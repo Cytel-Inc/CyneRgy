@@ -1,0 +1,24 @@
+url: ~
+template:
+  bootstrap: 5
+
+navbar:
+    structure:
+       left: [home, examples, references]
+       right: [search, github]
+    components:
+        home:
+            text: Home
+            href: index.html
+        examples:
+            text: Examples
+            menu:
+                - text: Example List
+                  href: articles/ExampleOutline.html
+                - text: 2-Arm, Normal Outcome, Patient Simulation
+                  href: articles/2ArmNormalOutcomePatientSimulation/Description.html
+                - text: Treatment Selection
+                  href: articles/TreatmentSelection/TreatmentSelectionDescription.html
+        references:
+            text: References
+            href: reference/index.html

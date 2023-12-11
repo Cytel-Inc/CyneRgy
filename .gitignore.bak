@@ -1,0 +1,14 @@
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.csv
+ISAOut1
+ISAOut2
+ISAOut3
+ISAOut4
+log
+out
+enrollment
+
+.Rproj.user

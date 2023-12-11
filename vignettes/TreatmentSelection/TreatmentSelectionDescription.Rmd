@@ -1,0 +1,88 @@
+---
+title: "Treatment Selection Example"
+author: "J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  word_document: default
+  html_document: default
+---
+
+# Multiarm, Binary Outcome - Treatment Selection Example
+
+This example demonstrates how to add new treatment selection functionality into East using an R function.
+
+For all of these examples, we assume all trial designs consist of control and three experimental treatments. There is one Interim Analysis, IA, and a Final Analysis, FA. At the IA, experimental treatment(s) are selected and continue to the second stage of the study. If the trial is not stopped for efficacy or futility, then control and any selected treatments continue to the next stage of the trial.
+
+The examples included here are to provide different approaches for selecting treatments for stage 2.
+
+**East Workbook**: TreatmentSelection.cywx
+
+**R Studio Project File**: TreatmentSelection.Rproj.
+
+In the RCode directory of this example you will find the following R files:
+
+1.  TreatmentSelectionTemplate.R - This file provides a template that may be used as a starting point for developing new treatment selection functions in R.
+
+2.  SelectExpThatAreBetterThanCtrl.R - Contains a function named SelectExpThatAreBetterThanCtrl to demonstrate the R code necessary for Example 1 as described below.
+
+3.  SelectExpWithPValueLessThanSpecified.R - Contains a function named SelectExpWithPValueLessThanSpecified to demonstrate the R code necessary for Example 2 as described below.
+
+4.  SelectSpecifiedNumberOfExpWithHighestResponses.R - Contains a function named SelectSpecifiedNumberOfExpWithHighestResponses to demonstrate the R code necessary for Example 3 as described below.
+
+5.  SelectExpUsingBayesianRule.R - Contains a function named SelectExpUsingBayesianRule to demonstrate the R code necessary for Example 4 as described below.
+
+In addition, if you would like to experiment with these examples and would like code to help you get started we have provided fill-in-the-blank type 
+code files in the FillInTheBlankRCode directory.  
+
+## Example 1 - Treatment Selection Rules
+
+At the interim analysis, select any treatment with a response rate that is higher than control for stage 2.
+
+If none of the treatments have a higher response rate than control, select the treatment with the largest probability of response.
+
+In the second stage, the randomization ratio will be 1:1 (experimental:control)
+
+
+## Example 2 - Treatment Selection Rule
+
+At the interim analysis, compare treatment and each experimental to control using a chi-squared test. 
+
+Any treatment with p-value less than user-specified dMaxPValue is selected for stage 2.
+
+If none of the treatments have a p-value less than user-specified dMaxPValue, select the treatment with the smallest p-value.
+
+In the second stage, the randomization ratio will be 1:1 (experimental:control)
+
+
+## Example 3 - Treatment Selection Rule
+
+At the interim analysis, the user-specified number of experimental treatments (maxSelection) that have the largest number of responses are selected.
+
+After the interim analysis, randomization occurs based on user specified inputs: 1:highestResponse:nextHighestResponse (control, selected experimental arm with highest number of responses, selected experimental arm with the second highest number of responses). 
+
+For example, the randomization ratio could be updated to the following:
+
+| Treatment                                      | Randomization Ratio |
+|------------------------------------------------|---------------------|
+| Control                                        | 1                   |
+| Treatment with largest number of responses     | 2                   |
+| Treatment with 2nd largest number of responses | 1                   |
+
+
+
+
+## Example 4 - Treatment Selection Rule
+
+At the interim analysis, we use the following Bayesian model and selection rule:
+
+Denote the probability of response on experimental treatment by p~j~ , for j = 1, 2, 3.
+
+[Prior:]{.underline}
+
+User-specified p~j~ \~ Beta( dPriorAlpha, dPriorBeta )
+
+Select any treatment that has at least a user-specified probability (treatmentPValue) of being greater than the user-specified historical response rate (historicResponseRate). Specifically, if Pr( p~j~ \> historicResponseRate \| data ) \> treatmentPValue, then experimental treatment j is selected for stage 2. If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( p~j~ \> historicResponseRate \| data ).
+
+After the IA, we use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
+
+
