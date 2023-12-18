@@ -35,7 +35,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -58,15 +64,42 @@
 
       <dl><dt>
           
+          <code><a href="PerformTreatmentSelection.html">PerformTreatmentSelection()</a></code> 
+        </dt>
+        <dd>A template for treatment selection functions in MAMS binary designs.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="RunExample.html">RunExample()</a></code> 
+        </dt>
+        <dd>RunExample</dd>
+      </dl><dl><dt>
+          
           <code><a href="SelectExpThatAreBetterThanCtrl.html">SelectExpThatAreBetterThanCtrl()</a></code> 
         </dt>
-        <dd>Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.</dd>
+        <dd>Select All Experimental That Are Better Than Control
+Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="SelectExpUsingBayesianRule.html">SelectExpUsingBayesianRule()</a></code> 
+        </dt>
+        <dd>Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="SelectExpWithPValueLessThanSpecified.html">SelectExpWithPValueLessThanSpecified()</a></code> 
+        </dt>
+        <dd>Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="SelectSpecifiedNumberOfExpWithHighestResponses.html">SelectSpecifiedNumberOfExpWithHighestResponses()</a></code> 
+        </dt>
+        <dd>Select Specified Number Of Exp With Highest Responses
+Select user-specified number of treatments to advance that have the largest number of responses.</dd>
       </dl></div>
   </main></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by The package maintainer.</p>
+  <p></p><p>Developed by J. Kyle Wathen.</p>
 </div>
 
 <div class="pkgdown-footer-right">

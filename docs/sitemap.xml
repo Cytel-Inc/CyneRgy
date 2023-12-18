@@ -16,6 +16,9 @@
     <loc>/articles/TreatmentSelection/TreatmentSelectionDescription.html</loc>
   </url>
   <url>
+    <loc>/articles/TreatmentSelectionDescription.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -28,6 +31,21 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/PerformTreatmentSelection.html</loc>
+  </url>
+  <url>
+    <loc>/reference/RunExample.html</loc>
+  </url>
+  <url>
     <loc>/reference/SelectExpThatAreBetterThanCtrl.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SelectExpUsingBayesianRule.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SelectExpWithPValueLessThanSpecified.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SelectSpecifiedNumberOfExpWithHighestResponses.html</loc>
   </url>
 </urlset>
