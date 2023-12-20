@@ -4,6 +4,12 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/2ArmNormalOutcomePatientSimulation.html</loc>
+  </url>
+  <url>
+    <loc>/articles/2ArmNormalOutcomePatientSimulationDescription.html</loc>
+  </url>
+  <url>
     <loc>/articles/ExampleOutline.html</loc>
   </url>
   <url>
@@ -11,9 +17,6 @@
   </url>
   <url>
     <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/TreatmentSelection/TreatmentSelectionDescription.html</loc>
   </url>
   <url>
     <loc>/articles/TreatmentSelectionDescription.html</loc>
@@ -25,10 +28,16 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/reference/CreateCyneRgyFuntion.html</loc>
+  </url>
+  <url>
     <loc>/reference/hello.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/InitLoadCyneRgy.html</loc>
   </url>
   <url>
     <loc>/reference/PerformTreatmentSelection.html</loc>

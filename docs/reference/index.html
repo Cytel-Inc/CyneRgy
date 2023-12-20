@@ -25,8 +25,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-examples">Examples</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-examples">
     <a class="dropdown-item" href="../articles/ExampleOutline.html">Example List</a>
-    <a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulation/Description.html">2-Arm, Normal Outcome, Patient Simulation</a>
-    <a class="dropdown-item" href="../articles/TreatmentSelection/TreatmentSelectionDescription.html">Treatment Selection</a>
+    <a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome, Patient Simulation</a>
+    <a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Treatment Selection</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -64,9 +64,15 @@
 
       <dl><dt>
           
-          <code><a href="PerformTreatmentSelection.html">PerformTreatmentSelection()</a></code> 
+          <code><a href="CreateCyneRgyFuntion.html">CreateCyneRgyFuntion()</a></code> 
         </dt>
-        <dd>A template for treatment selection functions in MAMS binary designs.</dd>
+        <dd>CreateCyneRgyFuntion</dd>
+      </dl><dl><dt>
+          
+          <code><a href="InitLoadCyneRgy.html">InitLoadCyneRgy()</a></code> 
+        </dt>
+        <dd>Initialization Setup in R
+Initialize is used to load required libraries and create any global</dd>
       </dl><dl><dt>
           
           <code><a href="RunExample.html">RunExample()</a></code> 
@@ -82,12 +88,14 @@ Select treatments that are higher than control or, if none are greater, select t
           
           <code><a href="SelectExpUsingBayesianRule.html">SelectExpUsingBayesianRule()</a></code> 
         </dt>
-        <dd>Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate.</dd>
+        <dd>Select Treatment Based On Bayesian Posterior Probability
+Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate.</dd>
       </dl><dl><dt>
           
           <code><a href="SelectExpWithPValueLessThanSpecified.html">SelectExpWithPValueLessThanSpecified()</a></code> 
         </dt>
-        <dd>Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value.</dd>
+        <dd>Select All Experimental Based On Small P-Value
+Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value.</dd>
       </dl><dl><dt>
           
           <code><a href="SelectSpecifiedNumberOfExpWithHighestResponses.html">SelectSpecifiedNumberOfExpWithHighestResponses()</a></code> 

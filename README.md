@@ -3,8 +3,10 @@ CyneRgy is an R package to illustrate the synergy of using R and Cytel products 
 
 
 
-# Introduction
-This website provides an overview of the East-R examples provided in this directory.  Each example is included in a directory that provides an R Studio project file, a Description file that describes the example,  RCode folder which contains the example R scripts, FillInTheBlinakRCode are the worked examples with various code deleted so the user can practice and fill in the blanks. 
+# Introduction README
+This repository and corresponding website provides an overview of the East-R examples provided in this directory.  Each example is included in a directory that provides an R Studio project file, a Description file that describes the example,  RCode folder which contains the example R scripts, FillInTheBlinakRCode are the worked examples with various code deleted so the user can practice and fill in the blanks. 
+
+In addition, the Sandbox directory contains in progress examples that are not complete.  Please be advised that the examples in this directory have not been completed or tested. 
 
 The following examples are included:
 
@@ -16,4 +18,4 @@ The following examples are included:
 
 1. **2-Am, Time-to-Event Outcome, Sample Size Re-estimation**: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.
 
-1. **[Treatment Selection](articles/TreatmentSelection/TreatmentSelectionDescription.html)**: This example demonstrates a multi-arm trial with a treatment selection rule.  The examples provide additional approaches to treatment selection. 
+1. **[Treatment Selection](docs/articles/TreatmentSelectionDescription.html)**: This example demonstrates a multi-arm trial with a treatment selection rule.  The examples provide additional approaches to treatment selection. 
