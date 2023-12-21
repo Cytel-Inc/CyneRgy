@@ -70,23 +70,52 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><p>```{include=ReadMe.md}</p>
-<p>INDEX.MD CONTENTS</p>
-<div class="section level1">
-<div class="page-header"><h1 id="introduction---cynergy">Introduction - CyneRgy<a class="anchor" aria-label="anchor" href="#introduction---cynergy"></a>
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="cynergy">CyneRgy<a class="anchor" aria-label="anchor" href="#cynergy"></a>
 </h1></div>
-<p>CyneRgy is an R package to illustrate the synergy of using R and Cytel products for clinical trial simulation.<br>
-This repository and corresponding website provides an overview of the R examples provided in this repository. Each example is intended to be used with one of Cytel’s products (East or Solara). Each example is included in a directory that provides an R Studio project file, a Description file that describes the example, RCode folder which contains the example R scripts, FillInTheBlinakRCode are the worked examples with various code deleted so the user can practice and fill in the blanks.</p>
+<p>R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial designs, without requiring the user to develop an entire R Code base. CyneRgy is an R package to illustrate the synergy of using R and Cytel products for clinical trial simulation and provide the users with tools to help develop new functions.</p>
+</div>
+<div class="section level1">
+<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h1>
+<p>This repository and corresponding website provides an overview of the R examples provided in this repository. Each example is intended to be used with one of Cytel’s products (East or Solara). Each example is included in a directory that provides an R Studio project file, a Description file that describes the example, RCode folder which contains the example R scripts, FillInTheBlinakRCode are the worked examples with various code deleted so the user can practice and fill in the blanks.</p>
+<p>In addition, the CyneRgy package provide helpful function for the user to create their own R functions based on templates and a seamless R experience for viewing example in R Studio.</p>
 <p>In addition, the Sandbox directory contains in progress examples that are not complete. Please be advised that the examples in this directory have not been completed or tested.</p>
-<p>Each example is included in a directory that provides an R Studio project file, a Description file that describes the example, RCode folder which contains the example R scripts, FillInTheBlinakRCode are the worked examples with various code deleted so the user can practice and fill in the blanks.</p>
 <p>The following examples are included:</p>
+<div class="section level2">
+<h2 id="patient-simulation">Patient Simulation<a class="anchor" aria-label="anchor" href="#patient-simulation"></a>
+</h2>
 <ol style="list-style-type: decimal">
-<li><p><strong>2-Arm, Binary Outcome Analysis</strong>: This example demonstrates how to add new analysis functionality into East using an R function. For all examples, we assume the trial design consist of control and an experimental treatments. There are 2 Interim Analysis, IA, and a Final Analysis, FA. At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.</p></li>
+<li><p><strong><a href="docs/articles/2ArmNormalOutcomePatientSimulationDescription.html">Two Arm, Normal Outcome - Patient Outcome Simulation Examples</a></strong> The following examples demonstrate how to add new patient outcome simulation capabilities into East using an R function in the context of a two-arm trial with a normally distributed patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.</p></li>
 <li><p><strong>2-Arm, Binary Outcome, Patient Simulation</strong>: These example demonstrates how to add new patient outcome simulation functionality into East using an R function in the context of a two-arm trial with normal outcomes. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are normal. The intent of these examples is to demonstrate how to add new ways to simulate patient data using R in a variety of trial examples.</p></li>
 <li><p><strong>2-Am, Time-to-Event Outcome, Patient Simulation</strong>: This example demonstrates how to add new patient outcome simulation functionality into East using an R function. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are time-to-event. The intent of these examples is to demonstrate how to add new ways to simulate time-to-event data using R.</p></li>
-<li><p><strong>2-Am, Time-to-Event Outcome, Sample Size Re-estimation</strong>: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.</p></li>
-<li><p><strong><a href="docs/articles/TreatmentSelectionDescription.html">Treatment Selection</a></strong>: This example demonstrates a multi-arm trial with a treatment selection rule. The examples provide additional approaches to treatment selection.</p></li>
 </ol>
+</div>
+<div class="section level2">
+<h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>
+<strong>2-Arm, Binary Outcome Analysis</strong>: This example demonstrates how to add new analysis functionality into East using an R function. For all examples, we assume the trial design consist of control and an experimental treatments. There are 2 Interim Analysis, IA, and a Final Analysis, FA. At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.</li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="treatment-selection">Treatment Selection<a class="anchor" aria-label="anchor" href="#treatment-selection"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>
+<strong><a href="docs/articles/TreatmentSelectionDescription.html">Treatment Selection</a></strong>: This example demonstrates a multi-arm trial with a treatment selection rule. The examples provide additional approaches to treatment selection.</li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="advanced-example">Advanced Example<a class="anchor" aria-label="anchor" href="#advanced-example"></a>
+</h2>
+<p>These example provide mutiple R function to achieve a more complex design option.</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>2-Am, Time-to-Event Outcome, Sample Size Re-estimation</strong>: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.</li>
+</ol>
+</div>
 </div>
 
   </main><aside class="col-md-3"><div class="license">
