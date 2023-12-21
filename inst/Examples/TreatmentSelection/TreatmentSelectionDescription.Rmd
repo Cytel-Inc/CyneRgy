@@ -34,7 +34,7 @@ In the RCode directory of this example you will find the following R files:
 In addition, if you would like to experiment with these examples and would like code to help you get started we have provided fill-in-the-blank type 
 code files in the FillInTheBlankRCode directory.  
 
-## Example 1 - Treatment Selection Rules
+## Example 1 - Selection Based on Response Rates Above Control
 
 At the interim analysis, select any treatment with a response rate that is higher than control for stage 2.
 
@@ -43,7 +43,7 @@ If none of the treatments have a higher response rate than control, select the t
 In the second stage, the randomization ratio will be 1:1 (experimental:control)
 
 
-## Example 2 - Treatment Selection Rule
+## Example 2 - Selection Based on P-Value Less Than Specified
 
 At the interim analysis, compare treatment and each experimental to control using a chi-squared test. 
 
@@ -54,7 +54,7 @@ If none of the treatments have a p-value less than user-specified dMaxPValue, se
 In the second stage, the randomization ratio will be 1:1 (experimental:control)
 
 
-## Example 3 - Treatment Selection Rule
+## Example 3 - Select Treatments With Highest Number of Responses
 
 At the interim analysis, the user-specified number of experimental treatments (maxSelection) that have the largest number of responses are selected.
 
@@ -71,7 +71,7 @@ For example, the randomization ratio could be updated to the following:
 
 
 
-## Example 4 - Treatment Selection Rule
+## Example 4 - Selection Based on Bayesian Posterior Probabilities
 
 At the interim analysis, we use the following Bayesian model and selection rule:
 

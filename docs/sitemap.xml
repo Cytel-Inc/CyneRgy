@@ -4,6 +4,12 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/2ArmNormalOutcomePatientSimulation.html</loc>
+  </url>
+  <url>
+    <loc>/articles/2ArmNormalOutcomePatientSimulationDescription.html</loc>
+  </url>
+  <url>
     <loc>/articles/ExampleOutline.html</loc>
   </url>
   <url>
@@ -13,7 +19,7 @@
     <loc>/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/TreatmentSelection/TreatmentSelectionDescription.html</loc>
+    <loc>/articles/TreatmentSelectionDescription.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -22,12 +28,36 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/reference/CreateCyneRgyFuntion.html</loc>
+  </url>
+  <url>
     <loc>/reference/hello.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/InitLoadCyneRgy.html</loc>
+  </url>
+  <url>
+    <loc>/reference/PerformTreatmentSelection.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ReplaceTagsInFile.html</loc>
+  </url>
+  <url>
+    <loc>/reference/RunExample.html</loc>
+  </url>
+  <url>
     <loc>/reference/SelectExpThatAreBetterThanCtrl.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SelectExpUsingBayesianRule.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SelectExpWithPValueLessThanSpecified.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SelectSpecifiedNumberOfExpWithHighestResponses.html</loc>
   </url>
 </urlset>
