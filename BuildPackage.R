@@ -21,6 +21,9 @@ for( iFile in 1:length( vFilesToAdd ) )
 
 PREP::AddFunctionToPkg("CreateCyneRgyFuntion", "This function will create a new file containing the template for the desired CyneRgy function.")
 
+PREP::AddFunctionToPkg("ReplaceTagsInFile", "This function is used to replace {{tags}} in template files.")
+
+
 
 ######################################################################################################################## .
 # Build package and website ####
