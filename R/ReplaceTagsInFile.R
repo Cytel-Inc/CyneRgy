@@ -8,7 +8,6 @@
 #' @name ReplaceTagsInFile
 #' @title ReplaceTagsInFile
 #' @description { Description: This function is used to replace {{tags}} in template files. }
-#' @export
 ReplaceTagsInFile <- function( strFileName, vTags, vReplace )
 {
     bFileExists     <- file.exists( strFileName )

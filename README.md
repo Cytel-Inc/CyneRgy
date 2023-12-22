@@ -14,7 +14,7 @@ The following examples are included:
 
 ## Patient Simulation 
 
-1. **[Two Arm, Normal Outcome - Patient Outcome Simulation Examples](docs/articles/2ArmNormalOutcomePatientSimulationDescription.html)**
+1. **[Two Arm, Normal Outcome - Patient Outcome Simulation Examples](articles/2ArmNormalOutcomePatientSimulationDescription.html)**
 The following examples demonstrate how to add new patient outcome simulation capabilities into East using an R function in the context of a two-arm trial with a normally distributed patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.
 1. **2-Arm, Binary Outcome, Patient Simulation**: These example demonstrates how to add new patient outcome simulation functionality into East using an R function in the context of a two-arm trial with normal outcomes. For all examples, we assume the trial design consists of standard of care and an experimental treatment.  The patient outcomes are normal.  The intent of these examples is to demonstrate how to add new ways to simulate patient data using R in a variety of trial examples.        
 
@@ -26,9 +26,9 @@ The following examples demonstrate how to add new patient outcome simulation cap
 
 ## Treatment Selection 
 
-1. **[Treatment Selection](docs/articles/TreatmentSelectionDescription.html)**: This example demonstrates a multi-arm trial with a treatment selection rule.  The examples provide additional approaches to treatment selection. 
+1. **[Treatment Selection](articles/TreatmentSelectionDescription.html)**: This example demonstrates a multi-arm trial with a treatment selection rule.  The examples provide additional approaches to treatment selection. 
 
 ## Advanced Example
-These example provide mutiple R function to achieve a more complex design option. 
+These example provide multiple R function to achieve a more complex design option. 
 
 1. **2-Am, Time-to-Event Outcome, Sample Size Re-estimation**: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.

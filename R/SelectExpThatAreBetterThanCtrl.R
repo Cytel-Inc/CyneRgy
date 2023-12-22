@@ -1,5 +1,4 @@
 ######################################################################################################################## .
-#' Select All Experimental That Are Better Than Control
 #' Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.  
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.

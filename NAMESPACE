@@ -2,7 +2,6 @@
 
 export(CreateCyneRgyFuntion)
 export(InitLoadCyneRgy)
-export(ReplaceTagsInFile)
 export(RunExample)
 export(SelectExpThatAreBetterThanCtrl)
 export(SelectExpUsingBayesianRule)
