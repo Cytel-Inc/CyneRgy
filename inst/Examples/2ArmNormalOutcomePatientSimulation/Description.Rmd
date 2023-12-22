@@ -11,6 +11,14 @@ output:
 
 The following examples demonstrate how to add new patient outcome simulation capabilities into East using an R function in the context of a two-arm trial with a normally distributed patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.      
 
+Once CyneRgy is installed, you can load this example in R Studio with the following commands:
+```{r, eval=FALSE}
+CyneRgy::RunExample( "2ArmNormalOutcomePatientSimulation" )
+```
+
+Running the command above will load the R Studio project in R Studio. 
+
+
 **East Workbook**: 2ArmTimeNormalOcomePatientSimulation.cywx
 
 **R Studio Project File**: 2ArmNormalOutcomePatientSimulation.Rproj.
