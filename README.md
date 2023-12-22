@@ -10,6 +10,14 @@ In addition, the CyneRgy package provide helpful function for the user to create
 
 In addition, the Sandbox directory contains in progress examples that are not complete.  Please be advised that the examples in this directory have not been completed or tested. 
 
+
+## Installation 
+Currently this package is not officially released and is not available on CRAN.  However,it may be installed directly from 1) GitHub using the [remotes package](https://remotes.r-lib.org/) package with the following code:
+
+```
+remotes::install_github( "Cytel-Inc/CyneRgy"" )
+```
+
 The following examples are included:
 
 ## Patient Simulation 

@@ -15,6 +15,14 @@ For all of these examples, we assume all trial designs consist of control and th
 
 The examples included here are to provide different approaches for selecting treatments for stage 2.
 
+Once CyneRgy is installed, you can load this example in R Studio with the following commands:
+```{r , eval=FALSE}
+CyneRgy::RunExample("TreatmentSelection")
+```
+
+Running the command above will load the R Studio project in R Studio. 
+
+
 **East Workbook**: TreatmentSelection.cywx
 
 **R Studio Project File**: TreatmentSelection.Rproj.
