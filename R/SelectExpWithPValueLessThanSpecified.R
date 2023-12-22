@@ -1,5 +1,4 @@
 ######################################################################################################################## .
-#' Select All Experimental Based On Small P-Value
 #' Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value. 
 #'@param SimData Data frame which consists of data generated in current simulation
 #'@param DesignParam List of Design and Simulation Parameters required to perform treatment selection.

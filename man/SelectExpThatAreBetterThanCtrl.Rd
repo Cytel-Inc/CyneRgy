@@ -2,8 +2,7 @@
 % Please edit documentation in R/SelectExpThatAreBetterThanCtrl.R
 \name{SelectExpThatAreBetterThanCtrl}
 \alias{SelectExpThatAreBetterThanCtrl}
-\title{Select All Experimental That Are Better Than Control
-Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.}
+\title{Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.}
 \usage{
 SelectExpThatAreBetterThanCtrl(SimData, DesignParam, LookInfo)
 }

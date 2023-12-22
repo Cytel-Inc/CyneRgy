@@ -1,6 +1,6 @@
 Package: CyneRgy
 Type: Package
-Title: CyneRgy - Package to integrate Cytel Products with R and Provide Examples
+Title: CyneRgy - R Integration With Cytel Products with R and Provide Examples
 Version: 0.1.0
 Author: J. Kyle Wathen
 Maintainer: J. Kyle Wathen <Kyle.Wathen@Cytel.com>

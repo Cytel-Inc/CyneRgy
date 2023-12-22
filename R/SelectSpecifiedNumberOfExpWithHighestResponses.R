@@ -1,5 +1,4 @@
 ######################################################################################################################## .
-#' Select Specified Number Of Exp With Highest Responses
 #' Select user-specified number of treatments to advance that have the largest number of responses. 
 #'@param SimData Data frame which consists of data generated in current simulation
 #'@param DesignParam List of Design and Simulation Parameters required to perform treatment selection.

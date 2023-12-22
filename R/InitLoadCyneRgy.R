@@ -1,4 +1,3 @@
-#' Initialization Setup in R
 #' Initialize is used to load required libraries and create any global 
 #' @export
 InitLoadCyneRgy <- function( Seed , UserParam = NULL )

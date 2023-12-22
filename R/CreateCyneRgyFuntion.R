@@ -5,10 +5,7 @@
 #   Change History:
 #   Last Modified Date: 12/19/2023
 #################################################################################################### .
-#' Create New CyneRgy Function Using Templates
-#' Create a new function to call for Cytel products using the correct template.
-#' @name CreateCyneRgyFuntion
-#' @title CreateCyneRgyFuntion
+#' Create new CyneRgy Function using provided templates. These R function that is created can be used in connection with Cytel-R integration.
 #' @description { Description: This function will create a new file containing the template for the desired CyneRgy function. }
 #' @export
 CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strDirectory = NA )
