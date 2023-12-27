@@ -25,7 +25,15 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-examples">Examples</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-examples">
     <a class="dropdown-item" href="../articles/ExampleOutline.html">Example List</a>
-    <a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome, Patient Simulation</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6>
+    <a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a>
+    <a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm, Time-to-Event Outcome</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Analysis</h6>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6>
+    <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Treatment Selection</a>
   </div>
 </li>
@@ -102,6 +110,26 @@
           <code><a href="SelectSpecifiedNumberOfExpWithHighestResponses.html">SelectSpecifiedNumberOfExpWithHighestResponses()</a></code> 
         </dt>
         <dd>Select user-specified number of treatments to advance that have the largest number of responses.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="SimulatePatientOutcomePercentAtZero.html">SimulatePatientOutcomePercentAtZero()</a></code> 
+        </dt>
+        <dd>Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="SimulatePatientOutcomePercentAtZeroBetaDist.html">SimulatePatientOutcomePercentAtZeroBetaDist()</a></code> 
+        </dt>
+        <dd>Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0 where the probability of a 0 is drawn from a Beta distribution.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="SimulatePatientSurvivalMixtureExponentials.html">SimulatePatientSurvivalMixtureExponentials()</a></code> 
+        </dt>
+        <dd>This function simulates from exponential, just included as a simple example as a starting point</dd>
+      </dl><dl><dt>
+          
+          <code><a href="SimulatePatientSurvivalWeibull.html">SimulatePatientSurvivalWeibull()</a></code> 
+        </dt>
+        <dd>Simulate time-to-event patient data from a Weibull distribution</dd>
       </dl></div>
   </main></div>
 

@@ -15,8 +15,17 @@ navbar:
             menu:
                 - text: Example List
                   href: articles/ExampleOutline.html
-                - text: 2-Arm, Normal Outcome, Patient Simulation
+                - text: --------------------
+                - text: Patient Simulation
+                - text: 2-Arm, Normal Outcome
                   href: articles/2ArmNormalOutcomePatientSimulationDescription.html
+                - text: 2-Arm, Time-to-Event Outcome
+                  href: articles/2ArmTimeToEventOutcomePatientSimulationDescription.html
+                - text: --------------------
+                - text: Analysis 
+                - text: --------------------
+                - text: Treatment Selection
+                - text: --------------------
                 - text: Treatment Selection
                   href: articles/TreatmentSelectionDescription.html
         references:
