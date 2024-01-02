@@ -1,0 +1,33 @@
+---
+title: "Two Arm Time-To-Event Outcome: Patient Outcome Simulation Examples"
+author: "J. Kyle Wathen"
+date: '`r format(Sys.time(), "%B %d, %Y", usetz=TRUE)`'
+output:
+  word_document: default
+  html_document: default
+---
+
+# Two Arm, Time-To-Event Outcome - Patient Outcome Simulation Examples
+
+The following examples demonstrate how to add new patient outcome simulation capabilities into East using an R function in the context of a two-arm trial with a time-to-event patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.
+
+**East Workbook**: 2ArmTimeToEventOutcomePatientSimulation.cywx
+
+**R Studio Project File**: 2ArmTimeToEventOutcomePatientSimulation.Rproj.
+
+In the RCode directory of this example you will find the following R files:
+
+1.  SimulatePatientSurvivalWeibull.R - This file provides an example R function to simulate patient time-to-event data from a Weibull distribution.  
+
+2. SimulatePatientSurvivalMixtureExponential.R - This file provides an example R function to simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different Exponential distribution for simulating the time-to-event from. 
+
+In addition, if you would like to experiment with these examples to and would like some code to help you get started, we have provided fill-in-the-blank type code files in the FillInTheBlankRCode directory.  
+
+## Example 1 - Simulation of Patient Time-To-Event Data from a Weibull Distribution
+
+To replace the patient outcome simulation.. 
+
+## Example 2 - Simulation of Patient Time-To-Event Data from a Mixture of Distributions
+Simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different Exponential distribution for simulating the time-to-event from. 
+
+
