@@ -27,7 +27,7 @@
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
-
+#' @export
 ######################################################################################################################## .
 
 AnalyzeUsingEastManualFormula<- function(SimData, DesignParam, LookInfo, UserParam = NULL)

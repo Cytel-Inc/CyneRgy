@@ -4,6 +4,9 @@
     <loc>https://Cytel-Inc.github.io/CyneRgy/404.html</loc>
   </url>
   <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmBinaryOutcomeAnalysisDescription.html</loc>
+  </url>
+  <url>
     <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulation.html</loc>
   </url>
   <url>
@@ -29,6 +32,18 @@
   </url>
   <url>
     <loc>https://Cytel-Inc.github.io/CyneRgy/index.html</loc>
+  </url>
+  <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.html</loc>
+  </url>
+  <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula.html</loc>
+  </url>
+  <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropLimitsOfCI.html</loc>
+  </url>
+  <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropTest.html</loc>
   </url>
   <url>
     <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFuntion.html</loc>

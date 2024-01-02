@@ -1,9 +1,6 @@
 ######################################################################################################################## .
-#' TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
-#' TODO(Kyle): Should the functions at the bottom be left at the bottom or do they need to be added to top documentation?
-#' 
-#' @param AnalyzeUsingBetaBinomial
-#' @title Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care. 
+#' Analyze Using Bayesian Beta-Binomial Model for Binary Data
+#' Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care. 
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
@@ -43,7 +40,9 @@
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
-
+#' TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
+#' TODO(Kyle): Should the functions at the bottom be left at the bottom or do they need to be added to top documentation?
+#' @export
 ######################################################################################################################## .
 
 AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam = NULL)

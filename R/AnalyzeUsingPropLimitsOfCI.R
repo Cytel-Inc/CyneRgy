@@ -39,13 +39,13 @@
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
-
+#' @export
 ######################################################################################################################## .
 AnalyzeUsingPropLimitsOfCI<- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
     if( is.null( UserParam ) )
     {
-        UserParam <- list(UserParam$dLowerLimit = 0.1, UserParam$dConfLevel = 0.8, UserParam$dUpperLimit = 0.2)
+        UserParam <- list(dLowerLimit = 0.1, dConfLevel = 0.8, dUpperLimit = 0.2)
     }
     
     # Retrieve necessary information from the objects East sent

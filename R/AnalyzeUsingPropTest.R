@@ -30,6 +30,7 @@
 ######################################################################################################################## .
 
 #TODO(Kyle)- I am not sure where to substitute in the user parameters since most seems to be sent from East and then analyzed using prop.test
+#' @export
 AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
     

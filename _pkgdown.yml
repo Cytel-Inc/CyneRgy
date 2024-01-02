@@ -23,6 +23,8 @@ navbar:
                   href: articles/2ArmTimeToEventOutcomePatientSimulationDescription.html
                 - text: --------------------
                 - text: Analysis 
+                - text: 2-Arm, Binary 
+                  href: articles/2ArmBinaryOutcomeAnalysisDescription.html
                 - text: --------------------
                 - text: Treatment Selection
                 - text: --------------------
