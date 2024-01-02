@@ -2,8 +2,15 @@
 # This document is used to add new functions and corresponding tests to the CyneRgy package ####
 ######################################################################################################################## .
 
+
+
 library( PREP ) # See https://biopharmsoftgrp.github.io/PREP/
 library( tools)
+
+######################################################################################################################## .
+# This loop can be helpful if you have exiting R files you want to add, just add them to a directory called        ####
+# AddUsingPREP and the loop below will add them and the corresponding tests using PREP
+######################################################################################################################## .
 vFilesToAdd <- tools::file_path_sans_ext( dir( "AddUsingPREP") )
 
 for( iFile in 1:length( vFilesToAdd ) )
