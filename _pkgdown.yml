@@ -27,8 +27,7 @@ navbar:
                   href: articles/2ArmBinaryOutcomeAnalysisDescription.html
                 - text: --------------------
                 - text: Treatment Selection
-                - text: --------------------
-                - text: Treatment Selection
+                - text: Binary Outcome
                   href: articles/TreatmentSelectionDescription.html
         references:
             text: References

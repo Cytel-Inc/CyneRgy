@@ -53,8 +53,7 @@
     <a class="dropdown-item" href="articles/2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="articles/TreatmentSelectionDescription.html">Treatment Selection</a>
+    <a class="dropdown-item" href="articles/TreatmentSelectionDescription.html">Binary Outcome</a>
   </div>
 </li>
 <li class="nav-item">
@@ -90,46 +89,73 @@
 <p>This repository and corresponding website provides an overview of the R examples provided in this repository. Each example is intended to be used with one of Cytel’s products (East or Solara). Each example is included in a directory that provides an R Studio project file, a Description file that describes the example, RCode folder which contains the example R scripts, FillInTheBlinakRCode are the worked examples with various code deleted so the user can practice and fill in the blanks.</p>
 <p>In addition, the CyneRgy package provide helpful function for the user to create their own R functions based on templates and a seamless R experience for viewing example in R Studio.</p>
 <p>In addition, the Sandbox directory contains in progress examples that are not complete. Please be advised that the examples in this directory have not been completed or tested.</p>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
+</div>
+<div class="section level1">
+<h1 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h1>
+<p>A variety of example can be fond in this package. Please see <a href="articles/ExampleOutline.html">Examples</a> for a complete list of examples. The CyneRgy package provides many built in functions that may be utilized, for a complete list see <a href="reference/index.html">References</a></p>
+</div>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
 <p>Currently this package is not officially released and is not available on CRAN. However,it may be installed directly from 1) GitHub using the <a href="https://remotes.r-lib.org/" class="external-link">remotes package</a> package with the following code:</p>
 <pre><code>remotes::install_github( "Cytel-Inc/CyneRgy"" )</code></pre>
 <p>The following examples are included:</p>
 </div>
+<div class="section level1">
+<h1 id="package-development">Package Development<a class="anchor" aria-label="anchor" href="#package-development"></a>
+</h1>
+<p>This document is intended to help with development of this package. In this document you can find packages that are helpful, example code snippets and functions calls that were made to create new functions.</p>
 <div class="section level2">
-<h2 id="patient-simulation">Patient Simulation<a class="anchor" aria-label="anchor" href="#patient-simulation"></a>
+<h2 id="style-guide">Style Guide<a class="anchor" aria-label="anchor" href="#style-guide"></a>
 </h2>
-<ol style="list-style-type: decimal">
-<li><p><strong><a href="articles/2ArmNormalOutcomePatientSimulationDescription.html">Two Arm, Normal Outcome - Patient Outcome Simulation Examples</a></strong> The following examples demonstrate how to add new patient outcome simulation capabilities into East using an R function in the context of a two-arm trial with a normally distributed patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.</p></li>
-<li><p><strong>2-Arm, Binary Outcome, Patient Simulation</strong>: These example demonstrates how to add new patient outcome simulation functionality into East using an R function in the context of a two-arm trial with normal outcomes. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are normal. The intent of these examples is to demonstrate how to add new ways to simulate patient data using R in a variety of trial examples.</p></li>
-<li><p><strong><a href="articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Am, Time-to-Event Outcome, Patient Simulation</a></strong>: This example demonstrates how to add new patient outcome simulation functionality into East using an R function. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are time-to-event. The intent of these examples is to demonstrate how to add new ways to simulate time-to-event data using R.</p></li>
-</ol>
+<p>Please follow the <a href="https://biopharmsoftgrp.github.io/BioPharmSoftRStyleGuide/" class="external-link">Biopharm Soft style guide</a> when developing code so that the style is consistent across different developers.</p>
 </div>
 <div class="section level2">
-<h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
+<h2 id="helpful-packages">Helpful packages<a class="anchor" aria-label="anchor" href="#helpful-packages"></a>
 </h2>
 <ol style="list-style-type: decimal">
 <li>
-<strong>2-Arm, Binary Outcome Analysis</strong>: This example demonstrates how to add new analysis functionality into East using an R function. For all examples, we assume the trial design consist of control and an experimental treatments. There are 2 Interim Analysis, IA, and a Final Analysis, FA. At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.</li>
+<a href="https://pkgdown.r-lib.org/reference/build_home.html" class="external-link">pkgdown</a> - Package used to create the package website.</li>
+<li>
+<a href="https://testthat.r-lib.org/" class="external-link">testthat</a> Useful for creating a testing R packages</li>
+<li>
+<a href="https://covr.r-lib.org/" class="external-link">covr</a> - Use to create a test coverage report with the following commands</li>
+</ol>
+<pre><code><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_coverage.html" class="external-link">use_coverage</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Likely do not need to run this again as it was setup alread</span></span>
+<span><span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/package_coverage.html" class="external-link">package_coverage</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Computes the coverage</span></span>
+<span><span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/report.html" class="external-link">report</a></span><span class="op">(</span><span class="op">)</span>           <span class="co"># Create a report</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="helpful-links">Helpful Links<a class="anchor" aria-label="anchor" href="#helpful-links"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><p><a href="https://git-for-windows.github.io/" class="external-link">Git for Windows</a> - Git for Windows, I believe you need to install this to use source control from windows</p></li>
+<li><p><a href="https://tortoisegit.org/" class="external-link">Tortoise Git</a> - Free Window shell program (runs in Windows explorer by Right clicking on a folder/file) – See image to the right. This allows you to commit changes to GitHub without remember all the commands.</p></li>
+<li><p><a href="https://guides.github.com/introduction/flow/" class="external-link">GitHub Flow</a> - Help understanding GitHub flow.</p></li>
+<li><p><a href="https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control" class="external-link">Getting Started with Source Control</a> - An introduciton to source control and getting started with Git.</p></li>
+<li><p><a href="https://backlog.com/git-tutorial/" class="external-link">Git Tutorial</a> - Useful Git tutorial</p></li>
 </ol>
 </div>
 <div class="section level2">
-<h2 id="treatment-selection">Treatment Selection<a class="anchor" aria-label="anchor" href="#treatment-selection"></a>
+<h2 id="helpful-code-snippets">Helpful Code Snippets<a class="anchor" aria-label="anchor" href="#helpful-code-snippets"></a>
 </h2>
-<ol style="list-style-type: decimal">
-<li>
-<strong><a href="articles/TreatmentSelectionDescription.html">Treatment Selection</a></strong>: This example demonstrates a multi-arm trial with a treatment selection rule. The examples provide additional approaches to treatment selection.</li>
-</ol>
-</div>
-<div class="section level2">
-<h2 id="advanced-example">Advanced Example<a class="anchor" aria-label="anchor" href="#advanced-example"></a>
-</h2>
-<p>These example provide multiple R function to achieve a more complex design option.</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>2-Am, Time-to-Event Outcome, Sample Size Re-estimation</strong>: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.</li>
-</ol>
+<p>If you need help please ask Kyle Wathen or another team member</p>
+<p>Add code snippet by Clicking Tools-&gt; Global Options -&gt; Code-&gt; Edit Snippets. In the Snippets menu choose R. When creating new snippets the key work snippet should start in column 1 and the snippets should be indented. In order to insert a snippet in R Studio you type the snippet name, or partial name, and click tab.</p>
+<p>Snippet to insert a new comment (newcom) will insert a commented code block.</p>
+<pre><code>snippet newcom
+   `r paste( paste( rep( "#", 100), collapse="" ), "." )`
+   # ${0} ####
+    `r paste( paste( rep( "#", 100), collapse="" ), "." )`</code></pre>
+<p>Snippet to insert a header (header).</p>
+<pre><code>snippet header
+   `r paste( paste( rep( "#", 100), collapse="" ), "." )`
+   #   Program/Function Name: ${1}
+   #   Author: J. Kyle Wathen
+   #   Description:
+   #   Change History:
+   #   Last Modified Date:
+   `r paste( paste( rep( "#", 100), collapse="" ), "." )`</code></pre>
 </div>
 </div>
 
