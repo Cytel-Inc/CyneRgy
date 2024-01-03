@@ -40,3 +40,60 @@ The following examples demonstrate how to add new patient outcome simulation cap
 These example provide multiple R function to achieve a more complex design option. 
 
 1. **2-Am, Time-to-Event Outcome, Sample Size Re-estimation**: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.
+
+
+# Package Development
+
+This document is intended to help with development of this package.  In this document you can find packages that are helpful, example code snippets and functions calls that were made to create new functions. 
+
+## Style Guide 
+
+ Please follow the [Biopharm Soft style guide](https://biopharmsoftgrp.github.io/BioPharmSoftRStyleGuide/) when developing code so that the style is consistent across different developers. 
+
+## Helpful packages
+1. **testthat** - Useful for creating a testing R packages
+3. **covr** - Use to create a test coverage report with the following commands
+ ```
+usethis::use_coverage()  # Likely do not need to run this again as it was setup alread
+covr::package_coverage() # Computes the coverage
+covr::report()           # Create a report
+```
+
+## Helpful Links
+1. [https://git-for-windows.github.io/]  - Git for Windows, I believe you need to install this to use source control from windows
+2. [https://guides.github.com/introduction/flow/](GitHub Flow) - Help understanding GitHub flow.
+3. [https://tortoisegit.org/] - Free Window shell program (runs in Windows explorer by Right clicking on a folder/file) – See image to the right.  This allows you to commit changes to GitHub without remember all the commands. 
+4. [https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control](Get started with Git)
+5. [https://backlog.com/git-tutorial/ ](Git tutorial)
+
+
+
+
+## Helpful Code Snippets
+If you need help please ask Kyle Wathen or another team member
+
+Add code snippet by Clicking Tools-> Global Options -> Code-> Edit Snippets.  In the Snippets menu choose R.  When creating new snippets the key work snippet should start in column 1 and the snippets should be indented.  In order to insert a snippet in R Studio you type the snippet name, or partial name, and click tab. 
+
+
+Snippet to insert a new comment (newcom) will insert a commented code block.
+
+ ```
+snippet newcom
+    `r paste( paste( rep( "#", 100), collapse="" ), "." )`
+    # ${0} ####
+     `r paste( paste( rep( "#", 100), collapse="" ), "." )`
+```
+
+Snippet to insert a header (header).
+
+```
+snippet header
+   `r paste( paste( rep( "#", 100), collapse="" ), "." )`
+   #   Program/Function Name: ${1}
+   #   Author: J. Kyle Wathen
+   #   Description:
+   #   Change History:
+   #   Last Modified Date:
+   `r paste( paste( rep( "#", 100), collapse="" ), "." )`
+```
+
