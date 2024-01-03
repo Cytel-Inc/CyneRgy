@@ -12,7 +12,7 @@ In addition, the CyneRgy package provide helpful function for the user to create
 In addition, the Sandbox directory contains in progress examples that are not complete.  Please be advised that the examples in this directory have not been completed or tested. 
 
 # Examples 
-A variety of example can be fond in this package.   Please see [Examples](articles/ExampleOutline.html) for a complete list of examples.  The CyneRgy package provides many built in functions that may be utilized.   
+A variety of example can be fond in this package.   Please see [Examples](articles/ExampleOutline.html) for a complete list of examples.  The CyneRgy package provides many built in functions that may be utilized, for a complete list see [References](reference/index.html)   
 
 # Installation 
 Currently this package is not officially released and is not available on CRAN.  However,it may be installed directly from 1) GitHub using the [remotes package](https://remotes.r-lib.org/) package with the following code:
@@ -34,7 +34,7 @@ This document is intended to help with development of this package.  In this doc
 ## Helpful packages
 1. [pkgdown](https://pkgdown.r-lib.org/reference/build_home.html) - Package used to create the package website. 
 1. [testthat](https://testthat.r-lib.org/) Useful for creating a testing R packages
-3. **covr** - Use to create a test coverage report with the following commands
+1. [covr](https://covr.r-lib.org/) - Use to create a test coverage report with the following commands
  ```
 usethis::use_coverage()  # Likely do not need to run this again as it was setup alread
 covr::package_coverage() # Computes the coverage
@@ -42,11 +42,12 @@ covr::report()           # Create a report
 ```
 
 ## Helpful Links
-1. [https://git-for-windows.github.io/]  - Git for Windows, I believe you need to install this to use source control from windows
-2. [https://guides.github.com/introduction/flow/] - Help understanding GitHub flow.
-3. [https://tortoisegit.org/] - Free Window shell program (runs in Windows explorer by Right clicking on a folder/file) – See image to the right.  This allows you to commit changes to GitHub without remember all the commands. 
-4. [https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control] - Getting started with Git source control
-5. [https://backlog.com/git-tutorial/ ] - Useful Git tutorial 
+1. [Git for Windows](https://git-for-windows.github.io/)  - Git for Windows, I believe you need to install this to use source control from windows
+3. [Tortoise Git](https://tortoisegit.org/) - Free Window shell program (runs in Windows explorer by Right clicking on a folder/file) – See image to the right.  This allows you to commit changes to GitHub without remember all the commands. 
+2. [GitHub Flow](https://guides.github.com/introduction/flow/) - Help understanding GitHub flow.
+
+4. [Getting Started with Source Control](https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control) - An introduciton to source control and getting started with Git.
+5. [Git Tutorial](https://backlog.com/git-tutorial/) - Useful Git tutorial 
 
 
 
