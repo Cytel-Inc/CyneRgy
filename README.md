@@ -51,7 +51,7 @@ This document is intended to help with development of this package.  In this doc
  Please follow the [Biopharm Soft style guide](https://biopharmsoftgrp.github.io/BioPharmSoftRStyleGuide/) when developing code so that the style is consistent across different developers. 
 
 ## Helpful packages
-1. **testthat** - Useful for creating a testing R packages
+1. **testthat** - [https://testthat.r-lib.org/] Useful for creating a testing R packages
 3. **covr** - Use to create a test coverage report with the following commands
  ```
 usethis::use_coverage()  # Likely do not need to run this again as it was setup alread
@@ -61,10 +61,10 @@ covr::report()           # Create a report
 
 ## Helpful Links
 1. [https://git-for-windows.github.io/]  - Git for Windows, I believe you need to install this to use source control from windows
-2. [https://guides.github.com/introduction/flow/](GitHub Flow) - Help understanding GitHub flow.
+2. [https://guides.github.com/introduction/flow/] - Help understanding GitHub flow.
 3. [https://tortoisegit.org/] - Free Window shell program (runs in Windows explorer by Right clicking on a folder/file) – See image to the right.  This allows you to commit changes to GitHub without remember all the commands. 
-4. [https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control](Get started with Git)
-5. [https://backlog.com/git-tutorial/ ](Git tutorial)
+4. [https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control] - Getting started with Git source control
+5. [https://backlog.com/git-tutorial/ ] - Useful Git tutorial 
 
 
 
