@@ -5,17 +5,19 @@
 #'@param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
 #'@param UserParam A list of user defined parameters in East. The default must be NULL.
 #' If UserParam is supplied, the list must contain the following named elements:
-#' UserParam$maxSelection - A value that defines how many treatment arms are chosen to advance. 
+#' \describe{
+#' \item{UserParam$QtyOfArmsToSelect}{A value that defines how many treatment arms are chosen to advance. 
 #'                          Note this number must match the number of user-specified allocation values.
-#'                          If this value is not specified, the default is 2.  
-#' UserParam$highestResponse - A value that specifies the allocation to the arm with the highest response
-#'                             If this value is not specified, the default is 2.
-#' UserParam$nextHighestResponse - A value that specifies the allocation to the arm with the next highest response
-#'                                 If this value is not specified, the default is 1.
+#'                          If this value is not specified, the default is 2.}  
+#' \item{UserParam$Rank1AllocationRatio} {A value that specifies the allocation to the arm with the highest response
+#'                             If this value is not specified, the default is 2.}
+#' \item{UserParam$Rank2AllocationRatio} {A value that specifies the allocation to the arm with the next highest response
+#'                                 If this value is not specified, the default is 1.}
+#'          }
 #'@description
 #'This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
-#'At the IA, the user-specified number of experimental treatments (maxSelection) that have the largest number of responses are selected.
-#'After the IA, we would like to randomize based on user specified inputs: 1:highestResponse:nextHighestResponse (control, selected experimental arm with highest number of responses, selected experimental arm with the second highest number of responses)
+#'At the IA, the user-specified number of experimental treatments (QtyOfArmsToSelect) that have the largest number of responses are selected.
+#'After the IA, we would like to randomize based on user specified inputs: 1:Rank1AllocationRatio:Rank2AllocationRatio (control, selected experimental arm with highest number of responses, selected experimental arm with the second highest number of responses)
 
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
@@ -77,7 +79,7 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
     
-    # Want to select the top user-specified (maxSelection) number of experimental treatments, so drop control from the sorting
+    # Want to select the top user-specified (QtyOfArmsToSelect) number of experimental treatments, so drop control from the sorting
     # Now, only the experimental treatments are left
     tabResults   <- tabResults[ -1, ]   
     
@@ -90,13 +92,13 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     # Select the user-specified (QtyOfArmsToSelect) number of treatments with the largest number of responses
     vReturnTreatmentID <- as.integer( row.names( mSortedMatrix[1:UserParam$QtyOfArmsToSelect, ]) )      
     
-    # The treatment with the highest number of responses should receive the user-specified highestResponse times as many patients as the next highest.
-    # The allocation will put user-specified highestResponse times as many patients on the treatment with the highest number of responses
-    # eg the treatment vReturnTreatmentID[ 1 ] will receive user-specified highestResponse times as many patients as vReturnTreatmentID[ 2 ]
+    # The treatment with the highest number of responses should receive the user-specified Rank1AllocationRatio times as many patients as the next highest.
+    # The allocation will put user-specified Rank1AllocationRatio times as many patients on the treatment with the highest number of responses
+    # eg the treatment vReturnTreatmentID[ 1 ] will receive user-specified Rank1AllocationRatio times as many patients as vReturnTreatmentID[ 2 ]
     lRankElements  <- UserParam[grep("^Rank", names(UserParam))]
     vAllocationRatio   <- unlist( lRankElements )[1:UserParam$QtyOfArmsToSelect]   
                                       
-    # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$highestResponse, vReturnTreatmentID[ 2 ] a ratio of UserParam$nextHighestResponse, and control is always 1
+    # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$Rank1AllocationRatio, vReturnTreatmentID[ 2 ] a ratio of UserParam$Rank2AllocationRatio, and control is always 1
     
     nErrrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
