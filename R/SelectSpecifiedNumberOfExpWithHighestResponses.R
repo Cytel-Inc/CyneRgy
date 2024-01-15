@@ -67,14 +67,11 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     #saveRDS( DesignParam, "DesignParam.Rds" )
     #saveRDS( LookInfo, "LookInfo.Rds" )
 
-    setwd( "C:/Kyle/Cytel/Software/CyneRgy/" )
-    saveRDS( SimData, "SimData.Rds")
-    saveRDS( DesignParam, "DesignParam.Rds" )
-    saveRDS( LookInfo, "LookInfo.Rds" )
+
 
     if( !exists( "UserParam" ) | is.null( UserParam ) )
     {
-        UserParam <- list( QtyOfArmsToSelect = 2, Rank1AllocationRatio = 2, Rank2AllocationRatio = 1 )
+        UserParam <- list( QtyOfArmsToSelect = 3, Rank1AllocationRatio = 3, Rank2AllocationRatio = 2, Rank3AllocationRatio = 1 )
     }
     # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
     tabResults   <- table( SimData$TreatmentID, SimData$Response )

@@ -5,8 +5,10 @@
 #'@param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
 #'@param UserParam A list of user defined parameters in East. The default must be NULL.
 #'  If UserParam is supplied, the list must contain the following named element:
-#'  UserParam$dMaxPValue - A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
-#'  Any treatment with less than the specified p-value will be advanced to the second stage
+#'  \describe{
+#'  \item{UserParam$dMaxPValue} {A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
+#'       Any treatment with less than the specified p-value will be advanced to the second stage}
+#'           }
 #'@description
 #' At the interim analysis, compare treatment and each experimental to control using a chi-squared test. 
 #' Any treatment with p-value < dMaxPValue is selected for stage 2.
