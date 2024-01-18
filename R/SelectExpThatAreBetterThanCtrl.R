@@ -51,7 +51,7 @@
 #'       The above code will save each of the input objects to a file so they may be examined within R.
 #' @export
 ######################################################################################################################## .
-SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo)
+SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo, UserParam=NULL)
 {
     
     # Input objects can be saved through the following lines:
