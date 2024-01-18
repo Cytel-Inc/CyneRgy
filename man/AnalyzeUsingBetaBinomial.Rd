@@ -15,13 +15,16 @@ AnalyzeUsingBetaBinomial(SimData, DesignParam, LookInfo, UserParam = NULL)
 \item{LookInfo}{List containing Design and Simulation Parameters, which might be required to perform analysis.}
 
 \item{UserParam}{A list of user defined parameters in East. The default must be NULL.
-If UserParam is supplied, the list must contain the following named elements:
-UserParam$dAlphaS
-UserParam$dBetaS
-UserParam$dBetaE
-UserParam$dAlphaE
-UserParam$dUpperCutoffEfficacy - A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy 
-UserParam$dLowerCutoffForFutility - A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility.}
+If UseParam is supplied, the list must contain the following named elements:
+\describe{
+   \item{UserParam$dAlphaS}{}
+   \item{UserParam$dBetaS}{}
+   \item{UserParam$dAlphaE}{}
+   \item{UserParam$dBetaE}{}
+   \item{UserParam$dMAV}{}
+   \item{UserParam$dUpperCutoffEfficacy}{ A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy }
+   \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility. }
+   }}
 }
 \value{
 TestStat A double value of the computed test statistic
@@ -43,6 +46,10 @@ In this version, the analysis for efficacy is to assume a beta prior to compute 
 \note{
 In this example we assume a Bayesian model and use posterior probabilities for decision making
 
+When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should set dLowerCutoffForFutility = 0
+when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  
+When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed.
+
 Helpful Hints:
       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
@@ -53,5 +60,4 @@ Helpful Hints:
 
       The above code will save each of the input objects to a file so they may be examined within R.
 TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
-TODO(Kyle): Should the functions at the bottom be left at the bottom or do they need to be added to top documentation?
 }
