@@ -73,7 +73,8 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
 
     if( !exists( "UserParam" ) | is.null( UserParam ) )
     {
-        UserParam <- list( QtyOfArmsToSelect = 3, Rank1AllocationRatio = 3, Rank2AllocationRatio = 2, Rank3AllocationRatio = 1 )
+        # Default is to select the treatment with highest number of responses and allocation of 2:1 (Experimental:Control)
+        UserParam <- list( QtyOfArmsToSelect = 1, Rank1AllocationRatio = 2 )
     }
     # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
