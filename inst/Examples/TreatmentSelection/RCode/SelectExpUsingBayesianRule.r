@@ -1,20 +1,20 @@
 ######################################################################################################################## .
-#   
-#'@param SelectExpUsingBayesianRule
-#'@title Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate. 
+#' Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate. 
 #'@param SimData Data frame which consists of data generated in current simulation
 #'@param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #'@param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
 #'@param UserParam A list of user defined parameters in East. The default must be NULL.
 #'  If UserParam is supplied, the list must contain the following named element:
-#'  UserParam$dPriorAlpha - A value (0,1) that defines the prior alpha parameter of the beta distribution. 
-#'                          If this value is not specified, the default is 0.2.  
-#'  UserParam$dPriorBeta - A value (0,1) that specifies the prior beta parameter of the beta distribution. 
-#'                              If this value is not specified, the default is 0.8.
-#'  UserParam$historicResponseRate - A value (0,1) that specifies the historic response rate.
-#'                                  If this value is not specified, the default is 0.1.
-#'  UserParam$treatmentPValue - A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
-#'                              If this value is not specified, the default is 0.2. 
+#'  \describe{
+#'  \item {UserParam$dPriorAlpha} {A value (0,1) that defines the prior alpha parameter of the beta distribution. 
+#'                          If this value is not specified, the default is 0.2.}  
+#'  \item {UserParam$dPriorBeta} {A value (0,1) that specifies the prior beta parameter of the beta distribution. 
+#'                              If this value is not specified, the default is 0.8.}
+#'  \item {UserParam$historicResponseRate} { A value (0,1) that specifies the historic response rate.
+#'                                  If this value is not specified, the default is 0.1.}
+#'  \item {UserParam$treatmentPValue} {A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
+#'                              If this value is not specified, the default is 0.2.}
+#'           }
 #'@description
 #'This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
 #'At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (treatmentPValue) of being greater than a user-specified historical 
@@ -33,14 +33,7 @@
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
 #' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 #' @note You must return at LEAST one treatment and one allocation ratio
-
-
-#TODO(Kyle)-does the following format work for examples/ helpful hints?
-
-
-
-
-#'@examples  Example Output Object:
+#' @examples  Example Output Object:
 #'       Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
 #'       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
 #'       vAllocationRatio    <- c( 2, 2 )
@@ -68,9 +61,7 @@
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
-
-
-
+#' @export
 ######################################################################################################################## .
 
 SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserParam= NULL)
