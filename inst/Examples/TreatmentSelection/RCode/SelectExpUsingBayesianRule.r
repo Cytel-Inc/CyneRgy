@@ -10,17 +10,17 @@
 #'                          If this value is not specified, the default is 0.2.}  
 #'  \item {UserParam$dPriorBeta} {A value (0,1) that specifies the prior beta parameter of the beta distribution. 
 #'                              If this value is not specified, the default is 0.8.}
-#'  \item {UserParam$historicResponseRate} { A value (0,1) that specifies the historic response rate.
-#'                                  If this value is not specified, the default is 0.1.}
-#'  \item {UserParam$treatmentPValue} {A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
-#'                              If this value is not specified, the default is 0.2.}
+#'  \item {UserParam$dHistoricResponseRate} { A value (0,1) that specifies the historic response rate.
+#'                                  If this value is not specified, the default is 0.2.}
+#'  \item {UserParam$dMinPosteriorProbability} {A value (0,1) that specifies the posterior probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
+#'                              If this value is not specified, the default is 0.5.}
 #'           }
 #'@description
 #'This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
 #'At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (treatmentPValue) of being greater than a user-specified historical 
-#'response rate (historicResponseRate). Specifically, if Pr( pj > historicResponseRate | data ) > treatmentPValue, then experimental treatment j is selected for stage 2.
-#'If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > historiceResponseRate | data ).
-#'User-specified pj ~ Beta( dPriorAlpha, dPriorBeta )
+#'response rate (dHistoricResponseRate). Specifically, if Pr( pj > dHistoricResponseRate | data ) > dMinPosteriorProbability, then experimental treatment j is selected for stage 2.
+#'If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > dHistoricResponseRate | data ).
+#'User-specified pj ~ Beta( dPriorAlpha, dPriorBeta ).  All experimental arms assume the same prior. 
 #'After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
 
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
@@ -33,25 +33,6 @@
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
 #' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 #' @note You must return at LEAST one treatment and one allocation ratio
-#' @examples  Example Output Object:
-#'       Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
-#'       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
-#'       vAllocationRatio    <- c( 2, 2 )
-#'       nErrorCode          <- 0
-#'       lReturn             <- list( TreatmentID = vSelectedTreatments, 
-#'                                    AllocRatio  = vAllocationRatio,
-#'                                    ErrorCode   = nErrorCode )
-#'       return( lReturn )
-#'       
-#'      Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-#'       vSelectedTreatments <- c( 1, 2 )  # Experimental 2 will receive twice as many as Experimental 1 or Control. 
-#'       vAllocationRatio    <- c( 1, 2 )
-#'       nErrorCode          <- 0
-#'       lReturn             <- list( TreatmentID = vSelectedTreatments, 
-#'                                    AllocRatio  = vAllocationRatio,
-#'                                    ErrorCode   = nErrorCode )
-#'       return( lReturn )
-#'
 #'@note Helpful Hints:
 #'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
 #'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
@@ -59,6 +40,7 @@
 #'       saveRDS( SimData,     "SimData.Rds")
 #'       saveRDS( DesignParam, "DesignParam.Rds" )
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
+#'       saveRDS( UserParam,   "UserParam.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
 #' @export
@@ -85,7 +67,7 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     
     if( is.null( UserParam ) )
     {
-        UserParam <- list(dPriorAlpha=0.2, dPriorBeta=0.8, historicResponseRate=0.1, treatmentPValue= 0.2)
+        UserParam <- list(dPriorAlpha=0.2, dPriorBeta=0.8, dHistoricResponseRate=0.2, dMinPosteriorProbability = 0.5)
     }
     
     #### Determine the posterior parameters based on SimData and the prior parameters ####
@@ -112,12 +94,12 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
         # Column 1 is the number of treatment failures
         dPostBeta  <- UserParam$dPriorBeta  + tabResultsExperimental[ iArm, 1 ]   
         
-        # Step 2: Compute and store the posterior probability Prob( pi > historicResponseRate | data )
-        vPostProbGreaterThanHistory[ iArm ] <- 1 - pbeta( UserParam$historicResponseRate, dPostAlpha, dPostBeta )
+        # Step 2: Compute and store the posterior probability Prob( pi > dHistoricResponseRate | data )
+        vPostProbGreaterThanHistory[ iArm ] <- 1 - pbeta( UserParam$dHistoricResponseRate, dPostAlpha, dPostBeta )
         
-        # Step 3: Did the posterior probability meet the criteria for selecting the treatment? Is Pr( pj > historicResponseRate | data ) > treatmentPValue?
+        # Step 3: Did the posterior probability meet the criteria for selecting the treatment? Is Pr( pj > dHistoricResponseRate | data ) > dMinPosteriorProbability?
         #         If so, add it to the list of treatments to select for stage 2
-        if( vPostProbGreaterThanHistory[ iArm ] > UserParam$treatmentPValue )
+        if( vPostProbGreaterThanHistory[ iArm ] > UserParam$dMinPosteriorProbability )
             vReturnTreatmentID <- c( vReturnTreatmentID, iArm )
         
        

@@ -4,7 +4,12 @@
 \alias{SelectExpThatAreBetterThanCtrl}
 \title{Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.}
 \usage{
-SelectExpThatAreBetterThanCtrl(SimData, DesignParam, LookInfo)
+SelectExpThatAreBetterThanCtrl(
+  SimData,
+  DesignParam,
+  LookInfo,
+  UserParam = NULL
+)
 }
 \arguments{
 \item{SimData}{Data frame which consists of data generated in current simulation.}

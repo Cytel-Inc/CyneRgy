@@ -78,7 +78,7 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     }
     # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
-    tabResultsAll <- tabResults
+    
     # Want to select the top user-specified (QtyOfArmsToSelect) number of experimental treatments, so drop control from the sorting
     # Now, only the experimental treatments are left
     tabResults   <- tabResults[ -1, ]   
@@ -90,12 +90,13 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     mSortedMatrix      <- tabResults[order( tabResults[, 2], decreasing =  TRUE), ]
     
     # Select the user-specified (QtyOfArmsToSelect) number of treatments with the largest number of responses
-    vReturnTreatmentID <- as.integer( row.names( mSortedMatrix[1:UserParam$QtyOfArmsToSelect, ]) )      
+    vSortedNames       <- row.names( mSortedMatrix )  # Get the names of the treatments in order by number of responses
+    vReturnTreatmentID <- as.integer( vSortedNames[1:UserParam$QtyOfArmsToSelect ] )  # Select the number of desired treatments.         
     
     # The treatment with the highest number of responses should receive the user-specified Rank1AllocationRatio times as many patients as the next highest.
     # The allocation will put user-specified Rank1AllocationRatio times as many patients on the treatment with the highest number of responses
     # eg the treatment vReturnTreatmentID[ 1 ] will receive user-specified Rank1AllocationRatio times as many patients as vReturnTreatmentID[ 2 ]
-    # NOTE: Always pull elments from the list by name rather than assuming a specific order
+    # NOTE: Always pull elements from the list by name rather than assuming a specific order
     vAllocationRatio <- c()
     for( iRank in 1:UserParam$QtyOfArmsToSelect )
     {

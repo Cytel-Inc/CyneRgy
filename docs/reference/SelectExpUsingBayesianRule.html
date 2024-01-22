@@ -101,15 +101,17 @@ After the IA, use a randomization ratio of 2:1 (experimental:control) for all ex
 
 <dt>UserParam</dt>
 <dd><p>A list of user defined parameters in East. The default must be NULL.
-If UserParam is supplied, the list must contain the following named element:
-UserParam$dPriorAlpha - A value (0,1) that defines the prior alpha parameter of the beta distribution. 
+If UserParam is supplied, the list must contain the following named element:</p><dl>
+ UserParam$dPriorAlpha A value (0,1) that defines the prior alpha parameter of the beta distribution. 
                         If this value is not specified, the default is 0.2.  
-UserParam$dPriorBeta - A value (0,1) that specifies the prior beta parameter of the beta distribution. 
+\item UserParam$dPriorBeta A value (0,1) that specifies the prior beta parameter of the beta distribution. 
                             If this value is not specified, the default is 0.8.
-UserParam$historicResponseRate - A value (0,1) that specifies the historic response rate.
+\item UserParam$historicResponseRate  A value (0,1) that specifies the historic response rate.
                                 If this value is not specified, the default is 0.1.
-UserParam$treatmentPValue - A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
-                            If this value is not specified, the default is 0.2.</p></dd>
+\item UserParam$treatmentPValue A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
+                            If this value is not specified, the default is 0.2.
+         
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
