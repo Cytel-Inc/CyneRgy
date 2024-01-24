@@ -91,31 +91,31 @@
 <a class="anchor" aria-label="anchor" href="#cynergy-"></a>
 </h1>
 </div>
-<p>R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial designs, without requiring the user to develop an entire R Code base. CyneRgy is an R package to illustrate the synergy of using R and Cytel products for clinical trial simulation and provide the users with tools to help develop new functions.</p>
+<p>R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial designs, without requiring you to develop an entire R code base. The CyneRgy R package illustrates the synergy of using R and Cytel products for clinical trial simulation and provide you with tools to help develop new functions.</p>
 </div>
 <div class="section level1">
 <h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h1>
-<p>This repository and corresponding website provides an overview of the R examples provided in this repository. Each example is intended to be used with one of Cytel’s products (East or Solara). Each example is included in a directory that provides an R Studio project file, a Description file that describes the example, RCode folder which contains the example R scripts, FillInTheBlinakRCode are the worked examples with various code deleted so the user can practice and fill in the blanks.</p>
-<p>In addition, the CyneRgy package provide helpful function for the user to create their own R functions based on templates and a seamless R experience for viewing example in R Studio.</p>
-<p>In addition, the Sandbox directory contains in progress examples that are not complete. Please be advised that the examples in this directory have not been completed or tested.</p>
+<p>This repository and corresponding website provide an overview of the R examples provided in this repository. Each example is intended to be used with one of Cytel’s products (East or Solara). Each example is included in a directory that provides an R Studio project file, a Description file that describes the example, RCode folder which contains the example R scripts, and FillInTheBlankRCode - examples with various code deleted so you can practice and fill in the blanks.</p>
+<p>In addition, the CyneRgy package provide helpful functions for you to create your own R functions based on templates and a seamless R experience for viewing examples in R Studio.</p>
+<p>Lastly, the Sandbox directory contains incomplete, in-progress examples. The examples in this directory have not been completed or tested.</p>
 </div>
 <div class="section level1">
 <h1 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h1>
-<p>A variety of example can be fond in this package. Please see <a href="articles/ExampleOutline.html">Examples</a> for a complete list of examples. The CyneRgy package provides many built in functions that may be utilized, for a complete list see <a href="reference/index.html">References</a></p>
+<p>A variety of examples can be found in this package. Please see <a href="articles/ExampleOutline.html">Examples</a> for a complete list of examples. The CyneRgy package provides many built-in functions that may be used; for a complete list see <a href="reference/index.html">References</a> .</p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
-<p>Currently this package is not officially released and is not available on CRAN. However,it may be installed directly from 1) GitHub using the <a href="https://remotes.r-lib.org/" class="external-link">remotes package</a> package with the following code:</p>
+<p>Currently this package is not officially released and is not available on CRAN. However, it may be installed directly from 1) GitHub using the <a href="https://remotes.r-lib.org/" class="external-link">remotes package</a> package with the following code:</p>
 <pre><code>remotes::install_github( "Cytel-Inc/CyneRgy"" )</code></pre>
 <p>The following examples are included:</p>
 </div>
 <div class="section level1">
 <h1 id="package-development">Package Development<a class="anchor" aria-label="anchor" href="#package-development"></a>
 </h1>
-<p>This document is intended to help with development of this package. In this document you can find packages that are helpful, example code snippets and functions calls that were made to create new functions.</p>
+<p>This document is intended to help with development of this package. In this document you can find packages that are helpful, example code snippets and function calls that were made to create new functions.</p>
 <div class="section level2">
 <h2 id="style-guide">Style Guide<a class="anchor" aria-label="anchor" href="#style-guide"></a>
 </h2>
@@ -128,11 +128,11 @@
 <li>
 <a href="https://pkgdown.r-lib.org/reference/build_home.html" class="external-link">pkgdown</a> - Package used to create the package website.</li>
 <li>
-<a href="https://testthat.r-lib.org/" class="external-link">testthat</a> Useful for creating a testing R packages</li>
+<a href="https://testthat.r-lib.org/" class="external-link">testthat</a> Useful for creating and testing R packages</li>
 <li>
 <a href="https://covr.r-lib.org/" class="external-link">covr</a> - Use to create a test coverage report with the following commands</li>
 </ol>
-<pre><code><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_coverage.html" class="external-link">use_coverage</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Likely do not need to run this again as it was setup alread</span></span>
+<pre><code><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_coverage.html" class="external-link">use_coverage</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Likely you do not need to run this again as it was set up already</span></span>
 <span><span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/package_coverage.html" class="external-link">package_coverage</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Computes the coverage</span></span>
 <span><span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/report.html" class="external-link">report</a></span><span class="op">(</span><span class="op">)</span>           <span class="co"># Create a report</span></span></code></pre>
 </div>
@@ -140,10 +140,10 @@
 <h2 id="helpful-links">Helpful Links<a class="anchor" aria-label="anchor" href="#helpful-links"></a>
 </h2>
 <ol style="list-style-type: decimal">
-<li><p><a href="https://git-for-windows.github.io/" class="external-link">Git for Windows</a> - Git for Windows, I believe you need to install this to use source control from windows</p></li>
-<li><p><a href="https://tortoisegit.org/" class="external-link">Tortoise Git</a> - Free Window shell program (runs in Windows explorer by Right clicking on a folder/file) – See image to the right. This allows you to commit changes to GitHub without remember all the commands.</p></li>
-<li><p><a href="https://guides.github.com/introduction/flow/" class="external-link">GitHub Flow</a> - Help understanding GitHub flow.</p></li>
-<li><p><a href="https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control" class="external-link">Getting Started with Source Control</a> - An introduciton to source control and getting started with Git.</p></li>
+<li><p><a href="https://git-for-windows.github.io/" class="external-link">Git for Windows</a> - Git for Windows; I believe you need to install this to use source control from Windows</p></li>
+<li><p><a href="https://tortoisegit.org/" class="external-link">Tortoise Git</a> - Free Windows shell program (runs in Windows explorer by right-clicking on a folder/file) – See image to the right. This allows you to commit changes to GitHub without having to remember all the commands.</p></li>
+<li><p><a href="https://guides.github.com/introduction/flow/" class="external-link">GitHub Flow</a> - Helps understanding GitHub flow.</p></li>
+<li><p><a href="https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control" class="external-link">Getting Started with Source Control</a> - An introduction to source control and getting started with Git.</p></li>
 <li><p><a href="https://backlog.com/git-tutorial/" class="external-link">Git Tutorial</a> - Useful Git tutorial</p></li>
 </ol>
 </div>
@@ -172,7 +172,7 @@
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>What license is it under?</li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
 

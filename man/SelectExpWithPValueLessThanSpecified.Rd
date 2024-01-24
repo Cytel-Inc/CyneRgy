@@ -20,8 +20,10 @@ SelectExpWithPValueLessThanSpecified(
 
 \item{UserParam}{A list of user defined parameters in East. The default must be NULL.
 If UserParam is supplied, the list must contain the following named element:
-UserParam$dMaxPValue - A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
-Any treatment with less than the specified p-value will be advanced to the second stage}
+\describe{
+\item{UserParam$dMaxPValue} {A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
+     Any treatment with less than the specified p-value will be advanced to the second stage}
+         }}
 }
 \value{
 TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
