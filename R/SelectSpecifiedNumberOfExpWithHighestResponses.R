@@ -60,18 +60,21 @@
 #' @export
 SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
-          
+    
     #Input objects can be saved through the following lines:
-    #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
-
-
-
+    # First set the working directory
+    # setwd(Sys.getenv("R_USER")) # You could specify the location directly. 
+    # setwd( "C://TreatmentSelection" )
+    # saveRDS( SimData, "SimData.Rds")
+    # saveRDS( DesignParam, "DesignParam.Rds" )
+    # saveRDS( LookInfo, "LookInfo.Rds" )
+    # saveRDS( UserParam, "UserParam.Rds")
+    
+    
     if( !exists( "UserParam" ) | is.null( UserParam ) )
     {
-        UserParam <- list( QtyOfArmsToSelect = 3, Rank1AllocationRatio = 3, Rank2AllocationRatio = 2, Rank3AllocationRatio = 1 )
+        # Default is to select the treatment with highest number of responses and allocation of 2:1 (Experimental:Control)
+        UserParam <- list( QtyOfArmsToSelect = 1, Rank1AllocationRatio = 2 )
     }
     # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
@@ -80,22 +83,29 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     # Now, only the experimental treatments are left
     tabResults   <- tabResults[ -1, ]   
     
-
-        
+    
+    
     # Sort in descending order based on the number of responses (column 2)
     # After the sort, the matrix will have the largest number of responses in the first row and the smallest number of responses in the last row
     mSortedMatrix      <- tabResults[order( tabResults[, 2], decreasing =  TRUE), ]
     
     # Select the user-specified (QtyOfArmsToSelect) number of treatments with the largest number of responses
-    vReturnTreatmentID <- as.integer( row.names( mSortedMatrix[1:UserParam$QtyOfArmsToSelect, ]) )      
+    vSortedNames       <- row.names( mSortedMatrix )  # Get the names of the treatments in order by number of responses
+    vReturnTreatmentID <- as.integer( vSortedNames[1:UserParam$QtyOfArmsToSelect ] )  # Select the number of desired treatments.         
     
     # The treatment with the highest number of responses should receive the user-specified Rank1AllocationRatio times as many patients as the next highest.
     # The allocation will put user-specified Rank1AllocationRatio times as many patients on the treatment with the highest number of responses
     # eg the treatment vReturnTreatmentID[ 1 ] will receive user-specified Rank1AllocationRatio times as many patients as vReturnTreatmentID[ 2 ]
-    lRankElements  <- UserParam[grep("^Rank", names(UserParam))]
-    vAllocationRatio   <- unlist( lRankElements )[1:UserParam$QtyOfArmsToSelect]   
-                                      
-    # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$Rank1AllocationRatio, vReturnTreatmentID[ 2 ] a ratio of UserParam$Rank2AllocationRatio, and control is always 1
+    # NOTE: Always pull elements from the list by name rather than assuming a specific order
+    vAllocationRatio <- c()
+    for( iRank in 1:UserParam$QtyOfArmsToSelect )
+    {
+        vAllocationRatio <- c( vAllocationRatio, UserParam[[ paste0( "Rank", iRank, "AllocationRatio" )]])
+    }
+    
+    
+    # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$Rank1AllocationRatio and
+    # vReturnTreatmentID[ 2 ] a ratio of UserParam$Rank2AllocationRatio, and control is always 1
     
     nErrrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
@@ -104,11 +114,9 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
         #Fatal error because the R code is incorrect
         nErrrorCode <- -1  
     }
-    
     lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ),
                      AllocRatio  = as.double( vAllocationRatio ),
                      ErrorCode   = as.integer( nErrrorCode ) )
-    
     return( lReturn )
     
 }

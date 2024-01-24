@@ -1,13 +1,14 @@
 ######################################################################################################################## .
-#'@param SelectExpWithPValueLessThanSpecified
-#'@title Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value. 
+#' Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value. 
 #'@param SimData Data frame which consists of data generated in current simulation
 #'@param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #'@param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
 #'@param UserParam A list of user defined parameters in East. The default must be NULL.
 #'  If UserParam is supplied, the list must contain the following named element:
-#'  UserParam$dMaxPValue - A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
-#'  Any treatment with less than the specified p-value will be advanced to the second stage
+#'  \describe{
+#'  \item{UserParam$dMaxPValue} {A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
+#'       Any treatment with less than the specified p-value will be advanced to the second stage}
+#'           }
 #'@description
 #' At the interim analysis, compare treatment and each experimental to control using a chi-squared test. 
 #' Any treatment with p-value < dMaxPValue is selected for stage 2.
@@ -24,13 +25,6 @@
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
 #' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 #' @note You must return at LEAST one treatment and one allocation ratio
-
-
-#TODO(Kyle)-does the following format work for examples/ helpful hints?
-
-
-
-
 #'@examples  Example Output Object:
 #'       Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
 #'       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
@@ -59,8 +53,8 @@
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
+#' @export
 ######################################################################################################################## .
-
 SelectExpWithPValueLessThanSpecified  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
     #Input objects can be saved through the following lines:

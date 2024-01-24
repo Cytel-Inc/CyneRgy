@@ -1,6 +1,5 @@
 ######################################################################################################################## .
-#' @param SelectExpThatAreBetterThanCtrl
-#' @title Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.  
+#' Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.  
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
@@ -19,16 +18,10 @@
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
 #' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 #' @note You must return at LEAST one treatment and one allocation ratio
-
-
-#TODO(Kyle)-does that format work for examples/ helpful hints?
-
-
-
-
-#' @examples  Example Output Object:
-#'       Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
-#'      vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
+#' @examples  
+#'       # Example Output Object:
+#'       #Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
+#'       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
 #'       vAllocationRatio    <- c( 2, 2 )
 #'       nErrorCode          <- 0
 #'       lReturn             <- list( TreatmentID = vSelectedTreatments, 
@@ -36,7 +29,7 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'       
-#'      Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
+#'       #Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
 #'       vSelectedTreatments <- c( 1, 2 )  # Experimental 2 will receive twice as many as Experimental 1 or Control. 
 #'       vAllocationRatio    <- c( 1, 2 )
 #'       nErrorCode          <- 0
@@ -50,15 +43,17 @@
 #'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
 #'
 #'       saveRDS( SimData,     "SimData.Rds")
+#'       
 #'       saveRDS( DesignParam, "DesignParam.Rds" )
+#'       
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
+#' @export
 ######################################################################################################################## .
-
-SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo)
+SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo, UserParam=NULL)
 {
-          
+    
     # Input objects can be saved through the following lines:
     
     #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
@@ -97,12 +92,12 @@ SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo)
     {
         vReturnTreatmentID <-  which.max( vProbabilityResponseOnExperimental  )
     }
- 
+    
     # We want all treatments to have a randomization ratio of 1 
     # The allocation will put twice as many on the treatment with the highest number of responses, 
     # eg. the Treatment vReturnTreatmentID[ 1 ] will receive twice as many patients as vReturnTreatmentID[ 2 ]
     vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ))    
-
+    
     
     # Treatment vReturnTreatmentID[ 1 ] will have a ratio of 2, vReturnTreatmentID[ 2 ] a ratio of 1, and control is always 1
     

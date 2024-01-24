@@ -15,14 +15,16 @@ SelectExpUsingBayesianRule(SimData, DesignParam, LookInfo, UserParam = NULL)
 
 \item{UserParam}{A list of user defined parameters in East. The default must be NULL.
 If UserParam is supplied, the list must contain the following named element:
-UserParam$dPriorAlpha - A value (0,1) that defines the prior alpha parameter of the beta distribution. 
-                        If this value is not specified, the default is 0.2.  
-UserParam$dPriorBeta - A value (0,1) that specifies the prior beta parameter of the beta distribution. 
-                            If this value is not specified, the default is 0.8.
-UserParam$historicResponseRate - A value (0,1) that specifies the historic response rate.
-                                If this value is not specified, the default is 0.1.
-UserParam$treatmentPValue - A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
+\describe{
+\item {UserParam$dPriorAlpha} {A value (0,1) that defines the prior alpha parameter of the beta distribution. 
+                        If this value is not specified, the default is 0.2.}  
+\item {UserParam$dPriorBeta} {A value (0,1) that specifies the prior beta parameter of the beta distribution. 
+                            If this value is not specified, the default is 0.8.}
+\item {UserParam$historicResponseRate} { A value (0,1) that specifies the historic response rate.
+                                If this value is not specified, the default is 0.1.}
+\item {UserParam$treatmentPValue} {A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
                             If this value is not specified, the default is 0.2.}
+         }}
 }
 \value{
 TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments

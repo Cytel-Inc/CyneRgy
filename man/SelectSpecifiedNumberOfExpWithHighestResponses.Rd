@@ -21,13 +21,15 @@ SelectSpecifiedNumberOfExpWithHighestResponses(
 
 \item{UserParam}{A list of user defined parameters in East. The default must be NULL.
 If UserParam is supplied, the list must contain the following named elements:
-UserParam$maxSelection - A value that defines how many treatment arms are chosen to advance. 
+\describe{
+\item{UserParam$QtyOfArmsToSelect}{A value that defines how many treatment arms are chosen to advance. 
                          Note this number must match the number of user-specified allocation values.
-                         If this value is not specified, the default is 2.  
-UserParam$highestResponse - A value that specifies the allocation to the arm with the highest response
-                            If this value is not specified, the default is 2.
-UserParam$nextHighestResponse - A value that specifies the allocation to the arm with the next highest response
+                         If this value is not specified, the default is 2.}  
+\item{UserParam$Rank1AllocationRatio} {A value that specifies the allocation to the arm with the highest response
+                            If this value is not specified, the default is 2.}
+\item{UserParam$Rank2AllocationRatio} {A value that specifies the allocation to the arm with the next highest response
                                 If this value is not specified, the default is 1.}
+         }}
 }
 \value{
 TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
@@ -38,8 +40,8 @@ ErrorCode An integer value:  ErrorCode = 0 --> No Error
 }
 \description{
 This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
-At the IA, the user-specified number of experimental treatments (maxSelection) that have the largest number of responses are selected.
-After the IA, we would like to randomize based on user specified inputs: 1:highestResponse:nextHighestResponse (control, selected experimental arm with highest number of responses, selected experimental arm with the second highest number of responses)
+At the IA, the user-specified number of experimental treatments (QtyOfArmsToSelect) that have the largest number of responses are selected.
+After the IA, we would like to randomize based on user specified inputs: 1:Rank1AllocationRatio:Rank2AllocationRatio (control, selected experimental arm with highest number of responses, selected experimental arm with the second highest number of responses)
 }
 \note{
 The length of TreatmentID and AllocRatio must be the same.
