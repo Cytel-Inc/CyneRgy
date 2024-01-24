@@ -18,7 +18,6 @@
 #'This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
 #'At the IA, the user-specified number of experimental treatments (QtyOfArmsToSelect) that have the largest number of responses are selected.
 #'After the IA, we would like to randomize based on user specified inputs: 1:Rank1AllocationRatio:Rank2AllocationRatio (control, selected experimental arm with highest number of responses, selected experimental arm with the second highest number of responses)
-
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
