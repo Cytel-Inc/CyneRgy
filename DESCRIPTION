@@ -1,11 +1,13 @@
 Package: CyneRgy
 Type: Package
 Title: CyneRgy - R Integration With Cytel Products with R and Provide Examples
-Version: 0.1.0
-Author: J. Kyle Wathen
+Version: 0.2.0
+Authors@R: c( person( "J.", "Wathen", "Kyle", email = "Kyle.Wathen@Cytel.com", role = c("aut", "cre")),
+              person( "Sydney", "Ringold", "", email = "Sydney.Ringold@Cytel.com", role = "ctb" ))
 Maintainer: J. Kyle Wathen <Kyle.Wathen@Cytel.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial 
+ designs, without requiring you to develop an entire R code base. The CyneRgy R package illustrates the synergy of using R and 
+ Cytel products for clinical trial simulation and provide tools to help develop new functions.  
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
