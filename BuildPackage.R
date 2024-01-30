@@ -35,6 +35,9 @@ PREP::AddFunctionToPkg("CreateCyneRgyFuntion", "This function will create a new 
 PREP::AddFunctionToPkg("ReplaceTagsInFile", "This function is used to replace {{tags}} in template files.")
 
 
+PREP::AddFunctionToPkg("CombineAllRFiles", "This function is used to combine all .R files in a directory into a single file for use in Cytel products. ")
+
+
 
 ######################################################################################################################## .
 # Build package and website ####
