@@ -47,5 +47,3 @@ CombineAllRFiles <- function( strOutFileName, strDirectory = "" )
     cat("Files combined successfully:", paste(vCombinedViles, collapse = ", "), "\n")
 }
 
-
-}
