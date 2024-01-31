@@ -14,7 +14,8 @@ LazyData: true
 RoxygenNote: 7.2.3
 Depends: R(>= 4.1.3),
          whisker,
-         stringr
+         stringr,
+         stats
 Suggests: 
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
