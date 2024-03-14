@@ -9,7 +9,7 @@
 #' @examples \dontrun{{CyneRgy::RunExample( "TreatmentSelection" )
 #' }}
 #' @export
-RunExample <- function(example) {
+RunExample <- function(strExample) {
     strPackage <- "CyneRgy"
     # locate all the examples that exist  call using runExample("myapp")
     validExamples <- list.files(system.file("Examples", package = strPackage))
@@ -21,7 +21,7 @@ RunExample <- function(example) {
             "'")
 
     # if an invalid example is given, throw an error
-    if (missing(example) || !nzchar(example) ||  !example %in% validExamples) {
+    if (missing(strExample) || !nzchar(strExample) ||  !strExample %in% validExamples) {
         print( paste0( 
             'Please run `RunExample()` with a valid example app as an argument.',
             validExamplesMsg ))
@@ -31,7 +31,7 @@ RunExample <- function(example) {
     {
         # find and launch the app
         
-        strRStudioProjFile <- system.file("Examples", example,"TreatmentSelection.Rproj", package = strPackage)
+        strRStudioProjFile <- system.file("Examples", strExample, package = strPackage)
         if (rstudioapi::isAvailable()) {
             rstudioapi::openProject(strRStudioProjFile, newSession = TRUE)
         } else {
