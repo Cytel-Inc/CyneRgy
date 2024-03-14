@@ -58,6 +58,7 @@ SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function(NumSub, NumArm, T
         else                        # if the probability of a 0 >= 1 --> Don't need to simulate from the binary distribution as all patients in the treatment are a 0
             nResponseIsZero <- 1
         
+        # If nResponseIsZero == 1 then the patient outcome is a a 0 and we don't need to simulate it. 
         
         if( nResponseIsZero == 0  )  # The patient responded, so we need to simulate their outcome from a binary distribution with the specified response proportion 
             vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])

@@ -21,6 +21,8 @@ navbar:
                   href: articles/2ArmNormalOutcomePatientSimulationDescription.html
                 - text: 2-Arm, Time-to-Event Outcome
                   href: articles/2ArmTimeToEventOutcomePatientSimulationDescription.html
+                - text: 2-Arm, Binary Outcome
+                  href: articles/2ArmBinaryOutcomePatientSimulation.html
                 - text: --------------------
                 - text: Analysis 
                 - text: 2-Arm, Binary 
