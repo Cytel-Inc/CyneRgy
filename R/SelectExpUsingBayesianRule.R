@@ -6,28 +6,27 @@
 #'@param UserParam A list of user defined parameters in East. The default must be NULL.
 #'  If UserParam is supplied, the list must contain the following named element:
 #'  \describe{
-#'  \item {UserParam$dPriorAlpha} {A value (0,1) that defines the prior alpha parameter of the beta distribution. 
+#'  \item{UserParam$dPriorAlpha}{A value (0,1) that defines the prior alpha parameter of the beta distribution. 
 #'                          If this value is not specified, the default is 0.2.}  
-#'  \item {UserParam$dPriorBeta} {A value (0,1) that specifies the prior beta parameter of the beta distribution. 
+#'  \item{UserParam$dPriorBeta}{A value (0,1) that specifies the prior beta parameter of the beta distribution. 
 #'                              If this value is not specified, the default is 0.8.}
-#'  \item {UserParam$historicResponseRate} { A value (0,1) that specifies the historic response rate.
+#'  \item{UserParam$historicResponseRate}{ A value (0,1) that specifies the historic response rate.
 #'                                  If this value is not specified, the default is 0.1.}
-#'  \item {UserParam$treatmentPValue} {A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
+#'  \item{UserParam$treatmentPValue}{A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
 #'                              If this value is not specified, the default is 0.2.}
 #'           }
-#'@description
-#'This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
-#'At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (treatmentPValue) of being greater than a user-specified historical 
-#'response rate (historicResponseRate). Specifically, if Pr( pj > historicResponseRate | data ) > treatmentPValue, then experimental treatment j is selected for stage 2.
-#'If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > historiceResponseRate | data ).
-#'User-specified pj ~ Beta( dPriorAlpha, dPriorBeta )
-#'After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
-
+#'@description {This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
+#'  At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (treatmentPValue) of being greater than a user-specified historical 
+#'  response rate (historicResponseRate). Specifically, if Pr( pj > historicResponseRate | data ) > treatmentPValue, then experimental treatment j is selected for stage 2.
+#'  If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > historiceResponseRate | data ).
+#'  User-specified pj ~ Beta( dPriorAlpha, dPriorBeta )
+#'  After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.}
+#'  
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
+#'                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #' @note The length of TreatmentID and AllocRatio must be the same.
 #' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
