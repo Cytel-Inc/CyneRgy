@@ -26,7 +26,7 @@ library( dplyr )
 ```
 
 # Introduction
-The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of example.  These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance.  The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
+The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples.  These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance.  The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
 
 The examples will all contain two treatments, Standard of Care (S) and Experimental (E) and are follows: 
 

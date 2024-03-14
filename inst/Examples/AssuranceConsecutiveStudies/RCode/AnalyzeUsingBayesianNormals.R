@@ -17,13 +17,13 @@
 AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
     
-    setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example4")
-    if( !file.exists("SimData.Rds"))
-    {
-        saveRDS( SimData,     "SimData.Rds")
-        saveRDS( DesignParam, "DesignParam.Rds" )
-        saveRDS( UserParam,   "UserParam.Rds")
-    }
+    # setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example4")
+    # if( !file.exists("SimData.Rds"))
+    # {
+    #     saveRDS( SimData,     "SimData.Rds")
+    #     saveRDS( DesignParam, "DesignParam.Rds" )
+    #     saveRDS( UserParam,   "UserParam.Rds")
+    # }
     
     
     bInterimAnalysis <- FALSE   # Assuming a fixed design, the next if statement will check this

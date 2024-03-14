@@ -29,6 +29,7 @@ SimulatePatientOutcomeNormalAssurance <- function(NumSub, TreatmentID, Mean, Std
     
     # Step 1 - Setup the vectors so we can sample which component of the mixture prior to use
     vStdDev     <- c( UserParam$dSDCtrl, UserParam$dSDExp )
+    vMean       <- c( UserParam$dMeanCtrl )
     vPriorMeans <- c( UserParam$dMean1, UserParam$dMean2 )
     vPriorSDs   <- c( UserParam$dSD1, UserParam$dSD2 )
     
