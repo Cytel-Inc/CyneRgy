@@ -4,7 +4,7 @@ template:
 
 navbar:
     structure:
-       left: [home, examples, references]
+       left: [home, examples, references, contribute]
        right: [search, github]
     components:
         home:
@@ -29,10 +29,17 @@ navbar:
                 - text: Treatment Selection
                 - text: Binary Outcome
                   href: articles/TreatmentSelectionDescription.html
+                - text: --------------------
+                - text: Advanced Examples
+                - text: Bayesian Assurance of Consecutive Studies
+                  href: articles/AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html
         references:
             text: References
             href: reference/index.html
-            
+        contribute: 
+            text: Contribute
+            href: articles/ContibutingToCyneRgy.html
+        
         github:
               icon: fa-github fa-lg
               href: https://github.com/Cytel-Inc/CyneRgy

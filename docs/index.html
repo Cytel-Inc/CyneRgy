@@ -37,7 +37,7 @@
     
     <a class="navbar-brand me-2" href="index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,10 +63,16 @@
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6>
     <a class="dropdown-item" href="articles/TreatmentSelectionDescription.html">Binary Outcome</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6>
+    <a class="dropdown-item" href="articles/AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html">Bayesian Assurance of Consecutive Studies</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">References</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="articles/ContibutingToCyneRgy.html">Contribute</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -105,70 +111,14 @@
 <div class="section level1">
 <h1 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h1>
-<p>A variety of examples can be found in this package. Please see <a href="articles/ExampleOutline.html">Examples</a> for a complete list of examples. The CyneRgy package provides many built-in functions that may be used; for a complete list see <a href="reference/index.html">References</a> .</p>
+<p>A variety of examples can be found in this package. Please see <a href="articles/ExampleOutline.html">Examples</a> for a complete list of examples. The CyneRgy package provides many built-in functions that may be used directly in Cytel products. For a complete list see <a href="reference/index.html">References</a> .</p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <p>Currently this package is not officially released and is not available on CRAN. However, it may be installed directly from 1) GitHub using the <a href="https://remotes.r-lib.org/" class="external-link">remotes package</a> package with the following code:</p>
-<pre><code>remotes::install_github( "Cytel-Inc/CyneRgy"" )</code></pre>
-<p>The following examples are included:</p>
-</div>
-<div class="section level1">
-<h1 id="package-development">Package Development<a class="anchor" aria-label="anchor" href="#package-development"></a>
-</h1>
-<p>This document is intended to help with development of this package. In this document you can find packages that are helpful, example code snippets and function calls that were made to create new functions.</p>
-<div class="section level2">
-<h2 id="style-guide">Style Guide<a class="anchor" aria-label="anchor" href="#style-guide"></a>
-</h2>
-<p>Please follow the <a href="https://biopharmsoftgrp.github.io/BioPharmSoftRStyleGuide/" class="external-link">Biopharm Soft style guide</a> when developing code so that the style is consistent across different developers.</p>
-</div>
-<div class="section level2">
-<h2 id="helpful-packages">Helpful packages<a class="anchor" aria-label="anchor" href="#helpful-packages"></a>
-</h2>
-<ol style="list-style-type: decimal">
-<li>
-<a href="https://pkgdown.r-lib.org/reference/build_home.html" class="external-link">pkgdown</a> - Package used to create the package website.</li>
-<li>
-<a href="https://testthat.r-lib.org/" class="external-link">testthat</a> Useful for creating and testing R packages</li>
-<li>
-<a href="https://covr.r-lib.org/" class="external-link">covr</a> - Use to create a test coverage report with the following commands</li>
-</ol>
-<pre><code><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_coverage.html" class="external-link">use_coverage</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Likely you do not need to run this again as it was set up already</span></span>
-<span><span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/package_coverage.html" class="external-link">package_coverage</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Computes the coverage</span></span>
-<span><span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/report.html" class="external-link">report</a></span><span class="op">(</span><span class="op">)</span>           <span class="co"># Create a report</span></span></code></pre>
-</div>
-<div class="section level2">
-<h2 id="helpful-links">Helpful Links<a class="anchor" aria-label="anchor" href="#helpful-links"></a>
-</h2>
-<ol style="list-style-type: decimal">
-<li><p><a href="https://git-for-windows.github.io/" class="external-link">Git for Windows</a> - Git for Windows; I believe you need to install this to use source control from Windows</p></li>
-<li><p><a href="https://tortoisegit.org/" class="external-link">Tortoise Git</a> - Free Windows shell program (runs in Windows explorer by right-clicking on a folder/file) – See image to the right. This allows you to commit changes to GitHub without having to remember all the commands.</p></li>
-<li><p><a href="https://guides.github.com/introduction/flow/" class="external-link">GitHub Flow</a> - Helps understanding GitHub flow.</p></li>
-<li><p><a href="https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control" class="external-link">Getting Started with Source Control</a> - An introduction to source control and getting started with Git.</p></li>
-<li><p><a href="https://backlog.com/git-tutorial/" class="external-link">Git Tutorial</a> - Useful Git tutorial</p></li>
-</ol>
-</div>
-<div class="section level2">
-<h2 id="helpful-code-snippets">Helpful Code Snippets<a class="anchor" aria-label="anchor" href="#helpful-code-snippets"></a>
-</h2>
-<p>If you need help please ask Kyle Wathen or another team member</p>
-<p>Add code snippet by Clicking Tools-&gt; Global Options -&gt; Code-&gt; Edit Snippets. In the Snippets menu choose R. When creating new snippets the key work snippet should start in column 1 and the snippets should be indented. In order to insert a snippet in R Studio you type the snippet name, or partial name, and click tab.</p>
-<p>Snippet to insert a new comment (newcom) will insert a commented code block.</p>
-<pre><code>snippet newcom
-   `r paste( paste( rep( "#", 100), collapse="" ), "." )`
-   # ${0} ####
-    `r paste( paste( rep( "#", 100), collapse="" ), "." )`</code></pre>
-<p>Snippet to insert a header (header).</p>
-<pre><code>snippet header
-   `r paste( paste( rep( "#", 100), collapse="" ), "." )`
-   #   Program/Function Name: ${1}
-   #   Author: J. Kyle Wathen
-   #   Description:
-   #   Change History:
-   #   Last Modified Date:
-   `r paste( paste( rep( "#", 100), collapse="" ), "." )`</code></pre>
-</div>
+<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span> <span class="st">"Cytel-Inc/CyneRgy"</span> <span class="op">)</span></span></code></pre>
+<p>You must have the remotes package to use the above command. To launch the examples, you will also need to have the rstudioapi package.</p>
 </div>
 
   </main><aside class="col-md-3"><div class="license">

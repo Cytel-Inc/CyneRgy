@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,10 +59,16 @@
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6>
     <a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6>
+    <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html">Bayesian Assurance of Consecutive Studies</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">References</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/ContibutingToCyneRgy.html">Contribute</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -92,8 +98,8 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">January 25, 2024 at 10:12 AM
-CST</h4>
+            <h4 data-toc-skip class="date">March 14, 2024 at 1:54 PM
+CDT</h4>
       
       
       <div class="d-none name"><code>ExampleOutline.Rmd</code></div>
@@ -115,14 +121,14 @@ practice and fill in the blanks.</p>
 <h3 id="patient-simulation">Patient Simulation<a class="anchor" aria-label="anchor" href="#patient-simulation"></a>
 </h3>
 <ol style="list-style-type: decimal">
-<li><p><strong><a href="articles/2ArmNormalOutcomePatientSimulationDescription.html">Two
-Arm, Normal Outcome - Patient Outcome Simulation Examples</a></strong>
-The following examples demonstrate how to add new patient outcome
-simulation capabilities into East using an R function in the context of
-a two-arm trial with a normally distributed patient outcome. For all
-examples, we assume the trial design consists of standard of care and an
-experimental treatment and the trial design assumes patient outcomes are
-normally distributed.</p></li>
+<li><p><strong><a href="2ArmNormalOutcomePatientSimulationDescription.html">Two Arm,
+Normal Outcome - Patient Outcome Simulation Examples</a></strong> The
+following examples demonstrate how to add new patient outcome simulation
+capabilities into East using an R function in the context of a two-arm
+trial with a normally distributed patient outcome. For all examples, we
+assume the trial design consists of standard of care and an experimental
+treatment and the trial design assumes patient outcomes are normally
+distributed.</p></li>
 <li><p><strong>2-Arm, Binary Outcome, Patient Simulation</strong>: These
 example demonstrates how to add new patient outcome simulation
 functionality into East using an R function in the context of a two-arm
@@ -131,7 +137,7 @@ consists of standard of care and an experimental treatment. The patient
 outcomes are normal. The intent of these examples is to demonstrate how
 to add new ways to simulate patient data using R in a variety of trial
 examples.</p></li>
-<li><p><strong><a href="articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Am,
+<li><p><strong><a href="2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Am,
 Time-to-Event Outcome, Patient Simulation</a></strong>: This example
 demonstrates how to add new patient outcome simulation functionality
 into East using an R function. For all examples, we assume the trial
@@ -160,7 +166,7 @@ depending on the design.</li>
 </h3>
 <ol style="list-style-type: decimal">
 <li>
-<strong><a href="articles/TreatmentSelectionDescription.html">Treatment
+<strong><a href="TreatmentSelectionDescription.html">Treatment
 Selection</a></strong>: This example demonstrates a multi-arm trial with
 a treatment selection rule. The examples provide additional approaches
 to treatment selection.</li>
@@ -172,12 +178,20 @@ to treatment selection.</li>
 <p>These example provide multiple R function to achieve a more complex
 design option.</p>
 <ol style="list-style-type: decimal">
-<li>
-<strong>2-Am, Time-to-Event Outcome, Sample Size
+<li><p><strong><a href="AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html">Bayesian
+Assurance of Consecutive Studies</a> </strong> The intent of this
+example is to demonstrate the computation of Bayesian assurance, or
+probability of success, through the integration of East and R using a
+series of examples. These examples begin with a 2-arm, normal outcome,
+fixed sample trial assuming a non-standard prior for computation of
+assurance. The examples progress to a more complex setting of computing
+assurance for a sequence of a phase 2 trial with normal outcomes
+followed by a phase 3 trial where the outcome is time-to-event.</p></li>
+<li><p><strong>2-Am, Time-to-Event Outcome, Sample Size
 Re-estimation</strong>: This example demonstrates how to add new
 approaches to the SSR when using time-to-event data. For the SSR in this
 type of design, the number of events can be increased by the function in
-R.</li>
+R.</p></li>
 </ol>
 </div>
 </div>
