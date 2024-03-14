@@ -4,7 +4,7 @@
 \alias{RunExample}
 \title{RunExample}
 \usage{
-RunExample(example)
+RunExample(strExample)
 }
 \description{
 {This function is used to open the examples included in this package.  
