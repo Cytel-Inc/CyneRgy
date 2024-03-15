@@ -9,6 +9,8 @@
 #' If UseParam are supplied in East, they will be an element in the list, UserParam.    
 #' @description
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
+#' However, you may choose to ignore the parameters  Mean, StdDev if the patient simulator
+#' you are creating only requires use of parameters the user will add to UserParam
 {{FUNCTION_NAME}} <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
 {
     # Note: It can be helpful to save to the parameters that East sent.
