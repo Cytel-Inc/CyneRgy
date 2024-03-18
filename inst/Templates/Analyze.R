@@ -1,22 +1,25 @@
-
-# Function Template for Performing Test for Multi Look Tests
 #  Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Template for analysis function with multiple looks
+#' @param SimData Data frame which consists of data generated in current simulation.
+#' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
+#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
+#' @param UserParam A list of user defined parameters in East. The default must be NULL.
 {{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     nError 	        <- 0
     nDecision 	    <- 0
     dTestStatistic  <- 0
     
-    # Write the actual code here.
-    # Compute test statistic value and store the decision
-    # value (appropriate code) in retval
-    # Use appropriate error handling and modify the
-    # Error appropriately
+    # Input objects can be saved through the following lines (EAST ONLY):
+    #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
+    #saveRDS( SimData, "SimData.Rds")
+    #saveRDS( DesignParam, "DesignParam.Rds" )
+    #saveRDS( LookInfo, "LookInfo.Rds" )
     
-    return(list(Decision  = as.integer(nDecision), 
-                ErrorCode = as.integer(nError),
-                TestStat  = as.double(dTestStatistic),))
+
+    lRet <- list(TestStat = as.double(dTestStatistic),
+                 Decision  = as.integer(nDecision), 
+                 ErrorCode = as.integer(nError))
+    return( lRet )
 }
 

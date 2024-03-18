@@ -10,7 +10,7 @@
 #' @export
 CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strDirectory = NA )
 {
-    strNewFileExt <- ".R"
+    strNewFileExt  <- ".R"
     strNewFileName <- strNewFunctionName
     
     
@@ -20,7 +20,7 @@ CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strD
     strPackage <- "CyneRgy"
     
     # Exiting template names, remove extensions
-    vValidExamples <- tools::file_path_sans_ext(list.files(system.file("Templates", package = strPackage)) )
+    vValidExamples         <- tools::file_path_sans_ext(list.files(system.file("Templates", package = strPackage)) )
     vValidExamplesFullPath <- list.files(system.file("Templates", package = strPackage), full.names = TRUE) 
     
     validExamplesMsg <-
@@ -28,9 +28,11 @@ CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strD
             "Valid values for strFunctionType are: '",
             paste(vValidExamples, collapse = "', '"),
             "'")
+
     
     # Check if strFunctionType is a valid example
-    if (!(strFunctionType %in% tools::file_path_sans_ext(basename(vValidExamples)))) {
+    if ( missing( strFunctionType ) || !nzchar(strFunctionType) || !(strFunctionType %in% vValidExamples) ) 
+    {
         print( paste0( 
             'Please run `CreateCyneRgyFuntion()` with a valid strFunctionType argument name.',
             validExamplesMsg ))
