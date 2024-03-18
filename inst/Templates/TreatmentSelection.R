@@ -51,9 +51,7 @@
 
 PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
-    
-#TODO(Kyle)-I was not sure how much to change of the template so I left mainly as is other than adding step 1 with UserParam
-          
+           
     # If you wanted to save the input objects you could use the following to save the files to your working directory
     # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
     # saveRDS( SimData, "SimData.Rds")
