@@ -65,31 +65,37 @@ CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDi
     # ExampleTemplate directory path
     exampleTemplateDirPath <- system.file("ExampleTemplate", package = strPackage)
     # Copy the file to the destination directory
-    bSuccess = file.copy(exampleTemplateDirPath, strTopDirPath, recursive=TRUE )
+    bSuccess <- file.copy(exampleTemplateDirPath, strTopDirPath, recursive=TRUE )
     
     #strNewDirName = ifelse(strNewDirName == "", basename(strSelectedExample), strNewFileName)
     
-    if(bSuccess){
-        bSuccess = file.rename(from = paste0(strTopDirPath,"ExampleTemplate"), to = paste0(strTopDirPath, strNewDirName))
+    if(bSuccess)
+    {
+        strToPath <- paste0(strTopDirPath, strNewDirName)
+        bSuccess  <- file.rename(from = paste0(strTopDirPath,"ExampleTemplate"), to = strToPath )
+        
+        #Note: GitHub does not add blank directories and since the RCode directory is blank we need to add it here
+        if( bSuccess )
+            dir.create( paste0( strToPath, "/RCode"))
     }else{
         stop("Directory creation Problem!")
     }
     
     if(bSuccess){
         #Rcode 
-        strRCodeFileName = paste0(strTopDirPath, strNewDirName, "/", "RCode", "/", strNewDirName, strNewFileExt)
-        bSuccess = file.copy(strSelectedExample, strRCodeFileName)
+        strRCodeFileName <- paste0(strTopDirPath, strNewDirName, "/", "RCode", "/", strNewDirName, strNewFileExt)
+        bSuccess         <- file.copy(strSelectedExample, strRCodeFileName)
     }else{
         stop("File copy problem inside RCode!")
     }
     
     if(bSuccess){
-        strRmdFileNameFrom = paste0(strTopDirPath, strNewDirName, "/", "Description.Rmd")
-        strRmdFileNameTo = paste0(strTopDirPath, strNewDirName, "/", strNewDirName, ".Rmd")
+        strRmdFileNameFrom <- paste0(strTopDirPath, strNewDirName, "/", "Description.Rmd")
+        strRmdFileNameTo   <- paste0(strTopDirPath, strNewDirName, "/", strNewDirName, ".Rmd")
         file.rename(from = strRmdFileNameFrom, to = strRmdFileNameTo)
         
-        strRprojFileNameFrom = paste0(strTopDirPath, strNewDirName, "/", "Example.Rproj")
-        strRprojFileNameTo = paste0(strTopDirPath, strNewDirName, "/", strNewDirName, ".Rproj")
+        strRprojFileNameFrom <- paste0(strTopDirPath, strNewDirName, "/", "Example.Rproj")
+        strRprojFileNameTo   <- paste0(strTopDirPath, strNewDirName, "/", strNewDirName, ".Rproj")
         file.rename(from = strRprojFileNameFrom, to = strRprojFileNameTo)
     }else{
        stop("Renaming problem!") 
