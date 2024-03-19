@@ -6,7 +6,7 @@
 \usage{
 CreateCyneRgyFuntion(
   strFunctionType,
-  strNewFunctionName = "",
+  strNewFunctionName = NA
   strDirectory = NA,
   bOpen = TRUE
 )

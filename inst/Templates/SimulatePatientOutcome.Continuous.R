@@ -14,6 +14,7 @@
 {{FUNCTION_NAME}} <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
 {
     # Note: It can be helpful to save to the parameters that East sent.
+    # Saving is not available in Solara
     # The next two lines show how you could save the UserParam variable to an Rds file
     # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
     # saveRDS(UserParam, "UserParam.Rds")
