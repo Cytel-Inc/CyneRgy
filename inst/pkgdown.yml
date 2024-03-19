@@ -3,6 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   2ArmBinaryOutcomeAnalysisDescription: 2ArmBinaryOutcomeAnalysisDescription.html
+  2ArmBinaryOutcomePatientSimulation: 2ArmBinaryOutcomePatientSimulation.html
   2ArmNormalOutcomePatientSimulationDescription: 2ArmNormalOutcomePatientSimulationDescription.html
   2ArmTimeToEventOutcomePatientSimulationDescription: 2ArmTimeToEventOutcomePatientSimulationDescription.html
   AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR: AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html
@@ -10,7 +11,7 @@ articles:
   ExampleOutline: ExampleOutline.html
   Home: Home.html
   TreatmentSelectionDescription: TreatmentSelectionDescription.html
-last_built: 2024-03-14T22:36Z
+last_built: 2024-03-19T10:08Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles

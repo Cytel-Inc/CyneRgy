@@ -8,10 +8,16 @@
 #' Create new CyneRgy Function using provided templates. These R function that is created can be used in connection with Cytel-R integration.
 #' @description { Description: This function will create a new file containing the template for the desired CyneRgy function. }
 #' @export
-CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strDirectory = NA )
+CreateCyneRgyFunction <- function( strFunctionType = "", strNewFunctionName = NA, strDirectory = NA, bOpen = TRUE)
+
 {
+    if( is.na(strNewFunctionName) || strNewFunctionName == "" )
+    {
+        strNewFunctionName <- strFunctionType
+    }
     strNewFileExt  <- ".R"
     strNewFileName <- strNewFunctionName
+    
     
     
     #TODO: Make sure the strFunctionType is a valid type, eg PatientSimulator, Analysis ect
@@ -34,7 +40,7 @@ CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strD
     if ( missing( strFunctionType ) || !nzchar(strFunctionType) || !(strFunctionType %in% vValidExamples) ) 
     {
         print( paste0( 
-            'Please run `CreateCyneRgyFuntion()` with a valid strFunctionType argument name.',
+            'Please run `CreateCyneRgyFunction()` with a valid strFunctionType argument name.',
             validExamplesMsg ))
         return()
     }
@@ -82,7 +88,9 @@ CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strD
     vReplace <- c(strNewFunctionName, strToday)
     ReplaceTagsInFile( strNewFilePath, vTags, vReplace )
     
-    
-    # Open the file in RStudio
-    strIgnore <- rstudioapi::navigateToFile( strNewFilePath )
+    if( bOpen )
+    {
+        # Open the file in RStudio
+        strIgnore <- rstudioapi::navigateToFile( strNewFilePath )
+    }
 }
