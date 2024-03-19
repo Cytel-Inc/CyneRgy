@@ -8,7 +8,7 @@
 #' Create new CyneRgy Function using provided templates. These R function that is created can be used in connection with Cytel-R integration.
 #' @description { Description: This function will create a new file containing the template for the desired CyneRgy function. }
 #' @export
-CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strDirectory = NA )
+CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strDirectory = NA, bOpen = TRUE)
 {
     strNewFileExt  <- ".R"
     strNewFileName <- strNewFunctionName
@@ -82,7 +82,8 @@ CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strD
     vReplace <- c(strNewFunctionName, strToday)
     ReplaceTagsInFile( strNewFilePath, vTags, vReplace )
     
-    
-    # Open the file in RStudio
-    strIgnore <- rstudioapi::navigateToFile( strNewFilePath )
+    if(bOpen){
+        # Open the file in RStudio
+        strIgnore <- rstudioapi::navigateToFile( strNewFilePath )
+    }
 }

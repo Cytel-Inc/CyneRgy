@@ -7,7 +7,8 @@
 CreateCyneRgyFuntion(
   strFunctionType,
   strNewFunctionName = "",
-  strDirectory = NA
+  strDirectory = NA,
+  bOpen = TRUE
 )
 }
 \description{
