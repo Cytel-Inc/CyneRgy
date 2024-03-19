@@ -7,6 +7,9 @@
     <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmBinaryOutcomeAnalysisDescription.html</loc>
   </url>
   <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmBinaryOutcomePatientSimulation.html</loc>
+  </url>
+  <url>
     <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulation.html</loc>
   </url>
   <url>
@@ -55,7 +58,10 @@
     <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.html</loc>
   </url>
   <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFuntion.html</loc>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.html</loc>
+  </url>
+  <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.html</loc>
   </url>
   <url>
     <loc>https://Cytel-Inc.github.io/CyneRgy/reference/index.html</loc>

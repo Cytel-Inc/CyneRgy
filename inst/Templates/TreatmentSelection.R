@@ -53,6 +53,7 @@ PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam
 {
            
     # If you wanted to save the input objects you could use the following to save the files to your working directory
+    # Saving is not available in Solara
     # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
     # saveRDS( SimData, "SimData.Rds")
     # saveRDS( DesignParam, "DesignParam.Rds" )
