@@ -10,7 +10,8 @@
     nDecision 	    <- 0
     dTestStatistic  <- 0
     
-    # Input objects can be saved through the following lines (EAST ONLY):
+    # Input objects can be saved through the following lines
+    # Saving is not available in Solara
     #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
     #saveRDS( SimData, "SimData.Rds")
     #saveRDS( DesignParam, "DesignParam.Rds" )
