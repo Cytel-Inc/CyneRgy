@@ -19,7 +19,7 @@
 SimulatePatientSurvivalAssurance <- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL  ) 
 {
     # The SurvParam depends on input in East, EAST sends the Medan (see the Simulation->Response Generation tab for what is sent)
-     setwd( "C:\\AssuranceNormal\\ExampleArgumentsFromEast\\Example3")
+    # setwd( "C:\\AssuranceNormal\\ExampleArgumentsFromEast\\Example3")
     # #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
     # saveRDS( NumSub, "NumSub.Rds")
     # saveRDS( NumArm, "NumArm.Rds" )
@@ -27,13 +27,13 @@ SimulatePatientSurvivalAssurance <- function(NumSub, NumArm, TreatmentID, SurvMe
     # saveRDS( SurvMethod, "SurvMethod.Rds" )
     # saveRDS( NumPrd, "NumPrd.Rds" )
     # saveRDS( SurvParam, "SurvParam.Rds" )
-     saveRDS( UserParam, "UserParamSim.Rds" )
+    # saveRDS( UserParam, "UserParamSim.Rds" )
     
     # Step 1 - Determine how many patients on each treatment need to be simulated ####
     vTrtAllocation <- table( TreatmentID )
     vSurvTime      <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
     
-    ErrorCode    <- rep( -1, NumSub ) 
+    ErrorCode    <- 0 
     
     # Step 2: First sample the piece of the prior we want to use ####
     
@@ -61,13 +61,22 @@ SimulatePatientSurvivalAssurance <- function(NumSub, NumArm, TreatmentID, SurvMe
     
     vRates      <- c( dRateCtrl, dRateExp )
     
-    vTrt1 <- rexp( vTrtAllocation[ 1 ], vRates[ 1 ] )
-    vTrt2 <- rexp( vTrtAllocation[ 2 ], vRates[ 2 ] )
     
-    vSurvTime[ TreatmentID == 0 ] <- vTrt1
-    vSurvTime[ TreatmentID == 1 ] <- vTrt2
+    for( i in 1:NumSub )
+    {
+        vSurvTime[ i ] <- rexp( 1, vRates[ TreatmentID[ i  ] + 1 ] )
+    }
+    
+    
+    #vTrt1 <- rexp( vTrtAllocation[ 1 ], vRates[ 1 ] )
+    #vTrt2 <- rexp( vTrtAllocation[ 2 ], vRates[ 2 ] )
+    
+    #vSurvTime[ TreatmentID == 0 ] <- vTrt1
+    #vSurvTime[ TreatmentID == 1 ] <- vTrt2
        
+    lRet <- list( SurvivalTime = as.double(vSurvTime),
+                  ErrorCode    = as.integer( ErrorCode) ,
+                  TrueHR       = as.double( rep( dTrueHazard, NumSub)) )
     
-    return(list(SurvivalTime = as.double(vSurvTime), TrueHR = as.double( rep( dTrueHazard, NumSub)), ErrorCode = ErrorCode) )
+    return( lRet )
 }
-
