@@ -24,12 +24,12 @@ SimulatePatientOutcomePercentAtZero.Binary <- function(NumSub, NumArm, Treatment
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file
-    setwd(["ENTER THE DESIRED LOCATION TO SAVE THE FILE"])
-    saveRDS( UserParam, "UserParam.Rds")
-    saveRDS( NumSub, "NumSub.Rds" )
-    saveRDS( TreatmentID, "TreatmentID.Rds" )
-    saveRDS( PropResp, "PropResp.Rds" )
-    saveRDS( NumArm, "NumArm.Rds" )
+    # setwd(["ENTER THE DESIRED LOCATION TO SAVE THE FILE"])
+    # saveRDS( UserParam, "UserParam.Rds")
+    # saveRDS( NumSub, "NumSub.Rds" )
+    # saveRDS( TreatmentID, "TreatmentID.Rds" )
+    # saveRDS( PropResp, "PropResp.Rds" )
+    # saveRDS( NumArm, "NumArm.Rds" )
  
     
     # If the user did not specify the user parameters, but still called this function then the probability
@@ -59,7 +59,7 @@ SimulatePatientOutcomePercentAtZero.Binary <- function(NumSub, NumArm, Treatment
         else                        # if the probability of a 0 >= 1 --> Don't need to simulate from the binary distribution as all patients in the treatment are a 0
             nTreatmentResistant <- 1
         
-        # If nResponseIsZero == 1 then the patient outcome is a a 0 and we don't need to simulate it. 
+        # If nTreatmentResistant == 1 then the patient outcome is a a 0 and we don't need to simulate it. 
         
         if( nTreatmentResistant == 0  )  # The patient responded, so we need to simulate their outcome from a binary distribution 
             vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
