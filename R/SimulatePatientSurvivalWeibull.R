@@ -1,88 +1,76 @@
-#' Simulate time-to-event patient data from a Weibull distribution
-# Parameter Description 
-# NumSub - The number of patients (subjects) in the trial.  NumSub survival times need to be generated for the trial.  
-#           This is a single numeric value, eg 250.
-# NumArm - The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-# The SurvParam depends on input in East. In the simulation window on the Response Generation tab 
-# SurvMethod - This values is pulled from the Input Method drop-down list.  
-# SurvParam - Depends on the table in the Response Generation tab. 2‐D array of parameters uses to generate time of events.
-# If SurvMethod is 1 (Hazard Rates):
-#   SurvParam is an array that specifies arm by arm hazard rates (one rate per arm per piece). Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
-#   Arms are in columns with column 1 is control, column 2 is experimental
-#   Time periods are in rows
-# If SurvMethod is 2:
-#   SurvParam is an array specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.
-# If SurvMethod is 3:
-#   SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental 
-#  
-# Description: This function simulates from exponential, just included as a simple example as a starting point 
-
-#' @param NumSub NumSub - The number of patients (subjects) in the trial.  NumSub survival times need to be generated for the trial.  
+#' Simulate patient outcomes from a Weibull distribution 
+#' @param NumSub The number of subjects that need to be simulated, integer value. NumSub survival times need to be generated for the trial.  
 #'           This is a single numeric value, eg 250.
-#' @param NumArm The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-#'           The SurvParam depends on input in East. In the simulation window on the Response Generation tab 
-#' @export
+#' @param NumArm - The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
+#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
+#' @param SurvMethod If SurvMethod is 1 (Hazard Rates):
+#'   SurvParam is an array that specifies arm by arm hazard rates (one rate per arm per piece). Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
+#'   Arms are in columns with column 1 is control, column 2 is experimental
+#'   Time periods are in rows
+#'   If SurvMethod is 2:
+#'         SurvParam is an array specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.
+#'   If SurvMethod is 3:
+#'         SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental 
+#' @param NumPrd The number of periods in the East input.
+#' @param PrdTime TODO - Get this from East
+#' @param SurvParam - Depends on the table in the Response Generation tab. 2‐D array of parameters uses to generate time of events.
+#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#'  If UserParam is supplied, TODO What parameter are we sending and what are we using:
+#'  \describe{
+#'       \item {UserParam$dShapeCtrl} {The shape parameter in the Weibull distribution for the control treatment}  
+#'       \item {UserParam$dScaleCtrl} {The scale parameter in the Weibull distribution for the control treatment}
+#'       \item {UserParam$dShapeExp} {The shape parameter in the Weibull distribution for the experimental treatment}  
+#'       \item {UserParam$dScaleExp} {The scale parameter in the Weibull distribution for the experimental treatment}
+#'  }
+#'  @description
+#'  This function simulates patient data from a Weibull( shape, scale ) distribution.   The rweibull function in the stats package
+#'  is used to simulate the survival time.  See help on rweibull.  The exponetial with mean = scale is a special case with the shape = 1   
+#'  The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
+#'  and only the parameters in UserParam are utilized.  
+#'  @export
 SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
     #TODO: Need to test that the paths that hit an error actually stop
-    
-    # The SurvParam depends on input in East, EAST sends the Median (see the Simulation->Response Generation tab for what is sent)
-    setwd( "C:\\Kyle\\Cytel\\Software\\East-R\\EastRExamples\\Examples\\2ArmTimeToEventOutcomePatientSimulation\\ExampleOutput")
  
-    # If you wanted to save the input objects you could use the following to save the files to your working directory
+    #It can often be helpful to save the objects that East send.   This can be done by setting the working directory to a location
+    # of your choice and the using SaveRDS
+    #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
+    #saveRDS( NumSub, "NumSub.Rds")
+    #saveRDS( NumArm, "NumArm.Rds" )
+    #saveRDS( TreatmentID, "TreatmentID.Rds" )
+    #saveRDS( SurvMethod, "SurvMethod.Rds" )
+    #saveRDS( NumPrd, "NumPrd.Rds" )
+    #saveRDS( SurvParam, "SurvParam.Rds" )
+    #saveRDS( UserParam, "UserParam.Rds" )
     
-    # Example of how to save the data sent from East for each look.
-    # If the DesignParam.Rds exists, then don't save it again.
-    if( !file.exists(  "DesignParam.Rds" ))
-    {
-        saveRDS( SurvParam, paste0( "SurvParam.Rds") )
-        # Use the same function as previous line if you want to save the other objects
-    }
-
-    # For this example, in East the user must set the Input Method to Hazard Rate and have the # of pieces = 2. 
-    # This will cause SurvParam to be a 2x2 matrix. 
-    # For this example we will assume that column 1 are the 2 Weibull parameters for Standard of Care and column 2 are the two Weibull parameters for Experimental 
+    # Step 1 - Check the user parameters to verify the specify the shape and scale of each treatment ####
+    # TODO - Check for input error and set an error if that is the case
     
+    ErrorCode    <- 0
+    
+    
+    # Step 2 - Create vectors with the parameters so they can be used more efficiently when simulating patient data ####
+    vShape <- c( UserParam$dShapeCtrl, UserParam$dShapeExp )
+    vScale <- c( UserParam$dScaleCtrl, UserParam$dScaleExp )
+    
+    # Step 3 - TreatmentID = 0 then it is control, 1 is experimental adding one since vectors are index by 1  ####
+    vTreatmentID <- TreatmentID + 1   
+    
+    # Initialize the vector to store the patient surival times. 
     vSurvTime <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
     
-    vTreatmentID <- TreatmentID +1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
-    ErrorCode    <- rep( -1, NumSub ) 
-    
-    
-    if(SurvMethod == 1)   # Hazard Rates
+  
+    # Step 4 - Simulate the patient survival times ####
+    # Simulate the patient survival times based on the treatment
+    for( nPatIndx in 1:NumSub)
     {
-        
-        if( NumPrd == 2 )
-        {
-            vShapes <- SurvParam[ 1, ]   # Row 1 is the shape parameters
-            vScales <- SurvParam[ 2, ]   # Row 2 is the scale parameters
-            # Simulate the patient survival times based on the treatment
-            # For the Hazard Rate input with 1 piece, this is just simulating from an exponential distribution as an example and results will match
-            # East if you used the build hazard option.
-            for( nPatIndx in 1:NumSub)
-            {
-                nPatientTreatment     <- vTreatmentID[ nPatIndx ]
-                vSurvTime[ nPatIndx ] <- rweibull( 1, vShapes[ nPatientTreatment ], vScales[ nPatientTreatment ] )
-                
-            }
-        }
-        else 
-        {
-            ErrorCode <- ERROR1   # CAUSE_AN_ERROR is not defined so should cause in error
-        }
-        
+        nPatientTreatment     <- vTreatmentID[ nPatIndx ]
+        vSurvTime[ nPatIndx ] <- rweibull( 1, vShape[ nPatientTreatment ], vScale[ nPatientTreatment ] )
+
     }
-    else if(SurvMethod == 2)   # Cumulative % Survivals
-    {
-        ErrorCode <- ERROR1 # ERROR1 is not defined so this will cause an error if the users selects anything besides Hazard Rate and uses this function
-        
-    }
-    else if(SurvMethod == 3)   # Median Survival Times
-    {
-        ErrorCode <- ERROR3   # ERROR3 is not defined so this will cause an error if the users selects anything besides Hazard Rate and uses this function
-    }
-    
-    return( list(SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode) )
+
+    lRet <- list(SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode)
+    return( lRet )
 }
 
 

@@ -30,4 +30,62 @@ To replace the patient outcome simulation..
 ## Example 2 - Simulation of Patient Time-To-Event Data from a Mixture of Distributions
 Simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different Exponential distribution for simulating the time-to-event from. 
 
+```{r}
+# Compute paraemters for Example 1 - Constant hazard from Exp 
+source( "RCode/HelperFunctionsWeibull.R")
+dMedianCtrl <- 12
+dMedianExp  <- 16
+
+dShapeCtrl <- 1
+dShapeExp  <- 1
+
+dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
+dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
+
+dShapeCtrl 
+dShapeExp 
+dScaleCtrl 
+dScaleExp  
+
+
+dMedianCtrl <- 12
+dMedianExp  <- 16
+
+dShapeCtrl <- 3
+dShapeExp  <- 4
+
+dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
+dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
+
+dShapeCtrl 
+dShapeExp 
+dScaleCtrl 
+dScaleExp  
+
+
+
+dMedianCtrl <- 12
+dMedianExp  <- 16
+
+dShapeCtrl <- 0.7
+dShapeExp  <- 0.8
+
+dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
+dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
+
+dShapeCtrl 
+dShapeExp 
+dScaleCtrl 
+dScaleExp  
+
+vTime <- seq( 0.01, 50, 0.01)
+vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
+vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
+
+plot( vTime, vHazCtrl, type = 'l')
+plot( vTime, vHazExp, type = 'l')
+plot( vTime, vHazCtrl/vHazExp, type = 'l')
+
+```
+
 
