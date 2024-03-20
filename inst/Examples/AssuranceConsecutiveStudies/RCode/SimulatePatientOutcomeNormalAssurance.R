@@ -7,12 +7,15 @@
 #' @param  UserParam A list of user defined parameters in East.   The default must be NULL resulting in ignoring the percent of patients at 0.
 #' If UseParam is supplied, the list must contain the following named elements:
 #' \describe{
+#'      \item{UserParam$dWeight1}{Probability of sampiling from part 1} 
+#'      \item{UserParam$dWeight}{Probability of sampling from part 2} 
 #'      \item{UserParam$dMean1}{Prior mean for part 1} 
 #'      \item{UserParam$dMean2}{Prior mean for part 2}
 #'      \item{UserParam$dSD1}{Prior SD for part 1}
 #'      \item{UserParam$dSD2}{Prior SD for part 2}
 #'      \item{UserParam$dWeight1}{Weight of prior 1}
 #'      \item{UserParam$dWeight2}{Weight of prior 2}
+#'      \item{UserParam$dMeanCtrl}{Mean form control } 
 #'  }
 #' @description
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
@@ -35,9 +38,10 @@ SimulatePatientOutcomeNormalAssurance <- function(NumSub, TreatmentID, Mean, Std
     vPriorMeans <- c( UserParam$dMean1, UserParam$dMean2 )
     vPriorSDs   <- c( UserParam$dSD1, UserParam$dSD2 )
     
-    # Step 2 - Sample the prior mean according to the weights of the two normal distributions in the mixture 
-    nPrior      <- sample( c(1, 2 ), 1 , prob = c( UserParam$dWeight1, UserParam$dWeight2 ), replace = TRUE )
-    vMean  <- c( vMean, rnorm( 1, vPriorMeans[ nPrior ], vPriorSDs[ nPrior ] ) )
+    # Step 2 - Sample the prior mean treatment effect according to the weights of the two normal distributions in the mixture 
+    nPrior           <- sample( c(1, 2 ), 1 , prob = c( UserParam$dWeight1, UserParam$dWeight2 ), replace = TRUE )
+    dTreatmentEffect <- rnorm( 1, vPriorMeans[ nPrior ], vPriorSDs[ nPrior ] )
+    vMean            <- c( vMean,  vMean[ 1 ] + dTreatmentEffect)
     
     # Step 3 - Initialize variable ####   
     nError           <- 0 # East code for no errors occurred 

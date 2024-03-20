@@ -56,6 +56,8 @@ AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL,
     lRet <- list( TestStat = as.double(dZVal), 
                   Decision  = as.integer( nDecision ),
                   ErrorCode = as.integer(Error), 
+                  dPValue   = as.double( dPValue ), 
+                  HazardRatio = as.double( SimData$TrueHR[ 1 ] ),
                   TrueHR    = as.double( SimData$TrueHR[ 1 ] ) )
     
     

@@ -17,12 +17,13 @@
 AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
     
-    # setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example2")
+    # setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example4")
     # if( !file.exists("SimData.Rds"))
     # {
     #     saveRDS( SimData,     "SimData.Rds")
-     #    saveRDS( DesignParam, "DesignParam.Rds" )
-     #    saveRDS( UserParam,   "UserParam.Rds")
+    #    saveRDS( DesignParam, "DesignParam.Rds" )
+    #    saveRDS( UserParam,   "UserParam.Rds")
+    #    saveRDS( LookInfo,   "LookInfo.Rds")
     # }
     
     
@@ -148,7 +149,8 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
 
     # Note: the SimData$vTrueDelta vector was added to the SimData via the return in the SimulatePateintOutcomeNormalAssurance
     
-    lReturn <- list(Decision = as.integer(nDecision), 
+    lReturn <- list(Decision = as.integer(nDecision),
+                    ErrorCode = as.integer(Error), 
                     PostProb = dPostProbGrt, 
                     dTrueDelta = as.double( SimData$vTrueDelta[1]),
                     dCtrlPostMean = as.double( lPostParams$dPostMeanCtrl ),
@@ -158,8 +160,7 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
                     dObsMeanCtrl = as.double( mean(  SimData$Response[ SimData$TreatmentID == 0 ])),
                     dObsMeanExp = as.double( mean(  SimData$Response[ SimData$TreatmentID == 1 ])),
                     dSimMeanCtrl = as.double(SimData$dSimMeanCtrl[1]),
-                    dSimMeanExp = as.double( SimData$dSimMeanExp[1]),
-                    ErrorCode = as.integer(Error))
+                    dSimMeanExp = as.double( SimData$dSimMeanExp[1]))
     # lReturn <- list(TestStat = as.double(0), 
     #                 Decision = as.integer(nDecision), 
     #                 PostProb = dPostProbGrt, 
