@@ -14,15 +14,15 @@
 #'    \item{UserParam$dPU}{A value in [0, 1] that specifies the upper cuttoff for efficacy.  If posterior probability is greater than PU a Go decision is made.}
 #'    }
 #' @export
-AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
+AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
     
-    # setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example4")
+    # setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example2")
     # if( !file.exists("SimData.Rds"))
     # {
     #     saveRDS( SimData,     "SimData.Rds")
-    #     saveRDS( DesignParam, "DesignParam.Rds" )
-    #     saveRDS( UserParam,   "UserParam.Rds")
+     #    saveRDS( DesignParam, "DesignParam.Rds" )
+     #    saveRDS( UserParam,   "UserParam.Rds")
     # }
     
     
@@ -31,7 +31,7 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo, UserPara
     if( missing( LookInfo ) == FALSE && !is.null( LookInfo ) )
     {
         
-        saveRDS( LookInfo,    "LookInfo.Rds" )
+        #saveRDS( LookInfo,    "LookInfo.Rds" )
         # Step 1 - If this is the IA then subset the data to include only those for the first look. East sends all simulated data
         
         if(  LookInfo$CurrLookIndex == 1 )
@@ -77,7 +77,7 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo, UserPara
             # Futility Check - Step 1, simulate the remaining patients in the trial ####
             # Simulate the future data based on post samples and combine with current data at the interim.
             vExpPats  <- c( vCurrentExpPats,  rnorm( nQtyFuturePatientsPerArm, vPostMeanExp[ i ],  UserParam$dSigma ) )
-            vStdPats  <- c( vCurrentCtrlPats, rnorm( nQtyFuturePatientsPerArm, vPostMeanCtrl[ i ], UserParam$dSigma ))
+            vCtrlPats <- c( vCurrentCtrlPats, rnorm( nQtyFuturePatientsPerArm, vPostMeanCtrl[ i ], UserParam$dSigma ))
             
             # Futility Check - Step 2, Compute the posterior parameters for this trial ####
             lPostParamsAtTrialEnd <- ComputePosteriorParametersNormal( vCtrlPats, vExpPats, UserParam )
@@ -148,11 +148,23 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo, UserPara
 
     # Note: the SimData$vTrueDelta vector was added to the SimData via the return in the SimulatePateintOutcomeNormalAssurance
     
-    lReturn <- list(TestStat = as.double(0), 
-                    Decision = as.integer(nDecision), 
+    lReturn <- list(Decision = as.integer(nDecision), 
                     PostProb = dPostProbGrt, 
                     dTrueDelta = as.double( SimData$vTrueDelta[1]),
+                    dCtrlPostMean = as.double( lPostParams$dPostMeanCtrl ),
+                    dCtrlPostVar = as.double( lPostParams$dPostVarCtrl ),
+                    dExpPostMean = as.double(  lPostParams$dPostMeanExp ),
+                    dExpPostVar = as.double( lPostParams$dPostVarExp  ),
+                    dObsMeanCtrl = as.double( mean(  SimData$Response[ SimData$TreatmentID == 0 ])),
+                    dObsMeanExp = as.double( mean(  SimData$Response[ SimData$TreatmentID == 1 ])),
+                    dSimMeanCtrl = as.double(SimData$dSimMeanCtrl[1]),
+                    dSimMeanExp = as.double( SimData$dSimMeanExp[1]),
                     ErrorCode = as.integer(Error))
+    # lReturn <- list(TestStat = as.double(0), 
+    #                 Decision = as.integer(nDecision), 
+    #                 PostProb = dPostProbGrt, 
+    #                 dTrueDelta = as.double( SimData$vTrueDelta[1]),
+    #                 ErrorCode = as.integer(Error))
     
     return( lReturn )
 }
