@@ -3,7 +3,7 @@ title: "Two Arm Time-To-Event Outcome: Patient Outcome Simulation Examples"
 author: "J. Kyle Wathen"
 date: '`r format(Sys.time(), "%B %d, %Y", usetz=TRUE)`'
 output:
-  html_document: default
+
   word_document: default
 ---
 
@@ -30,7 +30,7 @@ To replace the patient outcome simulation..
 ## Example 2 - Simulation of Patient Time-To-Event Data from a Mixture of Distributions
 Simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different Exponential distribution for simulating the time-to-event from. 
 
-```{r}
+```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Compute paraemters for Example 1 - Constant hazard from Exp 
 source( "RCode/HelperFunctionsWeibull.R")
 dMedianCtrl <- 12
@@ -47,6 +47,17 @@ dShapeExp
 dScaleCtrl 
 dScaleExp  
 
+vTime <- seq( 0.01, 50, 0.01)
+vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
+vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
+
+plot( vTime, vHazCtrl, type = 'l', main = "Constant Hazard for Control (Ctrl = Black, Exp = Blue)", ylim = c( 0, 0.1))
+lines( vTime, vHazExp, lty =2, col =4, lwd=2)
+#plot( vTime, vHazExp, type = 'l', main = "Hazard for Exp (Increasing Hazard)")
+plot( vTime, vHazExp/vHazCtrl, type = 'l', main = "Hazard Ratio (Constant Hazards)")
+
+
+# Increasing Hazard Example ###
 
 dMedianCtrl <- 12
 dMedianExp  <- 16
@@ -63,6 +74,16 @@ dScaleCtrl
 dScaleExp  
 
 
+vTime <- seq( 0.01, 50, 0.01)
+vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
+vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
+
+plot( vTime, vHazCtrl, type = 'l', main = "Increasing Hazard for Control (Ctrl = Black, Exp = Blue)", ylim = c( 0, 5))
+lines( vTime, vHazExp, lty =2, col =4, lwd=2)
+#plot( vTime, vHazExp, type = 'l', main = "Hazard for Exp (Increasing Hazard)")
+plot( vTime, vHazExp/vHazCtrl, type = 'l', main = "Hazard Ratio (Increasing Hazards)")
+
+# Decreasing Hazard Example ####
 
 dMedianCtrl <- 12
 dMedianExp  <- 16
@@ -82,10 +103,10 @@ vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
 
-plot( vTime, vHazCtrl, type = 'l')
-plot( vTime, vHazExp, type = 'l')
-plot( vTime, vHazCtrl/vHazExp, type = 'l')
 
+plot( vTime, vHazCtrl, type = 'l', main = "Decreasing Hazard for Control (Ctrl = Black, Exp = Blue)", ylim = c( 0, 1))
+lines( vTime, vHazExp, lty =2, col =4, lwd=2)
+plot( vTime, vHazExp/vHazCtrl, type = 'l', main = "Hazard Ratio (Decreasing Hazards)")
 ```
 
 
