@@ -100,12 +100,12 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam =
         
     }
     
-    if( !file.exists( paste0( "SimData", nLookIndex, ".Rds") ))
-    {
-        saveRDS( SimData, paste0( "SimData", nLookIndex, ".Rds") )
-        saveRDS( DesignParam, paste0( "DesignParam", nLookIndex, ".Rds") )
-        saveRDS( LookInfo, paste0( "LookInfo", nLookIndex, ".Rds") )
-    }
+    # if( !file.exists( paste0( "SimData", nLookIndex, ".Rds") ))
+    # {
+    #     saveRDS( SimData, paste0( "SimData", nLookIndex, ".Rds") )
+    #     saveRDS( DesignParam, paste0( "DesignParam", nLookIndex, ".Rds") )
+    #     saveRDS( LookInfo, paste0( "LookInfo", nLookIndex, ".Rds") )
+    # }
     Error 	<- 0
     #retval 	= 0
     

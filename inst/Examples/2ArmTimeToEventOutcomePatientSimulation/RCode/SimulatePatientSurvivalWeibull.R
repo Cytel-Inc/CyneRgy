@@ -17,10 +17,10 @@
 #' @param UserParam A list of user defined parameters in East. The default must be NULL.
 #'  If UserParam is supplied, TODO What parameter are we sending and what are we using:
 #'  \describe{
-#'       \item {UserParam$dShapeCtrl} {The shape parameter in the Weibull distribution for the control treatment}  
-#'       \item {UserParam$dScaleCtrl} {The scale parameter in the Weibull distribution for the control treatment}
-#'       \item {UserParam$dShapeExp} {The shape parameter in the Weibull distribution for the experimental treatment}  
-#'       \item {UserParam$dScaleExp} {The scale parameter in the Weibull distribution for the experimental treatment}
+#'       \item{UserParam$dShapeCtrl}{The shape parameter in the Weibull distribution for the control treatment}  
+#'       \item{UserParam$dScaleCtrl}{The scale parameter in the Weibull distribution for the control treatment}
+#'       \item{UserParam$dShapeExp}{The shape parameter in the Weibull distribution for the experimental treatment}  
+#'       \item{UserParam$dScaleExp}{The scale parameter in the Weibull distribution for the experimental treatment}
 #'  }
 #'  @description
 #'  This function simulates patient data from a Weibull( shape, scale ) distribution.   The rweibull function in the stats package

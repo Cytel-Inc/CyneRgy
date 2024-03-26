@@ -1,0 +1,10 @@
+---
+title: "Generate Patient Arrival Times with Poission Process"
+author: "J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+---
+```{r child = '../inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.Rmd'}
+```
+
