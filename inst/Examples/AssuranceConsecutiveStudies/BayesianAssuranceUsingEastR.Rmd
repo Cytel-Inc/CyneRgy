@@ -363,10 +363,11 @@ ggplot(dfDensity, aes(x = x, y = y)) +
 # 
 ######################################################################################################################## .
 
-dfEastResultsEx3 <- read_csv("EastOutput/Example3/Example3R.csv")
+dfEastResultsEx3 <- read_csv("EastOutput/Example3/Example3.csv")
 
+vGo       <- ifelse( dfEastResultsEx3$BdryStopCode ==2, 1, 0)
 
-dProbGo   <- mean( dfEastResultsEx3$BdryStopCode )  # Pr( Go )
+dProbGo   <- mean( vGo )  # Pr( Go )
 
 
 ```
@@ -375,7 +376,7 @@ The probability of a Go decision is `r round( dProbGo*100, 0)`% and the probabil
 ```{r echo = FALSE, warning = FALSE}
 
 # Get trials that are successful so we can build posterior of true delta when a Go decision is made
-dfSuccess <- dfEastResultsEx3[ dfEastResultsEx3$BdryStopCode==1, ]
+dfSuccess <- dfEastResultsEx3[ dfEastResultsEx3$BdryStopCode==2, ]
 
 dfDensity <- density( log( dfSuccess$TrueHR) )
 
