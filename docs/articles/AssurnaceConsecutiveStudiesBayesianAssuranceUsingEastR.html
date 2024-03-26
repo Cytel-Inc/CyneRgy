@@ -63,6 +63,9 @@
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6>
     <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html">Bayesian Assurance of Consecutive Studies</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6>
+    <a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a>
   </div>
 </li>
 <li class="nav-item">
@@ -99,7 +102,7 @@
                         <h4 data-toc-skip class="author">J. Kyle Wathen
 and Laurent Spiess</h4>
             
-            <h4 data-toc-skip class="date">March 19, 2024</h4>
+            <h4 data-toc-skip class="date">March 26, 2024</h4>
       
       
       <div class="d-none name"><code>AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.Rmd</code></div>
@@ -298,19 +301,19 @@ analysis.</p>
 </h3>
 <p>The results of the design are as follows:</p>
 <ul>
-<li>The probability of an end of study Go is: 0.143</li>
-<li>The probability of an end of study No Go (Stop) is: 0.2712</li>
-<li>The probability of futility at the interim: 0.5858</li>
+<li>The probability of an end of study Go is: 0.1478</li>
+<li>The probability of an end of study No Go (Stop) is: 0.2656</li>
+<li>The probability of futility at the interim: 0.5866</li>
 <li>The probability of a Go conditional on not stopping at the interim:
-0.3452438</li>
+0.357523</li>
 <li>The probability of a No Go conditional on not stopping at the
-interim: 0.6547562</li>
+interim: 0.642477</li>
 </ul>
 <p>The posterior mean of the true delta, <span class="math inline">\(\mu_E-\mu_S\)</span>, given a Go decision is:
-1</p>
+0.992</p>
 <p>The summary of the true delta given a Go decision is:</p>
 <pre><code><span><span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span><span class="co">##   0.262   0.831   0.986   1.000   1.151   1.881</span></span></code></pre>
+<span><span class="co">##   0.023   0.823   0.990   0.992   1.151   2.009</span></span></code></pre>
 <p>The scaled posterior distribution of the true delta given a Go
 decision is:</p>
 <p><img src="AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
@@ -377,8 +380,8 @@ phase 2.</p>
 <div class="section level4">
 <h4 id="results-for-phase-2">Results For Phase 2<a class="anchor" aria-label="anchor" href="#results-for-phase-2"></a>
 </h4>
-<p>The probability of a Go is 27% and the probability of a No Go is
-73%.</p>
+<p>The probability of a Go is 26.7% and the probability of a No Go is
+73.3%.</p>
 <p><img src="AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
 </div>
@@ -401,8 +404,8 @@ value.</p>
 <div class="section level4">
 <h4 id="results-for-phase-3">Results For Phase 3<a class="anchor" aria-label="anchor" href="#results-for-phase-3"></a>
 </h4>
-<p>The probability of a Go in Phase 3 is 45.8% and the probability of a
-No Go is 54.2%.</p>
+<p>The probability of a Go in Phase 3 is 46% and the probability of a No
+Go is 54%.</p>
 <p><img src="AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 </div>
 </div>
@@ -433,7 +436,7 @@ follows:</p>
 <h4 id="results-for-phase-2-followed-by-phase-3">Results For Phase 2 Followed by Phase 3<a class="anchor" aria-label="anchor" href="#results-for-phase-2-followed-by-phase-3"></a>
 </h4>
 <p>Given a Go decision is made in Phase 2, the probability of a Go in
-Phase 3 is 84.5% and the probability of a No Go is 15.5%.</p>
+Phase 3 is 84.8% and the probability of a No Go is 15.2%.</p>
 <p><img src="AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
 <div class="section level4">
@@ -441,8 +444,8 @@ Phase 3 is 84.5% and the probability of a No Go is 15.5%.</p>
 </h4>
 <p>Comparing the option of running only a Phase 3 versus a Phase 2
 followed by a Phase 3 if Phase 2 is successful, the probability of Go in
-phase 3 increases from 45.8% to 84.5% and the probability of a No Go in
-Phase 3 decreases from 54.2% to 15.5%.</p>
+phase 3 increases from 46% to 84.8% and the probability of a No Go in
+Phase 3 decreases from 54% to 15.2%.</p>
 </div>
 </div>
 </div>
@@ -468,8 +471,8 @@ endpoint.</p>
 <div class="section level4">
 <h4 id="results-for-phase-2-1">Results For Phase 2<a class="anchor" aria-label="anchor" href="#results-for-phase-2-1"></a>
 </h4>
-<p>The probability of a Go is 27% and the probability of a No Go is
-73%.</p>
+<p>The probability of a Go is 26.7% and the probability of a No Go is
+73.3%.</p>
 <p><img src="AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 </div>
 </div>

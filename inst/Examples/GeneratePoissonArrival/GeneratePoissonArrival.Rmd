@@ -1,0 +1,79 @@
+---
+title: 'Generate Poisson Arrival'
+author: "J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 5
+    number_sections: true
+    latex_engine: tinytex
+  word_document: default
+  pdf_document:
+    toc: true
+    toc_depth: '5'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library( CyneRgy )
+source( "RCode/GeneratePoissonArrival.R")
+```
+
+# Poisson Process for Patient Arrival times
+This example demonstrates how to add the ability to generate patient arrival time according to a Poisson process with a ramp-up.  
+
+
+The examples included here are to provide different approaches for simulating arrival time according to a Poisson process. 
+
+**East Workbook**: GeneragePoissonArrival.cywx
+
+**R Studio Project File**: GeneratePoissonArrival.Rproj.
+
+In the RCode directory of this example you will find the following R files:
+
+
+# Example 1 - Ramp-Up In Accrual
+
+In this example we make use of the UserParam and provide 7 rates, dRate1, dRate2, ..., dRate7.   Starting at time 0 the assume accrual rate is dRate1 per unit time, at time 1, the rate changes to dRate2, at time 3 the rate changes to dRate3, ect.    For example, if the time unit is months then this example illustrates how to ramp up over a 6 month period where month 6 on the accrual rate is assumed to be dRate7.  
+
+Suppose that the expected accrual rates where 3, 6, 10, 15, 18, 25, 35 starting at time unit 0, 1, 2, 3, 4, 5, 6.  One example trial could have accrual that looks like the following:
+
+```{r echo=FALSE,  warning=FALSE}
+NumSub   <- 600
+NumPrd   <- 1  
+PrdStart <- 0 
+AccrRate <- 1 
+UserParam <- list( dRate1 = 3, dRate2 = 6, dRate3 = 10, dRate4 = 15, dRate5 = 18, dRate6 = 25, dRate7 = 35 )
+
+lRet <- GeneratePoissonArrival( NumSub, NumPrd, PrdStart, AccrRate, UserParam )
+
+
+plot( lRet$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time", ylab ="Number of Patients Enrolled", main = "Number of Patients Enrolled Using UserParam")
+
+
+
+```
+
+# Example 2 - Ramp-Up In Accrual Using Built In Input
+
+In this example we make use of the build in inputs for East and Solara to provide  a ramp-up in accrual where the user can specify
+
+Suppose that the user specified the start periods as 0, 6, 12, 18, 24, 48 and the expected accrual rates of 1, 4, 12, 24, 48.  Then from time 0 to time 6 the expected rate is 1 patient per time unit, from time 6 to 12 the rate is 4 patients per time unit, time 12 to 18 expected accrual is 12, 18 to 24 the rate is 24 to 24 and after time unit 24 it is assume to be 48. One example trial could have accrual that looks like the following, with dashed lines at the time points where accrual rates change:
+
+```{r echo=FALSE,  warning=FALSE}
+AccrRate <- c( 1, 4, 12, 24, 48)
+PrdStart <- c( 0, 6, 12, 18, 24 )
+lRet2 <- GeneratePoissonArrival( NumSub, NumPrd, PrdStart, AccrRate  )
+plot( lRet2$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time",main = "Number of Patients Enrolled Using PrdStart and AccrRate", ylab = "Number of Patients Enrolled", ylim = c(0,300), xlim = c(0,26))
+abline( v = PrdStart, lty =2)
+
+plot( lRet2$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time",main = "Number of Patients Enrolled Using PrdStart and AccrRate", ylab = "Number of Patients Enrolled")
+abline( v = PrdStart, lty =2)
+
+```
+
+
+

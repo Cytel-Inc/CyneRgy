@@ -122,7 +122,10 @@ AnalyzeUsingPropLimitsOfCI<- function(SimData, DesignParam, LookInfo = NULL, Use
 
     
     
-    return(list(TestStat = as.double(dLowerLimitCI), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ) ))
+    return(list(TestStat  = as.double(dLowerLimitCI), 
+                ErrorCode = as.integer(Error), 
+                Decision  = as.integer( nDecision ),
+                Delta     = as.double( lAnalysisResult$estimate[1] - lAnalysisResult$estimate[2])))
 }
 
 
