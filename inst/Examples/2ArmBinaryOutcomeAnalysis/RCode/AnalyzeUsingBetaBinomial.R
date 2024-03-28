@@ -1,24 +1,35 @@
 ######################################################################################################################## .
-#' TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
-#' TODO(Kyle): Should the functions at the bottom be left at the bottom or do they need to be added to top documentation?
-#' 
 #' @param AnalyzeUsingBetaBinomial
-#' @title Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care. 
+#' @title Analyze for efficacy using a beta( alpha, beta) prior to compute the posterior probability that experimental is better than control treatment care. 
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
-#'                  If UserParam is supplied, the list must contain the following named elements:
-#'                  UserParam$dAlphaS
-#'                  UserParam$dBetaS
-#'                  UserParam$dBetaE
-#'                  UserParam$dAlphaE
-#'                  UserParam$dUpperCutoffEfficacy - A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy 
-#'                  UserParam$dLowerCutoffForFutility - A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility. 
-#' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than standard of care.
-#'              The futility is based on a Bayesian predictive probability.  
-#'              The prior for the prediction and the analysis do NOT need to be the same.  
-#'              This function requires more info in the glDesign than the previous AnalyzeUsingBetaBinomBayesianModel
+#' @param UserParam A list of user defined parameters in East or Solara.
+#'                  UserParam must be supplied and contain the following named elements:
+#'  \describe{
+#'      \item{UserParam$dAlphaCtrl}{Prior alpha parameter for control treatment}
+#'      \item{UserParam$dBetaCtrl}{Prior beta parameter for control treatment}
+#'      \item{UserParam$dAlphaExp}{Prior alpha parameter for experimental treatment}
+#'      \item{UserParam$dBetaExp}{Prior beta parameter for experimental treatment}
+#'      \item{UserParam$dUpperCutoffEfficacy}{A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy }
+#'      \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility. }
+#'  }
+
+#' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than control treatment.
+#'              The futility is based posterior probability being less than dLowerCutoffForFutility .  
+#'              In this example we assume a Bayesian model and use posterior probabilities for decision making
+#'              If user variables are not specified we assume:
+#'              pi_Ctrl ~ beta( 10, 40 ); to reflect that knowledge that on control treatment 10/50 previous patients responded
+#'              pi_EXp ~ beta( 0.2, 0.8 ); non-informative prior for Experimental to have the same prior mean as S but only 1 prior patient observed
+#'              
+#'              At an IA: If Pr( pi_Ctrl > pi_Exp | data ) > 0.95 --> Stop for efficacy.
+#'              Otherwise if  Pr( pi_Ctrl > pi_Exp | data ) < 0.1 --> Stop for futility
+#'              At an FA: If Pr( pi_Ctrl > pi_Exp | data ) > 0.95 --> Declare efficacy, otherwise, declare futility.
+#'              
+#'              When using simulation to obtain the frequentist Operating Characteristic (OC) 
+#'              of a Bayesian design, you should set dLowerCutoffForFutility = 0
+#'              when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  
+#'              When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed. 
 #'              
 #' @return TestStat A double value of the computed test statistic
 #' @return Decision An integer value: Decision = 0 --> No boundary crossed
@@ -29,11 +40,8 @@
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-
-#'@note In this example we assume a Bayesian model and use posterior probabilities for decision making
-#       If user variables are not specifed we assume:
-#       pi_S ~ beta( 10, 40 ); to reflect that knowledge that on standard of care 10/50 previous patients responded
-#       pi_E ~ beta( 0.2, 0.8 ); non-informative prior for Experimental to have the same prior mean as S but only 1 prior patient observed
+#'@note 
+#'
 #'@note Helpful Hints:
 #'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
 #'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
@@ -43,46 +51,60 @@
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
-
 ######################################################################################################################## .
 
-AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
+AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
-    # The below lines set the values of the parameters if a user does not specify a value
+    # Input objects can be saved through the following lines:
+    
+    # setwd( "C:/2ArmBinaryOutcomeAnalysis/ExampleArgumentsFromEast/Example4/")
+    # saveRDS( SimData, "SimData.Rds")
+    # saveRDS( DesignParam, "DesignParam.Rds" )
+    # saveRDS( LookInfo, "LookInfo.Rds" )
+
+    
+    # Step 1 - Retrieve necessary information from the objects East or Solara sent ####
+    if(  !is.null( LookInfo )  )
+    {
+        # Group sequential design
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfLooks          <- LookInfo$NumLooks
+        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    }
+    else
+    {
+        # Fixed Design
+        nQtyOfLooks          <- 1
+        nQtyOfEvents         <- DesignParam$MaxCompleters
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+    }
+    
     
     if( is.null( UserParam ) )
     {
-        UserParam <- list(dAlphaS=10, dBetaS=40, dAlphaE=0.2, dBetaE= 0.8, dUpperCutoffEfficacy= 0.975,dLowerCutoffForFutility = 0.1)
+        
+        # FATAL ERROR AS WE DON'T KNOW WHAT THE USER WANTS TO DO.  
+        # Creating a FATAL error will avoid misleading results when UserParam is not supplied
+        return(list(TestStat  = as.double(0), 
+                    ErrorCode = as.integer(-1), 
+                    Decision  = as.integer( 0 ),
+                    Delta     = as.double( 0 )))
     }
-
     
     
-    # Pull important information from the input parameters that were sent from East
-    nQtyOfLooks          <- LookInfo$NumLooks
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
-    
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-    
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Step 2 - Create the vector of simulated data for this IA - East sends all of the simulated data ####
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
     
     # Create vectors of data for each treatment 
-    vOutcomesS           <- vPatientOutcome[ vPatientTreatment == 0 ]
-    vOutcomesE           <- vPatientOutcome[ vPatientTreatment == 1 ]
+    vOutcomesCtrl        <- vPatientOutcome[ vPatientTreatment == 0 ]
+    vOutcomesExp         <- vPatientOutcome[ vPatientTreatment == 1 ]
     
-#TODO(Kyle): Should this below note move into the top formatting section?
-   
-    
-    # Important Note: 
-    # When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should set dLowerCutoffForFutility = 0
-    # when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  
-    # When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed. 
-  
-    # Perform the desired analysis - for this case a Bayesian analysis.  If Posterior Probability is > Cutoff --> Efficacy ####
+
+    # Step 3 -Perform the desired analysis - for this case a Bayesian analysis.  If Posterior Probability is > Cutoff --> Efficacy ####
     # The function PerformAnalysisBetaBinomial is provided below in this file.
-    lRet                 <- ProbExpGreaterCtrlBeta( vOutcomesS, vOutcomesE, UserParam$dAlphaS, UserParam$dBetaS, UserParam$dAlphaE, UserParam$dBetaE )
+    lRet                 <- ProbExpGreaterCtrlBeta( vOutcomesCtrl, vOutcomesExp, UserParam$dAlphaCtrl, UserParam$dBetaCtrl, UserParam$dAlphaExp, UserParam$dBetaExp )
     nDecision            <- ifelse( lRet$dPostProb > UserParam$dUpperCutoffEfficacy, 2, 0 )  # Above the cutoff --> Efficacy ( 2 is East code for Efficacy)
     
     if( nDecision == 0 )
@@ -99,18 +121,10 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam =
         }
         
     }
-    
-    # if( !file.exists( paste0( "SimData", nLookIndex, ".Rds") ))
-    # {
-    #     saveRDS( SimData, paste0( "SimData", nLookIndex, ".Rds") )
-    #     saveRDS( DesignParam, paste0( "DesignParam", nLookIndex, ".Rds") )
-    #     saveRDS( LookInfo, paste0( "LookInfo", nLookIndex, ".Rds") )
-    # }
+
     Error 	<- 0
-    #retval 	= 0
     
-    
-    return(list(TestStat = as.double(lRet$dPostProb), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ) ))
+    return(list(TestStat = as.double(lRet$dPostProb), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ), Delta = as.double( lRet$dDelta ) ) )
 }
 
 
@@ -118,7 +132,7 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam =
 
 # Function for performing statistical analysis using a Beta-Binomial Bayesian model
 
-ProbSGreaterEBeta <- function(vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlphaE, dBetaE) 
+ProbExpGreaterCtrlBeta <- function( vOutcomesCtrl, vOutcomesExp, dAlphaCtrl, dBetaCtrl, dAlphaExp, dBetaExp ) 
 {
     # In the beta-binomial model if we make the assumption that 
     # pi ~ Beta( a, b )
@@ -126,20 +140,22 @@ ProbSGreaterEBeta <- function(vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlphaE, 
     # pi | data ~ Beta( a + # success, b + # non-successes )
     
     # Compute the posterior parameters for control treatment 
-    dAlphaS <- dAlphaS + sum( vOutcomesS )
-    dBetaS  <- dBetaS  + length( vOutcomesS ) - sum( vOutcomesS )
+    dAlphaCtrl  <- dAlphaCtrl + sum( vOutcomesCtrl )
+    dBetaCtrl   <- dBetaCtrl  + length( vOutcomesCtrl ) - sum( vOutcomesCtrl )
     
     # Compute the posterior parameters for Exp treatment 
-    dAlphaE  <- dAlphaE + sum( vOutcomesE )
-    dBetaE   <- dBetaE  + length( vOutcomesE ) - sum( vOutcomesE )
+    dAlphaExp   <- dAlphaExp + sum( vOutcomesExp )
+    dBetaExp    <- dBetaExp  + length( vOutcomesExp ) - sum( vOutcomesExp )
     
     # There are much more efficient ways to compute this, but for simplicity, we are just sampling the posteriors
-    vPiCtrl    <- rbeta( 10000, dAlphaS, dBetaS )
-    vPiExp     <- rbeta( 10000, dAlphaE,  dBetaE  )
+    vPiCtrl    <- rbeta( 10000, dAlphaCtrl, dBetaCtrl )
+    vPiExp     <- rbeta( 10000, dAlphaExp,  dBetaExp  )
     dPostProb  <- ifelse( vPiExp > vPiCtrl, 1, 0 )
     dPostProb  <- sum( dPostProb )/length( dPostProb )
     
-    return(list(dPostProb = dPostProb))
+    # Compute Delta: mean(Pi_E) - mean( Pi_C)
+    dDelta     <- ( dAlphaExp/( dAlphaExp + dBetaExp) ) - ( dAlphaCtrl/( dAlphaCtrl +  dBetaCtrl ))
+    return(list(dPostProb = dPostProb, dDelta = dDelta))
 }
 
 

@@ -28,26 +28,26 @@
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
 ######################################################################################################################## .
-
-#TODO(Kyle)- I am not sure where to substitute in the user parameters since most seems to be sent from East and then analyzed using prop.test
-AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo, UserParam = NULL)
+AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
-    
-    
-    # Retrieve necessary information from the objects East sent
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
-    
     # Input objects can be saved through the following lines:
-    
     #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
     #saveRDS( SimData, "SimData.Rds")
     #saveRDS( DesignParam, "DesignParam.Rds" )
     #saveRDS( LookInfo, "LookInfo.Rds" )
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
     
-    
-  
+    # Retrieve necessary information from the objects East sent
+    if(  !is.null( LookInfo )  )
+    {
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    }
+    else
+    {
+        nQtyOfEvents         <- DesignParam$MaxCompleters
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+    }
     
     # Create the vector of simulated data for this IA - East sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]

@@ -68,25 +68,25 @@ $\pi_S \sim$ Beta( 10, 40 ) which has a prior mean response rate of 20% and is e
 
 $\pi_E \sim$ Beta( 0.2, 0.8 ) which has a prior mean response rate of 20% and is equivalent to observing 1 prior patient.
 
-The Beta distribution is conjugate for binary data.  Assuming $N_S$ and $N_E$ patients have enrolled on S and E, respectively, the following data is observed at an interim analysis
+The Beta distribution is conjugate for binary data.  Assuming $N_{Ctrl}$ and $N_{Exp}$ patients have enrolled on Contrl (Ctrl) and Experimental (Exp), respectively, the following data is observed at an interim analysis
 
 
 
 | Treatment | Number of Responses | Number of Treatment Failures |
 |-----------|---------------------|------------------------------|
-|    S      | $X_S$               | $N_S - X_S$                  |
-|    E      | $X_E$               | $N_E - X_E$                  |
+|    Ctrl   | $X_{Ctrl}$          | $N_{Ctrl} - X_{Ctrl}$        |
+|    Exp    | $X_{Exp}$           | $N_{Exp} - X_{Exp}$          |
 
 
 Then posterior distributions are:
 
-$\pi_S | N_S, X_S \sim$ Beta( 10 + $X_S$, 40 + $N_S - X_S$ )
+$\pi_{Ctrl} | N_{Ctrl}, X_{Ctrl} \sim$ Beta( 10 + $X_{Ctrl}$, 40 + $N_{Ctrl} - X_{Ctrl}$ )
 
-$\pi_E | N_E, X_E \sim$ Beta( 10 + $X_E$, 40 + $N_E - X_E$ )
+$\pi_{Ctrl} | N_{Exp}, X_{Exp} \sim$ Beta( 0.2 + $X_{Exp}$, 0.8 + $N_{Exp} - X_{Exp}$ )
 
 For analysis and decision making, the posterior distributions are used to stop the trial for efficacy if it is very likely that the response rate on E is higher than on S and stop for futility if it is unlikely that the response rate on E is better than S.  Specifically, compute the posterior probability that E has a higher response rate than S:
 
-$\rho = Pr( \pi_E > \pi_C | X_S, N_S, X_E, N_E )$  
+$\rho = Pr( \pi_{Exp} > \pi_{Ctrl} | X_{Ctrl}, N_{Ctrl}, X_{Exp}, N_{Exp} )$  
 
 At the interim analysis:
 Note that the below values can be user-specified. 
@@ -95,7 +95,7 @@ If $\rho > 0.975$ then make an early efficacy (Go) decision
 
 If $\rho < 0.10$ then make an early futility (No Go) decision.
 
-At the final analysis if $\rho > 0.975$ make an efficacy decision, otherwise a futility decision is made.
+At the final analysis if $\rho > 0.95$ make an efficacy decision, otherwise a futility decision is made.
 
 This example demonstrates how the prior data and informative prior on $\pi_S$ can impact decision making.   However, a full sensitivity analysis to the prior information and impact on Operating characteristics should be explored with approaches like this. 
 
