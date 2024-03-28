@@ -1,4 +1,3 @@
-
 ######################################################################################################################## .
 #' @param AnalyzeUsingEastManualFormula
 #' @title Compute the statistic using formula 28.2 in the East manual.
@@ -27,18 +26,17 @@
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
-
 ######################################################################################################################## .
 
-AnalyzeUsingEastManualFormula<- function(SimData, DesignParam, LookInfo, UserParam = NULL)
+AnalyzeUsingEastManualFormula<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
     
     # Input objects can be saved through the following lines:
-    
-    #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
+    # Saving is only available in East, do NOT save files in SOLARA
+    # #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
+    # saveRDS( SimData, "SimData.Rds")
+    # saveRDS( DesignParam, "DesignParam.Rds" )
+    # saveRDS( LookInfo, "LookInfo.Rds" )
     
     
     # Retrieve necessary information from the objects East sent

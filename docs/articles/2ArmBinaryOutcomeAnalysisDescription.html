@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">March 26, 2024</h4>
+            <h4 data-toc-skip class="date">March 28, 2024</h4>
       
       
       <div class="d-none name"><code>2ArmBinaryOutcomeAnalysisDescription.Rmd</code></div>
@@ -221,8 +221,9 @@ prior patients with 10 responses.</p>
 <p><span class="math inline">\(\pi_E \sim\)</span> Beta( 0.2, 0.8 )
 which has a prior mean response rate of 20% and is equivalent to
 observing 1 prior patient.</p>
-<p>The Beta distribution is conjugate for binary data. Assuming <span class="math inline">\(N_S\)</span> and <span class="math inline">\(N_E\)</span> patients have enrolled on S and E,
-respectively, the following data is observed at an interim analysis</p>
+<p>The Beta distribution is conjugate for binary data. Assuming <span class="math inline">\(N_{Ctrl}\)</span> and <span class="math inline">\(N_{Exp}\)</span> patients have enrolled on Contrl
+(Ctrl) and Experimental (Exp), respectively, the following data is
+observed at an interim analysis</p>
 <table class="table">
 <thead><tr class="header">
 <th>Treatment</th>
@@ -231,30 +232,32 @@ respectively, the following data is observed at an interim analysis</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>S</td>
-<td><span class="math inline">\(X_S\)</span></td>
-<td><span class="math inline">\(N_S - X_S\)</span></td>
+<td>Ctrl</td>
+<td><span class="math inline">\(X_{Ctrl}\)</span></td>
+<td><span class="math inline">\(N_{Ctrl} - X_{Ctrl}\)</span></td>
 </tr>
 <tr class="even">
-<td>E</td>
-<td><span class="math inline">\(X_E\)</span></td>
-<td><span class="math inline">\(N_E - X_E\)</span></td>
+<td>Exp</td>
+<td><span class="math inline">\(X_{Exp}\)</span></td>
+<td><span class="math inline">\(N_{Exp} - X_{Exp}\)</span></td>
 </tr>
 </tbody>
 </table>
 <p>Then posterior distributions are:</p>
-<p><span class="math inline">\(\pi_S | N_S, X_S \sim\)</span> Beta( 10 +
-<span class="math inline">\(X_S\)</span>, 40 + <span class="math inline">\(N_S - X_S\)</span> )</p>
-<p><span class="math inline">\(\pi_E | N_E, X_E \sim\)</span> Beta( 10 +
-<span class="math inline">\(X_E\)</span>, 40 + <span class="math inline">\(N_E - X_E\)</span> )</p>
+<p><span class="math inline">\(\pi_{Ctrl} | N_{Ctrl}, X_{Ctrl}
+\sim\)</span> Beta( 10 + <span class="math inline">\(X_{Ctrl}\)</span>,
+40 + <span class="math inline">\(N_{Ctrl} - X_{Ctrl}\)</span> )</p>
+<p><span class="math inline">\(\pi_{Ctrl} | N_{Exp}, X_{Exp}
+\sim\)</span> Beta( 0.2 + <span class="math inline">\(X_{Exp}\)</span>,
+0.8 + <span class="math inline">\(N_{Exp} - X_{Exp}\)</span> )</p>
 <p>For analysis and decision making, the posterior distributions are
 used to stop the trial for efficacy if it is very likely that the
 response rate on E is higher than on S and stop for futility if it is
 unlikely that the response rate on E is better than S. Specifically,
 compute the posterior probability that E has a higher response rate than
 S:</p>
-<p><span class="math inline">\(\rho = Pr( \pi_E &gt; \pi_C | X_S, N_S,
-X_E, N_E )\)</span></p>
+<p><span class="math inline">\(\rho = Pr( \pi_{Exp} &gt; \pi_{Ctrl} |
+X_{Ctrl}, N_{Ctrl}, X_{Exp}, N_{Exp} )\)</span></p>
 <p>At the interim analysis: Note that the below values can be
 user-specified.</p>
 <p>If <span class="math inline">\(\rho &gt; 0.975\)</span> then make an
@@ -262,7 +265,7 @@ early efficacy (Go) decision</p>
 <p>If <span class="math inline">\(\rho &lt; 0.10\)</span> then make an
 early futility (No Go) decision.</p>
 <p>At the final analysis if <span class="math inline">\(\rho &gt;
-0.975\)</span> make an efficacy decision, otherwise a futility decision
+0.95\)</span> make an efficacy decision, otherwise a futility decision
 is made.</p>
 <p>This example demonstrates how the prior data and informative prior on
 <span class="math inline">\(\pi_S\)</span> can impact decision making.
