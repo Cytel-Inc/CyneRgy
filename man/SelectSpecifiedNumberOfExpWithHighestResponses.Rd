@@ -25,9 +25,9 @@ If UserParam is supplied, the list must contain the following named elements:
 \item{UserParam$QtyOfArmsToSelect}{A value that defines how many treatment arms are chosen to advance. 
                          Note this number must match the number of user-specified allocation values.
                          If this value is not specified, the default is 2.}  
-\item{UserParam$Rank1AllocationRatio} {A value that specifies the allocation to the arm with the highest response
+\item{UserParam$Rank1AllocationRatio}{A value that specifies the allocation to the arm with the highest response
                             If this value is not specified, the default is 2.}
-\item{UserParam$Rank2AllocationRatio} {A value that specifies the allocation to the arm with the next highest response
+\item{UserParam$Rank2AllocationRatio}{A value that specifies the allocation to the arm with the next highest response
                                 If this value is not specified, the default is 1.}
          }}
 }
@@ -37,6 +37,8 @@ TreatmentID  A vector that consists of the experimental treatments that were sel
 AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 
 ErrorCode An integer value:  ErrorCode = 0 --> No Error
+                                      ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+                                      ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 }
 \description{
 This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   

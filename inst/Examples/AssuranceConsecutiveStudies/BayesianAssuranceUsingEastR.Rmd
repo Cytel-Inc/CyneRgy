@@ -44,7 +44,7 @@ Fixed sample, with normally distributed outcomes Y.
   * Sample size: 80 patients per arm
   * Assume standard deviation is known: $\sigma = 1.9$
  
-Denote the minimum acceptable value by MAV.  For patients receiving treatment $j$ = S or E, we assume the outcomes Y $\sim N( \mu_j, \sigma^2)$ where, for simplicity,  $\mu_j$ is unknown and $\sigma$ is the known, fixed quantity. We assume *a priori* $\mu_j \sim$ Normal( $\theta_j, \tau_j^2= 100^2$), for $j=$ S or E.  At the end of the study the following is computed:
+Denote the minimum acceptable value by MAV.  For patients receiving treatment $j$ = S or E, we assume the outcomes Y $\sim N( \mu_j, \sigma^2)$ where, for simplicity,  $\mu_j$ is unknown and $\sigma$ is the known, fixed quantity. We assume *a priori* $\mu_j \sim$ Normal( $\theta_j, \tau_j^2= 1000 $), for $j=$ S or E.  At the end of the study the following is computed:
 
 $$
     \rho = Pr( \mu_E > \mu_S + MAV | data ) \text{ and}
@@ -384,7 +384,7 @@ dfDensity <- density( log( dfSuccess$TrueHR) )
 #dfPostSample <- data.frame( SampleMean = dfSuccess$dTrueDelta )
 
 #dfDensity   <- density( dfDen$SampleMean)
-vY <- dfDensity$y/max( dfDensity$y )
+vY <- dfDensity$y #/max( dfDensity$y )
 vX <- dfDensity$x 
 
 dfPostDensity <- data.frame( y = vY, x = vX)
@@ -394,6 +394,31 @@ dfPostDensity <- data.frame( y = vY, x = vX)
 ggplot(dfPostDensity, aes(x = x, y = y)) +
     geom_area( fill = "skyblue", color = "black") +
     labs(title = expression("Assurance Posterior Distribution of True Log(HR)" ), 
+             x = expression( "True Log(HR) "  ), y ="Density") +
+    theme_bw() +
+    theme(
+        plot.title = element_text(hjust = 0.5),  # Center the title
+        axis.text.x = element_text(size = 10),    # Adjust x-axis text size
+        axis.title.x = element_text(size = 12),   # Adjust x-axis title size
+        axis.title.y = element_text(size = 12),   # Adjust y-axis title size
+        plot.margin = margin(20, 20, 20, 20),      # Adjust plot margins
+        #panel.grid.major = element_blank(),        # Remove major grid lines
+        #panel.grid.minor = element_blank(),        # Remove minor grid lines
+        panel.border = element_blank(),            # Remove panel border
+        axis.line = element_line(color = "black")  # Add black axis line
+    ) +
+    xlim(-0.4, 0.1)  # Set x-axis range from 0 to 1
+
+vY <- dfDensity$y/max( dfDensity$y )
+vX <- dfDensity$x 
+
+dfPostDensity <- data.frame( y = vY, x = vX)
+
+# Assuming dfPostDensity is your data frame
+# Adjusted ggplot code
+ggplot(dfPostDensity, aes(x = x, y = y)) +
+    geom_area( fill = "skyblue", color = "black") +
+    labs(title = expression("Scaled Assurance Posterior Distribution of True Log(HR)" ), 
              x = expression( "True Log(HR) "  ), y ="Density") +
     theme_bw() +
     theme(

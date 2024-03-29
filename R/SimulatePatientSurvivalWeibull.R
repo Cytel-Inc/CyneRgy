@@ -15,16 +15,16 @@
 #' @param PrdTime TODO - Get this from East
 #' @param SurvParam - Depends on the table in the Response Generation tab. 2‐D array of parameters uses to generate time of events.
 #' @param UserParam A list of user defined parameters in East. The default must be NULL.
-#'  If UserParam is supplied, TODO What parameter are we sending and what are we using:
+#'  If UserParam is supplied, 
 #'  \describe{
-#'       \item {UserParam$dShapeCtrl} {The shape parameter in the Weibull distribution for the control treatment}  
-#'       \item {UserParam$dScaleCtrl} {The scale parameter in the Weibull distribution for the control treatment}
-#'       \item {UserParam$dShapeExp} {The shape parameter in the Weibull distribution for the experimental treatment}  
-#'       \item {UserParam$dScaleExp} {The scale parameter in the Weibull distribution for the experimental treatment}
+#'       \item{UserParam$dShapeCtrl}{The shape parameter in the Weibull distribution for the control treatment}  
+#'       \item{UserParam$dScaleCtrl}{The scale parameter in the Weibull distribution for the control treatment}
+#'       \item{UserParam$dShapeExp}{The shape parameter in the Weibull distribution for the experimental treatment}  
+#'       \item{UserParam$dScaleExp}{The scale parameter in the Weibull distribution for the experimental treatment}
 #'  }
 #'  @description
 #'  This function simulates patient data from a Weibull( shape, scale ) distribution.   The rweibull function in the stats package
-#'  is used to simulate the survival time.  See help on rweibull.  The exponetial with mean = scale is a special case with the shape = 1   
+#'  is used to simulate the survival time.  See help on rweibull.  The exponential with mean = scale is a special case with the shape = 1   
 #'  The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 #'  and only the parameters in UserParam are utilized.  
 #'  @export
