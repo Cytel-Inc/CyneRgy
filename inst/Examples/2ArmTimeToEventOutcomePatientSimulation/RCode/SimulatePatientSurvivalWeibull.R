@@ -40,11 +40,11 @@ SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMetho
     
     # Example of how to save the data sent from East for each look.
     # If the DesignParam.Rds exists, then don't save it again.
-    if( !file.exists(  "DesignParam.Rds" ))
-    {
+    #if( !file.exists(  "DesignParam.Rds" ))
+    #{
         #saveRDS( SurvParam, paste0( "SurvParam.Rds") )
         # Use the same function as previous line if you want to save the other objects
-    }
+    #}
 
     # For this example, in East the user must set the Input Method to Hazard Rate and have the # of pieces = 2. 
     # This will cause SurvParam to be a 2x2 matrix. 
@@ -72,5 +72,3 @@ SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMetho
     
     return( list(SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode) )
 }
-
-

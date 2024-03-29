@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,15 +129,22 @@ If SurvMethod is 3:
 
 <dt>UserParam</dt>
 <dd><p>A list of user defined parameters in East. The default must be NULL.
-If UserParam is supplied, TODO What parameter are we sending and what are we using:</p><dl>
-      UserParam$dShapeCtrl The shape parameter in the Weibull distribution for the control treatment  
-     \item UserParam$dScaleCtrl The scale parameter in the Weibull distribution for the control treatment
-     \item UserParam$dShapeExp The shape parameter in the Weibull distribution for the experimental treatment  
-     \item UserParam$dScaleExp The scale parameter in the Weibull distribution for the experimental treatment
+If UserParam is supplied,</p><dl><dt>UserParam$dShapeCtrl</dt>
+<dd><p>The shape parameter in the Weibull distribution for the control treatment</p></dd>
+  
+     <dt>UserParam$dScaleCtrl</dt>
+<dd><p>The scale parameter in the Weibull distribution for the control treatment</p></dd>
+
+     <dt>UserParam$dShapeExp</dt>
+<dd><p>The shape parameter in the Weibull distribution for the experimental treatment</p></dd>
+  
+     <dt>UserParam$dScaleExp</dt>
+<dd><p>The scale parameter in the Weibull distribution for the experimental treatment</p></dd>
+
 
 </dl><p>@description
 This function simulates patient data from a Weibull( shape, scale ) distribution.   The rweibull function in the stats package
-is used to simulate the survival time.  See help on rweibull.  The exponetial with mean = scale is a special case with the shape = 1   
+is used to simulate the survival time.  See help on rweibull.  The exponential with mean = scale is a special case with the shape = 1   
 The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 and only the parameters in UserParam are utilized.  
 @export</p></dd>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,7 +145,14 @@ Analyze for efficacy using a beta prior to compute the posterior probability tha
           
           <code><a href="SelectExpWithPValueLessThanSpecified.html">SelectExpWithPValueLessThanSpecified()</a></code> 
         </dt>
-        <dd>Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value.</dd>
+        <dd>Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value. 
+ If UserParam is supplied, the list must contain the following named element:
+ <dl><dt>UserParam$dMaxPValue</dt>
+<dd><p>A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
+      Any treatment with less than the specified p-value will be advanced to the second stage</p></dd>
+
+          
+</dl></dd>
       </dl><dl><dt>
           
           <code><a href="SelectSpecifiedNumberOfExpWithHighestResponses.html">SelectSpecifiedNumberOfExpWithHighestResponses()</a></code> 

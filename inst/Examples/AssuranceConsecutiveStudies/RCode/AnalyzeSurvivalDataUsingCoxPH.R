@@ -26,6 +26,13 @@ AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL,
         nQtyOfEvents         <- DesignParam$MaxEvents 
     }
     
+    
+    
+    if( is.null( UserParam ) )
+    {
+        UserParam <- list( bReturnLogTrueHazard = FALSE, bReturnNAForNoGoTrials = FALSE )   
+    }
+    
     SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
     
     # Compute the time of analysis 
@@ -53,12 +60,24 @@ AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL,
     # 3  Futility Boundary Crossed
     # 4  Equivalence Boundary Crossed
     #
+    
+    dTrueHR <- as.double( SimData$TrueHR[ 1 ] )
+ 
+    if( UserParam$bReturnLogTrueHazard )
+    {
+        dTrueHR <- log( dTrueHR )       
+    }
+    
+    if( UserParam$bReturnNAForNoGoTrials & nDecision != 2 )
+    {
+        dTrueHR <- NA
+    }
     lRet <- list( TestStat = as.double(dZVal), 
                   Decision  = as.integer( nDecision ),
                   ErrorCode = as.integer(Error), 
                   dPValue   = as.double( dPValue ), 
-                  HazardRatio = as.double( SimData$TrueHR[ 1 ] ),
-                  TrueHR    = as.double( SimData$TrueHR[ 1 ] ) )
+                  HazardRatio = as.double( dTrueHR ),
+                  TrueHR    = as.double( dTrueHR ) )
     
     
     return( lRet)
