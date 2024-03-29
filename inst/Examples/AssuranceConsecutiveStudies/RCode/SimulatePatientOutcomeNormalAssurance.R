@@ -66,7 +66,7 @@ SimulatePatientOutcomeNormalAssurance <- function(NumSub, TreatmentID, Mean, Std
     
     # Step 7 - Build the return object, add other variables to the list as needed
     #       Add the vTrueDeta so it can easily be output by saving the East summary stats. 
-    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double(TrueDelta)  )
+    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double(TrueDelta), Delta = as.double( TrueDelta)  )
     
     return( lReturn )
 }
@@ -115,7 +115,7 @@ SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function(NumSub, Treatme
     TrueDelta <- rep( Mean[2], length( vPatientOutcome))
     
     # Step 7 - Build the return object, add other variables to the list as needed
-    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double(TrueDelta)  )
+    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double(TrueDelta), Delta = as.double( TrueDelta)  )
     
     return( lReturn )
 }

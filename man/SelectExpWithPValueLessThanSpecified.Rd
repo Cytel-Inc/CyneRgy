@@ -2,7 +2,12 @@
 % Please edit documentation in R/SelectExpWithPValueLessThanSpecified.R
 \name{SelectExpWithPValueLessThanSpecified}
 \alias{SelectExpWithPValueLessThanSpecified}
-\title{Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value.}
+\title{Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value. 
+ If UserParam is supplied, the list must contain the following named element:
+ \describe{
+ \item{UserParam$dMaxPValue}{A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
+      Any treatment with less than the specified p-value will be advanced to the second stage}
+          }}
 \usage{
 SelectExpWithPValueLessThanSpecified(
   SimData,
@@ -11,26 +16,14 @@ SelectExpWithPValueLessThanSpecified(
   UserParam = NULL
 )
 }
-\arguments{
-\item{SimData}{Data frame which consists of data generated in current simulation}
-
-\item{DesignParam}{List of Design and Simulation Parameters required to perform treatment selection.}
-
-\item{LookInfo}{List containing Design and Simulation Parameters, which might be required to perform treatment selection}
-
-\item{UserParam}{A list of user defined parameters in East. The default must be NULL.
-If UserParam is supplied, the list must contain the following named element:
-\describe{
-\item{UserParam$dMaxPValue} {A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
-     Any treatment with less than the specified p-value will be advanced to the second stage}
-         }}
-}
 \value{
 TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 
 AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 
 ErrorCode An integer value:  ErrorCode = 0 --> No Error
+                                      ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+                                      ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 }
 \description{
 At the interim analysis, compare treatment and each experimental to control using a chi-squared test. 

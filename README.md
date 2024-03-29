@@ -2,6 +2,8 @@
 
 R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial designs, without requiring you to develop an entire R code base. The CyneRgy R package illustrates the synergy of using R and Cytel products for clinical trial simulation and provide tools to help develop new functions.  
 
+This CyneRgy site is a ‘beta’ draft and has been published to support the use of custom R code with Cytel’s products and to gather feedback. The site will change frequently in the weeks leading up to its official release, currently scheduled for the latter half of April, 2024. Please forgive typos and disconnected links, and feel free to offer suggestions and comments using the Issue tab in GitHub. 
+
 
 # Introduction 
 

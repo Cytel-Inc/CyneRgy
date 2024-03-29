@@ -6,7 +6,7 @@
 #'@param UserParam A list of user defined parameters in East. The default must be NULL.
 #'  If UserParam is supplied, the list must contain the following named element:
 #'  \describe{
-#'  \item{UserParam$dMaxPValue} {A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
+#'  \item{UserParam$dMaxPValue}{A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
 #'       Any treatment with less than the specified p-value will be advanced to the second stage}
 #'           }
 #'@description
@@ -14,12 +14,11 @@
 #' Any treatment with p-value < dMaxPValue is selected for stage 2.
 #' If none of the treatments have a p-value < dMaxPValue, select the treatment with the smallest p-value
 #' In the second stage, the randomization ratio will be 1:1 (experimental:control)
-
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
+#'                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #' @note The length of TreatmentID and AllocRatio must be the same.
 #' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio

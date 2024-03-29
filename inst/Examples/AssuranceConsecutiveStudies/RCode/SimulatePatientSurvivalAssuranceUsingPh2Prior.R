@@ -19,7 +19,7 @@
 SimulatePatientSurvivalAssuranceUsingPh2Prior <- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL  ) 
 {
     # The SurvParam depends on input in East, EAST sends the Medan (see the Simulation->Response Generation tab for what is sent)
-     setwd( "C:\\AssuranceNormal\\ExampleArgumentsFromEast\\Example5")
+     #setwd( "C:\\AssuranceNormal\\ExampleArgumentsFromEast\\Example5")
     # #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
     # saveRDS( NumSub, "NumSub.Rds")
     # saveRDS( NumArm, "NumArm.Rds" )
@@ -27,7 +27,7 @@ SimulatePatientSurvivalAssuranceUsingPh2Prior <- function(NumSub, NumArm, Treatm
     # saveRDS( SurvMethod, "SurvMethod.Rds" )
     # saveRDS( NumPrd, "NumPrd.Rds" )
     # saveRDS( SurvParam, "SurvParam.Rds" )
-     saveRDS( UserParam, "UserParamSim.Rds" )
+     # saveRDS( UserParam, "UserParamSim.Rds" )
     
     # Step 1 - Determine how many patients on each treatment need to be simulated ####
     vTrtAllocation <- table( TreatmentID )
