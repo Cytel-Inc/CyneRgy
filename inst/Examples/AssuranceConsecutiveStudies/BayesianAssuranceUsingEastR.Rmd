@@ -44,7 +44,7 @@ Fixed sample, with normally distributed outcomes Y.
   * Sample size: 80 patients per arm
   * Assume standard deviation is known: $\sigma = 1.9$
  
-Denote the minimum acceptable value by MAV.  For patients receiving treatment $j$ = S or E, we assume the outcomes Y $\sim N( \mu_j, \sigma^2)$ where, for simplicity,  $\mu_j$ is unknown and $\sigma$ is the known, fixed quantity. We assume *a priori* $\mu_j \sim$ Normal( $\theta_j, \tau_j^2= 1000 $), for $j=$ S or E.  At the end of the study the following is computed:
+Denote the minimum acceptable value by MAV.  For patients receiving treatment $j$ = S or E, we assume the outcomes Y $\sim N( \mu_j, \sigma^2)$ where, for simplicity,  $\mu_j$ is unknown and $\sigma$ is the known, fixed quantity. We assume *a priori* $\mu_j \sim$ Normal( $\theta_j$, $\tau_j^2$= $1000^2$ ), for $j=$ S or E.  At the end of the study the following is computed:
 
 $$
     \rho = Pr( \mu_E > \mu_S + MAV | data ) \text{ and}
