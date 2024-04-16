@@ -19,7 +19,7 @@ CyneRgy::RunExample( "2ArmNormalOutcomePatientSimulation" )
 Running the command above will load the R Studio project in R Studio. 
 
 
-**East Workbook**: 2ArmTimeNormalOcomePatientSimulation.cywx
+**East Workbook**: 2ArmTimeNormalOucomePatientSimulation.cywx
 
 **R Studio Project File**: 2ArmNormalOutcomePatientSimulation.Rproj.
 
@@ -43,7 +43,7 @@ In this example, the patient outcome is change from baseline. However, there is 
 
 1. Example 1.2 - This function assumes that 20% of patients, on average, will not respond to treatment. A binomial distribution is utilized to simulate if the patient is a non-responder. If the patient is a responder, then their outcome is simulated from a normal distribution with the mean and standard deviation provided in East and sent to R. For this example, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.2 and dProbOfZeroOutcomeExp = 0.2.
 
-1.  Example 1.3 - This example is similar to the previous example, however, this function assumes that 40% of patients, on average, will not respond to treatment. For this example, the required parameters, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.4 and dProbOfZeroOutcomeExp = 0.4. 
+1.  Example 1.3 - This example is similar to the previous example, however, this function assumes that 40% of patients, on average, will not respond to treatment. For this example, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.4 and dProbOfZeroOutcomeExp = 0.4. 
 
 ## Example 2 - Simulation of Patient Normal Data from a Mixture Distribution with Mixture Percent Sampled from a Beta Distribution
 
