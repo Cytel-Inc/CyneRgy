@@ -64,9 +64,9 @@ In the second stage, the randomization ratio will be 1:1 (experimental:control)
 
 ## Example 3 - Select Treatments With Highest Number of Responses
 
-At the interim analysis, the user-specified number of experimental treatments (maxSelection) that have the largest number of responses are selected.
+At the interim analysis, the user-specified number of experimental treatments (QtyOfArmsToSelect) that have the largest number of responses are selected.
 
-After the interim analysis, randomization occurs based on user specified inputs: 1:highestResponse:nextHighestResponse (control, selected experimental arm with highest number of responses, selected experimental arm with the second highest number of responses). 
+After the interim analysis, randomization occurs based on user specified inputs: 1:Rank1AllocationRatio:Rank2AllocationRatio (control, selected experimental arm with highest number of responses, selected experimental arm with the second highest number of responses). 
 
 For example, the randomization ratio could be updated to the following:
 
