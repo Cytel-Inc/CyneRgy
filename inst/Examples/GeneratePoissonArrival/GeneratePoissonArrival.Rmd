@@ -37,7 +37,7 @@ In the RCode directory of this example you will find the following R files:
 
 # Example 1 - Ramp-Up In Accrual
 
-In this example we make use of the UserParam and provide 7 rates, dRate1, dRate2, ..., dRate7.   Starting at time 0, the assume accrual rate is dRate1 per unit time, at time 1, the rate changes to dRate2, at time 3, the rate changes to dRate3, ect.    For example, if the time unit is months, then this example illustrates how to ramp up over a 6 month period where month 6 on the accrual rate is assumed to be dRate7.  
+In this example we make use of the UserParam and provide 7 rates, dRate1, dRate2, ..., dRate7.   Starting at time 0, the assume accrual rate is dRate1 per unit time, at time 1, the rate changes to dRate2, at time 3, the rate changes to dRate3, ect.    For example, if the time unit is months, then this example illustrates how to ramp up over a 6 month period, where at month 6 and beyond the accrual rate is assumed to be dRate7.  
 
 Suppose that the expected accrual rates were 3, 6, 10, 15, 18, 25, 35 starting at time unit 0, 1, 2, 3, 4, 5, 6.  One example trial could have accrual that looks like the following:
 
