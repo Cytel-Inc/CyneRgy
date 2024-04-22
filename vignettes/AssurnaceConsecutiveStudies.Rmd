@@ -16,7 +16,7 @@ output:
     toc_depth: '5'
 ---
 
-```{r child = '../inst/Examples/AssuranceConsecutiveStudies/BayesianAssuranceUsingEastR.rmd'}
+```{r child = '../inst/Examples/AssuranceConsecutiveStudies/AssuranceConsecutiveStudies.Rmd'}
 ```
 
 
