@@ -62,7 +62,7 @@
     <a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6>
-    <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html">Bayesian Assurance of Consecutive Studies</a>
+    <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6>
     <a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a>
@@ -102,7 +102,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">April 03, 2024</h4>
+            <h4 data-toc-skip class="date">April 22, 2024</h4>
       
       
       <div class="d-none name"><code>GeneratePoissonArrival.Rmd</code></div>
@@ -117,7 +117,7 @@ Wathen</h4>
 arrival time according to a Poisson process with a ramp-up.</p>
 <p>The examples included here are to provide different approaches for
 simulating arrival time according to a Poisson process.</p>
-<p><strong>East Workbook</strong>: GeneragePoissonArrival.cywx</p>
+<p><strong>East Workbook</strong>: GeneratePoissonArrival.cywx</p>
 <p><strong>R Studio Project File</strong>:
 GeneratePoissonArrival.Rproj.</p>
 <p>In the RCode directory of this example you will find the following R
@@ -127,29 +127,30 @@ files:</p>
 <h2 id="example-1---ramp-up-in-accrual">Example 1 - Ramp-Up In Accrual<a class="anchor" aria-label="anchor" href="#example-1---ramp-up-in-accrual"></a>
 </h2>
 <p>In this example we make use of the UserParam and provide 7 rates,
-dRate1, dRate2, …, dRate7. Starting at time 0 the assume accrual rate is
-dRate1 per unit time, at time 1, the rate changes to dRate2, at time 3
-the rate changes to dRate3, ect. For example, if the time unit is months
-then this example illustrates how to ramp up over a 6 month period where
-month 6 on the accrual rate is assumed to be dRate7.</p>
-<p>Suppose that the expected accrual rates where 3, 6, 10, 15, 18, 25,
-35 starting at time unit 0, 1, 2, 3, 4, 5, 6. One example trial could
-have accrual that looks like the following:</p>
+dRate1, dRate2, …, dRate7. Starting at time 0, the assume accrual rate
+is dRate1 per unit time, at time 1, the rate changes to dRate2, at time
+3, the rate changes to dRate3, ect. For example, if the time unit is
+months, then this example illustrates how to ramp up over a 6 month
+period, where at month 6 and beyond the accrual rate is assumed to be
+dRate7.</p>
+<p>Suppose that the expected accrual rates were 3, 6, 10, 15, 18, 25, 35
+starting at time unit 0, 1, 2, 3, 4, 5, 6. One example trial could have
+accrual that looks like the following:</p>
 <p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="example-2---ramp-up-in-accrual-using-built-in-input">Example 2 - Ramp-Up In Accrual Using Built In Input<a class="anchor" aria-label="anchor" href="#example-2---ramp-up-in-accrual-using-built-in-input"></a>
 </h2>
-<p>In this example we make use of the build in inputs for East and
-Solara to provide a ramp-up in accrual where the user can specify</p>
+<p>In this example we make use of the built-in inputs for East and
+Solara to provide a ramp-up in accrual that the user can specify.</p>
 <p>Suppose that the user specified the start periods as 0, 6, 12, 18,
-24, 48 and the expected accrual rates of 1, 4, 12, 24, 48. Then from
-time 0 to time 6 the expected rate is 1 patient per time unit, from time
-6 to 12 the rate is 4 patients per time unit, time 12 to 18 expected
-accrual is 12, 18 to 24 the rate is 24 to 24 and after time unit 24 it
-is assume to be 48. One example trial could have accrual that looks like
-the following, with dashed lines at the time points where accrual rates
-change:</p>
+24, 48 and the expected accrual rates of 1, 4, 12, 24, 48. Then, from
+time 0 to time 6, the expected rate is 1 patient per time unit, from
+time 6 to 12, the rate is 4 patients per time unit, time 12 to 18,
+expected accrual is 12, time 18 to 24, the rate is 24, and after time
+unit 24, it is assumed to be 48. One example trial could have accrual
+that looks like the following, with dashed lines at the time points
+where accrual rates change:</p>
 <p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-3-1.png" width="700"><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-3-2.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

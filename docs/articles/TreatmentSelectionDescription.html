@@ -62,7 +62,7 @@
     <a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6>
-    <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html">Bayesian Assurance of Consecutive Studies</a>
+    <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6>
     <a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a>
@@ -102,7 +102,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">April 03, 2024</h4>
+            <h4 data-toc-skip class="date">April 22, 2024</h4>
       
       
       <div class="d-none name"><code>TreatmentSelectionDescription.Rmd</code></div>
@@ -181,10 +181,10 @@ dMaxPValue, select the treatment with the smallest p-value.</p>
 <h3 id="example-3---select-treatments-with-highest-number-of-responses">Example 3 - Select Treatments With Highest Number of Responses<a class="anchor" aria-label="anchor" href="#example-3---select-treatments-with-highest-number-of-responses"></a>
 </h3>
 <p>At the interim analysis, the user-specified number of experimental
-treatments (maxSelection) that have the largest number of responses are
-selected.</p>
+treatments (QtyOfArmsToSelect) that have the largest number of responses
+are selected.</p>
 <p>After the interim analysis, randomization occurs based on user
-specified inputs: 1:highestResponse:nextHighestResponse (control,
+specified inputs: 1:Rank1AllocationRatio:Rank2AllocationRatio (control,
 selected experimental arm with highest number of responses, selected
 experimental arm with the second highest number of responses).</p>
 <p>For example, the randomization ratio could be updated to the
