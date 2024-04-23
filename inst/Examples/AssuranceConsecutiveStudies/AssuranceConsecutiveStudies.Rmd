@@ -379,6 +379,7 @@ The required user input for generating patient survival in East is provided belo
 The required user input for generating patient survival in Solara is provided below.  
 
 ![Input for generate response](Example3GenerateResponseSolara.jpg)
+
 ## Results
 
 ```{r  echo=FALSE,  warning=FALSE, include = FALSE}
