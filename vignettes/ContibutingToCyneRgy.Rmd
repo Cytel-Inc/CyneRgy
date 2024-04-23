@@ -49,7 +49,7 @@ covr::report()           # Create a report
 ## Helpful Code Snippets
 If you need help please ask Kyle Wathen or another team member
 
-Add code snippet by Clicking Tools-> Global Options -> Code-> Edit Snippets.  In the Snippets menu choose R.  When creating new snippets the key work snippet should start in column 1 and the snippets should be indented.  In order to insert a snippet in R Studio you type the snippet name, or partial name, and click the tab key. 
+Add code snippet by Clicking Tools-> Global Options -> Code-> Edit Snippets.  In the Snippets menu choose R.  When creating new snippets the key work snippet should start in column 1 and the snippets should be indented.  In order to insert a snippet in R Studio you type the snippet name, or partial name, and click tab 
 
 
 Snippet to insert a new comment (newcom) will insert a commented code block.

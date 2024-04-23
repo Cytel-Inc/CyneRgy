@@ -36,7 +36,7 @@ The following examples demonstrate how to add new patient outcome simulation cap
 This example provide multiple R function to achieve a more complex design option. 
 
 
-1. **[Bayesian Assurance of Consecutive Studies](AssuranaceConsecutiveStudiesBayesianAssuranceUsingEastR.html) ** The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples.  These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance.  The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
+1. **[Bayesian Assurance of Consecutive Studies](AssuranceConsecutiveStudiesBayesianAssuranceUsingEastR.html) ** The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples.  These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance.  The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
 
 1. **2-Am, Time-to-Event Outcome, Sample Size Re-estimation**: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.
 
