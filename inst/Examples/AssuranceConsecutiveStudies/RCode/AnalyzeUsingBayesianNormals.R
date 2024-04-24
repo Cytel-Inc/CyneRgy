@@ -152,6 +152,7 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
     lReturn <- list(Decision = as.integer(nDecision),
                     ErrorCode = as.integer(Error), 
                     PostProb = dPostProbGrt, 
+                    Delta      = as.double(  SimData$vTrueDelta[1] ),               # This is needed for true value plots in Solara
                     dTrueDelta = as.double( SimData$vTrueDelta[1]),
                     dCtrlPostMean = as.double( lPostParams$dPostMeanCtrl ),
                     dCtrlPostVar = as.double( lPostParams$dPostVarCtrl ),
@@ -161,11 +162,7 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
                     dObsMeanExp = as.double( mean(  SimData$Response[ SimData$TreatmentID == 1 ])),
                     dSimMeanCtrl = as.double(SimData$dSimMeanCtrl[1]),
                     dSimMeanExp = as.double( SimData$dSimMeanExp[1]))
-    # lReturn <- list(TestStat = as.double(0), 
-    #                 Decision = as.integer(nDecision), 
-    #                 PostProb = dPostProbGrt, 
-    #                 dTrueDelta = as.double( SimData$vTrueDelta[1]),
-    #                 ErrorCode = as.integer(Error))
+
     
     return( lReturn )
 }
