@@ -35,9 +35,9 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     # Input objects can be saved through the following lines:
     # Saving is only available in East, do NOT save files in SOLARA
     # #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    saveRDS( SimData, "SimData.Rds")
-    saveRDS( DesignParam, "DesignParam.Rds" )
-    saveRDS( LookInfo, "LookInfo.Rds" )
+    # saveRDS( SimData, "SimData.Rds")
+    # saveRDS( DesignParam, "DesignParam.Rds" )
+    # saveRDS( LookInfo, "LookInfo.Rds" )
     
     
     # Retrieve necessary information from the objects East sent
