@@ -43,7 +43,7 @@ CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileName
         outputStream <- file(strOutFileName, open = "w")
     
     # Vector to store the names of the combined files
-    vCombinefFiles <- c()
+    vCombineFiles <- c()
     
     # Loop through each file in the directory
     iFileCount <- 0
@@ -77,7 +77,7 @@ CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileName
         }
         
         # Add the name of the combined file to the vector
-        vCombinefFiles <- c(vCombinefFiles, basename(strFileName))
+        vCombineFiles <- c(vCombineFiles, basename(strFileName))
     }
     
     lReturn <- list(nQtyCombinedFiles = iFileCount)
@@ -97,7 +97,7 @@ CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileName
     }
     
     # Print the names of the combined files
-    lReturn$strReturn <- paste(paste(iFileCount, "Files combined successfully:\n"), paste(vCombinefFiles, collapse = "\n"), "\n")
+    lReturn$strReturn <- paste(paste(iFileCount, "Files combined successfully:\n"), paste(vCombineFiles, collapse = "\n"), "\n")
     
     return(lReturn)
 }
