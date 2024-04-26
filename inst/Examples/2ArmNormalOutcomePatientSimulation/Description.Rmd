@@ -19,7 +19,7 @@ CyneRgy::RunExample( "2ArmNormalOutcomePatientSimulation" )
 Running the command above will load the R Studio project in R Studio. 
 
 
-**East Workbook**: 2ArmTimeNormalOucomePatientSimulation.cywx
+**East Workbook**: 2ArmNormalOutcomePatientSimulation.cywx
 
 **R Studio Project File**: 2ArmNormalOutcomePatientSimulation.Rproj.
 
