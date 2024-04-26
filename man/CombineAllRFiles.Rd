@@ -2,10 +2,39 @@
 % Please edit documentation in R/CombineAllRFiles.R
 \name{CombineAllRFiles}
 \alias{CombineAllRFiles}
-\title{CombineAllRFiles}
+\title{Combine All R Files}
 \usage{
-CombineAllRFiles(strOutFileName, strDirectory = "")
+CombineAllRFiles(
+  strOutFileName = NA,
+  strDirectory = "",
+  strFileNameToIgnore = NA
+)
+}
+\arguments{
+\item{strOutFileName}{The name of the output file. If not provided, the function will return the combined content.}
+
+\item{strDirectory}{The directory where the R files are located. Defaults to the current working directory.}
+
+\item{strFileNameToIgnore}{The name of any file to be ignored during the combination process. Defaults to NA.}
+}
+\value{
+A list containing the following elements:
+\itemize{
+  \item{nQtyCombinedFiles: The number of files combined.}
+  \item{strCombinedContents: The combined content of all the R files (only if strOutFileName is NA).}
+  \item{strReturn: A string summarizing the operation, including the names of the combined files.}
+}
 }
 \description{
-{ Description: This function is used to combine all .R files in a directory into a single file for use in Cytel products.  }
+This function combines the contents of all R files in a specified directory into one file.
+It also replaces any sequence of one or more `#` characters with a single `#`.
+}
+\examples{
+\dontrun{
+  result <- CombineAllRFiles(strOutFileName = "combined.R", strDirectory = "/path/to/your/directory")
+  print(result$strReturn)
+}
+}
+\seealso{
+\code{\link[base]{list.files}}, \code{\link[base]{file}}, \code{\link[base]{readLines}}, \code{\link[base]{writeLines}}
 }
