@@ -25,9 +25,6 @@ In addition, if you would like to experiment with these examples to and would li
 
 ## Example 1 - Simulation of Patient Time-To-Event Data from a Weibull Distribution
 
-
-
-
 In this example, an R function is provided to help explore how to simulate patient data that follows a pattern where hazards and hazard ratio are changing over time and the impact on expected study power. 
 
 To replace the patient outcome simulation, the function used is SimulatePatientSurvivalWeibull and can be found in RCode/SimulatePatientSurvivalWeibull.R. The required User Specified parameters are the shape and scale for each arm’s distribution, specifically, dShapeCtrl, dShapeExp, dScaleCtrl, and dScaleExp. 
