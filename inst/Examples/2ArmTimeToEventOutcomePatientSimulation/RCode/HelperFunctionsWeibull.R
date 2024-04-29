@@ -28,36 +28,38 @@ ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 ######################################################################################################################## .
 # Example - Weibull with increasing hazards with median of 12 vs 16 ####
 ######################################################################################################################## .
-dShapeS     <- 3
-dMedianS    <- 12
-
-dScaleS     <- ComputeScaleGivenShapeMedian( dShapeS, dMedianS )
-dScaleS
-
-nQtyPats    <- 10000
-vTime       <- seq( 0.05, 40, 0.05)
-vHazardS    <- ComputeHazardWeibulll( vTime, dShapeS, dScaleS )
-vDataS      <- rweibull( nQtyPats, dShapeS, dScaleS )
-
-
-dShapeE     <- 4
-dMedianE    <- 16
-dScaleE     <- ComputeScaleGivenShapeMedian( dShapeE, dMedianE )
-dScaleE
-
-vHazardE    <- ComputeHazardWeibulll( vTime, dShapeE, dScaleE )
-vDataE      <- rweibull( nQtyPats, dShapeE, dScaleE )
-
-
-plot( vTime, vHazardS, type = 'l', xlab = "Time", ylab="Hazard", main ="Hazard: Standard of Care (Solid), Experimental (Dashed)" )
-lines( vTime, vHazardE, lty =2)
-
-
-print( paste( "Parameters for S: Shape = ", round( dShapeS, 3), ", Scale= ", round( dScaleS, 3 )) )
-print( paste( "Parameters for E: Shape = ", round( dShapeE, 3), ", Scale= ", round( dScaleE, 3 )) )
-print( paste( "Observed median on S: ", median( vDataS ) ) )
-print( paste( "Observed median on E: ", median( vDataE ) ) )
-print( paste( "Observed HR=", median( vDataS )/median( vDataE ) ) )
+# # Standard of Care Treatment
+# dShapeS     <- 3
+# dMedianS    <- 12
+# 
+# dScaleS     <- ComputeScaleGivenShapeMedian( dShapeS, dMedianS )
+# dScaleS
+# 
+# nQtyPats    <- 10000
+# vTime       <- seq( 0.05, 40, 0.05)
+# vHazardS    <- ComputeHazardWeibulll( vTime, dShapeS, dScaleS )
+# vDataS      <- rweibull( nQtyPats, dShapeS, dScaleS )
+# 
+# 
+# # Experimental Treatment
+# dShapeE     <- 4
+# dMedianE    <- 16
+# dScaleE     <- ComputeScaleGivenShapeMedian( dShapeE, dMedianE )
+# dScaleE
+# 
+# vHazardE    <- ComputeHazardWeibulll( vTime, dShapeE, dScaleE )
+# vDataE      <- rweibull( nQtyPats, dShapeE, dScaleE )
+# 
+# 
+# plot( vTime, vHazardS, type = 'l', xlab = "Time", ylab="Hazard", main ="Hazard: Standard of Care (Solid), Experimental (Dashed)" )
+# lines( vTime, vHazardE, lty =2)
+# 
+# 
+# print( paste( "Parameters for S: Shape = ", round( dShapeS, 3), ", Scale= ", round( dScaleS, 3 )) )
+# print( paste( "Parameters for E: Shape = ", round( dShapeE, 3), ", Scale= ", round( dScaleE, 3 )) )
+# print( paste( "Observed median on S: ", median( vDataS ) ) )
+# print( paste( "Observed median on E: ", median( vDataE ) ) )
+# print( paste( "Observed HR=", median( vDataS )/median( vDataE ) ) )
 # 
 # ######################################################################################################################## .
 # # Example - Weibull with decreasing hazard with median of 12 vs 16 ####
@@ -75,6 +77,7 @@ print( paste( "Observed HR=", median( vDataS )/median( vDataE ) ) )
 # vDataS      <- rweibull( nQtyPats, dShapeS, dScaleS )
 # 
 # 
+# # Experimental Treatment
 # dShapeE     <- 0.8
 # dMedianE    <- 16
 # dScaleE     <- ComputeScaleGivenShapeMedian( dShapeE, dMedianE )
