@@ -8,4 +8,4 @@ output:
 ---
 ```{r child = '../inst/Examples/TreatmentSelection/TreatmentSelectionDescription.rmd'}
 ```
-
+ 

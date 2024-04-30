@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 If you would like to contribute to CyneRgy there are multiple avenues to get involved. 
 
-You can submit a issue, report a bug, or add your own functionality and examples for others to learn from.  In order to add examples, please follow the instructions below for adding an example.
+You can submit an issue, report a bug, or add your own functionality and examples for others to learn from..  In order to add examples, please follow the instructions below for adding an example.
 
 
 # Style Guide 
@@ -45,8 +45,8 @@ This document is intended to help with development of this package.  In this doc
 
 ## Helpful packages
 1. [pkgdown](https://pkgdown.r-lib.org/reference/build_home.html) - Package used to create the package website. 
-1. [testthat](https://testthat.r-lib.org/) Useful for creating and testing R packages
-1. [covr](https://covr.r-lib.org/) - Use to create a test coverage report with the following commands
+2. [testthat](https://testthat.r-lib.org/) Useful for creating and testing R packages
+3. [covr](https://covr.r-lib.org/) - Use to create a test coverage report with the following commands
  ```
 usethis::use_coverage()  # Likely you do not need to run this again as it was set up already
 covr::package_coverage() # Computes the coverage
@@ -55,8 +55,8 @@ covr::report()           # Create a report
 
 ## Helpful Links
 1. [Git for Windows](https://git-for-windows.github.io/)  - Git for Windows; I believe you need to install this to use source control from Windows
-3. [Tortoise Git](https://tortoisegit.org/) - Free Windows shell program (runs in Windows explorer by right-clicking on a folder/file) – See image to the right.  This allows you to commit changes to GitHub without having to remember all the commands. 
-2. [GitHub Flow](https://guides.github.com/introduction/flow/) - Helps understanding GitHub flow.
+2. [Tortoise Git](https://tortoisegit.org/) - Free Windows shell program (runs in Windows explorer by right-clicking on a folder/file) – See image to the right.  This allows you to commit changes to GitHub without having to remember all the commands. 
+3. [GitHub Flow](https://guides.github.com/introduction/flow/) - Helps understanding GitHub flow.
 
 4. [Getting Started with Source Control](https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control) - An introduction to source control and getting started with Git.
 5. [Git Tutorial](https://backlog.com/git-tutorial/) - Useful Git tutorial 
@@ -67,7 +67,7 @@ covr::report()           # Create a report
 ## Helpful Code Snippets
 If you need help please ask Kyle Wathen or another team member
 
-Add code snippet by Clicking Tools-> Global Options -> Code-> Edit Snippets.  In the Snippets menu choose R.  When creating new snippets the key work snippet should start in column 1 and the snippets should be indented.  In order to insert a snippet in R Studio you type the snippet name, or partial name, and click tab. 
+Add code snippet by Clicking Tools-> Global Options -> Code-> Edit Snippets.  In the Snippets menu choose R.  When creating new snippets the key work snippet should start in column 1 and the snippets should be indented.  In order to insert a snippet in R Studio you type the snippet name, or partial name, and click tab 
 
 
 Snippet to insert a new comment (newcom) will insert a commented code block.
