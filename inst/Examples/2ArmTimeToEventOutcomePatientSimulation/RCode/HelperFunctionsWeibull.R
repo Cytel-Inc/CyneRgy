@@ -26,10 +26,9 @@ ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 }
 
 ######################################################################################################################## .
-# Example - Weibull with increasing hazards with median of 12 vs 16 ####
+# Example - Weibull with increasing hazards with median of 12 vs 15 ####
 ######################################################################################################################## .
-# # Standard of Care Treatment
-# dShapeS     <- 3
+# dShapeS     <- 1.9
 # dMedianS    <- 12
 # 
 # dScaleS     <- ComputeScaleGivenShapeMedian( dShapeS, dMedianS )
@@ -41,9 +40,8 @@ ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 # vDataS      <- rweibull( nQtyPats, dShapeS, dScaleS )
 # 
 # 
-# # Experimental Treatment
-# dShapeE     <- 4
-# dMedianE    <- 16
+# dShapeE     <- 1.9
+# dMedianE    <- 15
 # dScaleE     <- ComputeScaleGivenShapeMedian( dShapeE, dMedianE )
 # dScaleE
 # 
@@ -62,10 +60,10 @@ ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 # print( paste( "Observed HR=", median( vDataS )/median( vDataE ) ) )
 # 
 # ######################################################################################################################## .
-# # Example - Weibull with decreasing hazard with median of 12 vs 16 ####
+# # Example - Weibull with decreasing hazard with median of 12 vs 15 ####
 # ######################################################################################################################## .
 # # Standard of Care Treatment
-# dShapeS     <- 0.7
+# dShapeS     <- 0.6
 # dMedianS    <- 12
 # 
 # dScaleS     <- ComputeScaleGivenShapeMedian( dShapeS, dMedianS )
@@ -77,9 +75,8 @@ ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 # vDataS      <- rweibull( nQtyPats, dShapeS, dScaleS )
 # 
 # 
-# # Experimental Treatment
-# dShapeE     <- 0.8
-# dMedianE    <- 16
+# dShapeE     <- 0.6
+# dMedianE    <- 15
 # dScaleE     <- ComputeScaleGivenShapeMedian( dShapeE, dMedianE )
 # dScaleE
 # 

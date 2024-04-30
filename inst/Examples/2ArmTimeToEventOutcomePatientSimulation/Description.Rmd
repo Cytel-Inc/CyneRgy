@@ -73,10 +73,10 @@ dShapeExp  <- 4
 dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
 dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 
-dShapeCtrl
-dShapeExp
-dScaleCtrl
-dScaleExp
+# dShapeCtrl 
+# dShapeExp 
+# dScaleCtrl 
+# dScaleExp  
 
 
 vTime <- seq( 0.01, 50, 0.01)
@@ -125,7 +125,4 @@ plot( vTime, vHazExp/vHazCtrl, type = 'l', main = "Hazard Ratio (Decreasing Haza
 Simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different Exponential distribution for simulating the time-to-event from. 
 
 
-## Advanced Topic - Setting the Seed
-
-Todo - Kyle...
 
