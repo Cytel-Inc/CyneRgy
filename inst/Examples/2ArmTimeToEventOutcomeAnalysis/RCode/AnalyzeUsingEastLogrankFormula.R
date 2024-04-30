@@ -69,6 +69,9 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     # Order the data by observed time for the remainder of the computations
     SimData                  <- SimData[ order( SimData$ObservedTime), ]
     
+    # Compute Observed HR
+    coxModel <- coxph(Surv(SurvivalTime, Event) ~ TreatmentID, data = SimData)
+    dTrueHR <- exp(coxModel$coefficients)
     SimData$EventOnTreatment <- ifelse(SimData$TreatmentID == 1, SimData$Event, 0) # If the event is observed on treatment
     SimData$EventOnControl   <- ifelse(SimData$TreatmentID == 0, SimData$Event, 0) # If the event is observed on control
     
@@ -128,12 +131,13 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
         # For this example, there is NO futility check but this is left for consistency with other examples 
         
     }
-    
+
     Error    <- 0
     
     lRet      <- list(TestStat = as.double( dTS ),
                       Decision  = as.integer( nDecision ), 
-                      ErrorCode = as.integer( Error ))
+                      ErrorCode = as.integer( Error ),
+                      HazardRatio = as.double( dTrueHR ))
     return( lRet )
 }
 
