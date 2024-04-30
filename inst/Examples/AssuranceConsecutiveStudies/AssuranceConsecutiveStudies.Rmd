@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Assurance Using East-R"
+title: "Bayesian Assurance of Consecutive Studies"
 author: "J. Kyle Wathen and Laurent Spiess"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -26,7 +26,7 @@ library( dplyr )
 ```
 
 # Introduction
-The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples.  These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance.  The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
+The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of R with [http://Cytel.com](Cytel) products using a series of examples.  These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance.  The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
 
 The examples will all contain two treatments, Standard of Care (S) and Experimental (E) and are follows: 
 
@@ -92,7 +92,7 @@ ggplot(dfSample, aes(SampleMean)) +
     xlim(-0.25, 1.75)  # Set x-axis range from 0 to 1
 ```
 
-## East-R Integration
+## R Integration
 In order to evaluate the design above, one can develop an R function for analysis that can be called from East during simulation.  By replacing only the analysis function with an R function, one can obtain the frequentist operating characteristics of the Bayesian design using East.  In addition, by replacing how the patient data is simulated one can obtain the Bayesian assurance.  Specifically, in the simulation when the patient data is simulated an R function will first sample the assurance prior then sample the patient data.   The resulting power of this simulation will be the Bayesian assurance assuming the 2 component prior given above.  
 
 There is often a need for examination of posterior distribution of both observed and true treatment differences given a Go decision.   These posterior distributions can be useful for planning the next phase of study and understanding potential risks.  Obtaining the posterior distributions is described in the next section and they are applied to the phase 2 followed by phase 3 in later sections.  
@@ -114,16 +114,26 @@ $$
 \frac{1}{\tau_j^{2*}} = \frac{1}{\tau_j^2} +\frac{n}{\sigma^2}
 $$
 
-### East Workbook
+### Integration with East
 
-Using the East workbook named Assurance.cywx with East version $>=$ 6.5.4 the Example 1 simulation can be used to obtain the results found in the next section.   After editing the simulation, on the User Define R Functions the Generate Response and Compute Test Statistic are both replaced with R code.   The Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named R/SimulatePatientOutcomeNormalAssurance.R and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in RCode/AnalyzeUsingBayesianNormals.R with input shown below. 
+Using the East workbook named Assurance.cywx with East version $>=$ 6.5.4 the Example 1 simulation can be used to obtain the results found in the next section.   After editing the simulation, on the User Define R Functions the Generate Response and Compute Test Statistic are both replaced with R code.   The Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R) and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in  [RCode/AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeUsingBayesianNormals.R) with input shown below. 
 
-![Input for generate response](Example1GenerateREsponseInput.jpg)
 
-![Input for test statistitic input](Example1TestStatisticInput.jpg)
+![Input for generate response in East](Example1GenerateResponseInput.jpg)
+
+![Input for test statistitic input in East](Example1TestStatisticInput.jpg)
+
+### Integration with Solara
+
+The setup in Solara is very similar to East.  Solara utilizes the same R functions.   In the Responses tab, the Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R) and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in [RCode/AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeUsingBayesianNormals.R) with input shown below. 
+
+![Input for generate response in Solara](Example1GenerateResponseSolara.jpg)
+
+![Input for test statistic in Solara](Example1TestStatisticSolara.jpg)
 
 
 ## Results
+
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 
@@ -194,7 +204,7 @@ $$
 Pr( \text{End of Study No Go} | X_1 ) = Pr[ \{ Pr( \mu_E > \mu_S + MAV | X_1, X_2 ) > PU \} | X_1  ] > PU_{Futility}
 $$
 
-## East-R Integration
+## R Integration
 In order to evaluate the design above, one can develop an R function for analysis that can be called from East during simulation.  By replacing only the analysis function with an R function, one can obtain the frequentist operating characteristics of the Bayesian design using East that includes the interim analysis and futility check based on a Bayesian predictive probability.  In addition, by replacing how the patient data is simulated one can obtain the Bayesian assurance.  Specifically, in the simulation when the patient data is simulated an R function will first sample the assurance prior then sample the patient data.   The resulting power of this simulation will be the Bayesian assurance assuming the 2 component prior given in Example 1 and including the futility check.  
   
 
@@ -352,6 +362,26 @@ ggplot(dfDensity, aes(x = x, y = y)) +
     xlim(-0.4, 0.1)  # Set x-axis range from 0 to 1
 ```
 
+## R Integration
+
+### Required R Functions
+
+This are 3 required R files and functions needed to evaluate this design.   The first file is used to initialize the R environment and load the survival package.   The second file is used to perform the analysis using a Cox model.  The third required file is used to first simulate the true HR from the prior and then simulate the patient data using the sampled HR.   
+
+The initialize function InitializeSurvival is found in the file [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/AssuranceConsecutiveStudies/RCode/InitializeSurvival.R).   The function used for analysis is AnalyzeSurivalDataUsingCoxPH, is found in the file [R/AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeSurvivalDataUsingCoxPH.R)  The function used for simulating patient data is SimulatePatientOutcomeNormalAssurance and is found in the file [RCode/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R)
+
+### Integration with East
+
+The required user input for generating patient survival in East is provided below.  
+
+![Input for generate response](Example3GenerateResponseInput.jpg)
+
+### Integration with Solara
+
+
+The required user input for generating patient survival in Solara is provided below.  
+
+![Input for generate response](Example3GenerateResponseSolara.jpg)
 
 ## Results
 

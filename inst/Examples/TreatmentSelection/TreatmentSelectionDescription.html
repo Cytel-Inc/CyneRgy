@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="J. Kyle Wathen" />
 
+<meta name="date" content="2024-04-16" />
 
-<title>TreatmentSelectionDescription</title>
+<title>Treatment Selection Example</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,6 +350,9 @@ display: none;
 
 
 
+<h1 class="title toc-ignore">Treatment Selection Example</h1>
+<h4 class="author">J. Kyle Wathen</h4>
+<h4 class="date">April 16, 2024</h4>
 
 </div>
 
@@ -356,14 +361,19 @@ display: none;
 <h1>Multiarm, Binary Outcome - Treatment Selection Example</h1>
 <p>This example demonstrates how to add new treatment selection
 functionality into East using an R function.</p>
-<p>For all of these examples, we assume all trails designs consist of
+<p>For all of these examples, we assume all trial designs consist of
 control and three experimental treatments. There is one Interim
 Analysis, IA, and a Final Analysis, FA. At the IA, experimental
-treatment(s) are selected and continue to the 2nd stage of the study. If
-the trial is not stopped for efficacy or futility, then control and any
-selected treatments continue to the next stage of the trial.</p>
-<p>The examples include here are to provide different approaches for
+treatment(s) are selected and continue to the second stage of the study.
+If the trial is not stopped for efficacy or futility, then control and
+any selected treatments continue to the next stage of the trial.</p>
+<p>The examples included here are to provide different approaches for
 selecting treatments for stage 2.</p>
+<p>Once CyneRgy is installed, you can load this example in R Studio with
+the following commands:</p>
+<pre class="r"><code>CyneRgy::RunExample(&quot;TreatmentSelection&quot;)</code></pre>
+<p>Running the command above will load the R Studio project in R
+Studio.</p>
 <p><strong>East Workbook</strong>: TreatmentSelection.cywx</p>
 <p><strong>R Studio Project File</strong>: TreatmentSelection.Rproj.</p>
 <p>In the RCode directory of this example you will find the following R
@@ -372,23 +382,55 @@ files:</p>
 <li><p>TreatmentSelectionTemplate.R - This file provides a template that
 may be used as a starting point for developing new treatment selection
 functions in R.</p></li>
-<li><p>TreatmentSelectionExample1.R - Contains a function named
-PerformTreatmentSelection for Example 1 as described below.</p></li>
-<li><p>TreatmentSelectionExample2.R - Contains a function named
-PerformTreatmentSelection for Example 2 as described below.</p></li>
+<li><p>SelectExpThatAreBetterThanCtrl.R - Contains a function named
+SelectExpThatAreBetterThanCtrl to demonstrate the R code necessary for
+Example 1 as described below.</p></li>
+<li><p>SelectExpWithPValueLessThanSpecified.R - Contains a function
+named SelectExpWithPValueLessThanSpecified to demonstrate the R code
+necessary for Example 2 as described below.</p></li>
+<li><p>SelectSpecifiedNumberOfExpWithHighestResponses.R - Contains a
+function named SelectSpecifiedNumberOfExpWithHighestResponses to
+demonstrate the R code necessary for Example 3 as described
+below.</p></li>
+<li><p>SelectExpUsingBayesianRule.R - Contains a function named
+SelectExpUsingBayesianRule to demonstrate the R code necessary for
+Example 4 as described below.</p></li>
 </ol>
-<p><strong>Example 1</strong></p>
-<p>At the interim analysis, any treatment with a response rate that is
-higher than control is selected for stage 2. In the second stage, the
-randomization ratio will be 1:1 (experimental:control)</p>
-<p><strong>Example 2</strong> At the interim analysis, compare treatment
-and each experimental using a chi-squared test and any treatment with
-p-value &lt; 0.2 is selected for stage 2 . In the second stage, the
-randomization ratio will be 1:1 (experimental:control)</p>
-<p><strong>Example 3</strong></p>
-<p>At the interim analysis, select the two treatments with the highest
-number of responses. In the second stage, the randomization ratio is
-updated to the following:</p>
+<p>In addition, if you would like to experiment with these examples and
+would like code to help you get started we have provided
+fill-in-the-blank type code files in the FillInTheBlankRCode
+directory.</p>
+<div id="example-1---selection-based-on-response-rates-above-control" class="section level2">
+<h2>Example 1 - Selection Based on Response Rates Above Control</h2>
+<p>At the interim analysis, select any treatment with a response rate
+that is higher than control for stage 2.</p>
+<p>If none of the treatments have a higher response rate than control,
+select the treatment with the largest probability of response.</p>
+<p>In the second stage, the randomization ratio will be 1:1
+(experimental:control)</p>
+</div>
+<div id="example-2---selection-based-on-p-value-less-than-specified" class="section level2">
+<h2>Example 2 - Selection Based on P-Value Less Than Specified</h2>
+<p>At the interim analysis, compare treatment and each experimental to
+control using a chi-squared test.</p>
+<p>Any treatment with p-value less than user-specified dMaxPValue is
+selected for stage 2.</p>
+<p>If none of the treatments have a p-value less than user-specified
+dMaxPValue, select the treatment with the smallest p-value.</p>
+<p>In the second stage, the randomization ratio will be 1:1
+(experimental:control)</p>
+</div>
+<div id="example-3---select-treatments-with-highest-number-of-responses" class="section level2">
+<h2>Example 3 - Select Treatments With Highest Number of Responses</h2>
+<p>At the interim analysis, the user-specified number of experimental
+treatments (QtyOfArmsToSelect) that have the largest number of responses
+are selected.</p>
+<p>After the interim analysis, randomization occurs based on user
+specified inputs: 1:Rank1AllocationRatio:Rank2AllocationRatio (control,
+selected experimental arm with highest number of responses, selected
+experimental arm with the second highest number of responses).</p>
+<p>For example, the randomization ratio could be updated to the
+following:</p>
 <table>
 <thead>
 <tr class="header">
@@ -411,25 +453,27 @@ updated to the following:</p>
 </tr>
 </tbody>
 </table>
-<p>The R Function to accomplish this in in
-RCode/TreatmentSelectionExample1.R. The resulting simulations are
-labeled Example 1 in the East workbook.</p>
-<p><strong>Example 4</strong></p>
+</div>
+<div id="example-4---selection-based-on-bayesian-posterior-probabilities" class="section level2">
+<h2>Example 4 - Selection Based on Bayesian Posterior Probabilities</h2>
 <p>At the interim analysis, we use the following Bayesian model and
-selection rule and selection rule</p>
+selection rule:</p>
 <p>Denote the probability of response on experimental treatment by
 p<sub>j</sub> , for j = 1, 2, 3.</p>
 <p><u>Prior:</u></p>
-<p>p<sub>j</sub> ~ Beta( 0.2, 0.8 )</p>
-<p>Select any treatment that has at least a 20% probability of being
-greater than historical response rate of 10%. Specifically, if Pr(
-p<sub>j</sub> &gt; 0.1 | data ) &gt; 0.2 then experimental treatment j
-is selected for stage 2. If none of the treatments meet the criteria for
-selection, then select the treatment with the largest Pr( p<sub>j</sub>
-&gt; 0.1 | data ).</p>
+<p>User-specified p<sub>j</sub> ~ Beta( dPriorAlpha, dPriorBeta )</p>
+<p>Select any treatment that has at least a user-specified probability
+(treatmentPValue) of being greater than the user-specified historical
+response rate (historicResponseRate). Specifically, if Pr( p<sub>j</sub>
+&gt; historicResponseRate | data ) &gt; treatmentPValue, then
+experimental treatment j is selected for stage 2. If none of the
+treatments meet the criteria for selection, then select the treatment
+with the largest Pr( p<sub>j</sub> &gt; historicResponseRate | data
+).</p>
 <p>After the IA, we use a randomization ratio of 2:1
 (experimental:control) for all experimental treatments that are selected
 for stage 2.</p>
+</div>
 </div>
 
 

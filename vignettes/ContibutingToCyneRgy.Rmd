@@ -9,11 +9,32 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Contributing to CyneRgy
+# Contributing to CyneRgy
 
 If you would like to contribute to CyneRgy there are multiple avenues to get involved. 
 
-You can submit an issue, report a bug, or add your own functionality and examples for others to learn from.
+You can submit an issue, report a bug, or add your own functionality and examples for others to learn from..  In order to add examples, please follow the instructions below for adding an example.
+
+
+# Style Guide 
+
+Please follow the [Biopharm Soft style guide](https://biopharmsoftgrp.github.io/BioPharmSoftRStyleGuide/) when developing code so that the style is consistent across different developers. 
+
+# Adding ad Example
+
+If you are interested in contributing an example please follow the guidelines in this section.  To make sure the examples are clear and included in the package website please use the following steps.   These steps are changing over time so if you find something that is not clear or incorrect, please add an issue. 
+
+1. Use Git to clone the CyneRgy repository. 
+1. If an issue does not exist in the CyneRgy repository, then please add one and use it to create a new branch for development.  If an issue already exists, then create a branch for development. 
+1. You can start a new example with the function CyneRgy::CreateCyneRgyExample.
+1. Once the example is complete, copy the example folder to the inst/Examples directory of CyneRgy.  
+1. Use Git to add the files to the repository.  
+1. Update the vignettes/ExampleOutline.Rmd file to include a brief description and link to the new example. 
+1. Use Git to commit to the branch created above
+1. Add a Pull Request in GitHub to merge your development branch to the Dev branch.   
+
+Please note, all branches are merged to Dev.   Dev is used to combine all branches, then a branch is created for building the package website and reviewed for documentation and completeness.   Once this is done, the Dev branch is merged via a Pull Request to main and the example is then included on the website as well as in the package when it is installed from GitHub. 
+
 
 
 
@@ -21,9 +42,6 @@ You can submit an issue, report a bug, or add your own functionality and example
 
 This document is intended to help with development of this package.  In this document you can find packages that are helpful, example code snippets and function calls that were made to create new functions. 
 
-## Style Guide 
-
-Please follow the [Biopharm Soft style guide](https://biopharmsoftgrp.github.io/BioPharmSoftRStyleGuide/) when developing code so that the style is consistent across different developers. 
 
 ## Helpful packages
 1. [pkgdown](https://pkgdown.r-lib.org/reference/build_home.html) - Package used to create the package website. 

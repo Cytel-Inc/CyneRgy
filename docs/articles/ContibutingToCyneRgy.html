@@ -62,7 +62,7 @@
     <a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6>
-    <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html">Bayesian Assurance of Consecutive Studies</a>
+    <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6>
     <a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a>
@@ -102,7 +102,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">April 03, 2024</h4>
+            <h4 data-toc-skip class="date">April 24, 2024</h4>
       
       
       <div class="d-none name"><code>ContibutingToCyneRgy.Rmd</code></div>
@@ -110,13 +110,54 @@ Wathen</h4>
 
     
     
-<div class="section level3">
-<h3 id="contributing-to-cynergy">Contributing to CyneRgy<a class="anchor" aria-label="anchor" href="#contributing-to-cynergy"></a>
-</h3>
+<div class="section level2">
+<h2 id="contributing-to-cynergy">Contributing to CyneRgy<a class="anchor" aria-label="anchor" href="#contributing-to-cynergy"></a>
+</h2>
 <p>If you would like to contribute to CyneRgy there are multiple avenues
 to get involved.</p>
 <p>You can submit a issue, report a bug, or add your own functionality
-and examples for others to learn from.</p>
+and examples for others to learn from. In order to add examples, please
+follow the instructions below for adding an example.</p>
+</div>
+<div class="section level2">
+<h2 id="style-guide">Style Guide<a class="anchor" aria-label="anchor" href="#style-guide"></a>
+</h2>
+<p>Please follow the <a href="https://biopharmsoftgrp.github.io/BioPharmSoftRStyleGuide/" class="external-link">Biopharm
+Soft style guide</a> when developing code so that the style is
+consistent across different developers.</p>
+</div>
+<div class="section level2">
+<h2 id="adding-ad-example">Adding ad Example<a class="anchor" aria-label="anchor" href="#adding-ad-example"></a>
+</h2>
+<p>If you are interested in contributing an example please follow the
+guidelines in this section. To make sure the examples are clear and
+included in the package website please use the following steps. These
+steps are changing over time so if you find something that is not clear
+or incorrect, please add an issue.</p>
+<ol style="list-style-type: decimal">
+<li>Use Git to clone the CyneRgy repository.</li>
+<li>If an issue does not exist in the CyneRgy repository, then please
+add one and use it to create a new branch for development. If an issue
+already exists, then create a branch for development.</li>
+<li>You can start a new example with the function
+CyneRgy::CreateCyneRgyExample.</li>
+<li>Once the example is complete, copy the example folder to the
+inst/Examples directory of CyneRgy.<br>
+</li>
+<li>Use Git to add the files to the repository.<br>
+</li>
+<li>Update the vignettes/ExampleOutline.Rmd file to include a brief
+description and link to the new example.</li>
+<li>Use Git to commit to the branch created above</li>
+<li>Add a Pull Request in GitHub to merge your development branch to the
+Dev branch.</li>
+</ol>
+<p>Please note, all branches are merged to Dev. Dev is used to combine
+all branches, then a branch is created for building the package website
+and reviewed for documentation and completeness. Once this is done, the
+Dev branch is merged via a Pull Request to main and the example is then
+included on the website as well as in the package when it is installed
+from GitHub.</p>
 </div>
 <div class="section level2">
 <h2 id="package-development">Package Development<a class="anchor" aria-label="anchor" href="#package-development"></a>
@@ -124,13 +165,6 @@ and examples for others to learn from.</p>
 <p>This document is intended to help with development of this package.
 In this document you can find packages that are helpful, example code
 snippets and function calls that were made to create new functions.</p>
-<div class="section level3">
-<h3 id="style-guide">Style Guide<a class="anchor" aria-label="anchor" href="#style-guide"></a>
-</h3>
-<p>Please follow the <a href="https://biopharmsoftgrp.github.io/BioPharmSoftRStyleGuide/" class="external-link">Biopharm
-Soft style guide</a> when developing code so that the style is
-consistent across different developers.</p>
-</div>
 <div class="section level3">
 <h3 id="helpful-packages">Helpful packages<a class="anchor" aria-label="anchor" href="#helpful-packages"></a>
 </h3>

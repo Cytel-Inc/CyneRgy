@@ -34,7 +34,7 @@ navbar:
                 - text: --------------------
                 - text: Advanced Examples
                 - text: Bayesian Assurance of Consecutive Studies
-                  href: articles/AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html
+                  href: articles/AssurnaceConsecutiveStudies.html
                 - text: --------------------
                 - text: Other Integration Points
                 - text: Poisson Arrival Times

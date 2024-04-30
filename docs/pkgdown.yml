@@ -6,13 +6,13 @@ articles:
   2ArmBinaryOutcomePatientSimulation: 2ArmBinaryOutcomePatientSimulation.html
   2ArmNormalOutcomePatientSimulationDescription: 2ArmNormalOutcomePatientSimulationDescription.html
   2ArmTimeToEventOutcomePatientSimulationDescription: 2ArmTimeToEventOutcomePatientSimulationDescription.html
-  AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR: AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html
+  AssurnaceConsecutiveStudies: AssurnaceConsecutiveStudies.html
   ContibutingToCyneRgy: ContibutingToCyneRgy.html
   ExampleOutline: ExampleOutline.html
   GeneratePoissonArrival: GeneratePoissonArrival.html
   Home: Home.html
   TreatmentSelectionDescription: TreatmentSelectionDescription.html
-last_built: 2024-04-03T12:53Z
+last_built: 2024-04-24T16:04Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles
