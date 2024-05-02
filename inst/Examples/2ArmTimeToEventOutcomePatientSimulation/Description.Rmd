@@ -49,8 +49,8 @@ dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 # dScaleExp  
 
 vTime <- seq( 0.01, 50, 0.01)
-vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
-vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
+vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
+vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
 
 plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Constant Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 0.1))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
@@ -80,8 +80,8 @@ dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 
 
 vTime <- seq( 0.01, 50, 0.01)
-vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
-vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
+vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
+vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
 
 plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Increasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 5))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
@@ -111,8 +111,8 @@ dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 # dScaleExp  
 
 vTime <- seq( 0.01, 50, 0.01)
-vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
-vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
+vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
+vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
 
 
 plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Decreasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 1))
