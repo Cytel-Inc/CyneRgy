@@ -25,13 +25,14 @@ In addition, if you would like to experiment with these examples to and would li
 
 ## Example 1 - Simulation of Patient Time-To-Event Data from a Weibull Distribution
 
-To replace the patient outcome simulation.. 
+In this example, an R function is provided to help explore how to simulate patient data that follows a pattern where hazards and hazard ratio are changing over time and the impact on expected study power. 
 
-## Example 2 - Simulation of Patient Time-To-Event Data from a Mixture of Distributions
-Simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different Exponential distribution for simulating the time-to-event from. 
+To replace the patient outcome simulation, the function used is SimulatePatientSurvivalWeibull and can be found in RCode/SimulatePatientSurvivalWeibull.R. The required User Specified parameters are the shape and scale for each arm’s distribution, specifically, dShapeCtrl, dShapeExp, dScaleCtrl, and dScaleExp. 
+
+1.	Example 1.1 – Assume that the difference in risk of death for patients in the control arm compared to the risk of death for patients in the experimental arm remains the same over time. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East and sent to R. For this example, the required parameters are the shape and scale for each arm, specifically, dShapeCtrl = 1.0, dShapeExp = 1.0, dScaleCtrl = 17.31, and dScaleExp = 23.08. The Scale parameters are computed based on the median Survival time for each arm. This example is included to demonstrate using an R function if the data is simulated as it is in East without the use of an R function. 
 
 ```{r echo = FALSE, warning=FALSE, message = FALSE}
-# Compute paraemters for Example 1 - Constant hazard from Exp 
+# Constant Hazard from Exponential ##
 source( "RCode/HelperFunctionsWeibull.R")
 dMedianCtrl <- 12
 dMedianExp  <- 16
@@ -42,21 +43,25 @@ dShapeExp  <- 1
 dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
 dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 
-dShapeCtrl 
-dShapeExp 
-dScaleCtrl 
-dScaleExp  
+# dShapeCtrl 
+# dShapeExp 
+# dScaleCtrl 
+# dScaleExp  
 
 vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
 
-plot( vTime, vHazCtrl, type = 'l', main = "Constant Hazard for Control (Ctrl = Black, Exp = Blue)", ylim = c( 0, 0.1))
+plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Constant Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 0.1))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
 #plot( vTime, vHazExp, type = 'l', main = "Hazard for Exp (Increasing Hazard)")
-plot( vTime, vHazExp/vHazCtrl, type = 'l', main = "Hazard Ratio (Constant Hazards)")
+plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard Ratio", main = "Hazard Ratio with Constant Hazards")
 
+```
 
+2.	Example 1.2 – This function assumes that the hazard of death or progression is increasing over time for both arms. The control arm’s hazards, however, increase at a slower rate than the experimental arm’s hazards. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East and sent to R. For this example, the required parameters are the shape and scale for each arm, specifically, dShapeCtrl = 3.0, dShapeExp = 4.0, dScaleCtrl = 13.56, and dScaleExp = 17.54. This example is included to demonstrate using an R function if the data is simulated differently to how it is in East without the use of an R function. 
+
+```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Increasing Hazard Example ###
 
 dMedianCtrl <- 12
@@ -68,21 +73,27 @@ dShapeExp  <- 4
 dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
 dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 
-dShapeCtrl 
-dShapeExp 
-dScaleCtrl 
-dScaleExp  
+# dShapeCtrl 
+# dShapeExp 
+# dScaleCtrl 
+# dScaleExp  
 
 
 vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
 
-plot( vTime, vHazCtrl, type = 'l', main = "Increasing Hazard for Control (Ctrl = Black, Exp = Blue)", ylim = c( 0, 5))
+plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Increasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 5))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
 #plot( vTime, vHazExp, type = 'l', main = "Hazard for Exp (Increasing Hazard)")
-plot( vTime, vHazExp/vHazCtrl, type = 'l', main = "Hazard Ratio (Increasing Hazards)")
+plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard Ratio", main = "Hazard Ratio with Increasing Hazards")
 
+```
+
+
+3.	Example 1.3 – This example is similar to the previous example, however, this function assumes that both the arms’ hazards are decreasing over time. The control arm’s hazards decrease at a slower rate than the experimental arm’s hazards. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East and sent to R. For this example, the required parameters are the shape and scale for each arm, specifically, dShapeCtrl = 0.7, dShapeExp = 0.8, dScaleCtrl = 20.26, and dScaleExp = 25.30. This example is included to demonstrate using an R function if the data is simulated differently to how it is in East without the use of an R function.
+
+```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Decreasing Hazard Example ####
 
 dMedianCtrl <- 12
@@ -94,19 +105,24 @@ dShapeExp  <- 0.8
 dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
 dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 
-dShapeCtrl 
-dShapeExp 
-dScaleCtrl 
-dScaleExp  
+# dShapeCtrl 
+# dShapeExp 
+# dScaleCtrl 
+# dScaleExp  
 
 vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibulll( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibulll( vTime, dShapeExp, dScaleExp )
 
 
-plot( vTime, vHazCtrl, type = 'l', main = "Decreasing Hazard for Control (Ctrl = Black, Exp = Blue)", ylim = c( 0, 1))
+plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Decreasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 1))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
-plot( vTime, vHazExp/vHazCtrl, type = 'l', main = "Hazard Ratio (Decreasing Hazards)")
+plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard Ratio", main = "Hazard Ratio with Decreasing Hazards")
+
 ```
+
+## Example 2 - Simulation of Patient Time-To-Event Data from a Mixture of Distributions
+Simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different Exponential distribution for simulating the time-to-event from. 
+
 
 
