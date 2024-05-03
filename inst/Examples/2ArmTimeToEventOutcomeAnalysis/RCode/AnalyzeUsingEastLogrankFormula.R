@@ -1,10 +1,12 @@
 ######################################################################################################################## .
-#  Last Modified Date: 04/24/2024
+#  Last Modified Date: 05/03/2024
 #' AnalyzeUsingEastLogrankFormula
 #' @name AnalyzeUsingEastLogrankFormula
 #' @title Compute the statistic using formulas Q.242 and Q.243 in the East manual.
+
 #' @description Use the formulas Q.242 and Q.243 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
 #'              The test statistic is compared to the lower boundary computed and sent by East as an input. This example does NOT include a futility rule. 
+
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
 #'        It will have headers indicating the names of the columns. These names will be same as those used in 
 #'        Data Generation. User should access the variables using headers, for example, SimData$ArrivalTime, 
@@ -48,9 +50,7 @@
 #'                                            Used in Solara for creating the observed hazard ratio graph. 
 #'                                            Only applicable for time-to-event data.}
 #'                                            
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#'                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
-#'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
+
 #'@note Helpful Hints:
 #'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
 #'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
@@ -103,8 +103,10 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     SimData                  <- SimData[ order( SimData$ObservedTime), ]
     
     # Compute Observed HR
-    coxModel <- coxph(Surv(SurvivalTime, Event) ~ TreatmentID, data = SimData)
-    dTrueHR <- exp(coxModel$coefficients)
+
+    coxModel                 <- coxph(Surv(ObservedTime, Event) ~ TreatmentID, data = SimData)
+    dTrueHR                  <- exp(coxModel$coefficients)
+    
     SimData$EventOnTreatment <- ifelse(SimData$TreatmentID == 1, SimData$Event, 0) # If the event is observed on treatment
     SimData$EventOnControl   <- ifelse(SimData$TreatmentID == 0, SimData$Event, 0) # If the event is observed on control
     

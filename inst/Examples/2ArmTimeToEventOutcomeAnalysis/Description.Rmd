@@ -18,8 +18,12 @@ The examples included here are to provide different approaches for analyzing the
 In the RCode directory of this example you will find the following R files:
 
 1. AnalyzeUsingEastLogrankFormula.R - Contains a function named AnalyzeUsingEastLogrankFormula to demonstrate the R code necessary for this example as described below.
+2. AnalyzeUsingSurvivalPackage.R - Contains a function named AnalyzeUsingSurvivalPackage to demonstrate the R code necessary for this example as described below.
 
-## Example 1 - Two-arm Arm TTE Analysis Using a Formula 28.2 in the East manual
+## Example 1 - Two Arm TTE Analysis Using a Formula 28.2 in the East manual
 
 To replace the analysis, use the formulas Q.242 and Q.243 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making could be modified in a simple approach.  The test statistic is compared to the lower boundary computed and sent by East as an input. This example does NOT include a futility rule. 
 
+## Example 2 - Two Arm TTE Analysis Using survdiff function from the survival package
+
+This example utilizes the survdiff function from survival package to perform the analysis. The chisquare statistic from survdiff is used to compute the logrank statistic that is compared to the lower boundary computed and sent by East as an input.  This example does NOT include a futility rule. 
