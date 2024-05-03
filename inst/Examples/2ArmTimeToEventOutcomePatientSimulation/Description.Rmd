@@ -52,10 +52,10 @@ vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
 
-plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Constant Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 0.1))
+plot( vTime, vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard", main = "Constant Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 0.1))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
 #plot( vTime, vHazExp, type = 'l', main = "Hazard for Exp (Increasing Hazard)")
-plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard Ratio", main = "Hazard Ratio with Constant Hazards")
+plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard Ratio", main = "Hazard Ratio with Constant Hazards")
 
 ```
 
@@ -83,10 +83,10 @@ vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
 
-plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Increasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 5))
+plot( vTime, vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard", main = "Increasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 5))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
 #plot( vTime, vHazExp, type = 'l', main = "Hazard for Exp (Increasing Hazard)")
-plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard Ratio", main = "Hazard Ratio with Increasing Hazards")
+plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard Ratio", main = "Hazard Ratio with Increasing Hazards")
 
 ```
 
@@ -115,9 +115,9 @@ vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
 
 
-plot( vTime, vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard", main = "Decreasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 1))
+plot( vTime, vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard", main = "Decreasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 1))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
-plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time", ylab = "Hazard Ratio", main = "Hazard Ratio with Decreasing Hazards")
+plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard Ratio", main = "Hazard Ratio with Decreasing Hazards")
 
 ```
 
