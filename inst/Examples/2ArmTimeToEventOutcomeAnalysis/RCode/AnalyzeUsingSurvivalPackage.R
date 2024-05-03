@@ -1,12 +1,12 @@
 ######################################################################################################################## .
 #  Last Modified Date: 05/03/2024
-#' @param AnalyzeUsingEastLogrankFormula
-#' @title Compute the statistic using formulas Q.242 and Q.243 in the East manual.
+#' @param AnalyzeUsingSurvivalPackage
+#' @title Compute the statistic using survival package
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
 #' @param UserParam A list of user defined parameters in East. The default must be NULL.
-#' @description Use the formulas Q.242 and Q.243 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
+#' @description Use the survival package to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
 #'              The test statistic is compared to the lower boundary computed and sent by East as an input. This example does NOT include a futility rule. 
 #' @return TestStat A double value of the computed test statistic
 #' @return Decision An integer value: Decision = 0 --> No boundary crossed
@@ -29,7 +29,7 @@
 #'       The above code will save each of the input objects to a file so they may be examined within R.
 ######################################################################################################################## .
 
-AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     
     # Input objects can be saved through the following lines:
@@ -54,7 +54,7 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint
     }
-
+    
     SimData$TimeOfEvent      <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
     
     # Compute the time of analysis 
@@ -73,69 +73,26 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     coxModel                 <- coxph(Surv(ObservedTime, Event) ~ TreatmentID, data = SimData)
     dTrueHR                  <- exp(coxModel$coefficients)
     
-    SimData$EventOnTreatment <- ifelse(SimData$TreatmentID == 1, SimData$Event, 0) # If the event is observed on treatment
-    SimData$EventOnControl   <- ifelse(SimData$TreatmentID == 0, SimData$Event, 0) # If the event is observed on control
-    
-    # Arm wise count of subjects at risk at the beginning. Is same as arm wise sample size
-    nSubjectsAtRiskTreatment <- nrow( SimData[ SimData$TreatmentID == 1, ])
-    nSubjectsAtRiskControl   <- nrow( SimData[ SimData$TreatmentID == 0, ])
-    
-    # Initialize intermediate quantities required for test statistic computation
-    dNum <- 0
-    dDen <- 0
-    
-    # Iterate over subjects to calculate dNum and dDen required for test statistic computation
-    for ( nSubject in 1:nrow( SimData ) )
-    {   # Update the count of subjects at risk for each arm for non event times
-        if ( SimData$Event[ nSubject ] == 0 ) 
-        {
-            if ( SimData$TreatmentID[ nSubject ] == 1 )
-            {
-                nSubjectsAtRiskTreatment <- nSubjectsAtRiskTreatment - 1
-            }
-            if ( SimData$TreatmentID[ nSubject ] == 0 )
-            {
-                nSubjectsAtRiskControl   <- nSubjectsAtRiskControl - 1
-            }
-            
-        } # For subjects with events, compute dNum and dDen
-        if ( SimData$Event[ nSubject ] == 1 )
-        {
-            nEventsOnTreatment           <- SimData$EventOnTreatment[ nSubject ]
-            nEventsOnControl             <- SimData$EventOnControl[ nSubject ]
-            nEvents                      <- nEventsOnTreatment + nEventsOnControl
-            nSubjectsAtRisk              <- nSubjectsAtRiskTreatment + nSubjectsAtRiskControl
-            # Equation Q.242 in East Manual
-            dNum <- dNum + nEventsOnTreatment - nSubjectsAtRiskTreatment*nEvents/nSubjectsAtRisk
-            # Generate dDen based on number of subjects at risk
-            if ( nSubjectsAtRisk != 1 )
-            {   # Equation Q.243 in East Manual
-                dDen <- dDen + nSubjectsAtRiskTreatment*nSubjectsAtRiskControl*( nSubjectsAtRisk - nEvents )*nEvents/( ( nSubjectsAtRisk - 1)*nSubjectsAtRisk^2 )
-            }
-            # Update the count of subjects at risk before the next iteration
-            nSubjectsAtRiskTreatment     <- nSubjectsAtRiskTreatment - nEventsOnTreatment
-            nSubjectsAtRiskControl       <- nSubjectsAtRiskControl - nEventsOnControl
-        }
-    }
+    # Compute the test statistic using survival package
+    logrankTest              <- survdiff(Surv(ObservedTime, Event) ~ TreatmentID, SimData)
     
     # Compute the logrank test statistic
-    dTS       <- dNum/sqrt( dDen )
+    dTS                      <- sqrt(logrankTest$chisq) * sign(logrankTest$obs[2] - logrankTest$exp[2])
     
     # A decision of 1 means success, 0 means continue the trial
-    nDecision <- ifelse( dTS < dEffBdry, 1, 0 )
+    nDecision                <- ifelse( dTS < dEffBdry, 1, 0 )
     
     if( nDecision == 0 )
     {
         # For this example, there is NO futility check but this is left for consistency with other examples 
         
     }
-
-    Error    <- 0
     
-    lRet      <- list(TestStat = as.double( dTS ),
-                      Decision  = as.integer( nDecision ), 
-                      ErrorCode = as.integer( Error ),
-                      HazardRatio = as.double( dTrueHR ))
+    Error                    <- 0
+    
+    lRet                     <- list(TestStat = as.double( dTS ),
+                                     Decision  = as.integer( nDecision ),
+                                     ErrorCode = as.integer( Error ),
+                                     HazardRatio = as.double( dTrueHR ))
     return( lRet )
 }
-
