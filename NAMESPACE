@@ -2,8 +2,10 @@
 
 export(AnalyzeUsingBetaBinomial)
 export(AnalyzeUsingEastManualFormula)
+export(AnalyzeUsingEastManualFormulaNormal)
 export(AnalyzeUsingPropLimitsOfCI)
 export(AnalyzeUsingPropTest)
+export(AnalyzeUsingTTestNormal)
 export(CombineAllRFiles)
 export(CreateCyneRgyExample)
 export(CreateCyneRgyFunction)

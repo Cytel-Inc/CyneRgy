@@ -11,7 +11,7 @@
 
 <meta name="author" content="J. Kyle Wathen" />
 
-<meta name="date" content="2024-03-20" />
+<meta name="date" content="2024-04-16" />
 
 <title>Two Arm Binary Outcome: Patient Outcome Simulation</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Two Arm Binary Outcome: Patient Outcome
 Simulation</h1>
 <h4 class="author">J. Kyle Wathen</h4>
-<h4 class="date">March 20, 2024</h4>
+<h4 class="date">April 16, 2024</h4>
 
 </div>
 
@@ -400,11 +400,11 @@ of patients that will not respond to treatment is between 20% and 40%.
 In this example, an R function is provided to help explore the
 proportion of patients that are treatment resistant and the impact on
 expected study power. The function used for this example is
-SimulatePatientOutcomePercentAtZero and can be found in
+SimulatePatientOutcomePercentAtZero.Binary and can be found in
 RCode/SimulatePatientOutcomePercentAtZero.Binary.R. The required User
 Specified parameters are the probability a patient is a non-responder
-for each arm, specifically, dProbOfZeroOutcomeCtrl and
-dProbOfZeroOutcomeExp.</p>
+for each arm, specifically, dProbOfTreatmentReistantCtrl and
+dProbOfTreatmentReistantExp.</p>
 <p>For these examples, a binomial distribution is utilized to simulate
 if the patient is treatment resistant. If the patient is not treatment
 resistant, then their outcome is simulated from a binomial distribution
