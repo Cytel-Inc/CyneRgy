@@ -1,6 +1,6 @@
 ---
 title: "Treatment Selection Example"
-author: "J. Kyle Wathen"
+author: "Sydney Ringold, J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   word_document: default

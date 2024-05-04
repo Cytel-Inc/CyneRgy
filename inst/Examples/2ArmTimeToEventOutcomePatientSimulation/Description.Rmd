@@ -1,6 +1,6 @@
 ---
 title: "Two Arm Time-To-Event Outcome: Patient Outcome Simulation Examples"
-author: "J. Kyle Wathen"
+author: "Valeria A. G. Mazzanti, J. Kyle Wathen"
 date: '`r format(Sys.time(), "%B %d, %Y", usetz=TRUE)`'
 output:
 
@@ -125,4 +125,29 @@ plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazar
 Simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different Exponential distribution for simulating the time-to-event from. 
 
 
+
+# Notes about the Weibull Distribution 
+In R the Weibull distribution has a shape parameter $\alpha$ and scale parameter, $\sigma$ and has a density given by
+
+$$
+f(x) = \frac{\alpha}{\sigma}\left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
+$$
+
+
+
+The hazard function is 
+$$
+h(x) = \frac{\alpha}{\sigma}\left( \frac{x}{\sigma}\right)^{\alpha-1}
+$$
+
+In R, an Exponential distribution has a rate parameter, $\lambda$ and has density given by
+
+$$
+f(x) = \lambda e^{-\lambda x}
+$$
+The hazard function is constant 
+$$
+h(x) = \lambda
+$$
+The Exponential distribution is a special case of the Weibull and can be obtained by setting the shape parameter, $\alpha=1$, and scale parameter, $\sigma = \frac{1}{\lambda}$.  Functions to help with computation of Weibull parameters are found in [HelperFunctionsWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/HelperFunctionsWeibull.R)
 

@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,8 @@
     <a class="dropdown-item" href="../articles/2ArmBinaryOutcomePatientSimulation.html">2-Arm, Binary Outcome</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Analysis</h6>
+    <a class="dropdown-item" href="../articles/2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome</a>
+    <a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm, Time-To-Event Outcome</a>
     <a class="dropdown-item" href="../articles/2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6>
@@ -102,7 +104,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">April 24, 2024 at 11:05 AM
+            <h4 data-toc-skip class="date">May 04, 2024 at 6:21 AM
 CDT</h4>
       
       
@@ -133,15 +135,16 @@ trial with a normally distributed patient outcome. For all examples, we
 assume the trial design consists of standard of care and an experimental
 treatment and the trial design assumes patient outcomes are normally
 distributed.</p></li>
-<li><p><strong>2-Arm, Binary Outcome, Patient Simulation</strong>: These
-example demonstrates how to add new patient outcome simulation
-functionality into East using an R function in the context of a two-arm
-trial with normal outcomes. For all examples, we assume the trial design
-consists of standard of care and an experimental treatment. The patient
-outcomes are normal. The intent of these examples is to demonstrate how
-to add new ways to simulate patient data using R in a variety of trial
+<li><p><strong><a href="2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm,
+Binary Outcome, Patient Simulation</a></strong>: These examples
+demonstrates how to add new patient outcome simulation functionality
+into East using an R function in the context of a two-arm trial with
+normal outcomes. For all examples, we assume the trial design consists
+of standard of care and an experimental treatment. The patient outcomes
+are normal. The intent of these examples is to demonstrate how to add
+new ways to simulate patient data using R in a variety of trial
 examples.</p></li>
-<li><p><strong><a href="2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Am,
+<li><p><strong><a href="2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm,
 Time-to-Event Outcome, Patient Simulation</a></strong>: This example
 demonstrates how to add new patient outcome simulation functionality
 into East using an R function. For all examples, we assume the trial
@@ -155,14 +158,30 @@ R.</p></li>
 <h3 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
 </h3>
 <ol style="list-style-type: decimal">
-<li>
-<strong>2-Arm, Binary Outcome Analysis</strong>: This example
-demonstrates how to add new analysis functionality into East using an R
-function. For all examples, we assume the trial design consist of
+<li><p><strong><a href="2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome
+Analysis</a></strong>: This example demonstrates how to add new analysis
+functionality for continuous (normal) data into Cytel products using an
+R function. For all examples, we assume the trial design consists of
 control and an experimental treatments. There are 2 Interim Analysis,
 IA, and a Final Analysis, FA. At the IA, the analysis is performed and
 depending on the example may determine early efficacy or early futility
-depending on the design.</li>
+depending on the design.</p></li>
+<li><p><strong><a href="2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm,
+Time-To-Event Outcome Analysis</a></strong>: This example demonstrates
+how to add new analysis functionality for time-to-event data into Cytel
+products using an R function. For all examples, we assume the trial
+design consists of control and an experimental treatments. There are 2
+Interim Analysis, IA, and a Final Analysis, FA. At the IA, the analysis
+is performed and depending on the example may determine early efficacy
+or early futility depending on the design.</p></li>
+<li><p><strong><a href="2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary Outcome
+Analysis</a></strong>: This example demonstrates how to add new analysis
+functionality for binary data into Cytel products using an R function.
+For all examples, we assume the trial design consists of control and an
+experimental treatments. There are 2 Interim Analysis, IA, and a Final
+Analysis, FA. At the IA, the analysis is performed and depending on the
+example may determine early efficacy or early futility depending on the
+design.</p></li>
 </ol>
 </div>
 <div class="section level3">
@@ -179,10 +198,10 @@ to treatment selection.</li>
 <div class="section level3">
 <h3 id="advanced-example">Advanced Example<a class="anchor" aria-label="anchor" href="#advanced-example"></a>
 </h3>
-<p>These example provide multiple R function to achieve a more complex
+<p>This example provide multiple R function to achieve a more complex
 design option.</p>
 <ol style="list-style-type: decimal">
-<li><p><strong><a href="AssurnaceConsecutiveStudiesBayesianAssuranceUsingEastR.html">Bayesian
+<li><p><strong><a href="AssurnaceConsecutiveStudies.html">Bayesian
 Assurance of Consecutive Studies</a> </strong> The intent of this
 example is to demonstrate the computation of Bayesian assurance, or
 probability of success, through the integration of East and R using a
@@ -207,7 +226,7 @@ R.</p></li>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by J. Kyle Wathen.</p>
+<p>Developed by J. Kyle Wathen, Valeria A. G. Mazzanti, Sydney Ringold.</p>
 </div>
 
 <div class="pkgdown-footer-right">
