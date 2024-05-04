@@ -10,42 +10,55 @@ AnalyzeUsingBetaBinomial(SimData, DesignParam, LookInfo, UserParam = NULL)
 \arguments{
 \item{SimData}{Data frame which consists of data generated in current simulation.}
 
-\item{DesignParam}{List of Design and Simulation Parameters required to perform analysis.}
+\item{DesignParam}{Input Parameters which user may need to compute test statistic and perform test. 
+User should access the variables using names, for example,  DesignParam$Alpha, and not order.}
 
-\item{LookInfo}{List containing Design and Simulation Parameters, which might be required to perform analysis.}
+\item{LookInfo}{List Input Parameters related to multiple looks which user may need to compute test statistic 
+and perform test. User should access the variables using names, 
+for example LookInfo$NumLooks and not order. Other important variables in group sequential designs are: 
+  LookInfo$NumLooks An integer value with the number of looks in the study
+  LookInfo$CurrLookIndex An integer value with the current index look, starting from 1
+  LookInfo$CumEvents A vector of length LookInfo$NumLooks that contains the number of events at the look.}
 
-\item{UserParam}{A list of user defined parameters in East. The default must be NULL.
-If UseParam is supplied, the list must contain the following named elements:
+\item{UserParam}{A list of user defined parameters in East or Solara.
+                UserParam must be supplied and contain the following named elements:
 \describe{
-   \item{UserParam$dAlphaS}{}
-   \item{UserParam$dBetaS}{}
-   \item{UserParam$dAlphaE}{}
-   \item{UserParam$dBetaE}{}
-   \item{UserParam$dMAV}{}
-   \item{UserParam$dUpperCutoffEfficacy}{ A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy }
-   \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility. }
-   }}
+    \item{UserParam$dAlphaCtrl}{Prior alpha parameter for control treatment.  Equivalent to the prior number of treatment successes. }
+    \item{UserParam$dBetaCtrl}{Prior beta parameter for control treatment.  Equivalent to the prior number of treatment failures.}
+    \item{UserParam$dAlphaExp}{Prior alpha parameter for experimental treatment. Equivalent to the prior number of treatment successes.}
+    \item{UserParam$dBetaExp}{Prior beta parameter for experimental treatment. Equivalent to the prior number of treatment failures.}
+    \item{UserParam$dUpperCutoffEfficacy}{A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy }
+    \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility. }
+}
+If user variables are not specified then a Beta( 1, 1 ) prior  is utilized for both standard of care and experimental.}
 }
 \value{
-TestStat A double value of the computed test statistic
-
-Decision An integer value: Decision = 0 --> No boundary crossed
-                                   Decision = 1 --> Lower Efficacy Boundary Crossed
-                                   Decision = 2 --> Upper Efficacy Boundary Crossed
-                                   Decision = 3 --> Futility Boundary Crossed
-                                   Decision = 4 --> Equivalence Boundary Crossed
-
-ErrorCode An integer value:  ErrorCode = 0 --> No Error
+The function must return a list in the return statement of the function. The information below lists 
+            elements of the list, if the element is required or optional and a description of the return values if needed.
+            \describe{
+                 \item{Decision}{Required value. Integer Value with the following meaning:
+                                 \describe{
+                                   \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
+                                   \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
+                                   \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
+                                   \item{Decision = 3}{when the Futility Boundary Crossed}
+                                   \item{Decision = 4}{when the Equivalence Boundary Crossed}
+                                   } 
+                                   }
+                 \item{ErrorCode}{Optional integer value \describe{ 
+                                    \item{ErrorCode = 0}{No Error}
+                                    \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+                                    \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
+                                    }
+                                    }
+                 \item{Delta}{Estimated different between experimental and standard of care}
+                 }
 }
 \description{
-In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than standard of care.
-             The futility is based on a Bayesian predictive probability.  
-             The prior for the prediction and the analysis do NOT need to be the same.  
-             This function requires more info in the glDesign than the previous AnalyzeUsingBetaBinomBayesianModel
+In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than standard of care
+             Futility is based on a low posterior probability, eg it is unlikely that experimental is better than standard of care
 }
 \note{
-In this example we assume a Bayesian model and use posterior probabilities for decision making
-
 When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should set dLowerCutoffForFutility = 0
 when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  
 When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed.
@@ -59,5 +72,4 @@ Helpful Hints:
       saveRDS( LookInfo,    "LookInfo.Rds" )
 
       The above code will save each of the input objects to a file so they may be examined within R.
-TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
 }
