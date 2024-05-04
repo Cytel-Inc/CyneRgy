@@ -175,11 +175,11 @@ boundaries of a confidence interval (CI) for making Go and No Go type
 decision. In this type of trial, teams often set a Minimum Acceptable
 Value (MAV), the minimum treatment difference that would warrant further
 development in a product, and a Target Value (TV), the value that is
-highly desirable based on other consideration (TODO-Need more
-explanation here). In this simplified example, if it is likely that the
-treatment difference is above the MAV then a Go decision is made. If a
-Go decision is not made, then if is is unlikely that the treatment
-difference is above the TV, a No Go decision is made.</p>
+highly desirable based on other consideration. In this simplified
+example, if it is likely that the treatment difference is above the MAV
+then a Go decision is made. If a Go decision is not made, then if is is
+unlikely that the treatment difference is above the TV, a No Go decision
+is made.</p>
 <p>In this example, the prop.test from base R is utilized to analyze the
 data and compute at a user-specified confidence interval. If
 user-specified variables are not defined, we assume the MAV = 0.1 and
