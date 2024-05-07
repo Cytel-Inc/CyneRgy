@@ -1,13 +1,12 @@
-#' @name RunExample
-#' @title RunExample
-#' @description {This function is used to open the examples included in this package.  
+#' Run an example from CyneRgy.  
+#' @description {This function is used to open the examples included in this package.  A new instance of R Studio will launch and open the example. 
 #'   For a current list of example call
 #'   CyneRgy::RunExample() and you will get a list of the available examples.
 #'
 #'   This function opens the example in R Studio. 
 #'   }
-#' @examples \dontrun{{CyneRgy::RunExample( "TreatmentSelection" )
-#' }}
+#' @examples \dontrun{CyneRgy::RunExample( "TreatmentSelection" )
+#' }
 #' @export
 RunExample <- function(strExample) {
     strPackage <- "CyneRgy"

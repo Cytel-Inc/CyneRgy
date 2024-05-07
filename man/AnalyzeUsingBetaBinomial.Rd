@@ -2,8 +2,7 @@
 % Please edit documentation in R/AnalyzeUsingBetaBinomial.R
 \name{AnalyzeUsingBetaBinomial}
 \alias{AnalyzeUsingBetaBinomial}
-\title{Analyze Using Bayesian Beta-Binomial Model for Binary Data
-Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care.}
+\title{Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care.}
 \usage{
 AnalyzeUsingBetaBinomial(SimData, DesignParam, LookInfo, UserParam = NULL)
 }

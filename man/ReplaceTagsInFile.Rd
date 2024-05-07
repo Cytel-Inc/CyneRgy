@@ -2,9 +2,19 @@
 % Please edit documentation in R/ReplaceTagsInFile.R
 \name{ReplaceTagsInFile}
 \alias{ReplaceTagsInFile}
-\title{ReplaceTagsInFile}
+\title{Replace tags in a file.}
 \usage{
 ReplaceTagsInFile(strFileName, vTags, vReplace)
+}
+\arguments{
+\item{strFileName}{The name of the file to use as input.  In tags, defined by {{tags}}, will be replaced with the corresponding values.}
+
+\item{vTags}{Vector of tag names, eg FUNCTION_NAME, VARIABLE_NAME that will be replaced with the values in vReplace}
+
+\item{vreplace}{Vector of values to replace the tags with.}
+}
+\value{
+A TRUE/FALSE value if the functions was successful.
 }
 \description{
 { Description: This function is used to replace {{tags}} in template files. }

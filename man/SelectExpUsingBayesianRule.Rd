@@ -2,7 +2,7 @@
 % Please edit documentation in R/SelectExpUsingBayesianRule.R
 \name{SelectExpUsingBayesianRule}
 \alias{SelectExpUsingBayesianRule}
-\title{Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate.}
+\title{Select treatments to advance based on a Bayesian rule to select any that have at least a user-specified probability of being greater than a user-specified historical response rate.}
 \usage{
 SelectExpUsingBayesianRule(SimData, DesignParam, LookInfo, UserParam = NULL)
 }

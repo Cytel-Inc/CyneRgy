@@ -2,12 +2,12 @@
 % Please edit documentation in R/RunExample.R
 \name{RunExample}
 \alias{RunExample}
-\title{RunExample}
+\title{Run an example from CyneRgy.}
 \usage{
 RunExample(strExample)
 }
 \description{
-{This function is used to open the examples included in this package.  
+{This function is used to open the examples included in this package.  A new instance of R Studio will launch and open the example. 
   For a current list of example call
   CyneRgy::RunExample() and you will get a list of the available examples.
 
@@ -15,6 +15,6 @@ RunExample(strExample)
   }
 }
 \examples{
-\dontrun{{CyneRgy::RunExample( "TreatmentSelection" )
-}}
+\dontrun{CyneRgy::RunExample( "TreatmentSelection" )
+}
 }
