@@ -1,0 +1,11 @@
+---
+title: "Two Arm Time To Event Outcome Analysis Examples"
+author: "Anoop Singh Rawat"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  word_document: default
+  html_document: default
+---
+```{r child = '../inst/Examples/2ArmTimeToEventOutcomeAnalysis/Description.Rmd'}
+```
+

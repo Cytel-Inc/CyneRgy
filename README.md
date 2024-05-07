@@ -14,7 +14,7 @@ Lastly, the Sandbox directory contains incomplete, in-progress examples. The exa
 A variety of examples can be found in this package. Please see [Examples](articles/ExampleOutline.html) for a complete list of examples. The CyneRgy package provides many built-in functions that may be used directly in Cytel products. For a complete list see [References](reference/index.html). 
 
 # Installation 
-Currently this package is not officially released and is not available on CRAN. However, it may be installed directly from GitHub using the [remotes package](https://remotes.r-lib.org/) package with the following code:
+Currently this package is not officially released and is not available on CRAN. However, it may be installed directly from GitHub using the [remotes package](https://remotes.r-lib.org/)  with the following code:
 
 ```
 remotes::install_github( "Cytel-Inc/CyneRgy@main" )
