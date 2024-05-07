@@ -2,7 +2,7 @@
 % Please edit documentation in R/SimulatePatientSurvivalWeibull.R
 \name{SimulatePatientSurvivalWeibull}
 \alias{SimulatePatientSurvivalWeibull}
-\title{Simulate patient outcomes from a Weibull distribution}
+\title{Simulate patient outcomes from a Weibull distribution.}
 \usage{
 SimulatePatientSurvivalWeibull(
   NumSub,
@@ -54,5 +54,5 @@ and only the parameters in UserParam are utilized.
 @export}
 }
 \description{
-Simulate patient outcomes from a Weibull distribution
+Simulate patient outcomes from a Weibull distribution.
 }

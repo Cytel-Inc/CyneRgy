@@ -2,7 +2,7 @@
 % Please edit documentation in R/SimulatePatientSurvivalMixtureExponentials.R
 \name{SimulatePatientSurvivalMixtureExponentials}
 \alias{SimulatePatientSurvivalMixtureExponentials}
-\title{This function simulates from exponential, just included as a simple example as a starting point}
+\title{This function simulates from exponential, just included as a simple example as a starting point.}
 \usage{
 SimulatePatientSurvivalMixtureExponentials(
   NumSub,
@@ -16,5 +16,5 @@ SimulatePatientSurvivalMixtureExponentials(
 )
 }
 \description{
-This function simulates from exponential, just included as a simple example as a starting point
+This function simulates from exponential, just included as a simple example as a starting point.
 }

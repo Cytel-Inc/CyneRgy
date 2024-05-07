@@ -2,7 +2,7 @@
 % Please edit documentation in R/CreateCyneRgyExample.R
 \name{CreateCyneRgyExample}
 \alias{CreateCyneRgyExample}
-\title{Create new CyneRgy Example using provided templates. The directory created can be used in .}
+\title{Create new CyneRgy example using provided templates. The directory created can be used in connection with Cytel-R integration.}
 \usage{
 CreateCyneRgyExample(
   strFunctionType,

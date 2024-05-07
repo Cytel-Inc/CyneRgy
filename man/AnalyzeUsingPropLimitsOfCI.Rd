@@ -2,7 +2,7 @@
 % Please edit documentation in R/AnalyzeUsingPropLimitsOfCI.R
 \name{AnalyzeUsingPropLimitsOfCI}
 \alias{AnalyzeUsingPropLimitsOfCI}
-\title{Analyze using a simplified limits of confidence interval design}
+\title{Analyze using a simplified limits of confidence interval design.}
 \usage{
 AnalyzeUsingPropLimitsOfCI(SimData, DesignParam, LookInfo, UserParam = NULL)
 }
