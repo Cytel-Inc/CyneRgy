@@ -1,4 +1,4 @@
-#' This function simulates from exponential, just included as a simple example as a starting point 
+#' This function simulates from exponential, just included as a simple example as a starting point. 
 # Parameter Description 
 # NumSub - The number of patients (subjects) in the trial.  NumSub survival times need to be generated for the trial.  
 #           This is a single numeric value, eg 250.

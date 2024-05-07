@@ -1,4 +1,4 @@
-#' Simulate patient outcomes from a Weibull distribution 
+#' Simulate patient outcomes from a Weibull distribution. 
 #' @param NumSub The number of subjects that need to be simulated, integer value. NumSub survival times need to be generated for the trial.  
 #'           This is a single numeric value, eg 250.
 #' @param NumArm - The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 

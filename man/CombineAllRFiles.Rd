@@ -2,7 +2,7 @@
 % Please edit documentation in R/CombineAllRFiles.R
 \name{CombineAllRFiles}
 \alias{CombineAllRFiles}
-\title{Combine All R Files}
+\title{This function combines the contents of all R files in a specified directory into one file.}
 \usage{
 CombineAllRFiles(
   strOutFileName = NA,

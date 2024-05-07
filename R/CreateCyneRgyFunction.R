@@ -5,11 +5,21 @@
 #   Change History:
 #   Last Modified Date: 12/19/2023
 #################################################################################################### .
-#' Create new CyneRgy Function using provided templates. These R function that is created can be used in connection with Cytel-R integration.
-#' @description { Description: This function will create a new file containing the template for the desired CyneRgy function. }
+#' Create a new CyneRgy function using provided templates that can be utilized with R integration points in Cytel products. 
+#' @description {Create a new CyneRgy function using provided templates that can be utilized with R integration points in Cytel products.}
+#' @param strFunctionType A string variable that provides the function type to create.   This argument is used to determine which integration template should be used. 
+#' @param strNewFunctionName The name of the new function to create.   This argument is also used to name the file.  The resulting file is named [strNewFunctionName].R
+#' @param strDirectory A sub-directory with this name is created in the current working directory.  If no value is provided, the file is created in the working directory. 
+#' @param bOpen TRUE/FALSE value, when TRUE the file is opened and when FALSE the file is not opened, just created. Note, the R Studio API is used to open the file and only works in R Studio.
+#' @examples \dontrun{
+#' CreateCyneRgyFunction()  # A full list of options for strFunctionType is provided
+#' 
+#' # Using the Analyze.Binary function template a new file named NewBinaryAnalysis.R is created in the working directory with a function that is ready to
+#' # be used in places where binary data is generated in simulations. 
+#' CreateCyneRgyFunction( "Analyze.Binary", "NewBinaryAnalysis" )  
+#' }
 #' @export
 CreateCyneRgyFunction <- function( strFunctionType = "", strNewFunctionName = NA, strDirectory = NA, bOpen = TRUE)
-
 {
     if( is.na(strNewFunctionName) || strNewFunctionName == "" )
     {

@@ -5,15 +5,16 @@
 #   Change History:
 #   Last Modified Date: 04/26/2024
 #################################################################################################### .
-#' Combine All R Files
-#'
 #' This function combines the contents of all R files in a specified directory into one file.
-#' It also replaces any sequence of one or more `#` characters with a single `#`.
 #'
 #' @param strOutFileName The name of the output file. If not provided, the function will return the combined content.
 #' @param strDirectory The directory where the R files are located. Defaults to the current working directory.
 #' @param strFileNameToIgnore The name of any file to be ignored during the combination process. Defaults to NA.
+#' @description
+#' This function combines the contents of all R files in a specified directory into one file.
+#' It also replaces any sequence of one or more `#` characters with a single `#`.
 #'
+#' 
 #' @return A list containing the following elements:
 #' \itemize{
 #'   \item{nQtyCombinedFiles: The number of files combined.}
