@@ -120,11 +120,11 @@ vDataE      <- rweibull( nQtyPats, dShapeE, dScaleE )
 plot( vTime, vHazardS, type = 'l', xlab = "Time (Months)", ylab="Hazard", main ="Hazard: Standard of Care (Solid), Experimental (Dashed)" )
 lines( vTime, vHazardE, lty =2)
 
-print( paste( "Parameters for S: Shape = ", round( dShapeS, 3), ", Scale= ", round( dScaleS, 3 )) )
-print( paste( "Parameters for E: Shape = ", round( dShapeE, 3), ", Scale= ", round( dScaleE, 3 )) )
-print( paste( "Observed median on S: ", median( vDataS ) ) )
-print( paste( "Observed median on E: ", median( vDataE ) ) )
-print( paste( "Observed HR=", median( vDataS )/median( vDataE ) ) )
+# print( paste( "Parameters for S: Shape = ", round( dShapeS, 3), ", Scale= ", round( dScaleS, 3 )) )
+# print( paste( "Parameters for E: Shape = ", round( dShapeE, 3), ", Scale= ", round( dScaleE, 3 )) )
+# print( paste( "Observed median on S: ", median( vDataS ) ) )
+# print( paste( "Observed median on E: ", median( vDataE ) ) )
+# print( paste( "Observed HR=", median( vDataS )/median( vDataE ) ) )
 # 
 
 
