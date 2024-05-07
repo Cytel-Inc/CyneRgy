@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
     <a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6>
-    <a class="dropdown-item" href="../articles/AssurnaceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a>
+    <a class="dropdown-item" href="../articles/AssuranceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6>
     <a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a>
@@ -104,7 +104,7 @@
                         <h4 data-toc-skip class="author">Valeria A. G.
 Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">May 04, 2024</h4>
+            <h4 data-toc-skip class="date">May 07, 2024</h4>
       
       
       <div class="d-none name"><code>2ArmTimeToEventOutcomePatientSimulationDescription.Rmd</code></div>
@@ -170,9 +170,9 @@ East without the use of an R function.</li>
 <p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-2.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-3.png" width="700"></p>
 <pre><code><span><span class="co">## [1] "Parameters for S: Shape =  0.7 , Scale=  20.257"</span></span>
 <span><span class="co">## [1] "Parameters for E: Shape =  0.8 , Scale=  25.298"</span></span>
-<span><span class="co">## [1] "Observed median on S:  11.9227824337899"</span></span>
-<span><span class="co">## [1] "Observed median on E:  16.175414619635"</span></span>
-<span><span class="co">## [1] "Observed HR= 0.737092848261033"</span></span></code></pre>
+<span><span class="co">## [1] "Observed median on S:  12.0916204057003"</span></span>
+<span><span class="co">## [1] "Observed median on E:  15.8898989342603"</span></span>
+<span><span class="co">## [1] "Observed HR= 0.760962700626717"</span></span></code></pre>
 <p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-4.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-5.png" width="700"></p>
 <ol start="2" style="list-style-type: decimal">
 <li>Example 1.2 – This function assumes that the hazard of death or
@@ -198,22 +198,30 @@ this example, the required parameters are the shape and scale for each
 arm, specifically, dShapeCtrl = 0.7, dShapeExp = 0.8, dScaleCtrl =
 20.26, and dScaleExp = 25.30. This example is included to demonstrate
 using an R function if the data is simulated differently to how it is in
-East without the use of an R function.</li>
+East without the use of an R function.<br><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-2.png" width="700">
+</li>
 </ol>
-<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="example-2---simulation-of-patient-time-to-event-data-from-a-mixture-of-distributions">Example 2 - Simulation of Patient Time-To-Event Data from a Mixture
 of Distributions<a class="anchor" aria-label="anchor" href="#example-2---simulation-of-patient-time-to-event-data-from-a-mixture-of-distributions"></a>
 </h3>
 <p>Simulate patient data from a mixture of exponential distributions.
-The mixture is based on having any number of patient groups in the study
-where each group has a different Exponential distribution for simulating
-the time-to-event from.</p>
+The mixture is based on having any number of patient subgroups in the
+study where each group has a different Exponential distribution for
+simulating the time-to-event (TTE) from. In the East workbook, four
+simulations are conducted. The simulations are: 1. both subgroups have
+the same HR=0.75 with same median TTE, eg subgroup has no impact, 2. 25%
+of patients are in subgroup 1, with a median TTE lower than in group 2
+and both subgroups have a HR = 0.75, 3. 25% of patients are in subgroup
+1 with an HR = 0.8 and subgroup 2 has a HR = 0.75, 4. 40% of patients
+are in subgroup 1 with an HR = 0.8 and subgroup 2 has a HR = 0.75.</p>
+<p>The intent of the example is to illustrate the impact of the patient
+subgroup may have on the operating characteristics of the design.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="notes-about-the-weibull-distribution">Notes about the Weibull Distribution<a class="anchor" aria-label="anchor" href="#notes-about-the-weibull-distribution"></a>
+<h2 id="notes-about-the-exponential-and-weibull-distributions">Notes about the Exponential and Weibull Distributions<a class="anchor" aria-label="anchor" href="#notes-about-the-exponential-and-weibull-distributions"></a>
 </h2>
 <p>In R the Weibull distribution has a shape parameter <span class="math inline">\(\alpha\)</span> and scale parameter, <span class="math inline">\(\sigma\)</span> and has a density given by</p>
 <p><span class="math display">\[

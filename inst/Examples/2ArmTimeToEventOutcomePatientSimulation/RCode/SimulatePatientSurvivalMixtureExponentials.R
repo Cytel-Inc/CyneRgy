@@ -1,30 +1,37 @@
 #' Simulate patient outcomes from a Weibull distribution 
-#' @param NumSub The number of subjects that need to be simulated, integer value. NumSub survival times need to be generated for the trial.  
-#'           This is a single numeric value, eg 250.
-#' @param NumArm - The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
+#' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, eg 250.
+#' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
-#' @param SurvMethod If SurvMethod is 1 (Hazard Rates):
-#'   SurvParam is an array that specifies arm by arm hazard rates (one rate per arm per piece). Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
-#'   Arms are in columns with column 1 is control, column 2 is experimental
-#'   Time periods are in rows
-#'   If SurvMethod is 2:
-#'         SurvParam is an array specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.
-#'   If SurvMethod is 3:
-#'         SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental 
-#' @param NumPrd The number of periods in the East input.
-#' @param PrdTime TODO - Get this from East
-#' @param SurvParam - Depends on the table in the Response Generation tab. 2‐D array of parameters uses to generate time of events.
+#' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
+#' @param NumPrd Number of time periods that are provided. 
+#' @param PrdTime \describe{ 
+#'      \item{If SurvMethod = 1}{PrdTime is a vector of starting times of hazard pieces.}
+#'      \item{If SurvMethod = 2}{Times at which the cumulative % survivals are specified.}
+#'      \item{If SurvMethod = 3}{Period time is 0 by default}
+#'      }
+#' @param SurvParam \describe{Depends on the table in the Response Generation tab. 2‐D array of parameters to generate the survival times
+#'    \item{If SurvMethod is 1}{SurvParam is an array (NumPrd rows, NumArm columns) that specifies arm by arm hazard rates (one rate per arm per piece). 
+#'    Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
+#'    Arms are in columns with column 1 is control, column 2 is experimental
+#'    Time periods are in rows, row 1 is time period 1, row 2 is time period 2...}
+#'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
+#'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
+#'  }
 #' @param UserParam A list of user defined parameters in East. The default must be NULL.
-#'  If UserParam is supplied, TODO What parameter are we sending and what are we using:
+#'  If UserParam is supplied it must contain the following 
 #'  \describe{
-#'       \item {UserParam$dShapeCtrl} {The shape parameter in the Weibull distribution for the control treatment}  
-#'       \item {UserParam$dScaleCtrl} {The scale parameter in the Weibull distribution for the control treatment}
-#'       \item {UserParam$dShapeExp} {The shape parameter in the Weibull distribution for the experimental treatment}  
-#'       \item {UserParam$dScaleExp} {The scale parameter in the Weibull distribution for the experimental treatment}
+#'       \item{UserParam$QtyOfSubgroups}{The quantity of patient subgroups.  For each subgroup II = 1,2..,QtyOfSubgroups, 
+#'       you must specify ProbSubgroupII, MedianTTECtrlSubgroupII, MedianTTEExpSubgroupII }
+#'       \item{UserParam$ProbSubgroup1}{The probability a patient is in subgroup 1}  
+#'       \item{UserParam$MedianTTECtrlSubgroup1}{The median time-to-event for a patient in subgroup 1 that receives control treatment}
+#'       \item{UserParam$MedianTTEExpSubgroup1}{The median time-to-event for a patient in subgroup 1 that receives experimental treatment} 
+#'       \item{UserParam$ProbSubgroup2}{The probability a patient is in subgroup 2}  
+#'       \item{UserParam$MedianTTECtrlSubgroup2}{The median time-to-event for a patient in subgroup 2 that receives control treatment}
+#'       \item{UserParam$MedianTTEExpSubgroup2}{The median time-to-event for a patient in subgroup 2 that receives experimental treatment} 
 #'  }
 #'  @description
-#'  This function simulates patient data from a Weibull( shape, scale ) distribution.   The rweibull function in the stats package
-#'  is used to simulate the survival time.  See help on rweibull.  
+#'  This function simulates patient data from a mixture of Exponential distributions. The mixture is based on patient subgroups.  For each,
+#'  subgroup you specify the median time-to-event for the control and experimental treatments as well as the probability a patient belongs in a specific group.
 #'  The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 #'  and only the parameters in UserParam are utilized.  
 #'  @export
