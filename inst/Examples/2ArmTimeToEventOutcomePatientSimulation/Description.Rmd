@@ -3,7 +3,7 @@ title: "Two Arm Time-To-Event Outcome: Patient Outcome Simulation Examples"
 author: "Valeria A. G. Mazzanti, J. Kyle Wathen"
 date: '`r format(Sys.time(), "%B %d, %Y", usetz=TRUE)`'
 output:
-
+  html_document: default
   word_document: default
 ---
 
