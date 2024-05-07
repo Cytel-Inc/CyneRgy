@@ -1,5 +1,5 @@
 ######################################################################################################################## .
-#' Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate. 
+#' Select treatments to advance based on a Bayesian rule to select any that have at least a user-specified probability of being greater than a user-specified historical response rate. 
 #'@param SimData Data frame which consists of data generated in current simulation
 #'@param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #'@param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
