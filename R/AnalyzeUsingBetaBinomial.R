@@ -2,38 +2,48 @@
 #' Analyze Using Bayesian Beta-Binomial Model for Binary Data
 #' Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care. 
 #' @param SimData Data frame which consists of data generated in current simulation.
-#' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
-#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
-#' If UseParam is supplied, the list must contain the following named elements:
-#' \describe{
-#'    \item{UserParam$dAlphaS}{}
-#'    \item{UserParam$dBetaS}{}
-#'    \item{UserParam$dAlphaE}{}
-#'    \item{UserParam$dBetaE}{}
-#'    \item{UserParam$dMAV}{}
-#'    \item{UserParam$dUpperCutoffEfficacy}{ A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy }
-#'    \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility. }
-#'    }
-#' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than standard of care.
-#'              The futility is based on a Bayesian predictive probability.  
-#'              The prior for the prediction and the analysis do NOT need to be the same.  
-#'              This function requires more info in the glDesign than the previous AnalyzeUsingBetaBinomBayesianModel
-#'              
-#' @return TestStat A double value of the computed test statistic
-#' @return Decision An integer value: Decision = 0 --> No boundary crossed
-#'                                    Decision = 1 --> Lower Efficacy Boundary Crossed
-#'                                    Decision = 2 --> Upper Efficacy Boundary Crossed
-#'                                    Decision = 3 --> Futility Boundary Crossed
-#'                                    Decision = 4 --> Equivalence Boundary Crossed
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-
-#'@note In this example we assume a Bayesian model and use posterior probabilities for decision making
-#       If user variables are not specified we assume non-informative uniform prior equivalent to observing two patient outcomes:
-#       pi_S ~ beta( 1, 1 ); 
-#       pi_E ~ beta( 1, 1 ); 
+#' @param DesignParam Input Parameters which user may need to compute test statistic and perform test. 
+#'                    User should access the variables using names, for example,  DesignParam$Alpha, and not order. 
+#' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
+#'                 and perform test. User should access the variables using names, 
+#'                 for example LookInfo$NumLooks and not order. Other important variables in group sequential designs are: 
+#'                   LookInfo$NumLooks An integer value with the number of looks in the study
+#'                   LookInfo$CurrLookIndex An integer value with the current index look, starting from 1
+#'                   LookInfo$CumEvents A vector of length LookInfo$NumLooks that contains the number of events at the look.
+#' @param UserParam A list of user defined parameters in East or Solara.
+#'                  UserParam must be supplied and contain the following named elements:
+#'  \describe{
+#'      \item{UserParam$dAlphaCtrl}{Prior alpha parameter for control treatment.  Equivalent to the prior number of treatment successes. }
+#'      \item{UserParam$dBetaCtrl}{Prior beta parameter for control treatment.  Equivalent to the prior number of treatment failures.}
+#'      \item{UserParam$dAlphaExp}{Prior alpha parameter for experimental treatment. Equivalent to the prior number of treatment successes.}
+#'      \item{UserParam$dBetaExp}{Prior beta parameter for experimental treatment. Equivalent to the prior number of treatment failures.}
+#'      \item{UserParam$dUpperCutoffEfficacy}{A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy }
+#'      \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility. }
+#'  }
+#'  If user variables are not specified then a Beta( 1, 1 ) prior  is utilized for both standard of care and experimental.
+#'  
+#' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than standard of care
+#'              Futility is based on a low posterior probability, eg it is unlikely that experimental is better than standard of care  
+#' @return The function must return a list in the return statement of the function. The information below lists 
+#'             elements of the list, if the element is required or optional and a description of the return values if needed.
+#'             \describe{
+#'                  \item{Decision}{Required value. Integer Value with the following meaning:
+#'                                  \describe{
+#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
+#'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
+#'                                    \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
+#'                                    \item{Decision = 3}{when the Futility Boundary Crossed}
+#'                                    \item{Decision = 4}{when the Equivalence Boundary Crossed}
+#'                                    } 
+#'                                    }
+#'                  \item{ErrorCode}{Optional integer value \describe{ 
+#'                                     \item{ErrorCode = 0}{No Error}
+#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
+#'                                     }
+#'                                     }
+#'                  \item{Delta}{Estimated different between experimental and standard of care}
+#'                  }
 #' @note 
 #' When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should set dLowerCutoffForFutility = 0
 #' when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  
@@ -47,7 +57,6 @@
 #'       saveRDS( LookInfo,    "LookInfo.Rds" )
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
-#' TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
 #' @export
 ######################################################################################################################## .
 AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
@@ -57,8 +66,8 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam =
     if( is.null( UserParam ) )
     {
         # Default values are non-informative uniform prior
-        UserParam <- list(dAlphaS = 0.5, dBetaS = 0.5, 
-                          dAlphaE = 0.5, dBetaE = 0.5, 
+        UserParam <- list(dAlphaS = 1, dBetaS = 1, 
+                          dAlphaE = 1, dBetaE = 1, 
                           dMAV = 0, 
                           dUpperCutoffEfficacy = 0.975,
                           dLowerCutoffForFutility = 0.1 )
@@ -114,7 +123,7 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam =
     #retval 	= 0
     
     
-    return(list(TestStat = as.double(lRet$dPostProb), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ) ))
+    return(list(TestStat = as.double(lRet$dPostProb), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ), Delta = as.double( lRet$dDelta ) ))
 }
 
 
@@ -143,59 +152,12 @@ ProbExpGreaterStdPlusDeltaBeta <- function(vOutcomesS, vOutcomesE, dAlphaS, dBet
     dPostProb  <- ifelse( vPiExp > vPiStd + dDelta, 1, 0 )
     dPostProb  <- sum( dPostProb )/length( dPostProb )
     
-    return(list(dPostProb = dPostProb))
+    # Compute Delta: mean(Pi_E) - mean( Pi_C)
+    dDelta     <- ( dAlphaE/( dAlphaE + dBetaE) ) - ( dAlphaS/( dAlphaS +  dBetaS ))
+    return(list(dPostProb = dPostProb, dDelta = dDelta))
 }
 
 
-
-
-# Function to compute Bayesian predictive probability of success
-ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function(dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams) {
-    # Compute the posterior parameters based on observed data
-    posteriorAlphaS <- priorAlphaS + sum(dataS)
-    posteriorBetaS  <- priorBetaS + length(dataS) - sum(dataS)
-    
-    posteriorAlphaE <- priorAlphaE + sum(dataE)
-    posteriorBetaE  <- priorBetaE + length(dataE) - sum(dataE)
-    
-    #lAnalysisParams <- list( dAlphaCtrl = priorAlphaS,
-    #                         dBetaCtrl  = priorBetaS,
-    #                         dAlphaExp  = priorAlphaE,
-    #                         dBetaExp   = priorBetaE )
-    
-    # Initialize counters for successful trials
-    successfulTrials <- 0
-    
-    # Simulate the remaining trials and compute the predictive probability
-    for (i in 1:nSimulations) {
-        # Sample response rates from posterior distributions
-        posteriorRateS <- rbeta(1, posteriorAlphaS, posteriorBetaS)
-        posteriorRateE <- rbeta(1, posteriorAlphaE, posteriorBetaE)
-        
-        # Simulate patient outcomes for for the current virtual trial based on sampled rates
-        # The data at the end of the trial is a combination of the data at the interim, dataS, and the simulated data to the end of the trial, remainingDataS
-        remainingDataS <- SimulatePatientOutcome(nQtyOfPatsS - length(dataS), posteriorRateS)
-        combinedDataS  <- c(dataS, remainingDataS)
-        
-        remainingDataE <- SimulatePatientOutcome(nQtyOfPatsE - length(dataE), posteriorRateE)
-        combinedDataE  <- c(dataE, remainingDataE)
-        
-        
-        # Perform the analysis with combined data to check if the trial is successful
-        result <- ProbSGreaterEBeta(combinedDataS, combinedDataE, lAnalysisParams )
-        
-        # Check if the result meets the cutoff for success
-        if (result$dPostProb <= finalBoundary) {
-            successfulTrials <- successfulTrials + 1
-        }
-    }
-    
-    # Compute the Bayesian predictive probability of success
-    predictiveProbabilityS <- successfulTrials / nSimulations
-    
-    # Return the result
-    return(list(predictiveProbabilityS = predictiveProbabilityS))
-}
 
 
 

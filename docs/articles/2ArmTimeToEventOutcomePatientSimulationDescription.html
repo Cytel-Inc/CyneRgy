@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,8 @@
     <a class="dropdown-item" href="../articles/2ArmBinaryOutcomePatientSimulation.html">2-Arm, Binary Outcome</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Analysis</h6>
+    <a class="dropdown-item" href="../articles/2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome</a>
+    <a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm, Time-To-Event Outcome</a>
     <a class="dropdown-item" href="../articles/2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6>
@@ -99,10 +101,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>2 Arm Time-To-Event Outcome Patient Simulation</h1>
-                        <h4 data-toc-skip class="author">J. Kyle
-Wathen</h4>
+                        <h4 data-toc-skip class="author">Valeria A. G.
+Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">April 24, 2024</h4>
+            <h4 data-toc-skip class="date">May 04, 2024</h4>
       
       
       <div class="d-none name"><code>2ArmTimeToEventOutcomePatientSimulationDescription.Rmd</code></div>
@@ -144,7 +146,61 @@ directory.</p>
 <h3 id="example-1---simulation-of-patient-time-to-event-data-from-a-weibull-distribution">Example 1 - Simulation of Patient Time-To-Event Data from a Weibull
 Distribution<a class="anchor" aria-label="anchor" href="#example-1---simulation-of-patient-time-to-event-data-from-a-weibull-distribution"></a>
 </h3>
-<p>To replace the patient outcome simulation..</p>
+<p>In this example, an R function is provided to help explore how to
+simulate patient data that follows a pattern where hazards and hazard
+ratio are changing over time and the impact on expected study power.</p>
+<p>To replace the patient outcome simulation, the function used is
+SimulatePatientSurvivalWeibull and can be found in
+RCode/SimulatePatientSurvivalWeibull.R. The required User Specified
+parameters are the shape and scale for each arm’s distribution,
+specifically, dShapeCtrl, dShapeExp, dScaleCtrl, and dScaleExp.</p>
+<ol style="list-style-type: decimal">
+<li>Example 1.1 – Assume that the difference in risk of death for
+patients in the control arm compared to the risk of death for patients
+in the experimental arm remains the same over time. The time to death or
+progression of patients is simulated from a Weibull distribution with
+the shape and scale for each arm provided in East and sent to R. For
+this example, the required parameters are the shape and scale for each
+arm, specifically, dShapeCtrl = 1.0, dShapeExp = 1.0, dScaleCtrl =
+17.31, and dScaleExp = 23.08. The Scale parameters are computed based on
+the median Survival time for each arm. This example is included to
+demonstrate using an R function if the data is simulated as it is in
+East without the use of an R function.</li>
+</ol>
+<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-2.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-3.png" width="700"></p>
+<pre><code><span><span class="co">## [1] "Parameters for S: Shape =  0.7 , Scale=  20.257"</span></span>
+<span><span class="co">## [1] "Parameters for E: Shape =  0.8 , Scale=  25.298"</span></span>
+<span><span class="co">## [1] "Observed median on S:  11.9227824337899"</span></span>
+<span><span class="co">## [1] "Observed median on E:  16.175414619635"</span></span>
+<span><span class="co">## [1] "Observed HR= 0.737092848261033"</span></span></code></pre>
+<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-4.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-5.png" width="700"></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Example 1.2 – This function assumes that the hazard of death or
+progression is increasing over time for both arms. The control arm’s
+hazards, however, increase at a slower rate than the experimental arm’s
+hazards. The time to death or progression of patients is simulated from
+a Weibull distribution with the shape and scale for each arm provided in
+East and sent to R. For this example, the required parameters are the
+shape and scale for each arm, specifically, dShapeCtrl = 3.0, dShapeExp
+= 4.0, dScaleCtrl = 13.56, and dScaleExp = 17.54. This example is
+included to demonstrate using an R function if the data is simulated
+differently to how it is in East without the use of an R function.</li>
+</ol>
+<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-3-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-3-2.png" width="700"></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Example 1.3 – This example is similar to the previous example,
+however, this function assumes that both the arms’ hazards are
+decreasing over time. The control arm’s hazards decrease at a slower
+rate than the experimental arm’s hazards. The time to death or
+progression of patients is simulated from a Weibull distribution with
+the shape and scale for each arm provided in East and sent to R. For
+this example, the required parameters are the shape and scale for each
+arm, specifically, dShapeCtrl = 0.7, dShapeExp = 0.8, dScaleCtrl =
+20.26, and dScaleExp = 25.30. This example is included to demonstrate
+using an R function if the data is simulated differently to how it is in
+East without the use of an R function.</li>
+</ol>
+<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="example-2---simulation-of-patient-time-to-event-data-from-a-mixture-of-distributions">Example 2 - Simulation of Patient Time-To-Event Data from a Mixture
@@ -154,22 +210,27 @@ of Distributions<a class="anchor" aria-label="anchor" href="#example-2---simulat
 The mixture is based on having any number of patient groups in the study
 where each group has a different Exponential distribution for simulating
 the time-to-event from.</p>
-<pre><code><span><span class="co">## [1] 1</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 1</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 17.31234</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 23.08312</span></span></code></pre>
-<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-2.png" width="700"></p>
-<pre><code><span><span class="co">## [1] 3</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 4</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 13.55937</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 17.53532</span></span></code></pre>
-<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-3.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-4.png" width="700"></p>
-<pre><code><span><span class="co">## [1] 0.7</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 0.8</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 20.25692</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 25.29811</span></span></code></pre>
-<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-5.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-2-6.png" width="700"></p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="notes-about-the-weibull-distribution">Notes about the Weibull Distribution<a class="anchor" aria-label="anchor" href="#notes-about-the-weibull-distribution"></a>
+</h2>
+<p>In R the Weibull distribution has a shape parameter <span class="math inline">\(\alpha\)</span> and scale parameter, <span class="math inline">\(\sigma\)</span> and has a density given by</p>
+<p><span class="math display">\[
+f(x) = \frac{\alpha}{\sigma}\left(\frac{x}{\sigma}\right)^{\alpha-1}
+e^{-\left(\frac{x}{\sigma}\right)^\alpha}
+\]</span></p>
+<p>The hazard function is <span class="math display">\[
+h(x) = \frac{\alpha}{\sigma}\left( \frac{x}{\sigma}\right)^{\alpha-1}
+\]</span></p>
+<p>In R, an Exponential distribution has a rate parameter, <span class="math inline">\(\lambda\)</span> and has density given by</p>
+<p><span class="math display">\[
+f(x) = \lambda e^{-\lambda x}
+\]</span> The hazard function is constant <span class="math display">\[
+h(x) = \lambda
+\]</span> The Exponential distribution is a special case of the Weibull
+and can be obtained by setting the shape parameter, <span class="math inline">\(\alpha=1\)</span>, and scale parameter, <span class="math inline">\(\sigma = \frac{1}{\lambda}\)</span>. Functions to
+help with computation of Weibull parameters are found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/Dev/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/HelperFunctionsWeibull.R" class="external-link">HelperFunctionsWeibull.R</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -179,7 +240,7 @@ the time-to-event from.</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by J. Kyle Wathen.</p>
+<p>Developed by J. Kyle Wathen, Valeria A. G. Mazzanti, Sydney Ringold.</p>
 </div>
 
 <div class="pkgdown-footer-right">
