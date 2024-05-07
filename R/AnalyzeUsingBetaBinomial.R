@@ -1,5 +1,4 @@
 ######################################################################################################################## .
-#' Analyze Using Bayesian Beta-Binomial Model for Binary Data
 #' Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care. 
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam Input Parameters which user may need to compute test statistic and perform test. 

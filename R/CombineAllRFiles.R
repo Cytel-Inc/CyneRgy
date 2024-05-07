@@ -5,8 +5,6 @@
 #   Change History:
 #   Last Modified Date: 04/26/2024
 #################################################################################################### .
-#' Combine All R Files
-#'
 #' This function combines the contents of all R files in a specified directory into one file.
 #' It also replaces any sequence of one or more `#` characters with a single `#`.
 #'
