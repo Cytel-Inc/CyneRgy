@@ -30,7 +30,7 @@ SimulatePatientSurvivalMixtureExponentials <- function(NumSub, NumArm, Treatment
     #saveRDS( SurvParam, "SurvParam.Rds" )
     #saveRDS( UserParam, "UserParam.Rds" )
     
-    # The SurvParam depends on input in East, EAST sends the Medan (see the Simulation->Response Generation tab for what is sent)
+    # The SurvParam depends on input in East, EAST sends the Median (see the Simulation->Response Generation tab for what is sent)
     
     vSurvTime <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
     
@@ -95,7 +95,7 @@ SimulatePatientSurvivalMixtureExponentials <- function(NumSub, NumArm, Treatment
             else
             {
                 #ErrorCode <- 1
-                ErrorCode <- ERROR1   # CAUSE_AN_ERROR is not defined so shoudl cause in error
+                ErrorCode <- ERROR1   # CAUSE_AN_ERROR is not defined so should cause in error
                 
             }
         }

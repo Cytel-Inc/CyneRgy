@@ -109,7 +109,7 @@ SelectExpWithPValueLessThanSpecified  <- function(SimData, DesignParam, LookInfo
     }
  
     # Step 3: Create the allocation ratios for all selected treatments ####
-    # In this case, all selected treatments should have an allocation ration of 1:1
+    # In this case, all selected treatments should have an allocation ratio of 1:1
     # The allocation will put twice as many patients on the treatment with the highest number of responses 
     vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ) )    
                                        
