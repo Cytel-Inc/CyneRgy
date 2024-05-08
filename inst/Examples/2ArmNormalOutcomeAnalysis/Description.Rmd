@@ -1,0 +1,67 @@
+---
+title: '2ArmNormalOutcomeAnalysis'
+author: "Shubham Lahoti"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 5
+    number_sections: true
+    latex_engine: tinytex
+  word_document: default
+  pdf_document:
+    toc: true
+    toc_depth: '5'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library( CyneRgy )
+```
+
+# Introduction
+# Two Arm, Normal Outcome - Analysis Examples
+
+This example demonstrates how to add new analysis functionality  into East using an R function.  
+
+For all examples, we assume the trial design consist of control and an experimental treatment. There are 2 Interim Analyses, IA, and a Final Analysis, FA. At the IA, the analysis is performed and, depending on the example, may determine early efficacy or early futility depending on the design.
+
+The examples included here are to provide different approaches for analyzing the data in the trial. 
+
+In the RCode directory of this example you will find the following R files:
+
+1.  AnalyzeUsingEastManualFormulaNormal.R - Contains a function named AnalyzeUsingEastManualFormulaNormal to demonstrate the R code necessary for this example as described below.
+
+2.  AnalyzeUsingTTestNormal.R - Contains a function named AnalyzeUsingTTestNormal to demonstrate the R code necessary for this example as described below.
+
+3.  AnalyzeUsingMeanLimitsOfCI.R - Contains a function named AnalyzeUsingMeanLimitsOfCI to demonstrate the R code necessary for this example as described below.
+
+
+
+## Example 1 - Two-arm Arm Normal Analysis Using a Formula Q.3.3 in the East manual
+
+To replace the analysis, use the formula Q.3.3 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making could be modified in a simple approach.  The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule. 
+
+## Example 2 - Two-arm Arm Normal Analysis Using the t.test function in R  
+
+This example utilizes the t.test() function in base R to perform the analysis. The t statistic that is compared to the upper boundary computed and sent by East as an input.  This example does NOT include a futility rule. 
+
+
+## Example 3 -  Utilization of Confidence Interval Limits for Go/No GO Decision Making in two arm Normal analysis
+
+In many phase II trials, teams like to utilize the upper and lower boundaries of a confidence interval (CI) for making Go and No Go type decision. In this type of trial, teams often set a Minimum Acceptable Value (MAV), the minimum treatment difference that would warrant further development in a product, and a Target Value (TV), the value that is highly desirable based on other consideration.  In this simplified example, if it is likely that the treatment difference is above the MAV then a Go decision is made.  If a Go decision is not made, then if is is unlikely that the treatment difference is above the TV, a No Go decision is made.      
+
+In this example, the t.test from base R is utilized to analyze the data and compute at a user-specified confidence interval. The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV.  If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the difference is greater than the TV.  Using a frequentist CI an approximation to this design can be done by the logic described below.
+
+#At an Interim Analysis
+    If the Lower Limit of the CI, denoted by LL, is greater than a user-specified amount then a Go decision is made.  Specifically, if LL > user-specified lower limit --> Go
+    If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than a user-specified value a No Go decision is made.  Specifically, if UL < user-specified upper limit --> No Go
+    Otherwise, continue to the next analysis.
+
+#At the Final Analysis: 
+    If the Lower Limit of the CI, denoted by LL, is greater than a user-specified values then a Go decision is made.  Specifically, if LL > user-specified value --> Go
+    Otherwise, a No Go decision is made.
+    
+Note, in this example the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
