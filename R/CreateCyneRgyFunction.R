@@ -35,7 +35,7 @@ CreateCyneRgyFunction <- function( strFunctionType = "", strNewFunctionName = NA
     # create it and open it
     strPackage <- "CyneRgy"
     
-    # Exiting template names, remove extensions
+    # Existing template names, remove extensions
     vValidExamples         <- tools::file_path_sans_ext(list.files(system.file("Templates", package = strPackage)) )
     vValidExamplesFullPath <- list.files(system.file("Templates", package = strPackage), full.names = TRUE) 
     

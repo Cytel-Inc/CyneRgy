@@ -19,7 +19,7 @@ CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDi
     }
     
     
-    #TODO: Make sure the strFunctionType is a valid type, eg GenerateArrivalTimes ect
+    #TODO: Make sure the strFunctionType is a valid type, eg GenerateArrivalTimes etc.
     # Make sure the file does not already exist
     # create it and open it
     strPackage <- "CyneRgy"

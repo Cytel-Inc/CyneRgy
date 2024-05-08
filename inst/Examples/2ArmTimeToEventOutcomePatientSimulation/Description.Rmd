@@ -33,7 +33,21 @@ To replace the patient outcome simulation, the function used is SimulatePatientS
 
 ```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Constant Hazard from Exponential ##
-source( "RCode/HelperFunctionsWeibull.R")
+#source( "RCode/HelperFunctionsWeibull.R")
+
+ComputeHazardWeibull <- function( vTime, dShape, dScale )
+{
+    vHaz <- (dShape/dScale) * (vTime/dScale )^(dShape-1)
+    return ( vHaz )
+}
+
+ 
+ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
+{
+    dScale <- dMedian/exp( log( -log( 0.5) )/dShape )
+    return( dScale )
+}
+
 dMedianCtrl <- 12
 dMedianExp  <- 16
 
