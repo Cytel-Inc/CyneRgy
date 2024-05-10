@@ -1,6 +1,6 @@
 ---
 title: '2 Arm Normal Outcome Analysis'
-author: "Shubham Lahoti"
+author: "Shubham Lahoti and J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document:
@@ -36,6 +36,8 @@ In the RCode directory of this example you will find the following R files:
 
 2.  AnalyzeUsingTTestNormal.R - Contains a function named AnalyzeUsingTTestNormal to demonstrate the R code necessary for this example as described below.
 
+3.  AnalyzeUsingMeanLimitsOfCI.R - Contains a function named AnalyzeUsingMeanLimitsOfCI to demonstrate the R code necessary for this example as described below.
+
 
 
 ## Example 1 - Two-arm Arm Normal Analysis Using a Formula Q.3.3 in the East manual
@@ -45,3 +47,34 @@ To replace the analysis, use the formula Q.3.3 in the East manual to compute the
 ## Example 2 - Two-arm Arm Normal Analysis Using the t.test function in R  
 
 This example utilizes the t.test() function in base R to perform the analysis. The t statistic that is compared to the upper boundary computed and sent by East as an input.  This example does NOT include a futility rule. 
+
+
+## Example 3 -  Utilization of Confidence Interval Limits for Go/No Go Decision Making in two arm Normal analysis
+
+In many phase II trials, teams need to make Go and No Go type decision. In this type of trial, teams often set a Minimum Acceptable Value (MAV), the minimum treatment difference that would warrant further development in a product, and a Target Value (TV), the value that is highly desirable based on other consideration.  In this example, if it is likely that the treatment difference is above the MAV then a Go decision is made.  If a Go decision is not made, then if is is unlikely that the treatment difference is above the TV, a No Go decision is made.      
+
+In this example, the team has enough resources for 100 patients. The team would like to compare two fixed design options and one group sequential design with a one interim look and a final.  
+
+**Option 1** The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV = 0.1.  If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the difference is greater than the TV = 0.3.  Using a frequentist CI an approximation to this design can be done by the logic described below assuming the 80% confidence interval (CI), runs from the 10% to the 90%.  
+
+**Option 2** The team would like to make a Go decision if there is at least a 85% chance that the difference in treatment is greater than the MAV = 0.1.  If a Go decision is not made, then a No Go decision is made if there is less than a 15% chance the difference is greater than the TV = 0.3.  Using a frequentist CI an approximation to this design can be done by the logic described below. Using a frequentist CI an approximation to this design can be done by the logic described below assuming the 70% confidence interval (CI), runs from the 15% to the 85%.  
+
+**Option 3** In this design, the team would like to include an interim analysis (IA) at 50 patients with an option to stop for early Go or No-Go decision.  To account for the IA, the team would like to make a Go decision if there is at least a 92.5% chance the difference is above the MAV = 0.1 and stop for futility if there is less than a 7.5% chance the difference is above the TV = 0.3.
+
+### At an Interim Analysis
+
+Use t.test from base R to analyze the data and compute desired CI.  
+
+If the Lower Limit of the CI, denoted by LL, is greater than a user-specified MAV then a Go decision is made.  Specifically, if LL > MAV --> Go
+
+If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than a TV a No Go decision is made.  Specifically, if UL < TV --> No Go
+
+Otherwise, continue to the next analysis.
+
+### At the Final Analysis
+
+If LL > MAV --> Go
+
+Otherwise, a No Go decision is made.
+    
+Note, in this example the boundary information that is computed and sent from East is ignored in order to implement this decision approach.

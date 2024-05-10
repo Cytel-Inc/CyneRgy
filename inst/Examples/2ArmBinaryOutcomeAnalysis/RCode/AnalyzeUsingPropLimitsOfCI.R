@@ -69,6 +69,7 @@ AnalyzeUsingPropLimitsOfCI<- function(SimData, DesignParam, LookInfo = NULL, Use
     else
     {
         # Fixed Design
+        nLookIndex           <- 1
         nQtyOfLooks          <- 1
         nQtyOfEvents         <- DesignParam$MaxCompleters
         nQtyOfPatsInAnalysis <- nrow( SimData )
