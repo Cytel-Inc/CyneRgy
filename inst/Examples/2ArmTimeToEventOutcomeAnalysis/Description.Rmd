@@ -1,0 +1,51 @@
+---
+title: 'Two Arm Time To Event Outcome Analysis Examples'
+author: "Anoop Singh Rawat and Shubham Lahoti"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+---
+
+# Two Arm, Time To Event (TTE) Outcome - Analysis Examples
+
+This example demonstrates how to add new analysis functionality into East using an R function.  
+
+For all examples, we assume the trial design consist of control and an experimental treatment. There are 2 Interim Analyses, IA, and a Final Analysis, FA. At the IA, the analysis is performed and, depending on the example, may determine early efficacy or early futility depending on the design.
+
+The examples included here are to provide different approaches for analyzing the data in the trial. 
+
+In the RCode directory of this example you will find the following R files:
+
+1. AnalyzeUsingEastLogrankFormula.R - Contains a function named AnalyzeUsingEastLogrankFormula to demonstrate the R code necessary for this example as described below.
+2. AnalyzeUsingSurvivalPackage.R - Contains a function named AnalyzeUsingSurvivalPackage to demonstrate the R code necessary for this example as described below.
+3. AnalyzeUsingHazardRatioLimitsOfCI.R - Contains a function named AnalyzeUsingHazardRatioLimitsOfCI to demonstrate the R code necessary for this example as described below.
+
+
+## Example 1 - Two Arm TTE Analysis Using a Formula 28.2 in the East manual
+
+To replace the analysis, use the formulas Q.242 and Q.243 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making could be modified in a simple approach.  The test statistic is compared to the lower boundary computed and sent by East as an input. This example does NOT include a futility rule. 
+
+## Example 2 - Two Arm TTE Analysis Using survdiff function from the survival package
+
+This example utilizes the survdiff function from survival package to perform the analysis. The chisquare statistic from survdiff is used to compute the logrank statistic that is compared to the lower boundary computed and sent by East as an input.  This example does NOT include a futility rule.
+
+## Example 3 - Utilization of Confidence Interval Limits for Go/No Go Decision Making in two arm Survival analysis
+
+In many phase II trials, teams like to utilize the upper and lower boundaries of a confidence interval (CI) for making Go and No Go type decision. In this type of trial, teams often set a Minimum Acceptable Value (MAV), the minimum treatment difference that would warrant further development in a product, and a Target Value (TV), the value that is highly desirable based on other consideration.  In this simplified example, if it is likely that the Hazard ratio is below the MAV then a Go decision is made. If a Go decision is not made, then if is is unlikely that the Hazard Ratio is below the TV, a No Go decision is made.      
+
+In this example, the coxph() from "survival" package in R is utilized to analyze the data and compute at a user-specified confidence interval. The team would like to make a Go decision if there is at least a 90% chance that the Hazard Ratio is less than the MAV.  If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the Hazard ratio is less than the TV.  Using a frequentist CI an approximation to this design can be done by the logic described below.
+
+#At an Interim Analysis
+    If the Lower Limit of the CI, denoted by LL, is less than a log of user-specified amount then a Go decision is made.  Specifically, if LL < log user-specified lower limit --> Go
+    If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is greater than a log of user-specified value a No Go decision is made.  Specifically, if UL > log user-specified upper limit --> No Go
+    Otherwise, continue to the next analysis.
+
+#At the Final Analysis: 
+    If the Lower Limit of the CI, denoted by LL, is less than than a log of user-specified values then a Go decision is made.  Specifically, if LL < log user-specified value --> Go
+    Otherwise, a No Go decision is made.
+    
+Note, in this example the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
+
+
+
