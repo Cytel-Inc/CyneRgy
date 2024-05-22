@@ -13,6 +13,9 @@
 #'5) groups = character vector of labels for the different treatments.
 #'6) K = Number of treatment groups.
 #'
+# UserParam = It is the list of Block lengths. So if a user wants randomization sampling to be done in "b" blocks, provide a list of b components such that each component represnts the length of block.
+# For example - for 2 blocks, UserParam <- list(x = 20, y = 10) where 20 is the length of first block and 10 is the length of second block.
+
 #'Library Prerequisite : Installation of a library "randomizeR" is required to do the Block randomization in R.
 
 # Description: 
