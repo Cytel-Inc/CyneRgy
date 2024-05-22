@@ -31,7 +31,7 @@ RandomizationSubjectsUsingSampleFunctionInR <- function(NumSub, NumArms, AllocRa
     dAllocFraction                <- c( vAllocRatio[ 1 ]/sum( vAllocRatio ), 1 - vAllocRatio[ 1 ]/sum( vAllocRatio ) )
     vSampleSizeArmWise            <- c( round( dNumSub * dAllocFraction[ 1 ]), dNumSub - round( dNumSub * dAllocFraction[ 1 ] ) )
     
-    # Find the indices on Control and treatment arms
+    # Find the indices for Control and treatment arms
     vControlArmIndex              <- sample( 1:dNumSub, size = vSampleSizeArmWise[ 1 ], replace = FALSE )
     vTreatmentArmIndex            <- c( 1:dNumSub )[ -vControlArmIndex ]
     
