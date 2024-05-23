@@ -17,7 +17,7 @@
 #'           }
 #'@description
 #'This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
-#'At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (treatmentPValue) of being greater than a user-specified historical 
+#'At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (dMinPosteriorProbability) of being greater than a user-specified historical 
 #'response rate (dHistoricResponseRate). Specifically, if Pr( pj > dHistoricResponseRate | data ) > dMinPosteriorProbability, then experimental treatment j is selected for stage 2.
 #'If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > dHistoricResponseRate | data ).
 #'User-specified pj ~ Beta( dPriorAlpha, dPriorBeta ).  All experimental arms assume the same prior. 
@@ -52,8 +52,8 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     # 1)    For each experimental treatment j, calculate the posterior probability distribution based on the observed data in ‘SimData’ and the 
     #       prior Beta (dPriorAlpha,dPriorBeta) distribution.  Denote the number of patients on treatment j by Nj, number of patient responses Yj, and the number of patients with treatment failure by
     #       Y'j = Nj - Yj the distribution pj | data ~ Beta( dPriorAlpha + Yj, dPriorBeta + Y'j  )
-    # 2)	Determine whether any experimental treatment has at least a treatmentPValue chance pj > historicResponseRate, eg for any treatment j if Pr( pj > historicResponseRate | data ) > treatmentPValue, select treatment j for stage 2.
-    # 3)	If none of the treatments meet the above criteria for selection, then select the treatment with the largest Pr( pj > historicResponseRate | data ).
+    # 2)	Determine whether any experimental treatment has at least a dMinPosteriorProbability chance pj > dHistoricResponseRate, eg for any treatment j if Pr( pj > dHistoricResponseRate | data ) > dMinPosteriorProbability, select treatment j for stage 2.
+    # 3)	If none of the treatments meet the above criteria for selection, then select the treatment with the largest Pr( pj > dHistoricResponseRate | data ).
     # 4)	After selecting the treatments, use a randomization ratio of 2:1 (experimental: control) for all experimental treatments that are selected for stage 2
 
           
@@ -81,7 +81,7 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     
     # Loop over the experimental arms and record which treatments are selected for stage 2
     vReturnTreatmentID      <- c()
-    # Initialize the vector to keep vPostProbGreaterThanHistory. If none of the Post Prob > treatmentPValue, the max can be selected from it
+    # Initialize the vector to keep vPostProbGreaterThanHistory. If none of the Post Prob > UserParam$dMinPosteriorProbability, the max can be selected from it
     vPostProbGreaterThanHistory <- rep( 0, nQtyOfExperimentalArms )  
     
     for( iArm in 1:nQtyOfExperimentalArms )
@@ -106,7 +106,7 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
         
     }
     # Step 4: If none of the experimental treatments had a response rate greater than control, select the treatment with the largest response rate 
-    # No treatments met the criteria for selection so use the one with the largest Prob( pi > historicResponseRate | data )
+    # No treatments met the criteria for selection so use the one with the largest Prob( pi > dHistoricResponseRate | data )
     if( length( vReturnTreatmentID ) == 0 ) 
     {
         vReturnTreatmentID <-  which.max( vPostProbGreaterThanHistory  )

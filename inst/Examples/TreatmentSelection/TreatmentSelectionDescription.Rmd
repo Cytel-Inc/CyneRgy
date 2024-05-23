@@ -89,7 +89,7 @@ Denote the probability of response on experimental treatment by p~j~ , for j = 1
 
 User-specified p~j~ \~ Beta( dPriorAlpha, dPriorBeta )
 
-Select any treatment that has at least a user-specified probability (treatmentPValue) of being greater than the user-specified historical response rate (historicResponseRate). Specifically, if Pr( p~j~ \> historicResponseRate \| data ) \> treatmentPValue, then experimental treatment j is selected for stage 2. If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( p~j~ \> historicResponseRate \| data ).
+Select any treatment that has at least a user-specified probability (dMinPosteriorProbability) of being greater than the user-specified historical response rate (dHistoricResponseRate). Specifically, if Pr( p~j~ \> dHistoricResponseRate \| data ) \> dMinPosteriorProbability, then experimental treatment j is selected for stage 2. If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( p~j~ \> dHistoricResponseRate \| data ).
 
 After the IA, we use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
 
