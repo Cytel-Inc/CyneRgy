@@ -26,10 +26,11 @@
 #'   result <- CombineAllRFiles(strOutFileName = "combined.R", strDirectory = "/path/to/your/directory")
 #'   print(result$strReturn)
 #' }
-#' @export
 #'
 #' @seealso \code{\link[base]{list.files}}, \code{\link[base]{file}}, \code{\link[base]{readLines}}, \code{\link[base]{writeLines}}
-CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileNameToIgnore = NA) {
+#' 
+#' @export
+CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileNameToIgnore = NA, strListName = NA) {
     bReturnContents <- FALSE 
     if(is.na(strOutFileName)) {
         bReturnContents <- TRUE 
@@ -42,6 +43,14 @@ CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileName
     strCombinedContents <- ""
     if(!bReturnContents)
         outputStream <- file(strOutFileName, open = "w")
+    
+    strPrefixFunctionNames <- ""
+    if( !is.na( strListName ) )
+    {
+        # The user is combining files and wants them in a list 
+        strCombinedContents <- paste0( strListName, " <- list()")
+        strPrefixFunctionNames <- paste0( strListName, "$" )
+    }
     
     # Vector to store the names of the combined files
     vCombineFiles <- c()
@@ -68,19 +77,45 @@ CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileName
         strComment     <- paste0(strComment, "# File ", iFileCount , ": ", basename(strFileName), " Timestamp: ", strFormatedTimeStamp, " ####\n")
         strComment     <- paste0(strComment, "##################################################################################### #\n\n")
         
+        #if( strPrefixFunctionNames != "" )
+        #    strFileContent <- gsub("(^\\s*)([a-zA-Z0-9._]+)(\\s*<-\\s*function)", paste0("\\1", strPrefixFunctionNames, "\\2\\3"), strFileContent)
+        
+        
         strFileContent <- c(strComment, strFileContent)
         
         # Write the content to the output file or a append to the other input read in
-        if(!bReturnContents)
-            writeLines(strFileContent, outputStream)
-        else {
-            strCombinedContents <- paste(paste0(strFileContent, collapse= "\n"), strCombinedContents, collapse = "\n")
-        }
+        #if(bReturnContents) {
+            #strCombinedContents <- paste(paste0(strFileContent, collapse= "\n"), strCombinedContents, collapse = "\n")
+            strCombinedContents <- paste( strCombinedContents, paste0(strFileContent, collapse= "\n"),  collapse = "\n")
+        #}
+        # if(!bReturnContents)
+        #     writeLines(strFileContent, outputStream)
+        # else {
+        #     strCombinedContents <- paste(paste0(strFileContent, collapse= "\n"), strCombinedContents, collapse = "\n")
+        # }
         
         # Add the name of the combined file to the vector
         vCombineFiles <- c(vCombineFiles, basename(strFileName))
     }
     
+    if( strPrefixFunctionNames != "" )
+    {
+        exprs <- parse(text = strCombinedContents)
+        for (i in seq_along(exprs)) {
+            expr <- exprs[[i]]
+            if (is.call(expr) && (expr[[1]] == as.name("<-") || expr[[1]] == as.name("=")) && is.call(expr[[3]]) && expr[[3]][[1]] == as.name("function")) {
+                # This is a function definition, so modify the function name
+                expr[[2]] <- as.name(paste0(strPrefixFunctionNames, expr[[2]]))
+                exprs[[i]] <- expr
+            }
+        }
+        
+        # Convert the modified expressions back into a string
+        strCombinedContents <- gsub("`", "", paste(sapply(exprs, deparse), collapse = "\n"))
+    }
+    
+    if(!bReturnContents)
+        writeLines(strCombinedContents, outputStream)
     lReturn <- list(nQtyCombinedFiles = iFileCount)
     
     # Close the output file

@@ -7,7 +7,8 @@
 CombineAllRFiles(
   strOutFileName = NA,
   strDirectory = "",
-  strFileNameToIgnore = NA
+  strFileNameToIgnore = NA,
+  strListName = NA
 )
 }
 \arguments{
@@ -34,6 +35,7 @@ It also replaces any sequence of one or more `#` characters with a single `#`.
   result <- CombineAllRFiles(strOutFileName = "combined.R", strDirectory = "/path/to/your/directory")
   print(result$strReturn)
 }
+
 }
 \seealso{
 \code{\link[base]{list.files}}, \code{\link[base]{file}}, \code{\link[base]{readLines}}, \code{\link[base]{writeLines}}
