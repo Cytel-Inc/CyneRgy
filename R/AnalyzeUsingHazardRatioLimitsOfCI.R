@@ -13,22 +13,22 @@
 #'               If a Go decision is not made, then if it is unlikely that the Hazard ratio is below the Target Value (TV) a No Go decision is made.      
 #'               In this example, the coxph() from survival package in R is utilized to analyze the data and compute estimate of log HR and Std error of log HR. 
 #'               The team would like to make a Go decision if there is at least a 90% chance that HR is below than the MAV.  
-#'               If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the difference is less than the TV.  
+#'               If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the HR is less than the TV.  
 #'          
 #'               Specifically, if user provides upper and lower limit in Hazard ratio scale then,
 #'               1. For Hazard Ratio 
-#'                  if LL < UserParam$dMAV --> Go 
-#'                  if UL > UserParam$dTV --> No Go
+#'                  if UL < UserParam$dMAV --> Go 
+#'                  if LL > UserParam$dTV --> No Go
 #'                  Otherwise, continue to the next analysis. 
 #'                  
 #'              2. For log Hazard Ratio 
-#'                  if LL < UserParam$dMAV --> Go 
-#'                  if UL > UserParam$dTV --> No Go
+#'                  if UL < UserParam$dMAV --> Go 
+#'                  if LL > UserParam$dTV --> No Go
 #'               Otherwise, continue to the next analysis. 
 #'  Note - HR and log HR are monotonically related.
 #'  In coxph() function, we get the analysis for log HR and hence we make the use of 2) in decision making. 
 #'               
-#'               At the Final Analysis: If LL < UserParam$dMAV  then a Go decision is made, otherwise, a No Go decision is made.
+#'  At the Final Analysis: If UL < UserParam$dMAV  then a Go decision is made, otherwise, a No Go decision is made.
 #'               
 #'               
 #' @return Hazard Ratio :  A double value of the computed or observed Hazard ratio
@@ -92,25 +92,25 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
     SimData                  <- SimData[ order( SimData$ObservedTime ), ]
     
     # Compute Observed HR
-    coxModel                 <- coxph( Surv( ObservedTime, Event ) ~ TreatmentID, data = SimData )
+    cCoxModel                <- coxph( Surv( ObservedTime, Event ) ~ TreatmentID, data = SimData )
     
     # find the value of observed Log(HR) and SE(log(HR))
-    dlogHR                   <- summary( coxModel )$coefficients[ 1 ]
-    dstdError                <- summary( coxModel )$coefficients[ 3 ]
+    dLogHR                   <- summary( cCoxModel )$coefficients[ 1 ]
+    dStdError                <- summary( cCoxModel )$coefficients[ 3 ]
     
     # Log HR follows Normal distribution with mean = observed log HR on line no 83 and Std error given on line no 84
     # Critical value for Z test is given as,
-    dalpha                   <- 1 - UserParam$dConfLevel
-    dZalpha                  <- qnorm( 1 - dalpha/2 )
+    dAlpha                   <- 1 - UserParam$dConfLevel
+    dZalpha                  <- qnorm( 1 - dAlpha/2 )
     
     # Confidence Interval for log HR is given as,
     
-    dLowerLimitCI                   <- dlogHR - dZalpha * dstdError
-    dUpperLimitCI                   <- dlogHR + dZalpha * dstdError
+    dLowerLimitCI                   <- dLogHR - dZalpha * dStdError
+    dUpperLimitCI                   <- dLogHR + dZalpha * dStdError
     
     
     # A decision of 2 means success, 0 means continue the trial
-    nDecision                <- ifelse( dLowerLimitCI < log(UserParam$dMAV), 2, 0 )  # log HR scale
+    nDecision                <- ifelse( dUpperLimitCI < log(UserParam$dMAV), 2, 0 )  # log HR scale
     
     if( nDecision == 0 )
     {
@@ -120,15 +120,15 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
         {
             # The final analysis was reached and a Go decision could not be made, thus a No Go decision is made
             nDecision <- 3                                    # East code for futility 
-        }else if( dUpperLimitCI > UserParam$dTV )     # At the IA check the No Go since a Go decision was not made
-            nDecision <- 3 # East code for futility 
+        }else if( dLowerLimitCI > UserParam$dTV )         # At the IA check the No Go since a Go decision was not made
+            nDecision <- 3                                 # East code for futility 
     }
     
     Error 	<- 0
     
     
     
-    return( list( HazardRatio  = as.double( exp( dlogHR ) ), 
+    return( list( HazardRatio  = as.double( exp( dLogHR ) ), 
                   ErrorCode = as.integer( Error ), 
                   Decision  = as.integer( nDecision ) ) )
     
