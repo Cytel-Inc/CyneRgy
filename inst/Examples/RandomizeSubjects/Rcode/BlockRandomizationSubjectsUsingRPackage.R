@@ -1,4 +1,3 @@
-
 # Function Template for Randomizing Subjects to Treatments.
 #'@name RandomizationSubjects
 #'@author Shubham Lahoti
@@ -13,40 +12,47 @@
 #'5) groups = character vector of labels for the different treatments.
 #'6) K = Number of treatment groups.
 #'
-# UserParam = It is the list of Block lengths. So if a user wants randomization sampling to be done in "b" blocks, provide a list of b components such that each component represnts the length of block.
+# UserParam = It is the list of Block lengths. So if a user wants randomization sampling to be done in "b" blocks, provide a list of b components such that each component represents the length of block.
 # For example - for 2 blocks, UserParam <- list(x = 20, y = 10) where 20 is the length of first block and 10 is the length of second block.
-
+ 
 #'Library Prerequisite : Installation of a library "randomizeR" is required to do the Block randomization in R.
 
 # Description: 
 # The permuted block technique randomizes patients between groups within a set of study participants, called a block. 
 # Treatment assignments within blocks are determined so that they are random in order but that the desired allocation proportions are achieved exactly within each block.
-
+#' @param NumSub: The number of subjects that need to be simulated, integer value
+#' @param NumArm: The number of arms in the trial including experimental and control, integer value
+#' @param AllocRatio: Tthe ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc).
+#' 
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.
 
-#' @return retval : This is a binary vector defining the treatment ID where 0 = Subject alloted to Control arm, 
-#'                                                                          1 = Subject alloted to treatment arm.
+#' @return retval : This is a binary vector defining the treatment ID where 0 = Subject allotted to Control arm, 
+#'                                                                          1 = Subject allotted to treatment arm.
 
 BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
 {
     library( randomizeR )
-    Error 	= 0
+    Error 	                      <- 0
     
     dNumSub                       <- NumSub            # Total Sample size
     dNumArms                      <- 2                 # two arm designs
     
     # Allocation ratio on control and treatment arm
     vAllocRatio                   <- c( 1, AllocRatio )
-    
     retval                        <- c(  )
     
-    #Block randomization function
-    par                           <- pbrPar( bc = unlist( UserParam ), K = 2, ratio = vAllocRatio, groups = c( "0", "1" ) ) 
-    R                             <- genSeq( par, r = 1 ) 
-    retval                        <- as.numeric( getRandList( R ) )
-
+    vBlockSize                    <- c()
+    for( i in 1:length( UserParam ) )
+    {
+        vBlockSize                <- c( vBlockSize, UserParam[[ paste0( "BlockSize", i )]])
+    }
+    
+    cPar                          <- pbrPar( bc = vBlockSize, K = 2, ratio = vAllocRatio, groups = c( "0", "1" ) ) 
+    cObject                       <- genSeq( cPar, r = 1 )                             
+    retval                        <- as.numeric( getRandList( cObject ) )
+    
     return( list( TreatmentID = as.integer( retval ), ErrorCode = as.integer( Error ) ) )
 }
 
