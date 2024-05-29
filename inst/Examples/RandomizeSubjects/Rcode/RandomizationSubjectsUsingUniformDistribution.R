@@ -1,4 +1,3 @@
-
 # Function Template for Randomizing Subjects to Treatments.
 #'@name RandomizationSubjects
 #'@author Shubham Lahoti
@@ -9,6 +8,11 @@
 #' 3) If u <= p then allot the subject to Control arm else allot the subject to treatment arm.
 #' 4) Make sure that Total sample size = Sample size on control + Sample size on treatment arm
 #' 
+#' @param NumSub: The number of subjects that need to be simulated, integer value
+#' @param NumArm: The number of arms in the trial including experimental and control, integer value
+#' @param AllocRatio: Tthe ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc).
+#' 
+#' 
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.
@@ -18,20 +22,20 @@
 
 RandomizationSubjectsUsingUniformDistribution <- function(NumSub, NumArms, AllocRatio, UserParam = NULL)
 {
-   
-    Error 	= 0
+    
+    Error 	                 <- 0
     
     dNumSub                  <- NumSub            # Total Sample size
     dNumArms                 <- 2                 # two arm designs
     
-   # Allocation ratio on control and treatment arm
+    # Allocation ratio on control and treatment arm
     vAllocRatio              <- c( 1, AllocRatio )
     
     # Convert the Allocation Ratio to Allocation Fraction for control and treatment arm
     dAllocFraction           <- c( vAllocRatio[ 1 ]/sum( vAllocRatio ), 1 - vAllocRatio[ 1 ]/sum( vAllocRatio ) )
     vSampleSizeArmWise       <- c( round( dNumSub * dAllocFraction[ 1 ]), dNumSub - round( dNumSub * dAllocFraction[ 1 ] ) )
     u <- retval              <- c( )
-   
+    
     for( i in 1:dNumSub )
     {   
         u[ i ]               <- runif( 1, 0, 1 )          #generate a random number from U(0, 1)
@@ -49,22 +53,22 @@ RandomizationSubjectsUsingUniformDistribution <- function(NumSub, NumArms, Alloc
         }
     }
     
-# The following chunk of code is to make sure that allotment of patients is exactly the same as per the allocation ratio (expected patients on each arm) provided.
+    # The following chunk of code is to make sure that allotment of patients is exactly the same as per the allocation ratio (expected patients on each arm) provided.
     
-        if( sum( retval ) != vSampleSizeArmWise[ 2 ] )               #if observed allotment is not the same as expected allotment 
+    if( sum( retval ) != vSampleSizeArmWise[ 2 ] )               #if observed allotment is not the same as expected allotment 
+    {
+        if( sum( retval ) > vSampleSizeArmWise[ 2 ] )            # if observed patients on treatment arm > expected patients on treatment arm
         {
-            if( sum( retval ) > vSampleSizeArmWise[ 2 ] )            # if observed patients on treatment arm > expected patients on treatment arm
-            {
-                diff         <- sum( retval ) - vSampleSizeArmWise[ 2 ]     # find the difference between No of observed patients and No of expected patients on treatment arm denoted by diff.
-                k            <- sample( which( retval == 1 ), diff)         # randomly choose the sample of "diff" indices from set of treatment indices 
-                retval[ k ]  <- 0                                           # assign the retval = 0 for the corresponding sampled indices
-                
-            }else{                                                    # if observed patients on treatment arm < expected patients on treatment arm
-                diff         <- vSampleSizeArmWise[ 2 ] - sum( retval )      # find the difference between No of observed patients and No of expected patients on control arm denoted by diff
-                k            <- sample( which( retval == 0 ), diff )         # randomly choose the sample of "diff" indices from set of control indices 
-                retval[ k ]  <- 1                                            # assign the retval = 1 for the corresponding sampled indices
-            } 
-        }
+            diff         <- sum( retval ) - vSampleSizeArmWise[ 2 ]     # find the difference between No of observed patients and No of expected patients on treatment arm denoted by diff.
+            k            <- sample( which( retval == 1 ), diff)         # randomly choose the sample of "diff" indices from set of treatment indices 
+            retval[ k ]  <- 0                                           # assign the retval = 0 for the corresponding sampled indices
+            
+        }else{                                                    # if observed patients on treatment arm < expected patients on treatment arm
+            diff         <- vSampleSizeArmWise[ 2 ] - sum( retval )      # find the difference between No of observed patients and No of expected patients on control arm denoted by diff
+            k            <- sample( which( retval == 0 ), diff )         # randomly choose the sample of "diff" indices from set of control indices 
+            retval[ k ]  <- 1                                            # assign the retval = 1 for the corresponding sampled indices
+        } 
+    }
     
     
     return(list(TreatmentID = as.integer(retval), ErrorCode = as.integer(Error)))
