@@ -34,16 +34,19 @@ This example utilizes the survdiff function from survival package to perform the
 
 In many phase II trials, teams like to utilize the upper and lower boundaries of a confidence interval (CI) for making Go and No Go type decision. In this type of trial, teams often set a Minimum Acceptable Value (MAV), the minimum treatment difference that would warrant further development in a product, and a Target Value (TV), the value that is highly desirable based on other consideration.  In this simplified example, if it is likely that the Hazard ratio is below the MAV then a Go decision is made. If a Go decision is not made, then if is is unlikely that the Hazard Ratio is below the TV, a No Go decision is made.      
 
-In this example, the coxph() from "survival" package in R is utilized to analyze the data and compute at a user-specified confidence interval. The team would like to make a Go decision if there is at least a 90% chance that the Hazard Ratio is less than the MAV.  If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the Hazard ratio is less than the TV.  Using a frequentist CI an approximation to this design can be done by the logic described below.
+In this example, the coxph() from survival package in R is utilized to analyze the data and compute estimate of log HR and Std error of log HR. The team would like to make a Go decision if there is at least a 90% chance that HR is below than the MAV.  
+If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the HR is less than the TV.
+Using a frequentist CI an approximation to this design can be done by the logic described below.
 
 #At an Interim Analysis
-    If the Lower Limit of the CI, denoted by LL, is less than a log of user-specified amount then a Go decision is made.  Specifically, if LL < log user-specified lower limit --> Go
-    If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is greater than a log of user-specified value a No Go decision is made.  Specifically, if UL > log user-specified upper limit --> No Go
-    Otherwise, continue to the next analysis.
+     For log Hazard Ratio    if UL < UserParam$dMAV --> Go 
+                             if LL > UserParam$dTV --> No Go
+                             Otherwise, continue to the next analysis. 
 
 #At the Final Analysis: 
-    If the Lower Limit of the CI, denoted by LL, is less than than a log of user-specified values then a Go decision is made.  Specifically, if LL < log user-specified value --> Go
-    Otherwise, a No Go decision is made.
+    If the Upper Limit of the CI, denoted by UL, is less than UserParam$dMAV --> Go
+    Specifically, if UL < UserParam$dMAV --> Go
+                  Otherwise, a No Go decision is made.
     
 Note, in this example the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
 
