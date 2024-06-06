@@ -41,7 +41,7 @@ RandomizationSubjectsUsingUniformDistribution <- function(NumSub, NumArms, Alloc
     {   
         u[ i ]               <- runif( 1, 0, 1 )          #generate a random number from U(0, 1)
         
-        # Here 0 means subject is alloted to control arm, 1 means subject is alloted to treatment arm.
+        # Here 0 means subject is allotted to control arm, 1 means subject is allotted to treatment arm.
         # CDF of Uniform (0, 1) is given as F(x) = x. We make use of this CDF to allocate the subjects randomly on either arms.
         if( u[ i ] > dAllocFraction[ 1 ] && sum( retval ) <= vSampleSizeArmWise[ 2 ] )
         {

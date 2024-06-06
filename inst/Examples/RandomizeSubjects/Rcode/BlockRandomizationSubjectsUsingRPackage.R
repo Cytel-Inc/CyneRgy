@@ -20,9 +20,10 @@
 # Treatment assignments within blocks are determined so that they are random in order but that the desired allocation proportions are achieved exactly within each block.
 #' @param NumSub: The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
 #' @param NumArm: The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
-#' @param AllocRatio: Tthe ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc). The argument value is passed from Engine.
-#' @param UserParam : It is the list of Block lengths. So if a user wants randomization sampling to be done in "b" blocks, provide a list of b components such that each component represents the length of block.
-#'  For example - for 2 blocks, UserParam <- list(x = 20, y = 10) where 20 is the length of first block and 10 is the length of second block.
+#' @param AllocRatio: The ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc). The argument value is passed from Engine.
+#' @param UserParam : It is the list of Block lengths. So if a user wants randomization sampling to be done in "X" blocks, provide a list of X components such that each component represents the length of block.
+#'  The names of the objects must be BlockSize1, BlockSize2,...BlockSizeX. For example - for 2 blocks, 
+#'  UserParam <- list(BlockSize1 = 20, BlockSize2 = 10) where 20 is the length of first block and 10 is the length of second block.
 
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
