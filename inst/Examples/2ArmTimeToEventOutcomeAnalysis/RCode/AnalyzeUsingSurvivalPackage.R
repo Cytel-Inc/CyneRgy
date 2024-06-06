@@ -44,12 +44,14 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
+        nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
     }
     else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
+        nQtyOfLooks          <- 1
         nLookIndex           <- 1
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint
@@ -85,7 +87,14 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
     if( nDecision == 0 )
     {
         # For this example, there is NO futility check but this is left for consistency with other examples 
+        # At the final analysis we want to make a futility if effiecacy was not achieved.
         
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            # The final analysis was reached and a Go decision could not be made, thus a No Go decision is made
+            nDecision <- 3                                    # East code for futility 
+        }
     }
     
     Error                    <- 0

@@ -55,23 +55,17 @@
 ################################################################################################################################################################################################
 AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {   
-    
-    # Input objects can be saved through the following lines:
-    
-    # setwd( ["Set the path to save the .Rds files"])
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-
-   
+ 
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
+        nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
     }else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
+        nQtyOfLooks          <- 1
         nLookIndex           <- 1
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint
@@ -116,7 +110,7 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
     {
         # Did not hit a Go decision, so check No Go
         # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == LookInfo$NumLooks ) 
+        if( nLookIndex == nQtyOfLooks ) 
         {
             # The final analysis was reached and a Go decision could not be made, thus a No Go decision is made
             nDecision <- 3                                    # East code for futility 
