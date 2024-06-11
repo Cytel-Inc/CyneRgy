@@ -1,6 +1,6 @@
 ---
 title: 'Two Arm Time To Event Outcome Analysis Examples'
-author: "Anoop Singh Rawat"
+author: "Anoop Singh Rawat and Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default
@@ -19,6 +19,8 @@ In the RCode directory of this example you will find the following R files:
 
 1. AnalyzeUsingEastLogrankFormula.R - Contains a function named AnalyzeUsingEastLogrankFormula to demonstrate the R code necessary for this example as described below.
 2. AnalyzeUsingSurvivalPackage.R - Contains a function named AnalyzeUsingSurvivalPackage to demonstrate the R code necessary for this example as described below.
+3. AnalyzeUsingHazardRatioLimitsOfCI.R - Contains a function named AnalyzeUsingHazardRatioLimitsOfCI to demonstrate the R code necessary for this example as described below.
+
 
 ## Example 1 - Two Arm TTE Analysis Using a Formula 28.2 in the East manual
 
@@ -26,4 +28,27 @@ To replace the analysis, use the formulas Q.242 and Q.243 in the East manual to 
 
 ## Example 2 - Two Arm TTE Analysis Using survdiff function from the survival package
 
-This example utilizes the survdiff function from survival package to perform the analysis. The chisquare statistic from survdiff is used to compute the logrank statistic that is compared to the lower boundary computed and sent by East as an input.  This example does NOT include a futility rule. 
+This example utilizes the survdiff function from survival package to perform the analysis. The chisquare statistic from survdiff is used to compute the logrank statistic that is compared to the lower boundary computed and sent by East as an input.  This example does NOT include a futility rule.
+
+## Example 3 - Utilization of Confidence Interval Limits for Go/No Go Decision Making in two arm Survival analysis
+
+In many phase II trials, teams like to utilize the upper and lower boundaries of a confidence interval (CI) for making Go and No Go type decision. In this type of trial, teams often set a Minimum Acceptable Value (MAV), the minimum treatment difference that would warrant further development in a product, and a Target Value (TV), the value that is highly desirable based on other consideration.  In this simplified example, if it is likely that the Hazard ratio is below the MAV then a Go decision is made. If a Go decision is not made, then if is is unlikely that the Hazard Ratio is below the TV, a No Go decision is made.      
+
+In this example, the coxph() from survival package in R is utilized to analyze the data and compute estimate of log HR and Std error of log HR. The team would like to make a Go decision if there is at least a 90% chance that HR is below than the MAV.  
+If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the HR is less than the TV.
+Using a frequentist CI an approximation to this design can be done by the logic described below.
+
+#At an Interim Analysis
+     For log Hazard Ratio    if UL < UserParam$dMAV --> Go 
+                             if LL > UserParam$dTV --> No Go
+                             Otherwise, continue to the next analysis. 
+
+#At the Final Analysis: 
+    If the Upper Limit of the CI, denoted by UL, is less than UserParam$dMAV --> Go
+    Specifically, if UL < UserParam$dMAV --> Go
+                  Otherwise, a No Go decision is made.
+    
+Note, in this example the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
+
+
+

@@ -11,7 +11,7 @@
 
 <meta name="author" content="J. Kyle Wathen" />
 
-<meta name="date" content="2024-04-16" />
+<meta name="date" content="2024-05-23" />
 
 <title>Treatment Selection Example</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Treatment Selection Example</h1>
 <h4 class="author">J. Kyle Wathen</h4>
-<h4 class="date">April 16, 2024</h4>
+<h4 class="date">May 23, 2024</h4>
 
 </div>
 
@@ -463,13 +463,13 @@ p<sub>j</sub> , for j = 1, 2, 3.</p>
 <p><u>Prior:</u></p>
 <p>User-specified p<sub>j</sub> ~ Beta( dPriorAlpha, dPriorBeta )</p>
 <p>Select any treatment that has at least a user-specified probability
-(treatmentPValue) of being greater than the user-specified historical
-response rate (historicResponseRate). Specifically, if Pr( p<sub>j</sub>
-&gt; historicResponseRate | data ) &gt; treatmentPValue, then
-experimental treatment j is selected for stage 2. If none of the
-treatments meet the criteria for selection, then select the treatment
-with the largest Pr( p<sub>j</sub> &gt; historicResponseRate | data
-).</p>
+(dMinPosteriorProbability) of being greater than the user-specified
+historical response rate (dHistoricResponseRate). Specifically, if Pr(
+p<sub>j</sub> &gt; dHistoricResponseRate | data ) &gt;
+dMinPosteriorProbability, then experimental treatment j is selected for
+stage 2. If none of the treatments meet the criteria for selection, then
+select the treatment with the largest Pr( p<sub>j</sub> &gt;
+dHistoricResponseRate | data ).</p>
 <p>After the IA, we use a randomization ratio of 2:1
 (experimental:control) for all experimental treatments that are selected
 for stage 2.</p>

@@ -1,0 +1,44 @@
+---
+title: 'Simulate Patient Dropout for Single Endpoint 2 Arm Trials'
+author: "Shubham Lahoti, J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 5
+    number_sections: true
+    latex_engine: tinytex
+  word_document: default
+  pdf_document:
+    toc: true
+    toc_depth: '5'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library( CyneRgy )
+```
+
+# Introduction : 
+For all examples, we assume the trial design consist of control and an experimental treatment. Patients may dropout of a trial for a variety of reasons such as safety issues, treatment burden or other non-trial related issues. The dropout rate can be as high as 30% in some trials if the drug has adverse side effects. The introduction of dropout probabilities or dropout hazard rate plays a significant role during Data generation that can be further utilized during the analysis.
+
+In the RCode directory of this example you will find the following R files:
+
+1. GenerateCensoringUsingBinomialProportion.R
+
+The R function named "GenerateCensoringUsingBinomialProportion" in the file  generates the censor ID using the same dropout probability for both treatment using rbinom(). In this case, the Dropout probability is a common value across both treatments. 
+
+Steps : 
+1) Let pd = Dropout probability 
+2) Draw a random sample from Bernoulli distribution  with p = 1- pd i.e. Binomial(1, pd) of a size n = NumSub
+3) The sample generated in step (2) is a censoring indicator where 1 is a patient that does NOT drop out, eg completer, and 0 for a patient that drops out, eg non-completer.  
+
+2. GenerateDropoutTimeForSurvivalEp.R
+
+The function named "GenDropoutTimeForSurvival.R" generates dropout time for 2- Arm survival design. 
+In this cases, there is an option to provide a dropout information for each arm which then is utilized to generate dropout times for each arm from Exponential distribution. We fix Number of periods = 1 and Dropout distribution = Exponential
+
+
+

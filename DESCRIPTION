@@ -1,15 +1,15 @@
 Package: CyneRgy
 Type: Package
 Title: CyneRgy - Integration for Cytel Products and R
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c( person( given = "J. Kyle",       family = "Wathen",   email = "Kyle.Wathen@Cytel.com",      role = c("aut","cre")),
               person( given = "Valeria A. G.", family = "Mazzanti", email = "Valeria.Mazzanti@Cytel.com", role = c("aut") ),
-              person( given = "Sydney",        family = "Ringold",  email = "Sydney.Ringold@Cytel.com",   role = c("aut") ),
+              person( given = "Sydney",        family = "Ringold",  email = "Sydney.Ringold@Cytel.com",   role = c("ctb") ),
               person( given = "Anoop Singh",   family = "Rawat",    role = c("ctb")),
               person( given = "Shubham",       family = "Lahoti",   role = c("ctb")))
 Author: J. Kyle Wathen  [aut, cre],
         Valeria A. G. Mazzanti [aut],
-        Sydney Ringold [aut],
+        Sydney Ringold [ctb],
         Anoop Singh Rawat[ctb],
         Shubham Lahoti[ctb]
 Maintainer: J. Kyle Wathen <Kyle.Wathen@Cytel.com>
@@ -19,7 +19,7 @@ Description: R integration with Cytel products provides a highly efficient appro
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Depends: R(>= 4.0.0),
          whisker,
          stringr,
