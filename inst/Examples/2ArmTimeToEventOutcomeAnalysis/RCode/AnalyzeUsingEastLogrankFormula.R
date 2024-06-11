@@ -64,25 +64,18 @@
 
 AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    
-    # Input objects can be saved through the following lines:
-    # Saving is only available in East, do NOT save files in SOLARA
-    # #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-    
-    
     # Retrieve necessary information from the objects East sent
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
+        nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
     }
     else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
+        nQtyOfLooks          <- 1
         nLookIndex           <- 1
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint

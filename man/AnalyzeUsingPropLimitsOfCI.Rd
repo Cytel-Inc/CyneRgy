@@ -15,7 +15,7 @@ AnalyzeUsingPropLimitsOfCI(SimData, DesignParam, LookInfo, UserParam = NULL)
 
 \item{UserParam}{A list of user defined parameters in East. The default must be NULL.
 If UserParam is supplied, the list must contain the following named elements:
-UserParam$dLowerLimit - A value (0,1) that specifes the lower limit for the confidence interval. 
+UserParam$dLowerLimit - A value (0,1) that specifies the lower limit for the confidence interval. 
 UserParam$dUpperLimit - A value (0,1) that specifies the upper limit for the confidence interval.
 UserParam$dConfLevel - A value (0,1) that specifies the confidence level for the prop.test function in base R.}
 }
@@ -32,9 +32,9 @@ ErrorCode An integer value:  ErrorCode = 0 --> No Error
 }
 \description{
 In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made.  
-              If a Go decision is not made, then if is is unlikely that the treatment difference is above the Target Value (TV) a No Go decision is made.      
+              If a Go decision is not made, then if is unlikely that the treatment difference is above the Target Value (TV) a No Go decision is made.      
               In this example, the prop.test from base R is utilized to analyze the data and compute at user-specified confidence interval (dConfLevel).  
-              We set the defauly without user-specified variables to assume the MAV = 0.1 and TV=0.2. The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV.  If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the difference is greater than the TV.  
+              We set the default without user-specified variables to assume the MAV = 0.1 and TV=0.2. The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV.  If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the difference is greater than the TV.  
               Using a frequentist CI an approximation to this design can be done by the logic described below.
               At an Interim Analysis, If the Lower Limit of the CI, denoted by LL, is greater than user-specified dLowerLimit then a Go decision is made.  Specifically, if LL > UserParam$dLowerLimit --> Go
               If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than user-specified dUpperLimit a No Go decision is made.  Specifically, if UL < UserParam$dUpperLimit --> No Go

@@ -17,7 +17,6 @@
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-
 #'@note Helpful Hints:
 #'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
 #'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
@@ -30,22 +29,18 @@
 ######################################################################################################################## .
 AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
-    # Input objects can be saved through the following lines:
-    #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
-    
-    # Retrieve necessary information from the objects East sent
+
+    # Step 1: Retrieve necessary information from the objects East sent ####
     if(  !is.null( LookInfo )  )
     {
+        nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
     }
     else
     {
-        nQtyOfEvents         <- DesignParam$MaxCompleters
+        nQtyOfLooks          <- 1
+        nLookIndex           <- 1
         nQtyOfPatsInAnalysis <- nrow( SimData )
     }
     
