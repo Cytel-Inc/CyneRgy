@@ -58,6 +58,9 @@
     <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula.html</loc>
   </url>
   <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula_Normal.html</loc>
+  </url>
+  <url>
     <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingHazardRatioLimitsOfCI.html</loc>
   </url>
   <url>
@@ -70,7 +73,13 @@
     <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropTest.html</loc>
   </url>
   <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingTTestNormal.html</loc>
+  </url>
+  <url>
     <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.html</loc>
+  </url>
+  <url>
+    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/ComputeScaleGivenShapeMedian.html</loc>
   </url>
   <url>
     <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.html</loc>

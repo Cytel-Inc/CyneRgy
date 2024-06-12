@@ -30,6 +30,9 @@ ErrorCode An integer value:  ErrorCode = 0 --> No Error
 This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East as an input.  
              This example does NOT include a futility rule.
 }
+\details{
+Analyze using the prop.test function in base R.
+}
 \note{
 Helpful Hints:
       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 

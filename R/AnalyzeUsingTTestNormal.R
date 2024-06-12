@@ -1,4 +1,4 @@
-#  Last Modified Date: 04/30/2024
+#' Analyze Using t-test Normal
 #' @name AnalyzeUsingTTestNormal
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.

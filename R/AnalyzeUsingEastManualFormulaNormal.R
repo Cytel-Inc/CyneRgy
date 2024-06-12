@@ -1,4 +1,4 @@
-#  Last Modified Date: 04/18/2024
+#'  Last Modified Date: 04/18/2024
 #' @name AnalyzeUsingEastManualFormula_Normal
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.

@@ -1,5 +1,5 @@
 
-#' @param AnalyzeUsingMeanLimitsOfCI
+#' Analyze using a simplified limits of confidence interval design
 #' @title Analyze using a simplified limits of confidence interval design
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
