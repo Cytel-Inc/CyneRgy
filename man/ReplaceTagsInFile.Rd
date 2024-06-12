@@ -19,3 +19,10 @@ A TRUE/FALSE value if the functions was successful.
 \description{
 { Description: This function is used to replace {{tags}} in template files. }
 }
+\examples{
+ \dontrun{
+vTags    <- c("FUNCTION_NAME",  "CREATION_DATE")
+vReplace <- c(strNewFunctionName, strToday)
+strFileName <- "MyTemplate.R" # A file that contains {{FUNCTION_NAME}} and {{CREATION_DATE}}
+ReplaceTagsInFile( strFileName, vTags, vReplace )}
+}

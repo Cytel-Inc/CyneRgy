@@ -41,6 +41,9 @@ In this simplified example of upper and lower confidence boundary designs, if it
               Otherwise, continue to the next analysis. At the Final Analysis: If the Lower Limit of the CI, denoted by LL, is greater than dLowerLimit then a Go decision is made.  Specifically, if LL > UserParam$dLowerLimit --> Go
               Otherwise, a No Go decision is made
 }
+\details{
+Analyze using a simplified limits of confidence interval design.
+}
 \note{
 In this example, the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
 

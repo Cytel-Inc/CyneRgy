@@ -1,7 +1,7 @@
 
 ######################################################################################################################## .
-#' @param AnalyzeUsingEastManualFormula
-#' @title Compute the statistic using formula 28.2 in the East manual.
+#' Compute the statistic using formula 28.2 in the East manual
+#' @name AnalyzeUsingEastManualFormula
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.

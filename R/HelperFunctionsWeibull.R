@@ -5,20 +5,18 @@
 #' @param  vTime A vector of times to compute the hazard of the Weibull distribution at
 #' @param dShape The shape of the Weibull distribution, see rweibull
 #' @param dScale The scale of the Weibull distribution, see rweibull
-#' @description
-#' Function to compute the hazard of the Weibull distribution 
-#' 
+#' @description Function to compute the hazard of the Weibull distribution 
 ComputeHazardWeibulll <- function( vTime, dShape, dScale )
 {
     vHaz <- (dShape/dScale) * (vTime/dScale )^(dShape-1)
     return ( vHaz )
 }
 
+
+#' Compute the scale parameter for the Weibull distribution with median = dMedian and scale parameter = dScale
 #' @param dShape The shape of the Weibull distribution
 #' @param dMedian The median of the Weibull distribution
-#' @description
-#' Compute the scale parameter for the Weibull distribution with median = dMedian and scale parameter = dScale
-#' 
+#' @description Function to compute the scale given the shape and median
 ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 {
     dScale <- dMedian/exp( log( -log( 0.5) )/dShape )

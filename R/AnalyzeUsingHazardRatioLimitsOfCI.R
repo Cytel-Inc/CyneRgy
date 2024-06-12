@@ -1,4 +1,4 @@
-#' @param AnalyzeUsingHazardRatioLimitsOfCI
+#' Analyze Using Hazard Ratio Limits Of CI
 #' @title Analyze using a simplified limits of confidence interval design
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.

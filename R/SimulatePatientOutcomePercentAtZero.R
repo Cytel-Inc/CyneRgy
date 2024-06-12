@@ -1,5 +1,4 @@
 #' Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
-#' @param SimulatePatientOutcomePercentAtZero
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.

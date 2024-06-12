@@ -1,6 +1,5 @@
 ######################################################################################################################## .
-# TODO(Kyle)-Could you check that this documentation is correct (specifically the description)
-#' @param AnalyzeUsingPropLimitsOfCI
+#' Analyze using a simplified limits of confidence interval design.
 #' @title Analyze using a simplified limits of confidence interval design.
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.

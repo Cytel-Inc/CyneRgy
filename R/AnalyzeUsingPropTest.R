@@ -1,5 +1,5 @@
 ######################################################################################################################## .
-#' @param AnalyzeUsingPropTest
+#' Analyze using the prop.test function in base R.
 #' @title Analyze using the prop.test function in base R.
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.

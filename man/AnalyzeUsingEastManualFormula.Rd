@@ -2,7 +2,7 @@
 % Please edit documentation in R/AnalyzeUsingEastManualFormula.R
 \name{AnalyzeUsingEastManualFormula}
 \alias{AnalyzeUsingEastManualFormula}
-\title{Compute the statistic using formula 28.2 in the East manual.}
+\title{Compute the statistic using formula 28.2 in the East manual}
 \usage{
 AnalyzeUsingEastManualFormula(SimData, DesignParam, LookInfo, UserParam = NULL)
 }

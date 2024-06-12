@@ -11,8 +11,7 @@
 #' @param vreplace Vector of values to replace the tags with.
 #' @return A TRUE/FALSE value if the functions was successful. 
 #' @description { Description: This function is used to replace {{tags}} in template files. }
-#' @example 
-#' \dontrun{
+#' @examples  \dontrun{
 #' vTags    <- c("FUNCTION_NAME",  "CREATION_DATE")
 #' vReplace <- c(strNewFunctionName, strToday)
 #' strFileName <- "MyTemplate.R" # A file that contains {{FUNCTION_NAME}} and {{CREATION_DATE}}
