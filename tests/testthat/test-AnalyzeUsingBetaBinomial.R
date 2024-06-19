@@ -33,17 +33,11 @@ test_that("Test- AnalyzeUsingBetaBinomial", {
     lExpRet1 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
     
     expect_equal( lRet1, lExpRet1, info = "Test 1: Return list did not match")
-    
+     
     # Test 2 ####
     lRet2    <- AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = LookInfo, UserParam = NULL )
     
     lExpRet2 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
     
     expect_equal( lRet2, lExpRet2, info = "Test 2: Return list did not match")
-    # Example test that will fail
-    # nRet         <- 1
-    # nExpectedRet <- 10
-
-
-    # expect_equal( nRet, nExpectedRet, info = "The test failed...", label ="Test for ..." )
-})
+ })
