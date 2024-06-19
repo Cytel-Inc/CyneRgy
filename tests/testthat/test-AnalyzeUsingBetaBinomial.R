@@ -27,15 +27,17 @@ test_that("Test- AnalyzeUsingBetaBinomial", {
     LookInfo    <- list( NumLooks = 3, CurrLooKIndex = 1, CumCompleters = c( nQtyOfPatients/2, nQtyOfPatients ))
     DesignParam <- list( SampleSize = nQtyOfPatients, MaxCompleters = nQtyOfPatients)
     
-    #lRet1    <- AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+    # Test 1 ####
+    lRet1    <- AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
     
-    #lExpRet1 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
+    lExpRet1 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
     
-    #expect_equal( lRet1, lExpRet1, info = "Test 1: Return list did not match")
+    expect_equal( lRet1, lExpRet1, info = "Test 1: Return list did not match")
     
+    # Test 2 ####
     lRet2    <- AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = LookInfo, UserParam = NULL )
     
-    lExpRet2 <<- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
+    lExpRet2 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
     
     expect_equal( lRet2, lExpRet2, info = "Test 2: Return list did not match")
     # Example test that will fail
