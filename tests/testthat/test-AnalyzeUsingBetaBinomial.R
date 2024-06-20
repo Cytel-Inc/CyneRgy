@@ -8,7 +8,6 @@
 
 
 context( "AnalyzeUsingBetaBinomial")
-
 test_that("Test- AnalyzeUsingBetaBinomial", {
     nQtyOfPatientsPerArm <- 125
     nQtyOfPatients       <- 2*nQtyOfPatientsPerArm
@@ -27,17 +26,43 @@ test_that("Test- AnalyzeUsingBetaBinomial", {
     LookInfo    <- list( NumLooks = 3, CurrLooKIndex = 1, CumCompleters = c( nQtyOfPatients/2, nQtyOfPatients ))
     DesignParam <- list( SampleSize = nQtyOfPatients, MaxCompleters = nQtyOfPatients)
     
-    # Test 1 ####
-    lRet1    <- AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+    #Test 1  LookInfo = NULL, UserParam = NULL ####
+    
+    lRet1 <- tryCatch({
+        AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+    }, error = function(e) {
+        NULL
+    })
     
     lExpRet1 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
     
     expect_equal( lRet1, lExpRet1, info = "Test 1: Return list did not match")
-     
-    # Test 2 ####
-    lRet2    <- AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = LookInfo, UserParam = NULL )
+    
+    #Test 2  UserParam = NULL####
+    
+    lRet2 <- tryCatch({
+        AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = LookInfo, UserParam = NULL )
+    }, error = function(e) {
+        NULL
+    })
     
     lExpRet2 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
     
     expect_equal( lRet2, lExpRet2, info = "Test 2: Return list did not match")
- })
+
+    #Test 3 omit LookInfo, UserParam ####
+    
+    lRet3 <- tryCatch({
+        AnalyzeUsingBetaBinomial( SimData, DesignParam )
+    }, error = function(e) {
+        NULL
+    })
+    
+    lExpRet3 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
+    
+    expect_equal( lRet3, lExpRet3, info = "Test 3: Return list did not match")
+    
+})
+
+
+
