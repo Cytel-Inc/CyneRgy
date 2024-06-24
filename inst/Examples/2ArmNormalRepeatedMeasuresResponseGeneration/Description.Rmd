@@ -1,0 +1,41 @@
+---
+title: 'Generate Responses for 2 arm Normal Repeated measures'
+author: "Shubham Lahoti"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 5
+    number_sections: true
+    latex_engine: tinytex
+  word_document: default
+  pdf_document:
+    toc: true
+    toc_depth: '5'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library( CyneRgy )
+```
+
+# Introduction :
+
+Repeated measures deal with multiple measures of the same variable on the same subjects over more than one time periods to learn the development and other changes in subjects over time. 
+Repeated measures can have multiple responses for a same subject over time. And the responses between the visits can be correlated.
+
+So the response generation for Normal endpoint in Repeated measures primarily depends on Mean for all visits, Standard deviation for all visits, Correlation between the visits.
+
+In the R Code directory of this example you will find the following R files:
+
+1. GenerateResponseDiffOfMeansRepeatedMeasures.R
+
+The R function named "GenRespDiffOfMeansRepMeasures" in the file  is used to generate the Normal responses across multiple visits for 2 arm Normal Repeated measures design.
+
+
+2. LibraryMASS.R
+
+This file is used to load the library "MASS" to run mvrnorm() function. 
+
