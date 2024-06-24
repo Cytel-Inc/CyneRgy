@@ -1,14 +1,15 @@
 #################################################################################################### .
 #   Program/Function Name:
-#   Author: Author Name
-#   Description: Test file for AnalyzeUsingBetaBinomial
+#   Author: Audrey Wathen
+#   Description: Test file for 
 #   Change History:
-#   Last Modified Date: 01/02/2024
+#   Last Modified Date: 06/20/2024
 #################################################################################################### .
 
 
-context( "AnalyzeUsingBetaBinomial")
-test_that("Test- AnalyzeUsingBetaBinomial", {
+context( "AnalyzeUsingTTestNormal")
+
+test_that("Test- AnalyzeUsingTTestNormal", {
     nQtyOfPatientsPerArm <- 125
     nQtyOfPatients       <- 2*nQtyOfPatientsPerArm
     
@@ -29,7 +30,7 @@ test_that("Test- AnalyzeUsingBetaBinomial", {
     #Test 1  LookInfo = NULL, UserParam = NULL ####
     
     lRet1 <- tryCatch({
-        AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+        AnalyzeUsingTTestNormal( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
     }, error = function(e) {
         NULL
     })
@@ -41,7 +42,7 @@ test_that("Test- AnalyzeUsingBetaBinomial", {
     #Test 2  UserParam = NULL####
     
     lRet2 <- tryCatch({
-        AnalyzeUsingBetaBinomial( SimData, DesignParam, LookInfo = LookInfo, UserParam = NULL )
+        AnalyzeUsingTTestNormal( SimData, DesignParam, LookInfo = LookInfo, UserParam = NULL )
     }, error = function(e) {
         NULL
     })
@@ -49,11 +50,11 @@ test_that("Test- AnalyzeUsingBetaBinomial", {
     lExpRet2 <- list( TestStat = NULL, ErrorCode = 0, Decision = 0, Delta = 0 ) 
     
     expect_equal( lRet2, lExpRet2, info = "Test 2: Return list did not match")
-
+    
     #Test 3 omit LookInfo, UserParam ####
     
     lRet3 <- tryCatch({
-        AnalyzeUsingBetaBinomial( SimData, DesignParam )
+        AnalyzeUsingTTestNormal( SimData, DesignParam )
     }, error = function(e) {
         NULL
     })
