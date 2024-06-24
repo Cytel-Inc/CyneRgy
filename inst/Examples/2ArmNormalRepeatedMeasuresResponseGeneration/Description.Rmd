@@ -35,7 +35,7 @@ In the R Code directory of this example you will find the following R files:
 The R function named "GenRespDiffOfMeansRepMeasures" in the file  is used to generate the Normal responses across multiple visits for 2 arm Normal Repeated measures design.
 
 
-4. LibraryMASS.R
+2. LibraryMASS.R
 
-This file is used to install the library "MASS" to run mvrnorm() function. 
+This file is used to load the library "MASS" to run mvrnorm() function. 
 
