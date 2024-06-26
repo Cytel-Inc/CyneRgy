@@ -1,0 +1,176 @@
+<!DOCTYPE html>  
+<html>  
+<body>  
+  
+<h2>Solara - Check R File Locally via Javascript</h2>  
+ 
+<p>
+This utility is for the R Integatration when calling analysis (Compute Test Statistitic) for binomial data in a two-arm trial. <br> 
+This code checks for the following:<br/>
+<ol>
+    <li>Function name</li>
+    <li>Function signature - The signature required by East/Solara for this integration point is</li>
+    <br/>
+    FunctionName <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) <br/>
+    {<br/>
+        &emsp;&emsp;# code here <br/>
+    }<br/>
+    <br/>
+
+    
+    <b>Many forms in R would be acceptable.</b> <br>
+    For exmaple, the following are all acceptable:<br/>
+    <br/>
+    <ul>
+        <li>
+            FunctionName <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) { <br>
+            &emsp;&emsp;# code here <br> 
+            }<br/><br>
+        </li>
+        <li>
+            FunctionName <- function(SimData,DesignParam,LookInfo,UserParam=NULL) {<br/>
+                &emsp;&emsp;# code here <br>
+            }<br/><br>
+        </li>
+        <li>
+            FunctionName <- function( SimData, <br/>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; DesignParam, <br/>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; LookInfo, <br/>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; UserParam = NULL ) <br/>
+            {<br/>
+                &emsp;&emsp;# code here <br>
+            }<br/>
+            <br/>
+        </li>
+        <li>    
+            FunctionName <- function( SimData, <br/>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; DesignParam, <br/>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; LookInfo, <br/>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; UserParam = NULL ) { <br/>
+                                        <br/>
+                &emsp;&emsp;# code here <br>
+            }<br/><br>
+        </li>
+    </ul>
+</ol>
+If any of the parameters are missing, or the UserParam does not have a default value of NULL there is an issue and it shoud be flagged as an <span style="color:red"> error</span>. 
+<br/>
+The function name that the user inputs below for <i>Analysis Function Name </i>should have the required signature listed above.  
+<br/>
+</p>
+
+<div style="background-color:lightgrey;">
+<p><b>Upload an R script file:</b></p>  
+<input type="file" id="fileInput" style="width:  300px">  
+  
+<p>Analysis Function Name:</p>  
+<input type="text" id="functionName" style="width:  300px">  
+  
+<p>Click "Parse" to check the R file for highlevel mistakes.</p>  
+<button onclick="parseRFunctions()">Check File</button>  
+</div>
+<p id="demo"></p>  
+  
+<script>
+
+function parseRFunctions() {  
+    var fileInput = document.getElementById('fileInput');  
+    var functionNameInput = document.getElementById('functionName');  
+    var demo = document.getElementById('demo');  
+    var file = fileInput.files[0];  
+    var reader = new FileReader();  
+    reader.onload = function(e) {  
+        // This is the content of the file  
+        var rScript = e.target.result;  
+  
+        // Split script into lines  
+        var lines = rScript.split('\n');  
+        var functions = [];  
+        var functionExists = false;  
+        var functionParametersMatch = false;  
+        var braceCount = 0;  
+        var parenthesesCount = 0;  //Need to keep track of opening na closing ( ) in case the user puts function signature on multiple role 
+  
+        var bInFunction = false;
+        // Iterate through each line  
+        for (var i = 0; i < lines.length; i++) {  
+            // Update brace count  
+            braceCount += (lines[i].match(/{/g) || []).length;  
+            braceCount -= (lines[i].match(/}/g) || []).length;  
+                        
+            // Update parentheses count  
+            parenthesesCount += (lines[i].match(/\(/g) || []).length;  
+            parenthesesCount -= (lines[i].match(/\)/g) || []).length; 
+
+            if( braceCount === 0 ){
+                bInFunction = false; 
+            }
+
+            if(  parenthesesCount === 1 && !bInFunction )
+            {
+                //alert( "Paren count is 1")
+            }
+            // Use regular expressions to find function signatures  
+            //If the braceCount > 0 then it is a local function and is not valid
+            var match = lines[i].match(/^\s*([a-zA-Z0-9._]+)\s*<-?\s*function\s*\((.*?)\)/);  
+
+            if( match === null  && !bInFunction && parenthesesCount === 1 ){
+                //It could be a function line but does not have the closing ) so 
+                 match = lines[i].match(/^\s*([a-zA-Z0-9._]+)\s*<-?\s*function\s*\((.*?)$/); 
+                if( match === null )
+                match = lines.slice(i).join("\n").match(/^\s*([a-zA-Z0-9._]+)\s*<-?\s*function\s*\(([^)]*)\)\s*\{/); 
+                  //match = lines[i].match(/^\s*([a-zA-Z0-9._]+)\s*<-?\s*function\s*\(/); 
+
+            }
+            if ( match && (( braceCount <= 1 && !bInFunction ) ||  ( parenthesesCount === 1 && !bInFunction ) ) ) {  
+                if(  (match && braceCount == 1 && !bInFunction )  ){
+                     bInFunction = true;
+                 }
+                var func = {  
+                    name: match[1],  
+                    parameters: match[2].split(',').map(function(param) {  
+                        return param.replace(/\s+/g, '');   //param.trim();  
+                    })  
+                };  
+                functions.push(func);  
+  
+                //Check the function signature - Each R interface requires a different set and name of parameters so this next block of code to check
+                //parameters would need to be specific to the place the user as adding R, eg analysis, output simulation ect
+
+                // Check if the function name exists and parameters match  
+                if (func.name === functionNameInput.value) {  
+                    functionExists = true;  
+                    if (func.parameters.includes('SimData') && func.parameters.includes('DesignParam')   
+                        && func.parameters.includes('LookInfo') && func.parameters.includes('UserParam=NULL')) {  
+                        functionParametersMatch = true;  
+                    }  
+                }  
+            }  
+        }  
+  
+        // Display if the function name is valid and parameters match  
+        if (functionExists) {  
+            if( functionParametersMatch )
+                demo.innerHTML += 'Function Name Check and Correct Parameters: Success! The function "' + functionNameInput.value + '" is a valid function name<br><br>'; 
+            else
+                demo.innerHTML += 'Function Name Check and Correct Parameters: Failed! The function "' + functionNameInput.value + '" is a valid function name BUT does not have the correct parameters.<br><br>'; 
+        } else {  
+            demo.innerHTML += 'Function Name Check:Error! The function "' + functionNameInput.value + '" is NOT a valid function name<br><br>';  
+        }  
+
+
+  
+        // Now 'functions' array contains the function names and parameters  
+        functions.forEach(function(func) {  
+            demo.innerHTML += 'Function Name: ' + func.name + '<br>';  
+            demo.innerHTML += 'Function Parameters: ' + func.parameters.join(', ') + '<br><br>';  
+        });  
+    };  
+    reader.readAsText(file);  
+}   
+  
+
+</script>  
+  
+</body>  
+</html>  

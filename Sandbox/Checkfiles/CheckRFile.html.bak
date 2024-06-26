@@ -1,0 +1,50 @@
+<!DOCTYPE html>  
+<html>  
+<body>  
+  
+<h2>Parse R Functions</h2>  
+  
+<p>Upload an R script file:</p>  
+<input type="file" id="fileInput">  
+  
+<p>Click "Parse" to parse the R functions.</p>  
+<button onclick="parseRFunctions()">Parse</button>  
+  
+<p id="demo"></p>  
+  
+<script>  
+function parseRFunctions() {  
+    var fileInput = document.getElementById('fileInput');  
+    var file = fileInput.files[0];  
+    var reader = new FileReader();  
+    reader.onload = function(e) {  
+        // This is the content of the file  
+        var rScript = e.target.result;  
+  
+        // Use regular expressions to find function signatures  
+        var re = /([a-zA-Z0-9._]+)\s*<-?\s*function\s*\((.*?)\)/g;  
+        var match;  
+        var functions = [];  
+        while (match = re.exec(rScript)) {  
+            var func = {  
+                name: match[1],  
+                parameters: match[2].split(',').map(function(param) {  
+                    return param.trim();  
+                })  
+            };  
+            functions.push(func);  
+        }  
+  
+        // Now 'functions' array contains the function names and parameters  
+        var demo = document.getElementById('demo');  
+        functions.forEach(function(func) {  
+            demo.innerHTML += 'Function Name: ' + func.name + '<br>';  
+            demo.innerHTML += 'Function Parameters: ' + func.parameters.join(', ') + '<br><br>';  
+        });  
+    };  
+    reader.readAsText(file);  
+}  
+</script>  
+  
+</body>  
+</html>  
