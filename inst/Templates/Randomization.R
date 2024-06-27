@@ -32,7 +32,7 @@
   nError 	        <- 0
   vTreatmentID	  <- rep(0, NumSub)   #A Binary vector of length NumSub
 
-  # Write a code to generate Censor ID for the subjects
+  # Write a code to generate Treatment ID for the subjects
   
   return( list( TreatmentID = as.double( vTreatmentID ), ErrorCode = as.integer( nError ) ) )
 }

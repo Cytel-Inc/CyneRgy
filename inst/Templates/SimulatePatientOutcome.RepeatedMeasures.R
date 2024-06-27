@@ -26,30 +26,26 @@
 #'                                     }
 #'                                     }
 #'                                     
-#'                  \item{Response}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified }             
-#'                                     
-#'                      }
+#'                  \item{Response<NumVisit>}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified }             
 #'                      
 #'                      
 {{FUNCTION_NAME}} <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
-  nError                         <- 0
-  vResponse                      <- list()
-  
-  # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
-  
-  nLookIndex           <- 1 
-  if(  !is.null( LookInfo )  )
-  {
-    nQtyOfLooks          <- LookInfo$NumLooks
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-  }
-  else
-  {
-    nQtyOfLooks          <- 1
-    nQtyOfPatsInAnalysis <- nrow( SimData )
-  }
-  
-  return(list(Response = as.double(vResponse), ErrorCode = as.integer(nError)))
+    # TO DO : Modify this function appropriately
+    Error 	    <- 0
+    OutResponse <- c()
+    retval      <- list()
+    # Write the actual code here.
+    # Store the generated continuous response values in # an array called retval.
+    # Initializing Response Array to 0	
+    for(i in 1:NumVisit)
+    {
+        strVisitName <- paste0( "Response", i )
+        OutResponse <- rep(0,NumSub)
+        retval[[strVisitName]] <- as.double(OutResponse)
+    }
+    # Use appropriate error handling and modify the
+    # Error appropriately 
+    retval$ErrorCode <- as.integer(Error)
+    return(retval)
 }
