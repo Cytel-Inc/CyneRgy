@@ -60,7 +60,7 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
         # Look info was provided so use it
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
+        nQtyOfEvents         <- LookInfo$CumCompleters[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
     }else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately

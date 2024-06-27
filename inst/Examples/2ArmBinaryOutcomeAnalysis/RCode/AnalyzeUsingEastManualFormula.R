@@ -40,9 +40,17 @@ AnalyzeUsingEastManualFormula<- function(SimData, DesignParam, LookInfo = NULL, 
     
     
     # Retrieve necessary information from the objects East sent
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+
+    if(  !is.null( LookInfo )  )
+    {
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    }
+    else
+    {
+        nLookIndex           <- 1
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+    }
     
     # Create the vector of simulated data for this IA - East sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
@@ -68,7 +76,15 @@ AnalyzeUsingEastManualFormula<- function(SimData, DesignParam, LookInfo = NULL, 
     dZj                  <- ( dPiHatExperimental - dPiHatControl )/sqrt( dPiHatj*( 1- dPiHatj ) * ( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS)  ) 
     
     # A decision of 2 means success, 0 means continue the trial
-    nDecision            <- ifelse( dZj > LookInfo$EffBdryUpper[ nLookIndex], 2, 0 )  
+    if(  !is.null( LookInfo )  )
+    {
+        nDecision            <- ifelse( dZj > LookInfo$EffBdryUpper[ nLookIndex], 2, 0 )  
+    }
+    else
+    {
+        nDecision            <- ifelse( dZj > DesignParam$CriticalPoint, 2, 0 )    
+    }
+    
     
     if( nDecision == 0 )
     {

@@ -30,7 +30,7 @@
 #' 
 #######################################################################################################################################################################################################################
 
-AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
+AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {   
        # Input objects can be saved through the following lines:
     
@@ -41,10 +41,16 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo, UserParam =
 
     
     # Retrieve necessary information from the objects East sent
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-    
+    if(  !is.null( LookInfo )  )
+    {
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    }
+    else
+    {
+        nLookIndex           <- 1
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+    }
     # Create the vector of simulated data for this IA - East sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
@@ -70,8 +76,15 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo, UserParam =
                                      var.equal = TRUE)
     
     dTValue              <- lAnalysisResult$statistic    # extract t-test statistic value
-    nDecision            <- ifelse( dTValue > LookInfo$EffBdryUpper[ nLookIndex ], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
     
+    if(  !is.null( LookInfo )  )
+    {
+        nDecision            <- ifelse( dTValue > LookInfo$EffBdryUpper[ nLookIndex ], 2, 0 )  # A decision of 2 means success, 0 means continue the trial  
+    }
+    else
+    {
+        nDecision            <- ifelse( dTValue > DesignParam$CriticalPoint, 2, 0 )    
+    }
     
     if( nDecision == 0 )
     {

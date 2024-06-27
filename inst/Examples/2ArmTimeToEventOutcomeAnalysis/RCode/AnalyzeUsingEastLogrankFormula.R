@@ -64,6 +64,9 @@
 
 AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
+          # saveRDS( SimData,     "SimData.Rds")
+          # saveRDS( DesignParam, "DesignParam.Rds" )
+          # saveRDS( LookInfo,    "LookInfo.Rds" )
     # Retrieve necessary information from the objects East sent
     if( !is.null( LookInfo ) )
     {

@@ -57,8 +57,15 @@ AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam
     lAnalysisResult      <- prop.test(mData, alternative = "greater", correct = FALSE)
     dPValue              <- lAnalysisResult$p.value
     dZValue              <- qnorm( 1 - dPValue )
-    nDecision            <- ifelse( dZValue > LookInfo$EffBdryUpper[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
     
+    if(  !is.null( LookInfo )  )
+    {
+        nDecision            <- ifelse( dZValue > LookInfo$EffBdryUpper[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial  
+    }
+    else
+    {
+        nDecision            <- ifelse( dZValue > DesignParam$CriticalPoint, 2, 0 )    
+    }
     if( nDecision == 0 )
     {
         # if needed, check futility
