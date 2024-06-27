@@ -1,19 +1,16 @@
-#'Last Modified Date: {{27th June 2024}}
+#'Last Modified Date: {{Date Created}}
 #'@name {{FUNCTION_NAME}}
-#'@param NumSub: The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#'@param ProbDrop: A Dropout probability for both the arms. The argument value is passed from Engine.
-#'@param NumVisit: Number of Visits
-#'@param TreatmentID: Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
-#'@param Inputmethod: There were two options  1) Actual values , 2) Change from baseline. 
-#'Actual values: You give mean and SD values for each visit and using those you will generate responses.
-#'Change from baseline: Expected change from baseline at each visit rather than the true means.
-#'@param VisitTime: Visit Times
-#'@param MeanControl: Control Mean for all visits
-#'@param MeanTrt: Treatment Mean for all visits
-#'@param StdDevControl: Control Standard Deviations for all visits
-#'@param StdDevTrt: Treatment Standard Deviations for all visits
-#'@param CorrMat: Correlation Matrix between all visits
-#'@param UserParam User can pass custom scalar variables defined by users as a member of this list. 
+#'@param NumSub: Mandatory. The integer number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
+#'@param NumVisit: Mandatory. Integer number of Visits
+#'@param TreatmentID: Mandatory. Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
+#'@param Inputmethod: Mandatory. 0 - Actual values : Indicating that user has given mean and SD values for each visit. These are used to generate responses.
+#'@param VisitTime: Mandatory. Numeric Visit Times
+#'@param MeanControl: Mandatory. Numeric Control Mean for all visits
+#'@param MeanTrt: Mandatory. Numeric Treatment Mean for all visits
+#'@param StdDevControl: Mandatory. Numeric Control Standard Deviations for all visits
+#'@param StdDevTrt: Mandatory. Numeric Treatment Standard Deviations for all visits
+#'@param CorrMat: Mandatory. Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits. 
+#'@param UserParam Optional. User can pass custom scalar variables defined by users as a member of this list. 
 #'                  User should access the variables using names, for example UserParam$Var1 and not order. 
 #'                  These variables can be of the following types: Integer, Numeric, or Character
 #' 
@@ -41,11 +38,11 @@
     for(i in 1:NumVisit)
     {
         strVisitName <- paste0( "Response", i )
-        OutResponse <- rep(0,NumSub)
-        retval[[strVisitName]] <- as.double(OutResponse)
+        OutResponse <- rep( 0, NumSub )
+        retval[[strVisitName]] <- as.double( OutResponse )
     }
     # Use appropriate error handling and modify the
     # Error appropriately 
-    retval$ErrorCode <- as.integer(Error)
-    return(retval)
+    retval$ErrorCode <- as.integer( Error )
+    return( retval )
 }

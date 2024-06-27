@@ -79,8 +79,8 @@
 {
   nError <- 0
   nDecision <- 0
-  dprimdeltaest = 0
-  dsecdeltaest = 0
+  dprimdeltaest <- 0
+  dsecdeltaest <- 0
   
   # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
   nLookIndex           <- 1 

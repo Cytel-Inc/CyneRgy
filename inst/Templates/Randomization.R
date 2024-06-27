@@ -1,9 +1,9 @@
 #  Last Modified Date: {{27th June 2024}}
 #' @name {{FUNCTION_NAME}}
-#' @param NumSub: The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#' @param NumArm: The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
-#' @param AllocRatio: The ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc). The argument value is passed from Engine.
-#' @param UserParam : User can pass custom scalar variables defined by users as a member of this list. 
+#' @param NumSub: Mandatory. The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
+#' @param NumArm: Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
+#' @param AllocRatio: Mandatory. The ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc). The argument value is passed from Engine.
+#' @param UserParam : Optional. User can pass custom scalar variables defined by users as a member of this list. 
 #'                   User should access the variables using names, for example UserParam$Var1 and not order. 
 #'                   These variables can be of the following types: Integer, Numeric, or Character
 
@@ -26,11 +26,11 @@
 #'                      
 
 
-{{FUNCTION_NAME}} <- function(NumSub, NumArms, AllocRatio, UserParam = NULL  )
+{{FUNCTION_NAME}} <- function( NumSub, NumArms, AllocRatio, UserParam = NULL  )
 {
 
   nError 	        <- 0
-  vTreatmentID	  <- rep(0, NumSub)   #A Binary vector of length NumSub
+  vTreatmentID	  <- rep( 0, NumSub )   #A Binary vector of length NumSub
 
   # Write a code to generate Treatment ID for the subjects
   
