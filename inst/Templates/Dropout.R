@@ -1,0 +1,44 @@
+#  Last Modified Date: {{27th June 2024}}
+#' @name {{FUNCTION_NAME}}
+#' @param NumSub The integer value specifying the number of patients or subjects in the trial. The numeric value of the argument value is sent in when called.
+#' @param ProbDrop A Dropout probability for both the arms. The numeric value is sent to the .
+#' @param UserParam : User can pass custom scalar variables defined by users as a member of this list. 
+#'                    User should access the variables using names, for example UserParam$Var1 and not order. 
+#'                    These variables can be of the following types: Integer, Numeric, or Character
+
+#' @return The function must return a list in the return statement of the function. The information below lists 
+#'             elements of the list, if the element is required or optional and a description of the return values if needed.
+#'             \describe{
+#'                  \item{CensorInd (Mandatory)}{Required value. A Binary vector of length NumSub such that
+#'                                  \describe{
+#'                                    \item{CensorInd = 0}{ Non Completer / Dropout }
+#'                                    \item{CensorInd = 1}{ Completer }
+#'                                    } 
+#'                                    }
+#'                  \item{ErrorCode}{Optional integer value \describe{ 
+#'                                     \item{ErrorCode = 0}{No Error}
+#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
+#'                                     }
+#'                                     }
+#'                      }
+#'                      
+#'   @return 
+  #' \describe{
+  #'     \item{ErrorCode (Optional)}{An integer value:  ErrorCode = 0 --> No Error
+  #'                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+  #'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.}
+  #'     \item{CensorInd (Mandatory)}{A vector of length NumSub of censor indicator values with 0 for patients that dropout eg non-completer, 1 for no dropout, eg compelter. }
+
+{{FUNCTION_NAME}} <- function(NumSub, NumArms, AllocRatio, UserParam = NULL  )
+{
+  
+  nError 	              <- 0
+  vCensorInd	          <- rep(0, Numub)     # Binary Vector of length NumSub
+  
+  # Write a code to randomly allot the subjects either on control or treatment arm.
+  
+  
+  
+  return( list( CensorInd = as.double( vCensorInd ), ErrorCode = as.integer( nError ) ) )
+}
