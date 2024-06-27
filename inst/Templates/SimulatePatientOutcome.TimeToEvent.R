@@ -20,7 +20,18 @@
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
 #' @param  UserParam A list of user defined parameters in East.   You must have a default = NULL, as in this example.
-#' If UseParam are supplied in East or Solara, they will be an element in the list, eg UserParam$ParameterName.    
+#' If UseParam are supplied in East or Solara, they will be an element in the list, eg UserParam$ParameterName.  
+#' @return The function must return a list in the return statement of the function. The information below lists 
+#'             elements of the list, if the element is required or optional and a description of the return values if needed. 
+#'             \describe{
+#'             \item{SurvivalTime}{Required numeric value. A vector of generated time to response values for each subject.}
+#'             \item{ErrorCode}{Optional integer value \describe{ 
+#'                                     \item{ErrorCode = 0}{No Error}
+#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
+#'                                     }
+#'                                     }
+#'             }  
 #' @description
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
 #' However, you may choose to ignore the parameters SurvMethod, NumPrd, PrdTime, and SurvParam if the patient simulator
