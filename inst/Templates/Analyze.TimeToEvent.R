@@ -33,7 +33,6 @@
 #'                 \describe{
 #'                      \item{NumLooks}{An integer value with the number of looks in the study}
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
-#'                      \item{CumCompleters}{In a time-to-event trial a vector of length LookInfo$NumLooks that contains the number of events at the look.}
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{CumAlpha}{cumulative alpha spent, one sided tests}
 #'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible vaues are: Z Scale: 0, p-Value Scale: 1}
@@ -76,7 +75,6 @@
     nError 	        <- 0
     nDecision 	    <- 0
     dTestStatistic  <- 0
-    
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
     nLookIndex           <- 1 
     
@@ -85,7 +83,8 @@
         # Look info was provided so this is a group sequential design and need to use the look information
         nQtyOfLooks  <- LookInfo$NumLooks
         nLookIndex   <- LookInfo$CurrLookIndex
-        nQtyOfEvents <- LookInfo$CumEvents[ nLookIndex ]
+        CumEvents    <- LookInfo$InfoFrac*DesignParam$MaxEvents
+        nQtyOfEvents <- CumEvents[ nLookIndex ]
     }
     else
     {
