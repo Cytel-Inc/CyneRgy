@@ -1,4 +1,4 @@
-#'Last Modified Date: {{Date Created}}
+#'Last Modified Date: {{CREATION_DATE}}
 #'@name {{FUNCTION_NAME}}
 #'@param NumSub: Mandatory. The integer number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
 #'@param NumVisit: Mandatory. Integer number of Visits

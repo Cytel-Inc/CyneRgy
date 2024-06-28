@@ -1,4 +1,4 @@
-#  Last Modified Date: {{27th June 2024}}
+#  Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @param NumSub Mandatory. The integer value specifying the number of patients or subjects in the trial. The numeric value of the argument value is sent in when called.
 #' @param NumArm Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.

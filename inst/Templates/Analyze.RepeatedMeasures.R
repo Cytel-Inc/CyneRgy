@@ -1,4 +1,4 @@
-#' Last Modified Date: {{27th June 2024}}
+#' Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
 #'        It will have headers indicating the names of the columns. These names will be same as those used in 
@@ -28,7 +28,7 @@
 #'          \item{ResponseLag}{Fixed Followup time between first visit and Final visit }
 #'          \item{AllocInfo}{Allocation ratio on Control and Experimental arm }
 #'          \item{CriticalPoint}{Z Critical value for a given Alpha}
-#'          \item{NumVisit}{Number of visits in a Design}
+#'          \item{NumVisit}{Integer number of visits in a Design}
 #'          \item{VisitTime}{Numeric vector containing visit times}
 #'          \item{VisitStatus}{Integer vector indicating the visit selection status. 0 - Visit selected for analysis. 1 - Otherwise }
 #'          \item{PrimContrastCoeff}{Numeric vector containing Primary Contrast Coefficient per visit }
@@ -82,7 +82,7 @@
 #'                                    Mandatory If FutBdryScale = 2 (Delta Scale) and FutContrast = 0 (Primary Contrast) 
 #'                                    else optional}
 #'                  
-#'                  \item{SecDelta}{ Optional float value that gives estimate of Secondary contrast delta 
+#'                  \item{SecDelta}{ Float value that gives estimate of Secondary contrast delta 
 #'                                  Mandatory if FutBdryScale = 2 (Delta Scale) and FutContrast = 1 (Secondary Contrast)
 #'                                  else optional}                 
 #'                   

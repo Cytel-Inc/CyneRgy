@@ -1,4 +1,4 @@
-#  Last Modified Date: {{27th June 2024}}
+#  Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @param NumSub: Mandatory. The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
 #' @param NumArms: Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
