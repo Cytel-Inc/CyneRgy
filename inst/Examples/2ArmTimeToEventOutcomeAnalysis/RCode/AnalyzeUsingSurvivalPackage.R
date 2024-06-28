@@ -46,7 +46,8 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
         # Look info was provided so use it
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfEvents         <- LookInfo$CumCompleters[ nLookIndex ]
+        CumEvents            <- LookInfo$InfoFrac*DesignParam$MaxEvents
+        nQtyOfEvents         <- CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
     }
     else

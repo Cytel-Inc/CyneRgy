@@ -24,7 +24,7 @@
 #'                 for example LookInfo$NumLooks and not order. Other important variables in group sequential designs are: 
 #'                   LookInfo$NumLooks An integer value with the number of looks in the study
 #'                   LookInfo$CurrLookIndex An integer value with the current index look, starting from 1
-#'                   LookInfo$CumEvents A vector of length LookInfo$NumLooks that contains the number of events at the look.
+#'                   LookInfo$InfoFrac A numeric vector containing information fraction
 #' @param UserParam User can pass custom scalar variables defined by users as a member of this list. 
 #'                  User should access the variables using names, for example UserParam$Var1 and not order. 
 #'                  These variables can be of the following types: Integer, Numeric, or Character
@@ -73,7 +73,8 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
         # Look info was provided so use it
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfEvents         <- LookInfo$CumCompleters[ nLookIndex ]
+        CumEvents            <- LookInfo$InfoFrac*DesignParam$MaxEvents
+        nQtyOfEvents         <- CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
     }
     else
