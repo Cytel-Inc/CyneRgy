@@ -8,8 +8,11 @@
 #'        \describe
 #'        {
 #'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
+#'          \item{ArrTimeVisit<VisitID>}{A numeric value with the time the patient arrived in the trial for the <VisitID>th visit.}
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
-#'          \item{Response}{Numeric value for the response from the patient }
+#'          \item{Response<VisitID>}{Numeric value for the response from the patient at the <VisitID>th visit. }
+#'          \item{CensorInd<VisitID>}{A binary (0-1) value where 1 indicates that the patient was censored at the <VisitID>th visit.}
+#'          \item{DropoutVisitID}{An integer value which indicates the ID of the visit where the patient was censored. }
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
 #'      may need to compute test statistic and perform test. User should access the variables
@@ -23,10 +26,14 @@
 #'          \item{UpperAlpha}{Two Sided Asymmetric Tests }
 #'          \item{MaxCompleters}{Maximum Completers for a Continuous ep design}
 #'          \item{ResponseLag}{Fixed Followup time between first visit and Final visit }
-#'          \item{Alloc Info}{Allocation ratio on Control and Experimental arm }
+#'          \item{AllocInfo}{Allocation ratio on Control and Experimental arm }
 #'          \item{CriticalPoint}{Z Critical value for a given Alpha}
 #'          \item{NumVisit}{Number of visits in a Design}
-#'          \item{PrimContrastCoeff}{Primary Contrasts Coefficients}
+#'          \item{VisitTime}{Numeric vector containing visit times}
+#'          \item{VisitStatus}{Integer vector indicating the visit selection status. 0 - Visit selected for analysis. 1 - Otherwise }
+#'          \item{PrimContrastCoeff}{Numeric vector containing Primary Contrast Coefficient per visit }
+#'          \item{SecContrastCoeff}{Numeric vector containing Secondary Contrast Coefficient per visit }
+#'          \item{DropImpt}{Integer value for Dropout imputation method. 1 indicates None, 0 indicates LOCF }
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
 #'                 and perform test. User should access the variables using names, 
@@ -45,6 +52,9 @@
 #'                      \item{FutBdry}{Vector of futility bondaries, one sided tests.}
 #'                      \item{FutBdryUpper}{Vector of upper futility boundaries, two sided tests}
 #'                      \item{FutBdryLower}{Vector of lower futility boundaries, two sided tests}
+#'                      \item{InterimVisit}{1 based index of the visit which is driving the interims}
+#'                      \item{FutContrast}{The contrast based on which futility boundaries are being computed. 0- Primary, 1-Secondary}
+#'                      \item{IncludePipeline}{Flag indicating whether to include pipeline subjects in the interim or not. 0- Don't include. 1- Include}
 #'                 }
 #' @param UserParam User can pass custom scalar variables defined by users as a member of this list. 
 #'                  User should access the variables using names, for example UserParam$Var1 and not order. 
@@ -68,9 +78,9 @@
 #'                                     }
 #'                                     }
 #'                                     
-#'                  \item{PrimDelta}{ Optional float value that gives estimate of Primary delta }
+#'                  \item{PrimDelta}{ Optional float value that gives estimate of Primary contrast delta }
 #'                  
-#'                  \item{SecDelta}{ Optional float value that gives estimate of Secondary delta }                 
+#'                  \item{SecDelta}{ Optional float value that gives estimate of Secondary contrast delta }                 
 #'                                     
 #'                      }
 #'                      
