@@ -73,7 +73,7 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
         # Look info was provided so use it
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
+        nQtyOfEvents         <- LookInfo$CumCompleters[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
     }
     else
