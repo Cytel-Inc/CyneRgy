@@ -1,7 +1,7 @@
 #  Last Modified Date: {{27th June 2024}}
 #' @name {{FUNCTION_NAME}}
 #' @param NumSub: Mandatory. The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#' @param NumArm: Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
+#' @param NumArms: Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
 #' @param AllocRatio: Mandatory. The ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc). The argument value is passed from Engine.
 #' @param UserParam : Optional. User can pass custom scalar variables defined by users as a member of this list. 
 #'                   User should access the variables using names, for example UserParam$Var1 and not order. 
@@ -26,13 +26,26 @@
 #'                      
 
 
-{{FUNCTION_NAME}} <- function( NumSub, NumArms, AllocRatio, UserParam = NULL  )
+{{FUNCTION_NAME}} <- function(NumSub, NumArms, AllocRatio, UserParam = NULL)
 {
-
-  nError 	        <- 0
-  vTreatmentID	  <- rep( 0, NumSub )   #A Binary vector of length NumSub
-
-  # Write a code to generate Treatment ID for the subjects
   
-  return( list( TreatmentID = as.double( vTreatmentID ), ErrorCode = as.integer( nError ) ) )
+  Error 	                      <- 0
+  
+  # Allocation ratio on control and treatment arm
+  vAllocRatio                   <- c( 1, AllocRatio )
+  
+  # Convert the Allocation Ratio to Allocation Fraction for control and treatment arm
+  dAllocFraction                <- c( vAllocRatio[ 1 ]/sum( vAllocRatio ), 1 - vAllocRatio[ 1 ]/sum( vAllocRatio ) )
+  vSampleSizeArmWise            <- c( round( NumSub * dAllocFraction[ 1 ]), NumSub - round( NumSub * dAllocFraction[ 1 ] ) )
+  
+  # Find the indices for Control and treatment arms
+  vControlArmIndex              <- sample( 1:NumSub, size = vSampleSizeArmWise[ 1 ], replace = FALSE )
+  vTreatmentArmIndex            <- c( 1:NumSub )[ -vControlArmIndex ]
+  
+  # Generate a vector of zeroes of size NumSub and then replace the Treatment Indices with 1.
+  
+  retval                        <- rep( 0, NumSub )
+  retval[ vTreatmentArmIndex ]  <-  1
+  
+  return(list(TreatmentID = as.integer(retval), ErrorCode = as.integer(Error)))
 }
