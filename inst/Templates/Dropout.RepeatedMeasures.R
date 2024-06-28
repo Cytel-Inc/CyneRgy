@@ -31,32 +31,58 @@
 #'                      }
 
 
-{{FUNCTION_NAME}} <- function(NumSub, NumArm, NumVisit, VisitTime, TreatmentID, 
-                              DropMethod, ByTime, DropParamControl, DropParamtrt, UserParam = NULL  )
+{{FUNCTION_NAME}} <- function(NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
+                    DropMethod, ByTime, DropParamControl, DropParamtrt, UserParam = NULL)
 {
-  
-  Error 	= 0
-  initval 	= c()
+  # TO DO : Modify this function appropriately 
+  Error     = 0
+  initval   = c()
   retval <- list()
   
-  # Initializing CensorInd Arrays to 0
+  # Initializing CensorInd Arrays
   for(i in 1:NumVisit)
   {
     strCensorIndName <- paste0( "CensorInd", i )
-    CensorInd <- rep(0,NumSub)
+    CensorInd <- rep(1,NumSub)
     retval[[strCensorIndName]] <- as.integer(CensorInd)
   }
-  # Initialising DropOutTime and DropoutVisitID to Inf
-  # This effectively means that all the patients have dropped out at an infinite time, 
-  # i.e., effectively they haven't dropped out at all, meaning that they all are completers 
   
+  # Initialising DropOutTime and DropoutVisitID to Inf
+  # This effectively means that all the patients have dropped out at an infinite time,
+  # i.e., effectively they haven't dropped out at all, meaning that they all are completers
   for(i in 1:NumSub)
   {
     initval[i] = Inf;
-  } 
-  retval$DropoutVisitID = as.double(initval)
-  retval$DropOutTime = as.double(Inf)
+  }
   
+  retval$DropoutVisitID = as.integer(initval)
+  retval$DropOutTime = as.double(rep(NumVisit, NumSub))
+  
+  # Use appropriate error handling and modify the
+  # Error appropriately in each of the methods
+  retval$ErrorCode <- as.integer(Error)
+  
+  # Step 1: Create a list containing input arguments and assign names to each element
+  input_list <- list(NumSub = NumSub, NumArm = NumArm, NumVisit = NumVisit, VisitTime = VisitTime,
+                     TreatmentID = TreatmentID, DropMethod = DropMethod, ByTime = ByTime,
+                     DropParamControl = DropParamControl, DropParamtrt = DropParamtrt, UserParam = UserParam)
+  names(input_list) <- c("NumSub", "NumArm", "NumVisit", "VisitTime", "TreatmentID",
+                         "DropMethod", "ByTime", "DropParamControl", "DropParamtrt", "UserParam")
+  
+  # Step 2: Save the list of input arguments in RDS format for later reference
+  saveRDS(input_list, "input_arguments.rds")
+  
+  # Step 3: Convert the list of input arguments to a matrix and pad shorter elements with NA values
+  max_length <- max(lengths(input_list))
+  input_matrix <- sapply(input_list, function(x) c(x, rep(NA, max_length - length(x))))
+  
+  # Step 4: Convert the matrix to a data frame
+  input_df <- as.data.frame(input_matrix)
+  
+  # Step 5: Write the data frame to a CSV file
+  write.csv(input_df, "input_arguments.csv", row.names = FALSE)
+  
+ 
   
   # Repeated Measures Dropout Output Heirarchy
   # Step 1: If user has returned Censor Indicator arrays CensorInd1, CensorInd . CensorInd<NumVisit> from their R code, 
@@ -74,5 +100,5 @@
   
   #retval is one of the options: 1) CensorID, 2) VisitID, 3) DropOutTime
   
-  return( list( retval = as.double( retval ), ErrorCode = as.integer( nError ) ) )
+  return(retval);
 }
