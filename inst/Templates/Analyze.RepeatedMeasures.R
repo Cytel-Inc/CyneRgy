@@ -78,10 +78,18 @@
 #'                                     }
 #'                                     }
 #'                                     
-#'                  \item{PrimDelta}{ Optional float value that gives estimate of Primary contrast delta }
+#'                  \item{PrimDelta}{ Float value that gives estimate of Primary contrast delta, 
+#'                                    Mandatory If FutBdryScale = 2 (Delta Scale) and FutContrast = 0 (Primary Contrast) 
+#'                                    else optional}
 #'                  
-#'                  \item{SecDelta}{ Optional float value that gives estimate of Secondary contrast delta }                 
-#'                                     
+#'                  \item{SecDelta}{ Optional float value that gives estimate of Secondary contrast delta 
+#'                                  Mandatory if FutBdryScale = 2 (Delta Scale) and FutContrast = 1 (Secondary Contrast)
+#'                                  else optional}                 
+#'                   
+#'                   \item{TestStat}{ Float value, Mandatory If FutBdryScale = 2 (Delta Scale) and FutContrast = 0 (Primary Contrast)}                  
+#'                                  { Mandatory If FutBdryScale = 2 (Delta Scale) and FutContrast = 1 (Secondary Contrast)
+#'                                  else optional }
+#'                      
 #'                      }
 #'                      
 #'                      
