@@ -88,7 +88,7 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
     if( nDecision == 0 )
     {
         # For this example, there is NO futility check but this is left for consistency with other examples 
-        # At the final analysis we want to make a futility if effiecacy was not achieved.
+        # At the final analysis we want to make a futility if efficacy was not achieved.
         
         # We are at the FA, efficacy decision was not made yet so the decision is futility
         if( nLookIndex == nQtyOfLooks ) 
