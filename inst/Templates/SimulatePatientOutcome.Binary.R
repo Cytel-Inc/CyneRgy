@@ -6,7 +6,18 @@
 #' @param TreatmentID A vector of treatment ids, 0 is control treatment and  1 experimental treatment.  length( TreatmentID ) = NumSub
 #' @param PropResp A vector of length NumArm with the response probabilities for each arm
 #' @param  UserParam A list of user defined parameters in East.   You must have a default of NULL, as in this example.
-#' If UseParam are supplied in East, they will be an element in the list, UserParam.    
+#' If UseParam are supplied in East, they will be an element in the list, UserParam.   
+#' @return The function must return a list in the return statement of the function. The information below lists 
+#'             elements of the list, if the element is required or optional and a description of the return values if needed. 
+#'             \describe{
+#'             \item{Response}{Required numeric value. Contains a vector of generated binary response for all subjects.}
+#'             \item{ErrorCode}{Optional integer value \describe{ 
+#'                                     \item{ErrorCode = 0}{No Error}
+#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
+#'                                     }
+#'                                     }
+#'             }
 #' @description
 #' This template can be used as a starting point for developing custom functionality when the patient response is binary.  
 #' The function signature must remain the same.  

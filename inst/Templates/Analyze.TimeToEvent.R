@@ -1,5 +1,4 @@
 #  Last Modified Date: {{CREATION_DATE}}
-#' {{FUNCTION_NAME}}
 #' @name {{FUNCTION_NAME}}
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
 #'        It will have headers indicating the names of the columns. These names will be same as those used in 
@@ -12,6 +11,7 @@
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
 #'          \item{SurvivalTime}{Numeric value for the survival time or time-to-event for the patient, note this is not the time in the trial
 #'                               that the patient experiences the event. }
+#'          \item{DropOutTime}{Numeric value for the dropout time for the patient in a time to event trial.}
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
 #'      may need to compute test statistic and perform test. User should access the variables
@@ -33,8 +33,6 @@
 #'                 \describe{
 #'                      \item{NumLooks}{An integer value with the number of looks in the study}
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
-#'                      \item{CumEvents}{In a time-to-event trial a vector of length LookInfo$NumLooks that contains the number of events at the look.}
-#'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{CumAlpha}{cumulative alpha spent, one sided tests}
 #'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible vaues are: Z Scale: 0, p-Value Scale: 1}
@@ -52,7 +50,7 @@
 #' @return The function must return a list in the return statement of the function. The information below lists 
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{
-#'                  \item{Decision}{Required value. Integer Value with the following meaning:
+#'                  \item{Decision}{Optional value. Integer Value with the following meaning:
 #'                                  \describe{
 #'                                    \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
 #'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
@@ -61,6 +59,7 @@
 #'                                    \item{Decision = 4}{when the Equivalence Boundary Crossed}
 #'                                    } 
 #'                                    }
+#'                  \item{TestStat}{Numeric value. Required if Decision is not returned}
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
@@ -76,7 +75,6 @@
     nError 	        <- 0
     nDecision 	    <- 0
     dTestStatistic  <- 0
-    
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
     nLookIndex           <- 1 
     
@@ -85,7 +83,8 @@
         # Look info was provided so this is a group sequential design and need to use the look information
         nQtyOfLooks  <- LookInfo$NumLooks
         nLookIndex   <- LookInfo$CurrLookIndex
-        nQtyOfEvents <- LookInfo$CumEvents[ nLookIndex ]
+        CumEvents    <- LookInfo$InfoFrac*DesignParam$MaxEvents
+        nQtyOfEvents <- CumEvents[ nLookIndex ]
     }
     else
     {
