@@ -95,24 +95,24 @@
 #'                      
 {{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-  nError <- 0
-  nDecision <- 0
-  dprimdeltaest <- 0
-  dsecdeltaest <- 0
-  
-  # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
-  nLookIndex           <- 1 
-  if(  !is.null( LookInfo )  )
-  {
-    nQtyOfLooks          <- LookInfo$NumLooks
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-  }
-  else
-  {
-    nQtyOfLooks          <- 1
-    nQtyOfPatsInAnalysis <- nrow( SimData )
-  }
-  
-  return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dprimdeltaest), SecDelta = as.double(dsecdeltaest), ErrorCode = as.integer(nError)))
+     nError        <- 0
+     nDecision     <- 0
+     dPrimDeltaEst <- 0
+     dSecDeltaEst  <- 0
+     
+     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
+     nLookIndex           <- 1 
+     if(  !is.null( LookInfo )  )
+     {
+         nQtyOfLooks          <- LookInfo$NumLooks
+         nLookIndex           <- LookInfo$CurrLookIndex
+         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+     }
+     else
+     {
+         nQtyOfLooks          <- 1
+         nQtyOfPatsInAnalysis <- nrow( SimData )
+     }
+     
+     return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDeltaEst), SecDelta = as.double(dSecDeltaEst), ErrorCode = as.integer(nError)))
 }

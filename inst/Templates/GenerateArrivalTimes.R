@@ -1,6 +1,6 @@
 #   Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Template for simulating patient data in R. 
+#' @title Template for simulating patient patient arrival time.  
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumPrd Number of time periods that are provided. 
 #' @param PrdStart Vector with start of a time interval 

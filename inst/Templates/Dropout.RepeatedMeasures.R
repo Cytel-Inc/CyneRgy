@@ -35,48 +35,48 @@
                     DropMethod, ByTime, DropParamControl, DropParamtrt, UserParam = NULL)
 {
   # TO DO : Modify this function appropriately 
-  Error     = 0
-  initval   = c()
-  retval <- list()
+    Error     <-  0
+    initval   <- c()
+    retval    <- list()
+    
+    # Initializing CensorInd Arrays
+    for(i in 1:NumVisit)
+    {
+        strCensorIndName <- paste0( "CensorInd", i )
+        CensorInd        <- rep(1,NumSub)
+        retval[[strCensorIndName]] <- as.integer(CensorInd)
+    }
   
-  # Initializing CensorInd Arrays
-  for(i in 1:NumVisit)
-  {
-    strCensorIndName <- paste0( "CensorInd", i )
-    CensorInd <- rep(1,NumSub)
-    retval[[strCensorIndName]] <- as.integer(CensorInd)
-  }
+    # Initializing DropOutTime and DropoutVisitID to Inf
+    # This effectively means that all the patients have dropped out at an infinite time,
+    # i.e., effectively they haven't dropped out at all, meaning that they all are completers
+    for(i in 1:NumSub)
+    {
+        initval[i] = Inf;
+    }
   
-  # Initialising DropOutTime and DropoutVisitID to Inf
-  # This effectively means that all the patients have dropped out at an infinite time,
-  # i.e., effectively they haven't dropped out at all, meaning that they all are completers
-  for(i in 1:NumSub)
-  {
-    initval[i] = Inf;
-  }
+    retval$DropoutVisitID <- as.integer(initval)
+    retval$DropOutTime    <- as.double(rep(NumVisit, NumSub))
   
-  retval$DropoutVisitID = as.integer(initval)
-  retval$DropOutTime = as.double(rep(NumVisit, NumSub))
-  
-  # Use appropriate error handling and modify the
-  # Error appropriately in each of the methods
-  retval$ErrorCode <- as.integer(Error)
-  
-  # Repeated Measures Dropout Output Heirarchy
-  # Step 1: If user has returned Censor Indicator arrays CensorInd1, CensorInd . CensorInd<NumVisit> from their R code, 
-  # then no other outputs are required. In that case, all other outputs become optional and the workflow ends here. 
-  # If user has not returned Censor Indicator arrays from their R code, please go to Step 2.
-  # 
-  # Step 2: If user has returned DropoutVisitID from their R code, then no other outputs are required. 
-  # In that case, all other outputs become optional and the workflow ends here.  
-  # If user has not returned DropoutVisitID from their R code, please go to Step 3.
-  # 
-  # Step 3: If user has returned DropOutTime from their R code, then simulations run successfully and 
-  # all other outputs becomes optional. no other outputs are required. If user has not returned DropOutTime from their R code, 
-  # then the application will return an error code. The workflow ends here. 
-  
-  
-  #retval is one of the options: 1) CensorID, 2) VisitID, 3) DropOutTime
-  
-  return(retval);
+    # Use appropriate error handling and modify the
+    # Error appropriately in each of the methods
+    retval$ErrorCode <- as.integer(Error)
+    
+    # Repeated Measures Dropout Output Hierarchy
+    # Step 1: If user has returned Censor Indicator arrays CensorInd1, CensorInd . CensorInd<NumVisit> from their R code, 
+    # then no other outputs are required. In that case, all other outputs become optional and the workflow ends here. 
+    # If user has not returned Censor Indicator arrays from their R code, please go to Step 2.
+    # 
+    # Step 2: If user has returned DropoutVisitID from their R code, then no other outputs are required. 
+    # In that case, all other outputs become optional and the workflow ends here.  
+    # If user has not returned DropoutVisitID from their R code, please go to Step 3.
+    # 
+    # Step 3: If user has returned DropOutTime from their R code, then simulations run successfully and 
+    # all other outputs becomes optional. no other outputs are required. If user has not returned DropOutTime from their R code, 
+    # then the application will return an error code. The workflow ends here. 
+    
+    
+    #retval is one of the options: 1) CensorID, 2) VisitID, 3) DropOutTime
+    
+    return( retval );
 }

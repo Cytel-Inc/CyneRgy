@@ -26,9 +26,9 @@
 {{FUNCTION_NAME}} <- function( NumSub, ProbDrop,  UserParam = NULL ) 
 {   
   
-  Error 	            <- 0
+    Error 	            <- 0
   
-  vCensoringIndicator <- rbinom( n = NumSub, size = 1, prob = 1 - ProbDrop )
+    vCensoringIndicator <- rbinom( n = NumSub, size = 1, prob = 1 - ProbDrop )
   
-  return( list( CensorInd = as.integer( vCensoringIndicator ), ErrorCode = as.integer( Error ) ) );
+    return( list( CensorInd = as.integer( vCensoringIndicator ), ErrorCode = as.integer( Error ) ) );
 }

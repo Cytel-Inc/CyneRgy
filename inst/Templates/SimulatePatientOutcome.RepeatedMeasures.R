@@ -29,17 +29,17 @@
 {{FUNCTION_NAME}} <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
     # TO DO : Modify this function appropriately
-    Error 	    <- 0
-    OutResponse <- c()
-    retval      <- list()
+    Error 	     <- 0
+    vOutResponse <- c()
+    retval       <- list()
     # Write the actual code here.
     # Store the generated continuous response values in # an array called retval.
     # Initializing Response Array to 0	
     for(i in 1:NumVisit)
     {
         strVisitName <- paste0( "Response", i )
-        OutResponse <- rep( 0, NumSub )
-        retval[[strVisitName]] <- as.double( OutResponse )
+        vOutResponse <- rep( 0, NumSub )
+        retval[[ strVisitName ]] <- as.double( vOutResponse )
     }
     # Use appropriate error handling and modify the
     # Error appropriately 
