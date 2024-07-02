@@ -33,20 +33,29 @@
 #######################################################################################################################################################################################################################
 
 
-AnalyzeUsingEastManualFormulaNormal <- function(SimData, DesignParam, LookInfo, UserParam = NULL )
+AnalyzeUsingEastManualFormulaNormal <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Input objects can be saved through the following lines:
 
-    setwd( "D:\\Project\\backup_cynergy\\")
-    saveRDS( SimData, "SimData.Rds")
-    saveRDS( DesignParam, "DesignParam.Rds" )
-    saveRDS( LookInfo, "LookInfo.Rds" )
+    # setwd( "D:\\Project\\backup_cynergy\\")
+    # saveRDS( SimData, "SimData.Rds")
+    # saveRDS( DesignParam, "DesignParam.Rds" )
+    # saveRDS( LookInfo, "LookInfo.Rds" )
 
     
     # Retrieve necessary information from the objects East sent
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    if(  !is.null( LookInfo )  )
+    {
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfLooks          <- LookInfo$NumLooks
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    }
+    else
+    {
+        nLookIndex           <- 1
+        nQtyOfLooks          <- 1
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+    }
     
     # Create the vector of simulated data for this IA - East sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
@@ -72,12 +81,22 @@ AnalyzeUsingEastManualFormulaNormal <- function(SimData, DesignParam, LookInfo, 
     dZj                  <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS )/( dStdDevPooled * sqrt( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ))
     
     # A decision of 2 means success, 0 means continue the trial
-    nDecision            <- ifelse( dZj > LookInfo$EffBdryUpper[ nLookIndex ], 2, 0 )  
-    
+    if(  !is.null( LookInfo )  )
+    {
+        nDecision            <- ifelse( dZj > LookInfo$EffBdryUpper[ nLookIndex], 2, 0 )  
+    }
+    else
+    {
+        nDecision            <- ifelse( dZj > DesignParam$CriticalPoint, 2, 0 )    
+    }
     if( nDecision == 0 )
     {
-        # For this example, there is NO futility check but this is left for consistency with other examples 
-        
+        # Did not hit efficacy, so check futility 
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
     }
     
     Error <-  0
