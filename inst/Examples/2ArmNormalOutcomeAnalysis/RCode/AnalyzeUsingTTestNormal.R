@@ -44,11 +44,13 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, User
     if(  !is.null( LookInfo )  )
     {
         nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfLooks          <- LookInfo$NumLooks
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
     }
     else
     {
         nLookIndex           <- 1
+        nQtyOfLooks          <- 1
         nQtyOfPatsInAnalysis <- nrow( SimData )
     }
     # Create the vector of simulated data for this IA - East sends all of the simulated data
@@ -88,8 +90,12 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, User
     
     if( nDecision == 0 )
     {
-        # For this example, there is NO futility check but this is left for consistency with other examples 
-        
+        # Did not hit efficacy, so check futility 
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
     }
     
     Error <-  0

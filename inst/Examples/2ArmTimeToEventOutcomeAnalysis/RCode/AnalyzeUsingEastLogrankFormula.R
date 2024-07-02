@@ -157,8 +157,12 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     
     if( nDecision == 0 )
     {
-        # For this example, there is NO futility check but this is left for consistency with other examples 
-        
+        # Did not hit efficacy, so check futility 
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
     }
 
     Error    <- 0

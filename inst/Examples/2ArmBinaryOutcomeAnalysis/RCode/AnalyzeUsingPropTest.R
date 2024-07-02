@@ -68,10 +68,12 @@ AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam
     }
     if( nDecision == 0 )
     {
-        # if needed, check futility
-        
-        
-        
+        # Did not hit efficacy, so check futility 
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
     }
     
     Error 	= 0
