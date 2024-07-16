@@ -24,7 +24,7 @@
 #'                 for example LookInfo$NumLooks and not order. Other important variables in group sequential designs are: 
 #'                   LookInfo$NumLooks An integer value with the number of looks in the study
 #'                   LookInfo$CurrLookIndex An integer value with the current index look, starting from 1
-#'                   LookInfo$CumEvents A vector of length LookInfo$NumLooks that contains the number of events at the look.
+#'                   LookInfo$InfoFrac A numeric vector containing information fraction
 #' @param UserParam User can pass custom scalar variables defined by users as a member of this list. 
 #'                  User should access the variables using names, for example UserParam$Var1 and not order. 
 #'                  These variables can be of the following types: Integer, Numeric, or Character
@@ -64,13 +64,17 @@
 
 AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
+          # saveRDS( SimData,     "SimData.Rds")
+          # saveRDS( DesignParam, "DesignParam.Rds" )
+          # saveRDS( LookInfo,    "LookInfo.Rds" )
     # Retrieve necessary information from the objects East sent
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
+        CumEvents            <- LookInfo$InfoFrac*DesignParam$MaxEvents
+        nQtyOfEvents         <- CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
     }
     else
@@ -153,8 +157,12 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     
     if( nDecision == 0 )
     {
-        # For this example, there is NO futility check but this is left for consistency with other examples 
-        
+        # Did not hit efficacy, so check futility 
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
     }
 
     Error    <- 0

@@ -57,7 +57,6 @@ AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, Us
         # Group sequential design
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfLooks          <- LookInfo$NumLooks
-        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
     }
     else
@@ -65,7 +64,6 @@ AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, Us
         # Fixed Design
         nLookIndex           <- 1
         nQtyOfLooks          <- 1
-        nQtyOfEvents         <- DesignParam$MaxCompleters
         nQtyOfPatsInAnalysis <- nrow( SimData )
     }
     
