@@ -22,7 +22,7 @@ library( CyneRgy )
 ```
 
 # Introduction : 
-For all examples, we assume the trial design consist of control and an experimental treatment. Patients may dropout of a trial for a variety of reasons such as safety issues, treatment burden or other non-trial related issues. The dropout rate can be as high as 30% in some trials if the drug has adverse side effects. The introduction of dropout probabilities or dropout hazard rate plays a significant role during Data generation that can be further utilized during the analysis.
+For all examples, we assume the trial design consist of control and an experimental treatment. Patients may dropout of a trial for a variety of reasons such as safety issues, treatment burden or other non-trial related issues. The dropout rate can be as high as 30% in some trials if the drug has adverse side effects. The introduction of dropout probabilities or dropout hazard rate plays a significant role during data generation that can be further utilized during the analysis.
 
 In the RCode directory of this example you will find the following R files:
 
