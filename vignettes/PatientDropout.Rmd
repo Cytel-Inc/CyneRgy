@@ -1,0 +1,11 @@
+---
+title: "Simulate Patient Dropout for Single Endpoint 2 Arm Trials"
+author: "Shubham Lahoti"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  word_document: default
+  html_document: default
+---
+```{r child = '../inst/Examples/2ArmPatientDropout/Description.Rmd'}
+```
+

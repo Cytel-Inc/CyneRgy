@@ -9,8 +9,8 @@
 #'        {
 #'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
-#'          \item{SurvivalTime}{Numeric value for the survival time or time-to-event for the patient, note this is not the time in the trial
-#'                               that the patient experiences the event. }
+#'          \item{Response}{A numeric value indicating the response. }
+#'          \item{CensorIndOrg}{An integer value indicating whether the subject was censored or not. }
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
 #'      may need to compute test statistic and perform test. User should access the variables
@@ -22,8 +22,17 @@
 #'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
 #'          \item{LowerAlpha}{Two Sided Asymmetric Tests }
 #'          \item{UpperAlpha}{Two Sided Asymmetric Tests }
-#'          \item{MaxEvents}{Maximum Events in a time to event based trial}
+#'          \item{MaxCompleters}{Maximum Number of Completers}
 #'          \item{FollowUpType}{For survival tests, Follow Up Type.  Possible values are: Until End ofS Study: 0, For fixed period: 1}
+#'          \item{AllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size. }
+#'          \item{CriticalPoint}{Critical Value for a fixed sample design. }
+#'          \item{FollowUpType}{Follow up type. Integer value with the following meaning:\describe{
+#'                                    \item{FollowUpType = 0}{Until End of the Study}
+#'                                    \item{FollowUpType = 1}{For Fixed Period}
+#'                                    }
+#'                                    }
+#'          \item{FollowUpDur}{Follow up duration}
+#'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials. }
 #'      
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
@@ -50,7 +59,7 @@
 #' @return The function must return a list in the return statement of the function. The information below lists 
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{
-#'                  \item{Decision}{Required value. Integer Value with the following meaning:
+#'                  \item{Decision}{Optional value. Integer Value with the following meaning:
 #'                                  \describe{
 #'                                    \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
 #'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
@@ -59,6 +68,11 @@
 #'                                    \item{Decision = 4}{when the Equivalence Boundary Crossed}
 #'                                    } 
 #'                                    }
+#'                  \item{TestStat}{Numeric value. Required if Decision is not returned}
+#'                  \item{Delta}{Numeric value. Required if Decision is not returned AND Futility Boundary scale is either Delta or CP. }
+#'                  \item{CtrlCompleters}{Integer value. Required if Decision is not returned and Futility Boundary scale is CP. }
+#'                  \item{TrmtCompleters }{Integer value. Required if Decision is not returned and Futility Boundary scale is CP. }
+#'                  \item{CtrlPi}{Numeric value. Required if Decision is not returned and Futility Boundary scale is CP. }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}

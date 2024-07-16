@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,7 @@
     <a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a>
     <a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm, Time-to-Event Outcome</a>
     <a class="dropdown-item" href="../articles/2ArmBinaryOutcomePatientSimulation.html">2-Arm, Binary Outcome</a>
+    <a class="dropdown-item" href="../articles/2ArmNormalRepeatedMeasuresResponseGeneration.html">2-Arm, Repeated Measure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Analysis</h6>
     <a class="dropdown-item" href="../articles/2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome</a>
@@ -68,6 +69,8 @@
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6>
     <a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a>
+    <a class="dropdown-item" href="../articles/PatientDropout.html">Patient Dropout</a>
+    <a class="dropdown-item" href="../articles/PatientRandomization.html">Patient Randomization</a>
   </div>
 </li>
 <li class="nav-item">
@@ -104,7 +107,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">June 11, 2024 at 8:14 PM
+            <h4 data-toc-skip class="date">July 16, 2024 at 12:56 PM
 CDT</h4>
       
       
@@ -135,13 +138,14 @@ trial with a normally distributed patient outcome. For all examples, we
 assume the trial design consists of standard of care and an experimental
 treatment and the trial design assumes patient outcomes are normally
 distributed.</p></li>
-<li><p><strong>2-Arm, Binary Outcome, Patient Simulation</strong>: These
-examples demonstrate how to add new patient outcome simulation
-functionality into East using an R function in the context of a two-arm
-trial with normal outcomes. For all examples, we assume the trial design
-consists of standard of care and an experimental treatment. The patient
-outcomes are normal. The intent of these examples is to demonstrate how
-to add new ways to simulate patient data using R in a variety of trial
+<li><p><strong><a href="2ArmBinaryOutcomePatientSimulation.html">2-Arm,
+Binary Outcome, Patient Simulation</a></strong>: These examples
+demonstrate how to add new patient outcome simulation functionality into
+East using an R function in the context of a two-arm trial with normal
+outcomes. For all examples, we assume the trial design consists of
+standard of care and an experimental treatment. The patient outcomes are
+normal. The intent of these examples is to demonstrate how to add new
+ways to simulate patient data using R in a variety of trial
 examples.</p></li>
 <li><p><strong><a href="2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm,
 Time-to-Event Outcome, Patient Simulation</a></strong>: This example
@@ -151,19 +155,29 @@ design consists of standard of care and an experimental treatment. The
 patient outcomes are time-to-event. The intent of these examples is to
 demonstrate how to add new ways to simulate time-to-event data using
 R.</p></li>
+<li><p><strong><a href="2ArmNormalRepeatedMeasuresResponseGeneration.html">2-Arm, Repeated
+Measure, Patient Simulation</a></strong>: Repeated measures involve
+collecting multiple data points for the same variable from the same
+subjects across multiple time periods. This method provides insights
+into the subjects’ development and changes over time. In this context, a
+single subject can have multiple responses over time, and these
+responses can be correlated across different visits.</p></li>
 </ol>
+<p>For a Normal endpoint in repeated measures, the generation of
+responses primarily depends on the mean and standard deviation across
+all visits, as well as the correlation between these visits.</p>
 </div>
 <div class="section level3">
 <h3 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
 </h3>
 <ol style="list-style-type: decimal">
-<li><p><strong>2-Arm, Binary Outcome Analysis</strong>: This example
-demonstrates how to add new analysis functionality into East using an R
-function. For all examples, we assume the trial design consists of a
-control and experimental treatments. There are 2 Interim Analysis, IA,
-and a Final Analysis, FA. At the IA, the analysis is performed and
-depending on the example may determine early efficacy or early futility
-depending on the design.</p></li>
+<li><p><strong><a href="2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary Outcome
+Analysis</a></strong>: This example demonstrates how to add new analysis
+functionality into East using an R function. For all examples, we assume
+the trial design consists of a control and experimental treatments.
+There are 2 Interim Analysis, IA, and a Final Analysis, FA. At the IA,
+the analysis is performed and depending on the example may determine
+early efficacy or early futility depending on the design.</p></li>
 <li><p><strong><a href="2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm,
 Time-To-Event Outcome Analysis</a></strong>: This example demonstrates
 how to add new analysis functionality for time-to-event data into Cytel
@@ -200,7 +214,7 @@ to treatment selection.</li>
 design option.</p>
 <ol style="list-style-type: decimal">
 <li><p><strong><a href="AssurnaceConsecutiveStudies.html">Bayesian
-Assurance of Consecutive Studies</a> </strong>: The intent of this
+Assurance of Consecutive Studies</a></strong>: The intent of this
 example is to demonstrate the computation of Bayesian assurance, or
 probability of success, through the integration of East and R using a
 series of examples. These examples begin with a 2-arm, normal outcome,
@@ -213,6 +227,30 @@ Re-estimation</strong>: This example demonstrates how to add new
 approaches to the SSR when using time-to-event data. For the SSR in this
 type of design, the number of events can be increased by the function in
 R.</p></li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="other-integration-points">Other Integration Points<a class="anchor" aria-label="anchor" href="#other-integration-points"></a>
+</h3>
+<p>These examples provide examples for other integration points.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong><a href="GeneratePoissonArrival.html">Poisson Arrival
+Times</a></strong>: This example demonstrates how to add the ability to
+generate patient arrival time according to a Poisson process with a
+ramp-up. The examples included here are to provide different approaches
+for simulating arrival time according to a Poisson process.</p></li>
+<li><p><strong><a href="PatientDroput.html">Patient
+Dropout</a></strong>: For all examples, we assume the trial design
+consist of control and an experimental treatment. Patients may dropout
+of a trial for a variety of reasons such as safety issues, treatment
+burden or other non-trial related issues. The dropout rate can be as
+high as 30% in some trials if the drug has adverse side effects. The
+introduction of dropout probabilities or dropout hazard rate plays a
+significant role during data generation that can be further utilized
+during the analysis.</p></li>
+<li><p><strong><a href="PatientRandomization.html">Patient
+Randomization</a></strong>: Examples of how to use R for
+randomization.</p></li>
 </ol>
 </div>
 </div>

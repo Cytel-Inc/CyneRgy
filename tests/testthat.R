@@ -1,4 +1,4 @@
 library(testthat)
-library(GCalculations)
+library(CyneRgy)
 
-test_check("GCalculations")
+test_check("CyneRgy")
