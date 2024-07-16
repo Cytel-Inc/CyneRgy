@@ -1,5 +1,5 @@
 ---
-title: 'Generate Responses for 2 arm Normal Repeated measures'
+title: 'Generate Responses for 2 Arm Normal Repeated Measures'
 author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -22,11 +22,9 @@ library( CyneRgy )
 ```
 
 # Introduction :
+Repeated measures involve collecting multiple data points for the same variable from the same subjects across multiple time periods. This method provides insights into the subjects' development and changes over time. In this context, a single subject can have multiple responses over time, and these responses can be correlated across different visits.
 
-Repeated measures deal with multiple measures of the same variable on the same subjects over more than one time periods to learn the development and other changes in subjects over time. 
-Repeated measures can have multiple responses for a same subject over time. And the responses between the visits can be correlated.
-
-So the response generation for Normal endpoint in Repeated measures primarily depends on Mean for all visits, Standard deviation for all visits, Correlation between the visits.
+For a Normal endpoint in repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits.
 
 In the R Code directory of this example you will find the following R files:
 
