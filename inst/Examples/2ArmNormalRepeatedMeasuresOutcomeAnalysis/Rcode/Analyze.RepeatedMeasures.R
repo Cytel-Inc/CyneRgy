@@ -43,7 +43,6 @@
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
 #'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
-#'                      \item{CumAlpha}{cumulative alpha spent, one sided tests}
 #'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible vaues are: Z Scale: 0, p-Value Scale: 1}
 #'                      \item{EffBdry}{Vector of efficacy bondaries, one sided tests}
 #'                      \item{EffBdryUpper}{Vector of upper efficacy bondaries, two sided tests}
@@ -95,38 +94,62 @@
 #'                      
 Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
+  # This example is for the case of no dropouts only
   nError <- 0
   nDecision <- 0
   dPrimDelta <- 0
   dSecDelta <- 0
-  
-  nLookIndex           <- 1 
+   
   if(  !is.null( LookInfo )  )
   {
     nQtyOfLooks          <- LookInfo$NumLooks
     nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    nQtyOfPatsForInterim <- LookInfo$CumCompleters[ nLookIndex ]
+    nAnalysisVisit       <- LookInfo$InterimVisit
   } else
   {
+    nLookIndex           <- 1
     nQtyOfLooks          <- 1
-    nQtyOfPatsInAnalysis <- nrow( SimData )
+    nQtyOfPatsForInterim <- nrow( SimData )
   }
 
   dfWideData <- data.frame(id = 1:DesignParam$SampleSize, TreatmentID = SimData$TreatmentID)
   vResponseColumns <- c()
+  vVisitTimesColumns <- c()
   for (i in 1:DesignParam$NumVisit) {
       dfWideData[[paste0("Response", i)]] <- SimData[, paste0("Response",i)]
       vResponseColumns <- c(vResponseColumns, paste0("Response", i))
+      dfWideData[[paste0("CalendarVisitTime", i)]] <- SimData[,'ArrivalTime'] + SimData[, paste0("ArrTimeVisit", i)]
+      vVisitTimesColumns <- c(vVisitTimesColumns, paste0("CalendarVisitTime", i))
   }
   
-  dfLongData <- reshape(dfWideData, varying = vResponseColumns,
-                      direction = "long", sep = "", idvar = "id")
-  dfLongData <- longData[order(longData$TreatmentID, longData$id, longData$time),]
+  dfLongData <- reshape(dfWideData, varying = c(vResponseColumns, vVisitTimesColumns),
+                      direction = "long", sep = "", idvar = "id", timevar = "Visit")
+  dfLongData <- dfLongData[order(dfLongData$Visit, dfLongData$CalendarVisitTime),]
+  
+  if(  !is.null( LookInfo )  )
+  {
+      dAnalysisTime <- dfLongData[dfLongData[['Visit']] == nAnalysisVisit, ][nQtyOfPatsForInterim, "CalendarVisitTime"]
+      
+      if (LookInfo$IncludePipeline == 0)
+      {
+          vSubjectsForAnalysis <- unique(dfLongData[dfLongData[['Visit']] == nAnalysisVisit & dfLongData[['CalendarVisitTime']] <= dAnalysisTime, 'id'])
+      } else 
+      {
+          vSubjectsForAnalysis <- unique(dfLongData[dfLongData[['CalendarVisitTime']] <= dAnalysisTime, 'id'])
+      }
+      
+      dfAnalysisData <- dfLongData[dfLongData[['id']] %in% vSubjectsForAnalysis, ]
+  } else
+  {
+      dfAnalysisData <- dfLongData
+  }
+  
   
   mmrm <- gls(Response ~ TreatmentID,
-              na.action = na.omit, data = dfLongData,
-              correlation = nlme::corSymm(form = ~ time | id),
-              weights = nlme::varIdent(form = ~ 1|time))
+              na.action = na.omit, data = dfAnalysisData,
+              correlation = nlme::corSymm(form = ~ Visit | id),
+              weights = nlme::varIdent(form = ~ 1|Visit))
   
   dpValue <- summary(mmrm)$tTable["TreatmentID", "p-value"]
   
@@ -139,6 +162,7 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
       dAlpha <- DesignParam$Alpha
   }
   
+  # Check for efficacy
   if(dpValue <= dAlpha)
   {
       nDecision <- 2
@@ -147,7 +171,15 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
       nDecision <- 0 
   }
   
-  retval <- summary(mmrm)$tTable["TreatmentID","t-value"]
+  if( nDecision == 0 )
+  {
+      # At the final analysis we want to make a futility if efficacy was not achieved.
+      # We are at the FA, efficacy decision was not made yet so the decision is futility
+      if( nLookIndex == nQtyOfLooks ) 
+      {
+          nDecision <- 3 # Code for futility 
+      }
+  }
   
   return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDelta), SecDelta = as.double(dSecDelta), ErrorCode = as.integer(nError)))
 }
