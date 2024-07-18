@@ -23,6 +23,8 @@ navbar:
                   href: articles/2ArmTimeToEventOutcomePatientSimulationDescription.html
                 - text: 2-Arm, Binary Outcome
                   href: articles/2ArmBinaryOutcomePatientSimulation.html
+                - text: 2-Arm, Repeated Measure
+                  href: articles/2ArmNormalRepeatedMeasuresResponseGeneration.html
                 - text: --------------------
                 - text: Analysis 
                 - text: 2-Arm, Normal Outcome 
@@ -43,6 +45,10 @@ navbar:
                 - text: Other Integration Points
                 - text: Poisson Arrival Times
                   href: articles/GeneratePoissonArrival.html
+                - text: Patient Dropout
+                  href: articles/PatientDropout.html
+                - text: Patient Randomization
+                  href: articles/PatientRandomization.html
         references:
             text: References
             href: reference/index.html

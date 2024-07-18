@@ -24,7 +24,8 @@ for( iFile in 1:length( vFilesToAdd ) )
 # Adding the logo.png ####
 ######################################################################################################################## .
 library( usethis)
-usethis::use_logo( "CyneRgy.png")
+usethis::use_logo( "NewCyneRgyLogoDark.png")
+
 
 ######################################################################################################################## .
 # Add new functions here ####
@@ -37,6 +38,15 @@ PREP::AddFunctionToPkg("ReplaceTagsInFile", "This function is used to replace {{
 
 PREP::AddFunctionToPkg("CombineAllRFiles", "This function is used to combine all .R files in a directory into a single file for use in Cytel products. ")
 
+######################################################################################################################## .
+# Adding a new Example ####
+######################################################################################################################## .
+
+To add an exmaple:
+    1. create the folder
+    2. Write the example 
+    3. Add a file similar to the the ones int the vignettes that references the example
+    4. Update the _pkgdown.yml file 
 
 
 ######################################################################################################################## .
