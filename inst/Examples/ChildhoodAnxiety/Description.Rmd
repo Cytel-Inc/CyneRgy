@@ -1,0 +1,42 @@
+---
+title: 'Trial in Childhood Anxiety'
+author: "Audrey Wathen, J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 5
+    number_sections: true
+    latex_engine: tinytex
+  word_document: default
+  pdf_document:
+    toc: true
+    toc_depth: '5'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library( CyneRgy )
+```
+
+# Introduction
+Please describe your example and put details of that.
+
+# Simulation Results
+Describe the fact that the initial sample size of XXX has a power of 90% when the data is normal.  However, when the data is simulated using a more realistic patient simulate the power drops to about 85%.  
+
+Discuss how to search for a sample size that will result in 90% power when using the more realistic patient simulation. 
+
+Discuss the fact that the original sample size would have resulted in an under powered study and thus be less likely to identify a treatment advance. 
+
+
+# Initial R Code Developement
+
+Discuss the use of UserParam and show screenshot example of what the input looks with multiple tabs in East Horizon
+Describe difficulties in how the filters were difficult to get what we wanted with this approach. 
+
+# Improved R Code
+Make sure to point out the fact that using East Horizon built in parameters has the advantage of having multiple values for each parameter where as the UserParam does not currently allow for this.   Thus, thinking about the input when developing the R code can make design exploration easier and less cumbersome.  
+

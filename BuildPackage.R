@@ -24,7 +24,9 @@ for( iFile in 1:length( vFilesToAdd ) )
 # Adding the logo.png ####
 ######################################################################################################################## .
 library( usethis)
+library( pkgdown)
 usethis::use_logo( "NewCyneRgyLogoDark.png")
+pkgdown::build_favicons( overwrite = TRUE)
 
 
 ######################################################################################################################## .
@@ -44,9 +46,9 @@ PREP::AddFunctionToPkg("CombineAllRFiles", "This function is used to combine all
 
 To add an exmaple:
     1. create the folder
-    2. Write the example 
-    3. Add a file similar to the the ones int the vignettes that references the example
-    4. Update the _pkgdown.yml file 
+2. Write the example 
+3. Add a file similar to the the ones int the vignettes that references the example
+4. Update the _pkgdown.yml file 
 
 
 ######################################################################################################################## .
@@ -58,3 +60,12 @@ devtools::document(roclets = c('rd', 'collate', 'namespace', 'vignette'))
 devtools::build()
 devtools::install()
 pkgdown::build_site()
+
+
+
+######################################################################################################################## .
+# Add examples  ####
+######################################################################################################################## .
+library( CyneRgy )
+setwd( "./inst/Examples")
+CyneRgy::CreateCyneRgyExample( strFunctionType = "SimulatePatientOutcome.Continuous", strNewExampleName = "ChildhoodAnxiety" )
