@@ -22,21 +22,61 @@ library( CyneRgy )
 ```
 
 # Introduction
-Please describe your example and put details of that.
+his script is designed to simulate patient outcomes in a clinical trial, specifically focusing on the impact of two treatments on patient health as measured by the Child Health Utility 9D (CHU9D). The CHU9D is a health-related quality of life measure that assesses health status across nine dimensions.
+
+The script begins by sourcing a separate R script file, "simulatePatientOutcomeCHU9.R", which presumably contains a function for simulating patient outcomes based on provided parameters.
+
+Next, the script sets up the parameters for the simulation. It specifies the number of subjects (NumSub), the treatment each subject receives (TreatmentID), and the mean and standard deviation for the two treatments (Mean and StdDev). User-defined parameters for the mean and standard deviation at follow-up for both the control and experimental groups are also set (UserParam).
+
+The SimulatePatientOutcome function is then called with these parameters, and the results are stored in a dataframe, dfPatientData. The dataframe contains the TreatmentID for each patient and the corresponding simulated PatientOutcome.
+
+The script then checks the validity of the simulated data. It verifies that the response values (which represent changes in CHU9D scores) lie within the expected range (-36 to 36), and that the mean responses for the control and experimental groups match the expected values.
+
+
 
 # Simulation Results
-Describe the fact that the initial sample size of XXX has a power of 90% when the data is normal.  However, when the data is simulated using a more realistic patient simulate the power drops to about 85%.  
 
-Discuss how to search for a sample size that will result in 90% power when using the more realistic patient simulation. 
 
-Discuss the fact that the original sample size would have resulted in an under powered study and thus be less likely to identify a treatment advance. 
+In a clinical trial setting, the sample size and statistical power are key determinants of the study's ability to detect true treatment effects. When we assume a sample size of 234 and a true difference of 5 under normal data distribution, the statistical power is 90%. This power signifies that we have a 90% chance of detecting a true treatment effect, if one exists.
+
+However, this scenario changes when we introduce a more realistic patient simulation. In this context, the statistical power drops to approximately 85%. This decrease implies that, under these more realistic conditions, we would have an 85% chance of detecting a true treatment effect, given the same sample size of 234.
+
+Knowing that a sample size of 234 is insufficient under realistic conditions, it would be prudent to conduct further tests with larger sample sizes. For instance, we could run simulations with sample sizes ranging from 240 to 300, increasing in increments of 10. By examining the resulting statistical power for each of these sample sizes, we could identify the smallest sample size that brings us closest to a desired power of 90%.
+
+If we were to proceed with the original sample size of 234 under realistic conditions, our study would be under powered. Being underpowered means that our study would have a reduced likelihood of identifying a significant treatment effect, even if one truly exists. This could potentially lead to the erroneous conclusion that a potentially effective treatment is ineffective, thereby missing an opportunity for treatment advancement.
+
+In summary, while a sample size of 234 yields a power of 90% under normal data distribution, the power decreases to around 85% when we implement a more realistic patient simulation. This highlights the importance of considering realistic conditions when determining the sample size for a study, to ensure adequate power to detect true treatment effects.
 
 
 # Initial R Code Developement
 
-Discuss the use of UserParam and show screenshot example of what the input looks with multiple tabs in East Horizon
-Describe difficulties in how the filters were difficult to get what we wanted with this approach. 
+UserParams is a list that holds user defined parameters. These parameters are used to define the mean and standard deviation of the follow-up scores for both the control group and experimental group in the simulation.Specifically, the UserParam list includes the following elements:
+
+       dMeanFollowUpCtrl: This parameter represents the mean follow-up score for the control group. It is used to generate simulated patient outcomes for individuals in the control group.
+       
+       dMeanFollowUpExp: This parameter signifies the mean follow-up score for the experimental group. It is used to generate simulated patient outcomes for individuals in the experimental group.
+       
+       dStdDevFollowUpCtrl: This parameter denotes the standard deviation of the follow-up scores for the control group. It influences the spread of the simulated patient outcomes around the mean for the control group.
+       
+        dStdDevFollowUpExp: This parameter indicates the standard deviation of the follow-up scores for the experimental group. It affects the spread of the simulated patient outcomes around the mean for the experimental group.
+
+In the original version of the code, we had to manually create 12 different cards to represent the 12 distinct scenarios. This was necessary because the UserParam argument in our function was designed to accept only a single value for each variable.
+
+This approach, however, was not only labor-intensive but also presented challenges in terms of data filtering. Specifically, it was difficult to extract and display the desired information from these scenarios. The process of setting up the scenarios and then filtering the results to show what we wanted was cumbersome and inefficient.
+
+To improve this, we could consider modifying the function to accept multiple values for each variable in the UserParam argument. This would allow us to streamline the process of creating and managing different scenarios, making the code more efficient and user-friendly.
+
+
+
+![East Horizion R code Devolpment](image.jpg)
+
 
 # Improved R Code
-Make sure to point out the fact that using East Horizon built in parameters has the advantage of having multiple values for each parameter where as the UserParam does not currently allow for this.   Thus, thinking about the input when developing the R code can make design exploration easier and less cumbersome.  
 
+In utilizing the built-in parameters provided by East Horizons, I discovered a valuable feature: the ability to input multiple values for each parameter on a single line. This streamlined the process, making it easier to manage and adjust the parameters. Unfortunately, the current UserParam function in our script does not offer this capability.
+
+Reflecting on this, it's clear that the way we structure our input during the development phase can significantly impact the ease of design exploration. By considering the user experience and optimizing for efficiency in the early stages of code development, we can create a less cumbersome and more intuitive process. This approach would be particularly beneficial when dealing with complex simulations or data models, where the ability to easily adjust and experiment with different parameters is crucial.
+
+In light of this, it might be worth revising the UserParam function to allow for multiple input values per parameter. This change could enhance the flexibility and user-friendliness of our code, making design exploration a smoother, more efficient process.
+
+![East Horizion Improved R code](image2.jpg)
