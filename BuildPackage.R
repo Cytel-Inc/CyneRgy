@@ -38,6 +38,7 @@ PREP::AddFunctionToPkg("ReplaceTagsInFile", "This function is used to replace {{
 
 PREP::AddFunctionToPkg("CombineAllRFiles", "This function is used to combine all .R files in a directory into a single file for use in Cytel products. ")
 
+PREP::AddFunctionToPkg( "GetDecision", "This function takes a string for the desired decision, design and look info and return the correct decision value. ")
 ######################################################################################################################## .
 # Adding a new Example ####
 ######################################################################################################################## .
