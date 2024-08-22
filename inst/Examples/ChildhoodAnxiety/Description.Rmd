@@ -22,9 +22,9 @@ library( CyneRgy )
 ```
 
 # Introduction
-his script is designed to simulate patient outcomes in a clinical trial, specifically focusing on the impact of two treatments on patient health as measured by the Child Health Utility 9D (CHU9D). The CHU9D is a health-related quality of life measure that assesses health status across nine dimensions.
+In this example, we cover cover the situation where the patient data simulation needs to be improved to match what is expected in a clinical trial in childhood anxiety.  The primary outcome in this clinical trial is the change from baseline to follow-up of the Child Health Utility 9D (CHU9D), which is a health-related quality of life measure that assesses health status across nine dimensions for children with anxiety.   This example focuses on developing an approach to simulate the patient data that is realistic and understanding the impact on the power or the the study.  
 
-The script begins by sourcing a separate R script file, "simulatePatientOutcomeCHU9.R", which presumably contains a function for simulating patient outcomes based on provided parameters.
+The first step is to create an R function for simulating patient outcomes.  The function is found in ("simulatePatientOutcomeCHU9.R")[/RCode/SimulatePatientOutcomes], which presumably contains a function for simulating patient outcomes based on provided parameters.
 
 Next, the script sets up the parameters for the simulation. It specifies the number of subjects (NumSub), the treatment each subject receives (TreatmentID), and the mean and standard deviation for the two treatments (Mean and StdDev). User-defined parameters for the mean and standard deviation at follow-up for both the control and experimental groups are also set (UserParam).
 
