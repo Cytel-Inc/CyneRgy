@@ -35,7 +35,7 @@ SimulatePatientSurvivalMixtureExponentials <- function(NumSub, NumArm, Treatment
     vSurvTime <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
     
     vTreatmentID <- TreatmentID +1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
-    ErrorCode    <- rep( -1, NumSub ) 
+    ErrorCode    <- as.integer( 0 ) 
     
     
     if(SurvMethod == 1)   # Hazard Rates
@@ -90,12 +90,11 @@ SimulatePatientSurvivalMixtureExponentials <- function(NumSub, NumArm, Treatment
                     dRate                 <- mRates[ nPatientGroup, nPatientTreatment ]
                     vSurvTime[ nPatIndx ] <- rexp( 1, dRate )
                 }
-                ErrorCode    <- rep( 0, NumSub ) 
+                ErrorCode    <- as.integer( 0 ) 
             }
             else
             {
-                #ErrorCode <- 1
-                ErrorCode <- ERROR1   # CAUSE_AN_ERROR is not defined so should cause in error
+                ErrorCode <- -1
                 
             }
         }
@@ -103,15 +102,15 @@ SimulatePatientSurvivalMixtureExponentials <- function(NumSub, NumArm, Treatment
     }
     else if(SurvMethod == 2)   # Cumulative % Survivals
     {
-        ErrorCode <- ERROR1 # ERROR1 is not defined so this will cause an error if the users selects anything besides Hazard Rate and uses this function
+        ErrorCode <- -1 # < 0 --> Stop the simulations
         
     }
     else if(SurvMethod == 3)   # Median Survival Times
     {
-        ErrorCode <- ERROR3   # ERROR2 is not defined so this will cause an error if the users selects anything besides Hazard Rate and uses this function
+        ErrorCode <- -2   # < 0 --> Stop simulations
     }
     
-    return(list(SurvivalTime = as.double(vSurvTime), ErrorCode = ErrorCode) )
+    return(list(SurvivalTime = as.double(vSurvTime), ErrorCode = as.integer( ErrorCode ) ) )
 }
 
 

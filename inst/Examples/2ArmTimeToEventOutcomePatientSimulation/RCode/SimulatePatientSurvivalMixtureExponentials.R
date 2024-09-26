@@ -42,7 +42,7 @@ SimulatePatientSurvivalMixtureExponentials <- function(NumSub, NumArm, Treatment
     vSurvTime    <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
     
     vTreatmentID <- TreatmentID +1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
-    ErrorCode    <- rep( -1, NumSub ) 
+    ErrorCode    <- as.integer( 0 ) 
     
     ## Step 1.1 Read the UserParam and create required variables ####
     nQtyOfSubgroups <- UserParam$QtyOfSubgroups 

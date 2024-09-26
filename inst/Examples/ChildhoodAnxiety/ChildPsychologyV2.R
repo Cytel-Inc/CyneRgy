@@ -1,16 +1,16 @@
-source("simulatePatientOutcomeCHU9.R")
+source("RCode/simulatePatientOutcomeCHU9V2.R")
 
 # Call the function with some parameter values
 NumSub      <- 100
 TreatmentID <- sample(0:1, NumSub, replace = TRUE)
-Mean        <- c(25, 25)
-StdDev      <- c(5, 5)
+Mean        <- c(0, 10)
+StdDev      <- c(10.6, 10.6)
 
 
-UserParam   <- list(dMeanFollowUpCtrl = 25,
-                    dMeanFollowUpExp  = 15,
-                    dStdDevFollowUpCtrl = 5,
-                    dStdDevFollowUpExp =5 )
+UserParam   <- list(dMeanBaselineCtrl = 25,
+                    dMeanBaselineExp  = 25,
+                    dStdDevBaselineCtrl = 10.6,
+                    dStdDevBaselineExp =10.6 )
 
 lRet<-SimulatePatientOutcome(NumSub, TreatmentID, Mean, StdDev, UserParam)
 

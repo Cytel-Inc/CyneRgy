@@ -1,16 +1,16 @@
-source("simulatePatientOutcomeCHU9V2.R")
+source("RCode/simulatePatientOutcomeCHU9.R")
 
 # Call the function with some parameter values
 NumSub      <- 100
 TreatmentID <- sample(0:1, NumSub, replace = TRUE)
-Mean        <- c(0, 10)
-StdDev      <- c(10.6, 10.6)
+Mean        <- c(25, 25)
+StdDev      <- c(5, 5)
 
 
-UserParam   <- list(dMeanBaselineCtrl = 25,
-                    dMeanBaselineExp  = 25,
-                    dStdDevBaselineCtrl = 10.6,
-                    dStdDevBaselineExp =10.6 )
+UserParam   <- list(dMeanFollowUpCtrl = 25,
+                    dMeanFollowUpExp  = 15,
+                    dStdDevFollowUpCtrl = 5,
+                    dStdDevFollowUpExp =5 )
 
 lRet<-SimulatePatientOutcome(NumSub, TreatmentID, Mean, StdDev, UserParam)
 
@@ -38,10 +38,11 @@ table( dfPatientData)
 library(ggplot2)
 
 # Create a histogram of PatientOutcome by TreatmentID
-ggplot(dfPatientData, aes(x=PatientOutcome, fill=factor(TreatmentID))) +
-    geom_histogram(binwidth=1, alpha=0.5, position="identity") +
-    labs(x="Patient Outcome", y="Count", fill="Treatment ID") +
-    theme_minimal() +
-    facet_grid(~factor(TreatmentID), scales = "free_y") +
-    ggtitle("Histogram of Patient Outcomes by Treatment")
+gPlot <- ggplot(dfPatientData, aes(x=PatientOutcome, fill=factor(TreatmentID))) +
+        geom_histogram(binwidth=1, alpha=0.5, position="identity") +
+        labs(x="Patient Outcome", y="Count", fill="Treatment ID") +
+        theme_minimal() +
+        facet_grid(~factor(TreatmentID), scales = "free_y") +
+        ggtitle("Histogram of Patient Outcomes by Treatment")
 
+print( gPlot )
