@@ -1,4 +1,4 @@
-source("simulatePatientOutcomeCHU9V2.R")
+source("RCode/simulatePatientOutcomeCHU9V2.R")
 
 # Call the function with some parameter values
 NumSub      <- 100
