@@ -38,7 +38,7 @@ SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMetho
     # Step 1 - Initialize the return variables or other variables needed ####    
     vSurvTime    <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
     vTreatmentID <- TreatmentID +1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
-    ErrorCode    <- rep( -1, NumSub ) 
+    ErrorCode    <- as.integer( 0 )
     
     # Step 2 - Validate custom variable input and set defaults ####
     if( is.null( UserParam ) )

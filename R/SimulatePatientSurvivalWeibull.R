@@ -69,7 +69,7 @@ SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMetho
 
     }
 
-    lRet <- list(SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode)
+    lRet <- list(SurvivalTime = as.double( vSurvTime ), ErrorCode = as.integer( ErrorCode) )
     return( lRet )
 }
 

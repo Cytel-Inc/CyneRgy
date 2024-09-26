@@ -43,7 +43,6 @@
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
 #'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
-#'                      \item{CumAlpha}{cumulative alpha spent, one sided tests}
 #'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible vaues are: Z Scale: 0, p-Value Scale: 1}
 #'                      \item{EffBdry}{Vector of efficacy bondaries, one sided tests}
 #'                      \item{EffBdryUpper}{Vector of upper efficacy bondaries, two sided tests}

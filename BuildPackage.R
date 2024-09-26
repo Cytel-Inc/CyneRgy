@@ -24,7 +24,9 @@ for( iFile in 1:length( vFilesToAdd ) )
 # Adding the logo.png ####
 ######################################################################################################################## .
 library( usethis)
+library( pkgdown)
 usethis::use_logo( "NewCyneRgyLogoDark.png")
+pkgdown::build_favicons( overwrite = TRUE)
 
 
 ######################################################################################################################## .
@@ -38,15 +40,16 @@ PREP::AddFunctionToPkg("ReplaceTagsInFile", "This function is used to replace {{
 
 PREP::AddFunctionToPkg("CombineAllRFiles", "This function is used to combine all .R files in a directory into a single file for use in Cytel products. ")
 
+PREP::AddFunctionToPkg( "GetDecision", "This function takes a string for the desired decision, design and look info and return the correct decision value. ")
 ######################################################################################################################## .
 # Adding a new Example ####
 ######################################################################################################################## .
 
 To add an exmaple:
     1. create the folder
-    2. Write the example 
-    3. Add a file similar to the the ones int the vignettes that references the example
-    4. Update the _pkgdown.yml file 
+2. Write the example 
+3. Add a file similar to the the ones int the vignettes that references the example
+4. Update the _pkgdown.yml file 
 
 
 ######################################################################################################################## .
@@ -58,3 +61,12 @@ devtools::document(roclets = c('rd', 'collate', 'namespace', 'vignette'))
 devtools::build()
 devtools::install()
 pkgdown::build_site()
+
+
+
+######################################################################################################################## .
+# Add examples  ####
+######################################################################################################################## .
+library( CyneRgy )
+setwd( "./inst/Examples")
+CyneRgy::CreateCyneRgyExample( strFunctionType = "SimulatePatientOutcome.Continuous", strNewExampleName = "ChildhoodAnxiety" )
