@@ -1,0 +1,25 @@
+---
+title: 'BayesainRegressionWithNormalData'
+author: "J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 5
+    number_sections: true
+    latex_engine: tinytex
+  word_document: default
+  pdf_document:
+    toc: true
+    toc_depth: '5'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library( CyneRgy )
+```
+
+# Introduction
+In this example we use R integration to add a patient prognosis covariate to the patient simulation and analyze the data with a Bayesian regression model.  The Bayesian model is fit using JAGS.  
