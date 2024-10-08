@@ -70,3 +70,5 @@ pkgdown::build_site()
 library( CyneRgy )
 setwd( "./inst/Examples")
 CyneRgy::CreateCyneRgyExample( strFunctionType = "SimulatePatientOutcome.Continuous", strNewExampleName = "ChildhoodAnxiety" )
+
+CyneRgy::CreateCyneRgyExample( strFunctionType = "SimulatePatientOutcome.Continuous", strNewExampleName = "BayesainRegressionWithNormalData", "inst/Examples")

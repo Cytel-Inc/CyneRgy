@@ -81,6 +81,7 @@
 #'                      }
 RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
+    library(CyneRgy)
    
     library( R2jags )
     
