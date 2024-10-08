@@ -100,6 +100,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 0
                 }
+                else if(strDecision == "Efficacy")
+                {
+                    stop("CyneRgy::GetDecision - Efficacy check is not enabled at this look. Therefore, 'EFficacy' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Futility'.")
+                }
                 
             }
             else # It is a futility only design at the final analysis
@@ -111,6 +115,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 else if( strDecision == "Efficacy" )
                 {
                     nReturnDecision <- 0
+                }
+                else if( strDecision == "Continue")
+                {
+                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
                 }
                 
             }
@@ -128,6 +136,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 0
                 }
+                else if(strDecision == "Futility")
+                {
+                    stop("CyneRgy::GetDecision - Futility check is not enabled at this look. Therefore, 'Futility' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Efficacy'.")
+                }
             }
             else
             {
@@ -138,6 +150,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 else if(strDecision == "Futility"  )
                 {
                     nReturnDecision <- 0
+                }
+                else if(strDecision == "Continue")
+                {
+                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
                 }
                 
             }
@@ -169,6 +185,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 else if(strDecision == "Futility"  )
                 {
                     nReturnDecision <- 3
+                }
+                else if(strDecision == "Continue")
+                {
+                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
                 }
                 
             }
@@ -189,6 +209,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 0
                 }
+                else if(strDecision == "Efficacy")
+                {
+                    stop("CyneRgy::GetDecision - EFficacy check is not enabled at this look. Therefore, 'Efficacy' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Futility'.")
+                }
                 
             }
             else # It is a futility only design at the final analysis
@@ -200,6 +224,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 else if( strDecision == "Efficacy" )
                 {
                     nReturnDecision <- 0
+                }
+                else if(strDecision == "Continue")
+                {
+                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
                 }
                 
             }
@@ -217,6 +245,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 0
                 }
+                else if(strDecision == "Futility")
+                {
+                    stop("CyneRgy::GetDecision - Futility check is not enabled at this look. Therefore, 'Futility' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Efficacy'.")
+                }
             }
             else
             {
@@ -227,6 +259,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 else if(strDecision == "Futility"  )
                 {
                     nReturnDecision <- 0
+                }
+                else if(strDecision == "Continue")
+                {
+                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
                 }
                 
             }
@@ -259,6 +295,10 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 3
                 }
+                else if(strDecision == "Continue")
+                {
+                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
+                }
                 
             }
         }
@@ -268,17 +308,3 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
     
     return( as.integer(nReturnDecision) )
 }
-# DesignParam <- list( TailType = 1)
-# LookInfo    <- list( RejType = 0, CurrLookIndex = 1, NumLooks = 2 )
-# GetDecision( "Efficacy", DesignParam, LookInfo )   
-# 
-# GetDecision( "Futility", lFixedDesign$DesignParam, lFixedDesign$LookInfo )  
-# 
-# lFutilityOnly$LookInfo$CurrLookIndex <- 1
-# GetDecision(  "Futility", lFutilityOnly$DesignParam, lFutilityOnly$LookInfo )
-# GetDecision(  "Continue", lFutilityOnly$DesignParam, lFutilityOnly$LookInfo )
-# 
-# 
-# lFutilityOnly$LookInfo$CurrLookIndex <- 2
-# GetDecision(  "Efficacy", lFutilityOnly$DesignParam, lFutilityOnly$LookInfo )
-# GetDecision(  "Futility", lFutilityOnly$DesignParam, lFutilityOnly$LookInfo )
