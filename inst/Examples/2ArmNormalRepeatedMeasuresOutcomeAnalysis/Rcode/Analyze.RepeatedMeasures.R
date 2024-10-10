@@ -192,3 +192,4 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
   
   return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDelta), SecDelta = as.double(dSecDelta), ErrorCode = as.integer(nError)))
 }
+
