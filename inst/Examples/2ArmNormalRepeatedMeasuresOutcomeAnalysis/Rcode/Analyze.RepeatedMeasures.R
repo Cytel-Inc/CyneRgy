@@ -94,6 +94,8 @@
 #'                      
 Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
+  library(CyneRgy)
+    
   # This example is for the case of no dropouts only
   nError <- 0
   nDecision <- 0
@@ -162,24 +164,31 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
       dAlpha <- DesignParam$Alpha
   }
   
-  # Check for efficacy
-  if(dpValue <= dAlpha)
+  # Set look decision logic
+  if( nLookIndex < nQtyOfLooks ) # Interim Analysis
   {
-      nDecision <- 2
-  } else
-  {
-      nDecision <- 0 
-  }
-  
-  if( nDecision == 0 )
-  {
-      # At the final analysis we want to make a futility if efficacy was not achieved.
-      # We are at the FA, efficacy decision was not made yet so the decision is futility
-      if( nLookIndex == nQtyOfLooks ) 
+      if( dpValue <= dAlpha )
       {
-          nDecision <- 3 # Code for futility 
+          strDecision <- "Efficacy"
+      }
+      else
+      {
+          strDecision <- "Continue"
       }
   }
+  else # Final Analysis
+  {
+      if( dpValue <= dAlpha )
+      {
+          strDecision <- "Efficacy"
+      }
+      else
+      {
+          strDecision <- "Futility"
+      }
+  }
+  
+  nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
   
   return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDelta), SecDelta = as.double(dSecDelta), ErrorCode = as.integer(nError)))
 }

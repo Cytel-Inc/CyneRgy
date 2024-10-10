@@ -29,6 +29,7 @@
 ######################################################################################################################## .
 AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
+    library(CyneRgy)
 
     # Step 1: Retrieve necessary information from the objects East sent ####
     if(  !is.null( LookInfo )  )
@@ -57,24 +58,35 @@ AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam
     lAnalysisResult      <- prop.test(mData, alternative = "greater", correct = FALSE)
     dPValue              <- lAnalysisResult$p.value
     dZValue              <- qnorm( 1 - dPValue )
+    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint,
+                                    LookInfo$EffBdryUpper[ nLookIndex] )
     
-    if(  !is.null( LookInfo )  )
+    # Setup look decision logic
+    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
-        nDecision            <- ifelse( dZValue > LookInfo$EffBdryUpper[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial  
-    }
-    else
-    {
-        nDecision            <- ifelse( dZValue > DesignParam$CriticalPoint, 2, 0 )    
-    }
-    if( nDecision == 0 )
-    {
-        # Did not hit efficacy, so check futility 
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks ) 
+        
+        if( dZValue > dBoundary )
         {
-            nDecision <- 3 # Code for futility 
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Continue"
         }
     }
+    else # Final Analysis
+    {
+        if( dZValue > dBoundary  )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
+        }
+    }
+    
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	= 0
     

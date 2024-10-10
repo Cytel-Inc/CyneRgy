@@ -94,13 +94,17 @@
 #'                      
 {{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-     nError        <- 0
-     nDecision     <- 0
-     dPrimDeltaEst <- 0
-     dSecDeltaEst  <- 0
+     library(CyneRgy)
+    
+     nError           <- 0
+     nDecision        <- 0
+     dPrimDeltaEst    <- 0
+     dSecDeltaEst     <- 0
+     bIAEfficayCheck  <- TRUE
+     bIAFutilityCheck <- FALSE
+     bFAEfficacyCheck <- TRUE
      
      # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
-     nLookIndex           <- 1 
      if(  !is.null( LookInfo )  )
      {
          nQtyOfLooks          <- LookInfo$NumLooks
@@ -110,8 +114,41 @@
      else
      {
          nQtyOfLooks          <- 1
+         nLookIndex           <- 1
          nQtyOfPatsInAnalysis <- nrow( SimData )
      }
+     
+     # Setup look decision logic
+     if( nLookIndex < nQtyOfLooks )  # Interim Analysis
+     {
+         
+         if( bIAEfficayCheck )
+         {
+             strDecision <- "Efficacy"
+         }
+         else if( bIAFutilityCheck )
+         {
+             strDecision <- "Futility"
+         }
+         else
+         {
+             strDecision <- "Continue"
+         }
+     }
+     else # Final Analysis
+     {
+         if( bFAEfficacyCheck  )
+         {
+             strDecision <- "Efficacy"
+         }
+         else
+         {
+             strDecision <- "Futility"
+         }
+     }
+     
+     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+     
      
      return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDeltaEst), SecDelta = as.double(dSecDeltaEst), ErrorCode = as.integer(nError)))
 }
