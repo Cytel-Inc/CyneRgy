@@ -94,6 +94,8 @@
 #'                      
 Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
+  library(CyneRgy)
+    
   # This example is for the case of no dropouts only
   nError <- 0
   nDecision <- 0
@@ -186,7 +188,7 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
       }
   }
   
-  nDecision <- GetDecision( strDecision, DesignParam, LookInfo )
+  nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
   
   return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDelta), SecDelta = as.double(dSecDelta), ErrorCode = as.integer(nError)))
 }

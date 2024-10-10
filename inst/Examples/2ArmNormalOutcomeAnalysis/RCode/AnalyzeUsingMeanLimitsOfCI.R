@@ -50,6 +50,7 @@
 ################################################################################################################################################################################################
 AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
+    library(CyneRgy)
 
     # Step 1 - Retrieve necessary information from the objects Cytel objects sent ####
     if(  !is.null( LookInfo )  )
@@ -125,7 +126,7 @@ AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, Us
         }
     }
     
-    nDecision <- GetDecision( strDecision, DesignParam, LookInfo )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0
 

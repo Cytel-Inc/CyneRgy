@@ -29,6 +29,7 @@
 ######################################################################################################################## .
 AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
+    library(CyneRgy)
 
     # Step 1: Retrieve necessary information from the objects East sent ####
     if(  !is.null( LookInfo )  )
@@ -85,7 +86,7 @@ AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam
         }
     }
     
-    nDecision <- GetDecision( strDecision, DesignParam, LookInfo )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	= 0
     

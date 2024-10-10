@@ -32,6 +32,8 @@
 
 AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {   
+    library(CyneRgy)
+    
      # Retrieve necessary information from the objects East sent
     if(  !is.null( LookInfo )  )
     {
@@ -96,7 +98,7 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, User
         }
     }
     
-    nDecision <- GetDecision( strDecision, DesignParam, LookInfo )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error <-  0
     

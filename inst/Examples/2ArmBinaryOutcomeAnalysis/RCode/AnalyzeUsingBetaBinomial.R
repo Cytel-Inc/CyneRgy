@@ -71,6 +71,8 @@
 
 AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
+    library(CyneRgy)
+    
     # Step 1 - Retrieve necessary information from the objects East or Solara sent ####
     if(  !is.null( LookInfo )  )
     {
@@ -144,7 +146,7 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
         }
     }
 
-    nDecision <- GetDecision( strDecision, DesignParam, LookInfo )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     Error 	<- 0
     
