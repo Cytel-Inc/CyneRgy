@@ -32,15 +32,7 @@
 
 AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {   
-       # Input objects can be saved through the following lines:
-    
-    # setwd( "D:\\Project\\backup_cynergy")
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-
-    
-    # Retrieve necessary information from the objects East sent
+     # Retrieve necessary information from the objects East sent
     if(  !is.null( LookInfo )  )
     {
         nLookIndex           <- LookInfo$CurrLookIndex
@@ -78,25 +70,33 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, User
                                      var.equal = TRUE)
     
     dTValue              <- lAnalysisResult$statistic    # extract t-test statistic value
+    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
     
-    if(  !is.null( LookInfo )  )
+    # Set look decision logic
+    if( nLookIndex < nQtyOfLooks ) # Interim Analysis
     {
-        nDecision            <- ifelse( dTValue > LookInfo$EffBdryUpper[ nLookIndex ], 2, 0 )  # A decision of 2 means success, 0 means continue the trial  
-    }
-    else
-    {
-        nDecision            <- ifelse( dTValue > DesignParam$CriticalPoint, 2, 0 )    
-    }
-    
-    if( nDecision == 0 )
-    {
-        # Did not hit efficacy, so check futility 
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks ) 
+        if( dTValue > dBoundary )
         {
-            nDecision <- 3 # Code for futility 
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Continue"
         }
     }
+    else # Final Analysis
+    {
+        if( dTValue > dBoundary )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
+        }
+    }
+    
+    nDecision <- GetDecision( strDecision, DesignParam, LookInfo )
     
     Error <-  0
     

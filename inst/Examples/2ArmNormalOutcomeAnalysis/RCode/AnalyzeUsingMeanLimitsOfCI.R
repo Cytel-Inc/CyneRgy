@@ -95,27 +95,37 @@ AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, Us
     lAnalysisResult       <- t.test( vOutcomesE, vOutcomesS, alternative = "greater",
                                      var.equal = TRUE, conf.level = UserParam$dConfLevel )
     dLowerLimitCI        <- lAnalysisResult$conf.int[ 1 ]
+    dUpperLimitCI        <- lAnalysisResult$conf.int[ 2 ]
     
-    # A decision of 2 means success, 0 means continue the trial
-    nDecision            <- ifelse( dLowerLimitCI > UserParam$dMAV, 2, 0 )  
-    
-    if( nDecision == 0 )
+    # Set look decision logic
+    if( nLookIndex < nQtyOfLooks ) # Interim Analysis
     {
-        # Check futility 
-        dUpperLimitCI        <- lAnalysisResult$conf.int[ 2 ]
-        
-        # Did not hit a Go decision, so check No Go
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks ) 
+        if( dLowerLimitCI > UserParam$dMAV )
         {
-            # The final analysis was reached and a Go decision could not be made, thus a No Go decision is made
-            nDecision <- 3                                    # East code for futility 
+            strDecision <- "Efficacy"
         }
-        else if( dUpperLimitCI < UserParam$dTV ) 
-        {   # At the IA check the No Go since a Go decision was not made
-            nDecision <- 3 # East code for futility 
+        else if( dUpperLimitCI < UserParam$dTV )
+        {
+            strDecision <- "Futility"
+        }
+        else
+        {
+            strDecision <- "Continue"
         }
     }
+    else # Final Analysis
+    {
+        if( dLowerLimitCI > UserParam$dMAV )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
+        }
+    }
+    
+    nDecision <- GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0
 
