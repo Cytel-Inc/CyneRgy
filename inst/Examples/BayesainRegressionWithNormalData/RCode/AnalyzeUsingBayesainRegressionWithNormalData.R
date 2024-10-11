@@ -55,6 +55,7 @@
 #' @param UserParam User can pass custom scalar variables defined by users as a member of this list. 
 #'                  User should access the variables using names, for example UserParam$Var1 and not order. 
 #'                  These variables can be of the following types: Integer, Numeric, or Character
+#' @param SamplingMethod \describe{if(nSamplingMethod == 1) then JAGS else Stan}                 
 #' @return The function must return a list in the return statement of the function. The information below lists 
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{
@@ -79,7 +80,7 @@
 #'                                     }
 #'                                     }
 #'                      }
-RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
+RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL, SamplingMethod = 1)
 {
     library(CyneRgy)
    
@@ -124,7 +125,7 @@ RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = 
                            dBeta3PriorSD   = 100,
                            dPL             = 0.1, 
                            dPU1            = 0.99,
-                           dPU2            = 0.95)
+                           dPU2            = 0.95) 
     }
     
     lData <- list( nQtyPats = nrow( SimData ), vY = SimData$Response, vGoodPrognosis = SimData$GoodPrognosis, vTreatment = SimData$TreatmentID,
@@ -133,8 +134,11 @@ RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = 
                    dBeta2PriorMean = UserParam$dBeta2PriorMean, dBeta2PriorSD = UserParam$dBeta2PriorSD,
                    dBeta3PriorMean = UserParam$dBeta3PriorMean, dBeta3PriorSD = UserParam$dBeta3PriorSD )
 
-    lPostSample <- SamplePosterior( lData, UserParam, 1000, 0 )
-    
+    if(nSamplingMethod == 1) {
+        lPostSample <- SamplePosterior( lData, UserParam, 1000, 0 ) #Sampling using JAGS    
+    } else {
+        lPostSample <- SamplePosterior_stan(lData, UserParam, 1000, 0) #Sampling using Stan
+    }
     
     if( nLookIndex < nQtyOfLooks )  # Interim Analysis 
     {
@@ -204,6 +208,68 @@ SamplePosterior<- function( lData, UserParam, nQtySamplesPerChain , dDelta )
 
     return( list( dPrGrtMAV = dPrGrtMAV ))
 
+}
+
+
+SamplePosterior_stan<- function(lData, UserParam, nQtySamplesPerChain , dDelta)
+{
+    library(StanHeaders)
+    library(rstan)
+    
+    #Please ensure there is no space after("data) and before(}") double quotes
+    #Stan Model
+    strModel <- "data {
+                        int<lower=1> nQtyPats;
+                        vector[nQtyPats] vY;
+                        vector[nQtyPats] vGoodPrognosis;
+                        vector[nQtyPats] vTreatment;
+  
+                        real dBeta0PriorMean;
+                        real<lower=0> dBeta0PriorSD;
+                        real dBeta1PriorMean;
+                        real<lower=0> dBeta1PriorSD;
+                        real dBeta2PriorMean;
+                        real<lower=0> dBeta2PriorSD;
+                        real dBeta3PriorMean;
+                        real<lower=0> dBeta3PriorSD;
+                      }
+
+                 parameters {
+                        real dBeta0;
+                        real dBeta1;
+                        real dBeta2;
+                        real dBeta3;
+                      }
+
+                 model {
+                        dBeta0 ~ normal(dBeta0PriorMean, (dBeta0PriorSD*dBeta0PriorSD));
+                        dBeta1 ~ normal(dBeta1PriorMean, (dBeta1PriorSD*dBeta1PriorSD));
+                        dBeta2 ~ normal(dBeta2PriorMean, (dBeta2PriorSD*dBeta2PriorSD));
+                        dBeta3 ~ normal(dBeta3PriorMean, (dBeta3PriorSD*dBeta3PriorSD));    
+    
+                        vector[nQtyPats] vMean;
+  
+                        for(i in 1:nQtyPats) 
+                        {
+                            vMean[i] <- dBeta0 + (vTreatment[i] * dBeta1) + (vGoodPrognosis[i] * dBeta2) + (vTreatment[i] * vGoodPrognosis[i] * dBeta3);
+                            vY[i] ~ normal(vMean[i], 1);
+                        }
+                 }"
+    
+    #Compiling and Construct the Stan model  
+    model <- stan_model(model_code = strModel)
+    #Initialize the parameters for each chain, Going to run 3 chains
+    lInits <- list(InitsNormalModel(UserParam), InitsNormalModel(UserParam), InitsNormalModel(UserParam))
+    #Draw samples from the Stan Model
+    #We need to add 1000 to iter since iter (burnin + steady) includes warmp (burnin) simulations 
+    mSamps <- sampling(object=model, data=lData, init=lInits, chains=3, iter=nQtySamplesPerChain+1000, warmup=1000, refresh=0, cores=1)
+    
+    #Extract the samples
+    mSamps <- extract(mSamps)
+    vBeta1 <- mSamps$dBeta1
+    dPrGrtMAV <- mean(ifelse(vBeta1 > dDelta, 1, 0))
+    
+    return(list(dPrGrtMAV = dPrGrtMAV))
 }
 
 
