@@ -99,5 +99,5 @@ AnalyzeUsingEastManualFormula<- function(SimData, DesignParam, LookInfo = NULL, 
     Error <-  0
     
     
-    return(list(TestStat = as.double(dZj), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ) ))
+    return(list(TestStat = as.double(dZj), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ), Delta = as.double( dPiHatExperimental - dPiHatControl ) ))
 }
