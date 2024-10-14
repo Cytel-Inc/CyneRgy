@@ -71,13 +71,7 @@
 
 AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
-    # Input objects can be saved through the following lines:
-    
-    # setwd( "C:/2ArmBinaryOutcomeAnalysis/ExampleArgumentsFromEast/Example4/")
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-
+    library(CyneRgy)
     
     # Step 1 - Retrieve necessary information from the objects East or Solara sent ####
     if(  !is.null( LookInfo )  )
@@ -91,6 +85,7 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
     else
     {
         # Fixed Design
+        nLookIndex           <- 1
         nQtyOfLooks          <- 1
         nQtyOfEvents         <- DesignParam$MaxCompleters
         nQtyOfPatsInAnalysis <- nrow( SimData )
@@ -121,22 +116,37 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
     # Step 3 -Perform the desired analysis - for this case a Bayesian analysis.  If Posterior Probability is > Cutoff --> Efficacy ####
     # The function PerformAnalysisBetaBinomial is provided below in this file.
     lRet                 <- ProbExpGreaterCtrlBeta( vOutcomesCtrl, vOutcomesExp, UserParam$dAlphaCtrl, UserParam$dBetaCtrl, UserParam$dAlphaExp, UserParam$dBetaExp )
-    nDecision            <- ifelse( lRet$dPostProb > UserParam$dUpperCutoffEfficacy, 2, 0 )  # Above the cutoff --> Efficacy ( 2 is East code for Efficacy)
     
-    if( nDecision == 0 )
+    # Setup look decision logic
+    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
-        # Did not hit efficacy, so check futility 
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks ) 
+
+        if( lRet$dPostProb > UserParam$dUpperCutoffEfficacy )
         {
-            nDecision <- 3 # East code for futility 
+            strDecision <- "Efficacy"
         }
-        else if( lRet$dPostProb <  UserParam$dLowerCutoffForFutility ) # We are at the FA, efficacy decision was not made yet so the decision is futility
+        else if( lRet$dPostProb <  UserParam$dLowerCutoffForFutility )
         {
-            nDecision <- 3 # East code for futility 
+            strDecision <- "Futility"
         }
-        
+        else
+        {
+            strDecision <- "Continue"
+        }
     }
+    else # Final Analysis
+    {
+        if( lRet$dPostProb > UserParam$dUpperCutoffEfficacy  )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
+        }
+    }
+
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     Error 	<- 0
     
@@ -224,5 +234,3 @@ ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function(dataS, data
     # Return the result
     return(list(predictiveProbabilityS = predictiveProbabilityS))
 }
-
-

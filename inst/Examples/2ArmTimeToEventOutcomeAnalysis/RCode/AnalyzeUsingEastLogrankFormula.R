@@ -64,10 +64,9 @@
 
 AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-          # saveRDS( SimData,     "SimData.Rds")
-          # saveRDS( DesignParam, "DesignParam.Rds" )
-          # saveRDS( LookInfo,    "LookInfo.Rds" )
-    # Retrieve necessary information from the objects East sent
+    library(CyneRgy)
+    library(survival)
+    
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
@@ -151,20 +150,34 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     
     # Compute the logrank test statistic
     dTS       <- dNum/sqrt( dDen )
-    
-    # A decision of 1 means success, 0 means continue the trial
-    nDecision <- ifelse( dTS < dEffBdry, 1, 0 )
-    
-    if( nDecision == 0 )
+
+    # Setup look decision logic
+    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
-        # Did not hit efficacy, so check futility 
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks ) 
+        
+        if( dTS <  dEffBdry )
         {
-            nDecision <- 3 # Code for futility 
+            strDecision <- "Efficacy"
+        }
+        else 
+        {
+            strDecision <- "Continue"
+        }
+    }
+    else # Final Analysis
+    {
+        if( dTS <  dEffBdry  )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
         }
     }
 
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+    
     Error    <- 0
     
     lRet      <- list(TestStat = as.double( dTS ),
@@ -173,4 +186,3 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
                       HazardRatio = as.double( dTrueHR ))
     return( lRet )
 }
-
