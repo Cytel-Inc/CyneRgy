@@ -80,11 +80,10 @@
 #'                                     }
 #'                                     }
 #'                      }
-RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL, SamplingMethod = 1)
+RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    library(CyneRgy)
+    #library(CyneRgy)
    
-    library( R2jags )
     
     Error 	    <- 0
     nDecision 	<- 0
@@ -111,7 +110,7 @@ RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = 
     
     if( is.null( UserParam ) )
     {
-        # By default - Assuming:
+        # By default - Sample using JAGS and  Assuming:
         # non-informative priors
         # Stop for futility at the Interim Analysis if Prob( E > C ) < 0.1
         # At the Final Analysis select E if Prob( E > C ) > 0.95
@@ -125,7 +124,8 @@ RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = 
                            dBeta3PriorSD   = 100,
                            dPL             = 0.1, 
                            dPU1            = 0.99,
-                           dPU2            = 0.95) 
+                           dPU2            = 0.95,
+                           nSamplingMethod = 1) 
     }
     
     lData <- list( nQtyPats = nrow( SimData ), vY = SimData$Response, vGoodPrognosis = SimData$GoodPrognosis, vTreatment = SimData$TreatmentID,
@@ -134,7 +134,7 @@ RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = 
                    dBeta2PriorMean = UserParam$dBeta2PriorMean, dBeta2PriorSD = UserParam$dBeta2PriorSD,
                    dBeta3PriorMean = UserParam$dBeta3PriorMean, dBeta3PriorSD = UserParam$dBeta3PriorSD )
 
-    if(nSamplingMethod == 1) {
+    if(UserParam$nSamplingMethod == 1) {
         lPostSample <- SamplePosterior( lData, UserParam, 1000, 0 ) #Sampling using JAGS    
     } else {
         lPostSample <- SamplePosterior_stan(lData, UserParam, 1000, 0) #Sampling using Stan
@@ -169,6 +169,9 @@ RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = 
 
 SamplePosterior<- function( lData, UserParam, nQtySamplesPerChain , dDelta )
 {
+    
+    library( R2jags )
+    
     lInits           <- list( InitsNormalModel( UserParam ), InitsNormalModel( UserParam ), InitsNormalModel( UserParam ))  # Going to run 3 chains
     strModelFile     <- paste0( "BayesianModel1.txt" )
     
