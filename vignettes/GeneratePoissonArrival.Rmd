@@ -1,5 +1,5 @@
 ---
-title: "Generate Patient Arrival Times with Poission Process"
+title: "Generate Patient Arrival Times with Poisson Process"
 author: "J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:

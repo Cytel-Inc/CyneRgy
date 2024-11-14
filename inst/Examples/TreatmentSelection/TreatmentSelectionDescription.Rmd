@@ -1,5 +1,5 @@
 ---
-title: "Treatment Selection Example"
+title: "Multiarm, Binary Outcome - Treatment Selection"
 author: "J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -7,11 +7,11 @@ output:
   word_document: default
 ---
 
-# Multiarm, Binary Outcome - Treatment Selection Example
+## Introduction
 
-This example demonstrates how to add new treatment selection functionality into East using an R function.
+This example demonstrates how to add new treatment selection functionality into East using R functions.
 
-For all of these examples, we assume all trial designs consist of control and three experimental treatments. There is one Interim Analysis, IA, and a Final Analysis, FA. At the IA, experimental treatment(s) are selected and continue to the second stage of the study. If the trial is not stopped for efficacy or futility, then control and any selected treatments continue to the next stage of the trial.
+For all of these examples, we assume all trial designs consist of control and three experimental treatments. There is one Interim Analysis (IA) and a Final Analysis (FA). At the IA, experimental treatment(s) are selected and continue to the second stage of the study. If the trial is not stopped for efficacy or futility, then control and any selected treatments continue to the next stage of the trial.
 
 The examples included here are to provide different approaches for selecting treatments for stage 2.
 
@@ -20,27 +20,24 @@ Once CyneRgy is installed, you can load this example in R Studio with the follow
 CyneRgy::RunExample("TreatmentSelection")
 ```
 
-Running the command above will load the R Studio project in R Studio. 
+Running the command above will load the RStudio project in RStudio. 
 
+**East Workbook**: [TreatmentSelection.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.cywx)
 
-**East Workbook**: TreatmentSelection.cywx
+**RStudio Project File**: [TreatmentSelection.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.Rproj)
 
-**R Studio Project File**: TreatmentSelection.Rproj.
+In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TreatmentSelection/RCode) you will find the following R files:
 
-In the RCode directory of this example you will find the following R files:
+1.  [SelectExpThatAreBetterThanCtrl.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpThatAreBetterThanCtrl.R) - Contains a function named SelectExpThatAreBetterThanCtrl to demonstrate the R code necessary for Example 1 as described below.
 
-1.  TreatmentSelectionTemplate.R - This file provides a template that may be used as a starting point for developing new treatment selection functions in R.
+2.  [SelectExpWithPValueLessThanSpecified.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpWithPValueLessThanSpecified.R) - Contains a function named SelectExpWithPValueLessThanSpecified to demonstrate the R code necessary for Example 2 as described below.
 
-2.  SelectExpThatAreBetterThanCtrl.R - Contains a function named SelectExpThatAreBetterThanCtrl to demonstrate the R code necessary for Example 1 as described below.
+3.  [SelectSpecifiedNumberOfExpWithHighestResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectSpecifiedNumberOfExpWithHighestResponses.R) - Contains a function named SelectSpecifiedNumberOfExpWithHighestResponses to demonstrate the R code necessary for Example 3 as described below.
 
-3.  SelectExpWithPValueLessThanSpecified.R - Contains a function named SelectExpWithPValueLessThanSpecified to demonstrate the R code necessary for Example 2 as described below.
-
-4.  SelectSpecifiedNumberOfExpWithHighestResponses.R - Contains a function named SelectSpecifiedNumberOfExpWithHighestResponses to demonstrate the R code necessary for Example 3 as described below.
-
-5.  SelectExpUsingBayesianRule.R - Contains a function named SelectExpUsingBayesianRule to demonstrate the R code necessary for Example 4 as described below.
+4.  [SelectExpUsingBayesianRule.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpUsingBayesianRule.R) - Contains a function named SelectExpUsingBayesianRule to demonstrate the R code necessary for Example 4 as described below.
 
 In addition, if you would like to experiment with these examples and would like code to help you get started we have provided fill-in-the-blank type 
-code files in the FillInTheBlankRCode directory.  
+code files in the [FillInTheBlankRCode directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TreatmentSelection/FillInTheBlankRCode).  
 
 ## Example 1 - Selection Based on Response Rates Above Control
 
@@ -85,9 +82,7 @@ At the interim analysis, we use the following Bayesian model and selection rule:
 
 Denote the probability of response on experimental treatment by p~j~ , for j = 1, 2, 3.
 
-[Prior:]{.underline}
-
-User-specified p~j~ \~ Beta( dPriorAlpha, dPriorBeta )
+Prior: User-specified p~j~ \~ Beta( dPriorAlpha, dPriorBeta )
 
 Select any treatment that has at least a user-specified probability (dMinPosteriorProbability) of being greater than the user-specified historical response rate (dHistoricResponseRate). Specifically, if Pr( p~j~ \> dHistoricResponseRate \| data ) \> dMinPosteriorProbability, then experimental treatment j is selected for stage 2. If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( p~j~ \> dHistoricResponseRate \| data ).
 

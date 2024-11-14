@@ -21,8 +21,3 @@ remotes::install_github( "Cytel-Inc/CyneRgy@main" )
 ```
 
 You must have the remotes package to use the above command. To launch the examples, you will also need to have the rstudioapi package. 
-
-
-
-
-

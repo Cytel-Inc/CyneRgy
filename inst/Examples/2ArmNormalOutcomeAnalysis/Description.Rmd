@@ -1,42 +1,38 @@
 ---
-title: '2 Arm Normal Outcome Analysis'
+title: '2-Arm, Normal Outcome - Analysis'
 author: "Shubham Lahoti and J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  html_document:
-    toc: true
-    toc_float:
-      collapsed: false
-    toc_depth: 5
-    number_sections: true
-    latex_engine: tinytex
+  html_document: default
   word_document: default
-  pdf_document:
-    toc: true
-    toc_depth: '5'
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library( CyneRgy )
-```
+## Introduction
 
-# Introduction
-# Two Arm, Normal Outcome - Analysis Examples
+This example demonstrates how to add new analysis functionality into East using R functions.  
 
-This example demonstrates how to add new analysis functionality  into East using an R function.  
-
-For all examples, we assume the trial design consist of control and an experimental treatment. There are 2 Interim Analyses, IA, and a Final Analysis, FA. At the IA, the analysis is performed and, depending on the example, may determine early efficacy or early futility depending on the design.
+For all examples, we assume the trial design consist of control and an experimental treatment. There are 2 Interim Analyses (IA) and a Final Analysis (FA). At the IA, the analysis is performed and, depending on the example, may determine early efficacy or early futility depending on the design.
 
 The examples included here are to provide different approaches for analyzing the data in the trial. 
 
-In the RCode directory of this example you will find the following R files:
+Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+```{r, eval=FALSE}
+CyneRgy::RunExample( "2ArmNormalOutcomeAnalysis" )
+```
 
-1.  AnalyzeUsingEastManualFormulaNormal.R - Contains a function named AnalyzeUsingEastManualFormulaNormal to demonstrate the R code necessary for this example as described below.
+Running the command above will load the RStudio project in RStudio. 
 
-2.  AnalyzeUsingTTestNormal.R - Contains a function named AnalyzeUsingTTestNormal to demonstrate the R code necessary for this example as described below.
+**East Workbook**: [2ArmNormalOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.cywx)
 
-3.  AnalyzeUsingMeanLimitsOfCI.R - Contains a function named AnalyzeUsingMeanLimitsOfCI to demonstrate the R code necessary for this example as described below.
+**RStudio Project File**: [2ArmNormalOutcomeAnalysis.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.Rproj)
+
+In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomeAnalysis/RCode) you will find the following R files:
+
+1.  [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/RCode/AnalyzeUsingEastManualFormulaNormal.R) - Contains a function named AnalyzeUsingEastManualFormulaNormal to demonstrate the R code necessary for this example as described below.
+
+2.  [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/RCode/AnalyzeUsingTTestNormal.R) - Contains a function named AnalyzeUsingTTestNormal to demonstrate the R code necessary for this example as described below.
+
+3.  [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/RCode/AnalyzeUsingMeanLimitsOfCI.R) - Contains a function named AnalyzeUsingMeanLimitsOfCI to demonstrate the R code necessary for this example as described below.
 
 
 
@@ -51,30 +47,28 @@ This example utilizes the t.test() function in base R to perform the analysis. T
 
 ## Example 3 -  Utilization of Confidence Interval Limits for Go/No Go Decision Making in two arm Normal analysis
 
-In many phase II trials, teams need to make Go and No Go type decision. In this type of trial, teams often set a Minimum Acceptable Value (MAV), the minimum treatment difference that would warrant further development in a product, and a Target Value (TV), the value that is highly desirable based on other consideration.  In this example, if it is likely that the treatment difference is above the MAV then a Go decision is made.  If a Go decision is not made, then if is is unlikely that the treatment difference is above the TV, a No Go decision is made.      
+In many phase II trials, teams need to make Go and No-Go type decision. In this type of trial, teams often set a Minimum Acceptable Value (MAV), the minimum treatment difference that would warrant further development in a product, and a Target Value (TV), the value that is highly desirable based on other consideration.  In this example, if it is likely that the treatment difference is above the MAV then a Go decision is made.  If a Go decision is not made, then if is is unlikely that the treatment difference is above the TV, a No-Go decision is made.      
 
 In this example, the team has enough resources for 100 patients. The team would like to compare two fixed design options and one group sequential design with a one interim look and a final.  
 
-**Option 1** The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV = 0.1.  If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the difference is greater than the TV = 0.3.  Using a frequentist CI an approximation to this design can be done by the logic described below assuming the 80% confidence interval (CI), runs from the 10% to the 90%.  
+**Option 1:** The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV = 0.1.  If a Go decision is not made, then a No-Go decision is made if there is less than a 10% chance the difference is greater than the TV = 0.3.  Using a frequentist CI an approximation to this design can be done by the logic described below assuming the 80% confidence interval (CI), runs from the 10% to the 90%.  
 
-**Option 2** The team would like to make a Go decision if there is at least a 85% chance that the difference in treatment is greater than the MAV = 0.1.  If a Go decision is not made, then a No Go decision is made if there is less than a 15% chance the difference is greater than the TV = 0.3.  Using a frequentist CI an approximation to this design can be done by the logic described below. Using a frequentist CI an approximation to this design can be done by the logic described below assuming the 70% confidence interval (CI), runs from the 15% to the 85%.  
+**Option 2:** The team would like to make a Go decision if there is at least a 85% chance that the difference in treatment is greater than the MAV = 0.1.  If a Go decision is not made, then a No-Go decision is made if there is less than a 15% chance the difference is greater than the TV = 0.3.  Using a frequentist CI an approximation to this design can be done by the logic described below assuming the 70% confidence interval (CI), runs from the 15% to the 85%.  
 
-**Option 3** In this design, the team would like to include an interim analysis (IA) at 50 patients with an option to stop for early Go or No-Go decision.  To account for the IA, the team would like to make a Go decision if there is at least a 92.5% chance the difference is above the MAV = 0.1 and stop for futility if there is less than a 7.5% chance the difference is above the TV = 0.3.
+**Option 3:** In this design, the team would like to include an interim analysis (IA) at 50 patients with an option to stop for early Go or No-Go decision.  To account for the IA, the team would like to make a Go decision if there is at least a 92.5% chance the difference is above the MAV = 0.1 and stop for futility if there is less than a 7.5% chance the difference is above the TV = 0.3.
 
 ### At an Interim Analysis
 
 Use t.test from base R to analyze the data and compute desired CI.  
 
-If the Lower Limit of the CI, denoted by LL, is greater than a user-specified MAV then a Go decision is made.  Specifically, if LL > MAV --> Go
-
-If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than a TV a No Go decision is made.  Specifically, if UL < TV --> No Go
+- If the Lower Limit of the CI (LL) is greater than a user-specified MAV then a Go decision is made.  Specifically, if LL > MAV --> Go.
+- If a Go decision is not made, then if the Upper Limit of the CI (UL) is less than a TV a No-Go decision is made.  Specifically, if UL < TV --> No-Go.
 
 Otherwise, continue to the next analysis.
 
 ### At the Final Analysis
 
-If LL > MAV --> Go
-
-Otherwise, a No Go decision is made.
+- If LL > MAV --> Go.
+- Otherwise, a No-Go decision is made.
     
-Note, in this example the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
+Note: in this example the boundary information that is computed and sent from East is ignored in order to implement this decision approach.

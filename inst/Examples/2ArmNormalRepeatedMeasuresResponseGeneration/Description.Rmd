@@ -1,39 +1,35 @@
 ---
-title: 'Generate Responses for 2 Arm Normal Repeated Measures'
+title: '2-Arm, Normal Outcome, Repeated Measures - Patient Simulation'
 author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  html_document:
-    toc: true
-    toc_float:
-      collapsed: false
-    toc_depth: 5
-    number_sections: true
-    latex_engine: tinytex
+  html_document: default
   word_document: default
-  pdf_document:
-    toc: true
-    toc_depth: '5'
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library( CyneRgy )
-```
+## Introduction
 
-# Introduction :
 Repeated measures involve collecting multiple data points for the same variable from the same subjects across multiple time periods. This method provides insights into the subjects' development and changes over time. In this context, a single subject can have multiple responses over time, and these responses can be correlated across different visits.
 
-For a Normal endpoint in repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits.
+For a normal endpoint in repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits.
 
-In the R Code directory of this example you will find the following R files:
+Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+```{r, eval=FALSE}
+CyneRgy::RunExample( "2ArmNormalRepeatedMeasuresResponseGeneration" )
+```
 
-1. GenerateResponseDiffOfMeansRepeatedMeasures.R
+Running the command above will load the RStudio project in RStudio. 
 
-The R function named "GenRespDiffOfMeansRepMeasures" in the file  is used to generate the Normal responses across multiple visits for 2 arm Normal Repeated measures design.
+**RStudio Project File**: [2ArmNormalRepeatedMeasuresResponseGeneration.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/2ArmNormalRepeatedMeasuresResponseGeneration.Rproj)
+
+In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode) you will find the following R files:
+
+1. [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/GenerateResponseDiffOfMeansRepeatedMeasures.R)
+
+The R function named "GenRespDiffOfMeansRepMeasures" in the file is used to generate the normal responses across multiple visits for 2-arm normal repeated measures design.
 
 
-2. LibraryMASS.R
+2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/Rcode/LibraryMASS.R)
 
 This file is used to load the library "MASS" to run mvrnorm() function. 
 

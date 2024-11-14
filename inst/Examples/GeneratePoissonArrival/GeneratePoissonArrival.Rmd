@@ -1,38 +1,32 @@
 ---
-title: 'Generate Poisson Arrival'
+title: 'Generate Patient Arrival Times with Poisson Process'
 author: "J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  html_document:
-    toc: true
-    toc_float:
-      collapsed: false
-    toc_depth: 5
-    number_sections: true
-    latex_engine: tinytex
+  html_document: default
   word_document: default
-  pdf_document:
-    toc: true
-    toc_depth: '5'
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library( CyneRgy )
-source( "RCode/GeneratePoissonArrival.R")
-```
+# Introduction
 
-# Poisson Process for Patient Arrival times
 This example demonstrates how to add the ability to generate patient arrival time according to a Poisson process with a ramp-up.  
-
 
 The examples included here are to provide different approaches for simulating arrival time according to a Poisson process. 
 
-**East Workbook**: GeneratePoissonArrival.cywx
+Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+```{r, eval=FALSE}
+CyneRgy::RunExample( "GeneratePoissonArrival" )
+```
 
-**R Studio Project File**: GeneratePoissonArrival.Rproj.
+Running the command above will load the RStudio project in RStudio. 
 
-In the RCode directory of this example you will find the following R files:
+**East Workbook**: [GeneratePoissonArrival.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx)
+
+**RStudio Project File**: [GeneratePoissonArrival.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.Rproj)
+
+In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/RCode) you will find the following R file:
+
+1. [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/RCode/GeneratePoissonArrival.R)
 
 
 # Example 1 - Ramp-Up In Accrual
@@ -42,6 +36,8 @@ In this example we make use of the UserParam and provide 7 rates, dRate1, dRate2
 Suppose that the expected accrual rates were 3, 6, 10, 15, 18, 25, 35 starting at time unit 0, 1, 2, 3, 4, 5, 6.  One example trial could have accrual that looks like the following:
 
 ```{r echo=FALSE,  warning=FALSE}
+source("RCode/GeneratePoissonArrival.R")
+
 NumSub   <- 600
 NumPrd   <- 1  
 PrdStart <- 0 
