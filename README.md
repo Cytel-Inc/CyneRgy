@@ -4,7 +4,7 @@ R integration with Cytel products provides a highly efficient approach to achiev
 
 # Introduction 
 
-This repository and corresponding website provide an overview of the R examples provided in this repository. Each example is intended to be used with one of Cytel's products (East or East Horizon). [Each example](https://github.com/Cytel-Inc/CyneRgy/tree/210-fix-typos-in-codemarkdownreadme-GP/inst/Examples) is included in a directory that provides an RStudio project file, a Description file that describes the example, RCode folder which contains the example R scripts, and FillInTheBlankRCode - examples with various code deleted so you can practice and fill in the blanks. 
+This repository and corresponding website provide an overview of the R examples provided in this repository. Each example is intended to be used with one of Cytel's products (East or East Horizon). [Each example](inst/Examples) is included in a directory that provides an RStudio project file, a Description file that describes the example, RCode folder which contains the example R scripts, and FillInTheBlankRCode - examples with various code deleted so you can practice and fill in the blanks. 
 
 In addition, the CyneRgy package provides helpful functions for you to create your own R functions based on templates and a seamless R experience for viewing examples in R Studio.   
 
