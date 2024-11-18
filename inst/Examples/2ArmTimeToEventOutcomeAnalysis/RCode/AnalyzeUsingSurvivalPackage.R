@@ -31,15 +31,9 @@
 
 AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    
-    # Input objects can be saved through the following lines:
-    # Saving is only available in East, do NOT save files in SOLARA
-    # #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-    
-    
+    library(CyneRgy)
+    library(survival)
+
     # Retrieve necessary information from the objects East sent
     if( !is.null( LookInfo ) )
     {
@@ -81,19 +75,33 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
     
     # Compute the logrank test statistic
     dTS                      <- sqrt(logrankTest$chisq) * sign(logrankTest$obs[2] - logrankTest$exp[2])
-    
-    # A decision of 1 means success, 0 means continue the trial
-    nDecision                <- ifelse( dTS < dEffBdry, 1, 0 )
-    
-    if( nDecision == 0 )
+
+    # Setup look decision logic
+    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
-        # At the final analysis we want to make a futility if efficacy was not achieved.
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks ) 
+
+        if( dTS <  dEffBdry )
         {
-            nDecision <- 3 # Code for futility 
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Continue"
         }
     }
+    else # Final Analysis
+    {
+        if( dTS <  dEffBdry  )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
+        }
+    }
+
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error                    <- 0
     

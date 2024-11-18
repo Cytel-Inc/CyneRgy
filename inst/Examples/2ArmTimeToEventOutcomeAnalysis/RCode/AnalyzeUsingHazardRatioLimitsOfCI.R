@@ -55,6 +55,9 @@
 ################################################################################################################################################################################################
 AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {   
+    library(CyneRgy)
+    library(survival)
+    
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
@@ -102,31 +105,40 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
     dLowerLimitCI                   <- dLogHR - dZalpha * dStdError
     dUpperLimitCI                   <- dLogHR + dZalpha * dStdError
     
-    
-    # A decision of 2 means success, 0 means continue the trial
-    nDecision                <- ifelse( dUpperLimitCI < log(UserParam$dMAV), 2, 0 )  # log HR scale
-    
-    if( nDecision == 0 )
+    # Setup look decision logic
+    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
-        # Did not hit a Go decision, so check No Go
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks ) 
+        if( dUpperLimitCI < log(UserParam$dMAV) )
         {
-            # The final analysis was reached and a Go decision could not be made, thus a No Go decision is made
-            nDecision <- 3                                    # East code for futility 
-        }else if( dLowerLimitCI > UserParam$dTV )         # At the IA check the No Go since a Go decision was not made
-            nDecision <- 3                                 # East code for futility 
+            strDecision <- "Efficacy"
+        }
+        else if( dLowerLimitCI > UserParam$dTV )
+        {
+            strDecision <- "Futility"
+        }
+        else
+        {
+            strDecision <- "Continue"
+        }
     }
+    else # Final Analysis
+    {
+        if( dUpperLimitCI < log(UserParam$dMAV)  )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
+        }
+    }
+
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0
-    
-    
     
     return( list( HazardRatio  = as.double( exp( dLogHR ) ), 
                   ErrorCode = as.integer( Error ), 
                   Decision  = as.integer( nDecision ) ) )
     
 }
-    
-
-

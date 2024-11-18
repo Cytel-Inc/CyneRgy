@@ -72,12 +72,16 @@
 #'                      }
 {{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    nError 	        <- 0
-    nDecision 	    <- 0
-    dTestStatistic  <- 0
-    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
-    nLookIndex           <- 1 
+    library(CyneRgy)
     
+    nError 	         <- 0
+    nDecision 	     <- 0
+    dTestStatistic   <- 0
+    bIAEfficayCheck  <- TRUE
+    bIAFutilityCheck <- FALSE
+    bFAEfficacyCheck <- TRUE
+    
+    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so this is a group sequential design and need to use the look information
@@ -119,29 +123,35 @@
     # dZVal     <- summary(fitCox)$coefficients[,"z"]
     # dPValue   <- pnorm( dZVal, lower.tail = TRUE)
     
-    # Example fixed design - 2 is efficacy and 3 is futility
-    # nDecision <- ifelse( dPValue <= DesignParam$Alpha, 2, 3 )
-    
-    # Example group sequential design where the 0 would indicate continue and at some point, eg the final analysis you may want to make this futility, see below
-    # Often times you may want to check futility if efficacy was not achieved. 
-    # nDecision <- ifelse( dPValue <= DesignParam$Alpha, 2, 0 )
-
-    
-    
-    # Step 5 - Specify the decision.  Note if this is a group sequential design then you things may need to be different ####
-    
-    if( nDecision == 0 )
+    # Step 5 - Setup look decision logic ####
+    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
-        # In the group sequential design you may want to check futility or other things here.
-        
-        
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks ) 
+        if( dPValue <= DesignParam$Alpha )
         {
-            # The final analysis was reached and efficacy not achieved so it is futility 
-            nDecision <- 3                                  
+            strDecision <- "Efficacy"
+        }
+        else if( bIAFutilityCheck )
+        {
+            strDecision <- "Futility"
+        }
+        else
+        {
+            strDecision <- "Continue"
         }
     }
+    else # Final Analysis
+    {
+        if( dPValue <= DesignParam$Alpha  )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
+        }
+    }
+    
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     lRet <- list(TestStat = as.double(dTestStatistic),
                  Decision  = as.integer(nDecision), 

@@ -77,12 +77,16 @@
 #'                      }
 {{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    nError 	        <- 0
-    nDecision 	    <- 0
-    dTestStatistic  <- 0
+    library(CyneRgy)
     
-    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
-    nLookIndex           <- 1 
+    nError 	         <- 0
+    nDecision 	     <- 0
+    dTestStatistic   <- 0
+    bIAEfficayCheck  <- TRUE
+    bIAFutilityCheck <- FALSE
+    bFAEfficacyCheck <- TRUE
+    
+    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents ####
     if(  !is.null( LookInfo )  )
     {
         nQtyOfLooks          <- LookInfo$NumLooks
@@ -92,10 +96,46 @@
     else
     {
         nQtyOfLooks          <- 1
+        nLookIndex           <- 1
         nQtyOfPatsInAnalysis <- nrow( SimData )
     }
 
+    # Step 2 - Create a data set as needed for the analysis using SimData, DesignParams ect ####
+    # Add any code here for creating the data set for analysis
     
+    # Step 3 - Run the analysis #### 
+    # Add any code here for analysis 
+    
+    # Step 4 - Setup look decision logic ####
+    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
+    {
+        
+        if( bIAEfficayCheck )
+        {
+            strDecision <- "Efficacy"
+        }
+        else if( bIAFutilityCheck )
+        {
+            strDecision <- "Futility"
+        }
+        else
+        {
+            strDecision <- "Continue"
+        }
+    }
+    else # Final Analysis
+    {
+        if( bFAEfficacyCheck  )
+        {
+            strDecision <- "Efficacy"
+        }
+        else
+        {
+            strDecision <- "Futility"
+        }
+    }
+    
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     lRet <- list(TestStat = as.double(dTestStatistic),
                  Decision  = as.integer(nDecision), 
