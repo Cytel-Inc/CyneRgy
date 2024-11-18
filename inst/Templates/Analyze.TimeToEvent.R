@@ -123,7 +123,7 @@
     # dZVal     <- summary(fitCox)$coefficients[,"z"]
     # dPValue   <- pnorm( dZVal, lower.tail = TRUE)
     
-    # Step 5 - Setup look decision logic
+    # Step 5 - Setup look decision logic ####
     if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
         if( dPValue <= DesignParam$Alpha )

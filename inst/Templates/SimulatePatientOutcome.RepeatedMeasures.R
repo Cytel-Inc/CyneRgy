@@ -32,7 +32,9 @@
     Error 	     <- 0
     vOutResponse <- c()
     retval       <- list()
-    # Write the actual code here.
+    
+    # Add code to simulate the patient data as desired.  
+    # Example of how to create the return list with Response1, Response2,..., ResponseNumVisit
     # Store the generated continuous response values in # an array called retval.
     # Initializing Response Array to 0	
     for(i in 1:NumVisit)
@@ -41,6 +43,7 @@
         vOutResponse <- rep( 0, NumSub )
         retval[[ strVisitName ]] <- as.double( vOutResponse )
     }
+    
     # Use appropriate error handling and modify the
     # Error appropriately 
     retval$ErrorCode <- as.integer( Error )
