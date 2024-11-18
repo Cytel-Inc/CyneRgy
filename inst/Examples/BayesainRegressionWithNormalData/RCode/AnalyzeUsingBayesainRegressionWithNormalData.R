@@ -84,6 +84,9 @@ RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = 
 {
     #library(CyneRgy)
    
+    library(StanHeaders)
+    library(rstan)
+    library( R2jags )
     
     Error 	    <- 0
     nDecision 	<- 0
@@ -170,7 +173,7 @@ RunAnalysisUsingBayesianRegression <- function(SimData, DesignParam, LookInfo = 
 SamplePosterior<- function( lData, UserParam, nQtySamplesPerChain , dDelta )
 {
     
-    library( R2jags )
+    
     
     lInits           <- list( InitsNormalModel( UserParam ), InitsNormalModel( UserParam ), InitsNormalModel( UserParam ))  # Going to run 3 chains
     strModelFile     <- paste0( "BayesianModel1.txt" )
@@ -216,8 +219,7 @@ SamplePosterior<- function( lData, UserParam, nQtySamplesPerChain , dDelta )
 
 SamplePosterior_stan<- function(lData, UserParam, nQtySamplesPerChain , dDelta)
 {
-    library(StanHeaders)
-    library(rstan)
+ 
     
     #Please ensure there is no space after("data) and before(}") double quotes
     #Stan Model
