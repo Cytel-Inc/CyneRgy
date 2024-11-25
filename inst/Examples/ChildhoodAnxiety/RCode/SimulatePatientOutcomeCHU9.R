@@ -1,12 +1,12 @@
 #   Last Modified Date: 06/25/2024
 #' @name ChildPsychology
 #' @title Template for simulating patient data in R. 
-#' @param NumSub The number of subjects that need to be simulated, integer value numsub= 250
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
+#' @param NumSub The number of subjects that need to be simulated
+#' @param TreatmentID A vector of treatment ids, 0 = Treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param  UserParam A list of user defined parameters in East.   You must have a default of NULL, as in this example.
-#' If UseParam are supplied in East, they will be an element in the list, UserParam.    
+#' @param  UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
+#' If UseParam are supplied in East or East Horizon, they will be an element in the list, UserParam.    
 #' @description
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
 #' However, you may choose to ignore the parameters  Mean, StdDev if the patient simulator

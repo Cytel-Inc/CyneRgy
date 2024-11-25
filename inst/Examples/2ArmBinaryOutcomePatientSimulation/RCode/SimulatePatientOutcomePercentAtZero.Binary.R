@@ -4,7 +4,7 @@
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
-#' @param  UserParam A list of user defined parameters in East.   The default must be NULL resulting in simulating from a non-mixture distribution.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in simulating from a non-mixture distribution.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dProbOfTreatmentReistantCtrl}{A value in (0, 1) that defines the probability a patient is treatment resistant the control (ctrl) treatment.}

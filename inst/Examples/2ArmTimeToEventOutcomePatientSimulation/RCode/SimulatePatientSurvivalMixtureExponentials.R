@@ -1,7 +1,7 @@
 #' Simulate patient outcomes from a Weibull distribution 
-#' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, eg 250.
-#' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
+#' @param NumSub The number of patient times to generate for the trial. This is a single numeric value, e.g., 250.
+#' @param NumArm The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
+#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided. 
 #' @param PrdTime \describe{ 
@@ -17,10 +17,10 @@
 #'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 #'  If UserParam is supplied it must contain the following 
 #'  \describe{
-#'       \item{UserParam$QtyOfSubgroups}{The quantity of patient subgroups.  For each subgroup II = 1,2..,QtyOfSubgroups, 
+#'       \item{UserParam$QtyOfSubgroups}{The quantity of patient subgroups. For each subgroup II = 1,2..,QtyOfSubgroups, 
 #'       you must specify ProbSubgroupII, MedianTTECtrlSubgroupII, MedianTTEExpSubgroupII }
 #'       \item{UserParam$ProbSubgroup1}{The probability a patient is in subgroup 1}  
 #'       \item{UserParam$MedianTTECtrlSubgroup1}{The median time-to-event for a patient in subgroup 1 that receives control treatment}
