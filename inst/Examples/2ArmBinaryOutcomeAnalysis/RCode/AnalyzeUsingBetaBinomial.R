@@ -117,35 +117,11 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
     # The function PerformAnalysisBetaBinomial is provided below in this file.
     lRet                 <- ProbExpGreaterCtrlBeta( vOutcomesCtrl, vOutcomesExp, UserParam$dAlphaCtrl, UserParam$dBetaCtrl, UserParam$dAlphaExp, UserParam$dBetaExp )
     
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-
-        if( lRet$dPostProb > UserParam$dUpperCutoffEfficacy )
-        {
-            strDecision <- "Efficacy"
-        }
-        else if( lRet$dPostProb <  UserParam$dLowerCutoffForFutility )
-        {
-            strDecision <- "Futility"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( lRet$dPostProb > UserParam$dUpperCutoffEfficacy  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = lRet$dPostProb > UserParam$dUpperCutoffEfficacy, 
+                                               bIAFutilityCondition = lRet$dPostProb <  UserParam$dLowerCutoffForFutility,
+                                               bFAEfficacyCondition = lRet$dPostProb > UserParam$dUpperCutoffEfficacy)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     Error 	<- 0

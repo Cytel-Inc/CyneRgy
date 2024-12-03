@@ -105,34 +105,11 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
     dLowerLimitCI                   <- dLogHR - dZalpha * dStdError
     dUpperLimitCI                   <- dLogHR + dZalpha * dStdError
     
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        if( dUpperLimitCI < log(UserParam$dMAV) )
-        {
-            strDecision <- "Efficacy"
-        }
-        else if( dLowerLimitCI > UserParam$dTV )
-        {
-            strDecision <- "Futility"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dUpperLimitCI < log(UserParam$dMAV)  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dUpperLimitCI < log(UserParam$dMAV),
+                                               bIAFutilityCondition = dLowerLimitCI > UserParam$dTV,
+                                               bFAEfficacyCondition = dUpperLimitCI < log(UserParam$dMAV))
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0

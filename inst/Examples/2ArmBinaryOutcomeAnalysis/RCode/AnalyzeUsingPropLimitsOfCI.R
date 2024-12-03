@@ -95,36 +95,12 @@ AnalyzeUsingPropLimitsOfCI<- function(SimData, DesignParam, LookInfo = NULL, Use
     lAnalysisResult      <- prop.test(mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel)
     dLowerLimitCI        <- lAnalysisResult$conf.int[ 1 ]
     dUpperLimitCI        <- lAnalysisResult$conf.int[ 2 ]
-    
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
 
-        if( dLowerLimitCI > UserParam$dLowerLimit )
-        {
-            strDecision <- "Efficacy"
-        }
-        else if( dUpperLimitCI < UserParam$dUpperLimit )
-        {
-            strDecision <- "Futility"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dLowerLimitCI > UserParam$dLowerLimit  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit,
+                                               bIAFutilityCondition = dUpperLimitCI < UserParam$dUpperLimit,
+                                               bFAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0
