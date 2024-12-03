@@ -124,33 +124,11 @@
     # dPValue   <- pnorm( dZVal, lower.tail = TRUE)
     
     # Step 5 - Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        if( dPValue <= DesignParam$Alpha )
-        {
-            strDecision <- "Efficacy"
-        }
-        else if( bIAFutilityCheck )
-        {
-            strDecision <- "Futility"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dPValue <= DesignParam$Alpha  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dPValue <= DesignParam$Alpha,
+                                               bIAFutilityCondition = bIAFutilityCheck,
+                                               bFAEfficacyCondition = dPValue <= DesignParam$Alpha)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     lRet <- list(TestStat = as.double(dTestStatistic),

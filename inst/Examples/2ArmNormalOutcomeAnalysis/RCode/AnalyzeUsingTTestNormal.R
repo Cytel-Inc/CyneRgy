@@ -74,30 +74,10 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, User
     dTValue              <- lAnalysisResult$statistic    # extract t-test statistic value
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
     
-    # Set look decision logic
-    if( nLookIndex < nQtyOfLooks ) # Interim Analysis
-    {
-        if( dTValue > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dTValue > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dTValue > dBoundary, 
+                                               bFAEfficacyCondition = dTValue > dBoundary)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error <-  0

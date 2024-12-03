@@ -75,32 +75,11 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
     
     # Compute the logrank test statistic
     dTS                      <- sqrt(logrankTest$chisq) * sign(logrankTest$obs[2] - logrankTest$exp[2])
-
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-
-        if( dTS <  dEffBdry )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dTS <  dEffBdry  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-
+    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dTS <  dEffBdry, 
+                                               bFAEfficacyCondition = dTS <  dEffBdry)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error                    <- 0

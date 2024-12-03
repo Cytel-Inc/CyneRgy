@@ -70,30 +70,11 @@ AnalyzeUsingEastManualFormula<- function(SimData, DesignParam, LookInfo = NULL, 
     # Equation 28.2 in East manual
     dZj                  <- ( dPiHatExperimental - dPiHatControl )/sqrt( dPiHatj*( 1- dPiHatj ) * ( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS)  ) 
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex])
-
-    if( nLookIndex < nQtyOfLooks ) # Interim Analysis
-    {
-        if( dZj > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else
-    {
-        if( dZj > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
     
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dZj > dBoundary, 
+                                               bFAEfficacyCondition = dZj > dBoundary)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error <-  0

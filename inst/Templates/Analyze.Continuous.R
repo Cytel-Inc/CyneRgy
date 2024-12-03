@@ -108,34 +108,11 @@
     }
     
     # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        
-        if( bIAEfficayCheck )
-        {
-            strDecision <- "Efficacy"
-        }
-        else if( bIAFutilityCheck )
-        {
-            strDecision <- "Futility"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( bFAEfficacyCheck  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = bIAEfficayCheck,
+                                               bIAFutilityCondition = bIAFutilityCheck,
+                                               bFAEfficacyCondition = bFAEfficacyCheck)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     lRet <- list(TestStat = as.double(dTestStatistic),

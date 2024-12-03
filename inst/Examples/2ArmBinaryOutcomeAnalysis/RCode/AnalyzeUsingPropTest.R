@@ -60,32 +60,11 @@ AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam
     dZValue              <- qnorm( 1 - dPValue )
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint,
                                     LookInfo$EffBdryUpper[ nLookIndex] )
-    
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        
-        if( dZValue > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dZValue > dBoundary  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dZValue > dBoundary, 
+                                               bFAEfficacyCondition = dZValue > dBoundary)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	= 0

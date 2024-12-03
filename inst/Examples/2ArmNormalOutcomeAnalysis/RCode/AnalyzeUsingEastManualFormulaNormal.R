@@ -75,30 +75,10 @@ AnalyzeUsingEastManualFormulaNormal <- function(SimData, DesignParam, LookInfo =
     dZj                  <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS )/( dStdDevPooled * sqrt( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ))
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex])
     
-    # Set look decision logic
-    if( nLookIndex < nQtyOfLooks ) # Interim Analysis
-    {
-        if( dZj > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dZj > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dZj > dBoundary, 
+                                               bFAEfficacyCondition = dZj > dBoundary)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     
