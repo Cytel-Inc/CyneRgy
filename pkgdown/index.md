@@ -1,3 +1,5 @@
+[//]: # (Comment: When editing this file, do not forget to edit README.md too.)
+
 # CyneRgy <a href="https://Cytel-Inc.github.io/CyneRgy/"><img src="man/figures/logo.png" align="right" height="120" /></a>
 
 R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial designs, without requiring you to develop an entire R code base. The CyneRgy R package illustrates the synergy of using R and Cytel products for clinical trial simulation and provides tools to help develop new functions.  
