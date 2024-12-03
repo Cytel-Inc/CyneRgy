@@ -5,25 +5,25 @@
 #' @param NumPrd Number of time periods that are provided. 
 #' @param PrdStart Vector with start of a time interval 
 #' @param AccrRate the accrual rate in each period.  
-#' @param  UserParam A list of user defined parameters in East.   You must have a default of NULL, as in this example.
-#' If UseParam are supplied in East, they will be an element in the list, UserParam. 
+#' @param  UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
+#' If UseParam are supplied, they will be an element in the list, UserParam. 
 #' @return The function must return a list in the return statement of the function. The information below lists 
 #'             elements of the list, if the element is required or optional and a description of the return values if needed. 
 #'             \describe{
 #'             \item{ArrivalTime}{Required numeric value. Contains a vector of generated arrival times.}
 #'             \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
 #'             }   
 #' @description
-#' This template can be used as a starting point for developing custom functionality when the patient arrives in the trial .  
+#' This template can be used as a starting point for developing custom functionality when the patient arrives in the trial.  
 #' The function signature must remain the same.  
 #' However, you may choose to ignore the parameters NumPrd, PrdStart, AccrRate if the approach to simulating arrival times
 #' you are creating only requires use of parameters the user will add to UserParam
-{{FUNCTION_NAME}}  <- function(NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+{{FUNCTION_NAME}}  <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {
 
     
@@ -36,7 +36,7 @@
     {
         
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
-        # take care of any issues.   Also, if there is a default value for the parameters you may want to set them here.  Default values usually
+        # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
         # are applied to have the same functionality as East, see the first example
         
         # EXMAPLE - Set the default if needed

@@ -12,7 +12,7 @@
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#'                                      ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#'                                      ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #'                                      ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #' @note The length of TreatmentID and AllocRatio must be the same.
 #' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
@@ -53,7 +53,7 @@ PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam
 {
            
     # If you wanted to save the input objects you could use the following to save the files to your working directory
-    # Saving is not available in Solara
+    # Saving is not available in East Horizon Explore
     # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
     # saveRDS( SimData, "SimData.Rds")
     # saveRDS( DesignParam, "DesignParam.Rds" )
