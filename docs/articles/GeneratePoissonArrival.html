@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">November 14, 2024</h4>
+            <h4 data-toc-skip class="date">December 03, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/HEAD/vignettes/GeneratePoissonArrival.Rmd" class="external-link"><code>vignettes/GeneratePoissonArrival.Rmd</code></a></small>
       <div class="d-none name"><code>GeneratePoissonArrival.Rmd</code></div>
@@ -115,7 +115,9 @@ RStudio.</p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/RCode" class="external-link">RCode
 directory of this example</a> you will find the following R file:</p>
 <ol style="list-style-type: decimal">
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/RCode/GeneratePoissonArrival.R" class="external-link">GeneratePoissonArrival.R</a></li>
+<li>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/RCode/GeneratePoissonArrival.R" class="external-link">GeneratePoissonArrival.R</a>
+- This file provides the code used for the two examples below.</li>
 </ol>
 </div>
 <div class="section level2">
@@ -124,7 +126,7 @@ directory of this example</a> you will find the following R file:</p>
 <p>In this example we make use of the UserParam and provide 7 rates,
 dRate1, dRate2, …, dRate7. Starting at time 0, the assume accrual rate
 is dRate1 per unit time, at time 1, the rate changes to dRate2, at time
-3, the rate changes to dRate3, ect. For example, if the time unit is
+3, the rate changes to dRate3, etc. For example, if the time unit is
 months, then this example illustrates how to ramp up over a 6 month
 period, where at month 6 and beyond the accrual rate is assumed to be
 dRate7.</p>
@@ -136,8 +138,8 @@ accrual that looks like the following:</p>
 <div class="section level2">
 <h2 id="example-2---ramp-up-in-accrual-using-built-in-input">Example 2 - Ramp-Up In Accrual Using Built In Input<a class="anchor" aria-label="anchor" href="#example-2---ramp-up-in-accrual-using-built-in-input"></a>
 </h2>
-<p>In this example we make use of the built-in inputs for East and
-Solara to provide a ramp-up in accrual that the user can specify.</p>
+<p>In this example we make use of the built-in inputs for East and East
+Horizon to provide a ramp-up in accrual that the user can specify.</p>
 <p>Suppose that the user specified the start periods as 0, 6, 12, 18,
 24, 48 and the expected accrual rates of 1, 4, 12, 24, 48. Then, from
 time 0 to time 6, the expected rate is 1 patient per time unit, from
