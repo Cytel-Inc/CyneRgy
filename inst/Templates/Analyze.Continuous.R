@@ -91,7 +91,7 @@
     bIAFutilityCheck <- FALSE
     bFAEfficacyCheck <- TRUE
     
-    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
+    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents ####
     
     if(  !is.null( LookInfo )  )
     {
@@ -107,12 +107,19 @@
         nQtyOfPatsInAnalysis <- nrow( SimData )
     }
     
-    # Setup look decision logic
+    # Step 2 - Create a data set as needed for the analysis using SimData, DesignParams, etc. ####
+    # Add any code here for creating the data set for analysis
+    
+    # Step 3 - Run the analysis #### 
+    # Add any code here for analysis 
+    
+    # Step 4 Setup look decision logic ####
     # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
                                                bIAEfficacyCondition = bIAEfficayCheck,
                                                bIAFutilityCondition = bIAFutilityCheck,
                                                bFAEfficacyCondition = bFAEfficacyCheck)
+
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     lRet <- list(TestStat = as.double(dTestStatistic),

@@ -123,12 +123,13 @@
     # dZVal     <- summary(fitCox)$coefficients[,"z"]
     # dPValue   <- pnorm( dZVal, lower.tail = TRUE)
     
-    # Step 5 - Setup look decision logic
+    # Step 5 - Setup look decision logic ####
     # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
                                                bIAEfficacyCondition = dPValue <= DesignParam$Alpha,
                                                bIAFutilityCondition = bIAFutilityCheck,
                                                bFAEfficacyCondition = dPValue <= DesignParam$Alpha)
+
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     lRet <- list(TestStat = as.double(dTestStatistic),

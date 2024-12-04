@@ -1,4 +1,4 @@
-#   Last Modified Date: {{CREATION_DATE}}
+#  Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @title Template for simulating patient data in R. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
@@ -24,16 +24,7 @@
 #' you are creating only requires use of parameters the user will add to UserParam
 {{FUNCTION_NAME}} <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
-    # Note: It can be helpful to save to the parameters that East sent.
-    # Saving is not available in East Horizon Explore
-    # The next two lines show how you could save the UserParam variable to an Rds file
-    # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    # saveRDS(UserParam, "UserParam.Rds")
-    # saveRDS(NumSub, "NumSub.Rds" )
-    # saveRDS( TreatmentID, "TreatmentID.Rds" )
-    # saveRDS( Mean, "Mean.Rds" )
-    # saveRDS( StdDev, "StdDev.Rds" )
-
+  
     # Step 1 - Validate custom variable input and set defaults ####
     if( is.null( UserParam ) )
     {

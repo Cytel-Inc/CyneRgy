@@ -40,7 +40,7 @@
 {
     # Step 1 - Initialize the return variables or other variables needed ####
 	Error 	        <- 0
-	vPatientOutcome <- rep( 0, NubSub )  # Note, as you simulate the patient data put in in this vector so it can be returned
+	vPatientOutcome <- rep( 0, NumSub )  # Note, as you simulate the patient data put in in this vector so it can be returned
 
 	# Step 2 - Validate custom variable input and set defaults ####
 	if( is.null( UserParam ) )
