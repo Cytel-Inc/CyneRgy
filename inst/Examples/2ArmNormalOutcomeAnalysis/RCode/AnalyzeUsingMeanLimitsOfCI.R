@@ -59,6 +59,8 @@ AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, Us
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfLooks          <- LookInfo$NumLooks
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+        RejType              <- LookInfo$RejType
+        TailType             <- DesignParam$TailType
     }
     else
     {
@@ -66,6 +68,7 @@ AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, Us
         nLookIndex           <- 1
         nQtyOfLooks          <- 1
         nQtyOfPatsInAnalysis <- nrow( SimData )
+        TailType             <- DesignParam$TailType
     }
     
     

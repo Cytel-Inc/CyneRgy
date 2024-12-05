@@ -66,12 +66,15 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
         CumEvents            <- LookInfo$InfoFrac*DesignParam$MaxEvents
         nQtyOfEvents         <- CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
+        RejType              <- LookInfo$RejType
+        TailType             <- DesignParam$TailType
     }else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
         nQtyOfLooks          <- 1
         nLookIndex           <- 1
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint
+        TailType             <- DesignParam$TailType
     }
     
     SimData$TimeOfEvent      <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed

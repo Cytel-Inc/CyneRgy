@@ -108,11 +108,14 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
     nLookIndex           <- LookInfo$CurrLookIndex
     nQtyOfPatsForInterim <- LookInfo$CumCompleters[ nLookIndex ]
     nAnalysisVisit       <- LookInfo$InterimVisit
+    RejType              <- LookInfo$RejType
+    TailType             <- DesignParam$TailType
   } else
   {
     nLookIndex           <- 1
     nQtyOfLooks          <- 1
     nQtyOfPatsForInterim <- nrow( SimData )
+    TailType             <- DesignParam$TailType
   }
 
   dfWideData <- data.frame(id = 1:DesignParam$SampleSize, TreatmentID = SimData$TreatmentID)
