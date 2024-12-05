@@ -58,6 +58,7 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
     library(CyneRgy)
     library(survival)
     
+    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it

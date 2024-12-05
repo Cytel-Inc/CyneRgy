@@ -84,7 +84,7 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
 {
     library(CyneRgy)
     
-    # Step 1 - Retrieve necessary information from the objects East or Solara sent ####
+    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )
     {
         # Group sequential design

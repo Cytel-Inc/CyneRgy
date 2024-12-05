@@ -34,7 +34,7 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
     library(CyneRgy)
     library(survival)
 
-    # Retrieve necessary information from the objects East sent
+    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it

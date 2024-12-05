@@ -52,7 +52,7 @@ AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, Us
 {
     library(CyneRgy)
 
-    # Step 1 - Retrieve necessary information from the objects Cytel objects sent ####
+    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )
     {
         # Group sequential design
