@@ -3,7 +3,23 @@
 #' @title Compute the statistic using formula 28.2 in the East manual.
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
-#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
+#' @param LookInfo A list containing input parameters related to multiple looks, which the user may need to compute 
+#'                 test statistics and perform tests. Users should access the variables using their names 
+#'                 (e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
+#'                 
+#'                 - `LookInfo$NumLooks`: An integer representing the number of looks in the study.
+#'                 - `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
+#'                 - `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
+#'                 - `LookInfo$RejType`: A code representing rejection types. Possible values are:
+#'                   - **Efficacy Only:**
+#'                     - `0`: 1-Sided Efficacy Upper.
+#'                     - `2`: 1-Sided Efficacy Lower.
+#'                   - **Futility Only:**
+#'                     - `1`: 1-Sided Futility Upper.
+#'                     - `3`: 1-Sided Futility Lower.
+#'                   - **Efficacy and Futility:**
+#'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
+#'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
 #' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. For this example, user defined parameters are not included. 
 #' @description Use the formula 28.2 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
 #'              The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule. 
