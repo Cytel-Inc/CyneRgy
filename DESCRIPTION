@@ -27,3 +27,4 @@ Depends: R(>= 4.0.0),
 Suggests: 
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
+URL: https://Cytel-Inc.github.io/CyneRgy, https://github.com/Cytel-Inc/CyneRgy/

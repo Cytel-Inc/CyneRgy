@@ -4,7 +4,7 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 #' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East as an input.  
 #'              This example does NOT include a futility rule. 
 #'              
@@ -15,7 +15,7 @@
 #'                                    Decision = 3 --> Futility Boundary Crossed
 #'                                    Decision = 4 --> Equivalence Boundary Crossed
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #'@note Helpful Hints:
 #'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
@@ -60,32 +60,11 @@ AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo = NULL, UserParam
     dZValue              <- qnorm( 1 - dPValue )
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint,
                                     LookInfo$EffBdryUpper[ nLookIndex] )
-    
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        
-        if( dZValue > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dZValue > dBoundary  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dZValue > dBoundary, 
+                                               bFAEfficacyCondition = dZValue > dBoundary)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	= 0

@@ -1,5 +1,5 @@
-pandoc: 3.1.1
-pkgdown: 2.0.9
+pandoc: '3.2'
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   2ArmBinaryOutcomeAnalysisDescription: 2ArmBinaryOutcomeAnalysisDescription.html
@@ -14,12 +14,10 @@ articles:
   ContibutingToCyneRgy: ContibutingToCyneRgy.html
   ExampleOutline: ExampleOutline.html
   GeneratePoissonArrival: GeneratePoissonArrival.html
-  Home: Home.html
   PatientDropout: PatientDropout.html
   PatientRandomization: PatientRandomization.html
   TreatmentSelectionDescription: TreatmentSelectionDescription.html
-last_built: 2024-09-26T16:48Z
+last_built: 2024-12-03T20:34Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles
-

@@ -1,15 +1,15 @@
 #' @param SimulatePatientOutcomePercentAtZero
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
+#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param  UserParam A list of user defined parameters in East.   The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
 #' If UseParam is supplied, the list must contain the following named elements:
 #'  UserParam$dProbOfZeroOutcomeCtrl - A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
 #'  UserParam$dProbOfZeroOutcomeExp - A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
 #' @description
-#' In this example, the continuous outcome is a patient's change from baseline.   For this function, 20% of patients are believed to have no change due to treatment.  
+#' In this example, the continuous outcome is a patient's change from baseline. For this function, 20% of patients are believed to have no change due to treatment.  
 #' As such, this function simulations patient outcome where, on average, 20% will have a value of 0 for the outcome and 80%, on average, will have their value
 #' simulated from a normal distribution with the mean and standard deviation as sent from East. 
 SimulatePatientOutcomePercentAtZero <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)

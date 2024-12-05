@@ -1,27 +1,26 @@
-#  Function Template for Generating Response Values for Two Arm Continuous Endpoint: Repeated Measures
-
-#'@name: Generate Responses for 2 arm Normal Repeated measures
-#'@Endpoints : Repeated measures (2 arm continuous endpoint)
-#'@author Shubham Lahoti
-#'@description : The following function generates Response Values for Two Arm Continuous Endpoint: Repeated Measures
-#'@param NumSub: The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#'@param ProbDrop: A Dropout probability for both the arms. The argument value is passed from Engine.
-#'@param NumVisit: Number of Visits
-#'@param TreatmentID: Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
-#'@param Inputmethod: There were two options  1) Actual values , 2) Change from baseline. 
-#'Actual values: You give mean and SD values for each visit and using those you will generate responses.
-#'Change from baseline: Expected change from baseline at each visit rather than the true means.
-#'@param VisitTime: Visit Times
-#'@param MeanControl: Control Mean for all visits
-#'@param MeanTrt: Treatment Mean for all visits
-#'@param StdDevControl: Control Standard Deviations for all visits
-#'@param StdDevTrt: Treatment Standard Deviations for all visits
-#'@param CorrMat: Correlation Matrix between all visits
-#'@param UserParam: A list of user defined parameters in East. The default must be NULL. It is an optional parameter.
+#' @param GenerateResponseDiffOfMeansRepeatedMeasures
+#' @name Generate Responses for 2 arm Normal Repeated measures
+#' @Endpoints Repeated measures (2 arm continuous endpoint)
+#' @author Shubham Lahoti
+#' @description The following function generates Response Values for Two Arm Continuous Endpoint: Repeated Measures
+#' @param NumSub The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
+#' @param ProbDrop A Dropout probability for both the arms. The argument value is passed from Engine.
+#' @param NumVisit Number of Visits
+#' @param TreatmentID Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
+#' @param Inputmethod There were two options  1) Actual values, 2) Change from baseline. 
+#' Actual values: You give mean and SD values for each visit and using those you will generate responses.
+#' Change from baseline: Expected change from baseline at each visit rather than the true means.
+#' @param VisitTime Visit Times
+#' @param MeanControl Control Mean for all visits
+#' @param MeanTrt Treatment Mean for all visits
+#' @param StdDevControl Control Standard Deviations for all visits
+#' @param StdDevTrt Treatment Standard Deviations for all visits
+#' @param CorrMat Correlation Matrix between all visits
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. It is an optional parameter.
 
 
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.
 
 #' @return retval : A set of arrays of response for all subjects. Each array corresponds to each visit user has specified 

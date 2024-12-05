@@ -1,11 +1,11 @@
 #   Last Modified Date: 03/26/2024
 #' @name GeneratePoissonArrival
-#' @title Generate patient arrival time according to a Poisson processes.   
+#' @title Generate patient arrival time according to a Poisson process.   
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumPrd Number of time periods that are provided. 
 #' @param PrdStart Vector with start of a time interval, PrdStarr[ 1 ] = 0 
 #' @param AccrRate the accrual rate in each period.  
-#' @param  UserParam A list of user defined parameters that may be provided in East or Solara.   You must have a default of NULL, as in this example.
+#' @param UserParam A list of user defined parameters that may be provided in East or East Horizon. You must have a default of NULL, as in this example.
 #' The user may supplies rates names Rate1, Rate2, ...., RateX to represent the per unit time accrual rate where the maximum RateX is used after the ramp-up.
 #'    \describe{
 #'      \item{Rate1}{The rate in the first unit of time}
@@ -14,7 +14,7 @@
 #' @description
 #' This function allows for patient arrival time in the clinical trial according to a Poisson process.  If the UserParam is provided then PrdStart and AccrRate are ignored.
 #' If the UserParam is supplied, a ramp-up in accrual is obtained by
-#' supplying more than one Rate parameter.  The rate is per unit time and the Rate with the largest index will be used after the ramp up.
+#' supplying more than one Rate parameter. The rate is per unit time and the Rate with the largest index will be used after the ramp up.
 #' If UserParam is not supplied, then PrdStart, AccrRate are used to simulate arrival times according to a Poisson process.  
 GeneratePoissonArrival  <- function(NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {

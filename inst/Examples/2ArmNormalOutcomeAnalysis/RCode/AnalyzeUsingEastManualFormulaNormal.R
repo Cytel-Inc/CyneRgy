@@ -3,9 +3,9 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 #' 
-#' @description Use the formula Q.3.3 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
+#' @description Use the formula Q.3.3 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
 #'              The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule. 
 #'              Two sample Z test for Normal distribution. Number of Looks > 1.
 #'              
@@ -16,7 +16,7 @@
 #'                                    Decision = 3 --> Futility Boundary Crossed
 #'                                    Decision = 4 --> Equivalence Boundary Crossed
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 
 #'@note Helpful Hints:
@@ -75,30 +75,10 @@ AnalyzeUsingEastManualFormulaNormal <- function(SimData, DesignParam, LookInfo =
     dZj                  <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS )/( dStdDevPooled * sqrt( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ))
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex])
     
-    # Set look decision logic
-    if( nLookIndex < nQtyOfLooks ) # Interim Analysis
-    {
-        if( dZj > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dZj > dBoundary )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dZj > dBoundary, 
+                                               bFAEfficacyCondition = dZj > dBoundary)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     

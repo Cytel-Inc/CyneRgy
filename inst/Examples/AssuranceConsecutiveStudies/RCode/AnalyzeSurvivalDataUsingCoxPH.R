@@ -1,7 +1,7 @@
-#' @param SimData Data frame which consists of data generated in current simulation.
+#' @param SimData Dataframe which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     Error <- 0 

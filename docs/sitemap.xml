@@ -1,144 +1,49 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/404.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmBinaryOutcomeAnalysisDescription.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmBinaryOutcomePatientSimulation.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomeAnalysisDescription.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulation.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulationDescription.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalRepeatedMeasuresResponseGeneration.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomeAnalysisDescription.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomePatientSimulationDescription.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/AssuranceConsecutiveStudies.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/ChildhoodAnxiety.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/ContibutingToCyneRgy.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/GeneratePoissonArrival.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/Home.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/PatientDropout.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/PatientRandomization.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/articles/TreatmentSelectionDescription.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/index.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula_Normal.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingHazardRatioLimitsOfCI.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingMeanLimitsOfCI.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropLimitsOfCI.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropTest.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingTTestNormal.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/ComputeScaleGivenShapeMedian.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/InitLoadCyneRgy.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/PerformTreatmentSelection.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/ReplaceTagsInFile.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpThatAreBetterThanCtrl.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpUsingBayesianRule.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpWithPValueLessThanSpecified.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/SelectSpecifiedNumberOfExpWithHighestResponses.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZeroBetaDist.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalMixtureExponentials.html</loc>
-  </url>
-  <url>
-    <loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalWeibull.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/404.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmBinaryOutcomeAnalysisDescription.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmBinaryOutcomePatientSimulation.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomeAnalysisDescription.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulation.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulationDescription.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalRepeatedMeasuresResponseGeneration.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomeAnalysisDescription.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomePatientSimulationDescription.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/AssuranceConsecutiveStudies.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/ChildhoodAnxiety.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/ContibutingToCyneRgy.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/GeneratePoissonArrival.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/Home.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/PatientDropout.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/PatientRandomization.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/TreatmentSelectionDescription.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/index.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/authors.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/index.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula_Normal.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingHazardRatioLimitsOfCI.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingMeanLimitsOfCI.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropLimitsOfCI.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropTest.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingTTestNormal.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/ComputeScaleGivenShapeMedian.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/InitLoadCyneRgy.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/PerformTreatmentSelection.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/ReplaceTagsInFile.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpThatAreBetterThanCtrl.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpUsingBayesianRule.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpWithPValueLessThanSpecified.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SelectSpecifiedNumberOfExpWithHighestResponses.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZeroBetaDist.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalMixtureExponentials.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalWeibull.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/index.html</loc></url>
 </urlset>
+

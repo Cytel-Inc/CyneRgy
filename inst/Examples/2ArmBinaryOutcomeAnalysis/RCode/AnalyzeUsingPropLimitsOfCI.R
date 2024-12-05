@@ -5,9 +5,9 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East or Solara. UserParam must be supplied, the list must contain the following named elements:
+#' @param UserParam A list of user defined parameters in East or East Horizon. UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifics the lower limit, eg  Minimum Acceptable Value (MAV). }
+#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifics the lower limit, eg  Minimum Acceptable Value (MAV).}
 #'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg Target Value (TV).}
 #'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the prop.test function in base R.}
 #' }
@@ -31,9 +31,9 @@
 #'                                    Decision = 2 --> Upper Efficacy Boundary Crossed
 #'                                    Decision = 3 --> Futility Boundary Crossed
 #'                                    Decision = 4 --> Equivalence Boundary Crossed
-#' @return Delta The difference in the estimates, is utilzied in Solara to create the observed graph
+#' @return Delta The difference in the estimates, is utilzied in East Horizon Explore to create the observed graph
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #'@note In this example, the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
 #'@note Helpful Hints:
@@ -95,36 +95,12 @@ AnalyzeUsingPropLimitsOfCI<- function(SimData, DesignParam, LookInfo = NULL, Use
     lAnalysisResult      <- prop.test(mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel)
     dLowerLimitCI        <- lAnalysisResult$conf.int[ 1 ]
     dUpperLimitCI        <- lAnalysisResult$conf.int[ 2 ]
-    
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
 
-        if( dLowerLimitCI > UserParam$dLowerLimit )
-        {
-            strDecision <- "Efficacy"
-        }
-        else if( dUpperLimitCI < UserParam$dUpperLimit )
-        {
-            strDecision <- "Futility"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dLowerLimitCI > UserParam$dLowerLimit  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit,
+                                               bIAFutilityCondition = dUpperLimitCI < UserParam$dUpperLimit,
+                                               bFAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0

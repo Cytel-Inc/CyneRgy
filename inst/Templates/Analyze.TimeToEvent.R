@@ -10,21 +10,21 @@
 #'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
 #'          \item{SurvivalTime}{Numeric value for the survival time or time-to-event for the patient, note this is not the time in the trial
-#'                               that the patient experiences the event. }
+#'                               that the patient experiences the event.}
 #'          \item{DropOutTime}{Numeric value for the dropout time for the patient in a time to event trial.}
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
 #'      may need to compute test statistic and perform test. User should access the variables
-#'      using names for eg. DesignParam$Alphae and not order.  Them items are as follows:
+#'      using names for e.g., DesignParam$Alphae and not order.  Them items are as follows:
 #'      \describe{
 #'          \item{SampleSize}{Sample size of the trial}
 #'          \item{Alpha}{Type I Error}
-#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2 }
+#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2}
 #'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
-#'          \item{LowerAlpha}{Two Sided Asymmetric Tests }
-#'          \item{UpperAlpha}{Two Sided Asymmetric Tests }
+#'          \item{LowerAlpha}{Two Sided Asymmetric Tests}
+#'          \item{UpperAlpha}{Two Sided Asymmetric Tests}
 #'          \item{MaxEvents}{Maximum Events in a time to event based trial}
-#'          \item{FollowUpType}{For survival tests, Follow Up Type.  Possible values are: Until End ofS Study: 0, For fixed period: 1}
+#'          \item{FollowUpType}{For survival tests, Follow Up Type. Possible values are: Until End ofS Study: 0, For fixed period: 1}
 #'      
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
@@ -35,7 +35,7 @@
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{CumAlpha}{cumulative alpha spent, one sided tests}
-#'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible vaues are: Z Scale: 0, p-Value Scale: 1}
+#'                      \item{EffBdryScale}{Efficacy boundary scale. Possible vaues are: Z Scale: 0, p-Value Scale: 1}
 #'                      \item{EffBdry}{Vector of efficacy bondaries, one sided tests}
 #'                      \item{EffBdryUpper}{Vector of upper efficacy bondaries, two sided tests}
 #'                      \item{EffBdryLower}{Vector of lower efficacy boundary, two sided tests}
@@ -62,15 +62,15 @@
 #'                  \item{TestStat}{Numeric value. Required if Decision is not returned}
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
 #'                  \item{Delta}{HazardRatio}{Optional numeric value. 
-#'                                            Used in Solara for creating the observed hazard ratio graph. 
+#'                                            Used in East Horizon Explore for creating the observed hazard ratio graph. 
 #'                                            Only applicable for time-to-event data.}
 #'                      }
-{{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library(CyneRgy)
     
@@ -110,7 +110,7 @@
     
     # Add the Observed Time variable 
     SimData              <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis ,]   # Exclude any patients that were not enrolled by the time of the analysis
-    SimData$Event        <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )  # If the event is observed after the analysis it is not observed, eg censored 
+    SimData$Event        <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )  # If the event is observed after the analysis it is not observed, e.g., censored 
     SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
     
     # Step 3 - Perform the desired analysis ####
@@ -124,33 +124,12 @@
     # dPValue   <- pnorm( dZVal, lower.tail = TRUE)
     
     # Step 5 - Setup look decision logic ####
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        if( dPValue <= DesignParam$Alpha )
-        {
-            strDecision <- "Efficacy"
-        }
-        else if( bIAFutilityCheck )
-        {
-            strDecision <- "Futility"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dPValue <= DesignParam$Alpha  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-    
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dPValue <= DesignParam$Alpha,
+                                               bIAFutilityCondition = bIAFutilityCheck,
+                                               bFAEfficacyCondition = dPValue <= DesignParam$Alpha)
+
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     lRet <- list(TestStat = as.double(dTestStatistic),

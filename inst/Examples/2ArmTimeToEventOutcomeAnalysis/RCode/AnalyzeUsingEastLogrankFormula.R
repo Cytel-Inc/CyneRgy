@@ -42,7 +42,7 @@
 #'                                    }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
@@ -151,31 +151,10 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     # Compute the logrank test statistic
     dTS       <- dNum/sqrt( dDen )
 
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        
-        if( dTS <  dEffBdry )
-        {
-            strDecision <- "Efficacy"
-        }
-        else 
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dTS <  dEffBdry  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dTS <  dEffBdry, 
+                                               bFAEfficacyCondition = dTS <  dEffBdry)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error    <- 0

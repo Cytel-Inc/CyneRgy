@@ -163,31 +163,11 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
   {
       dAlpha <- DesignParam$Alpha
   }
-  
-  # Set look decision logic
-  if( nLookIndex < nQtyOfLooks ) # Interim Analysis
-  {
-      if( dpValue <= dAlpha )
-      {
-          strDecision <- "Efficacy"
-      }
-      else
-      {
-          strDecision <- "Continue"
-      }
-  }
-  else # Final Analysis
-  {
-      if( dpValue <= dAlpha )
-      {
-          strDecision <- "Efficacy"
-      }
-      else
-      {
-          strDecision <- "Futility"
-      }
-  }
-  
+
+  # Generate decision using GetDecisionString and GetDecision helpers
+  strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                             bIAEfficacyCondition = dpValue <= dAlpha,
+                                             bFAEfficacyCondition = dpValue <= dAlpha)
   nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
   
   return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDelta), SecDelta = as.double(dSecDelta), ErrorCode = as.integer(nError)))
