@@ -92,8 +92,8 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
         nQtyOfLooks          <- LookInfo$NumLooks
         nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-        # RejType              <- LookInfo$RejType
-        # TailType             <- DesignParam$TailType
+        RejType              <- LookInfo$RejType
+        TailType             <- DesignParam$TailType
     }
     else
     {
@@ -102,7 +102,7 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
         nQtyOfLooks          <- 1
         nQtyOfEvents         <- DesignParam$MaxCompleters
         nQtyOfPatsInAnalysis <- nrow( SimData )
-        # TailType             <- DesignParam$TailType
+        TailType             <- DesignParam$TailType
     }
     
     
