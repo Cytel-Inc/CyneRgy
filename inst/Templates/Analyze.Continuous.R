@@ -92,12 +92,14 @@
     bFAEfficacyCheck <- TRUE
     
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents ####
-    
+    # Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )
     {
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+        RejType              <- LookInfo$RejType
+        TailType             <- DesignParam$TailType
     }
     else
     {
@@ -105,6 +107,7 @@
         nLookIndex           <- 1 
         nQtyOfEvents         <- DesignParam$MaxCompleters
         nQtyOfPatsInAnalysis <- nrow( SimData )
+        TailType             <- DesignParam$TailType
     }
     
     # Step 2 - Create a data set as needed for the analysis using SimData, DesignParams, etc. ####

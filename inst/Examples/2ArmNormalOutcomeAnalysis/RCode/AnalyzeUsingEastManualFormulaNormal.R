@@ -37,18 +37,21 @@ AnalyzeUsingEastManualFormulaNormal <- function(SimData, DesignParam, LookInfo =
 {
     library(CyneRgy)
     
-    # Retrieve necessary information from the objects East sent
+    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )
     {
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfLooks          <- LookInfo$NumLooks
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+        RejType              <- LookInfo$RejType
+        TailType             <- DesignParam$TailType
     }
     else
     {
         nLookIndex           <- 1
         nQtyOfLooks          <- 1
         nQtyOfPatsInAnalysis <- nrow( SimData )
+        TailType             <- DesignParam$TailType
     }
     
     # Create the vector of simulated data for this IA - East sends all of the simulated data

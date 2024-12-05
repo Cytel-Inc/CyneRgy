@@ -82,6 +82,7 @@
     bFAEfficacyCheck <- TRUE
     
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
+    # Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so this is a group sequential design and need to use the look information
@@ -89,12 +90,15 @@
         nLookIndex   <- LookInfo$CurrLookIndex
         CumEvents    <- LookInfo$InfoFrac*DesignParam$MaxEvents
         nQtyOfEvents <- CumEvents[ nLookIndex ]
+        RejType      <- LookInfo$RejType
+        TailType     <- DesignParam$TailType
     }
     else
     {
         nQtyOfLooks  <- 1
         nLookIndex   <- 1
         nQtyOfEvents <- DesignParam$MaxEvents 
+        TailType     <- DesignParam$TailType
     }
     
     
