@@ -64,8 +64,6 @@ GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, Treat
         }
     }	
     
-
-    
     # Repeated Measures Dropout Output Hierarchy
     # Step 1: If user has returned Censor Indicator arrays CensorInd1, CensorInd2, ..., CensorInd<NumVisit> from their R code, 
     # then no other outputs are required. In that case, all other outputs become optional and the workflow ends here. 
@@ -77,10 +75,7 @@ GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, Treat
     # 
     # Step 3: If user has returned DropOutTime from their R code, then simulations run successfully and 
     # all other outputs becomes optional. no other outputs are required. If user has not returned DropOutTime from their R code, 
-    # then the application will return an error code. The workflow ends here. 
-    
-    
-    #retval is one of the options: 1) CensorID, 2) VisitID, 3) DropOutTime
+    # then the application will return an error code. The workflow ends here.
     
     return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( Error ) ) );
 }
