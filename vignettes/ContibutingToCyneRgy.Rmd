@@ -33,7 +33,7 @@ To make sure the examples are clear and included in the package website please u
 1. Use Git to commit to the branch created above.
 1. Add a Pull Request in GitHub to merge your development branch to the Dev branch.   
 
-Please note, all branches are merged to Dev. Dev is used to combine all branches, then a branch is created for building the package website and reviewed for documentation and completeness. Once this is done, the Dev branch is merged via a Pull Request to main and the example is then included on the website as well as in the package when it is installed from GitHub. 
+Please note that all branches are merged into Dev. Dev is used to combine all branches, then a branch is created for building the package website and reviewed for documentation and completeness. Once this is done, the Dev branch is merged into Main via a Pull Request and the example is then included on the website as well as in the package when it is installed from GitHub. 
 
 
 
@@ -44,39 +44,41 @@ This document is intended to help with development of this package. In this docu
 
 
 ## Helpful packages
-1. [pkgdown](https://pkgdown.r-lib.org/reference/build_home.html) - Package used to create the package website. 
+1. [pkgdown](https://pkgdown.r-lib.org/reference/build_home.html) - Package used to create the package website.
+ ```
+usethis::use_pkgdown_github_pages()  # Likely you do not need to run this again as it was set up already.
+pkgdown::build_site() # Preview the site locally before publishing
+```
 2. [testthat](https://testthat.r-lib.org/) - Useful for creating and testing R packages.
 3. [covr](https://covr.r-lib.org/) - Use to create a test coverage report with the following commands
  ```
 usethis::use_coverage()  # Likely you do not need to run this again as it was set up already.
 covr::package_coverage() # Computes the coverage
-covr::report()           # Create a report
+covr::report()           # Creates a report
 ```
 
 ## Helpful Links
-1. [Git for Windows](https://git-for-windows.github.io/) - Git for Windows; I believe you need to install this to use source control from Windows.
-2. [Tortoise Git](https://tortoisegit.org/) - Free Windows shell program (runs in Windows explorer by right-clicking on a folder/file) – See image to the right.  This allows you to commit changes to GitHub without having to remember all the commands. 
-3. [GitHub Flow](https://guides.github.com/introduction/flow/) - Helps understanding GitHub flow.
 
+1. [Git for Windows](https://git-for-windows.github.io/) - Git for Windows; I believe you need to install this to use source control from Windows.
+2. [Tortoise Git](https://tortoisegit.org/) - Free Windows shell program (runs in Windows explorer by right-clicking on a folder/file). This allows you to commit changes to GitHub without having to remember all the commands. 
+3. [GitHub Flow](https://guides.github.com/introduction/flow/) - Helps understanding GitHub flow.
 4. [Getting Started with Source Control](https://git-scm.com/book/en/v1/Getting-Started-About-Version-Control) - An introduction to source control and getting started with Git.
 5. [Git Tutorial](https://backlog.com/git-tutorial/) - Useful Git tutorial. 
-
-
 
 
 ## Helpful Code Snippets
 If you need help please ask Kyle Wathen or another team member.
 
-Add code snippet by Clicking Tools-> Global Options -> Code-> Edit Snippets. In the Snippets menu choose R. When creating new snippets the key work snippet should start in column 1 and the snippets should be indented. To insert a snippet in R Studio you type the snippet name, or partial name, and click tab. 
+Add code snippet by Clicking Tools → Global Options → Code → Edit Snippets. In the Snippets menu choose R. When creating new snippets the keyword "snippet" should start in column 1 and the snippets should be indented. To insert a snippet in RStudio, type the snippet name, or partial name, and click tab. 
 
 
 Snippet to insert a new comment (newcom) will insert a commented code block.
 
- ```
+```
 snippet newcom
-    `r paste( paste( rep( "#", 100), collapse="" ), "." )`
-    # ${0} ####
-     `r paste( paste( rep( "#", 100), collapse="" ), "." )`
+   `r paste( paste( rep( "#", 100), collapse="" ), "." )`
+   # ${0} ####
+   `r paste( paste( rep( "#", 100), collapse="" ), "." )`
 ```
 
 Snippet to insert a header (header).

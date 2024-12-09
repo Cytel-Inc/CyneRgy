@@ -11,47 +11,49 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Introduction 
-This document provides an overview of the East-R examples provided in this directory.  Each example is included in a directory that provides 
-* an R Studio project file, 
-* a Description file that describes the example, 
-* an RCode folder which contains the example R scripts and FillInTheBlankRCode (the worked examples with various code deleted so you can practice and fill in the blanks). 
+## Introduction 
+This document provides an overview of the R examples provided in [this directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples). Each example is included in a directory that provides:
+
+- an RStudio project file, 
+- a Description file that describes the example, 
+- an RCode folder which contains the example R scripts,
+- a FillInTheBlankRCode folder which contains the worked examples with various code deleted so you can practice and fill in the blanks. 
 
 The following examples are included:
 
 ## Patient Simulation 
 
-1. **[2-Arm, Normal Outcome - Patient Outcome Simulation Examples](2ArmNormalOutcomePatientSimulationDescription.html)**:
+1. **[2-Arm, Normal Outcome - Patient Simulation Examples](2ArmNormalOutcomePatientSimulationDescription.html)**:
 The following examples demonstrate how to add new patient outcome simulation capabilities into East using an R function in the context of a two-arm trial with a normally distributed patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.
 
-1. **[2-Arm, Binary Outcome, Patient Simulation](2ArmBinaryOutcomePatientSimulation.html)**: These examples demonstrate how to add new patient outcome simulation functionality into East using an R function in the context of a two-arm trial with normal outcomes. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are normal. The intent of these examples is to demonstrate how to add new ways to simulate patient data using R in a variety of trial examples.
+1. **[2-Arm, Time-To-Event Outcome - Patient Simulation](2ArmTimeToEventOutcomePatientSimulationDescription.html)**: This example demonstrates how to add new patient outcome simulation functionality into East using an R function. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are time-to-event. The intent of these examples is to demonstrate how to add new ways to simulate time-to-event data using R.  
 
-1. **[2-Arm, Time-to-Event Outcome, Patient Simulation](2ArmTimeToEventOutcomePatientSimulationDescription.html)**: This example demonstrates how to add new patient outcome simulation functionality into East using an R function. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are time-to-event. The intent of these examples is to demonstrate how to add new ways to simulate time-to-event data using R.  
+1. **[2-Arm, Binary Outcome - Patient Simulation](2ArmBinaryOutcomePatientSimulation.html)**: These examples demonstrate how to add new patient outcome simulation functionality into East using an R function in the context of a two-arm trial with binary outcomes. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are binary. The intent of these examples is to demonstrate how to add new ways to simulate patient data using R in a variety of trial examples.
 
-1. **[2-Arm, Repeated Measure, Patient Simulation](2ArmNormalRepeatedMeasuresResponseGeneration.html)**:
-Repeated measures involve collecting multiple data points for the same variable from the same subjects across multiple time periods. This method provides insights into the subjects' development and changes over time. In this context, a single subject can have multiple responses over time, and these responses can be correlated across different visits.
+1. **[2-Arm, Normal Outcome, Repeated Measure - Patient Simulation](2ArmNormalRepeatedMeasuresResponseGeneration.html)**:
+Repeated measures involve collecting multiple data points for the same variable from the same subjects across multiple time periods. This method provides insights into the subjects' development and changes over time. In this context, a single subject can have multiple responses over time, and these responses can be correlated across different visits. For a Normal endpoint in repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits.
 
-For a Normal endpoint in repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits.
+1. **[Childhood Anxiety Trial](ChildhoodAnxiety.html)**: This example covers the situation where the patient data simulation needs to be improved to match what is expected in a clinical trial in childhood anxiety.
 
 ## Analysis 
 
-1. **[2-Arm, Binary Outcome Analysis](2ArmBinaryOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality into East using an R function. For all examples, we assume the trial design consists of a control and experimental treatments. There are 2 Interim Analysis, IA, and a Final Analysis, FA. At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
+1. **[2-Arm, Normal Outcome - Analysis](2ArmNormalOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for normal data into East using an R function. For all examples, we assume the trial design consists of a control and experimental treatments. There are 2 Interim Analysis (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
 
-1. **[2-Arm, Time-To-Event Outcome  Analysis](2ArmTimeToEventOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality  for time-to-event data into Cytel products using an R function.  For all examples, we assume the trial design consists of control and an experimental treatments. There are 2 Interim Analyses, IA, and a Final Analysis, FA. At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
+1. **[2-Arm, Time-To-Event Outcome - Analysis](2ArmTimeToEventOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality  for time-to-event data into Cytel products using an R function.  For all examples, we assume the trial design consists of control and an experimental treatments. There are 2 Interim Analyses (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
 
-1. **[2-Arm, Binary Outcome Analysis](2ArmBinaryOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for binary data into Cytel products using an R function.  For all examples, we assume the trial design consists of control and an experimental treatments. There are 2 Interim Analysis, IA, and a Final Analysis, FA. At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
+1. **[2-Arm, Binary Outcome - Analysis](2ArmBinaryOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for binary data into Cytel products using an R function.  For all examples, we assume the trial design consists of control and an experimental treatments. There are 2 Interim Analysis (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
 
 
 ## Treatment Selection 
 
-1. **[Treatment Selection](TreatmentSelectionDescription.html)**: This example demonstrates a multi-arm trial with a treatment selection rule. The examples provide additional approaches to treatment selection. 
+1. **[Treatment Selection](TreatmentSelectionDescription.html)**: This example demonstrates a multi-arm trial with a treatment selection rule and binary outcome. The examples provide additional approaches to treatment selection. 
 
 ## Advanced Example
 These examples provide multiple R functions to achieve a more complex design option. 
 
-1. **[Bayesian Assurance of Consecutive Studies](AssurnaceConsecutiveStudies.html)**: The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples. These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance. The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
+1. **[Bayesian Assurance of Consecutive Studies](AssuranceConsecutiveStudies.html)**: The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples. These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance. The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
 
-1. **2-Arm, Time-to-Event Outcome, Sample Size Re-estimation**: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.
+1. **2-Arm, Time-To-Event Outcome - Sample Size Re-Estimation**: This example demonstrates how to add new approaches to the SSR when using time-to-event data. For the SSR in this type of design, the number of events can be increased by the function in R.
 
 
 
@@ -60,7 +62,7 @@ These examples provide examples for other integration points.
 
 1. **[Poisson Arrival Times](GeneratePoissonArrival.html)**: This example demonstrates how to add the ability to generate patient arrival time according to a Poisson process with a ramp-up.  The examples included here are to provide different approaches for simulating arrival time according to a Poisson process. 
 
-1. **[Patient Dropout](PatientDroput.html)**: For all examples, we assume the trial design consist of control and an experimental treatment. Patients may dropout of a trial for a variety of reasons such as safety issues, treatment burden or other non-trial related issues. The dropout rate can be as high as 30% in some trials if the drug has adverse side effects. The introduction of dropout probabilities or dropout hazard rate plays a significant role during data generation that can be further utilized during the analysis.
+1. **[Patient Dropout](PatientDropout.html)**: For all examples, we assume the trial design consists of a control and an experimental treatment. Patients may dropout of a trial for a variety of reasons such as safety issues, treatment burden or other non-trial related issues. The dropout rate can reach as high as 30% in some trials if the drug has adverse side effects. The introduction of dropout probabilities or dropout hazard rate plays a significant role during data generation that can be further utilized during the analysis.
 
 
 1. **[Patient Randomization](PatientRandomization.html)**: Examples of how to use R for randomization.

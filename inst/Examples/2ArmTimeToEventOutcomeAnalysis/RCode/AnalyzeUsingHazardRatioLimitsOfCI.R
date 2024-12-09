@@ -3,7 +3,7 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East or Solara. UserParam must be supplied, the list must contain the following named elements:
+#' @param UserParam A list of user defined parameters in East or East Horizon. UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
 #'   \item{UserParam$dMAV}{A value (0, Inf) that specifics the lower limit, eg  Minimum Acceptable Value (MAV). }
 #'   \item{UserParam$dTV}{A value (0 Inf) that specifies the upper limit for the confidence interval, eg Target Value (TV).}
@@ -38,7 +38,7 @@
 #'                                    Decision = 3 --> Futility Boundary Crossed
 #'                                    Decision = 4 --> Equivalence Boundary Crossed
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.
 
 #'@note In this example, the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
@@ -58,6 +58,7 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
     library(CyneRgy)
     library(survival)
     
+    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
@@ -66,12 +67,15 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
         CumEvents            <- LookInfo$InfoFrac*DesignParam$MaxEvents
         nQtyOfEvents         <- CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
+        RejType              <- LookInfo$RejType
+        TailType             <- DesignParam$TailType
     }else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
         nQtyOfLooks          <- 1
         nLookIndex           <- 1
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint
+        TailType             <- DesignParam$TailType
     }
     
     SimData$TimeOfEvent      <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
@@ -105,34 +109,11 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = N
     dLowerLimitCI                   <- dLogHR - dZalpha * dStdError
     dUpperLimitCI                   <- dLogHR + dZalpha * dStdError
     
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        if( dUpperLimitCI < log(UserParam$dMAV) )
-        {
-            strDecision <- "Efficacy"
-        }
-        else if( dLowerLimitCI > UserParam$dTV )
-        {
-            strDecision <- "Futility"
-        }
-        else
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dUpperLimitCI < log(UserParam$dMAV)  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dUpperLimitCI < log(UserParam$dMAV),
+                                               bIAFutilityCondition = dLowerLimitCI > UserParam$dTV,
+                                               bFAEfficacyCondition = dUpperLimitCI < log(UserParam$dMAV))
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0

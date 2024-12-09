@@ -3,9 +3,9 @@
 #' @title Simulate patient outcomes from a binary distribution with a percent of patients having an outcome of 0 where the probability of a 0 is drawn from a Beta distribution.
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
+#' @param TreatmentID A vector of treatment ids, 0 = Treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
-#' @param  UserParam A list of user defined parameters in East.   The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
 #' If UserParam is supplied, the list must contain the following named elements:
 #'  UserParam$dCtrlBetaParam1 -  First parameter in the Beta distribution for the control (ctrl) treatment.
 #'  UserParam$dCtrlBetaParam2 - Second parameter in the Beta distribution for the control (ctrl) treatment.
@@ -58,7 +58,7 @@ SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function(NumSub, NumArm, T
         else                        # if the probability of a 0 >= 1 --> Don't need to simulate from the binary distribution as all patients in the treatment are a 0
             nResponseIsZero <- 1
         
-        # If nResponseIsZero == 1 then the patient outcome is a a 0 and we don't need to simulate it. 
+        # If nResponseIsZero == 1 then the patient outcome is a a 0 and we don't need to simulate it
         
         if( nResponseIsZero == 0  )  # The patient responded, so we need to simulate their outcome from a binary distribution with the specified response proportion 
             vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])

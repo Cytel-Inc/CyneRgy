@@ -1,5 +1,5 @@
 ---
-title: "Randomization of Subjects in two arm designs"
+title: "2-Arm - Randomization of Subjects"
 author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:

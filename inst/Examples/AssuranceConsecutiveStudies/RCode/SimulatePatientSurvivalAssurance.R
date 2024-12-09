@@ -1,8 +1,8 @@
 #' @param SimulatePatientSurvivalAssurance
 #' @title Simulate Time-To-Event Data for Assurance 
-#' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, eg 250.
+#' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, e.g., 250.
 #' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
+#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided. 
 #' @param PrdTime \describe{ 
@@ -18,7 +18,7 @@
 #'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
-#' @param  UserParam A list of user defined parameters in East or Solara.   
+#' @param UserParam A list of user defined parameters in East or East Horizon.   
 #' If UseParam must be supplied supplied and the list must contain the following named elements:
 #' \describe{
 #'      \item{UserParam$dWeight1}{Probability of sampling from part 1} 

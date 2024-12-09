@@ -2,18 +2,18 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Template for simulating patient data in R. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-#' @param TreatmentID A vector of treatment ids, 0 is control treatment and  1 experimental treatment.  length( TreatmentID ) = NumSub
+#' @param NumArm  The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
+#' @param TreatmentID A vector of treatment ids, 0 is control treatment and  1 experimental treatment. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of length NumArm with the response probabilities for each arm
-#' @param  UserParam A list of user defined parameters in East.   You must have a default of NULL, as in this example.
-#' If UseParam are supplied in East, they will be an element in the list, UserParam.   
+#' @param  UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
+#' If UseParam are supplied, they will be an element in the list, UserParam.   
 #' @return The function must return a list in the return statement of the function. The information below lists 
 #'             elements of the list, if the element is required or optional and a description of the return values if needed. 
 #'             \describe{
 #'             \item{Response}{Required numeric value. Contains a vector of generated binary response for all subjects.}
 #'             \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
@@ -23,7 +23,7 @@
 #' The function signature must remain the same.  
 #' However, you may choose to ignore the parameters  PropResp if the patient simulator
 #' you are creating only requires use of parameters the user will add to UserParam
-{{FUNCTION_NAME}}  <- function(NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+{{FUNCTION_NAME}}  <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
 {
 
     # Step 1 - Initialize the return variables or other variables needed ####

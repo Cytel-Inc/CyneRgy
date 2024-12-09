@@ -27,7 +27,7 @@
 #'             \item{SurvivalTime}{Required numeric value. A vector of generated time to response values for each subject.}
 #'             \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
@@ -56,7 +56,7 @@
 	
 	# Step 3 - Simulate the patient data and store in vPatientOutcome ####
 	
-	# Example 1 of using the parameters East/Solara sent - If you don't need this block of code you may delete it.
+	# Example 1 of using the parameters East/East Horizon Explore sent - If you don't need this block of code you may delete it.
 	if(SurvMethod == 1)   # Hazard Rates
 	{
 		# Simulate patient data using the hazard rates

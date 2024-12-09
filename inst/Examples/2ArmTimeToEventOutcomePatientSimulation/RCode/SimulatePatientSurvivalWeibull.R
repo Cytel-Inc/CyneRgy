@@ -1,7 +1,7 @@
 #' Simulate patient outcomes from a Weibull distribution 
 #' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, eg 250.
 #' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
+#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided. 
 #' @param PrdTime \describe{ 
@@ -17,7 +17,7 @@
 #'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
-#' @param UserParam A list of user defined parameters in East or Solara. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 #'  If UserParam is suppled it must contain the following:
 #'  \describe{
 #'       \item{UserParam$dShapeCtrl}{The shape parameter in the Weibull distribution for the control treatment}  
@@ -26,8 +26,8 @@
 #'       \item{UserParam$dScaleExp}{The scale parameter in the Weibull distribution for the experimental treatment}
 #'  }
 #'  @description
-#'  This function simulates patient data from a Weibull( shape, scale ) distribution.   The rweibull function in the stats package
-#'  is used to simulate the survival time.  See help on rweibull.  
+#'  This function simulates patient data from a Weibull( shape, scale ) distribution. The rweibull function in the stats package
+#'  is used to simulate the survival time. See help on rweibull.  
 #'  The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 #'  and only the parameters in UserParam are utilized.  
 #'  @export
@@ -45,7 +45,7 @@ SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMetho
     {
         
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
-        # take care of any issues.   Also, if there is a default value for the parameters you may want to set them here.  Default values usually
+        # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
         # are applied to have the same functionality as East, see the first example
         
         # EXMAPLE - Set the default if needed

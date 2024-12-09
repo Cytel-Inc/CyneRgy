@@ -1,9 +1,9 @@
 ######################################################################################################################## .
 #' Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate. 
-#'@param SimData Data frame which consists of data generated in current simulation
-#'@param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
-#'@param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
-#'@param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param SimData Dataframe which consists of data generated in current simulation
+#' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
+#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 #'  If UserParam is supplied, the list must contain the following named element:
 #'  \describe{
 #'  \item {UserParam$dPriorAlpha} {A value (0,1) that defines the prior alpha parameter of the beta distribution. 
@@ -15,27 +15,27 @@
 #'  \item {UserParam$dMinPosteriorProbability} {A value (0,1) that specifies the posterior probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
 #'                              If this value is not specified, the default is 0.5.}
 #'           }
-#'@description
-#'This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
-#'At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (UserParam$dMinPosteriorProbability) of being greater than a user-specified historical 
-#'response rate (UserParam$dHistoricResponseRate). Specifically, if Pr( pj > UserParam$dHistoricResponseRate | data ) > UserParam$dMinPosteriorProbability, then experimental treatment j is selected for stage 2.
-#'If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > UserParam$dHistoricResponseRate | data ).
-#'User-specified pj ~ Beta( UserParam$dPriorAlpha, UserParam$dPriorBeta ).  All experimental arms assume the same prior. 
-#'After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
+#' @description
+#' This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
+#' At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (UserParam$dMinPosteriorProbability) of being greater than a user-specified historical 
+#' response rate (UserParam$dHistoricResponseRate). Specifically, if Pr( pj > UserParam$dHistoricResponseRate | data ) > UserParam$dMinPosteriorProbability, then experimental treatment j is selected for stage 2.
+#' If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > UserParam$dHistoricResponseRate | data ).
+#' User-specified pj ~ Beta( UserParam$dPriorAlpha, UserParam$dPriorBeta ). All experimental arms assume the same prior. 
+#' After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
 
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #' @note The length of TreatmentID and AllocRatio must be the same.
-#' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
-#' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
-#' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
+#' @note The allocation ratio for control will be 1, AllocRatio are relative to this value. So, a 2 will randomize twice as many to experimental
+#' @note The order of AllocRatio should be the same as TreatmentID, and the corresponding elements will have the assigned allocation ratio
+#' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, e.g., TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 #' @note You must return at LEAST one treatment and one allocation ratio
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
+#' @note Helpful Hints:
+#'       There is often info that East sends to R that are not shown in a given example. It can be very helpful to save the input 
+#'       objects and then load them into your R session and inspect them. This can be done with the following R code in your function.
 #'
 #'       saveRDS( SimData,     "SimData.Rds")
 #'       saveRDS( DesignParam, "DesignParam.Rds" )

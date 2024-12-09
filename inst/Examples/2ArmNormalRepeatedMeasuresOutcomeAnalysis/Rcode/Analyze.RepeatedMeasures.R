@@ -101,18 +101,22 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
   nDecision <- 0
   dPrimDelta <- 0
   dSecDelta <- 0
-   
+  
+  # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
   if(  !is.null( LookInfo )  )
   {
     nQtyOfLooks          <- LookInfo$NumLooks
     nLookIndex           <- LookInfo$CurrLookIndex
     nQtyOfPatsForInterim <- LookInfo$CumCompleters[ nLookIndex ]
     nAnalysisVisit       <- LookInfo$InterimVisit
+    RejType              <- LookInfo$RejType
+    TailType             <- DesignParam$TailType
   } else
   {
     nLookIndex           <- 1
     nQtyOfLooks          <- 1
     nQtyOfPatsForInterim <- nrow( SimData )
+    TailType             <- DesignParam$TailType
   }
 
   dfWideData <- data.frame(id = 1:DesignParam$SampleSize, TreatmentID = SimData$TreatmentID)
@@ -163,31 +167,11 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
   {
       dAlpha <- DesignParam$Alpha
   }
-  
-  # Set look decision logic
-  if( nLookIndex < nQtyOfLooks ) # Interim Analysis
-  {
-      if( dpValue <= dAlpha )
-      {
-          strDecision <- "Efficacy"
-      }
-      else
-      {
-          strDecision <- "Continue"
-      }
-  }
-  else # Final Analysis
-  {
-      if( dpValue <= dAlpha )
-      {
-          strDecision <- "Efficacy"
-      }
-      else
-      {
-          strDecision <- "Futility"
-      }
-  }
-  
+
+  # Generate decision using GetDecisionString and GetDecision helpers
+  strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                             bIAEfficacyCondition = dpValue <= dAlpha,
+                                             bFAEfficacyCondition = dpValue <= dAlpha)
   nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
   
   return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDelta), SecDelta = as.double(dSecDelta), ErrorCode = as.integer(nError)))

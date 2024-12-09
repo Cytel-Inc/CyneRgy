@@ -42,7 +42,7 @@
 #'                                    }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
@@ -67,6 +67,7 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     library(CyneRgy)
     library(survival)
     
+    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
@@ -75,6 +76,8 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
         CumEvents            <- LookInfo$InfoFrac*DesignParam$MaxEvents
         nQtyOfEvents         <- CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
+        RejType              <- LookInfo$RejType
+        TailType             <- DesignParam$TailType
     }
     else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
@@ -82,6 +85,7 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
         nLookIndex           <- 1
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint
+        TailType             <- DesignParam$TailType
     }
 
     SimData$TimeOfEvent      <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
@@ -151,31 +155,10 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     # Compute the logrank test statistic
     dTS       <- dNum/sqrt( dDen )
 
-    # Setup look decision logic
-    if( nLookIndex < nQtyOfLooks )  # Interim Analysis
-    {
-        
-        if( dTS <  dEffBdry )
-        {
-            strDecision <- "Efficacy"
-        }
-        else 
-        {
-            strDecision <- "Continue"
-        }
-    }
-    else # Final Analysis
-    {
-        if( dTS <  dEffBdry  )
-        {
-            strDecision <- "Efficacy"
-        }
-        else
-        {
-            strDecision <- "Futility"
-        }
-    }
-
+    # Generate decision using GetDecisionString and GetDecision helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                               bIAEfficacyCondition = dTS <  dEffBdry, 
+                                               bFAEfficacyCondition = dTS <  dEffBdry)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error    <- 0

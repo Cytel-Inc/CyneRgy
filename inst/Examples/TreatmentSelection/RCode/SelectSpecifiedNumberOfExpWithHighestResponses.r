@@ -1,9 +1,9 @@
 ######################################################################################################################## .
 #' Select user-specified number of treatments to advance that have the largest number of responses. 
-#'@param SimData Data frame which consists of data generated in current simulation
+#'@param SimData Dataframe which consists of data generated in current simulation
 #'@param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #'@param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
-#'@param UserParam A list of user defined parameters in East. The default must be NULL.
+#'@param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #' \item{UserParam$QtyOfArmsToSelect}{A value that defines how many treatment arms are chosen to advance. 
@@ -21,7 +21,7 @@
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#'                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#'                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #' @note The length of TreatmentID and AllocRatio must be the same.
 #' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
@@ -60,7 +60,7 @@
 SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
           
-    #Input objects can be saved through the following lines:
+    # Input objects can be saved through the following lines:
     # First set the working directory
     # setwd(Sys.getenv("R_USER")) # You could specify the location directly. 
     # setwd( "C://TreatmentSelection" )
