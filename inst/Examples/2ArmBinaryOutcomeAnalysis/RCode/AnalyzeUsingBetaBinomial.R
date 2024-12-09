@@ -4,12 +4,23 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam Input Parameters which user may need to compute test statistic and perform test. 
 #'                    User should access the variables using names, for example, DesignParam$Alpha, and not order. 
-#' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
-#'                 and perform test. User should access the variables using names, 
-#'                 for example LookInfo$NumLooks and not order. Other important variables in group sequential designs are: 
-#'                   LookInfo$NumLooks An integer value with the number of looks in the study
-#'                   LookInfo$CurrLookIndex An integer value with the current index look, starting from 1
-#'                   LookInfo$CumEvents A vector of length LookInfo$NumLooks that contains the number of events at the look.
+#' @param LookInfo A list containing input parameters related to multiple looks, which the user may need to compute 
+#'                 test statistics and perform tests. Users should access the variables using their names 
+#'                 (e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
+#'                 
+#'                 - `LookInfo$NumLooks`: An integer representing the number of looks in the study.
+#'                 - `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
+#'                 - `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
+#'                 - `LookInfo$RejType`: A code representing rejection types. Possible values are:
+#'                   - **Efficacy Only:**
+#'                     - `0`: 1-Sided Efficacy Upper.
+#'                     - `2`: 1-Sided Efficacy Lower.
+#'                   - **Futility Only:**
+#'                     - `1`: 1-Sided Futility Upper.
+#'                     - `3`: 1-Sided Futility Lower.
+#'                   - **Efficacy and Futility:**
+#'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
+#'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
 #' @param UserParam A list of user defined parameters in East or East Horizon.
 #'                  UserParam must be supplied and contain the following named elements:
 #'  \describe{
@@ -73,7 +84,7 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
 {
     library(CyneRgy)
     
-    # Step 1 - Retrieve necessary information from the objects East or Solara sent ####
+    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )
     {
         # Group sequential design
@@ -81,6 +92,8 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
         nQtyOfLooks          <- LookInfo$NumLooks
         nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+        RejType              <- LookInfo$RejType
+        TailType             <- DesignParam$TailType
     }
     else
     {
@@ -89,6 +102,7 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, User
         nQtyOfLooks          <- 1
         nQtyOfEvents         <- DesignParam$MaxCompleters
         nQtyOfPatsInAnalysis <- nrow( SimData )
+        TailType             <- DesignParam$TailType
     }
     
     
