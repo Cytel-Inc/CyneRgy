@@ -14,10 +14,17 @@ articles:
   ContibutingToCyneRgy: ContibutingToCyneRgy.html
   ExampleOutline: ExampleOutline.html
   GeneratePoissonArrival: GeneratePoissonArrival.html
+  IntegrationPointAnalysis: IntegrationPointAnalysis.html
+  IntegrationPointDropout: IntegrationPointDropout.html
+  IntegrationPointEnrollment: IntegrationPointEnrollment.html
+  IntegrationPointInitialization: IntegrationPointInitialization.html
+  IntegrationPointRandomization: IntegrationPointRandomization.html
+  IntegrationPointResponse: IntegrationPointResponse.html
+  Overview: Overview.html
   PatientDropout: PatientDropout.html
   PatientRandomization: PatientRandomization.html
   TreatmentSelectionDescription: TreatmentSelectionDescription.html
-last_built: 2024-12-03T20:34Z
+last_built: 2024-12-13T23:53Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles

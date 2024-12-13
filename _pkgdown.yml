@@ -1,15 +1,35 @@
 url: https://Cytel-Inc.github.io/CyneRgy/
 template:
   bootstrap: 5
+  light-switch: true
 
 navbar:
     structure:
-       left: [home, examples, references, contribute]
-       right: [search, github]
+       left: [home, gettingstarted, examples, references, contribute]
+       right: [search, github, lightswitch]
     components:
         home:
             text: Home
             href: index.html
+        gettingstarted:
+            text: Getting Started
+            menu:
+                - text: Overview
+                  href: articles/Overview.html
+                - text: --------------------
+                - text: Integration Specific Points
+                - text: Initialization
+                  href: articles/IntegrationPointInitialization.html
+                - text: Analysis
+                  href: articles/IntegrationPointAnalysis.html
+                - text: Enrollment
+                  href: articles/IntegrationPointEnrollment.html
+                - text: Randomization
+                  href: articles/IntegrationPointRandomization.html
+                - text: Response
+                  href: articles/IntegrationPointResponse.html
+                - text: Dropout
+                  href: articles/IntegrationPointDropout.html
         examples:
             text: Examples
             menu:

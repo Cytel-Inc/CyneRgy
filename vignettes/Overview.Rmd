@@ -1,0 +1,20 @@
+---
+title: "Getting Started"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+# Overview
+
+(more explanations here)
+Each integration point provides a set of inputs for use in your R scripts, leaving it up to you to determine if and how they should be utilized.
+
+For detailed information about each integration point, please refer to the following pages:
+
+1. [Initialization](IntegrationPointInitialization.html)
+2. [Analysis](IntegrationPointAnalysis.html)
+3. [Enrollment](IntegrationPointEnrollment.html)
+4. [Randomization](IntegrationPointRandomization.html)
+5. [Response](IntegrationPointResponse.html)
+6. [Dropout](IntegrationPointDropout.html)

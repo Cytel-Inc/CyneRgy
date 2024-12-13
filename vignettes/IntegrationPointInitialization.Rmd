@@ -1,0 +1,9 @@
+---
+title: "Integration Point: Initialization"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+# Integration Point: Initialization
+
