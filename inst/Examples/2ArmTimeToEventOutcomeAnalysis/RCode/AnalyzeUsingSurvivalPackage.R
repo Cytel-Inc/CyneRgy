@@ -5,8 +5,8 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
-#' @description Use the survival package to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
+#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @description Use the survival package to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
 #'              The test statistic is compared to the lower boundary computed and sent by East as an input. This example does NOT include a futility rule. 
 #' @return TestStat A double value of the computed test statistic
 #' @return Decision An integer value: Decision = 0 --> No boundary crossed
@@ -15,7 +15,7 @@
 #'                                    Decision = 3 --> Futility Boundary Crossed
 #'                                    Decision = 4 --> Equivalence Boundary Crossed
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 
 #'@note Helpful Hints:
@@ -31,10 +31,16 @@
 
 AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    library(CyneRgy)
-    library(survival)
-
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    
+    # Input objects can be saved through the following lines:
+    # Saving is only available in East, do NOT save files in SOLARA
+    # #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
+    # saveRDS( SimData, "SimData.Rds")
+    # saveRDS( DesignParam, "DesignParam.Rds" )
+    # saveRDS( LookInfo, "LookInfo.Rds" )
+    
+    
+    # Retrieve necessary information from the objects East sent
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
@@ -43,8 +49,6 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
         CumEvents            <- LookInfo$InfoFrac*DesignParam$MaxEvents
         nQtyOfEvents         <- CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
-        RejType              <- LookInfo$RejType
-        TailType             <- DesignParam$TailType
     }
     else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
@@ -52,7 +56,6 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
         nLookIndex           <- 1
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint
-        TailType             <- DesignParam$TailType
     }
     
     SimData$TimeOfEvent      <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
@@ -79,11 +82,18 @@ AnalyzeUsingSurvivalPackage <- function(SimData, DesignParam, LookInfo = NULL, U
     # Compute the logrank test statistic
     dTS                      <- sqrt(logrankTest$chisq) * sign(logrankTest$obs[2] - logrankTest$exp[2])
     
-    # Generate decision using GetDecisionString and GetDecision helpers
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = dTS <  dEffBdry, 
-                                               bFAEfficacyCondition = dTS <  dEffBdry)
-    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+    # A decision of 1 means success, 0 means continue the trial
+    nDecision                <- ifelse( dTS < dEffBdry, 1, 0 )
+    
+    if( nDecision == 0 )
+    {
+        # At the final analysis we want to make a futility if efficacy was not achieved.
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
+    }
     
     Error                    <- 0
     

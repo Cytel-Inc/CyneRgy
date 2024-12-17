@@ -9,30 +9,30 @@
 #'        {
 #'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
-#'          \item{Response}{A numeric value indicating the response.}
-#'          \item{CensorIndOrg}{An integer value indicating whether the subject was censored or not.}
+#'          \item{Response}{A numeric value indicating the response. }
+#'          \item{CensorIndOrg}{An integer value indicating whether the subject was censored or not. }
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
 #'      may need to compute test statistic and perform test. User should access the variables
-#'      using names for e.g., DesignParam$Alpha and not order. Them items are as follows:
+#'      using names for eg. DesignParam$Alphae and not order.  Them items are as follows:
 #'      \describe{
 #'          \item{SampleSize}{Sample size of the trial}
 #'          \item{Alpha}{Type I Error}
-#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2}
+#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2 }
 #'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
-#'          \item{LowerAlpha}{Two Sided Asymmetric Tests}
-#'          \item{UpperAlpha}{Two Sided Asymmetric Tests}
+#'          \item{LowerAlpha}{Two Sided Asymmetric Tests }
+#'          \item{UpperAlpha}{Two Sided Asymmetric Tests }
 #'          \item{MaxCompleters}{Maximum Number of Completers}
 #'          \item{FollowUpType}{For survival tests, Follow Up Type.  Possible values are: Until End ofS Study: 0, For fixed period: 1}
-#'          \item{AllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size.}
-#'          \item{CriticalPoint}{Critical Value for a fixed sample design.}
+#'          \item{AllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size. }
+#'          \item{CriticalPoint}{Critical Value for a fixed sample design. }
 #'          \item{FollowUpType}{Follow up type. Integer value with the following meaning:\describe{
 #'                                    \item{FollowUpType = 0}{Until End of the Study}
 #'                                    \item{FollowUpType = 1}{For Fixed Period}
 #'                                    }
 #'                                    }
 #'          \item{FollowUpDur}{Follow up duration}
-#'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials.}
+#'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials. }
 #'      
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
@@ -69,65 +69,41 @@
 #'                                    } 
 #'                                    }
 #'                  \item{TestStat}{Numeric value. Required if Decision is not returned}
-#'                  \item{Delta}{Numeric value. Required if Decision is not returned AND Futility Boundary scale is either Delta or CP.}
-#'                  \item{CtrlCompleters}{Integer value. Required if Decision is not returned and Futility Boundary scale is CP.}
-#'                  \item{TrmtCompleters }{Integer value. Required if Decision is not returned and Futility Boundary scale is CP.}
-#'                  \item{CtrlPi}{Numeric value. Required if Decision is not returned and Futility Boundary scale is CP.}
+#'                  \item{Delta}{Numeric value. Required if Decision is not returned AND Futility Boundary scale is either Delta or CP. }
+#'                  \item{CtrlCompleters}{Integer value. Required if Decision is not returned and Futility Boundary scale is CP. }
+#'                  \item{TrmtCompleters }{Integer value. Required if Decision is not returned and Futility Boundary scale is CP. }
+#'                  \item{CtrlPi}{Numeric value. Required if Decision is not returned and Futility Boundary scale is CP. }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
 #'                      }
-{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    library(CyneRgy)
+    nError 	        <- 0
+    nDecision 	    <- 0
+    dTestStatistic  <- 0
     
-    nError 	         <- 0
-    nDecision 	     <- 0
-    dTestStatistic   <- 0
-    bIAEfficayCheck  <- TRUE
-    bIAFutilityCheck <- FALSE
-    bFAEfficacyCheck <- TRUE
-    
-    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents ####
-    # Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
+    nLookIndex           <- 1 
     if(  !is.null( LookInfo )  )
     {
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-        RejType              <- LookInfo$RejType
-        TailType             <- DesignParam$TailType
     }
     else
     {
         nQtyOfLooks          <- 1
-        nLookIndex           <- 1 
         nQtyOfEvents         <- DesignParam$MaxCompleters
         nQtyOfPatsInAnalysis <- nrow( SimData )
-        TailType             <- DesignParam$TailType
     }
     
-    # Step 2 - Create a data set as needed for the analysis using SimData, DesignParams, etc. ####
-    # Add any code here for creating the data set for analysis
     
-    # Step 3 - Run the analysis #### 
-    # Add any code here for analysis 
-    
-    # Step 4 Setup look decision logic ####
-    # Generate decision using GetDecisionString and GetDecision helpers
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = bIAEfficayCheck,
-                                               bIAFutilityCondition = bIAFutilityCheck,
-                                               bFAEfficacyCondition = bFAEfficacyCheck)
-
-    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-
     lRet <- list(TestStat = as.double(dTestStatistic),
                  Decision  = as.integer(nDecision), 
                  ErrorCode = as.integer(nError))
     return( lRet )
 }
-

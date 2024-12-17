@@ -3,9 +3,9 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East. The default must be NULL.
 #' 
-#' @description Use the formula Q.3.3 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
+#' @description Use the formula Q.3.3 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
 #'              The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule. 
 #'              Two sample Z test for Normal distribution. Number of Looks > 1.
 #'              
@@ -16,7 +16,7 @@
 #'                                    Decision = 3 --> Futility Boundary Crossed
 #'                                    Decision = 4 --> Equivalence Boundary Crossed
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 
 #'@note Helpful Hints:
@@ -35,23 +35,26 @@
 
 AnalyzeUsingEastManualFormulaNormal <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    library(CyneRgy)
+    # Input objects can be saved through the following lines:
     
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # setwd( "D:\\Project\\backup_cynergy\\")
+    # saveRDS( SimData, "SimData.Rds")
+    # saveRDS( DesignParam, "DesignParam.Rds" )
+    # saveRDS( LookInfo, "LookInfo.Rds" )
+    
+    
+    # Retrieve necessary information from the objects East sent
     if(  !is.null( LookInfo )  )
     {
         nLookIndex           <- LookInfo$CurrLookIndex
         nQtyOfLooks          <- LookInfo$NumLooks
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-        RejType              <- LookInfo$RejType
-        TailType             <- DesignParam$TailType
     }
     else
     {
         nLookIndex           <- 1
         nQtyOfLooks          <- 1
         nQtyOfPatsInAnalysis <- nrow( SimData )
-        TailType             <- DesignParam$TailType
     }
     
     # Create the vector of simulated data for this IA - East sends all of the simulated data
@@ -76,18 +79,28 @@ AnalyzeUsingEastManualFormulaNormal <- function(SimData, DesignParam, LookInfo =
     
     # Equation from Appendix Q - 3.3 in East manual
     dZj                  <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS )/( dStdDevPooled * sqrt( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ))
-    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex])
     
-    # Generate decision using GetDecisionString and GetDecision helpers
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = dZj > dBoundary, 
-                                               bFAEfficacyCondition = dZj > dBoundary)
-    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-    
+    # A decision of 2 means success, 0 means continue the trial
+    if(  !is.null( LookInfo )  )
+    {
+        nDecision            <- ifelse( dZj > LookInfo$EffBdryUpper[ nLookIndex], 2, 0 )  
+    }
+    else
+    {
+        nDecision            <- ifelse( dZj > DesignParam$CriticalPoint, 2, 0 )    
+    }
+    if( nDecision == 0 )
+    {
+        # Did not hit efficacy, so check futility 
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
+    }
     
     Error <-  0
     
     
     return(list(TestStat = as.double( dZj ), ErrorCode = as.integer( Error ), Decision = as.integer( nDecision ) ))
 }
-
