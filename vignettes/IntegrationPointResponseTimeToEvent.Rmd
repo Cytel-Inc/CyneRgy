@@ -1,41 +1,66 @@
 ---
-title: "Integration Point: Response"
+title: "Integration Point: Response - Time-to-Event Outcome"
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-[$\leftarrow$ Go back to the **Getting Started: Overview** page](Overview.html)
+[$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
 
-# Description
 
-The Response integration point allows you to incorporate custom patient outcome simulation capabilities into East Horizon. By specifying a function, you can simulate patient outcomes according to your requirements, replacing the native generation method for patient response. For example, you can:
+# Input Variables
 
-- Simulate patient data using a mixture distribution where a proportion of patients do not respond to treatment.
-- Simulate patient data from a statistical distribution not natively supported by East Horizon, such as:
-  - Gamma distribution for continuous outcomes,
-  - Beta distribution for binary outcomes,
-  - Weibull distribution for time-to-event outcomes.
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
 
-# How to Use It in East Horizon
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**NumSub**|Integer|Number of subjects in the trial.|
+|**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
+|**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
+|**SurvMethod**|Integer|Selected method for survival analysis from the East Horizon dropdown list:<br>– `1`: Hazard rate.<br>– `2`: Cumulative % survival rates.<br>– `3`: Median survival times.|
+|**NumPrd**|Integer|Number of periods in the trial.|
+|**PrdTime**|Vector of Numeric|Vector or length `NumPrd`, indicating the times for survival parameters. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Starting times of hazard pieces.<br>– If `SurvMethod = 2`: Times at which the cumulative % survivals are specified.<br>– If `SurvMethod = 3`: Defaults to 0.|
+|**SurvParam**|Matrix|Survival parameters dependent on `SurvMethod`:<br>– If `SurvMethod = 1`: Specifies hazard rates per arm per period. Size: `NumPrd` rows $\times$ `NumArm` columns, where `SurvParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 2`: Specifies cumulative % survival rates per arm per period. Size: `NumPrd` rows $\times$ `NumArm` columns, where `SurvParam[i, j]` represents the cumulative % survival for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 3`: Contains median survival times for each arm. Size: 1 row $\times$ 2 columns, where column 1 is control and column 2 is experimental.|
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
-You can set up a response function in East Horizon Explore under **Distribution** in a **Response Card** while creating or editing an **Input Set**. Follow these steps:
+# Expected Output Variable
 
-1. Select "User Specified-R" from the dropdown in the Distribution field in the Response card.
-1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
-1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
-1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
-1. Continue creating your project by specifying scenarios for patient Response, Enrollments, etc.
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
 
-For a visual guide of where to find the option, refer to the screenshot below:
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `SurvivalTime` and `ErrorCode`.                    |
 
-![Screenshot of East Horizon](response.png)
+## Expected Members of the Output List
 
-# Endpoint Types
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **SurvivalTime**   | Vector of Numeric  | Vector of length `NumSub`, containing the generated time to response values for each subject.                  |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
 
-The input values, expected output values, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
+# Minimal Template
 
-1. Continuous (Normal) Outcome
-1. Continuous (Normal) Outcome with Repeated Measures
-1. Binary Outcome
-1. Time-to-Event (Survival) Outcome
+Your R script could contain a function such as this one, with a name of your choice. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+```
+GenerateResponse <- function( NumSub, NumArm, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
+  
+  # Write the actual code here.
+  # Store the generated binary response values in a vector called vPatientOutcome.
+
+  return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) 
+
+# Examples
+
+Explore the following examples for more context:
+
+1. [**2 Arm, Time-To-Event Outcome - Patient Simulation**](2ArmTimeToEventOutcomePatientSimulationDescription.html)
+    - [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/SimulatePatientSurvivalWeibull.R)
+    - [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/SimulatePatientSurvivalMixtureExponentials.R)
