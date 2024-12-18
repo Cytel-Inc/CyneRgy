@@ -22,4 +22,4 @@ For comprehensive details about each integration point, please refer to the foll
 
 ## Additional Resources
 
-For tips, best practices, and further information, visit the Knowledge Base: [Using R functions within East Horizon: Explore](https://knowledge.cytel.com/r-connection).
+For tips, best practices, and further information, visit the Cytel Knowledge Base: [Using R functions within East Horizon: Explore](https://knowledge.cytel.com/r-connection).

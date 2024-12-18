@@ -11,20 +11,20 @@ This integration point and outcome is currently available for the **Two Arm Conf
 
 # Input Variables
 
-When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
 
 | **Variable**   | **Type** | **Description**                                                                 |
-|----------------|----------|---------------------------------------------------------------------------------|
+|----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**NumVisit**|Integer|Number of visits.|
-|**Inputmethod**|Integer|Two options:  1) Actual values, 2) Change from baseline.|
+|**Inputmethod**|Integer|Two options:<br>– `0`: The mean and SD values represent actual values.<br>– `1`: They represent an expected change from baseline at each visit rather than the true means.|
 |**VisitTime**|Vector of Numeric|Vector of length `NumVisit`, indicating the visit times.|
 |**MeanControl**|Vector of Numeric|Vector of length `NumVisit`, indicating the control mean for each visit.|
 |**MeanTrt**|Vector of Numeric|Vector of length `NumVisit`, indicating the treatment mean for each visit.|
 |**StdDevControl**|Vector of Numeric|Vector of length `NumVisit`, indicating the control standard deviation for each visit.|
 |**StdDevTrt**|Vector of Numeric|Vector of length `NumVisit`, indicating the treatment standard deviation for each visit.|
-|**CorrMat**|Matrix of Numeric|Matrix of size `NumVisit` $\times $ `NumVisit`, indicating the correlation between all visits.|
+|**CorrMat**|Matrix of Numeric|Matrix of size `NumVisit` $\times$ `NumVisit`, indicating the correlation between all visits.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -33,12 +33,12 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 | **Type**  | **Description**                                                                                  |
 |------------------|--------------------------------------------------------------------------------------------------|
-| List  | A named list containing `ErrorCode` and `Response`.                    |
+| List  | A named list containing `Response1`, `Response2`, ..., `ResponseNumVisit`, and `ErrorCode`.                    |
 
 ## Expected Members of the Output List
 
 | **Members**     | **Type**  | **Description**                                                                                  |
-|-----------------|----------|--------------------------------------------------------------------------------------------------|
+|----------------|--------------|---------------------------------------------------------------------------------|
 |**Response1**|Vector of Numeric|Vector of length `NumSub`, containing the generated responses for all subjects for the first visit.|
 |**Response2**|Vector of Numeric|Vector of length `NumSub`, containing the generated responses for all subjects for the second visit.|
 |*...*||Responses for additional visits follow the same format, incrementing the visit number (e.g., Response3, Response4, etc.).    |

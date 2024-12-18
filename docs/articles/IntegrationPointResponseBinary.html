@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Integration Point: Response • CyneRgy</title>
+<title>Integration Point: Response - Binary Outcome • CyneRgy</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Response">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Response - Binary Outcome">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -107,7 +107,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Response</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Response - Binary Outcome</h1>
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
@@ -119,68 +119,158 @@ Potvin</h4>
 
     
     
-<p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
-Go back to the <strong>Getting Started: Overview</strong> page</a></p>
+<p><a href="IntegrationPointResponse.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
+Go back to the <em>Integration Point: Response</em> page</a></p>
+<p>This integration point and outcome is currently available for the
+<strong>Two Arm Confirmatory</strong> and <strong>Multiple Arm
+Confirmatory</strong> Study Objectives.</p>
 <div class="section level2">
-<h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
+<h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
-<p>The Response integration point allows you to incorporate custom
-patient outcome simulation capabilities into East Horizon. By specifying
-a function, you can simulate patient outcomes according to your
-requirements, replacing the native generation method for patient
-response. For example, you can:</p>
+<p>When creating a custom R script, you can optionally use specific
+variables provided by East Horizon’s engine itself. These variables are
+automatically available and do not need to be set by the user, except
+for the <code>UserParam</code> variable. Refer to the table below for
+the variables that are available for this integration point and
+outcome.</p>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="12%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Variable</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>NumSub</strong></td>
+<td>Integer</td>
+<td>Number of subjects.</td>
+</tr>
+<tr class="even">
+<td><strong>NumArm</strong></td>
+<td>Integer</td>
+<td>Number of arms in the trial ﴾including placebo/control, and
+experimental﴿.</td>
+</tr>
+<tr class="odd">
+<td><strong>TreatmentID</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length <code>NumSub</code>, indicating the allocation of
+subjects to arms. Index <code>0</code> represents placebo/control. For
+example, <code>[0, 0, 1]</code> indicates three subjects: two in the
+control group and one experimental.</td>
+</tr>
+<tr class="even">
+<td><strong>PropResp</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length <code>NumArm</code>, indicating the expected
+proportions (probabilities) of responders for each arm.</td>
+</tr>
+<tr class="odd">
+<td><strong>UserParam</strong></td>
+<td>List</td>
+<td>Contains all user-defined parameters specified in the East Horizon
+interface (refer to the <a href="IntegrationPointResponse.html#how-to-use-it-in-east-horizon">How
+to Use It in East Horizon</a> section). To access these parameters in
+your R code, use the syntax: <code>UserParam$NameOfTheVariable</code>,
+replacing <code>NameOfTheVariable</code> with the appropriate parameter
+name.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="expected-output-variable">Expected Output Variable<a class="anchor" aria-label="anchor" href="#expected-output-variable"></a>
+</h2>
+<p>East Horizon expects an output of a specific type. Refer to the table
+below for the expected output for this integration point:</p>
+<table class="table">
+<colgroup>
+<col width="15%">
+<col width="84%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>List</td>
+<td>A named list containing <code>Response</code> and
+<code>ErrorCode</code>.</td>
+</tr></tbody>
+</table>
+<div class="section level3">
+<h3 id="expected-members-of-the-output-list">Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#expected-members-of-the-output-list"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="12%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Members</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Response</strong></td>
+<td>Vector of Double</td>
+<td>Vector of length <code>NumSub</code>, containing the generated
+binary responses for all subjects (0 or 1).</td>
+</tr>
+<tr class="even">
+<td><strong>ErrorCode</strong></td>
+<td>Integer</td>
+<td>Optional. Can be used to handle errors in your script:<br>–
+<code>0</code>: No Error<br> – <code>Positive Integer</code>: Nonfatal
+Error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal Error, no
+further simulations will be attempted.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="minimal-template">Minimal Template<a class="anchor" aria-label="anchor" href="#minimal-template"></a>
+</h2>
+<p>Your R script could contain a function such as this one, with a name
+of your choice. We recommend always declaring <code>UserParam</code> as
+a default <code>NULL</code> value in the function arguments, as this
+will ensure that the same function will work regardless of whether the
+user has specified any custom parameters in East Horizon.</p>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">PropResp</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>  <span class="va">vPatientOutcome</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0  </span></span>
+<span>  </span>
+<span>  <span class="co"># Write the actual code here.</span></span>
+<span>  <span class="co"># Store the generated binary response values in a vector called vPatientOutcome.</span></span>
+<span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientOutcome</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+<p>A detailed template with step-by-step explanations is available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R" class="external-link">SimulatePatientOutcome.Binary.R</a></p>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>Explore the following examples for more context:</p>
+<ol style="list-style-type: decimal">
+<li>
+<a href="2ArmBinaryOutcomePatientSimulation.html"><strong>2-Arm,
+Binary Outcome - Patient Simulation</strong></a>
 <ul>
-<li>Simulate patient data using a mixture distribution where a
-proportion of patients do not respond to treatment.</li>
-<li>Simulate patient data from a statistical distribution not natively
-supported by East Horizon, such as:
-<ul>
-<li>Gamma distribution for continuous outcomes,</li>
-<li>Beta distribution for binary outcomes,</li>
-<li>Weibull distribution for time-to-event outcomes.</li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZero.Binary.R" class="external-link">SimulatePatientOutcomePercentAtZero.Binary.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R" class="external-link">SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R</a></li>
 </ul>
 </li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
-</h2>
-<p>You can set up a response function in East Horizon Explore under
-<strong>Distribution</strong> in a <strong>Response Card</strong> while
-creating or editing an <strong>Input Set</strong>. Follow these
-steps:</p>
-<ol style="list-style-type: decimal">
-<li>Select “User Specified-R” from the dropdown in the Distribution
-field in the Response card.</li>
-<li>Browse and select the appropriate R file (<code>filename.r</code>)
-from your computer, or use the built-in <strong>R Code
-Assistant</strong> to create one. This file should contain function(s)
-written to perform various tasks to be used throughout your
-Project.</li>
-<li>Choose the appropriate function name. If the expected function is
-not displaying, then check your R code for errors.</li>
-<li>Set any required user parameters (variables) as needed for your
-function using <strong>+ Add Variables</strong>.</li>
-<li>Continue creating your project by specifying scenarios for patient
-Response, Enrollments, etc.</li>
-</ol>
-<p>For a visual guide of where to find the option, refer to the
-screenshot below:</p>
-<div class="float">
-<img src="response.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="endpoint-types">Endpoint Types<a class="anchor" aria-label="anchor" href="#endpoint-types"></a>
-</h2>
-<p>The input values, expected output values, examples, and templates for
-this integration point depend on the endpoint type (or outcome) you are
-using. Refer to the relevant pages below:</p>
-<ol style="list-style-type: decimal">
-<li>Continuous (Normal) Outcome</li>
-<li>Continuous (Normal) Outcome with Repeated Measures</li>
-<li>Binary Outcome</li>
-<li>Time-to-Event (Survival) Outcome</li>
 </ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

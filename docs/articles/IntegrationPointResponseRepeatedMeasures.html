@@ -126,7 +126,7 @@ Go back to the <em>Integration Point: Response</em> page</a></p>
 <div class="section level2">
 <h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
-<p>When creating a custom R script, you can optionally use certain
+<p>When creating a custom R script, you can optionally use specific
 variables provided by East Horizon’s engine itself. These variables are
 automatically available and do not need to be set by the user, except
 for the <code>UserParam</code> variable. Refer to the table below for
@@ -135,8 +135,8 @@ outcome.</p>
 <table class="table">
 <colgroup>
 <col width="14%">
-<col width="9%">
-<col width="75%">
+<col width="12%">
+<col width="72%">
 </colgroup>
 <thead><tr class="header">
 <th><strong>Variable</strong></th>
@@ -165,7 +165,9 @@ control group and one experimental.</td>
 <tr class="even">
 <td><strong>Inputmethod</strong></td>
 <td>Integer</td>
-<td>Two options: 1) Actual values, 2) Change from baseline.</td>
+<td>Two options:<br>– <code>0</code>: The mean and SD values represent
+actual values.<br>– <code>1</code>: They represent an expected change
+from baseline at each visit rather than the true means.</td>
 </tr>
 <tr class="odd">
 <td><strong>VisitTime</strong></td>
@@ -200,8 +202,9 @@ standard deviation for each visit.</td>
 <tr class="even">
 <td><strong>CorrMat</strong></td>
 <td>Matrix of Numeric</td>
-<td>Matrix of size <code>NumVisit</code> $$ <code>NumVisit</code>,
-indicating the correlation between all visits.</td>
+<td>Matrix of size <code>NumVisit</code>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumVisit</code>, indicating the correlation between all
+visits.</td>
 </tr>
 <tr class="odd">
 <td><strong>UserParam</strong></td>
@@ -232,8 +235,9 @@ below for the expected output for this integration point:</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td>List</td>
-<td>A named list containing <code>ErrorCode</code> and
-<code>Response</code>.</td>
+<td>A named list containing <code>Response1</code>,
+<code>Response2</code>, …, <code>ResponseNumVisit</code>, and
+<code>ErrorCode</code>.</td>
 </tr></tbody>
 </table>
 <div class="section level3">
@@ -241,9 +245,9 @@ below for the expected output for this integration point:</p>
 </h3>
 <table class="table">
 <colgroup>
-<col width="13%">
-<col width="8%">
-<col width="78%">
+<col width="14%">
+<col width="12%">
+<col width="72%">
 </colgroup>
 <thead><tr class="header">
 <th><strong>Members</strong></th>
@@ -272,9 +276,9 @@ the visit number (e.g., Response3, Response4, etc.).</td>
 <tr class="even">
 <td><strong>ResponseNumVisit</strong></td>
 <td>Vector of Numeric</td>
-<td>Vector of length <code>NumSub</code>, containing the generated
+<td>Final vector of length <code>NumSub</code>, containing the generated
 responses for all subjects for the last visit. <code>NumVisit</code>
-should be the number of visits.</td>
+should be replaced by the number of visits.</td>
 </tr>
 <tr class="odd">
 <td><strong>ErrorCode</strong></td>

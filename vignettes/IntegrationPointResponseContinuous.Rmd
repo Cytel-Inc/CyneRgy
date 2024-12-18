@@ -11,10 +11,10 @@ This integration point and outcome is currently available for the **Two Arm Conf
 
 # Input Variables
 
-When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
 
 | **Variable**   | **Type** | **Description**                                                                 |
-|----------------|----------|---------------------------------------------------------------------------------|
+|----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**Mean**|Vector of Numeric|Vector of length equal to the number of arms, indicating the mean of the treatments.|
@@ -32,7 +32,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 ## Expected Members of the Output List
 
 | **Members**     | **Type**  | **Description**                                                                                  |
-|-----------------|----------|--------------------------------------------------------------------------------------------------|
+|----------------|--------------|---------------------------------------------------------------------------------|
 | **Response**   | Vector of Double  | Vector of length `NumSub`, containing the generated responses for all subjects.                  |
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
 
