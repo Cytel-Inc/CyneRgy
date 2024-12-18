@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 13, 2024</h4>
+            <h4 data-toc-skip class="date">December 18, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/HEAD/vignettes/IntegrationPointInitialization.Rmd" class="external-link"><code>vignettes/IntegrationPointInitialization.Rmd</code></a></small>
       <div class="d-none name"><code>IntegrationPointInitialization.Rmd</code></div>
@@ -120,8 +120,116 @@ Potvin</h4>
     
     
 <div class="section level2">
-<h2 id="integration-point-initialization">Integration Point: Initialization<a class="anchor" aria-label="anchor" href="#integration-point-initialization"></a>
+<h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
 </h2>
+<p>The Initialization integration point allows you to specify an
+optional function that will run before any other user-defined functions
+during simulations. This function can serve various purposes, such
+as:</p>
+<ul>
+<li>Setting a seed for reproducibility in the R environment</li>
+<li>Loading required R packages or libraries</li>
+<li>Setting global variables</li>
+<li>Setting the working directory</li>
+<li>Performing other initial setup tasks</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
+</h2>
+<p>You can set up an initialization function when <strong>creating a new
+project</strong> in East Horizon by navigating to the <strong>Initialize
+R Simulations</strong> option under the <strong>Plan</strong> section.
+Follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>Turn on the switch to enable the feature.</li>
+<li>Select the appropriate R file from your computer, or use the
+built-in R Code Assistant to create one.</li>
+<li>Specify the function name you want to initialize.</li>
+<li>Set any required user parameters (variables) as needed for your
+function.</li>
+</ol>
+<p>For a visual guide, refer to the screenshot below:</p>
+<div class="float">
+<img src="initialization.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="input-values">Input Values<a class="anchor" aria-label="anchor" href="#input-values"></a>
+</h2>
+<p>When creating a custom R script, you can optionally use certain
+variables provided by East Horizon’s engine itself. These variables are
+automatically available and do not need to be set by the user, except
+for the UserParam variable. Refer to the table below for the variables
+that are available for this integration point.</p>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="9%">
+<col width="75%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Variable</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td><strong>UserParam</strong></td>
+<td>List</td>
+<td>This variable contains all user-defined parameters specified in the
+East Horizon interface (refer to the <a href="#how-to-use-it-in-east-horizon">How to Use It in East Horizon</a>
+section). To access these parameters in your R code, use the syntax:
+<code>UserParam$NameOfTheVariable</code>, replacing
+<code>NameOfTheVariable</code> with the appropriate parameter name.</td>
+</tr></tbody>
+</table>
+<div class="section level3">
+<h3 id="expected-output-value">Expected Output Value<a class="anchor" aria-label="anchor" href="#expected-output-value"></a>
+</h3>
+<p>East Horizon expects an output of a specific type. Refer to the table
+below for the expected outputs for this integration point:</p>
+<table class="table">
+<colgroup>
+<col width="13%">
+<col width="8%">
+<col width="78%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Output</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td><strong>ErrorCode</strong></td>
+<td>Integer</td>
+<td>This output is optional. It can be used to handle errors in your
+script:<br>– <code>0</code>: No Error<br> –
+<code>Positive Integer</code>: Nonfatal Error, the current simulation
+will be aborted, but the next simulation will proceed.<br>–
+<code>Negative Integer</code>: Fatal Error, no further simulations will
+be attempted.</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p>Your R script could contain a function such as this one, with a name
+of your choice. We recommend always declaring <code>UserParam</code> as
+a default <code>NULL</code> value in the function arguments, as this
+will ensure that the same function will work regardless of whether the
+user has specified any custom parameters in East Horizon.</p>
+<pre><code><span><span class="va">Init</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>  <span class="co"># Do something, for example set the seed</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Error handling (no error)</span></span>
+<span>  <span class="va">error</span> <span class="op">=</span> <span class="fl">0</span></span>
+<span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">error</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
