@@ -8,10 +8,10 @@
 #'        \describe
 #'        {
 #'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
-#'          \item{ArrTimeVisit<VisitID>}{A numeric value with the time the patient arrived in the trial for the <VisitID>th visit.}
+#'          \item{ArrTimeVisit[VisitID]}{A numeric value with the time the patient arrived in the trial for the [VisitID]th visit.}
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
-#'          \item{Response<VisitID>}{Numeric value for the response from the patient at the <VisitID>th visit. }
-#'          \item{CensorInd<VisitID>}{A binary (0-1) value where 1 indicates that the patient was censored at the <VisitID>th visit.}
+#'          \item{Response[VisitID]}{Numeric value for the response from the patient at the [VisitID]th visit. }
+#'          \item{CensorInd[VisitID]}{A binary (0-1) value where 1 indicates that the patient was censored at the [VisitID]th visit.}
 #'          \item{DropoutVisitID}{An integer value which indicates the ID of the visit where the patient was censored. }
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
