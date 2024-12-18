@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-[$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
+[$\leftarrow$ Go back to the **Getting Started: Overview** page](Overview.html)
 
 # Description
 
@@ -35,7 +35,7 @@ For a visual guide of where to find the option, refer to the screenshot below:
 
 The input values, expected output values, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
 
-1. [**Continuous (Normal) Outcome**](IntegrationPointResponseContinuous.html)
-1. [**Continuous (Normal) Outcome with Repeated Measures**](IntegrationPointResponseRepeatedMeasures.html)
-1. [**Binary Outcome**](IntegrationPointResponseBinary.html)
-1. [**Time-to-Event (Survival) Outcome**](IntegrationPointResponseTimeToEvent.html)
+1. Continuous (Normal) Outcome
+1. Continuous (Normal) Outcome with Repeated Measures
+1. Binary Outcome
+1. Time-to-Event (Survival) Outcome

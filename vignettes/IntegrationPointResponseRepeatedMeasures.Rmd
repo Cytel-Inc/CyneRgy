@@ -1,0 +1,84 @@
+---
+title: "Integration Point: Response - Continuous Outcome with Repeated Measures"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
+
+This integration point and outcome is currently available for the **Two Arm Confirmatory** Study Objective.
+
+# Input Variables
+
+When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|----------|---------------------------------------------------------------------------------|
+|**NumSub**|Integer|Number of subjects.|
+|**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
+|**NumVisit**|Integer|Number of visits.|
+|**Inputmethod**|Integer|Two options:  1) Actual values, 2) Change from baseline.|
+|**VisitTime**|Vector of Numeric|Vector of length `NumVisit`, indicating the visit times.|
+|**MeanControl**|Vector of Numeric|Vector of length `NumVisit`, indicating the control mean for each visit.|
+|**MeanTrt**|Vector of Numeric|Vector of length `NumVisit`, indicating the treatment mean for each visit.|
+|**StdDevControl**|Vector of Numeric|Vector of length `NumVisit`, indicating the control standard deviation for each visit.|
+|**StdDevTrt**|Vector of Numeric|Vector of length `NumVisit`, indicating the treatment standard deviation for each visit.|
+|**CorrMat**|Matrix of Numeric|Matrix of size `NumVisit` $\times $ `NumVisit`, indicating the correlation between all visits.|
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+
+# Expected Output Variable
+
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
+
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `ErrorCode` and `Response`.                    |
+
+## Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|-----------------|----------|--------------------------------------------------------------------------------------------------|
+|**Response1**|Vector of Numeric|Vector of length `NumSub`, containing the generated responses for all subjects for the first visit.|
+|**Response2**|Vector of Numeric|Vector of length `NumSub`, containing the generated responses for all subjects for the second visit.|
+|*...*||Responses for additional visits follow the same format, incrementing the visit number (e.g., Response3, Response4, etc.).    |
+|**ResponseNumVisit**|Vector of Numeric|Final vector of length `NumSub`, containing the generated responses for all subjects for the last visit. `NumVisit` should be replaced by the number of visits.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+
+# Minimal Template
+
+Your R script could contain a function such as this one, with a name of your choice. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+```
+GenerateResponse <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, 
+                              MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vOutResponse  	<- c()
+  lReturn           <- list()
+  
+  # Add code to simulate the patient data as desired.  
+  # Example of how to create the return list with Response1, Response2, ..., ResponseNumVisit.
+  # Store the generated continuous response values in a vector called vOutResponse for each subject.
+  # Store the response vector in a list called vOutResponse for each visit.
+  for(i in 1:NumVisit)
+  {
+      strVisitName <- paste0( "Response", i ) # Response1, Response2, ..., ResponseNumVisit
+      vOutResponse <- rep( 0, NumSub )  # Initializing response array to 0	
+      lReturn[[ strVisitName ]] <- as.double( vOutResponse )
+  }
+    
+  lReturn$ErrorCode <- as.integer( nError )
+  return( lReturn )
+}
+```
+
+A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.RepeatedMeasures.R) 
+
+# Example
+
+Explore the following example for more context:
+
+1. [**2-Arm, Normal Outcome, Repeated Measures - Patient Simulation**](2ArmNormalRepeatedMeasuresResponseGeneration.html)
+    - [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/GenerateResponseDiffOfMeansRepeatedMeasures.R)
+    

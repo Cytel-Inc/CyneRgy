@@ -113,15 +113,79 @@ Potvin</h4>
             
             <h4 data-toc-skip class="date">December 18, 2024</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/HEAD/vignettes/IntegrationPointResponse.Rmd" class="external-link"><code>vignettes/IntegrationPointResponse.Rmd</code></a></small>
+
       <div class="d-none name"><code>IntegrationPointResponse.Rmd</code></div>
     </div>
 
     
     
+<p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
+Go back to the <em>Getting Started: Overview</em> page</a></p>
 <div class="section level2">
-<h2 id="integration-point-response">Integration Point: Response<a class="anchor" aria-label="anchor" href="#integration-point-response"></a>
+<h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
 </h2>
+<p>The Response integration point allows you to incorporate custom
+patient outcome simulation capabilities into East Horizon. By specifying
+a function, you can simulate patient outcomes according to your
+requirements, replacing the native generation method for patient
+response. For example, you can:</p>
+<ul>
+<li>Simulate patient data using a mixture distribution where a
+proportion of patients do not respond to treatment.</li>
+<li>Simulate patient data from a statistical distribution not natively
+supported by East Horizon, such as:
+<ul>
+<li>Gamma distribution for continuous outcomes,</li>
+<li>Beta distribution for binary outcomes,</li>
+<li>Weibull distribution for time-to-event outcomes.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
+</h2>
+<p>You can set up a response function in East Horizon Explore under
+<strong>Distribution</strong> in a <strong>Response Card</strong> while
+creating or editing an <strong>Input Set</strong>. Follow these
+steps:</p>
+<ol style="list-style-type: decimal">
+<li>Select “User Specified-R” from the dropdown in the Distribution
+field in the Response card.</li>
+<li>Browse and select the appropriate R file (<code>filename.r</code>)
+from your computer, or use the built-in <strong>R Code
+Assistant</strong> to create one. This file should contain function(s)
+written to perform various tasks to be used throughout your
+Project.</li>
+<li>Choose the appropriate function name. If the expected function is
+not displaying, then check your R code for errors.</li>
+<li>Set any required user parameters (variables) as needed for your
+function using <strong>+ Add Variables</strong>.</li>
+<li>Continue creating your project by specifying scenarios for patient
+Response, Enrollments, etc.</li>
+</ol>
+<p>For a visual guide of where to find the option, refer to the
+screenshot below:</p>
+<div class="float">
+<img src="response.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="endpoint-types">Endpoint Types<a class="anchor" aria-label="anchor" href="#endpoint-types"></a>
+</h2>
+<p>The input values, expected output values, examples, and templates for
+this integration point depend on the endpoint type (or outcome) you are
+using. Refer to the relevant pages below:</p>
+<ol style="list-style-type: decimal">
+<li><a href="IntegrationPointResponseContinuous.html"><strong>Continuous
+(Normal) Outcome</strong></a></li>
+<li><a href="IntegrationPointResponseRepeatedMeasures.html"><strong>Continuous
+(Normal) Outcome with Repeated Measures</strong></a></li>
+<li><a href="IntegrationPointResponseBinary.html"><strong>Binary
+Outcome</strong></a></li>
+<li><a href="IntegrationPointResponseTimeToEvent.html"><strong>Time-to-Event
+(Survival) Outcome</strong></a></li>
+</ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

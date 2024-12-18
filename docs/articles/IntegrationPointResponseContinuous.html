@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Integration Point: Initialization • CyneRgy</title>
+<title>Integration Point: Response - Continuous Outcome • CyneRgy</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Initialization">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Response - Continuous Outcome">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -36,7 +36,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
-<li class="active nav-item dropdown">
+<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-getting-started" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Getting Started</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-getting-started">
 <li><a class="dropdown-item" href="../articles/Overview.html">Overview</a></li>
@@ -107,71 +107,32 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Initialization</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Response - Continuous Outcome</h1>
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
             <h4 data-toc-skip class="date">December 18, 2024</h4>
       
 
-      <div class="d-none name"><code>IntegrationPointInitialization.Rmd</code></div>
+      <div class="d-none name"><code>IntegrationPointResponseContinuous.Rmd</code></div>
     </div>
 
     
     
-<p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
-Go back to the <em>Getting Started: Overview</em> page</a></p>
+<p><a href="IntegrationPointResponse.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
+Go back to the <em>Integration Point: Response</em> page</a></p>
+<p>This integration point and outcome is currently available for the
+<strong>Two Arm Confirmatory</strong> and <strong>Multiple Arm
+Confirmatory</strong> Study Objectives.</p>
 <div class="section level2">
-<h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
-</h2>
-<p>The Initialization integration point allows you to specify an
-optional function that will run before any other user-defined functions
-during simulations. This function can serve various purposes, such
-as:</p>
-<ul>
-<li>Setting a seed for reproducibility in the R environment</li>
-<li>Loading required R packages or libraries</li>
-<li>Setting global variables</li>
-<li>Setting the working directory</li>
-<li>Performing other initial setup tasks</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
-</h2>
-<p>You can set up an initialization function when <strong>creating a new
-project</strong> in East Horizon by navigating to the <strong>Initialize
-R Simulations</strong> option under the <strong>Plan</strong> section.
-Follow these steps:</p>
-<ol style="list-style-type: decimal">
-<li>Choose <strong>Initialize R Simulations</strong> in the Plan section
-when setting up a new Project.</li>
-<li>Turn on the switch to enable the feature.</li>
-<li>Browse and select the appropriate R file (<code>filename.r</code>)
-from your computer, or use the built-in <strong>R Code
-Assistant</strong> to create one. This file should contain function(s)
-written to perform various tasks to be used throughout your
-Project.</li>
-<li>Specify the function name you want to initialize. If the expected
-function is not displaying, then check your R code for errors.</li>
-<li>Set any required user parameters (variables) as needed for your
-function using <strong>+ Add Variables</strong>.</li>
-<li>Continue creating your project.</li>
-</ol>
-<p>For a visual guide of where to find the option, refer to the
-screenshot below:</p>
-<div class="float">
-<img src="initialization.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="input-variable">Input Variable<a class="anchor" aria-label="anchor" href="#input-variable"></a>
+<h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
 <p>When creating a custom R script, you can optionally use certain
 variables provided by East Horizon’s engine itself. These variables are
 automatically available and do not need to be set by the user, except
 for the <code>UserParam</code> variable. Refer to the table below for
-the variable that is available for this integration point.</p>
+the variables that are available for this integration point and
+outcome.</p>
 <table class="table">
 <colgroup>
 <col width="14%">
@@ -183,16 +144,43 @@ the variable that is available for this integration point.</p>
 <th><strong>Type</strong></th>
 <th><strong>Description</strong></th>
 </tr></thead>
-<tbody><tr class="odd">
+<tbody>
+<tr class="odd">
+<td><strong>NumSub</strong></td>
+<td>Integer</td>
+<td>Number of subjects.</td>
+</tr>
+<tr class="even">
+<td><strong>TreatmentID</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length <code>NumSub</code>, indicating the allocation of
+subjects to arms. Index <code>0</code> represents placebo/control. For
+example, <code>[0, 0, 1]</code> indicates three subjects: two in the
+control group and one experimental.</td>
+</tr>
+<tr class="odd">
+<td><strong>Mean</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length equal to the number of arms, indicating the mean of
+the treatments.</td>
+</tr>
+<tr class="even">
+<td><strong>StdDev</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length equal to the number of arms, indicating the
+standard deviation of the treatments.</td>
+</tr>
+<tr class="odd">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
-interface (refer to the <a href="#how-to-use-it-in-east-horizon">How to
-Use It in East Horizon</a> section). To access these parameters in your
-R code, use the syntax: <code>UserParam$NameOfTheVariable</code>,
+interface (refer to the <a href="IntegrationPointResponse.html#how-to-use-it-in-east-horizon">How
+to Use It in East Horizon</a> section). To access these parameters in
+your R code, use the syntax: <code>UserParam$NameOfTheVariable</code>,
 replacing <code>NameOfTheVariable</code> with the appropriate parameter
 name.</td>
-</tr></tbody>
+</tr>
+</tbody>
 </table>
 </div>
 <div class="section level2">
@@ -202,16 +190,41 @@ name.</td>
 below for the expected output for this integration point:</p>
 <table class="table">
 <colgroup>
+<col width="15%">
+<col width="84%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>List</td>
+<td>A named list containing <code>Response</code> and
+<code>ErrorCode</code>.</td>
+</tr></tbody>
+</table>
+<div class="section level3">
+<h3 id="expected-members-of-the-output-list">Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#expected-members-of-the-output-list"></a>
+</h3>
+<table class="table">
+<colgroup>
 <col width="13%">
 <col width="8%">
 <col width="78%">
 </colgroup>
 <thead><tr class="header">
-<th><strong>Output</strong></th>
+<th><strong>Members</strong></th>
 <th><strong>Type</strong></th>
 <th><strong>Description</strong></th>
 </tr></thead>
-<tbody><tr class="odd">
+<tbody>
+<tr class="odd">
+<td><strong>Response</strong></td>
+<td>Vector of Double</td>
+<td>Vector of length <code>NumSub</code>, containing the generated
+responses for all subjects.</td>
+</tr>
+<tr class="even">
 <td><strong>ErrorCode</strong></td>
 <td>Integer</td>
 <td>Optional. Can be used to handle errors in your script:<br>–
@@ -219,8 +232,10 @@ below for the expected output for this integration point:</p>
 Error, the current simulation will be aborted, but the next simulation
 will proceed.<br>– <code>Negative Integer</code>: Fatal Error, no
 further simulations will be attempted.</td>
-</tr></tbody>
+</tr>
+</tbody>
 </table>
+</div>
 </div>
 <div class="section level2">
 <h2 id="minimal-template">Minimal Template<a class="anchor" aria-label="anchor" href="#minimal-template"></a>
@@ -230,17 +245,41 @@ of your choice. We recommend always declaring <code>UserParam</code> as
 a default <code>NULL</code> value in the function arguments, as this
 will ensure that the same function will work regardless of whether the
 user has specified any custom parameters in East Horizon.</p>
-<pre><code><span><span class="va">Init</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">TreatmentID</span>, <span class="va">Mean</span>, <span class="va">StdDev</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
-<span>  <span class="co"># Do something, for example set the seed</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span> <span class="fl">42</span> <span class="op">)</span></span>
-<span>  <span class="co"># If you want the user to set the seed using East Horizon interface, you could use set.seed( UserParam$seed ) </span></span>
+<span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>  <span class="va">vPatientOutcome</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0  </span></span>
 <span>  </span>
-<span>  <span class="co"># Error handling (no error)</span></span>
-<span>  <span class="va">nError</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>  <span class="co"># Write the actual code here.</span></span>
+<span>  <span class="co"># Store the generated continuous response values in a vector called vPatientOutcome.</span></span>
 <span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientOutcome</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
+<p>A detailed template with step-by-step explanations is available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Continuous.R" class="external-link">SimulatePatientOutcome.Continuous.R</a></p>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>Explore the following examples for more context:</p>
+<ol style="list-style-type: decimal">
+<li>
+<a href="2ArmNormalOutcomePatientSimulationDescription.html"><strong>2-Arm,
+Normal Outcome - Patient Simulation</strong></a>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZero.R" class="external-link">SimulatePatientOutcomePercentAtZero.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZeroBetaDist.R" class="external-link">SimulatePatientOutcomePercentAtZeroBetaDist.R</a></li>
+</ul>
+</li>
+<li>
+<a href="ChildhoodAnxiety.html"><strong>Childhood Anxiety
+Trial</strong></a>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/RCode/SimulatePatientOutcomeCHU9.R" class="external-link">SimulatePatientOutcomeCHU9.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/RCode/SimulatePatientOutcomeCHU9V2.R" class="external-link">SimulatePatientOutcomeCHU9V2.R</a></li>
+</ul>
+</li>
+</ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

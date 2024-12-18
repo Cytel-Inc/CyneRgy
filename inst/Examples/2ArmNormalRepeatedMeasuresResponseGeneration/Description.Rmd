@@ -27,5 +27,5 @@ In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tr
 1. [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/GenerateResponseDiffOfMeansRepeatedMeasures.R) - The R function named "GenRespDiffOfMeansRepMeasures" in the file is used to generate the normal responses across multiple visits for 2-arm normal repeated measures design.
 
 
-2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/Rcode/LibraryMASS.R) - This file is used to load the library "MASS" to run mvrnorm() function. 
+2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/LibraryMASS.R) - This file is used to load the library "MASS" to run mvrnorm() function. 
 

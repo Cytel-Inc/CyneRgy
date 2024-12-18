@@ -7,14 +7,19 @@ output: html_document
 
 # Overview
 
-(more explanations here)
-Each integration point provides a set of inputs for use in your R scripts, leaving it up to you to determine if and how they should be utilized.
+East Horizon supports the customization of trial design simulations by integrating your own R scripts. This feature allows you to leverage R's robust statistical computing capabilities to enhance your simulation designs. This section provides the steps to access the R integration points, input values you can use in your scripts, expected output values, examples and templates. Each integration point provides a set of inputs for use in your R scripts, leaving it up to you to determine if and how they should be utilized.
 
-For detailed information about each integration point, please refer to the following pages:
+## Detailed Information on Integration Points
+
+For comprehensive details about each integration point, please refer to the following pages:
 
 1. [Initialization](IntegrationPointInitialization.html)
 2. [Analysis](IntegrationPointAnalysis.html)
 3. [Enrollment](IntegrationPointEnrollment.html)
 4. [Randomization](IntegrationPointRandomization.html)
-5. [Response](IntegrationPointResponse.html)
+5. [Response (Patient Simulation)](IntegrationPointResponse.html)
 6. [Dropout](IntegrationPointDropout.html)
+
+## Additional Resources
+
+For tips, best practices, and further information, visit the Knowledge Base: [Using R functions within East Horizon: Explore](https://knowledge.cytel.com/r-connection).

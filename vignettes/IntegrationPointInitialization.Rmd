@@ -2,10 +2,10 @@
 title: 'Integration Point: Initialization'
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document: default
-  pdf_document: default
+output: html_document
 ---
+
+[$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
 
 # Description
 
@@ -21,46 +21,48 @@ The Initialization integration point allows you to specify an optional function 
 
 You can set up an initialization function when **creating a new project** in East Horizon by navigating to the **Initialize R Simulations** option under the **Plan** section. Follow these steps:
 
+1. Choose **Initialize R Simulations** in the Plan section when setting up a new Project.
 1. Turn on the switch to enable the feature.
-1. Select the appropriate R file from your computer, or use the built-in **R Code Assistant** to create one.
-1. Specify the function name you want to initialize.
-1. Set any required user parameters (variables) as needed for your function.
+1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Specify the function name you want to initialize. If the expected function is not displaying, then check your R code for errors.
+1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
+1. Continue creating your project.
 
-For a visual guide, refer to the screenshot below:
+For a visual guide of where to find the option, refer to the screenshot below:
 
 ![Screenshot of East Horizon](initialization.png)
 
-# Input Values
+# Input Variable
 
-When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the UserParam variable. Refer to the table below for the variables that are available for this integration point.
+When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
 
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|----------|---------------------------------------------------------------------------------|
-| **UserParam**  | List     | This variable contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
-## Expected Output Value
+# Expected Output Variable
 
-East Horizon expects an output of a specific type. Refer to the table below for the expected outputs for this integration point:
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
 
 | **Output**     | **Type**  | **Description**                                                                                  |
 |-----------------|----------|--------------------------------------------------------------------------------------------------|
-| **ErrorCode**   | Integer  | This output is optional. It can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
 
-# Example
+# Minimal Template
 
 Your R script could contain a function such as this one, with a name of your choice. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
 ```
-Init <- function(UserParam = NULL)
+Init <- function( UserParam = NULL )
 {
   # Do something, for example set the seed
-  set.seed(42)
-  # If you want the user to set the seed using East Horizon interface, you could use set.seed(UserParam$seed) 
+  set.seed( 42 )
+  # If you want the user to set the seed using East Horizon interface, you could use set.seed( UserParam$seed ) 
   
   # Error handling (no error)
-  error = 0
+  nError <- 0
 
-  return(as.integer(error))
+  return( as.integer( nError ) )
 }
 ```
 
