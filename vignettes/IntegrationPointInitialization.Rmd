@@ -7,6 +7,8 @@ output: html_document
 
 [$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
 
+This integration point is currently available for the **Two Arm Confirmatory** (all endpoint types) and **Multiple Arm Confirmatory** (continuous and binary outcomes) Study Objectives.
+
 # Description
 
 The Initialization integration point allows you to specify an optional function that will run before any other user-defined functions during simulations. This function can serve various purposes, such as:
@@ -15,6 +17,8 @@ The Initialization integration point allows you to specify an optional function 
 - Loading required R packages or libraries
 - Setting global variables
 - Setting the working directory
+- Setting the Random Number Generator
+- Sourcing an additional file
 - Performing other initial setup tasks
 
 # How to Use It in East Horizon
@@ -32,12 +36,13 @@ For a visual guide of where to find the option, refer to the screenshot below:
 
 ![Screenshot of East Horizon](initialization.png)
 
-# Input Variable
+# Input Variables
 
 When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
 
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|----------|---------------------------------------------------------------------------------|
+|**Seed**|Integer|Randomization seed set in East Horizon in Simulation Setup.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -53,7 +58,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 Your R script could contain a function such as this one, with a name of your choice. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
 ```
-Init <- function( UserParam = NULL )
+Init <- function( Seed = NULL, UserParam = NULL )
 {
   # Do something, for example set the seed
   set.seed( 42 )
@@ -65,4 +70,6 @@ Init <- function( UserParam = NULL )
   return( as.integer( nError ) )
 }
 ```
+
+A detailed template with step-by-step explanations is available here: [Initialize.R](https://github.com/Cytel-Inc/CyneRgy/blob/220-create-getting-started-page-with-subpages-GP/inst/Templates/Initialize.R) 
 

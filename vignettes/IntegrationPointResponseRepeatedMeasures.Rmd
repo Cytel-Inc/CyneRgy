@@ -15,7 +15,7 @@ When creating a custom R script, you can optionally use specific variables provi
 
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
-|**NumSub**|Integer|Number of subjects.|
+|**NumSub**|Integer|Number of subjects in the trial.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**NumVisit**|Integer|Number of visits.|
 |**Inputmethod**|Integer|Two options:<br>– `0`: The mean and SD values represent actual values.<br>– `1`: They represent an expected change from baseline at each visit rather than the true means.|

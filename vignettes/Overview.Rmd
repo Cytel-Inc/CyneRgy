@@ -13,12 +13,12 @@ East Horizon supports the customization of trial design simulations by integrati
 
 For comprehensive details about each integration point, please refer to the following pages:
 
-1. [Initialization](IntegrationPointInitialization.html)
-2. [Analysis](IntegrationPointAnalysis.html)
-3. [Enrollment](IntegrationPointEnrollment.html)
-4. [Randomization](IntegrationPointRandomization.html)
-5. [Response (Patient Simulation)](IntegrationPointResponse.html)
-6. [Dropout](IntegrationPointDropout.html)
+1. [**Initialization**](IntegrationPointInitialization.html)
+1. [**Analysis**](IntegrationPointAnalysis.html)
+1. [**Enrollment**](IntegrationPointEnrollment.html)
+1. [**Randomization**](IntegrationPointRandomization.html)
+1. [**Response (Patient Simulation)**](IntegrationPointResponse.html)
+1. [**Dropout**](IntegrationPointDropout.html)
 
 ## Additional Resources
 

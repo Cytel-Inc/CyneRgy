@@ -121,6 +121,10 @@ Potvin</h4>
     
 <p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
 Go back to the <em>Getting Started: Overview</em> page</a></p>
+<p>This integration point is currently available for the <strong>Two Arm
+Confirmatory</strong> (all endpoint types) and <strong>Multiple Arm
+Confirmatory</strong> (continuous and binary outcomes) Study
+Objectives.</p>
 <div class="section level2">
 <h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
 </h2>
@@ -133,6 +137,8 @@ as:</p>
 <li>Loading required R packages or libraries</li>
 <li>Setting global variables</li>
 <li>Setting the working directory</li>
+<li>Setting the Random Number Generator</li>
+<li>Sourcing an additional file</li>
 <li>Performing other initial setup tasks</li>
 </ul>
 </div>
@@ -165,7 +171,7 @@ screenshot below:</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="input-variable">Input Variable<a class="anchor" aria-label="anchor" href="#input-variable"></a>
+<h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
 <p>When creating a custom R script, you can optionally use certain
 variables provided by East Horizon’s engine itself. These variables are
@@ -183,7 +189,13 @@ the variable that is available for this integration point.</p>
 <th><strong>Type</strong></th>
 <th><strong>Description</strong></th>
 </tr></thead>
-<tbody><tr class="odd">
+<tbody>
+<tr class="odd">
+<td><strong>Seed</strong></td>
+<td>Integer</td>
+<td>Randomization seed set in East Horizon in Simulation Setup.</td>
+</tr>
+<tr class="even">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
@@ -192,7 +204,8 @@ Use It in East Horizon</a> section). To access these parameters in your
 R code, use the syntax: <code>UserParam$NameOfTheVariable</code>,
 replacing <code>NameOfTheVariable</code> with the appropriate parameter
 name.</td>
-</tr></tbody>
+</tr>
+</tbody>
 </table>
 </div>
 <div class="section level2">
@@ -230,7 +243,7 @@ of your choice. We recommend always declaring <code>UserParam</code> as
 a default <code>NULL</code> value in the function arguments, as this
 will ensure that the same function will work regardless of whether the
 user has specified any custom parameters in East Horizon.</p>
-<pre><code><span><span class="va">Init</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">Init</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">Seed</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="co"># Do something, for example set the seed</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span> <span class="fl">42</span> <span class="op">)</span></span>
@@ -241,6 +254,8 @@ user has specified any custom parameters in East Horizon.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
+<p>A detailed template with step-by-step explanations is available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/220-create-getting-started-page-with-subpages-GP/inst/Templates/Initialize.R" class="external-link">Initialize.R</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
