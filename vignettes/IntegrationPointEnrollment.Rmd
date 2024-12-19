@@ -1,9 +1,82 @@
 ---
-title: "Integration Point: Enrollment"
+title: 'Integration Point: Enrollment'
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-# Integration Point: Enrollment
+[$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
+
+This integration point is currently available for the **Two Arm Confirmatory** (all endpoint types) and **Multiple Arm Confirmatory** (continuous and binary outcomes) Study Objectives.
+
+# Description
+
+The Enrollment integration point allows you to customize the distribution of subject arrival times using a custom R script. Instead of relying on a default uniform distribution, you can implement alternative enrollment patterns such as Poisson, equidistant, or exponential enrollment, among others, to better suit your trial's requirements.
+
+# How to Use It in East Horizon
+
+You can set up an enrollment function in East Horizon Explore under **Distribution** in a **Enrollment Card** while creating or editing an **Input Set**. Follow these steps:
+
+1. Select "User Specified-R" from the dropdown in the Distribution field in the Enrollment card.
+1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
+1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
+1. Continue creating your project by specifying scenarios for patient Response, Enrollments, etc.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![Screenshot of East Horizon](enrollment.png)
+
+# Input Variable
+
+When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**NumSub**|Integer|Number of subjects in the trial.|
+|**NumPrd**|Integer|Number of accrual periods in the trial.|
+|**PrdStart**|Vector of Numeric|Vector of length `NumPrd`, indicating the start time of each period, with `PrdStarr[ 1 ] = 0`.|
+|**AccrRate**|Vector of Numeric|Vector of length `NumPrd`, indicating the accrual rate in each period.|
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+
+# Expected Output Variable
+
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
+
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `ArrivalTime` and `ErrorCode`.                    |
+
+## Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **ArrivalTime**   | Vector of Double  | Vector of length `NumSub`, containing the generated arrival times for all subjects.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+
+# Minimal Template
+
+Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+```
+GenArrTimes <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+{
+  nError        	    <- 0 # Error handling (no error)
+  vPatientArrivalTime 	<- rep( 0, NumSub ) # Initializing response array to 0
+  
+  # Write the actual code here.
+  # Store the generated arrival times in a vector called vPatientArrivalTime
+
+  return( list( Response = as.double( vPatientArrivalTime ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+A detailed template with step-by-step explanations is available here: [GenerateArrivalTimes.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/GenerateArrivalTimes.R) 
+
+# Examples
+
+Explore the following examples for more context:
+
+1. [**Generate Patient Arrival Times with Poisson Process**](GeneratePoissonArrival.html)
+    - [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/RCode/GeneratePoissonArrival.R)
 

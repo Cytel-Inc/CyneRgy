@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 18, 2024</h4>
+            <h4 data-toc-skip class="date">December 19, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointInitialization.Rmd</code></div>
@@ -239,10 +239,12 @@ further simulations will be attempted.</td>
 <h2 id="minimal-template">Minimal Template<a class="anchor" aria-label="anchor" href="#minimal-template"></a>
 </h2>
 <p>Your R script could contain a function such as this one, with a name
-of your choice. We recommend always declaring <code>UserParam</code> as
-a default <code>NULL</code> value in the function arguments, as this
-will ensure that the same function will work regardless of whether the
-user has specified any custom parameters in East Horizon.</p>
+of your choice. All input variables must be declared, even if they are
+not used in the script. We recommend always declaring
+<code>UserParam</code> as a default <code>NULL</code> value in the
+function arguments, as this will ensure that the same function will work
+regardless of whether the user has specified any custom parameters in
+East Horizon.</p>
 <pre><code><span><span class="va">Init</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">Seed</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="co"># Do something, for example set the seed</span></span>
@@ -256,6 +258,19 @@ user has specified any custom parameters in East Horizon.</p>
 <span><span class="op">}</span></span></code></pre>
 <p>A detailed template with step-by-step explanations is available here:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/220-create-getting-started-page-with-subpages-GP/inst/Templates/Initialize.R" class="external-link">Initialize.R</a></p>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>Used to load libraries in <a href="2ArmNormalRepeatedMeasuresResponseGeneration.html"><strong>2-Arm,
+Normal Outcome, Repeated Measures - Patient Simulation</strong></a>.
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/LibraryMASS.R" class="external-link">LibraryMASS.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/LibraryNIme.R" class="external-link">LibraryNIme.R</a></li>
+</ul>
+</li>
+</ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

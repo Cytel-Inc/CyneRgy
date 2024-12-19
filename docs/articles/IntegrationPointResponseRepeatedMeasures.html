@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 18, 2024</h4>
+            <h4 data-toc-skip class="date">December 19, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseRepeatedMeasures.Rmd</code></div>
@@ -297,10 +297,12 @@ further simulations will be attempted.</td>
 <h2 id="minimal-template">Minimal Template<a class="anchor" aria-label="anchor" href="#minimal-template"></a>
 </h2>
 <p>Your R script could contain a function such as this one, with a name
-of your choice. We recommend always declaring <code>UserParam</code> as
-a default <code>NULL</code> value in the function arguments, as this
-will ensure that the same function will work regardless of whether the
-user has specified any custom parameters in East Horizon.</p>
+of your choice. All input variables must be declared, even if they are
+not used in the script. We recommend always declaring
+<code>UserParam</code> as a default <code>NULL</code> value in the
+function arguments, as this will ensure that the same function will work
+regardless of whether the user has specified any custom parameters in
+East Horizon.</p>
 <pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumVisit</span>, <span class="va">TreatmentID</span>, <span class="va">Inputmethod</span>, <span class="va">VisitTime</span>, <span class="va">MeanControl</span>, </span>
 <span>                              <span class="va">MeanTrt</span>, <span class="va">StdDevControl</span>, <span class="va">StdDevTrt</span>, <span class="va">CorrMat</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>

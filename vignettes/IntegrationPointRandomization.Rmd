@@ -1,5 +1,5 @@
 ---
-title: 'Integration Point: Initialization'
+title: 'Integration Point: Randomization'
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
@@ -32,24 +32,30 @@ For a visual guide of where to find the option, refer to the screenshot below:
 When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
 
 | **Variable**   | **Type** | **Description**                                                                 |
-|----------------|-------------|---------------------------------------------------------------------------------|
+|----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
-|**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
-|**AllocRatio**|Vector of Numeric|Vector of length `NumArm - 1`, indicating the expected allocation ratios for each treatment arm relative to the control arm ($n_{t_i}/n_c$).
+|**NumArms**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
+|**AllocRatio**|Vector of Numeric|Vector of length `NumArm - 1`, indicating the expected allocation ratios for each treatment arm relative to the control arm ($n_{t_i}/n_c$).|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 
 East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
 
-| **Output**     | **Type**  | **Description**                                                                                  |
-|-----------------|-------------|--------------------------------------------------------------------------------------------------|
-| **TreatmentID**   | Vector of Integer  | Vector of length `NumSub`, containing the allocation indices for all subjects (0 for control arm, 1 for first experimental arm, etc.).
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `TreatmentID` and `ErrorCode`.                    |
+
+## Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **TreatmentID**   | Vector of Integer  | Vector of length `NumSub`, containing the allocation indices for all subjects (0 for control arm, 1 for first experimental arm, etc.).|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
 
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
 ```
 Randomize <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )

@@ -1,24 +1,22 @@
 ---
-title: "Integration Point: Response - Continuous Outcome"
+title: "Integration Point: Dropout - Continuous or Binary Outcome, Multiple Arm"
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-[$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
-
-This integration point and outcome is currently available for the **Two Arm Confirmatory** and **Multiple Arm Confirmatory** Study Objectives.
+[$\leftarrow$ Go back to the *Integration Point: Dropout - Continuous or Binary Outcome* page](IntegrationPointDropoutContinuousOrBinary.html)
 
 # Input Variables
 
-When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point, outcome, and study objective.
 
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
+|**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
+|**ProbDrop**|Vector of Numeric|Vector of length `NumArm`, indicating the probability of dropout for each arm. The first element corresponds to the control group, followed by the probabilities for each experimental arm in sequence.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
-|**Mean**|Vector of Numeric|Vector of length equal to the number of arms, indicating the mean of the treatments.|
-|**StdDev**|Vector of Numeric|Vector of length equal to the number of arms, indicating the standard deviation of the treatments.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -27,13 +25,13 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 | **Type**  | **Description**                                                                                  |
 |------------------|--------------------------------------------------------------------------------------------------|
-| List  | A named list containing `Response` and `ErrorCode`.                    |
+| List  | A named list containing `CensorInd` and `ErrorCode`.                    |
 
 ## Expected Members of the Output List
 
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
-| **Response**   | Vector of Double  | Vector of length `NumSub`, containing the generated responses for all subjects.                  |
+| **CensorInd**   | Vector of Integer  | Vector of length `NumSub`, containing the generated censor indicator values for all subjects:<br>– `0`: Dropout<br>– `1`: Completer.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
 
 # Minimal Template
@@ -41,27 +39,21 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
 ```
-GenerateResponse <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
+GenCensorInd <- function( NumSub, NumArm, ProbDrop, TreatmentID, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
-  vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
+  nError        	    <- 0 # Error handling (no error)
+  vCensoringIndicator 	<- rep( 1, NumSub ) # Initializing vector to 1 (all patients are completers)	
   
   # Write the actual code here.
-  # Store the generated continuous response values in a vector called vPatientOutcome.
+  # Store the generated censor indicator values in a vector called vCensoringIndicator
 
-  return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+  return( list( CensorInd = as.integer( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
 }
 ```
-
-A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Continuous.R) 
 
 # Examples
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Normal Outcome - Patient Simulation**](2ArmNormalOutcomePatientSimulationDescription.html)
-    - [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZero.R)
-    - [SimulatePatientOutcomePercentAtZeroBetaDist.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZeroBetaDist.R)
-1. [**Childhood Anxiety Trial**](ChildhoodAnxiety.html)
-    - [SimulatePatientOutcomeCHU9.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/RCode/SimulatePatientOutcomeCHU9.R)
-    - [SimulatePatientOutcomeCHU9V2.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/RCode/SimulatePatientOutcomeCHU9V2.R)
+1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
+    - This example focuses on a Two-Arm Confirmatory study objective but can still provide valuable insights.

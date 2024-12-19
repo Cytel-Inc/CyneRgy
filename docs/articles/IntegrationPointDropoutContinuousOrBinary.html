@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Integration Point: Dropout • CyneRgy</title>
+<title>Integration Point: Dropout - Continuous or Binary Outcome • CyneRgy</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Dropout">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Dropout - Continuous or Binary Outcome">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -36,7 +36,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
-<li class="active nav-item dropdown">
+<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-getting-started" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Getting Started</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-getting-started">
 <li><a class="dropdown-item" href="../articles/Overview.html">Overview</a></li>
@@ -107,70 +107,31 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Dropout</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Dropout - Continuous or Binary Outcome</h1>
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
             <h4 data-toc-skip class="date">December 19, 2024</h4>
       
 
-      <div class="d-none name"><code>IntegrationPointDropout.Rmd</code></div>
+      <div class="d-none name"><code>IntegrationPointDropoutContinuousOrBinary.Rmd</code></div>
     </div>
 
     
     
-<p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
-Go back to the <em>Getting Started: Overview</em> page</a></p>
+<p><a href="IntegrationPointDropout.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
+Go back to the <em>Integration Point: Dropout</em> page</a></p>
 <div class="section level2">
-<h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
-</h2>
-<p>The Dropout integration point allows you to customize the behavior of
-dropouts in a longitudinal study design using a custom R script. Instead
-of relying on the built-in default binomial distribution, you can
-implement dropout distributions such as Poisson or Weibull, to better
-suit your trial’s requirements.</p>
-</div>
-<div class="section level2">
-<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
-</h2>
-<p>You can set up a dropout function in East Horizon Explore under
-<strong>Dropout Distribution</strong> in a <strong>Response
-Card</strong> while creating or editing an <strong>Input Set</strong>.
-Follow these steps:</p>
-<ol style="list-style-type: decimal">
-<li>Select “User Specified-R” from the dropdown in the Dropout
-Distribution field in the Enrollment card.</li>
-<li>Browse and select the appropriate R file (<code>filename.r</code>)
-from your computer, or use the built-in <strong>R Code
-Assistant</strong> to create one. This file should contain function(s)
-written to perform various tasks to be used throughout your
-Project.</li>
-<li>Choose the appropriate function name. If the expected function is
-not displaying, then check your R code for errors.</li>
-<li>Set any required user parameters (variables) as needed for your
-function using <strong>+ Add Variables</strong>.</li>
-<li>Continue creating your project by specifying scenarios for patient
-Response, Enrollments, etc.</li>
-</ol>
-<p>For a visual guide of where to find the option, refer to the
-screenshot below:</p>
-<div class="float">
-<img src="dropout.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="endpoint-types">Endpoint Types<a class="anchor" aria-label="anchor" href="#endpoint-types"></a>
+<h2 id="study-objectives">Study Objectives<a class="anchor" aria-label="anchor" href="#study-objectives"></a>
 </h2>
 <p>The input variables, expected output variables, examples, and
-templates for this integration point depend on the endpoint type (or
-outcome) you are using. Refer to the relevant pages below:</p>
+templates for this integration point depend on the study objective
+(number of arms) you are using. Refer to the relevant pages below:</p>
 <ol style="list-style-type: decimal">
-<li><a href="IntegrationPointDropoutContinuousOrBinary.html"><strong>Continuous
-(Normal) or Binary Outcome</strong></a></li>
-<li><a href="IntegrationPointDropoutRepeatedMeasures.html"><strong>Continuous
-(Normal) Outcome with Repeated Measures</strong></a></li>
-<li><a href="IntegrationPointDropoutTimeToEvent.html"><strong>Time-to-Event
-(Survival) Outcome</strong></a></li>
+<li><a href="IntegrationPointDropoutContinuousOrBinaryTwoArm.html"><strong>Two
+Arm Confirmatory</strong></a></li>
+<li><a href="IntegrationPointDropoutContinuousOrBinaryMultipleArm.html"><strong>Multiple
+Arm Confirmatory</strong></a></li>
 </ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

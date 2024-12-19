@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 18, 2024</h4>
+            <h4 data-toc-skip class="date">December 19, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseBinary.Rmd</code></div>
@@ -168,7 +168,9 @@ control group and one experimental.</td>
 <td><strong>PropResp</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>NumArm</code>, indicating the expected
-proportions (probabilities) of responders for each arm.</td>
+proportions (probabilities) of responders for each arm. The first
+element corresponds to the control group, followed by the probabilities
+for each experimental arm in sequence.</td>
 </tr>
 <tr class="odd">
 <td><strong>UserParam</strong></td>
@@ -241,10 +243,12 @@ further simulations will be attempted.</td>
 <h2 id="minimal-template">Minimal Template<a class="anchor" aria-label="anchor" href="#minimal-template"></a>
 </h2>
 <p>Your R script could contain a function such as this one, with a name
-of your choice. We recommend always declaring <code>UserParam</code> as
-a default <code>NULL</code> value in the function arguments, as this
-will ensure that the same function will work regardless of whether the
-user has specified any custom parameters in East Horizon.</p>
+of your choice. All input variables must be declared, even if they are
+not used in the script. We recommend always declaring
+<code>UserParam</code> as a default <code>NULL</code> value in the
+function arguments, as this will ensure that the same function will work
+regardless of whether the user has specified any custom parameters in
+East Horizon.</p>
 <pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">PropResp</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>

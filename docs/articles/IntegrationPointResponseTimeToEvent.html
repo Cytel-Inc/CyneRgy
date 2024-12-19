@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Integration Point: Response - Time-to-Event Outcome • CyneRgy</title>
+<title>Integration Point: Dropout - Time-to-Event Outcome • CyneRgy</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Response - Time-to-Event Outcome">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Dropout - Time-to-Event Outcome">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -107,11 +107,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Response - Time-to-Event Outcome</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Dropout - Time-to-Event Outcome</h1>
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 18, 2024</h4>
+            <h4 data-toc-skip class="date">December 19, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseTimeToEvent.Rmd</code></div>
@@ -119,8 +119,8 @@ Potvin</h4>
 
     
     
-<p><a href="IntegrationPointResponse.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
-Go back to the <em>Integration Point: Response</em> page</a></p>
+<p><a href="IntegrationPointDropout.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
+Go back to the <em>Integration Point: Dropout</em> page</a></p>
 <div class="section level2">
 <h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
@@ -162,43 +162,39 @@ example, <code>[0, 0, 1]</code> indicates three subjects: two in the
 control group and one experimental.</td>
 </tr>
 <tr class="even">
-<td><strong>SurvMethod</strong></td>
+<td><strong>DropMethod</strong></td>
 <td>Integer</td>
-<td>Selected method for survival analysis from the East Horizon dropdown
-list:<br>– <code>1</code>: Hazard rate.<br>– <code>2</code>: Cumulative
-% survival rates.<br>– <code>3</code>: Median survival times.</td>
+<td>Selected method for dropout parameters from the East Horizon
+dropdown list:<br>– <code>1</code>: Dropout hazard rate.<br>–
+<code>2</code>: Probability of dropout.</td>
 </tr>
 <tr class="odd">
 <td><strong>NumPrd</strong></td>
 <td>Integer</td>
-<td>Number of periods in the trial.</td>
+<td>Number of dropout periods in the trial. Equals to 1 if
+<code>DropMethod = 2</code>.</td>
 </tr>
 <tr class="even">
 <td><strong>PrdTime</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector or length <code>NumPrd</code>, indicating the times for
-survival parameters. Depends on <code>SurvMethod</code>:<br>– If
-<code>SurvMethod = 1</code>: Starting times of hazard pieces.<br>– If
-<code>SurvMethod = 2</code>: Times at which the cumulative % survivals
-are specified.<br>– If <code>SurvMethod = 3</code>: Defaults to 0.</td>
+dropout parameters. Depends on <code>DropMethod</code>:<br>– If
+<code>DropMethod = 1</code>: Starting times of dropout periods.<br>– If
+<code>DropMethod = 2</code>: Times at which the probabilities of dropout
+are specified.</td>
 </tr>
 <tr class="odd">
-<td><strong>SurvParam</strong></td>
+<td><strong>DropParam</strong></td>
 <td>Matrix</td>
-<td>Survival parameters dependent on <code>SurvMethod</code>:<br>– If
-<code>SurvMethod = 1</code>: Specifies hazard rates per arm per period.
-Size: <code>NumPrd</code> rows
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumArm</code> columns, where <code>SurvParam[i, j]</code>
+<td>Size: <code>NumPrd</code> rows
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumArm</code> columns. Dropout parameters dependent on
+<code>DropMethod</code>:<br>– If <code>DropMethod = 1</code>: Specifies
+dropout hazard rates per arm per period. <code>DropParam[i, j]</code>
 represents the hazard rate for the <code>jth</code> arm in the
 <code>ith</code> period.<br>– If <code>SurvMethod = 2</code>: Specifies
-cumulative % survival rates per arm per period. Size:
-<code>NumPrd</code> rows
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumArm</code> columns, where <code>SurvParam[i, j]</code>
-represents the cumulative % survival for the <code>jth</code> arm in the
-<code>ith</code> period.<br>– If <code>SurvMethod = 3</code>: Contains
-median survival times for each arm. Size: 1 row
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
-2 columns, where column 1 is control and column 2 is experimental.</td>
+cumulative probabilities of dropout per arm per period.
+<code>SurvParam[i, j]</code> represents the probability of dropout for
+the <code>jth</code> arm in the <code>ith</code> period.</td>
 </tr>
 <tr class="even">
 <td><strong>UserParam</strong></td>
@@ -229,7 +225,7 @@ below for the expected output for this integration point:</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td>List</td>
-<td>A named list containing <code>SurvivalTime</code> and
+<td>A named list containing <code>DropOutTime</code> and
 <code>ErrorCode</code>.</td>
 </tr></tbody>
 </table>
@@ -249,10 +245,11 @@ below for the expected output for this integration point:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><strong>SurvivalTime</strong></td>
+<td><strong>DropOutTime</strong></td>
 <td>Vector of Numeric</td>
-<td>Vector of length <code>NumSub</code>, containing the generated time
-to response values for each subject.</td>
+<td>Vector of length <code>NumSub</code>, containing the generated
+dropout times for each subject. A value of <code>Inf</code> indicates
+that the subject does not drop out.</td>
 </tr>
 <tr class="even">
 <td><strong>ErrorCode</strong></td>
@@ -271,22 +268,24 @@ further simulations will be attempted.</td>
 <h2 id="minimal-template">Minimal Template<a class="anchor" aria-label="anchor" href="#minimal-template"></a>
 </h2>
 <p>Your R script could contain a function such as this one, with a name
-of your choice. We recommend always declaring <code>UserParam</code> as
-a default <code>NULL</code> value in the function arguments, as this
-will ensure that the same function will work regardless of whether the
-user has specified any custom parameters in East Horizon.</p>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">SurvMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">SurvParam</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+of your choice. All input variables must be declared, even if they are
+not used in the script. We recommend always declaring
+<code>UserParam</code> as a default <code>NULL</code> value in the
+function arguments, as this will ensure that the same function will work
+regardless of whether the user has specified any custom parameters in
+East Horizon.</p>
+<pre><code><span><span class="va">GenDropTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">DropMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">DropParam</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
-<span>  <span class="va">vSurvTime</span>         <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing survival times array to 0    </span></span>
+<span>  <span class="va">vDropoutTime</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="cn">Inf</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing dropout times vector to Inf (all patients are completers)  </span></span>
 <span>  </span>
 <span>  <span class="co"># Write the actual code here.</span></span>
-<span>  <span class="co"># Store the generated binary response values in a vector called vPatientOutcome.</span></span>
+<span>  <span class="co"># Store the generated dropout times in a vector called vDropoutTime</span></span>
 <span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> SurvivalTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vSurvTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> DropOutTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vDropoutTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 <p>A detailed template with step-by-step explanations is available here:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R" class="external-link">SimulatePatientOutcome.TimeToEvent.R</a></p>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R" class="external-link">Dropout.Survival.R</a></p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -294,11 +293,10 @@ user has specified any custom parameters in East Horizon.</p>
 <p>Explore the following examples for more context:</p>
 <ol style="list-style-type: decimal">
 <li>
-<a href="2ArmTimeToEventOutcomePatientSimulationDescription.html"><strong>2
-Arm, Time-To-Event Outcome - Patient Simulation</strong></a>
+<a href="PatientDropout.html"><strong>2-Arm, Single Endpoint -
+Simulate Patient Dropout</strong></a>
 <ul>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/SimulatePatientSurvivalWeibull.R" class="external-link">SimulatePatientSurvivalWeibull.R</a></li>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/SimulatePatientSurvivalMixtureExponentials.R" class="external-link">SimulatePatientSurvivalMixtureExponentials.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateDropoutTimeForSurvival.R" class="external-link">GenerateDropoutTimeForSurvival.R</a></li>
 </ul>
 </li>
 </ol>

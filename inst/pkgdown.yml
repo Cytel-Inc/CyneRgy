@@ -16,6 +16,11 @@ articles:
   GeneratePoissonArrival: GeneratePoissonArrival.html
   IntegrationPointAnalysis: IntegrationPointAnalysis.html
   IntegrationPointDropout: IntegrationPointDropout.html
+  IntegrationPointDropoutContinuousOrBinary: IntegrationPointDropoutContinuousOrBinary.html
+  IntegrationPointDropoutContinuousOrBinaryMultipleArm: IntegrationPointDropoutContinuousOrBinaryMultipleArm.html
+  IntegrationPointDropoutContinuousOrBinaryTwoArm: IntegrationPointDropoutContinuousOrBinaryTwoArm.html
+  IntegrationPointDropoutRepeatedMeasures: IntegrationPointDropoutRepeatedMeasures.html
+  IntegrationPointDropoutTimeToEvent: IntegrationPointDropoutTimeToEvent.html
   IntegrationPointEnrollment: IntegrationPointEnrollment.html
   IntegrationPointInitialization: IntegrationPointInitialization.html
   IntegrationPointRandomization: IntegrationPointRandomization.html
@@ -28,7 +33,7 @@ articles:
   PatientDropout: PatientDropout.html
   PatientRandomization: PatientRandomization.html
   TreatmentSelectionDescription: TreatmentSelectionDescription.html
-last_built: 2024-12-19T03:13Z
+last_built: 2024-12-19T17:11Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles

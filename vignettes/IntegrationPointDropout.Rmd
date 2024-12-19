@@ -1,9 +1,34 @@
 ---
-title: "Integration Point: Dropout"
+title: 'Integration Point: Dropout'
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-# Integration Point: Dropout
+[$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
 
+# Description
+
+The Dropout integration point allows you to customize the behavior of dropouts in a longitudinal study design using a custom R script. Instead of relying on the built-in default binomial distribution, you can implement dropout distributions such as Poisson or Weibull, to better suit your trial's requirements.
+
+# How to Use It in East Horizon
+
+You can set up a dropout function in East Horizon Explore under **Dropout Distribution** in a **Response Card** while creating or editing an **Input Set**. Follow these steps:
+
+1. Select "User Specified-R" from the dropdown in the Dropout Distribution field in the Enrollment card.
+1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
+1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
+1. Continue creating your project by specifying scenarios for patient Response, Enrollments, etc.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![Screenshot of East Horizon](dropout.png)
+
+# Endpoint Types
+
+The input variables, expected output variables, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
+
+1. [**Continuous (Normal) or Binary Outcome**](IntegrationPointDropoutContinuousOrBinary.html)
+1. [**Continuous (Normal) Outcome with Repeated Measures**](IntegrationPointDropoutRepeatedMeasures.html)
+1. [**Time-to-Event (Survival) Outcome**](IntegrationPointDropoutTimeToEvent.html)

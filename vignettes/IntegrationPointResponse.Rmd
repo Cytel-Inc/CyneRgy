@@ -33,7 +33,7 @@ For a visual guide of where to find the option, refer to the screenshot below:
 
 # Endpoint Types
 
-The input values, expected output values, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
+The input variables, expected output variables, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
 
 1. [**Continuous (Normal) Outcome**](IntegrationPointResponseContinuous.html)
 1. [**Continuous (Normal) Outcome with Repeated Measures**](IntegrationPointResponseRepeatedMeasures.html)

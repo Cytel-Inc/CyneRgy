@@ -15,7 +15,7 @@ For comprehensive details about each integration point, please refer to the foll
 
 1. [**Initialization**](IntegrationPointInitialization.html)
 1. [**Analysis**](IntegrationPointAnalysis.html)
-1. [**Enrollment**](IntegrationPointEnrollment.html)
+1. [**Enrollment (Arrival Times)**](IntegrationPointEnrollment.html)
 1. [**Randomization**](IntegrationPointRandomization.html)
 1. [**Response (Patient Simulation)**](IntegrationPointResponse.html)
 1. [**Dropout**](IntegrationPointDropout.html)
