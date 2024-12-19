@@ -313,11 +313,11 @@ East Horizon.</p>
 <span>  <span class="co"># Add code to simulate the patient data as desired.  </span></span>
 <span>  <span class="co"># Example of how to create the return list with Response1, Response2, ..., ResponseNumVisit.</span></span>
 <span>  <span class="co"># Store the generated continuous response values in a vector called vOutResponse for each subject.</span></span>
-<span>  <span class="co"># Store the response vector in a list called vOutResponse for each visit.</span></span>
+<span>  <span class="co"># Store the response vector in a list called lReturn for each visit.</span></span>
 <span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">NumVisit</span><span class="op">)</span></span>
 <span>  <span class="op">{</span></span>
-<span>      <span class="va">strVisitName</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span> <span class="st">"Response"</span>, <span class="va">i</span> <span class="op">)</span> <span class="co"># Response1, Response2, ..., ResponseNumVisit</span></span>
-<span>      <span class="va">vOutResponse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span>  <span class="co"># Initializing response array to 0  </span></span>
+<span>      <span class="va">strVisitName</span>              <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span> <span class="st">"Response"</span>, <span class="va">i</span> <span class="op">)</span> <span class="co"># Response1, Response2, ..., ResponseNumVisit</span></span>
+<span>      <span class="va">vOutResponse</span>              <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span>  <span class="co"># Initializing response array to 0 </span></span>
 <span>      <span class="va">lReturn</span><span class="op">[[</span> <span class="va">strVisitName</span> <span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vOutResponse</span> <span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span>    </span>

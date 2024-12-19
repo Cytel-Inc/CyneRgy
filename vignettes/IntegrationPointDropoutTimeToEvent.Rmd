@@ -1,13 +1,12 @@
 ---
-title: "Integration Point: Response - Binary Outcome"
+title: "Integration Point: Dropout - Time-to-Event Outcome"
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-[$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
+[$\leftarrow$ Go back to the *Integration Point: Dropout* page](IntegrationPointDropout.html)
 
-This integration point and outcome is currently available for the **Two Arm Confirmatory** and **Multiple Arm Confirmatory** Study Objectives.
 
 # Input Variables
 
@@ -18,7 +17,10 @@ When creating a custom R script, you can optionally use specific variables provi
 |**NumSub**|Integer|Number of subjects in the trial.|
 |**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
-|**PropResp**|Vector of Numeric|Vector of length `NumArm`, indicating the expected proportions (probabilities) of responders for each arm.|
+|**DropMethod**|Integer|Selected input method for dropout parameters from the East Horizon dropdown list:<br>– `1`: Dropout hazard rate.<br>– `2`: Probability of dropout.|
+|**NumPrd**|Integer|Number of dropout periods in the trial. Equals to 1 if `DropMethod = 2`.|
+|**PrdTime**|Vector of Numeric|Vector or length `NumPrd`, indicating the times for dropout parameters. Depends on `DropMethod`:<br>– If `DropMethod = 1`: Starting times of dropout periods.<br>– If `DropMethod = 2`: Times at which the probabilities of dropout are specified.|
+|**DropParam**|Matrix|Size: `NumPrd` rows $\times$ `NumArm` columns. Dropout parameters dependent on `DropMethod`:<br>– If `DropMethod = 1`: Specifies dropout hazard rates per arm per period. `DropParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 2`: Specifies cumulative probabilities of dropout per arm per period. `SurvParam[i, j]` represents the probability of dropout for the `jth` arm in the `ith` period.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -27,13 +29,13 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 | **Type**  | **Description**                                                                                  |
 |------------------|--------------------------------------------------------------------------------------------------|
-| List  | A named list containing `Response` and `ErrorCode`.                    |
+| List  | A named list containing `DropOutTime` and `ErrorCode`.                    |
 
 ## Expected Members of the Output List
 
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
-| **Response**   | Vector of Double  | Vector of length `NumSub`, containing the generated binary responses for all subjects (0 or 1).|
+| **DropOutTime**   | Vector of Numeric  | Vector of length `NumSub`, containing the generated dropout times for each subject. A value of `Inf` indicates that the subject does not drop out. |
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
 
 # Minimal Template
@@ -41,24 +43,23 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
 ```
-GenerateResponse <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+GenDropTimes <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
-  vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
+  vDropoutTime     	<- rep( Inf, NumSub ) # Initializing dropout times vector to Inf (all patients are completers)	
   
   # Write the actual code here.
-  # Store the generated binary response values in a vector called vPatientOutcome.
+  # Store the generated dropout times in a vector called vDropoutTime
 
-  return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+  return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nError ) ) )
 }
 ```
 
-A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R) 
+A detailed template with step-by-step explanations is available here: [Dropout.Survival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R) 
 
 # Examples
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Binary Outcome - Patient Simulation**](2ArmBinaryOutcomePatientSimulation.html)
-    - [SimulatePatientOutcomePercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZero.Binary.R)
-    - [SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R)
+1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
+    - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateDropoutTimeForSurvival.R)

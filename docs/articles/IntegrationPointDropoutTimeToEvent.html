@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Integration Point: Response - Binary Outcome • CyneRgy</title>
+<title>Integration Point: Dropout - Time-to-Event Outcome • CyneRgy</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Response - Binary Outcome">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Dropout - Time-to-Event Outcome">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -107,7 +107,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Response - Binary Outcome</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Dropout - Time-to-Event Outcome</h1>
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
@@ -119,11 +119,8 @@ Potvin</h4>
 
     
     
-<p><a href="IntegrationPointResponse.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
-Go back to the <em>Integration Point: Response</em> page</a></p>
-<p>This integration point and outcome is currently available for the
-<strong>Two Arm Confirmatory</strong> and <strong>Multiple Arm
-Confirmatory</strong> Study Objectives.</p>
+<p><a href="IntegrationPointDropout.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
+Go back to the <em>Integration Point: Dropout</em> page</a></p>
 <div class="section level2">
 <h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
@@ -165,12 +162,41 @@ example, <code>[0, 0, 1]</code> indicates three subjects: two in the
 control group and one experimental.</td>
 </tr>
 <tr class="even">
-<td><strong>PropResp</strong></td>
-<td>Vector of Numeric</td>
-<td>Vector of length <code>NumArm</code>, indicating the expected
-proportions (probabilities) of responders for each arm.</td>
+<td><strong>DropMethod</strong></td>
+<td>Integer</td>
+<td>Selected input method for dropout parameters from the East Horizon
+dropdown list:<br>– <code>1</code>: Dropout hazard rate.<br>–
+<code>2</code>: Probability of dropout.</td>
 </tr>
 <tr class="odd">
+<td><strong>NumPrd</strong></td>
+<td>Integer</td>
+<td>Number of dropout periods in the trial. Equals to 1 if
+<code>DropMethod = 2</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>PrdTime</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector or length <code>NumPrd</code>, indicating the times for
+dropout parameters. Depends on <code>DropMethod</code>:<br>– If
+<code>DropMethod = 1</code>: Starting times of dropout periods.<br>– If
+<code>DropMethod = 2</code>: Times at which the probabilities of dropout
+are specified.</td>
+</tr>
+<tr class="odd">
+<td><strong>DropParam</strong></td>
+<td>Matrix</td>
+<td>Size: <code>NumPrd</code> rows
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumArm</code> columns. Dropout parameters dependent on
+<code>DropMethod</code>:<br>– If <code>DropMethod = 1</code>: Specifies
+dropout hazard rates per arm per period. <code>DropParam[i, j]</code>
+represents the hazard rate for the <code>jth</code> arm in the
+<code>ith</code> period.<br>– If <code>SurvMethod = 2</code>: Specifies
+cumulative probabilities of dropout per arm per period.
+<code>SurvParam[i, j]</code> represents the probability of dropout for
+the <code>jth</code> arm in the <code>ith</code> period.</td>
+</tr>
+<tr class="even">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
@@ -199,7 +225,7 @@ below for the expected output for this integration point:</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td>List</td>
-<td>A named list containing <code>Response</code> and
+<td>A named list containing <code>DropOutTime</code> and
 <code>ErrorCode</code>.</td>
 </tr></tbody>
 </table>
@@ -219,10 +245,11 @@ below for the expected output for this integration point:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><strong>Response</strong></td>
-<td>Vector of Double</td>
+<td><strong>DropOutTime</strong></td>
+<td>Vector of Numeric</td>
 <td>Vector of length <code>NumSub</code>, containing the generated
-binary responses for all subjects (0 or 1).</td>
+dropout times for each subject. A value of <code>Inf</code> indicates
+that the subject does not drop out.</td>
 </tr>
 <tr class="even">
 <td><strong>ErrorCode</strong></td>
@@ -247,18 +274,18 @@ not used in the script. We recommend always declaring
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 East Horizon.</p>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">PropResp</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">GenDropTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">DropMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">DropParam</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
-<span>  <span class="va">vPatientOutcome</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0  </span></span>
+<span>  <span class="va">vDropoutTime</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="cn">Inf</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing dropout times vector to Inf (all patients are completers)  </span></span>
 <span>  </span>
 <span>  <span class="co"># Write the actual code here.</span></span>
-<span>  <span class="co"># Store the generated binary response values in a vector called vPatientOutcome.</span></span>
+<span>  <span class="co"># Store the generated dropout times in a vector called vDropoutTime</span></span>
 <span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientOutcome</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> DropOutTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vDropoutTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 <p>A detailed template with step-by-step explanations is available here:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R" class="external-link">SimulatePatientOutcome.Binary.R</a></p>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R" class="external-link">Dropout.Survival.R</a></p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -266,11 +293,10 @@ East Horizon.</p>
 <p>Explore the following examples for more context:</p>
 <ol style="list-style-type: decimal">
 <li>
-<a href="2ArmBinaryOutcomePatientSimulation.html"><strong>2-Arm,
-Binary Outcome - Patient Simulation</strong></a>
+<a href="PatientDropout.html"><strong>2-Arm, Single Endpoint -
+Simulate Patient Dropout</strong></a>
 <ul>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZero.Binary.R" class="external-link">SimulatePatientOutcomePercentAtZero.Binary.R</a></li>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R" class="external-link">SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateDropoutTimeForSurvival.R" class="external-link">GenerateDropoutTimeForSurvival.R</a></li>
 </ul>
 </li>
 </ol>

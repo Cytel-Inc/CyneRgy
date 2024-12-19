@@ -60,11 +60,11 @@ GenerateResponse <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitT
   # Add code to simulate the patient data as desired.  
   # Example of how to create the return list with Response1, Response2, ..., ResponseNumVisit.
   # Store the generated continuous response values in a vector called vOutResponse for each subject.
-  # Store the response vector in a list called vOutResponse for each visit.
+  # Store the response vector in a list called lReturn for each visit.
   for(i in 1:NumVisit)
   {
-      strVisitName <- paste0( "Response", i ) # Response1, Response2, ..., ResponseNumVisit
-      vOutResponse <- rep( 0, NumSub )  # Initializing response array to 0	
+      strVisitName              <- paste0( "Response", i ) # Response1, Response2, ..., ResponseNumVisit
+      vOutResponse              <- rep( 0, NumSub )  # Initializing response array to 0	
       lReturn[[ strVisitName ]] <- as.double( vOutResponse )
   }
     
