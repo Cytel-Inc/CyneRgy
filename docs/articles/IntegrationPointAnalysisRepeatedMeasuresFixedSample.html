@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 23, 2024</h4>
+            <h4 data-toc-skip class="date">December 24, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysisRepeatedMeasuresFixedSample.Rmd</code></div>
@@ -292,14 +292,13 @@ Completer.</td>
 the visit number (e.g., CensorInd3, CensorInd4, etc.).</td>
 </tr>
 <tr class="odd">
-<td>
-<strong>CensorIndNumVisit</strong>Vector of Numeric</td>
+<td><strong>CensorIndNumVisit</strong></td>
+<td>Vector of Numeric</td>
 <td>Vector of length equal to the number of subjects, containing the
 generated censor indicator values for all subjects at the last
 visit:<br>– <code>0</code>: Dropout.<br>– <code>1</code>:
 Completer.<br><code>NumVisit</code> should be replaced by the number of
 visits.</td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -397,11 +396,29 @@ Horizon Explore.</td>
 <td>Follow-up duration.</td>
 </tr>
 <tr class="even">
-<td><strong>DesignParam$TrtEffNull</strong></td>
-<td>Numeric</td>
-<td>Treatment effect under null on natural scale. Applicable for
-<code>DesignParam$TrialType = 1</code> (non-inferiority trials) only.
-Set to 0 for <code>DesignParam$TrialType = 0</code> (superiority).</td>
+<td><strong>DesignParam$NumVisit</strong></td>
+<td>Integer</td>
+<td>Number of visits.</td>
+</tr>
+<tr class="odd">
+<td><strong>DesignParam$VisitStatus</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length <code>NumVisit</code>, containing the visit
+selection status for each visit:<br>– <code>0</code>: Visit has not been
+selected for analysis.<br>– <code>1</code>: Visit has been selected for
+analysis.</td>
+</tr>
+<tr class="even">
+<td><strong>DesignParam$PrimContrastCoeff</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length <code>NumVisit</code>, containing the primary
+contrast coefficient for each visit.</td>
+</tr>
+<tr class="odd">
+<td><strong>DesignParam$DropImp</strong></td>
+<td>Integer</td>
+<td>Dropout imputation method:<br>– <code>0</code>: None.<br>–
+<code>1</code>: Last observation carried forward.</td>
 </tr>
 </tbody>
 </table>
@@ -514,7 +531,7 @@ are not used in the script. We recommend always declaring
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 East Horizon. A detailed template with step-by-step explanations is
-available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R" class="external-link">Analyze.Continuous.R</a>.</p>
+available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.RepeatedMeasures.R" class="external-link">Analyze.RepeatedMeasures.R</a>.</p>
 <div class="section level3">
 <h3 id="minimal-template-for-option-1-decision">Minimal Template for Option 1 (Decision)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-1-decision"></a>
 </h3>
@@ -532,10 +549,9 @@ available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Tem
 <span>    </span>
 <span>    <span class="co"># These variables are set because it is a fixed sample design.</span></span>
 <span>    <span class="va">nQtyOfLooks</span>          <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span>    <span class="va">nLookIndex</span>           <span class="op">&lt;-</span> <span class="fl">1</span> </span>
-<span>    <span class="va">nQtyOfEvents</span>         <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">MaxCompleters</span></span>
+<span>    <span class="va">nLookIndex</span>           <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span>    <span class="va">nQtyOfPatsInAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span> <span class="va">SimData</span> <span class="op">)</span></span>
-<span>    <span class="va">nTailType</span>            <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">TailType</span></span>
+<span>    <span class="va">TailType</span>             <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">TailType</span></span>
 <span>    </span>
 <span>    <span class="va">strDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecisionString.html">GetDecisionString</a></span><span class="op">(</span> <span class="va">LookInfo</span>, <span class="va">nLookIndex</span>, <span class="va">nQtyOfLooks</span>,</span>
 <span>                                               bFAEfficacyCondition <span class="op">=</span> <span class="va">bFAEfficacyCheck</span><span class="op">)</span></span>
@@ -548,7 +564,7 @@ available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Tem
 <div class="section level3">
 <h3 id="minimal-template-for-option-2-teststat">Minimal Template for Option 2 (TestStat)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-2-teststat"></a>
 </h3>
-<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>,  <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>    <span class="va">dTestStatistic</span>      <span class="op">&lt;-</span> <span class="fl">0</span></span>
@@ -563,17 +579,9 @@ available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Tem
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
-<p>Explore the following examples for more context:</p>
+<p>Explore the following example for more context:</p>
 <ol style="list-style-type: decimal">
-<li>
-<a href="2ArmNormalOutcomeAnalysisDescription.html"><strong>2-Arm,
-Normal Outcome - Analysis</strong></a>
-<ul>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/RCode/AnalyzeUsingEastManualFormulaNormal.R" class="external-link">AnalyzeUsingEastManualFormulaNormal.R</a></li>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/RCode/AnalyzeUsingTTestNormal.R" class="external-link">AnalyzeUsingTTestNormal.R</a></li>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/RCode/AnalyzeUsingMeanLimitsOfCI.R" class="external-link">AnalyzeUsingMeanLimitsOfCI.R</a></li>
-</ul>
-</li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresOutcomeAnalysis/RCode/Analyze.RepeatedMeasures.R" class="external-link">Analyze.RepeatedMeasures.R</a></li>
 </ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
