@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">December 19, 2024</h4>
+            <h4 data-toc-skip class="date">December 23, 2024</h4>
       
 
       <div class="d-none name"><code>ContibutingToCyneRgy.Rmd</code></div>
@@ -181,8 +181,9 @@ snippets and function calls that were made to create new functions.</p>
 <a href="https://pkgdown.r-lib.org/reference/build_home.html" class="external-link">pkgdown</a> -
 Package used to create the package website.</li>
 </ol>
-<pre><code><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">use_pkgdown_github_pages</span><span class="op">(</span><span class="op">)</span>  <span class="co"># Likely you do not need to run this again as it was set up already.</span></span>
-<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Preview the site locally before publishing</span></span></code></pre>
+<pre><code>usethis::use_pkgdown_github_pages()  # Likely you do not need to run this again as it was set up already.
+pkgdown::roxygen2::roxygenize() # Build the Rd scripts in /man for the reference section using the R scripts in /R.
+pkgdown::build_site() # Build the site pages using Rmd scripts in /vignettes. Preview the site locally before publishing.</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>
 <a href="https://testthat.r-lib.org/" class="external-link">testthat</a> - Useful for

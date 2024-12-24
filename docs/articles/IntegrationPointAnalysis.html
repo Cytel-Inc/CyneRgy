@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 19, 2024</h4>
+            <h4 data-toc-skip class="date">December 23, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysis.Rmd</code></div>
@@ -119,9 +119,77 @@ Potvin</h4>
 
     
     
+<p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
+Go back to the <em>Getting Started: Overview</em> page</a></p>
+<p>This integration point is currently available for the <strong>Two Arm
+Confirmatory</strong> (all endpoint types) and <strong>Multiple Arm
+Confirmatory</strong> (continuous and binary outcomes) Study
+Objectives.</p>
 <div class="section level2">
-<h2 id="integration-point-analysis">Integration Point: Analysis<a class="anchor" aria-label="anchor" href="#integration-point-analysis"></a>
+<h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
 </h2>
+<p>The Analysis integration point allows you to customize the
+statistical test for the treatment effect using a custom R script. This
+flexibility enables you to implement methods that better align with your
+trial’s specific needs, rather than relying on the built-in default
+statistical tests. For example:</p>
+<ul>
+<li>Continuous outcomes: Instead of using the default difference of
+means, you could provide a script for alternative approaches such as the
+ratio of means or a test from the Wilcoxon-Mann-Whitney family.</li>
+<li>Binary outcomes: Instead of the default difference of proportions,
+you could implement methods such as the ratio of proportions, odds
+ratio, risk ratio, or other suitable measures.</li>
+<li>Time-to-Event outcomes: Instead of the default Logrank test, you
+could include scripts for alternative approaches like the Peto-Peto
+test, which emphasizes early events, or a restricted mean survival time
+(RMST)-based test, which describes the mean event-free survival time up
+to a pre-selected time point.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
+</h2>
+<p>You can set up an analysis function in East Horizon Explore under
+<strong>Test</strong> in a <strong>Design Card</strong> while creating
+or editing an <strong>Input Set</strong>. Follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>Select “User Specified-R” from the dropdown in the Test field in the
+Design card.</li>
+<li>Browse and select the appropriate R file (<code>filename.r</code>)
+from your computer, or use the built-in <strong>R Code
+Assistant</strong> to create one. This file should contain function(s)
+written to perform various tasks to be used throughout your
+Project.</li>
+<li>Choose the appropriate function name. If the expected function is
+not displaying, then check your R code for errors.</li>
+<li>Set any required user parameters (variables) as needed for your
+function using <strong>+ Add Variables</strong>.</li>
+<li>Continue creating your project by specifying scenarios for patient
+Response, Enrollments, etc.</li>
+</ol>
+<p>For a visual guide of where to find the option, refer to the
+screenshots below:</p>
+<div class="float">
+<img src="analysis.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="endpoint-types">Endpoint Types<a class="anchor" aria-label="anchor" href="#endpoint-types"></a>
+</h2>
+<p>The input variables, expected output variables, examples, and
+templates for this integration point depend on the endpoint type (or
+outcome) you are using. Refer to the relevant pages below:</p>
+<ol style="list-style-type: decimal">
+<li><a href="IntegrationPointAnalysisContinuous.html"><strong>Continuous
+(Normal) Outcome</strong></a></li>
+<li><a href="IntegrationPointAnalysisRepeatedMeasures.html"><strong>Continuous
+(Normal) Outcome with Repeated Measures</strong></a></li>
+<li><a href="IntegrationPointAnalysisBinary.html"><strong>Binary
+Outcome</strong></a></li>
+<li><a href="IntegrationPointAnalysisTimeToEvent.html"><strong>Time-to-Event
+(Survival) Outcome</strong></a></li>
+</ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

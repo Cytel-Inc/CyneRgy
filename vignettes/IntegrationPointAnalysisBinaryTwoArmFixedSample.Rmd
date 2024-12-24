@@ -1,0 +1,134 @@
+---
+title: "Integration Point: Analysis - Binary Outcome, Two Arm, Fixed Sample Design"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Integration Point: Analysis - Binary Outcome, Two Arm* page](IntegrationPointAnalysisBinaryTwoArm.html)
+
+# Input Variables
+
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point, outcome, and study objective.
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|-----------------|---------------------------------------------------------------------------------|
+|**SimData**|Data Frame|Subject data generated in current simulation, one row per subject. To access these variables in your R code, use the syntax: `SimData$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
+|**DesignParam**|List|Input parameters which may be needed to compute test statistic and perform test. To access these variables in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
+|**LookInfo**|List|Input parameters related to multiple looks. Empty when the statistical design is Fixed Sample. However, it is used in the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See below for more information.|
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+
+## Variables of SimData
+
+The variables in SimData are generated during data generation, and depend on the current simulation. Some common and useful variables are:
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**SimData\$ArrivalTime**|Vector of Numeric| Vector of length equal to the number of subjects, containing the generated arrival times for all subjects.|
+|**SimData\$TreatmentID**|Vector of Integer| Vector of length equal to the number of subjects, containing the allocation indices for all subjects:<br>– `0`: Control arm.<br>– `1`: First experimental arm.<br>– etc.|
+| **SimData\$Response**  | Vector of Numeric  | Vector of length equal to the number of subjects, containing the generated responses for all subjects.|
+| **SimData\$CensorIndOrg**  | Vector of Integer  | Vector of length equal to the number of subjects, containing the generated censor indicator values for all subjects:<br>– `0`: Dropout.<br>– `1`: Completer.|
+
+## Variables of DesignParam
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**DesignParam\$Alpha**|Numeric|Type I Error (for one-sided tests).|
+|**DesignParam\$LowerAlpha**|Numeric|Lower Type I Error (for two-sided tests). Not available in East Horizon Explore.|
+|**DesignParam\$UpperAlpha**|Numeric|Upper Type I Error (for two-sided tests). Not available in East Horizon Explore.|
+|**DesignParam\$TrialType**|Integer|Trial Type:<br>– `0`: Superiority.<br>– `1`: Non-inferiority.<br>– `2`: Equivalence (not available in East Horizon Explore).<br>– `3`: Super-superiority.|
+|**DesignParam\$TestType**|Integer|Test Type:<br>– `0`: One-sided.<br>– `1`: Two-sided symmetric (not available in East Horizon Explore).<br>– `2`: Two-sided asymmetric (not available in East Horizon Explore).|
+|**DesignParam\$TailType**|Integer|Nature of critical region:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.|
+|**DesignParam\$AllocInfo**|Vector of Numeric| Vector of length equal to the number of treatment arms, containing the ratios of the treatment group sample sizes to control group sample size.|
+|**DesignParam\$CriticalPoint**|Numeric|Critical value (for one-sided tests).|
+|**DesignParam\$LowerCriticalPoint**|Numeric|Lower critical value (for two-sided tests). Not available in East Horizon Explore.|
+|**DesignParam\$UpperCriticalPoint**|Numeric|Upper critical value (for two-sided tests). Not available in East Horizon Explore.|
+|**DesignParam\$SampleSize**|Integer|Sample size of the trial.|
+|**DesignParam\$MaxCompleters**|Integer|Maximum number of completers.|
+|**DesignParam\$RespLag**|Numeric|Follow-up duration.|
+|**DesignParam\$TrtEffNull**|Numeric|Treatment effect under null on natural scale. Applicable for `DesignParam$TrialType = 1` (non-inferiority trials) only. Set to 0 for `DesignParam$TrialType = 0` (superiority).|
+
+# Expected Output Variable
+
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
+
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `ErrorCode` and one of the following: `Decision`, `TestStat`.
+
+The output list can take one of these two forms.
+
+## Option 1 (Decision): Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **Decision**   | Integer  | Boundary crossing decision:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `4`: Equivalence boundary crossed (not available in East Horizon Explore).<br>You can use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See the template below for the correct usage.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error.<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+
+## Option 2 (TestStat): Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **TestStat**   | Numeric  | Value of appropriate test statistic on Wald ﴾Z﴿ scale.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+
+- As the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
+
+# Minimal Templates
+
+Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [Analyze.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Binary.R).
+
+## Minimal Template for Option 1 (Decision)
+
+```
+PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    library( CyneRgy )
+    nError        	    <- 0 # Error handling (no error)
+    
+    # This is an example using GetDecisionString and GetDecision.
+    
+    # Write the actual code here.
+    # It is a fixed sample design, so no interim look nor futility check.
+    bFAEfficacyCheck <- TRUE # If TRUE, declares efficacy.
+    # Usually, bFAEfficacyCheck would be a conditional statement such as 'dTValue > dBoundary'.
+    
+    # These variables are set because it is a fixed sample design.
+    nQtyOfLooks          <- 1
+    nLookIndex           <- 1 
+    nQtyOfPatsInAnalysis <- nrow( SimData )
+    nTailType            <- DesignParam$TailType
+    
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bFAEfficacyCondition = bFAEfficacyCheck)
+
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+	
+	return( list( Decision = as.integer( nDecision ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+## Minimal Template for Option 2 (TestStat)
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    dTestStatistic      <- 0
+    
+	# Write the actual code here.
+    # Store the computed test statistic in dTestStatistic.
+    
+	return( list( TestStat = as.double( dTestStatistic ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+# Examples
+
+Explore the following examples for more context:
+
+1. [**2-Arm, Binary Outcome - Analysis**](2ArmBinaryOutcomeAnalysisDescription.html)
+    - [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode/AnalyzeUsingEastManualFormula.R)
+    - [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode/AnalyzeUsingBetaBinomial.R)
+    - [AnalyzeUsingPropLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode/AnalyzeUsingPropLimitsOfCI.R)
+    - [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode/AnalyzeUsingPropTest.R)

@@ -1,0 +1,15 @@
+---
+title: "Integration Point: Analysis - Binary Outcome"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Integration Point: Analysis* page](IntegrationPointAnalysis.html)
+
+# Study Objectives
+
+The input variables, expected output variables, examples, and templates for this integration point depend on the study objective (number of arms) you are using. Refer to the relevant pages below:
+
+1. [**Two Arm Confirmatory**](IntegrationPointAnalysisBinaryTwoArm.html)
+1. [**Multiple Arm Confirmatory**](IntegrationPointAnalysisBinaryMultipleArm.html)

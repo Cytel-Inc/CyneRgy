@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 19, 2024</h4>
+            <h4 data-toc-skip class="date">December 23, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointDropout.Rmd</code></div>
@@ -126,9 +126,9 @@ Go back to the <em>Getting Started: Overview</em> page</a></p>
 </h2>
 <p>The Dropout integration point allows you to customize the behavior of
 dropouts in a longitudinal study design using a custom R script. Instead
-of relying on the built-in default binomial distribution, you can
-implement dropout distributions such as Poisson or Weibull, to better
-suit your trial’s requirements.</p>
+of relying on the built-in default distribution, you can implement
+dropout distributions such as Poisson or Weibull, to better suit your
+trial’s requirements.</p>
 </div>
 <div class="section level2">
 <h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
@@ -136,10 +136,12 @@ suit your trial’s requirements.</p>
 <p>You can set up a dropout function in East Horizon Explore under
 <strong>Dropout Distribution</strong> in a <strong>Response
 Card</strong> while creating or editing an <strong>Input Set</strong>.
+For some endpoint types and study objectives, it will be under
+<strong>Distribution</strong> in the <strong>Dropout Rate</strong> tab.
 Follow these steps:</p>
 <ol style="list-style-type: decimal">
 <li>Select “User Specified-R” from the dropdown in the Dropout
-Distribution field in the Enrollment card.</li>
+Distribution or Distribution field in the Response card.</li>
 <li>Browse and select the appropriate R file (<code>filename.r</code>)
 from your computer, or use the built-in <strong>R Code
 Assistant</strong> to create one. This file should contain function(s)
@@ -153,9 +155,14 @@ function using <strong>+ Add Variables</strong>.</li>
 Response, Enrollments, etc.</li>
 </ol>
 <p>For a visual guide of where to find the option, refer to the
-screenshot below:</p>
+screenshots below:</p>
 <div class="float">
-<img src="dropout.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
+<img src="dropout.png" alt="Screenshot of East Horizon (Dropout Distribution)"><div class="figcaption">Screenshot of East Horizon (Dropout
+Distribution)</div>
+</div>
+<div class="float">
+<img src="dropout2.png" alt="Screenshot of East Horizon (Tab Dropout Rate, Distribution)"><div class="figcaption">Screenshot of East Horizon (Tab Dropout Rate,
+Distribution)</div>
 </div>
 </div>
 <div class="section level2">
