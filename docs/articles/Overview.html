@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 24, 2024</h4>
+            <h4 data-toc-skip class="date">December 30, 2024</h4>
       
 
       <div class="d-none name"><code>Overview.Rmd</code></div>
@@ -119,41 +119,99 @@ Potvin</h4>
 
     
     
+<p><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"></p>
+<style>
+.button-container {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 15px;
+}
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+    padding: 30px;
+}
+.button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+.button i {
+    margin-right: 10px;
+}
+</style>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>East Horizon supports the customization of trial design simulations
-by integrating your own R scripts. This feature allows you to leverage
-R’s robust statistical computing capabilities to enhance your simulation
-designs. This section provides the steps to access the R integration
-points, input values you can use in your scripts, expected output
-values, examples and templates. Each integration point provides a set of
-inputs for use in your R scripts, leaving it up to you to determine if
-and how they should be utilized.</p>
+<p>Cytel’s products such as East Horizon support the customization of
+trial design simulations by integrating your own R scripts. This feature
+allows you to leverage R’s robust statistical computing capabilities to
+enhance your simulation designs. This section provides the steps to
+access the R integration points, input values you can use in your
+scripts, expected output values, examples and templates. Each
+integration point provides a set of inputs for use in your R scripts,
+leaving it up to you to determine if and how they should be
+utilized.</p>
 <div class="section level3">
 <h3 id="detailed-information-on-integration-points">Detailed Information on Integration Points<a class="anchor" aria-label="anchor" href="#detailed-information-on-integration-points"></a>
 </h3>
 <p>For comprehensive details about each integration point, please refer
 to the following pages:</p>
-<ol style="list-style-type: decimal">
-<li><a href="IntegrationPointInitialization.html"><strong>Initialization</strong></a></li>
-<li><a href="IntegrationPointAnalysis.html"><strong>Analysis
-(Statistical Test)</strong></a></li>
-<li><a href="IntegrationPointEnrollment.html"><strong>Enrollment
-(Arrival Times)</strong></a></li>
-<li><a href="IntegrationPointRandomization.html"><strong>Randomization
-(Assignment of Subjects)</strong></a></li>
-<li><a href="IntegrationPointResponse.html"><strong>Response (Patient
-Simulation)</strong></a></li>
-<li><a href="IntegrationPointDropout.html"><strong>Dropout</strong></a></li>
-</ol>
+<div class="button-container">
+<p><a href="IntegrationPointInitialization.html" class="button"><i class="fas fa-cogs"></i>
+Initialization</a></p>
+<p><a href="IntegrationPointAnalysis.html" class="button"><i class="fas fa-chart-bar"></i>
+Analysis (Statistical Test)</a></p>
+<p><a href="IntegrationPointEnrollment.html" class="button"><i class="fas fa-user-clock"></i>
+Enrollment (Arrival Times)</a></p>
+<p><a href="IntegrationPointRandomization.html" class="button"><i class="fas fa-random"></i>
+Randomization (Assignment of Subjects)</a></p>
+<p><a href="IntegrationPointResponse.html" class="button"><i class="fas fa-user-md"></i>
+Response (Patient Simulation)</a></p>
+<p><a href="IntegrationPointDropout.html" class="button"><i class="fas fa-user-slash"></i>
+Dropout</a></p>
+<p><a href="" class="button"><i class="fas fa-project-diagram"></i>
+Treatment Selection</a></p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="additional-resources">Additional Resources<a class="anchor" aria-label="anchor" href="#additional-resources"></a>
 </h3>
-<p>For tips, best practices, and further information, visit the Cytel
-Knowledge Base: <a href="https://knowledge.cytel.com/r-connection" class="external-link">Using
-R functions within East Horizon: Explore</a>.</p>
+<p>For tips, best practices, and further information, visit the
+following pages on the Cytel Knowledge Base:</p>
+<div class="section level4">
+<h4 id="east-horizon">East Horizon<a class="anchor" aria-label="anchor" href="#east-horizon"></a>
+</h4>
+<ul>
+<li><a href="https://knowledge.cytel.com/r-connection" class="external-link">Using R functions
+within East Horizon: Explore</a></li>
+<li><a href="https://knowledge.cytel.com/pre-installed-r-packages-within-east-horizon" class="external-link">Pre-installed
+R packages within East Horizon</a></li>
+<li><a href="https://knowledge.cytel.com/r-code-assistant" class="external-link">R Code
+Assistant</a></li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="east-desktop">East Desktop<a class="anchor" aria-label="anchor" href="#east-desktop"></a>
+</h4>
+<ul>
+<li><a href="https://knowledge.cytel.com/r-integration-east" class="external-link">R
+Integration in East</a></li>
+<li><a href="https://knowledge.cytel.com/r-connect-additional-help-east-user-manual-chapter-o" class="external-link">R
+Connection Additional Help: East User Manual Appendix O</a></li>
+</ul>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

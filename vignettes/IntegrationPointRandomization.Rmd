@@ -7,13 +7,13 @@ output: html_document
 
 [$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
 
-This integration point is currently available for the **Two Arm Confirmatory** (all endpoint types) and **Multiple Arm Confirmatory** (continuous and binary outcomes) Study Objectives.
-
 # Description
 
 The Randomization integration point allows you to incorporate custom randomization methods into East Horizon. By specifying a function, you can control how subjects are assigned to designated arms based on your specific requirements, replacing the default complete randomization approach. For example, you can implement advanced randomization techniques such as block randomization, stratified randomization, or cluster randomization.
 
 # How to Use It in East Horizon
+
+This integration point is currently available in East Horizon Explore for the **Two Arm Confirmatory** (all endpoint types) study objective. It is expected to be available in the future for the **Multiple Arm Confirmatory** (continuous and binary outcomes) study objective.
 
 You can set up a response function in East Horizon Explore under **Randomization Method** in a **Design Card** while creating or editing an **Input Set**. Follow these steps:
 

@@ -5,21 +5,75 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<style>
+.button-container {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 15px;
+}
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+    padding: 30px;
+}
+.button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+.button i {
+    margin-right: 10px;
+}
+</style>
+
 # Overview
 
-East Horizon supports the customization of trial design simulations by integrating your own R scripts. This feature allows you to leverage R's robust statistical computing capabilities to enhance your simulation designs. This section provides the steps to access the R integration points, input values you can use in your scripts, expected output values, examples and templates. Each integration point provides a set of inputs for use in your R scripts, leaving it up to you to determine if and how they should be utilized.
+Cytel's products such as East Horizon support the customization of trial design simulations by integrating your own R scripts. This feature allows you to leverage R's robust statistical computing capabilities to enhance your simulation designs. This section provides the steps to access the R integration points, input values you can use in your scripts, expected output values, examples and templates. Each integration point provides a set of inputs for use in your R scripts, leaving it up to you to determine if and how they should be utilized.
 
 ## Detailed Information on Integration Points
 
 For comprehensive details about each integration point, please refer to the following pages:
 
-1. [**Initialization**](IntegrationPointInitialization.html)
-1. [**Analysis (Statistical Test)**](IntegrationPointAnalysis.html)
-1. [**Enrollment (Arrival Times)**](IntegrationPointEnrollment.html)
-1. [**Randomization (Assignment of Subjects)**](IntegrationPointRandomization.html)
-1. [**Response (Patient Simulation)**](IntegrationPointResponse.html)
-1. [**Dropout**](IntegrationPointDropout.html)
+:::: {.button-container}
+<a href="IntegrationPointInitialization.html" class="button"><i class="fas fa-cogs"></i> Initialization</a>
+
+<a href="IntegrationPointAnalysis.html" class="button"><i class="fas fa-chart-bar"></i> Analysis (Statistical Test)</a>
+
+<a href="IntegrationPointEnrollment.html" class="button"><i class="fas fa-user-clock"></i> Enrollment (Arrival Times)</a>
+
+<a href="IntegrationPointRandomization.html" class="button"><i class="fas fa-random"></i> Randomization (Assignment of Subjects)</a>
+
+<a href="IntegrationPointResponse.html" class="button"><i class="fas fa-user-md"></i> Response (Patient Simulation)</a>
+
+<a href="IntegrationPointDropout.html" class="button"><i class="fas fa-user-slash"></i> Dropout</a>
+
+<a href="" class="button"><i class="fas fa-project-diagram"></i> Treatment Selection</a>
+::::
 
 ## Additional Resources
 
-For tips, best practices, and further information, visit the Cytel Knowledge Base: [Using R functions within East Horizon: Explore](https://knowledge.cytel.com/r-connection).
+For tips, best practices, and further information, visit the following pages on the Cytel Knowledge Base:
+
+### East Horizon
+
+- [Using R functions within East Horizon: Explore](https://knowledge.cytel.com/r-connection)
+- [Pre-installed R packages within East Horizon](https://knowledge.cytel.com/pre-installed-r-packages-within-east-horizon)
+- [R Code Assistant](https://knowledge.cytel.com/r-code-assistant)
+
+### East Desktop
+
+- [R Integration in East](https://knowledge.cytel.com/r-integration-east)
+- [R Connection Additional Help: East User Manual Appendix O](https://knowledge.cytel.com/r-connect-additional-help-east-user-manual-chapter-o)

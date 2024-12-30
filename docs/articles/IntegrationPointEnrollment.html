@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 24, 2024</h4>
+            <h4 data-toc-skip class="date">December 30, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointEnrollment.Rmd</code></div>
@@ -121,10 +121,6 @@ Potvin</h4>
     
 <p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
 Go back to the <em>Getting Started: Overview</em> page</a></p>
-<p>This integration point is currently available for the <strong>Two Arm
-Confirmatory</strong> (all endpoint types) and <strong>Multiple Arm
-Confirmatory</strong> (continuous and binary outcomes) Study
-Objectives.</p>
 <div class="section level2">
 <h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
 </h2>
@@ -138,6 +134,11 @@ requirements.</p>
 <div class="section level2">
 <h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
 </h2>
+<p>This integration point is currently available in East Horizon Explore
+for the <strong>Two Arm Confirmatory</strong> (all endpoint types) study
+objective. It is expected to be available in the future for the
+<strong>Multiple Arm Confirmatory</strong> (continuous and binary
+outcomes) study objective.</p>
 <p>You can set up an enrollment function in East Horizon Explore under
 <strong>Distribution</strong> in a <strong>Enrollment Card</strong>
 while creating or editing an <strong>Input Set</strong>. Follow these
@@ -202,7 +203,7 @@ each period, with <code>PrdStarr[ 1 ] = 0</code>.</td>
 <tr class="even">
 <td><strong>AccrRate</strong></td>
 <td>Vector of Numeric</td>
-<td>Vector of length <code>NumPrd</code>, indicating the accrual rate in
+<td>Vector of length <code>NumPrd</code>, indicating the accrual rate of
 each period.</td>
 </tr>
 <tr class="odd">
@@ -257,7 +258,7 @@ below for the expected output for this integration point:</p>
 <td><strong>ArrivalTime</strong></td>
 <td>Vector of Double</td>
 <td>Vector of length <code>NumSub</code>, containing the generated
-arrival times for all subjects.</td>
+arrival time for all subjects.</td>
 </tr>
 <tr class="even">
 <td><strong>ErrorCode</strong></td>
@@ -288,7 +289,7 @@ East Horizon.</p>
 <span>  <span class="va">vPatientArrivalTime</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0</span></span>
 <span>  </span>
 <span>  <span class="co"># Write the actual code here.</span></span>
-<span>  <span class="co"># Store the generated arrival times in a vector called vPatientArrivalTime</span></span>
+<span>  <span class="co"># Store the generated arrival times in a vector called vPatientArrivalTime.</span></span>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientArrivalTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>

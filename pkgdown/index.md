@@ -5,13 +5,13 @@
 
 # Introduction 
 
-R integration with Cytel products provides a highly efficient way to create custom adaptive clinical trial designs and enhance your simulation capabilities, without requiring you to develop an entire R code base.
+R integration with Cytel's products provides a highly efficient way to create custom adaptive clinical trial designs and enhance your simulation capabilities, without requiring you to develop an entire R code base.
 
-The CyneRgy R package demonstrates the synergy between R and Cytel products such as East Horizon, providing tools, documentation, templates, and examples. It also offers a streamlined R experience in RStudio, simplifying the creation of new custom scripts.
+The CyneRgy R package demonstrates the synergy between R and Cytel's products such as East Horizon, providing tools, documentation, templates, and examples. It also offers a streamlined R experience in RStudio, simplifying the creation of new custom scripts.
 
 # Getting Started
 
-For a quick start, visit the [Getting Started](articles/Overview.html) section. This guide covers the basics of integrating your R scripts with East Horizon, including detailed steps for accessing integration points, what input variables are available, what output variables are expected, and links to related templates and examples.
+For a quick start, visit the [Getting Started](articles/Overview.html) section. This guide covers the basics of integrating your R scripts with Cytel's products, including detailed steps for accessing integration points, what input variables are available, what output variables are expected, and links to related templates and examples.
 
 # Examples and Templates
 

@@ -111,7 +111,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 24, 2024</h4>
+            <h4 data-toc-skip class="date">December 30, 2024</h4>
       
 
       <div class="d-none name"><code>IntegrationPointInitialization.Rmd</code></div>
@@ -121,10 +121,6 @@ Potvin</h4>
     
 <p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
 Go back to the <em>Getting Started: Overview</em> page</a></p>
-<p>This integration point is currently available for the <strong>Two Arm
-Confirmatory</strong> (all endpoint types) and <strong>Multiple Arm
-Confirmatory</strong> (continuous and binary outcomes) Study
-Objectives.</p>
 <div class="section level2">
 <h2 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
 </h2>
@@ -133,25 +129,89 @@ optional function that will run before any other user-defined functions
 during simulations. This function can serve various purposes, such
 as:</p>
 <ul>
-<li>Setting a seed for reproducibility in the R environment</li>
-<li>Loading required R packages or libraries</li>
-<li>Setting global variables</li>
-<li>Setting the working directory</li>
-<li>Setting the Random Number Generator</li>
-<li>Sourcing an additional file</li>
-<li>Performing other initial setup tasks</li>
+<li>Setting a seed for reproducibility in the R environment.</li>
+<li>Loading required R packages or libraries.</li>
+<li>Setting global variables.</li>
+<li>Setting the working directory.</li>
+<li>Sourcing an additional file.</li>
+<li>Performing other initial setup tasks.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
+<h2 id="availability">Availability<a class="anchor" aria-label="anchor" href="#availability"></a>
 </h2>
+<div class="section level3">
+<h3 id="east-horizon-explore">East Horizon Explore<a class="anchor" aria-label="anchor" href="#east-horizon-explore"></a>
+</h3>
+<p>This integration point is available in East Horizon Explore for the
+following study objectives and endpoint types:</p>
+<ul>
+<li>Two Arm Confirmatory: continuous, continuous with repeated measures,
+binary, and time-to-event outcomes.</li>
+<li><em>Two Arm Confirmatory: dual time-to-event/time-to-event, dual
+time-to-event/binary outcomes (coming soon).</em></li>
+<li><em>Multiple Arm Confirmatory: continuous and binary outcomes
+(coming soon).</em></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="east-horizon-design">East Horizon Design<a class="anchor" aria-label="anchor" href="#east-horizon-design"></a>
+</h3>
+<p><em>This integration point will be available in East Horizon Design
+in the future.</em></p>
+</div>
+<div class="section level3">
+<h3 id="east">East<a class="anchor" aria-label="anchor" href="#east"></a>
+</h3>
+<details><summary>
+This integration point is available in East for the following tests:
+</summary><ul>
+<li>Design, Continuous Endpoint, Two-Sample Test, Parallel Design,
+Difference of Means (MN-2S-DI)</li>
+<li>Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel
+Design, Difference of Proportions (PN-2S-DI)</li>
+<li>Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel
+Design, Ratio of Proportions (PN-2S-RA)</li>
+<li>Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel
+Design, Odds Ratio of Proportions PN-2S-OR</li>
+<li>Design, Survival Endpoint, Two-Sample Test, Parallel Design, Logrank
+Given Accrual Duration and Accrual Rates (SU-2S-LRAR)</li>
+<li>Design, Survival Endpoint, Two-Sample Test, Parallel Design, Logrank
+Given Accrual Duration and Study Duration (SU-2S-LRSD)</li>
+<li>Design, Discrete (Binary) Endpoint, Many-Sample Test, Single Arm
+Design, Chi-Square for Specified Proportions in C Categories
+(PN-ns-CH1C)</li>
+<li>Design, Discrete (Binary) Endpoint, Many-Sample Test, Parallel
+Design, Two Group Chi-Square for Specified Proportions in C Categories
+(PN-ns-CH2C)</li>
+<li>Design, Continuous Endpoint, Many-Sample Test, Pairwise Comparisons
+to Control - Difference of Means, Multiple Looks - Combining P-Values
+(MN-MAMS-PC)</li>
+<li>Design, Discrete (Binary) Endpoint, Many-Sample Test, Multiple
+Pairwise Comparisons to Control - Difference of Proportions, Multiple
+Looks - Combining P-Values (PN-MAMS-PC)</li>
+<li>Design, Survival (Time-to-Event) Endpoint, Many-Sample Test,
+Pairwise Comparisons to Control - Logrank Test, Multiple Looks -
+Combining P-Values (SU-MAMS-PC)</li>
+</ul></details>
+</div>
+</div>
+<div class="section level2">
+<h2 id="instructions">Instructions<a class="anchor" aria-label="anchor" href="#instructions"></a>
+</h2>
+<div class="section level3">
+<h3 id="in-east-horizon">In East Horizon<a class="anchor" aria-label="anchor" href="#in-east-horizon"></a>
+</h3>
 <p>You can set up an initialization function when <strong>creating a new
 project</strong> in East Horizon by navigating to the <strong>Initialize
-R Simulations</strong> option under the <strong>Plan</strong> section.
-Follow these steps:</p>
-<ol style="list-style-type: decimal">
-<li>Choose <strong>Initialize R Simulations</strong> in the Plan section
-when setting up a new Project.</li>
+R Simulations</strong> option under the <strong>Plan</strong>
+section.</p>
+<details><summary>
+Follow these steps:
+</summary><ol style="list-style-type: decimal">
+<li>Choose <strong>Initialize R Simulations</strong> in the
+<strong>Plan</strong> section when setting up a <strong>new
+Project</strong>.</li>
 <li>Turn on the switch to enable the feature.</li>
 <li>Browse and select the appropriate R file (<code>filename.r</code>)
 from your computer, or use the built-in <strong>R Code
@@ -166,18 +226,60 @@ function using <strong>+ Add Variables</strong>.</li>
 </ol>
 <p>For a visual guide of where to find the option, refer to the
 screenshot below:</p>
-<div class="float">
-<img src="initialization.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
+<img src="initialization.png"></details>
+</div>
+<div class="section level3">
+<h3 id="in-east">In East<a class="anchor" aria-label="anchor" href="#in-east"></a>
+</h3>
+<p>You can set up an initialization function in East by navigating to
+the <strong>User Defined R Function</strong> tab of a <strong>Simulation
+Input</strong>. For some tests, the option will be available in the
+<strong>Treatment Selection</strong> tab.</p>
+<details><summary>
+Follow these steps:
+</summary><ol style="list-style-type: decimal">
+<li>Choose the appropriate test in the <strong>Design</strong> tab.</li>
+<li>If you see the <strong>Design Input</strong> window, navigate to the
+<strong>Simulation Input</strong> window by clicking on the
+<strong>Simulate Design</strong> button under
+<strong>Library</strong>.</li>
+<li>Click on the <strong>Include Options</strong> button on the top
+right corner of the <strong>Simulation Input</strong> window and select
+<strong>User Defined R Function</strong>.</li>
+<li>In the tab <strong>User Defined R Function</strong>, a list of tasks
+will appear. Place your cursor in the <strong>File Name</strong> field
+for the task <strong>Initialize R Environment</strong>.</li>
+<li>Click on the button <strong>Browse…</strong> to select the
+appropriate R file (<code>filename.r</code>) from your computer. This
+file should contain function(s) written to perform various tasks to be
+used throughout your Project.</li>
+<li>Specify the function name you want to initialize. To copy the
+function’s name from the R script, click on the button
+<strong>View</strong>.</li>
+<li>Set any required user parameters (variables) as needed for your
+function using the button <strong>Add/Edit Variables</strong>.</li>
+<li>Continue setting up your project.</li>
+</ol>
+<p>For a visual guide of where to find the option, refer to the
+screenshot below:</p>
+<p><img src="initializationEast.png"></p>
+<p>For the <strong>Multiple Looks - Combining P-Values (MAMS)</strong>
+tests, the option will be available when checking the box <strong>Use R
+for Treatment Selection</strong> in the <strong>Treatment
+Selection</strong> tab of the <strong>Simulation Input</strong> window.
+Refer to the screenshot below:</p>
+<p><img src="initializationEast2.png"></p>
+</details>
 </div>
 </div>
 <div class="section level2">
 <h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
 <p>When creating a custom R script, you can optionally use certain
-variables provided by East Horizon’s engine itself. These variables are
-automatically available and do not need to be set by the user, except
-for the <code>UserParam</code> variable. Refer to the table below for
-the variable that is available for this integration point.</p>
+variables provided by East Horizon’s or East’s engine itself. These
+variables are automatically available and do not need to be set by the
+user, except for the <code>UserParam</code> variable. Refer to the table
+below for the variable that is available for this integration point.</p>
 <table class="table">
 <colgroup>
 <col width="14%">
@@ -193,17 +295,16 @@ the variable that is available for this integration point.</p>
 <tr class="odd">
 <td><strong>Seed</strong></td>
 <td>Integer</td>
-<td>Randomization seed set in East Horizon in Simulation Setup.</td>
+<td>Randomization seed set by the engine.</td>
 </tr>
 <tr class="even">
 <td><strong>UserParam</strong></td>
 <td>List</td>
-<td>Contains all user-defined parameters specified in the East Horizon
-interface (refer to the <a href="#how-to-use-it-in-east-horizon">How to
-Use It in East Horizon</a> section). To access these parameters in your
-R code, use the syntax: <code>UserParam$NameOfTheVariable</code>,
-replacing <code>NameOfTheVariable</code> with the appropriate parameter
-name.</td>
+<td>Contains all user-defined parameters specified in East Horizon’s or
+East’s interface (refer to the <a href="#instructions">Instructions</a>
+section). To access these parameters in your R code, use the syntax:
+<code>UserParam$NameOfTheVariable</code>, replacing
+<code>NameOfTheVariable</code> with the appropriate parameter name.</td>
 </tr>
 </tbody>
 </table>
@@ -228,9 +329,9 @@ below for the expected output for this integration point:</p>
 <td><strong>ErrorCode</strong></td>
 <td>Integer</td>
 <td>Optional. Can be used to handle errors in your script:<br>–
-<code>0</code>: No Error<br> – <code>Positive Integer</code>: Nonfatal
-Error, the current simulation will be aborted, but the next simulation
-will proceed.<br>– <code>Negative Integer</code>: Fatal Error, no
+<code>0</code>: No error.<br> – <code>Positive Integer</code>: Nonfatal
+error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal error, no
 further simulations will be attempted.</td>
 </tr></tbody>
 </table>
@@ -244,12 +345,12 @@ not used in the script. We recommend always declaring
 <code>UserParam</code> as a default <code>NULL</code> value in the
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
-East Horizon.</p>
+the interface.</p>
 <pre><code><span><span class="va">Init</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">Seed</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="co"># Do something, for example set the seed</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span> <span class="fl">42</span> <span class="op">)</span></span>
-<span>  <span class="co"># If you want the user to set the seed using East Horizon interface, you could use set.seed( UserParam$seed ) </span></span>
+<span>  <span class="co"># If you want the user to set the seed using East Horizon's or East's interface, you could use set.seed( UserParam$seed ) </span></span>
 <span>  </span>
 <span>  <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">nError</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
@@ -262,12 +363,48 @@ East Horizon.</p>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
+<p>Used to load libraries in the following examples:</p>
 <ol style="list-style-type: decimal">
-<li>Used to load libraries in <a href="2ArmNormalRepeatedMeasuresResponseGeneration.html"><strong>2-Arm,
-Normal Outcome, Repeated Measures - Patient Simulation</strong></a>.
+<li>
+<a href="2ArmNormalRepeatedMeasuresResponseGeneration.html"><strong>2-Arm,
+Normal Outcome, Repeated Measures - Patient Simulation</strong></a>
 <ul>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/LibraryMASS.R" class="external-link">LibraryMASS.R</a></li>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/LibraryNIme.R" class="external-link">LibraryNIme.R</a></li>
+</ul>
+</li>
+<li>
+<strong>2-Arm, Normal Outcome, Repeated Measures - Analysis</strong>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresOutcomeAnalysis/RCode/LibraryRM.R" class="external-link">LibraryRM.R</a></li>
+</ul>
+</li>
+<li>
+<a href="2ArmTimeToEventOutcomeAnalysisDescription.html"><strong>2-Arm,
+Time-To-Event Outcome - Analysis</strong></a>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/RCode/Librarysurvival.R" class="external-link">Librarysurvival.R</a></li>
+</ul>
+</li>
+<li>
+<a href="AssuranceConsecutiveStudies.html"><strong>Bayesian
+Assurance of Consecutive Studies</strong></a>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/InitializeSurvival.R" class="external-link">InitializeSurvival.R</a></li>
+</ul>
+</li>
+<li>
+<a href="GeneratePoissonArrival.html"><strong>Generate Patient
+Arrival Times with Poisson Process</strong></a>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/RCode/Initialize.R" class="external-link">Initialize.R</a></li>
+</ul>
+</li>
+<li>
+<a href="PatientRandomization.html"><strong>2-Arm - Randomization of
+Subjects</strong></a>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/Rcode/LoadRandomizeR.R" class="external-link">LoadRandomizeR.R</a></li>
 </ul>
 </li>
 </ol>

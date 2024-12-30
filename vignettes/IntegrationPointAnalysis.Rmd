@@ -19,6 +19,8 @@ The Analysis integration point allows you to customize the statistical test for 
 
 # How to Use It in East Horizon
 
+This integration point is currently available in East Horizon Explore for the **Two Arm Confirmatory** (all endpoint types) study objective. It is expected to be available in the future for the **Multiple Arm Confirmatory** (continuous and binary outcomes) study objective.
+
 You can set up an analysis function in East Horizon Explore under **Test** in a **Design Card** while creating or editing an **Input Set**. Follow these steps:
 
 1. Select "User Specified-R" from the dropdown in the Test field in the Design card.
@@ -34,6 +36,7 @@ For a visual guide of where to find the option, refer to the screenshots below:
 # Endpoint Types
 
 The input variables, expected output variables, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
+
 
 1. [**Continuous (Normal) Outcome**](IntegrationPointAnalysisContinuous.html)
 1. [**Continuous (Normal) Outcome with Repeated Measures**](IntegrationPointAnalysisRepeatedMeasures.html)

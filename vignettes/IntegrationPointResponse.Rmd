@@ -19,6 +19,8 @@ The Response integration point allows you to incorporate custom patient outcome 
 
 # How to Use It in East Horizon
 
+This integration point is currently available in East Horizon Explore for the **Two Arm Confirmatory** (all endpoint types) study objective. It is expected to be available in the future for the **Multiple Arm Confirmatory** (continuous and binary outcomes) study objective.
+
 You can set up a response function in East Horizon Explore under **Distribution** in a **Response Card** while creating or editing an **Input Set**. Follow these steps:
 
 1. Select "User Specified-R" from the dropdown in the Distribution field in the Response card.
