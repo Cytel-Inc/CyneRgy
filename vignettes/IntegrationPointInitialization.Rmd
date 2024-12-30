@@ -35,18 +35,26 @@ This integration point is available in East Horizon Explore for the following st
 ## East
 
 <details>
-<summary>This integration point is available in East for the following tests:</summary>
-- Design, Continuous Endpoint, Two-Sample Test, Parallel Design, Difference of Means (MN-2S-DI)
-- Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel Design, Difference of Proportions (PN-2S-DI)
-- Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel Design, Ratio of Proportions (PN-2S-RA)
-- Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel Design, Odds Ratio of Proportions PN-2S-OR
-- Design, Survival Endpoint, Two-Sample Test, Parallel Design, Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)
-- Design, Survival Endpoint, Two-Sample Test, Parallel Design, Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)
-- Design, Discrete (Binary) Endpoint, Many-Sample Test, Single Arm Design, Chi-Square for Specified Proportions in C Categories (PN-ns-CH1C)
-- Design, Discrete (Binary) Endpoint, Many-Sample Test, Parallel Design, Two Group Chi-Square for Specified Proportions in C Categories (PN-ns-CH2C)
-- Design, Continuous Endpoint, Many-Sample Test, Pairwise Comparisons to Control - Difference of Means, Multiple Looks - Combining P-Values (MN-MAMS-PC)
-- Design, Discrete (Binary) Endpoint, Many-Sample Test, Multiple Pairwise Comparisons to Control - Difference of Proportions, Multiple Looks - Combining P-Values (PN-MAMS-PC)
-- Design, Survival (Time-to-Event) Endpoint, Many-Sample Test, Pairwise Comparisons to Control - Logrank Test, Multiple Looks - Combining P-Values (SU-MAMS-PC)
+<summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
+
+- Design, Continuous Endpoint
+    - Two-Sample Test, Parallel Design, Difference of Means (MN-2S-DI)
+    - Many-Sample Test, Pairwise Comparisons to Control - Difference of Means, Multiple Looks - Combining P-Values (MN-MAMS-PC)
+- Design, Discrete Endpoint
+    - Two-Sample Test, Parallel Design
+        - Difference of Proportions (PN-2S-DI)
+        - Ratio of Proportions (PN-2S-RA)
+        - Odds Ratio of Proportions (PN-2S-OR)
+    - Many-Sample Test
+        - Single Arm Design, Chi-Square for Specified Proportions in C Categories (PN-ns-CH1C)
+        - Parallel Design, Two Group Chi-Square for Specified Proportions in C Categories (PN-ns-CH2C)
+        - Multiple Pairwise Comparisons to Control - Difference of Proportions, Multiple Looks - Combining P-Values (PN-MAMS-PC)
+- Design, Survival Endpoint
+    - Two-Sample Test, Parallel Design
+        - Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)
+        - Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)
+    - Many-Sample Test, Pairwise Comparisons to Control - Logrank Test, Multiple Looks - Combining P-Values (SU-MAMS-PC)
+
 </details>
 
 # Instructions
@@ -56,7 +64,7 @@ This integration point is available in East Horizon Explore for the following st
 You can set up an initialization function when **creating a new project** in East Horizon by navigating to the **Initialize R Simulations** option under the **Plan** section.
 
 <details>
-<summary>Follow these steps:</summary>
+<summary>Follow these steps (click to expand/collapse):</summary>
 
 1. Choose **Initialize R Simulations** in the **Plan** section when setting up a **new Project**.
 1. Turn on the switch to enable the feature.
@@ -75,7 +83,7 @@ For a visual guide of where to find the option, refer to the screenshot below:
 You can set up an initialization function in East by navigating to the **User Defined R Function** tab of a **Simulation Input**, after including the option. For some tests, the option will be available in the **Treatment Selection** tab.
 
 <details>
-<summary>Follow these steps:</summary>
+<summary>Follow these steps (click to expand/collapse):</summary>
 
 1. Choose the appropriate test in the **Design** tab.
 1. If you see the **Design Input** window, navigate to the **Simulation Input** window by clicking on the **Simulate Design** button under **Library**.

@@ -132,18 +132,85 @@ exponential enrollment, among others, to better suit your trial’s
 requirements.</p>
 </div>
 <div class="section level2">
-<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
+<h2 id="availability">Availability<a class="anchor" aria-label="anchor" href="#availability"></a>
 </h2>
-<p>This integration point is currently available in East Horizon Explore
-for the <strong>Two Arm Confirmatory</strong> (all endpoint types) study
-objective. It is expected to be available in the future for the
-<strong>Multiple Arm Confirmatory</strong> (continuous and binary
-outcomes) study objective.</p>
+<div class="section level3">
+<h3 id="east-horizon-explore">East Horizon Explore<a class="anchor" aria-label="anchor" href="#east-horizon-explore"></a>
+</h3>
+<p>This integration point is available in East Horizon Explore for the
+following study objectives and endpoint types:</p>
+<ul>
+<li>Two Arm Confirmatory: continuous, continuous with repeated measures,
+binary, and time-to-event outcomes.</li>
+<li><em>Two Arm Confirmatory: dual time-to-event/time-to-event, dual
+time-to-event/binary outcomes (coming soon).</em></li>
+<li><em>Multiple Arm Confirmatory: continuous and binary outcomes
+(coming soon).</em></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="east-horizon-design">East Horizon Design<a class="anchor" aria-label="anchor" href="#east-horizon-design"></a>
+</h3>
+<p><em>This integration point will be available in East Horizon Design
+in the future.</em></p>
+</div>
+<div class="section level3">
+<h3 id="east">East<a class="anchor" aria-label="anchor" href="#east"></a>
+</h3>
+<details><summary>
+This integration point is available in East for the following tests
+(click to expand/collapse):
+</summary><ul>
+<li>Design, Continuous Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design, Difference of Means
+(MN-2S-DI)</li>
+</ul>
+</li>
+<li>Design, Discrete Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design
+<ul>
+<li>Difference of Proportions (PN-2S-DI)</li>
+<li>Ratio of Proportions (PN-2S-RA)</li>
+<li>Odds Ratio of Proportions (PN-2S-OR)</li>
+</ul>
+</li>
+<li>Many-Sample Test
+<ul>
+<li>Single Arm Design, Chi-Square for Specified Proportions in C
+Categories (PN-ns-CH1C)</li>
+<li>Parallel Design, Two Group Chi-Square for Specified Proportions in C
+Categories (PN-ns-CH2C)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Design, Survival Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design
+<ul>
+<li>Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)</li>
+<li>Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></details>
+</div>
+</div>
+<div class="section level2">
+<h2 id="instructions">Instructions<a class="anchor" aria-label="anchor" href="#instructions"></a>
+</h2>
+<div class="section level3">
+<h3 id="in-east-horizon">In East Horizon<a class="anchor" aria-label="anchor" href="#in-east-horizon"></a>
+</h3>
 <p>You can set up an enrollment function in East Horizon Explore under
 <strong>Distribution</strong> in a <strong>Enrollment Card</strong>
-while creating or editing an <strong>Input Set</strong>. Follow these
-steps:</p>
-<ol style="list-style-type: decimal">
+while creating or editing an <strong>Input Set</strong>.</p>
+<details><summary>
+Follow these steps (click to expand/collapse):
+</summary><ol style="list-style-type: decimal">
 <li>Select “User Specified-R” from the dropdown in the Distribution
 field in the Enrollment card.</li>
 <li>Browse and select the appropriate R file (<code>filename.r</code>)
@@ -160,12 +227,47 @@ Response, Enrollments, etc.</li>
 </ol>
 <p>For a visual guide of where to find the option, refer to the
 screenshot below:</p>
-<div class="float">
-<img src="enrollment.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
+<img src="enrollment.png"></details>
+</div>
+<div class="section level3">
+<h3 id="in-east">In East<a class="anchor" aria-label="anchor" href="#in-east"></a>
+</h3>
+<p>You can set up an initialization function in East by navigating to
+the <strong>User Defined R Function</strong> tab of a <strong>Simulation
+Input</strong>, after including the option.</p>
+<details><summary>
+Follow these steps (click to expand/collapse):
+</summary><ol style="list-style-type: decimal">
+<li>Choose the appropriate test in the <strong>Design</strong> tab.</li>
+<li>If you see the <strong>Design Input</strong> window, navigate to the
+<strong>Simulation Input</strong> window by clicking on the
+<strong>Simulate Design</strong> button under
+<strong>Library</strong>.</li>
+<li>Click on the <strong>Include Options</strong> button on the top
+right corner of the <strong>Simulation Input</strong> window and select
+<strong>User Defined R Function</strong>.</li>
+<li>In the tab <strong>User Defined R Function</strong>, a list of tasks
+will appear. Place your cursor in the <strong>File Name</strong> field
+for the task <strong>Generate Arrival Times</strong>.</li>
+<li>Click on the button <strong>Browse…</strong> to select the
+appropriate R file (<code>filename.r</code>) from your computer. This
+file should contain function(s) written to perform various tasks to be
+used throughout your Project.</li>
+<li>Specify the function name you want to initialize. To copy the
+function’s name from the R script, click on the button
+<strong>View</strong>.</li>
+<li>Set any required user parameters (variables) as needed for your
+function using the button <strong>Add/Edit Variables</strong>.</li>
+<li>Continue setting up your project.</li>
+</ol>
+<p>For a visual guide of where to find the option, refer to the
+screenshot below:</p>
+<p><img src="enrollmentEast.png"></p>
+</details>
 </div>
 </div>
 <div class="section level2">
-<h2 id="input-variable">Input Variable<a class="anchor" aria-label="anchor" href="#input-variable"></a>
+<h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
 <p>When creating a custom R script, you can optionally use certain
 variables provided by East Horizon’s engine itself. These variables are
@@ -209,12 +311,11 @@ each period.</td>
 <tr class="odd">
 <td><strong>UserParam</strong></td>
 <td>List</td>
-<td>Contains all user-defined parameters specified in the East Horizon
-interface (refer to the <a href="#how-to-use-it-in-east-horizon">How to
-Use It in East Horizon</a> section). To access these parameters in your
-R code, use the syntax: <code>UserParam$NameOfTheVariable</code>,
-replacing <code>NameOfTheVariable</code> with the appropriate parameter
-name.</td>
+<td>Contains all user-defined parameters specified in East Horizon’s or
+East’s interface (refer to the <a href="#instructions">Instructions</a>
+section). To access these parameters in your R code, use the syntax:
+<code>UserParam$NameOfTheVariable</code>, replacing
+<code>NameOfTheVariable</code> with the appropriate parameter name.</td>
 </tr>
 </tbody>
 </table>
@@ -264,9 +365,9 @@ arrival time for all subjects.</td>
 <td><strong>ErrorCode</strong></td>
 <td>Integer</td>
 <td>Optional. Can be used to handle errors in your script:<br>–
-<code>0</code>: No Error<br> – <code>Positive Integer</code>: Nonfatal
-Error, the current simulation will be aborted, but the next simulation
-will proceed.<br>– <code>Negative Integer</code>: Fatal Error, no
+<code>0</code>: No error.<br> – <code>Positive Integer</code>: Nonfatal
+error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal error, no
 further simulations will be attempted.</td>
 </tr>
 </tbody>
@@ -282,16 +383,16 @@ not used in the script. We recommend always declaring
 <code>UserParam</code> as a default <code>NULL</code> value in the
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
-East Horizon.</p>
+the interface.</p>
 <pre><code><span><span class="va">GenArrTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumPrd</span>, <span class="va">PrdStart</span>, <span class="va">AccrRate</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>                <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
-<span>  <span class="va">vPatientArrivalTime</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0</span></span>
+<span>  <span class="va">vPatientArrivalTime</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing arrival time array to 0</span></span>
 <span>  </span>
 <span>  <span class="co"># Write the actual code here.</span></span>
 <span>  <span class="co"># Store the generated arrival times in a vector called vPatientArrivalTime.</span></span>
 <span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientArrivalTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> ArrivalTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientArrivalTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 <p>A detailed template with step-by-step explanations is available here:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/GenerateArrivalTimes.R" class="external-link">GenerateArrivalTimes.R</a></p>

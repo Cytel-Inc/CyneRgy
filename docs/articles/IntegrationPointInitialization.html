@@ -164,35 +164,50 @@ in the future.</em></p>
 <h3 id="east">East<a class="anchor" aria-label="anchor" href="#east"></a>
 </h3>
 <details><summary>
-This integration point is available in East for the following tests:
+This integration point is available in East for the following tests
+(click to expand/collapse):
 </summary><ul>
-<li>Design, Continuous Endpoint, Two-Sample Test, Parallel Design,
-Difference of Means (MN-2S-DI)</li>
-<li>Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel
-Design, Difference of Proportions (PN-2S-DI)</li>
-<li>Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel
-Design, Ratio of Proportions (PN-2S-RA)</li>
-<li>Design, Discrete (Binary) Endpoint, Two-Sample Test, Parallel
-Design, Odds Ratio of Proportions PN-2S-OR</li>
-<li>Design, Survival Endpoint, Two-Sample Test, Parallel Design, Logrank
-Given Accrual Duration and Accrual Rates (SU-2S-LRAR)</li>
-<li>Design, Survival Endpoint, Two-Sample Test, Parallel Design, Logrank
-Given Accrual Duration and Study Duration (SU-2S-LRSD)</li>
-<li>Design, Discrete (Binary) Endpoint, Many-Sample Test, Single Arm
-Design, Chi-Square for Specified Proportions in C Categories
-(PN-ns-CH1C)</li>
-<li>Design, Discrete (Binary) Endpoint, Many-Sample Test, Parallel
-Design, Two Group Chi-Square for Specified Proportions in C Categories
-(PN-ns-CH2C)</li>
-<li>Design, Continuous Endpoint, Many-Sample Test, Pairwise Comparisons
-to Control - Difference of Means, Multiple Looks - Combining P-Values
-(MN-MAMS-PC)</li>
-<li>Design, Discrete (Binary) Endpoint, Many-Sample Test, Multiple
-Pairwise Comparisons to Control - Difference of Proportions, Multiple
-Looks - Combining P-Values (PN-MAMS-PC)</li>
-<li>Design, Survival (Time-to-Event) Endpoint, Many-Sample Test,
-Pairwise Comparisons to Control - Logrank Test, Multiple Looks -
-Combining P-Values (SU-MAMS-PC)</li>
+<li>Design, Continuous Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design, Difference of Means
+(MN-2S-DI)</li>
+<li>Many-Sample Test, Pairwise Comparisons to Control - Difference of
+Means, Multiple Looks - Combining P-Values (MN-MAMS-PC)</li>
+</ul>
+</li>
+<li>Design, Discrete Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design
+<ul>
+<li>Difference of Proportions (PN-2S-DI)</li>
+<li>Ratio of Proportions (PN-2S-RA)</li>
+<li>Odds Ratio of Proportions (PN-2S-OR)</li>
+</ul>
+</li>
+<li>Many-Sample Test
+<ul>
+<li>Single Arm Design, Chi-Square for Specified Proportions in C
+Categories (PN-ns-CH1C)</li>
+<li>Parallel Design, Two Group Chi-Square for Specified Proportions in C
+Categories (PN-ns-CH2C)</li>
+<li>Multiple Pairwise Comparisons to Control - Difference of
+Proportions, Multiple Looks - Combining P-Values (PN-MAMS-PC)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Design, Survival Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design
+<ul>
+<li>Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)</li>
+<li>Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)</li>
+</ul>
+</li>
+<li>Many-Sample Test, Pairwise Comparisons to Control - Logrank Test,
+Multiple Looks - Combining P-Values (SU-MAMS-PC)</li>
+</ul>
+</li>
 </ul></details>
 </div>
 </div>
@@ -207,7 +222,7 @@ project</strong> in East Horizon by navigating to the <strong>Initialize
 R Simulations</strong> option under the <strong>Plan</strong>
 section.</p>
 <details><summary>
-Follow these steps:
+Follow these steps (click to expand/collapse):
 </summary><ol style="list-style-type: decimal">
 <li>Choose <strong>Initialize R Simulations</strong> in the
 <strong>Plan</strong> section when setting up a <strong>new
@@ -233,10 +248,10 @@ screenshot below:</p>
 </h3>
 <p>You can set up an initialization function in East by navigating to
 the <strong>User Defined R Function</strong> tab of a <strong>Simulation
-Input</strong>. For some tests, the option will be available in the
-<strong>Treatment Selection</strong> tab.</p>
+Input</strong>, after including the option. For some tests, the option
+will be available in the <strong>Treatment Selection</strong> tab.</p>
 <details><summary>
-Follow these steps:
+Follow these steps (click to expand/collapse):
 </summary><ol style="list-style-type: decimal">
 <li>Choose the appropriate test in the <strong>Design</strong> tab.</li>
 <li>If you see the <strong>Design Input</strong> window, navigate to the
