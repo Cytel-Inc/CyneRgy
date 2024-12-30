@@ -80,14 +80,14 @@ For a visual guide of where to find the option, refer to the screenshot below:
 
 ## In East
 
-You can set up an initialization function in East by navigating to the **User Defined R Function** tab of a **Simulation Input**, after including the option. For some tests, the option will be available in the **Treatment Selection** tab.
+You can set up an initialization function in East by navigating to the **Initialize R Environment** task of the **User Defined R Function** tab of a **Simulation Input** window, after including the option. For some tests, the option will be available in the **Treatment Selection** tab.
 
 <details>
 <summary>Follow these steps (click to expand/collapse):</summary>
 
 1. Choose the appropriate test in the **Design** tab.
-1. If you see the **Design Input** window, navigate to the **Simulation Input** window by clicking on the **Simulate Design** button under **Library**.
-1. Click on the **Include Options** button on the top right corner of the **Simulation Input** window and select **User Defined R Function**.
+1. If you see the **Design Input** window, compute the scenario using the **Compute** button, save the design using the **Save in Workbook** button, then navigate to the **Simulation Input** window by clicking on the **Simulate Design** button under **Library**.
+1. Click on the **Include Options** button on the top right corner of the **Simulation Input** window and select both **Accrual / Dropouts** and **User Defined R Function**.
 1. In the tab **User Defined R Function**, a list of tasks will appear. Place your cursor in the **File Name** field for the task **Initialize R Environment**.
 1. Click on the button **Browse...** to select the appropriate R file (`filename.r`) from your computer. This file should contain function(s) written to perform various tasks to be used throughout your Project.
 1. Specify the function name you want to initialize. To copy the function's name from the R script, click on the button **View**.

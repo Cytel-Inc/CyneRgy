@@ -203,7 +203,7 @@ Categories (PN-ns-CH2C)</li>
 <h2 id="instructions">Instructions<a class="anchor" aria-label="anchor" href="#instructions"></a>
 </h2>
 <div class="section level3">
-<h3 id="in-east-horizon">In East Horizon<a class="anchor" aria-label="anchor" href="#in-east-horizon"></a>
+<h3 id="in-east-horizon-explore">In East Horizon Explore<a class="anchor" aria-label="anchor" href="#in-east-horizon-explore"></a>
 </h3>
 <p>You can set up an enrollment function in East Horizon Explore under
 <strong>Distribution</strong> in a <strong>Enrollment Card</strong>
@@ -232,20 +232,24 @@ screenshot below:</p>
 <div class="section level3">
 <h3 id="in-east">In East<a class="anchor" aria-label="anchor" href="#in-east"></a>
 </h3>
-<p>You can set up an initialization function in East by navigating to
-the <strong>User Defined R Function</strong> tab of a <strong>Simulation
-Input</strong>, after including the option.</p>
+<p>You can set up an enrollment function in East by navigating to the
+<strong>Generate Arrival Times</strong> task of the <strong>User Defined
+R Function</strong> tab of a <strong>Simulation Input</strong> window,
+after including the option.</p>
 <details><summary>
 Follow these steps (click to expand/collapse):
 </summary><ol style="list-style-type: decimal">
 <li>Choose the appropriate test in the <strong>Design</strong> tab.</li>
-<li>If you see the <strong>Design Input</strong> window, navigate to the
+<li>If you see the <strong>Design Input</strong> window, compute the
+scenario using the <strong>Compute</strong> button, save the design
+using the <strong>Save in Workbook</strong> button, then navigate to the
 <strong>Simulation Input</strong> window by clicking on the
 <strong>Simulate Design</strong> button under
 <strong>Library</strong>.</li>
 <li>Click on the <strong>Include Options</strong> button on the top
 right corner of the <strong>Simulation Input</strong> window and select
-<strong>User Defined R Function</strong>.</li>
+both <strong>Accrual / Dropouts</strong> and <strong>User Defined R
+Function</strong>.</li>
 <li>In the tab <strong>User Defined R Function</strong>, a list of tasks
 will appear. Place your cursor in the <strong>File Name</strong> field
 for the task <strong>Generate Arrival Times</strong>.</li>
@@ -270,10 +274,10 @@ screenshot below:</p>
 <h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
 <p>When creating a custom R script, you can optionally use certain
-variables provided by East Horizon’s engine itself. These variables are
-automatically available and do not need to be set by the user, except
-for the <code>UserParam</code> variable. Refer to the table below for
-the variable that is available for this integration point.</p>
+variables provided by East Horizon’s or East’s engine itself. These
+variables are automatically available and do not need to be set by the
+user, except for the <code>UserParam</code> variable. Refer to the table
+below for the variable that is available for this integration point.</p>
 <table class="table">
 <colgroup>
 <col width="14%">
