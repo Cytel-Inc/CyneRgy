@@ -24,11 +24,11 @@ The Initialization integration point allows you to specify an optional function 
 
 This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
 
-- Two Arm Confirmatory: continuous, continuous with repeated measures, binary, and time-to-event outcomes.
-- *Two Arm Confirmatory: dual time-to-event/time-to-event, dual time-to-event/binary outcomes (coming soon).*
-- *Multiple Arm Confirmatory: continuous and binary outcomes (coming soon).*
+- **Two Arm Confirmatory**: continuous, continuous with repeated measures, binary, and time-to-event outcomes.
+- ***Two Arm Confirmatory**: dual time-to-event/time-to-event, dual time-to-event/binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
+- ***Multiple Arm Confirmatory**: continuous and binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
 
-## East Horizon Design
+## East Horizon Design <span class="badge text-bg-secondary">Coming soon</span>
 
 *This integration point will be available in East Horizon Design in the future.*
 
@@ -144,7 +144,7 @@ A detailed template with step-by-step explanations is available here: [Initializ
 # Examples
 
 Used to load libraries in the following examples:
-
+    
 1.  [**2-Arm, Normal Outcome, Repeated Measures - Patient Simulation**](2ArmNormalRepeatedMeasuresResponseGeneration.html)
     - [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/LibraryMASS.R)
     - [LibraryNIme.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/LibraryNIme.R)
