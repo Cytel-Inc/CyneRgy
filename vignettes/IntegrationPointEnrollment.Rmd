@@ -17,9 +17,9 @@ The Enrollment integration point allows you to customize the distribution of sub
 
 This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
 
-- Two Arm Confirmatory: continuous, continuous with repeated measures, binary, and time-to-event outcomes.
-- *Two Arm Confirmatory: dual time-to-event/time-to-event, dual time-to-event/binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
-- *Multiple Arm Confirmatory: continuous and binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
+- **Two Arm Confirmatory**: continuous, continuous with repeated measures, binary, and time-to-event outcomes.
+- ***Two Arm Confirmatory**: dual time-to-event/time-to-event, dual time-to-event/binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
+- ***Multiple Arm Confirmatory**: continuous and binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
 
 ## East Horizon Design <span class="badge text-bg-secondary">Coming soon</span>
 
