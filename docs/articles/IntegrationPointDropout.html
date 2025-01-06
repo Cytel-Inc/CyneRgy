@@ -43,11 +43,12 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Integration Specific Points</h6></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointInitialization.html">Initialization</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis (Test Statistic)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment (Arrival Times)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization (Assignment of Subjects)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -111,7 +112,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">December 31, 2024</h4>
+            <h4 data-toc-skip class="date">January 06, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointDropout.Rmd</code></div>
@@ -119,6 +120,35 @@ Potvin</h4>
 
     
     
+<style>
+.button-container {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 15px;
+}
+.button {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+    padding: 30px;
+}
+.button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+.button i {
+    margin-right: 10px;
+}
+</style>
 <p><a href="Overview.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
 Go back to the <em>Getting Started: Overview</em> page</a></p>
 <div class="section level2">
@@ -131,23 +161,100 @@ dropout distributions such as Poisson or Weibull, to better suit your
 trial’s requirements.</p>
 </div>
 <div class="section level2">
-<h2 id="how-to-use-it-in-east-horizon">How to Use It in East Horizon<a class="anchor" aria-label="anchor" href="#how-to-use-it-in-east-horizon"></a>
+<h2 id="availability">Availability<a class="anchor" aria-label="anchor" href="#availability"></a>
 </h2>
-<p>This integration point is currently available in East Horizon Explore
-for the <strong>Two Arm Confirmatory</strong> (all endpoint types) study
-objective. It is expected to be available in the future for the
-<strong>Multiple Arm Confirmatory</strong> (continuous and binary
-outcomes) study objective.</p>
+<div class="section level3">
+<h3 id="east-horizon-explore">East Horizon Explore<a class="anchor" aria-label="anchor" href="#east-horizon-explore"></a>
+</h3>
+<p>This integration point is available in East Horizon Explore for the
+following study objectives and endpoint types:</p>
+<ul>
+<li>
+<strong>Two Arm Confirmatory</strong>: continuous, continuous with
+repeated measures, binary, and time-to-event outcomes.</li>
+<li>
+<em><strong>Two Arm Confirmatory</strong>: dual
+time-to-event/time-to-event, dual time-to-event/binary outcomes.</em>
+<span class="badge text-bg-secondary">Coming soon</span>
+</li>
+<li>
+<em><strong>Multiple Arm Confirmatory</strong>: continuous and
+binary outcomes.</em> <span class="badge text-bg-secondary">Coming
+soon</span>
+</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="east-horizon-design-coming-soon">East Horizon Design <span class="badge text-bg-secondary">Coming
+soon</span><a class="anchor" aria-label="anchor" href="#east-horizon-design-coming-soon"></a>
+</h3>
+<p><em>This integration point will be available in East Horizon Design
+in the future.</em></p>
+</div>
+<div class="section level3">
+<h3 id="east">East<a class="anchor" aria-label="anchor" href="#east"></a>
+</h3>
+<details><summary>
+This integration point is available in East for the following tests
+(click to expand/collapse):
+</summary><ul>
+<li>Design, Continuous Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design, Difference of Means
+(MN-2S-DI)</li>
+</ul>
+</li>
+<li>Design, Discrete Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design
+<ul>
+<li>Difference of Proportions (PN-2S-DI)</li>
+<li>Ratio of Proportions (PN-2S-RA)</li>
+<li>Odds Ratio of Proportions (PN-2S-OR)</li>
+</ul>
+</li>
+<li>Many-Sample Test
+<ul>
+<li>Single Arm Design, Chi-Square for Specified Proportions in C
+Categories (PN-ns-CH1C)</li>
+<li>Parallel Design, Two Group Chi-Square for Specified Proportions in C
+Categories (PN-ns-CH2C)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Design, Survival Endpoint
+<ul>
+<li>Two-Sample Test, Parallel Design
+<ul>
+<li>Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)</li>
+<li>Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></details>
+</div>
+</div>
+<div class="section level2">
+<h2 id="instructions">Instructions<a class="anchor" aria-label="anchor" href="#instructions"></a>
+</h2>
+<div class="section level3">
+<h3 id="in-east-horizon-explore">In East Horizon Explore<a class="anchor" aria-label="anchor" href="#in-east-horizon-explore"></a>
+</h3>
 <p>You can set up a dropout function in East Horizon Explore under
 <strong>Dropout Distribution</strong> in a <strong>Response
 Card</strong> while creating or editing an <strong>Input Set</strong>.
 For a Time-to-Event outcome or a Continuous outome with Repeated
 Measures, it will be under <strong>Distribution</strong> in the
-<strong>Dropout Rate</strong> tab of the <strong>Response Card</strong>.
-Follow these steps:</p>
-<ol style="list-style-type: decimal">
-<li>Select “User Specified-R” from the dropdown in the Dropout
-Distribution or Distribution field in the Response card.</li>
+<strong>Dropout Rate</strong> tab of the <strong>Response
+Card</strong>.</p>
+<details><summary>
+Follow these steps (click to expand/collapse):
+</summary><ol style="list-style-type: decimal">
+<li>Select <strong>User Specified-R</strong> from the dropdown in the
+<strong>Dropout Distribution</strong> or <strong>Distribution</strong>
+field in the <strong>Response Card</strong>.</li>
 <li>Browse and select the appropriate R file (<code>filename.r</code>)
 from your computer, or use the built-in <strong>R Code
 Assistant</strong> to create one. This file should contain function(s)
@@ -157,18 +264,18 @@ Project.</li>
 not displaying, then check your R code for errors.</li>
 <li>Set any required user parameters (variables) as needed for your
 function using <strong>+ Add Variables</strong>.</li>
-<li>Continue creating your project by specifying scenarios for patient
-Response, Enrollments, etc.</li>
+<li>Continue creating your project.</li>
 </ol>
 <p>For a visual guide of where to find the option, refer to the
 screenshots below:</p>
-<div class="float">
-<img src="dropout.png" alt="Screenshot of East Horizon (Dropout Distribution)"><div class="figcaption">Screenshot of East Horizon (Dropout
-Distribution)</div>
+<p><img src="dropout.png"></p>
+<p>![]](dropout2.png)</p>
+</details>
 </div>
-<div class="float">
-<img src="dropout2.png" alt="Screenshot of East Horizon (Tab Dropout Rate, Distribution)"><div class="figcaption">Screenshot of East Horizon (Tab Dropout Rate,
-Distribution)</div>
+<div class="section level3">
+<h3 id="in-east">In East<a class="anchor" aria-label="anchor" href="#in-east"></a>
+</h3>
+<p>(to do)</p>
 </div>
 </div>
 <div class="section level2">
@@ -177,14 +284,16 @@ Distribution)</div>
 <p>The input variables, expected output variables, examples, and
 templates for this integration point depend on the endpoint type (or
 outcome) you are using. Refer to the relevant pages below:</p>
-<ol style="list-style-type: decimal">
-<li><a href="IntegrationPointDropoutContinuousOrBinary.html"><strong>Continuous
-(Normal) or Binary Outcome</strong></a></li>
-<li><a href="IntegrationPointDropoutRepeatedMeasures.html"><strong>Continuous
-(Normal) Outcome with Repeated Measures</strong></a></li>
-<li><a href="IntegrationPointDropoutTimeToEvent.html"><strong>Time-to-Event
-(Survival) Outcome</strong></a></li>
-</ol>
+<div class="button-container">
+<p><a href="IntegrationPointDropoutContinuousOrBinary.html" class="button"><i class="fas fa-chart-line"></i>
+Continuous (Normal) Outcome</a></p>
+<p><a href="IntegrationPointDropoutTimeToEvent.html" class="button"><i class="fas fa-hourglass-half"></i>
+Time-to-Event (Survival) Outcome</a></p>
+<p><a href="IntegrationPointDropoutRepeatedMeasures.html" class="button"><i class="fas fa-sync"></i>
+Continuous (Normal) Outcome with Repeated Measures</a></p>
+<p><a href="IntegrationPointDropoutContinuousOrBinary.html" class="button"><i class="fas fa-toggle-on"></i>
+Binary Outcome</a></p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

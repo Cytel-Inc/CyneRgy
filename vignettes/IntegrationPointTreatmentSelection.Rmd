@@ -1,0 +1,172 @@
+---
+title: 'Integration Point: Treatment Selection'
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
+
+# Description
+
+The Treatment Selection integration point allows you to customize the selection of arms to carry forward after an interim analysis using a custom R script. Instead of relying on the limited settings (rules) of East or East Horizon, such as selecting a fixed number of top treatments or applying a threshold, you can implement entirely alternative methods to better suit your trial's requirements. For example, you could use Bayesian rules.
+
+# Availability
+
+## East Horizon Explore <span class="badge text-bg-secondary">Coming soon</span>
+
+*This integration point will be available in East Horizon Explore in the future.*
+
+This integration point will be available in East Horizon Explore for the following study objectives and endpoint types:
+
+- **Multiple Arm Confirmatory**: continuous and binary outcomes, with **Group Sequential with Treatment Selection** statistical design.
+
+## East Horizon Design <span class="badge text-bg-secondary">Coming soon</span>
+
+*This integration point will be available in East Horizon Design in the future.*
+
+## East
+
+<details>
+<summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
+
+- Design, Continuous Endpoint
+    - Many-Sample Test, Pairwise Comparisons to Control - Difference of Means, Multiple Looks - Combining P-Values (MN-MAMS-PC)
+- Design, Discrete Endpoint
+    - Many-Sample Test, Multiple Pairwise Comparisons to Control - Difference of Proportions, Multiple Looks - Combining P-Values (PN-MAMS-PC)
+- Design, Survival Endpoint
+    - Many-Sample Test, Pairwise Comparisons to Control - Logrank Test, Multiple Looks - Combining P-Values (SU-MAMS-PC)
+
+</details>
+
+# Instructions
+
+## In East
+
+(to do)
+
+You can set up an enrollment function in East by navigating to the **Use R for Treatment Selection** setting of the **Treatment Selection** tab of a **Simulation Input** window, after including the option.
+
+<details>
+<summary>Follow these steps (click to expand/collapse):</summary>
+
+1. Choose the appropriate test in the **Design** tab.
+1. If you see the **Design Input** window, compute the scenario using the **Compute** button, save the design using the **Save in Workbook** button, then navigate to the **Simulation Input** window by clicking on the **Simulate Design** button under **Library**.
+1. Click on the **Include Options** button on the top right corner of the **Simulation Input** window and select both **Accrual / Dropouts** and **User Defined R Function**.?
+1. In the tab **User Defined R Function**, a list of tasks will appear. Place your cursor in the **File Name** field for the task **Generate Arrival Times**.?
+1. Click on the button **Browse...** to select the appropriate R file (`filename.r`) from your computer. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Specify the function name you want to initialize. To copy the function's name from the R script, click on the button **View**.
+1. Set any required user parameters (variables) as needed for your function using the button **Add/Edit Variables**.
+1. Continue setting up your project.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![]()
+
+</details>
+
+# Input Variables
+
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point, outcome, and study objective.
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|-----------------|---------------------------------------------------------------------------------|
+|**SimData**|Data Frame|Subject data generated in current simulation, one row per subject. To access these variables in your R code, use the syntax: `SimData$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
+|**DesignParam**|List|Input parameters which may be needed to compute test statistic and perform test. To access these variables in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
+|**LookInfo**|List|Input parameters related to multiple looks which may be needed to compute test statistic and perform test. To access these variables in your R code, use the syntax: `LookInfo$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+
+## Variables of SimData
+
+The variables in SimData are generated during data generation, and depend on the current simulation. Some common and useful variables are:
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**SimData\$ArrivalTime**|Vector of Numeric| Vector of length equal to the number of subjects, containing the generated arrival times for all subjects.|
+|**SimData\$TreatmentID**|Vector of Integer| Vector of length equal to the number of subjects, containing the allocation indices for all subjects:<br>– `0`: Control arm.<br>– `1`: First experimental arm.<br>– etc.|
+| **SimData\$Response**  | Vector of Numeric  | Vector of length equal to the number of subjects, containing the generated responses for all subjects.|
+| **SimData\$CensorIndOrg**  | Vector of Integer  | Vector of length equal to the number of subjects, containing the generated censor indicator values for all subjects:<br>– `0`: Dropout.<br>– `1`: Completer.|
+
+## Variables of DesignParam
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**DesignParam\$Alpha**|Numeric|Type I Error (for one-sided tests).||
+|**DesignParam\$TrialType**|Integer|Trial Type:<br>– `0`: Superiority.|
+|**DesignParam\$TestType**|Integer|Test Type:<br>– `0`: One-sided.|
+|**DesignParam\$TailType**|Integer|Nature of critical region:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.|
+|**DesignParam\$InitialAllocInfo**|Vector of Numeric| Vector of length equal to the number of treatment arms, containing the ratios of the treatment group sample sizes to control group sample size.|
+|**DesignParam\$SampleSize**|Integer|Sample size of the trial.|
+|**DesignParam\$MaxCompleters**|Integer|Maximum number of completers.|
+|**DesignParam\$RespLag**|Numeric|Follow-up duration.|
+|**DesignParam\$MultAdjMethod**|Integer|Multiple comparison procedure:<br>– `0`: Bonferroni.<br>– `1`: Sidak (not available in East Horizon Explore).<br>– `2`: Weighted Bonferroni (for East Horizon Explore) or Simes (for East Horizon Design).<br>– `3`: Dunnett's Single Step (not available in East Horizon Explore).<br>– `4`: Hochberg's Step Up.<br>– `6`: Fixed Sequence.<br>– `7`: Fallback.<br>– `8`: Dunnett's Single Step.|
+|**DesignParam\$NumTreatments**|Integer|Number of treatment arms.|
+|**DesignParam\$AlphaProp**|Vector of Numeric|Vector of length `DesignParam$NumTreatments`, containing the proportion of Alpha for each treatment arm. Only available with `MultAdjMethod = Weighted Bonferroni or Fallback`.|
+|**DesignParam\$TestSeq**|Vector of Integer|Vector of length `DesignParam$NumTreatments`, containing the test sequence for each comparison (each treatment arm). Only available with `MultAdjMethod = Fixed Sequence or Fallback`.|
+
+## Variables of LookInfo
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**LookInfo\$NumLooks**|Integer|Number of looks.|
+|**LookInfo\$CurrLookIndex**|Integer|Current index look, starting from 1.|
+|**LookInfo\$InfoFrac**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the information fraction for each look.|
+|**LookInfo\$CumAlpha**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent (for one-sided tests) for each look.|
+|**LookInfo\$CumCompleters**|Vector of Integer|Vector of length `LookInfo$NumLooks`, containing the cumulative number of completers for each look.|
+|**LookInfo\$RejType**|Integer|Rejection type:<br>– `0`: One-sided efficacy upper<br>– `1`: One-sided futility upper.<br>– `2`: One-sided efficacy lower.<br>– `3`: One-sided futility lower.<br>– `4`: One-sided efficacy upper, futility lower.<br>– `5`: One-sided efficacy lower, futility upper.|
+|**LookInfo\$EffBdryScale**|Integer|Efficacy boundary scale:<br>– `0`: Z scale.<br>– `1`: Adjusted p-value scale (not available in East Horizon Explore).|
+|**LookInfo\$EffBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the efficacy boundary 
+|**LookInfo\$FutBdryScale**|Integer|Futility boundary scale:<br>– `1`: p-value scale (not available in East Horizon Explore).<br>– `2`: Delta scale.<br>– `3`: Conditional power scale (not available in East Horizon Explore).|
+|**LookInfo\$FutBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the futility boundary values (for one-sided tests) for each look.|
+
+# Expected Output Variable
+
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
+
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `TreatmentID`, `AllocRatio`, and `ErrorCode`.                    |
+
+## Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **TreatmentID**   | Vector of Integer  | Vector of length equal to the number of selected treatment arms, containing the indices of the treatments, starting from 1 and excluding the control. For example, [1, 2] indicates that treatment arms 1 and 2 are carried forward.|
+| **AllocRatio**   | Vector of Numeric  | Vector of length equal to the number of selected treatment arms, containing the allocation ratio for each treatment arm relative to the control arm, with the control arm always having a ratio of 1.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+# Minimal Template
+
+Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in the interface.
+
+```
+SelectTreatment <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+  nError        	    <- 0 # Error handling (no error)
+  
+  # Example
+  vSelectedTreatments 	<- c( 1, 2 )  # Experimental 1 and 2 are carried forward
+  vAllocationRatio      <- c( 1, 2 )  # Experimental 2 will receive twice as many as exp 1 or control
+  
+  # Write the actual code here.
+  # Store the selected treatments in a vector called vSelectedTreatments.
+  # Store the allocation ratios in a vector called vAllocationRatio.
+
+  return( list( TreatmentID = as.integer( vSelectedTreatments ),
+                AllocRatio = as.double( vAllocationRatio ),
+                ErrorCode = as.integer( nError ) ) )
+}
+```
+
+A detailed template with step-by-step explanations is available here: [TreatmentSelection.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/TreatmentSelection.R) 
+
+# Examples
+
+Explore the following examples for more context:
+
+1. [**Multiarm, Binary Outcome - Treatment Selection**](TreatmentSelectionDescription.html)
+    - [SelectExpThatAreBetterThanCtrl.r](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpThatAreBetterThanCtrl.r)
+    - [SelectExpUsingBayesianRule.r](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpUsingBayesianRule.r)
+    - [SelectExpWithPValueLessThanSpecified.r](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpWithPValueLessThanSpecified.r)
+    - [SelectSpecifiedNumberOfExpWithHighestResponses.r](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectSpecifiedNumberOfExpWithHighestResponses.r)
+

@@ -46,7 +46,7 @@ For comprehensive details about each integration point, please refer to the foll
 :::: {.button-container}
 <a href="IntegrationPointInitialization.html" class="button"><i class="fas fa-cogs"></i> Initialization</a>
 
-<a href="IntegrationPointAnalysis.html" class="button"><i class="fas fa-chart-bar"></i> Analysis (Statistical Test)</a>
+<a href="IntegrationPointAnalysis.html" class="button"><i class="fas fa-chart-bar"></i> Analysis (Test Statistic)</a>
 
 <a href="IntegrationPointEnrollment.html" class="button"><i class="fas fa-user-clock"></i> Enrollment (Arrival Times)</a>
 
@@ -56,7 +56,14 @@ For comprehensive details about each integration point, please refer to the foll
 
 <a href="IntegrationPointDropout.html" class="button"><i class="fas fa-user-slash"></i> Dropout</a>
 
-<a href="" class="button"><i class="fas fa-project-diagram"></i> Treatment Selection</a>
+<a href="IntegrationPointTreatmentSelection.html" class="button"><i class="fas fa-project-diagram"></i> Treatment Selection</a>
+
+<a href="" class="button"><i class="fas fa-shield-alt"></i> Survival Assurance</a>
+
+Re-Estimate Events?
+
+Adapt Test Statistics?
+
 ::::
 
 ## Additional Resources

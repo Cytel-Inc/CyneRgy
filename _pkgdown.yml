@@ -20,16 +20,18 @@ navbar:
                 - text: Integration Specific Points
                 - text: Initialization
                   href: articles/IntegrationPointInitialization.html
-                - text: Analysis
+                - text: Analysis (Test Statistic)
                   href: articles/IntegrationPointAnalysis.html
-                - text: Enrollment
+                - text: Enrollment (Arrival Times)
                   href: articles/IntegrationPointEnrollment.html
-                - text: Randomization
+                - text: Randomization (Assignment of Subjects)
                   href: articles/IntegrationPointRandomization.html
-                - text: Response
+                - text: Response (Patient Simulation)
                   href: articles/IntegrationPointResponse.html
                 - text: Dropout
                   href: articles/IntegrationPointDropout.html
+                - text: Treatment Selection
+                  href: articles/IntegrationPointTreatmentSelection.html
         examples:
             text: Examples
             menu:
