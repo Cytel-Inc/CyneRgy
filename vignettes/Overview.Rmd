@@ -58,11 +58,7 @@ For comprehensive details about each integration point, please refer to the foll
 
 <a href="IntegrationPointTreatmentSelection.html" class="button"><i class="fas fa-project-diagram"></i> Treatment Selection</a>
 
-<a href="" class="button"><i class="fas fa-shield-alt"></i> Survival Assurance</a>
-
-Re-Estimate Events?
-
-Adapt Test Statistics?
+[//]: # (Comment: Possibly to add - Survival Assurance?, Re-Estimate Events?, Adapt Test Statistics?)
 
 ::::
 
@@ -72,11 +68,11 @@ For tips, best practices, and further information, visit the following pages on 
 
 ### East Horizon
 
-- [Using R functions within East Horizon: Explore](https://knowledge.cytel.com/r-connection)
-- [Pre-installed R packages within East Horizon](https://knowledge.cytel.com/pre-installed-r-packages-within-east-horizon)
-- [R Code Assistant](https://knowledge.cytel.com/r-code-assistant)
+- [Using R functions within East Horizon: Explore](https://knowledge.cytel.com/r-connection) <span class="badge text-bg-secondary">For Cytel users only.</span>
+- [Pre-installed R packages within East Horizon](https://knowledge.cytel.com/pre-installed-r-packages-within-east-horizon) <span class="badge text-bg-secondary">For Cytel users only.</span>
+- [R Code Assistant](https://knowledge.cytel.com/r-code-assistant) <span class="badge text-bg-secondary">For Cytel users only.</span>
 
 ### East Desktop
 
 - [R Integration in East](https://knowledge.cytel.com/r-integration-east)
-- [R Connection Additional Help: East User Manual Appendix O](https://knowledge.cytel.com/r-connect-additional-help-east-user-manual-chapter-o)
+- [R Connection Additional Help: East User Manual Appendix O](https://knowledge.cytel.com/r-connect-additional-help-east-user-manual-chapter-o) <span class="badge text-bg-secondary">For Cytel users only.</span>

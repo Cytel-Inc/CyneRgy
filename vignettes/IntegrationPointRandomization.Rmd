@@ -108,7 +108,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
-| **TreatmentID**   | Vector of Integer  | Vector of length equal to the number of subjects, containing the allocation indices for all subjects:<br>– `0`: Control arm<br>– `1`: First experimental arm<br>– etc.).|
+| **TreatmentID**   | Vector of Integer  | Vector of length equal to the number of subjects, containing the allocation indices for all subjects:<br>– `0`: Control arm.<br>– `1`: First experimental arm.<br>– etc.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 # Minimal Template
