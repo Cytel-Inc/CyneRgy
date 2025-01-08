@@ -22,10 +22,10 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [2ArmNormalRepeatedMeasuresResponseGeneration.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/2ArmNormalRepeatedMeasuresResponseGeneration.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R) you will find the following R files:
 
-1. [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/GenerateResponseDiffOfMeansRepeatedMeasures.R) - The R function named "GenRespDiffOfMeansRepMeasures" in the file is used to generate the normal responses across multiple visits for 2-arm normal repeated measures design.
+1. [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R) - The R function named "GenRespDiffOfMeansRepMeasures" in the file is used to generate the normal responses across multiple visits for 2-arm normal repeated measures design.
 
 
-2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/Rcode/LibraryMASS.R) - This file is used to load the library "MASS" to run mvrnorm() function. 
+2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R) - This file is used to load the library "MASS" to run mvrnorm() function. 
 

@@ -16,8 +16,8 @@ This document provides an overview of the R examples provided in [this directory
 
 - an RStudio project file, 
 - a Description file that describes the example, 
-- an RCode folder which contains the example R scripts,
-- a FillInTheBlankRCode folder which contains the worked examples with various code deleted so you can practice and fill in the blanks. 
+- an R folder which contains the example R scripts,
+- a FillInTheBlankR folder which contains the worked examples with various code deleted so you can practice and fill in the blanks. 
 
 The following examples are included:
 

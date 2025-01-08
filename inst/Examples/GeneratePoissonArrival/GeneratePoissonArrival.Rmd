@@ -24,9 +24,9 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [GeneratePoissonArrival.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/RCode) you will find the following R file:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/R) you will find the following R file:
 
-1. [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/RCode/GeneratePoissonArrival.R) - This file provides the code used for the two examples below.
+1. [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R) - This file provides the code used for the two examples below.
 
 
 # Example 1 - Ramp-Up In Accrual
@@ -36,7 +36,7 @@ In this example we make use of the UserParam and provide 7 rates, dRate1, dRate2
 Suppose that the expected accrual rates were 3, 6, 10, 15, 18, 25, 35 starting at time unit 0, 1, 2, 3, 4, 5, 6.  One example trial could have accrual that looks like the following:
 
 ```{r echo=FALSE,  warning=FALSE}
-source("RCode/GeneratePoissonArrival.R")
+source("R/GeneratePoissonArrival.R")
 
 NumSub   <- 600
 NumPrd   <- 1  

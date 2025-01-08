@@ -21,9 +21,9 @@ Running the command above will load the RStudio project in RStudio.
 **RStudio Project File**: [2ArmPatientDropout.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/2ArmPatientDropout.Rproj)
 
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmPatientDropout/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmPatientDropout/R) you will find the following R files:
 
-1. [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateCensoringUsingBinomialProportion.R)
+1. [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R)
 
 The R function named "GenerateCensoringUsingBinomialProportion" in the file  generates the censor ID using the same dropout probability for both treatment using rbinom(). In this case, the Dropout probability is a common value across both treatments. 
 
@@ -33,7 +33,7 @@ Steps :
 - Draw a random sample from Bernoulli distribution with p = 1 - pd, i.e., Binomial(1, pd) of a size n = NumSub.
 - The sample generated in step (2) is a censoring indicator where 1 is a patient that does NOT drop out, e.g., completer, and 0 for a patient that drops out, e.g., non-completer.  
 
-2. [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateDropoutTimeForSurvival.R)
+2. [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)
 
 The function named "GenDropoutTimeForSurvival" generates dropout time for 2-arm survival design. 
 In this cases, there is an option to provide a dropout information for each arm which then is utilized to generate dropout times for each arm from Exponential distribution. We fix Number of periods = 1 and Dropout distribution = Exponential.
