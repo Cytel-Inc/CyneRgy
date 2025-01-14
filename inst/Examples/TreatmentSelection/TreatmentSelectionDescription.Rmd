@@ -26,18 +26,18 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [TreatmentSelection.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TreatmentSelection/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TreatmentSelection/R) you will find the following R files:
 
-1.  [SelectExpThatAreBetterThanCtrl.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpThatAreBetterThanCtrl.R) - Contains a function named SelectExpThatAreBetterThanCtrl to demonstrate the R code necessary for Example 1 as described below.
+1.  [SelectExpThatAreBetterThanCtrl.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpThatAreBetterThanCtrl.R) - Contains a function named SelectExpThatAreBetterThanCtrl to demonstrate the R code necessary for Example 1 as described below.
 
-2.  [SelectExpWithPValueLessThanSpecified.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpWithPValueLessThanSpecified.R) - Contains a function named SelectExpWithPValueLessThanSpecified to demonstrate the R code necessary for Example 2 as described below.
+2.  [SelectExpWithPValueLessThanSpecified.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpWithPValueLessThanSpecified.R) - Contains a function named SelectExpWithPValueLessThanSpecified to demonstrate the R code necessary for Example 2 as described below.
 
-3.  [SelectSpecifiedNumberOfExpWithHighestResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectSpecifiedNumberOfExpWithHighestResponses.R) - Contains a function named SelectSpecifiedNumberOfExpWithHighestResponses to demonstrate the R code necessary for Example 3 as described below.
+3.  [SelectSpecifiedNumberOfExpWithHighestResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectSpecifiedNumberOfExpWithHighestResponses.R) - Contains a function named SelectSpecifiedNumberOfExpWithHighestResponses to demonstrate the R code necessary for Example 3 as described below.
 
-4.  [SelectExpUsingBayesianRule.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpUsingBayesianRule.R) - Contains a function named SelectExpUsingBayesianRule to demonstrate the R code necessary for Example 4 as described below.
+4.  [SelectExpUsingBayesianRule.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpUsingBayesianRule.R) - Contains a function named SelectExpUsingBayesianRule to demonstrate the R code necessary for Example 4 as described below.
 
 In addition, if you would like to experiment with these examples and would like code to help you get started we have provided fill-in-the-blank type 
-code files in the [FillInTheBlankRCode directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TreatmentSelection/FillInTheBlankRCode).  
+code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TreatmentSelection/FillInTheBlankR).  
 
 ## Example 1 - Selection Based on Response Rates Above Control
 

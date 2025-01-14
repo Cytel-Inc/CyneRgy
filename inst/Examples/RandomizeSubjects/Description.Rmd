@@ -18,9 +18,9 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [RandomizeSubjects.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RandomizeSubjects.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/RandomizeSubjects/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/RandomizeSubjects/R) you will find the following R files:
 
-1. [RandomizationSubjectsUsingUniformDistribution.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RCode/RandomizationSubjectsUsingUniformDistribution.R)
+1. [RandomizationSubjectsUsingUniformDistribution.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R)
 
 The R function named "RandomizationSubjectsUsingUniformDistribution" in the file randomly allots the subjects to either of two arms using Uniform Distribution.
 
@@ -32,7 +32,7 @@ Steps :
 - Make sure that Total sample size = Sample size on control + Sample size on treatment arm.
 
 
-2. [RandomizationSubjectsUsingSampleFunctionInR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RCode/RandomizationSubjectsUsingSampleFunctionInR.R)
+2. [RandomizationSubjectsUsingSampleFunctionInR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R)
 
 The R function named "RandomizationSubjectsUsingSampleFunctionInR" in the file makes use of Sample() function in R to randomly allot the patients on control and treatment arm.
 
@@ -44,7 +44,7 @@ Steps:
 - Create a vector of zeroes of size = NumSub (Number of subjects) and then replace the zeroes by 1 for the Indices that correspond to treatment. 
 
 
-3. [BlockRandomizationSubjectsUsingRPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RCode/BlockRandomizationSubjectsUsingRPackage.R)
+3. [BlockRandomizationSubjectsUsingRPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R)
 
 The function named "BlockRandomizationSubjectsUsingRPackage.R" in the file makes use of pbrPar() function from the "randomizeR" library to perform the Block randomization.
 
@@ -55,7 +55,7 @@ Imbalances between groups can be minimized in small sample–size studies by res
 The permuted block technique randomizes patients into groups within a set of study participants, called a block. 
 Treatment assignments within blocks are determined so that they are random in order but that the desired allocation proportions are achieved exactly within each block.
 
-4. [LoadrandomizeR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RCode/LoadRandomizeR.R)
+4. [LoadrandomizeR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/LoadRandomizeR.R)
 
 This file is used to install the "randomizeR" package for execution of Block Randomization in R.
 

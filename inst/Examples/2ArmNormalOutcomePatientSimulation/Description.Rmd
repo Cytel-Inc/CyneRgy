@@ -23,15 +23,15 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [2ArmNormalOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomePatientSimulation/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R) you will find the following R files:
 
-1.  [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZero.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients have a null response. The code in Example 1 can be used when the proportion of patients with null response is a fixed value.   
+1.  [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients have a null response. The code in Example 1 can be used when the proportion of patients with null response is a fixed value.   
 
-1.  [SimulatePatientOutcomePercentAtZeroBetaDist.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZeroBetaDist.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients have a null response. This approach assumes that the probability of null response is unknown and must first be drawn from a Beta distribution.    
+1.  [SimulatePatientOutcomePercentAtZeroBetaDist.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients have a null response. This approach assumes that the probability of null response is unknown and must first be drawn from a Beta distribution.    
 
-1. [TestingAndExploration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/RCode/TestingAndExploration.R) - This file provides an example of loading East output and calling the R functions in in Example 1 from within R. The intent of this file is to help users call and test the function in Example 1.
+1. [TestingAndExploration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/TestingAndExploration.R) - This file provides an example of loading East output and calling the R functions in in Example 1 from within R. The intent of this file is to help users call and test the function in Example 1.
 
-In addition, if you would like to experiment with these examples without looking at the complete solution, you can find fill-in-the-blank-type code files in the [FillInTheBlankRCode directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomePatientSimulation/FillInTheBlankRCode).  
+In addition, if you would like to experiment with these examples without looking at the complete solution, you can find fill-in-the-blank-type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomePatientSimulation/FillInTheBlankR).  
 
 ## Example 1 - Simulation of Patient Normal Data from a Mixture Distribution 
 
