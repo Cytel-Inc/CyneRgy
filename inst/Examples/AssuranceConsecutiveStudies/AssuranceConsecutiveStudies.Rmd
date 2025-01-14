@@ -21,7 +21,7 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [AssuranceConsecutiveStudies.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/Assurance.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/AssuranceConsecutiveStudies/RCode) you will find the R files used in the examples.
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/AssuranceConsecutiveStudies/R) you will find the R files used in the examples.
 
 The examples will all contain two treatments, Standard of Care (S) and Experimental (E) and are follows: 
 
@@ -116,7 +116,7 @@ $$
 
 ### Integration with East
 
-Using the East workbook named Assurance.cywx with East version $>=$ 6.5.4 the Example 1 simulation can be used to obtain the results found in the next section.   After editing the simulation, on the User Define R Functions the Generate Response and Compute Test Statistic are both replaced with R code.   The Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named [RCode/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R) and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in  [RCode/AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeUsingBayesianNormals.R) with input shown below. 
+Using the East workbook named Assurance.cywx with East version $>=$ 6.5.4 the Example 1 simulation can be used to obtain the results found in the next section.   After editing the simulation, on the User Define R Functions the Generate Response and Compute Test Statistic are both replaced with R code.   The Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R) and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in  [R/AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R) with input shown below. 
 
 
 ![Input for generate response in East](Example1GenerateResponseInput.jpg)
@@ -125,7 +125,7 @@ Using the East workbook named Assurance.cywx with East version $>=$ 6.5.4 the Ex
 
 ### Integration with East Horizon Explore
 
-The setup in East Horizon Explore is very similar to East.  East Horizon Explore utilizes the same R functions.   In the Responses tab, the Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named [RCode/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R) and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in [RCode/AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeUsingBayesianNormals.R) with input shown below. 
+The setup in East Horizon Explore is very similar to East.  East Horizon Explore utilizes the same R functions.   In the Responses tab, the Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R) and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in [R/AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R) with input shown below. 
 
 ![Input for generate response in East Horizon Explore](Example1GenerateResponseSolara.jpg)
 
@@ -364,7 +364,7 @@ ggplot(dfDensity, aes(x = x, y = y)) +
 
 This are 3 required R files and functions needed to evaluate this design.   The first file is used to initialize the R environment and load the survival package.   The second file is used to perform the analysis using a Cox model.  The third required file is used to first simulate the true HR from the prior and then simulate the patient data using the sampled HR.   
 
-The initialize function InitializeSurvival is found in the file [RCode/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/InitializeSurvival.R).   The function used for analysis is AnalyzeSurivalDataUsingCoxPH, is found in the file [RCode/AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeSurvivalDataUsingCoxPH.R)  The function used for simulating patient data is SimulatePatientOutcomeNormalAssurance and is found in the file [RCode/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R)
+The initialize function InitializeSurvival is found in the file [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/InitializeSurvival.R).   The function used for analysis is AnalyzeSurivalDataUsingCoxPH, is found in the file [R/AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeSurvivalDataUsingCoxPH.R)  The function used for simulating patient data is SimulatePatientOutcomeNormalAssurance and is found in the file [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R)
 
 ### Integration with East
 

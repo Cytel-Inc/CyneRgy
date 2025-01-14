@@ -23,11 +23,11 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [2ArmBinaryOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/2ArmBinaryOutcomePatientSimulation.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R) you will find the following R files:
 
-1.  [SimulatePatientOutcomePercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZero.Binary.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients do not respond to treatment. The code in Example 1 can be used when the proportion of patients that don't respond to treatment is a fixed value.   
+1.  [SimulatePatientOutcomePercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.Binary.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients do not respond to treatment. The code in Example 1 can be used when the proportion of patients that don't respond to treatment is a fixed value.   
 
-1.  [SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/RCode/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients do not respond to treatment. This approach assumes that the percentage of patients that do not respond to treatment is unknown and must first be drawn from a Beta distribution.
+1.  [SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients do not respond to treatment. This approach assumes that the percentage of patients that do not respond to treatment is unknown and must first be drawn from a Beta distribution.
 
 ## Example 1 - Simulate Binary Data from a Mixture Distribution 
 
