@@ -21,7 +21,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |**NumPrd**|Integer|Number of dropout periods in the trial. Equals to 1 if `DropMethod = 2`.|
 |**PrdTime**|Vector of Numeric|Vector or length `NumPrd`, indicating the times for dropout parameters. Depends on `DropMethod`:<br>– If `DropMethod = 1`: Starting times of dropout periods.<br>– If `DropMethod = 2`: Times at which the probabilities of dropout are specified.|
 |**DropParam**|Matrix|Size: `NumPrd` rows $\times$ `NumArm` columns. Dropout parameters dependent on `DropMethod`:<br>– If `DropMethod = 1`: Specifies dropout hazard rates per arm per period. `DropParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 2`: Specifies cumulative probabilities of dropout per arm per period. `SurvParam[i, j]` represents the probability of dropout for the `jth` arm in the `ith` period.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 
@@ -36,7 +36,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **DropOutTime**   | Vector of Numeric  | Vector of length `NumSub`, containing the generated dropout times for each subject. A value of `Inf` indicates that the subject does not drop out. |
-| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 # Minimal Template
 
@@ -62,4 +62,4 @@ A detailed template with step-by-step explanations is available here: [Dropout.S
 Explore the following examples for more context:
 
 1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
-    - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateDropoutTimeForSurvival.R)
+    - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)

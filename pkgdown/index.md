@@ -21,8 +21,8 @@ A variety of examples highlighting how R scripts can seamlessly integrate with C
 
 - An **RStudio project file** for setup.  
 - A **Description file** detailing the example.  
-- An **RCode folder** which contains the example R scripts.  
-- A **FillInTheBlankRCode folder** which contains practice scripts with sections removed for hands-on learning.  
+- An **R folder** which contains the example R scripts.  
+- A **FillInTheBlankR folder** which contains practice scripts with sections removed for hands-on learning.  
 
 Templates are available in the [Templates directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Templates), and exploratory, in-progress examples can be found in the [Sandbox directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/Sandbox). Note that Sandbox examples are incomplete and untested.
 

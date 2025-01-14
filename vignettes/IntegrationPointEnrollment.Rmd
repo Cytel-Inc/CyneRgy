@@ -140,5 +140,5 @@ A detailed template with step-by-step explanations is available here: [GenerateA
 Explore the following examples for more context:
 
 1. [**Generate Patient Arrival Times with Poisson Process**](GeneratePoissonArrival.html)
-    - [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/RCode/GeneratePoissonArrival.R)
+    - [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R)
 

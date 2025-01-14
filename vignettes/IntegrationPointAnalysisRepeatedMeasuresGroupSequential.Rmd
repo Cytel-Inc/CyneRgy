@@ -16,7 +16,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |**SimData**|Data Frame|Subject data generated in current simulation, one row per subject. To access these variables in your R code, use the syntax: `SimData$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
 |**DesignParam**|List|Input parameters which may be needed to compute test statistic and perform test. To access these variables in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
 |**LookInfo**|List|Input parameters related to multiple looks which may be needed to compute test statistic and perform test. To access these variables in your R code, use the syntax: `LookInfo$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 ## Variables of SimData
 
@@ -103,7 +103,7 @@ The output list can take one of these two forms.
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **Decision**   | Integer  | Boundary crossing decision:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `3`: Futility boundary crossed.<br>– `4`: Equivalence boundary crossed (not available in East Horizon Explore).<br>You should use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See the template below for the correct usage.|
-| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error.<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 When there is no efficacy boundary to be crossed, the return code of `0` stands for futility in the final look. Similarly, when there is no futility boundary to be crossed, the return code of `0` stands for efficacy in the final look. Use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get decision values in a simple way.
 
@@ -114,7 +114,7 @@ When there is no efficacy boundary to be crossed, the return code of `0` stands 
 | **TestStat**   | Numeric  | Value of appropriate test statistic on Wald ﴾Z﴿ scale.|
 |**PrimDelta**|Numeric|Estimate of primary contrast Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta) and `LookInfo$FutContrast = 0` (primary contrast).|
 |**SecDelta**|Numeric|Estimate of secondary contrast Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta) and `LookInfo$FutContrast = 1` (secondary contrast).|
-| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 - If the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
 - If `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta scale)  and `LookInfo$FutContrast = 0` (primary contrast), `TestStat` will be used to check for efficacy and `PrimDelta` will be used to check for futility. 
@@ -185,5 +185,5 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 Explore the following example for more context:
 
-1. [Analyze.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresOutcomeAnalysis/RCode/Analyze.RepeatedMeasures.R)
+1. [Analyze.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresOutcomeAnalysis/R/Analyze.RepeatedMeasures.R)
 

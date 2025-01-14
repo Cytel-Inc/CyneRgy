@@ -35,7 +35,7 @@ navbar:
         examples:
             text: Examples
             menu:
-                - text: Example List
+                - text: Examples Outline
                   href: articles/ExampleOutline.html
                 - text: --------------------
                 - text: Patient Simulation

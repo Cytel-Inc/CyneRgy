@@ -54,7 +54,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Example List</a></li>
+<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Examples Outline</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6></li>
     <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a></li>
@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">January 07, 2025</h4>
+            <h4 data-toc-skip class="date">January 14, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointTreatmentSelection.Rmd</code></div>
@@ -194,27 +194,20 @@ Multiple Looks - Combining P-Values (SU-MAMS-PC)</li>
 <h3 id="in-east">In East<a class="anchor" aria-label="anchor" href="#in-east"></a>
 </h3>
 <p>(to do)</p>
-<p>You can set up an enrollment function in East by navigating to the
-<strong>Use R for Treatment Selection</strong> setting of the
+<p>You can set up a treatment selection function in East by navigating
+to the <strong>Use R For Treatment Selection</strong> setting of the
 <strong>Treatment Selection</strong> tab of a <strong>Simulation
-Input</strong> window, after including the option.</p>
+Input</strong> window.</p>
 <details><summary>
 Follow these steps (click to expand/collapse):
 </summary><ol style="list-style-type: decimal">
 <li>Choose the appropriate test in the <strong>Design</strong> tab.</li>
-<li>If you see the <strong>Design Input</strong> window, compute the
-scenario using the <strong>Compute</strong> button, save the design
-using the <strong>Save in Workbook</strong> button, then navigate to the
-<strong>Simulation Input</strong> window by clicking on the
-<strong>Simulate Design</strong> button under
-<strong>Library</strong>.</li>
-<li>Click on the <strong>Include Options</strong> button on the top
-right corner of the <strong>Simulation Input</strong> window and select
-both <strong>Accrual / Dropouts</strong> and <strong>User Defined R
-Function</strong>.?</li>
-<li>In the tab <strong>User Defined R Function</strong>, a list of tasks
-will appear. Place your cursor in the <strong>File Name</strong> field
-for the task <strong>Generate Arrival Times</strong>.?</li>
+<li>In the <strong>Simulation Input</strong> window, navigate to the tab
+<strong>Treatment Selection</strong> and select <strong>Use R For
+Treatment Selection</strong>.</li>
+<li>A list of tasks will appear. Place your cursor in the <strong>File
+Name</strong> field for the task <strong>Treatment
+Selection</strong>.</li>
 <li>Click on the button <strong>Browse…</strong> to select the
 appropriate R file (<code>filename.r</code>) from your computer. This
 file should contain function(s) written to perform various tasks to be
@@ -228,7 +221,7 @@ function using the button <strong>Add/Edit Variables</strong>.</li>
 </ol>
 <p>For a visual guide of where to find the option, refer to the
 screenshot below:</p>
-<p><img src=""></p>
+<p><img src="treatmentselectionEast.png"></p>
 </details>
 </div>
 </div>
@@ -284,11 +277,10 @@ name. Refer to the table below for more information.</td>
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
-interface (refer to the <a href="IntegrationPointResponse.html#how-to-use-it-in-east-horizon">How
-to Use It in East Horizon</a> section). To access these parameters in
-your R code, use the syntax: <code>UserParam$NameOfTheVariable</code>,
-replacing <code>NameOfTheVariable</code> with the appropriate parameter
-name.</td>
+interface (refer to the <a href="IntegrationPointResponse.html#instructions">Instructions</a>
+section). To access these parameters in your R code, use the syntax:
+<code>UserParam$NameOfTheVariable</code>, replacing
+<code>NameOfTheVariable</code> with the appropriate parameter name.</td>
 </tr>
 </tbody>
 </table>
@@ -615,10 +607,10 @@ the interface.</p>
 <a href="TreatmentSelectionDescription.html"><strong>Multiarm,
 Binary Outcome - Treatment Selection</strong></a>
 <ul>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpThatAreBetterThanCtrl.r" class="external-link">SelectExpThatAreBetterThanCtrl.r</a></li>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpUsingBayesianRule.r" class="external-link">SelectExpUsingBayesianRule.r</a></li>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectExpWithPValueLessThanSpecified.r" class="external-link">SelectExpWithPValueLessThanSpecified.r</a></li>
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/RCode/SelectSpecifiedNumberOfExpWithHighestResponses.r" class="external-link">SelectSpecifiedNumberOfExpWithHighestResponses.r</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpThatAreBetterThanCtrl.r" class="external-link">SelectExpThatAreBetterThanCtrl.r</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpUsingBayesianRule.r" class="external-link">SelectExpUsingBayesianRule.r</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpWithPValueLessThanSpecified.r" class="external-link">SelectExpWithPValueLessThanSpecified.r</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectSpecifiedNumberOfExpWithHighestResponses.r" class="external-link">SelectSpecifiedNumberOfExpWithHighestResponses.r</a></li>
 </ul>
 </li>
 </ol>

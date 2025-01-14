@@ -24,7 +24,7 @@ When creating a custom R script, you can optionally use specific variables provi
 | **ByTime**            | – If `DropMethod = 1`: Vector of Numeric of length `NumVisit`<br>– If `DropMethod = 2`: Numeric | By times for dropout. For `DropMethod = 1`, identical to `VisitTime`.           |
 | **DropParamControl**  | – If `DropMethod = 1`: Vector of Numeric of length `NumVisit`<br>– If `DropMethod = 2`: Numeric | Parameter(s) used to generate dropout times for control arm.                   |
 | **DropParamTrt**      | – If `DropMethod = 1`: Vector of Numeric of length `NumVisit`<br>– If `DropMethod = 2`: Numeric | Parameter(s) used to generate dropout times for treatment arm.                 |
-| **UserParam**         | List                                 | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**         | List                                 | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 
 # Expected Output Variable
@@ -59,7 +59,7 @@ The output list can take one of these three forms.
 |**CensorInd2**|Vector of Integer|Vector of length `NumSub`, containing the generated censor indicator values for all subjects for the second visit:<br>– `0`: Dropout<br>– `1`: Completer|
 |*...*||Censor indicator values for additional visits follow the same format, incrementing the visit number (e.g., CensorInd3, CensorInd4, etc.).    |
 |**CensorIndNumVisit**|Vector of Integer|Final vector of length `NumSub`, containing the generated censor indicator values for all subjects for the last visit:<br>– `0`: Dropout<br>– `1`: Completer<br>`NumVisit` should be replaced by the number of visits.|
-| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 # Minimal Templates
 
@@ -128,4 +128,4 @@ GenCensorInd <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
 Explore the following examples for more context:
 
 1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
-    - [GenerateDropoutTimeForRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateDropoutTimeForRM.R)
+    - [GenerateDropoutTimeForRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM.R)

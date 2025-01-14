@@ -25,7 +25,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |**StdDevControl**|Vector of Numeric|Vector of length `NumVisit`, indicating the control standard deviation for each visit.|
 |**StdDevTrt**|Vector of Numeric|Vector of length `NumVisit`, indicating the treatment standard deviation for each visit.|
 |**CorrMat**|Matrix of Numeric|Matrix of size `NumVisit` $\times$ `NumVisit`, indicating the correlation between all visits.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 
@@ -43,7 +43,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 |**Response2**|Vector of Numeric|Vector of length `NumSub`, containing the generated responses for all subjects for the second visit.|
 |*...*||Responses for additional visits follow the same format, incrementing the visit number (e.g., Response3, Response4, etc.).    |
 |**ResponseNumVisit**|Vector of Numeric|Final vector of length `NumSub`, containing the generated responses for all subjects for the last visit. `NumVisit` should be replaced by the number of visits.|
-| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 # Minimal Template
 
@@ -80,5 +80,5 @@ A detailed template with step-by-step explanations is available here: [SimulateP
 Explore the following example for more context:
 
 1. [**2-Arm, Normal Outcome, Repeated Measures - Patient Simulation**](2ArmNormalRepeatedMeasuresResponseGeneration.html)
-    - [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/RCode/GenerateResponseDiffOfMeansRepeatedMeasures.R)
+    - [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R)
     

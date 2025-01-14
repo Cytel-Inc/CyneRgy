@@ -21,7 +21,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |**NumPrd**|Integer|Number of periods in the trial.|
 |**PrdTime**|Vector of Numeric|Vector or length `NumPrd`, indicating the times for survival parameters. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Starting times of hazard pieces.<br>– If `SurvMethod = 2`: Times at which the cumulative % survivals are specified.<br>– If `SurvMethod = 3`: Defaults to 0.|
 |**SurvParam**|Matrix|Survival parameters dependent on `SurvMethod`:<br>– If `SurvMethod = 1`: Specifies hazard rates per arm per period. Size: `NumPrd` rows $\times$ `NumArm` columns, where `SurvParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 2`: Specifies cumulative % survival rates per arm per period. Size: `NumPrd` rows $\times$ `NumArm` columns, where `SurvParam[i, j]` represents the cumulative % survival for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 3`: Contains median survival times for each arm. Size: 1 row $\times$ 2 columns, where column 1 is control and column 2 is experimental.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [How to Use It in East Horizon](IntegrationPointResponse.html#how-to-use-it-in-east-horizon) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 
@@ -36,7 +36,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **SurvivalTime**   | Vector of Numeric  | Vector of length `NumSub`, containing the generated time to response values for each subject.                  |
-| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 # Minimal Template
 
@@ -62,5 +62,5 @@ A detailed template with step-by-step explanations is available here: [SimulateP
 Explore the following examples for more context:
 
 1. [**2 Arm, Time-To-Event Outcome - Patient Simulation**](2ArmTimeToEventOutcomePatientSimulationDescription.html)
-    - [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/SimulatePatientSurvivalWeibull.R)
-    - [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/SimulatePatientSurvivalMixtureExponentials.R)
+    - [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R)
+    - [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R)
