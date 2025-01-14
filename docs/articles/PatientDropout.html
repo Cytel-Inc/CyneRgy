@@ -120,9 +120,9 @@ Lahoti</h4>
 
     
     
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h2>
+<div class="section level3">
+<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h3>
 <p>For all examples, we assume the trial design consist of control and
 an experimental treatment. Patients may dropout of a trial for a variety
 of reasons such as safety issues, treatment burden or other non-trial
@@ -137,16 +137,26 @@ the following commands:</p>
 <p>Running the command above will load the RStudio project in
 RStudio.</p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/2ArmPatientDropout.Rproj" class="external-link">2ArmPatientDropout.Rproj</a></p>
-<p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmPatientDropout/RCode" class="external-link">RCode
+<p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmPatientDropout/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateCensoringUsingBinomialProportion.R" class="external-link">GenerateCensoringUsingBinomialProportion.R</a></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="external-link">GenerateCensoringUsingBinomialProportion.R</a>
+- Contains a function named GenerateCensoringUsingBinomialProportion to
+demonstrate the R code necessary for Example 1 as described
+below.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="external-link">GenerateDropoutTimeForSurvival.R</a>
+- Contains a function named GenDropoutTimeForSurvival to demonstrate the
+R code necessary for Example 2 as described below.</p></li>
 </ol>
+</div>
+<div class="section level2">
+<h2 id="example-1---dropout-using-binomial-proportion">Example 1 - Dropout Using Binomial Proportion<a class="anchor" aria-label="anchor" href="#example-1---dropout-using-binomial-proportion"></a>
+</h2>
 <p>The R function named “GenerateCensoringUsingBinomialProportion” in
 the file generates the censor ID using the same dropout probability for
 both treatment using rbinom(). In this case, the Dropout probability is
 a common value across both treatments.</p>
-<p>Steps :</p>
+<p>Steps:</p>
 <ul>
 <li>Let pd = Dropout probability.</li>
 <li>Draw a random sample from Bernoulli distribution with p = 1 - pd,
@@ -155,9 +165,10 @@ i.e., Binomial(1, pd) of a size n = NumSub.</li>
 a patient that does NOT drop out, e.g., completer, and 0 for a patient
 that drops out, e.g., non-completer.</li>
 </ul>
-<ol start="2" style="list-style-type: decimal">
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/RCode/GenerateDropoutTimeForSurvival.R" class="external-link">GenerateDropoutTimeForSurvival.R</a></li>
-</ol>
+</div>
+<div class="section level2">
+<h2 id="example-2---dropout-time-for-survival">Example 2 - Dropout Time For Survival<a class="anchor" aria-label="anchor" href="#example-2---dropout-time-for-survival"></a>
+</h2>
 <p>The function named “GenDropoutTimeForSurvival” generates dropout time
 for 2-arm survival design. In this cases, there is an option to provide
 a dropout information for each arm which then is utilized to generate

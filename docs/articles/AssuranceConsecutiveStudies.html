@@ -139,7 +139,7 @@ the following commands:</p>
 RStudio.</p>
 <p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/Assurance.cywx" class="external-link">AssuranceConsecutiveStudies.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/Assurance.Rproj" class="external-link">AssuranceConsecutiveStudies.Rproj</a></p>
-<p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/AssuranceConsecutiveStudies/RCode" class="external-link">RCode
+<p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/AssuranceConsecutiveStudies/R" class="external-link">R
 directory of this example</a> you will find the R files used in the
 examples.</p>
 <p>The examples will all contain two treatments, Standard of Care (S)
@@ -265,9 +265,9 @@ is:</p>
 in the next section. After editing the simulation, on the User Define R
 Functions the Generate Response and Compute Test Statistic are both
 replaced with R code. The Generate Response utilizes the
-SimulatePatientOutcomeNormalAssurance found in the file named <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R" class="external-link">RCode/SimulatePatientOutcomeNormalAssurance.R</a>
+SimulatePatientOutcomeNormalAssurance found in the file named <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link">R/SimulatePatientOutcomeNormalAssurance.R</a>
 and has variables as shown below. For the Compute Test Statistic the
-function name AnalyzeUsingBayesianNormals found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeUsingBayesianNormals.R" class="external-link">RCode/AnalyzeUsingBayesianNormals.R</a>
+function name AnalyzeUsingBayesianNormals found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="external-link">R/AnalyzeUsingBayesianNormals.R</a>
 with input shown below.</p>
 <div class="float">
 <img src="Example1GenerateResponseInput.jpg" alt="Input for generate response in East"><div class="figcaption">Input for generate response in East</div>
@@ -282,9 +282,9 @@ with input shown below.</p>
 <p>The setup in East Horizon Explore is very similar to East. East
 Horizon Explore utilizes the same R functions. In the Responses tab, the
 Generate Response utilizes the SimulatePatientOutcomeNormalAssurance
-found in the file named <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R" class="external-link">RCode/SimulatePatientOutcomeNormalAssurance.R</a>
+found in the file named <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link">R/SimulatePatientOutcomeNormalAssurance.R</a>
 and has variables as shown below. For the Compute Test Statistic the
-function name AnalyzeUsingBayesianNormals found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeUsingBayesianNormals.R" class="external-link">RCode/AnalyzeUsingBayesianNormals.R</a>
+function name AnalyzeUsingBayesianNormals found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="external-link">R/AnalyzeUsingBayesianNormals.R</a>
 with input shown below.</p>
 <div class="float">
 <img src="Example1GenerateResponseSolara.jpg" alt="Input for generate response in East Horizon Explore"><div class="figcaption">Input for generate response in East Horizon
@@ -422,11 +422,11 @@ the survival package. The second file is used to perform the analysis
 using a Cox model. The third required file is used to first simulate the
 true HR from the prior and then simulate the patient data using the
 sampled HR.</p>
-<p>The initialize function InitializeSurvival is found in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/InitializeSurvival.R" class="external-link">RCode/SimulatePatientOutcomeNormalAssurance.R</a>.
+<p>The initialize function InitializeSurvival is found in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/InitializeSurvival.R" class="external-link">R/SimulatePatientOutcomeNormalAssurance.R</a>.
 The function used for analysis is AnalyzeSurivalDataUsingCoxPH, is found
-in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeSurvivalDataUsingCoxPH.R" class="external-link">RCode/AnalyzeSurvivalDataUsingCoxPH.R</a>
+in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeSurvivalDataUsingCoxPH.R" class="external-link">R/AnalyzeSurvivalDataUsingCoxPH.R</a>
 The function used for simulating patient data is
-SimulatePatientOutcomeNormalAssurance and is found in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R" class="external-link">RCode/SimulatePatientOutcomeNormalAssurance.R</a></p>
+SimulatePatientOutcomeNormalAssurance and is found in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link">R/SimulatePatientOutcomeNormalAssurance.R</a></p>
 </div>
 <div class="section level4">
 <h4 id="integration-with-east-1">Integration with East<a class="anchor" aria-label="anchor" href="#integration-with-east-1"></a>
