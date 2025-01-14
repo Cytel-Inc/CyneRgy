@@ -20,7 +20,7 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [ChildhoodAnxiety.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildhoodAnxiety.Rproj)
 
-In this example, we first develop the necessary R code to simulate the patient data as well as a script to call the function and plot example data generated with the new function.   In this example you will find the following R files:
+In this example, we first develop the necessary R code to simulate the patient data as well as a script to call the function and plot example data generated with the new function. In this example you will find the following R files:
 
 1. [ChildPsychology.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildPsychology.R) - This file contains example code that call the patient simulation function. 
 2. [ChildPsychologyV2.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildPsychologyV2.R) - This file contains example code that call the updated patient simulation function. 
@@ -46,7 +46,7 @@ As an example, one simulated data set could look like the following:
 
 
 ```{r echo=FALSE}
-suppressWarnings( source( "ChildPsychology.R") )
+suppressWarnings( source( "ChildPsychology.R" ) )
 ```
 
 
