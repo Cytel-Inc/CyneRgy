@@ -16,7 +16,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |**SimData**|Data Frame|Subject data generated in current simulation, one row per subject. To access these variables in your R code, use the syntax: `SimData$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
 |**DesignParam**|List|Input parameters which may be needed to compute test statistic and perform test. To access these variables in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
 |**LookInfo**|List|Input parameters related to multiple looks which may be needed to compute test statistic and perform test. To access these variables in your R code, use the syntax: `LookInfo$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. Refer to the table below for more information.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointAnalysis.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 ## Variables of SimData
 

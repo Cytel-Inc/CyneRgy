@@ -21,7 +21,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |**NumPrd**|Integer|Number of dropout periods in the trial. Equals to 1 if `DropMethod = 2`.|
 |**PrdTime**|Vector of Numeric|Vector or length `NumPrd`, indicating the times for dropout parameters. Depends on `DropMethod`:<br>– If `DropMethod = 1`: Starting times of dropout periods.<br>– If `DropMethod = 2`: Times at which the probabilities of dropout are specified.|
 |**DropParam**|Matrix|Size: `NumPrd` rows $\times$ `NumArm` columns. Dropout parameters dependent on `DropMethod`:<br>– If `DropMethod = 1`: Specifies dropout hazard rates per arm per period. `DropParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 2`: Specifies cumulative probabilities of dropout per arm per period. `SurvParam[i, j]` represents the probability of dropout for the `jth` arm in the `ith` period.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointDropout.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 
