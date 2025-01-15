@@ -43,8 +43,6 @@ This integration point will be available in East Horizon Explore for the followi
 
 ## In East
 
-(to do)
-
 You can set up a treatment selection function in East by navigating to the **Use R For Treatment Selection** setting of the **Treatment Selection** tab of a **Simulation Input** window.
 
 <details>
