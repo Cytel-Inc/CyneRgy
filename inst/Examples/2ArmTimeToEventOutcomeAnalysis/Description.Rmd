@@ -24,11 +24,11 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [2ArmTimeToEventOutcomeAnalysis.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/2ArmTimeToEventOutcomeAnalysis.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R) you will find the following R files:
 
-1. [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/RCode/AnalyzeUsingEastLogrankFormula.R) - Contains a function named AnalyzeUsingEastLogrankFormula to demonstrate the R code necessary for this example as described below.
-2. [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/RCode/AnalyzeUsingSurvivalPackage.R) - Contains a function named AnalyzeUsingSurvivalPackage to demonstrate the R code necessary for this example as described below.
-3. [AnalyzeUsingHazardRatioLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/RCode/AnalyzeUsingHazardRatioLimitsOfCI.R) - Contains a function named AnalyzeUsingHazardRatioLimitsOfCI to demonstrate the R code necessary for this example as described below.
+1. [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R) - Contains a function named AnalyzeUsingEastLogrankFormula to demonstrate the R code necessary for this example as described below.
+2. [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R) - Contains a function named AnalyzeUsingSurvivalPackage to demonstrate the R code necessary for this example as described below.
+3. [AnalyzeUsingHazardRatioLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R) - Contains a function named AnalyzeUsingHazardRatioLimitsOfCI to demonstrate the R code necessary for this example as described below.
 
 
 ## Example 1 - Two Arm TTE Analysis Using Formulas in the East Manual

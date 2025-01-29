@@ -22,11 +22,11 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [2ArmTimeToEventOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R) you will find the following R files:
 
-1. [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/SimulatePatientSurvivalWeibull.R) - This file provides an example R function to simulate patient time-to-event data from a Weibull distribution.  
+1. [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R) - This file provides an example R function to simulate patient time-to-event data from a Weibull distribution.  
 
-2. [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/SimulatePatientSurvivalMixtureExponentials.R) - This file provides an example R function to simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different exponential distribution for simulating the time-to-event from. 
+2. [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R) - This file provides an example R function to simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different exponential distribution for simulating the time-to-event from. 
 
 
 ## Example 1 - Simulation of Patient Time-To-Event Data from a Weibull Distribution
@@ -39,7 +39,7 @@ To replace the patient outcome simulation, the function used is SimulatePatientS
 
 ```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Constant Hazard from Exponential ##
-#source( "RCode/HelperFunctionsWeibull.R")
+#source( "R/HelperFunctionsWeibull.R")
 
 ComputeHazardWeibull <- function( vTime, dShape, dScale )
 {
@@ -178,5 +178,5 @@ $$
 h(x) = \lambda
 $$
 
-The exponential distribution is a special case of the Weibull and can be obtained by setting the shape parameter, $\alpha=1$, and scale parameter, $\sigma = \frac{1}{\lambda}$.  Functions to help with computation of Weibull parameters are found in [HelperFunctionsWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/RCode/HelperFunctionsWeibull.R).
+The exponential distribution is a special case of the Weibull and can be obtained by setting the shape parameter, $\alpha=1$, and scale parameter, $\sigma = \frac{1}{\lambda}$.  Functions to help with computation of Weibull parameters are found in [HelperFunctionsWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R).
 

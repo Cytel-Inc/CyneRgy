@@ -26,19 +26,19 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [2ArmBinaryOutcomeAnalysis.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.Rproj)
 
-In the [RCode directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R) you will find the following R files:
 
-1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode/AnalyzeUsingEastManualFormula.R) - Contains a function named AnalyzeUsingEastManualFormula to demonstrate the R code necessary for this example as described below.
+1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R) - Contains a function named AnalyzeUsingEastManualFormula to demonstrate the R code necessary for this example as described below.
 
-2.  [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode/AnalyzeUsingPropTest.R) - Contains a function named AnalyzeUsingPropTest to demonstrate the R code necessary for this example as described below.
+2.  [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R) - Contains a function named AnalyzeUsingPropTest to demonstrate the R code necessary for this example as described below.
 
-3.  [AnalyzeUsingPropLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode/AnalyzeUsingPropLimitsOfCI.R) - Contains a function named AnalyzeUsingPropLimitsOfCI to demonstrate the R code necessary for this example as described below.
+3.  [AnalyzeUsingPropLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R) - Contains a function named AnalyzeUsingPropLimitsOfCI to demonstrate the R code necessary for this example as described below.
 
-4.  [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/RCode/AnalyzeUsingBetaBinomial.R) - Contains a function named AnalyzeUsingBetaBinomial to demonstrate the R code necessary for this example as described below.
+4.  [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R) - Contains a function named AnalyzeUsingBetaBinomial to demonstrate the R code necessary for this example as described below.
 
 
 In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type 
-code files in the [FillInTheBlankRCode directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankRCode).  
+code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
 
 ## Example 1 - Two-Arm Binary Analysis Using Formula 28.2 in the East Manual
 

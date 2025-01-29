@@ -1,0 +1,142 @@
+---
+title: 'Integration Point: Randomization'
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
+
+# Description
+
+The Randomization integration point allows you to incorporate custom randomization methods into Cytel products. By specifying a function, you can control how subjects are assigned to designated arms based on your specific requirements, replacing the default complete randomization approach. For example, you can implement advanced randomization techniques such as block randomization, stratified randomization, or cluster randomization.
+
+# Availability
+
+## East Horizon Explore
+
+This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
+
+- **Two Arm Confirmatory**: continuous, continuous with repeated measures, binary, and time-to-event outcomes.
+- ***Two Arm Confirmatory**: dual time-to-event/time-to-event, dual time-to-event/binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
+- ***Multiple Arm Confirmatory**: continuous and binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
+
+## East Horizon Design <span class="badge text-bg-secondary">Coming soon</span>
+
+*This integration point will be available in East Horizon Design in the future.*
+
+## East
+
+<details>
+<summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
+
+- Design, Continuous Endpoint
+    - Two-Sample Test, Parallel Design, Difference of Means (MN-2S-DI)
+- Design, Discrete Endpoint
+    - Two-Sample Test, Parallel Design
+        - Difference of Proportions (PN-2S-DI)
+        - Ratio of Proportions (PN-2S-RA)
+        - Odds Ratio of Proportions (PN-2S-OR)
+- Design, Survival Endpoint
+    - Two-Sample Test, Parallel Design
+        - Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)
+        - Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)
+
+</details>
+
+# Instructions
+
+## In East Horizon Explore
+
+You can set up a response function in East Horizon Explore under **Randomization Method** in a **Design Card** while creating or editing an **Input Set**.
+
+<details>
+<summary>Follow these steps (click to expand/collapse):</summary>
+
+1. Select **User Specified-R** from the dropdown in the **Randomization Method** field in the **Design Card**.
+1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
+1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
+1. Continue creating your project by specifying scenarios for patient Response, Enrollments, etc.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![Screenshot of East Horizon](randomization.png)
+</details>
+
+## In East
+
+You can set up a randomization function in East by navigating to the **Randomize Subjects** task of the **User Defined R Function** tab of a **Simulation Input** window, after including the option.
+
+<details>
+<summary>Follow these steps (click to expand/collapse):</summary>
+
+1. Choose the appropriate test in the **Design** tab.
+1. If you see the **Design Input** window, compute the scenario using the **Compute** button, save the design using the **Save in Workbook** button, then navigate to the **Simulation Input** window by clicking on the **Simulate Design** button under **Library**.
+1. Click on the **Include Options** button on the top right corner of the **Simulation Input** window and select both **Accrual / Dropouts** and **User Defined R Function**.
+1. In the tab **User Defined R Function**, a list of tasks will appear. Place your cursor in the **File Name** field for the task **Randomize Subjects**.
+1. Click on the button **Browse...** to select the appropriate R file (`filename.r`) from your computer. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Specify the function name you want to initialize. To copy the function's name from the R script, click on the button **View**.
+1. Set any required user parameters (variables) as needed for your function using the button **Add/Edit Variables**.
+1. Continue setting up your project.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![](randomizationEast.png)
+</details>
+
+# Input Variables
+
+When creating a custom R script, you can optionally use certain variables provided by East Horizon's or East's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**NumSub**|Integer|Number of subjects in the trial.|
+|**NumArms**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
+|**AllocRatio**|Vector of Numeric|Vector of length `NumArm - 1`, indicating the expected allocation ratios for each treatment arm relative to the control arm ($n_{t_i}/n_c$).|
+| **UserParam**  | List     | Contains all user-defined parameters specified in East Horizon's or East's interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+
+# Expected Output Variable
+
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
+
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `TreatmentID` and `ErrorCode`.                    |
+
+## Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **TreatmentID**   | Vector of Integer  | Vector of length equal to the number of subjects, containing the allocation indices for all subjects:<br>– `0`: Control arm.<br>– `1`: First experimental arm.<br>– etc.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+# Minimal Template
+
+Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in the interface.
+
+```
+Randomize <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
+{
+  nError        	    <- 0 # Error handling (no error)
+  vTreatmentArmIndex 	<- rep( 0, NumSub ) # Initializing response array to 0: in that case all patients are in the control group
+  
+  # Write the actual code here.
+  # Store the generated allocation indices in a vector called vTreatmentArmIndex.
+
+  return( list( TreatmentID = as.Integer( vTreatmentArmIndex ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+A detailed template with step-by-step explanations is available here: [Randomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Randomization.R) 
+
+# Examples
+
+Explore the following examples for more context:
+
+1. [**2-Arm - Randomization of Subjects**](PatientRandomization.html)
+    - [RandomizationSubjectsUsingUniformDistribution.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R)
+    - [RandomizationSubjectsUsingSampleFunctionInR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R)
+    - [BlockRandomizationSubjectsUsingRPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R)
+
+

@@ -1,0 +1,64 @@
+---
+title: "Integration Point: Response - Binary Outcome"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
+
+This integration point and outcome is currently available for the **Two Arm Confirmatory** and **Multiple Arm Confirmatory** Study Objectives.
+
+# Input Variables
+
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
+
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**NumSub**|Integer|Number of subjects in the trial.|
+|**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
+|**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
+|**PropResp**|Vector of Numeric|Vector of length `NumArm`, indicating the expected proportions (probabilities) of responders for each arm. The first element corresponds to the control group, followed by the probabilities for each experimental arm in sequence.|
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+
+# Expected Output Variable
+
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
+
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `Response` and `ErrorCode`.                    |
+
+## Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **Response**   | Vector of Double  | Vector of length `NumSub`, containing the generated binary responses for all subjects (0 or 1).|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+# Minimal Template
+
+Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+```
+GenerateResponse <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
+  
+  # Write the actual code here.
+  # Store the generated binary response values in a vector called vPatientOutcome.
+
+  return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R) 
+
+# Examples
+
+Explore the following examples for more context:
+
+1. [**2-Arm, Binary Outcome - Patient Simulation**](2ArmBinaryOutcomePatientSimulation.html)
+    - [SimulatePatientOutcomePercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.Binary.R)
+    - [SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R)

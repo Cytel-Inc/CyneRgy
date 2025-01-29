@@ -1,0 +1,142 @@
+---
+title: "Integration Point: Analysis"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+<style>
+.button-container {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 15px;
+}
+.button {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+    padding: 30px;
+}
+.button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+.button i {
+    margin-right: 10px;
+}
+</style>
+
+[$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
+
+# Description
+
+The Analysis integration point allows you to customize the statistical test for the treatment effect using a custom R script. This flexibility enables you to implement methods that better align with your trial's specific needs, rather than relying on the built-in default statistical tests. For example:
+
+- **Continuous outcomes**: Instead of using the default difference of means, you could provide a script for alternative approaches such as the ratio of means or a test from the Wilcoxon-Mann-Whitney family.
+- **Binary outcomes**: Instead of the default difference of proportions, you could implement methods such as the ratio of proportions, odds ratio, risk ratio, or other suitable measures.
+- **Time-to-Event outcomes**: Instead of the default Logrank test, you could include scripts for alternative approaches like the Peto-Peto test, which emphasizes early events, or a restricted mean survival time (RMST)-based test, which describes the mean event-free survival time up to a pre-selected time point.
+
+# Availability
+
+## East Horizon Explore
+
+This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
+
+- **Two Arm Confirmatory**: continuous, continuous with repeated measures, binary, and time-to-event outcomes.
+- ***Two Arm Confirmatory**: dual time-to-event/time-to-event, dual time-to-event/binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
+- ***Multiple Arm Confirmatory**: continuous and binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
+
+## East Horizon Design <span class="badge text-bg-secondary">Coming soon</span>
+
+*This integration point will be available in East Horizon Design in the future.*
+
+## East
+
+<details>
+<summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
+
+- Design, Continuous Endpoint
+    - Two-Sample Test, Parallel Design, Difference of Means (MN-2S-DI)
+- Design, Discrete Endpoint
+    - Two-Sample Test, Parallel Design
+        - Difference of Proportions (PN-2S-DI)
+        - Ratio of Proportions (PN-2S-RA)
+        - Odds Ratio of Proportions (PN-2S-OR)
+    - Many-Sample Test
+        - Single Arm Design, Chi-Square for Specified Proportions in C Categories (PN-ns-CH1C)
+        - Parallel Design, Two Group Chi-Square for Specified Proportions in C Categories (PN-ns-CH2C)
+- Design, Survival Endpoint
+    - Two-Sample Test, Parallel Design
+        - Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)
+        - Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)
+
+</details>
+
+# Instructions
+
+## In East Horizon Explore
+
+You can set up an analysis function in East Horizon Explore under **Test** or **Test Statistic** in a **Design Card** while creating or editing an **Input Set**.
+
+<details>
+<summary>Follow these steps (click to expand/collapse):</summary>
+
+1. Select **User Specified-R** from the dropdown in the **Test** field in the **Design Card**. 
+1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
+1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
+1. Continue creating your project.
+
+For a visual guide of where to find the option, refer to the screenshots below:
+
+![](analysis.png)
+
+For Time-to-event outcomes, the option is available under **General** in the **Test Statistic** field.
+
+![](analysis2.png)
+</details>
+
+## In East
+
+You can set up an enrollment function in East by navigating to the **Compute Test Statistic** task of the **User Defined R Function** tab of a **Simulation Input** window, after including the option.
+
+<details>
+<summary>Follow these steps (click to expand/collapse):</summary>
+
+1. Choose the appropriate test in the **Design** tab.
+1. If you see the **Design Input** window, compute the scenario using the **Compute** button, save the design using the **Save in Workbook** button, then navigate to the **Simulation Input** window by clicking on the **Simulate Design** button under **Library**.
+1. Click on the **Include Options** button on the top right corner of the **Simulation Input** window and select both **Accrual / Dropouts** and **User Defined R Function**.
+1. In the tab **User Defined R Function**, a list of tasks will appear. Place your cursor in the **File Name** field for the task **Compute Test Statistic**.
+1. Click on the button **Browse...** to select the appropriate R file (`filename.r`) from your computer. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Specify the function name you want to initialize. To copy the function's name from the R script, click on the button **View**.
+1. Set any required user parameters (variables) as needed for your function using the button **Add/Edit Variables**.
+1. Continue setting up your project.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![](analysisEast.png)
+
+</details>
+
+# Endpoint Types
+
+The input variables, expected output variables, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
+
+:::: {.button-container}
+<a href="IntegrationPointAnalysisContinuous.html" class="button"><i class="fas fa-chart-line"></i> Continuous (Normal) Outcome</a>
+
+<a href="IntegrationPointAnalysisTimeToEvent.html" class="button"><i class="fas fa-hourglass-half"></i> Time-to-Event (Survival) Outcome</a>
+
+<a href="IntegrationPointAnalysisRepeatedMeasures.html" class="button"><i class="fas fa-sync"></i> Continuous (Normal) Outcome with Repeated Measures</a>
+
+<a href="IntegrationPointAnalysisBinary.html" class="button"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
+::::

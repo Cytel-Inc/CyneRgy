@@ -1,6 +1,6 @@
 #   Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Template for simulating patient patient arrival time.  
+#' @title Template for simulating patient arrival time.  
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumPrd Number of time periods that are provided. 
 #' @param PrdStart Vector with start of a time interval 
@@ -40,7 +40,7 @@
         # are applied to have the same functionality as East, see the first example
         
         # EXMAPLE - Set the default if needed
-        #UserParam <- list( dRate = 0.5 )
+        # UserParam <- list( dRate = 0.5 )
     }
     
     # Step 3 - Loop over the patients and simulate the patient arrival times in the trial ####
@@ -53,5 +53,5 @@
         
     }
 
-	return(list(ArrivalTime = as.double(vPatientArrivalTime), ErrorCode =as.integer(Error)))
+	return( list( ArrivalTime = as.double( vPatientArrivalTime ), ErrorCode = as.integer( Error ) ) )
 }

@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
@@ -22,7 +22,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
@@ -36,10 +36,25 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-getting-started" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Getting Started</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-getting-started">
+<li><a class="dropdown-item" href="../articles/Overview.html">Overview</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Integration Specific Points</h6></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointInitialization.html">Initialization</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis (Test Statistic)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment (Arrival Times)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization (Assignment of Subjects)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+  </ul>
+</li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Example List</a></li>
+<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Examples Outline</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6></li>
     <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a></li>
@@ -73,6 +88,14 @@
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -89,9 +112,9 @@
                         <h4 data-toc-skip class="author">Shubham
 Lahoti</h4>
             
-            <h4 data-toc-skip class="date">December 03, 2024</h4>
+            <h4 data-toc-skip class="date">January 16, 2025</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/HEAD/vignettes/PatientRandomization.Rmd" class="external-link"><code>vignettes/PatientRandomization.Rmd</code></a></small>
+
       <div class="d-none name"><code>PatientRandomization.Rmd</code></div>
     </div>
 
@@ -107,15 +130,33 @@ the following commands:</p>
 <p>Running the command above will load the RStudio project in
 RStudio.</p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RandomizeSubjects.Rproj" class="external-link">RandomizeSubjects.Rproj</a></p>
-<p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/RandomizeSubjects/RCode" class="external-link">RCode
+<p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/RandomizeSubjects/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RCode/RandomizationSubjectsUsingUniformDistribution.R" class="external-link">RandomizationSubjectsUsingUniformDistribution.R</a></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R" class="external-link">RandomizationSubjectsUsingUniformDistribution.R</a>
+- Contains a function named
+RandomizationSubjectsUsingUniformDistribution to demonstrate the R code
+necessary for Example 1 as described below.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R" class="external-link">RandomizationSubjectsUsingSampleFunctionInR.R</a>
+- Contains a function named RandomizationSubjectsUsingSampleFunctionInR
+to demonstrate the R code necessary for Example 2 as described
+below.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R" class="external-link">BlockRandomizationSubjectsUsingRPackage.R</a>
+- Contains a function named BlockRandomizationSubjectsUsingRPackage to
+demonstrate the R code necessary for Example 3 as described
+below.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/LoadRandomizeR.R" class="external-link">LoadrandomizeR.R</a>
+- This file is used to install the “randomizeR” package for execution of
+Block Randomization in R.</p></li>
 </ol>
+</div>
+<div class="section level2">
+<h2 id="example-1---randomize-subjects-usings-uniform-distribution">Example 1 - Randomize Subjects Usings Uniform Distribution<a class="anchor" aria-label="anchor" href="#example-1---randomize-subjects-usings-uniform-distribution"></a>
+</h2>
 <p>The R function named “RandomizationSubjectsUsingUniformDistribution”
 in the file randomly allots the subjects to either of two arms using
 Uniform Distribution.</p>
-<p>Steps :</p>
+<p>Steps:</p>
 <ul>
 <li>We generate a random number from Uniform(0, 1). Save it as u.</li>
 <li>Let p = Allocation fraction on control arm and 1 - p = Allocation
@@ -125,9 +166,10 @@ the subject to treatment arm.</li>
 <li>Make sure that Total sample size = Sample size on control + Sample
 size on treatment arm.</li>
 </ul>
-<ol start="2" style="list-style-type: decimal">
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RCode/RandomizationSubjectsUsingSampleFunctionInR.R" class="external-link">RandomizationSubjectsUsingSampleFunctionInR.R</a></li>
-</ol>
+</div>
+<div class="section level2">
+<h2 id="example-2---randomize-subjects-using-sample-function">Example 2 - Randomize Subjects Using Sample Function<a class="anchor" aria-label="anchor" href="#example-2---randomize-subjects-using-sample-function"></a>
+</h2>
 <p>The R function named “RandomizationSubjectsUsingSampleFunctionInR” in
 the file makes use of Sample() function in R to randomly allot the
 patients on control and treatment arm.</p>
@@ -143,9 +185,10 @@ the sample() function available in R.</li>
 then replace the zeroes by 1 for the Indices that correspond to
 treatment.</li>
 </ul>
-<ol start="3" style="list-style-type: decimal">
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RCode/BlockRandomizationSubjectsUsingRPackage.R" class="external-link">BlockRandomizationSubjectsUsingRPackage.R</a></li>
-</ol>
+</div>
+<div class="section level2">
+<h2 id="example-3---randomize-subjects-using-randomizer-package">Example 3 - Randomize Subjects Using randomizeR Package<a class="anchor" aria-label="anchor" href="#example-3---randomize-subjects-using-randomizer-package"></a>
+</h2>
 <p>The function named “BlockRandomizationSubjectsUsingRPackage.R” in the
 file makes use of pbrPar() function from the “randomizeR” library to
 perform the Block randomization.</p>
@@ -160,11 +203,6 @@ set of study participants, called a block. Treatment assignments within
 blocks are determined so that they are random in order but that the
 desired allocation proportions are achieved exactly within each
 block.</p>
-<ol start="4" style="list-style-type: decimal">
-<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RCode/LoadRandomizeR.R" class="external-link">LoadrandomizeR.R</a></li>
-</ol>
-<p>This file is used to install the “randomizeR” package for execution
-of Block Randomization in R.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

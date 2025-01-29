@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
@@ -22,7 +22,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
@@ -36,10 +36,25 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-getting-started" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Getting Started</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-getting-started">
+<li><a class="dropdown-item" href="../articles/Overview.html">Overview</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Integration Specific Points</h6></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointInitialization.html">Initialization</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis (Test Statistic)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment (Arrival Times)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization (Assignment of Subjects)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+  </ul>
+</li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Example List</a></li>
+<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Examples Outline</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6></li>
     <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a></li>
@@ -73,6 +88,14 @@
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -89,9 +112,9 @@
                         <h4 data-toc-skip class="author">J. Kyle Wathen
 and Laurent Spiess</h4>
             
-            <h4 data-toc-skip class="date">December 03, 2024</h4>
+            <h4 data-toc-skip class="date">January 16, 2025</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/HEAD/vignettes/AssuranceConsecutiveStudies.Rmd" class="external-link"><code>vignettes/AssuranceConsecutiveStudies.Rmd</code></a></small>
+
       <div class="d-none name"><code>AssuranceConsecutiveStudies.Rmd</code></div>
     </div>
 
@@ -116,7 +139,7 @@ the following commands:</p>
 RStudio.</p>
 <p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/Assurance.cywx" class="external-link">AssuranceConsecutiveStudies.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/Assurance.Rproj" class="external-link">AssuranceConsecutiveStudies.Rproj</a></p>
-<p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/AssuranceConsecutiveStudies/RCode" class="external-link">RCode
+<p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/AssuranceConsecutiveStudies/R" class="external-link">R
 directory of this example</a> you will find the R files used in the
 examples.</p>
 <p>The examples will all contain two treatments, Standard of Care (S)
@@ -242,9 +265,9 @@ is:</p>
 in the next section. After editing the simulation, on the User Define R
 Functions the Generate Response and Compute Test Statistic are both
 replaced with R code. The Generate Response utilizes the
-SimulatePatientOutcomeNormalAssurance found in the file named <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R" class="external-link">RCode/SimulatePatientOutcomeNormalAssurance.R</a>
+SimulatePatientOutcomeNormalAssurance found in the file named <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link">R/SimulatePatientOutcomeNormalAssurance.R</a>
 and has variables as shown below. For the Compute Test Statistic the
-function name AnalyzeUsingBayesianNormals found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeUsingBayesianNormals.R" class="external-link">RCode/AnalyzeUsingBayesianNormals.R</a>
+function name AnalyzeUsingBayesianNormals found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="external-link">R/AnalyzeUsingBayesianNormals.R</a>
 with input shown below.</p>
 <div class="float">
 <img src="Example1GenerateResponseInput.jpg" alt="Input for generate response in East"><div class="figcaption">Input for generate response in East</div>
@@ -259,9 +282,9 @@ with input shown below.</p>
 <p>The setup in East Horizon Explore is very similar to East. East
 Horizon Explore utilizes the same R functions. In the Responses tab, the
 Generate Response utilizes the SimulatePatientOutcomeNormalAssurance
-found in the file named <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R" class="external-link">RCode/SimulatePatientOutcomeNormalAssurance.R</a>
+found in the file named <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link">R/SimulatePatientOutcomeNormalAssurance.R</a>
 and has variables as shown below. For the Compute Test Statistic the
-function name AnalyzeUsingBayesianNormals found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeUsingBayesianNormals.R" class="external-link">RCode/AnalyzeUsingBayesianNormals.R</a>
+function name AnalyzeUsingBayesianNormals found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="external-link">R/AnalyzeUsingBayesianNormals.R</a>
 with input shown below.</p>
 <div class="float">
 <img src="Example1GenerateResponseSolara.jpg" alt="Input for generate response in East Horizon Explore"><div class="figcaption">Input for generate response in East Horizon
@@ -399,11 +422,11 @@ the survival package. The second file is used to perform the analysis
 using a Cox model. The third required file is used to first simulate the
 true HR from the prior and then simulate the patient data using the
 sampled HR.</p>
-<p>The initialize function InitializeSurvival is found in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/InitializeSurvival.R" class="external-link">RCode/SimulatePatientOutcomeNormalAssurance.R</a>.
+<p>The initialize function InitializeSurvival is found in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/InitializeSurvival.R" class="external-link">R/SimulatePatientOutcomeNormalAssurance.R</a>.
 The function used for analysis is AnalyzeSurivalDataUsingCoxPH, is found
-in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/AnalyzeSurvivalDataUsingCoxPH.R" class="external-link">RCode/AnalyzeSurvivalDataUsingCoxPH.R</a>
+in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeSurvivalDataUsingCoxPH.R" class="external-link">R/AnalyzeSurvivalDataUsingCoxPH.R</a>
 The function used for simulating patient data is
-SimulatePatientOutcomeNormalAssurance and is found in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/RCode/SimulatePatientOutcomeNormalAssurance.R" class="external-link">RCode/SimulatePatientOutcomeNormalAssurance.R</a></p>
+SimulatePatientOutcomeNormalAssurance and is found in the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link">R/SimulatePatientOutcomeNormalAssurance.R</a></p>
 </div>
 <div class="section level4">
 <h4 id="integration-with-east-1">Integration with East<a class="anchor" aria-label="anchor" href="#integration-with-east-1"></a>
