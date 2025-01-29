@@ -1,0 +1,131 @@
+---
+title: "Integration Point: Dropout - Continuous Outcome with Repeated Measures"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Integration Point: Dropout* page](IntegrationPointDropout.html)
+
+This integration point and outcome is currently available for the **Two Arm Confirmatory** Study Objective.
+
+# Input Variables
+
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
+
+| **Variable**         | **Type**                              | **Description**                                                                 |
+|-----------------------|---------------------------------------|---------------------------------------------------------------------------------|
+| **NumSub**            | Integer                              | Number of subjects in the trial.                                               |
+| **NumArm**            | Integer                              | Number of arms in the trial ﴾including placebo/control, and experimental﴿.     |
+| **TreatmentID**       | Vector of Integer                    | Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
+| **DropMethod**        | Integer                              | Selected input method for dropout parameters from the East Horizon dropdown list:<br>– `1`: Cumulative probability of dropout by visit.<br>– `2`: Cumulative probability of dropout by time. |
+| **NumVisit**          | Integer                              | Number of visits. Defaults to 1 if `DropMethod = 2`.                              |
+| **VisitTime**         | Vector of Numeric                    | Vector of length `NumVisit`, indicating the visit times.                        |
+| **ByTime**            | – If `DropMethod = 1`: Vector of Numeric of length `NumVisit`<br>– If `DropMethod = 2`: Numeric | By times for dropout. For `DropMethod = 1`, identical to `VisitTime`.           |
+| **DropParamControl**  | – If `DropMethod = 1`: Vector of Numeric of length `NumVisit`<br>– If `DropMethod = 2`: Numeric | Parameter(s) used to generate dropout times for control arm.                   |
+| **DropParamTrt**      | – If `DropMethod = 1`: Vector of Numeric of length `NumVisit`<br>– If `DropMethod = 2`: Numeric | Parameter(s) used to generate dropout times for treatment arm.                 |
+| **UserParam**         | List                                 | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointDropout.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+
+
+# Expected Output Variable
+
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
+
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `ErrorCode` and one of the following: `DropOutTime`, `DropoutVisitID`, or `CensorInd1`, `CensorInd2`, ..., `CensorIndNumVisit`.             |
+
+The output list can take one of these three forms.
+
+## Option 1: Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **DropOutTime**   | Vector of Numeric  | Vector of length `NumSub`, containing the generated dropout times for each subject. A value of `Inf` indicates that the subject does not drop out. |
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+
+## Option 2: Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **DropoutVisitID**   | Vector of Integer  | Vector of length `NumSub`, containing the visit ID after which each subject drops out.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No Error<br> – `Positive Integer`: Nonfatal Error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal Error, no further simulations will be attempted.                  |
+
+## Option 3: Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+|**CensorInd1**|Vector of Integer|Vector of length `NumSub`, containing the generated censor indicator values for all subjects for the first visit:<br>– `0`: Dropout<br>– `1`: Completer|
+|**CensorInd2**|Vector of Integer|Vector of length `NumSub`, containing the generated censor indicator values for all subjects for the second visit:<br>– `0`: Dropout<br>– `1`: Completer|
+|*...*||Censor indicator values for additional visits follow the same format, incrementing the visit number (e.g., CensorInd3, CensorInd4, etc.).    |
+|**CensorIndNumVisit**|Vector of Integer|Final vector of length `NumSub`, containing the generated censor indicator values for all subjects for the last visit:<br>– `0`: Dropout<br>– `1`: Completer<br>`NumVisit` should be replaced by the number of visits.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+# Minimal Templates
+
+Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R) 
+
+## Minimal Template for Option 1
+
+```
+GenDropTimes <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
+                          DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vDropoutTime     	<- rep( Inf, NumSub ) # Initializing dropout times vector to Inf (all patients are completers)	
+  
+  # Write the actual code here.
+  # Store the generated dropout times in a vector called vDropoutTime.
+  
+  return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+## Minimal Template for Option 2
+
+```
+GenDropVisitID <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
+                            DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vDropoutVisitID   <- rep( 1, NumSub ) # Initializing dropout visit IDs vector to 1 (all patients drop out after first visit)	
+  
+  # Write the actual code here.
+  # Store the generated dropout visit IDs in a vector called vDropoutVisitID.
+  
+  return( list( DropoutVisitID = as.double( vDropoutVisitID ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+## Minimal Template for Option 3
+
+```
+GenCensorInd <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
+                          DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vCensorInd    	<- c()
+  lReturn           <- list()
+  
+  # Add code to simulate the dropout data as desired. 
+  # Example of how to create the return list with CensorInd1, CensorInd2, ..., CensorIndNumVisit.
+  # Store the generated censor indicator values in a vector called vCensorInd for each subject.
+  # Store the response vector in a list called lReturn for each visit.
+  for(i in 1:NumVisit)
+  {
+    strCensorIndName              <- paste0( "CensorInd", i ) # CensorInd1, CensorInd2, ..., CensorIndNumVisit
+    vCensorInd                    <- rep( 1, NumSub ) # Initializing censor array to 1 (all patients are completers)	
+    lReturn[[ strCensorIndName ]] <- as.integer( vCensorInd )
+  }
+  
+  lReturn$ErrorCode <- as.integer( nError )
+  return( lReturn )
+}
+```
+
+# Examples
+
+Explore the following examples for more context:
+
+1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
+    - [GenerateDropoutTimeForRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM.R)

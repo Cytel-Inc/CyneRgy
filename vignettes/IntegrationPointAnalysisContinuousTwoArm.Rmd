@@ -1,0 +1,15 @@
+---
+title: "Integration Point: Analysis - Continuous Outcome, Two Arm"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Integration Point: Analysis - Continuous Outcome* page](IntegrationPointAnalysisContinuous.html)
+
+# Statistical Designs
+
+The input variables, expected output variables, examples, and templates for this integration point depend on the statistical design (selected in the Design Card) you are using. Refer to the relevant pages below:
+
+1. [**Fixed Sample**](IntegrationPointAnalysisContinuousTwoArmFixedSample.html)
+1. [**Group Sequential**](IntegrationPointAnalysisContinuousTwoArmGroupSequential.html)

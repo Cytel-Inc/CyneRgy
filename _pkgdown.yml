@@ -1,19 +1,41 @@
 url: https://Cytel-Inc.github.io/CyneRgy/
 template:
   bootstrap: 5
+  light-switch: true
 
 navbar:
     structure:
-       left: [home, examples, references, contribute]
-       right: [search, github]
+       left: [home, gettingstarted, examples, references, contribute]
+       right: [search, github, lightswitch]
     components:
         home:
             text: Home
             href: index.html
+        gettingstarted:
+            text: Getting Started
+            menu:
+                - text: Overview
+                  href: articles/Overview.html
+                - text: --------------------
+                - text: Integration Specific Points
+                - text: Initialization
+                  href: articles/IntegrationPointInitialization.html
+                - text: Analysis (Test Statistic)
+                  href: articles/IntegrationPointAnalysis.html
+                - text: Enrollment (Arrival Times)
+                  href: articles/IntegrationPointEnrollment.html
+                - text: Randomization (Assignment of Subjects)
+                  href: articles/IntegrationPointRandomization.html
+                - text: Response (Patient Simulation)
+                  href: articles/IntegrationPointResponse.html
+                - text: Dropout
+                  href: articles/IntegrationPointDropout.html
+                - text: Treatment Selection
+                  href: articles/IntegrationPointTreatmentSelection.html
         examples:
             text: Examples
             menu:
-                - text: Example List
+                - text: Examples Outline
                   href: articles/ExampleOutline.html
                 - text: --------------------
                 - text: Patient Simulation
