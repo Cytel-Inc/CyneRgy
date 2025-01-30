@@ -1,11 +1,16 @@
 ---
 title: "2-Arm, Normal Outcome - Patient Simulation"
-author: "J. Kyle Wathen"
+author: "J. Kyle Wathen, Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default
   word_document: default
 ---
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response - Continuous Outcome</strong>.
+  <a href="IntegrationPointResponseContinuous.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
 
 ## Introduction
 
@@ -35,21 +40,267 @@ In addition, if you would like to experiment with these examples without looking
 
 ## Example 1 - Simulation of Patient Normal Data from a Mixture Distribution 
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.R" class="alert-link">SimulatePatientOutcomePercentAtZero.R</a></p>
+</div>
+
+<div class="alert alert-warning" role="alert">
+  <p style="margin-bottom:0">
+  Definition of the user parameters used in this example:
+<ul style="margin-bottom:0"><li>**dProbOfZeroOutcomeCtrl**: Probability a patient is a non-responder (null response) in the control arm.</li><li>**dProbOfZeroOutcomeExp**: Probability a patient is a non-responder (null response) in the experimental arm.</li></ul>
+  </p>
+</div>
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 5
+bigcolxmax = 8
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(2, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox*2
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.3, 5),
+  xmax = rep(7.7, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load probabilities of non-response \n (dProbOfZeroOutcomeCtrl and \n dProbOfZeroOutcomeExp)", 
+            "Loop through patients", 
+            "Simulate whether response is null \n using binomial distribution", 
+            "If not null, simulate response \n using normal distribution", 
+            "Return responses"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(1.5, 1.5),
+  ymax = c(1.8, 1.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+
+print(p)
+```
+
 In this example, the patient outcome is change from baseline. However, there is an unknown proportion of patients that will not respond to treatment, and thus, have a change from baseline of 0, a non-responder.  Using historical data, it is estimated that the proportion of patients that will not respond to treatment is between 20% and 40%. In this example, an R function is provided to help explore the proportion of patients that do not respond and the impact on expected study power. The function used for this example is SimulatePatientOutcomePercentAtZero. The required user-specified parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl and dProbOfZeroOutcomeExp.
 
-1. Example 1.1 - Assume that all patients will respond to treatment. A binomial distribution is utilized to simulate if the patient is a non-responder or a responder. If the patient is a responder, then their outcome is simulated from a normal distribution with the mean and standard deviation provided in East and sent to R. For this example, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.0 and dProbOfZeroOutcomeExp = 0.0.  This example is included to demonstrate using an R function if the data is simulated as it is in East without the use of an R function. 
+### Example 1.1 - All Patients Respond
 
-1. Example 1.2 - This function assumes that 20% of patients, on average, will not respond to treatment. A binomial distribution is utilized to simulate if the patient is a non-responder. If the patient is a responder, then their outcome is simulated from a normal distribution with the mean and standard deviation provided in East and sent to R. For this example, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.2 and dProbOfZeroOutcomeExp = 0.2.
+<div class="alert alert-warning" role="alert">
+  <p style="margin-bottom:0">
+  These user parameters are set in this example:
+<ul style="margin-bottom:0"><li>**dProbOfZeroOutcomeCtrl = 0.0**</li><li>**dProbOfZeroOutcomeExp = 0.0**</li></ul>
+  </p>
+</div>
 
-1.  Example 1.3 - This example is similar to the previous example, however, this function assumes that 40% of patients, on average, will not respond to treatment. For this example, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.4 and dProbOfZeroOutcomeExp = 0.4. 
+Assume that all patients will respond to treatment. A binomial distribution is utilized to simulate if the patient is a non-responder or a responder. If the patient is a responder, then their outcome is simulated from a normal distribution with the mean and standard deviation provided in East and sent to R. For this example, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.0 and dProbOfZeroOutcomeExp = 0.0.  This example is included to demonstrate using an R function if the data is simulated as it is in East without the use of an R function. 
+
+### Example 1.2 - 20% Don't Respond
+
+<div class="alert alert-warning" role="alert">
+  <p style="margin-bottom:0">
+  These user parameters are set in this example:
+<ul style="margin-bottom:0"><li>**dProbOfZeroOutcomeCtrl = 0.2**</li><li>**dProbOfZeroOutcomeExp = 0.2**</li></ul>
+  </p>
+</div>
+
+This function assumes that 20% of patients, on average, will not respond to treatment. A binomial distribution is utilized to simulate if the patient is a non-responder. If the patient is a responder, then their outcome is simulated from a normal distribution with the mean and standard deviation provided in East and sent to R. For this example, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.2 and dProbOfZeroOutcomeExp = 0.2.
+
+### Example 1.3 - 40% Don't Respond
+
+<div class="alert alert-warning" role="alert">
+  <p style="margin-bottom:0">
+  These user parameters are set in this example:
+<ul style="margin-bottom:0"><li>**dProbOfZeroOutcomeCtrl = 0.4**</li><li>**dProbOfZeroOutcomeExp = 0.4**</li></ul>
+  </p>
+</div>
+
+This example is similar to the previous example, however, this function assumes that 40% of patients, on average, will not respond to treatment. For this example, the required parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfZeroOutcomeCtrl = 0.4 and dProbOfZeroOutcomeExp = 0.4. 
 
 ## Example 2 - Simulation of Patient Normal Data from a Mixture Distribution with Mixture Percent Sampled from a Beta Distribution
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.R" class="alert-link">SimulatePatientOutcomePercentAtZeroBetaDist.R</a></p>
+</div>
+
+<div class="alert alert-warning" role="alert">
+  <p style="margin-bottom:0">
+  Definition of the user parameters used in this example:
+<ul style="margin-bottom:0"><li>**dCtrlBetaParam1**: Parameter 1 (alpha) for the Beta Distribution used to get the probability a patient is a non-responder (null response) in the control arm.</li><li>**dCtrlBetaParam2**: Parameter 2 (beta) for the Beta Distribution used to get the probability a patient is a non-responder (null response) in the control arm.</li><li>**dExpBetaParam1**: Parameter 1 (alpha) for the Beta Distribution used to get the probability a patient is a non-responder (null response) in the experimental arm.</li><li>**dExpBetaParam2**: Parameter 2 (beta) for the Beta Distribution used to get the probability a patient is a non-responder (null response) in the experimental arm.</li></ul>
+  </p>
+</div>
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 5
+bigcolxmax = 8
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(0.5, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox*2
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+ymaxsixthbox = yminfifthbox - spaceybox
+yminsixthbox = ymaxsixthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.3, 6),
+  xmax = rep(7.7, 6),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox, ymaxsixthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox, yminsixthbox),
+  label = c("Load Beta parameters \n (dCtrlBetaParam1, dCtrlBetaParam2, \n dExpBetaParam1, dExpBetaParam2)", 
+            "Simulate the probabilities of \n non-response using Beta distribution",
+            "Loop through patients", 
+            "Simulate whether response is null \n using binomial distribution", 
+            "If not null, simulate response \n using normal distribution", 
+            "Return responses"),
+  fill = rep("#cfe2ff", 6)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 5),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 5),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4], flowchart$ymin[5]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5], flowchart$ymax[6])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(-0.1, -0.1),
+  ymax = c(0.2, 0.2),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.8, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+
+print(p)
+```
+
 This function assumes that the probability that a patient is a non-responder is random and follows a Beta distribution. The intent of this option is to incorporate the variability in the unknown probability of null response. In addition, the provided function allows for a different Beta distribution for each treatment, which may be used to understand how a treatment that reduces the likelihood of a null response would perform in the trial. The function used for this example is SimulatePatientOutcomePercentAtZeroBetaDist. The required user-specified parameters are the prior parameters for each treatment, specifically, 1) dCtrlBetaParam1, 2) dCtrlBetaParam2, 3) dExpBetaParam1, 4) dExpBetaParam2.
 
-1. Example 2.1 For this example, independent Beta( 23.1, 55.2 ) are utilized, which have a 95% credible interval of (0.2, 0.4).  This function first simulates the probability of no response from Beta distributions for the control and experimental arms, then uses the simulated probability to simulate the proportion of patients with a null response.  In this example, it is assumed that the two probabilities are sampled from the same distribution but are not identical in a given simulation.  The R code could easily be adapted to accomplish this.  In East, you will need to add variables that are sent to R. For this example, the variable input screen in East would look like: ![Example Input Parameters](Example2_1Variables.png)
+### Example 2.1 - 20%-40% (95% CI) Don't Respond
 
-2. Example 2.2 - For this example, the treatment reduces the probability of null response by 10%, on average, when compared to control. In particular, assume the probability of null response follows a Beta( 23.1, 55.2 ) which has a 95% credible interval of (0.2, 0.4). For experimental treatment assume the probability of no response follows a Beta ( 10.8, 46.3 ) which has a 95% credible interval of (0.1, 0.3). In East, you will need to add variables that are sent to R. For this example, the variable input screen in East would look like: ![Example Input Parameters](Example2_2Variables.png)
+<div class="alert alert-warning" role="alert">
+  <p style="margin-bottom:0">
+  These user parameters are set in this example:
+<ul style="margin-bottom:0"><li>**dCtrlBetaParam1 = 23.1**</li><li>**dCtrlBetaParam2 = 55.2**</li><li>**dExpBetaParam1 = 23.1**</li><li>**dExpBetaParam2 = 55.2**</li></ul>
+  </p>
+</div>
+
+For this example, independent Beta( 23.1, 55.2 ) are utilized, which have a 95% credible interval of (0.2, 0.4).  This function first simulates the probability of no response from Beta distributions for the control and experimental arms, then uses the simulated probability to simulate the proportion of patients with a null response.  In this example, it is assumed that the two probabilities are sampled from the same distribution but are not identical in a given simulation.  The R code could easily be adapted to accomplish this.
+
+### Example 2.2 - 20%-40% (95% CI) of Controls Don't Respond, 10%-30% (95% CI) of Exp Don't Respond
+
+<div class="alert alert-warning" role="alert">
+  <p style="margin-bottom:0">
+  These user parameters are set in this example:
+<ul style="margin-bottom:0"><li>**dCtrlBetaParam1 = 23.1**</li><li>**dCtrlBetaParam2 = 55.2**</li><li>**dExpBetaParam1 = 10.8**</li><li>**dExpBetaParam2 = 46.3**</li></ul>
+  </p>
+</div>
+
+For this example, the treatment reduces the probability of null response by 10%, on average, when compared to control. In particular, assume the probability of null response follows a Beta( 23.1, 55.2 ) which has a 95% credible interval of (0.2, 0.4). For experimental treatment assume the probability of no response follows a Beta ( 10.8, 46.3 ) which has a 95% credible interval of (0.1, 0.3).
 
 
 
