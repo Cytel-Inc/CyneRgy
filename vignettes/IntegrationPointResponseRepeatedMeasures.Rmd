@@ -42,7 +42,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 |**Response1**|Vector of Numeric|Vector of length `NumSub`, containing the generated responses for all subjects for the first visit.|
 |**Response2**|Vector of Numeric|Vector of length `NumSub`, containing the generated responses for all subjects for the second visit.|
 |*...*||Responses for additional visits follow the same format, incrementing the visit number (e.g., Response3, Response4, etc.).    |
-|**ResponseNumVisit**|Vector of Numeric|Final vector of length `NumSub`, containing the generated responses for all subjects for the last visit. `NumVisit` should be replaced by the number of visits.|
+|**Response`NumVisit`**|Vector of Numeric|Final vector of length `NumSub`, containing the generated responses for all subjects for the last visit. `NumVisit` should be replaced by the number of visits.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 # Minimal Template

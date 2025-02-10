@@ -7,9 +7,14 @@ output:
   word_document: default
 ---
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response - Time-to-Event Outcome</strong>.
+  <a href="IntegrationPointResponseTimeToEvent.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
+
 ## Introduction
 
-The following examples demonstrate how to add new patient outcome simulation capabilities into East using an R function in the context of a two-arm trial with a time-to-event patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.
+The following examples demonstrate how to add new patient outcome simulation (*response*) capabilities into East Horizon or East using an R function in the context of a two-arm trial with a time-to-event patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
@@ -28,18 +33,122 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 2. [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R) - This file provides an example R function to simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient groups in the study where each group has a different exponential distribution for simulating the time-to-event from. 
 
-
 ## Example 1 - Simulation of Patient Time-To-Event Data from a Weibull Distribution
 
-In this example, an R function is provided to help explore how to simulate patient data that follows a pattern where hazards and hazard ratio are changing over time and the impact on expected study power. 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R" class="alert-link">SimulatePatientSurvivalWeibull.R</a></p>
+</div>
 
-To replace the patient outcome simulation, the function used is SimulatePatientSurvivalWeibull. The required user-specified parameters are the shape and scale for each arm’s distribution, specifically, dShapeCtrl, dShapeExp, dScaleCtrl, and dScaleExp. 
+In this example, the R function *SimulatePatientSurvivalWeibull* is provided to simulate patient data with hazards and hazard ratios that change over time, allowing for an exploration of their impact on expected study power. Refer to the table below for the definitions of the user-defined parameters used in this example.
 
-1.	Example 1.1 – Assume that the difference in risk of death for patients in the control arm compared to the risk of death for patients in the experimental arm remains the same over time. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East and sent to R. For this example, the required parameters are the shape and scale for each arm, specifically, dShapeCtrl = 1.0, dShapeExp = 1.0, dScaleCtrl = 17.31, and dScaleExp = 23.08. The Scale parameters are computed based on the median Survival time for each arm. This example is included to demonstrate using an R function if the data is simulated as it is in East without the use of an R function. 
+|**User parameter**|**Definition**|
+|---|------|
+|**dShapeCtrl**|Shape parameter of the Weibull distribution for the control arm.|
+|**dShapeExp**|Shape parameter of the Weibull distribution for the experimental arm.|
+|**dScaleCtrl**|Scale parameter of the Weibull distribution for the control arm.|
+|**dScaleExp**|Scale parameter of the Weibull distribution for the experimental arm.|
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 5
+bigcolxmax = 8
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(3.5, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox*2
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.3, 4),
+  xmax = rep(7.7, 4),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
+  label = c("Load Weibull parameters\n (dShapeCtrl, dShapeExp,\n dScaleCtrl, dScaleExp)", 
+            "Loop through patients", 
+            "Simulate survival time\n using Weibull distribution", 
+            "Return survival times"),
+  fill = rep("#cfe2ff", 4)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 3),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3, 3),
+  ymax = c(3.3, 3.3),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
+
+### Example 1.1 – Constant Hazards
+
+Assume that the difference in risk of death for patients in the control arm compared to the risk of death for patients in the experimental arm remains the same over time. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East Horizon or East and sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|---|---|
+|**dShapeCtrl**|1.0|
+|**dShapeExp**|1.0|
+|**dScaleCtrl**|17.31|
+|**dScaleExp**|23.08|
+
+The scale parameters are calculated based on the median survival time for each arm. This example demonstrates that using the R function with these parameters produces the same results as simulating the data directly in East without an R function.
 
 ```{r echo = FALSE, warning=FALSE, message = FALSE}
-# Constant Hazard from Exponential ##
-#source( "R/HelperFunctionsWeibull.R")
+# Constant Hazard Example ###
+
+par(bg = "white")  # Set background to white
 
 ComputeHazardWeibull <- function( vTime, dShape, dScale )
 {
@@ -47,7 +156,6 @@ ComputeHazardWeibull <- function( vTime, dShape, dScale )
     return ( vHaz )
 }
 
- 
 ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 {
     dScale <- dMedian/exp( log( -log( 0.5) )/dShape )
@@ -63,26 +171,33 @@ dShapeExp  <- 1
 dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
 dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 
-# dShapeCtrl 
-# dShapeExp 
-# dScaleCtrl 
-# dScaleExp  
-
 vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
 
 plot( vTime, vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard", main = "Constant Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 0.1))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
-#plot( vTime, vHazExp, type = 'l', main = "Hazard for Exp (Increasing Hazard)")
 plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard Ratio", main = "Hazard Ratio with Constant Hazards")
 
 ```
 
-2.	Example 1.2 – This function assumes that the hazard of death or progression is increasing over time for both arms. The control arm’s hazards, however, increase at a slower rate than the experimental arm’s hazards. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East and sent to R. For this example, the required parameters are the shape and scale for each arm, specifically, dShapeCtrl = 3.0, dShapeExp = 4.0, dScaleCtrl = 13.56, and dScaleExp = 17.54. This example is included to demonstrate using an R function if the data is simulated differently to how it is in East without the use of an R function. 
+### Example 1.2 – Increasing Hazards
+
+This function assumes that the hazard of death or disease progression increases over time in both arms, but at different rates: the control arm's hazard increases more slowly than that of the experimental arm. The time to death or progression is simulated using a Weibull distribution, with shape and scale parameters specified for each arm in East Horizon or East and then sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|---|---|
+|**dShapeCtrl**|3.0|
+|**dShapeExp**|4.0|
+|**dScaleCtrl**|13.56|
+|**dScaleExp**|17.54|
+
+This example demonstrates how an R function can be used to simulate data in a way that differs from East Horizon's or East's default simulation approach.
 
 ```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Increasing Hazard Example ###
+
+par(bg = "white")  # Set background to white
 
 dMedianCtrl <- 12
 dMedianExp  <- 16
@@ -93,12 +208,6 @@ dShapeExp  <- 4
 dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
 dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 
-# dShapeCtrl 
-# dShapeExp 
-# dScaleCtrl 
-# dScaleExp  
-
-
 vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
@@ -107,14 +216,26 @@ plot( vTime, vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard", main
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
 #plot( vTime, vHazExp, type = 'l', main = "Hazard for Exp (Increasing Hazard)")
 plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard Ratio", main = "Hazard Ratio with Increasing Hazards")
-
 ```
 
 
-3.	Example 1.3 – This example is similar to the previous example, however, this function assumes that both the arms’ hazards are decreasing over time. The control arm’s hazards decrease at a slower rate than the experimental arm’s hazards. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East and sent to R. For this example, the required parameters are the shape and scale for each arm, specifically, dShapeCtrl = 0.7, dShapeExp = 0.8, dScaleCtrl = 20.26, and dScaleExp = 25.30. This example is included to demonstrate using an R function if the data is simulated differently to how it is in East without the use of an R function.
+### Example 1.3 – Decreasing Hazards
+
+This example is similar to the previous one, but here the function assumes that hazards decrease over time in both arms. However, the control arm's hazard decreases at a slower rate than that of the experimental arm. The time to death or progression is simulated using a Weibull distribution, with shape and scale parameters specified for each arm in East Horizon or East and then sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|---|---|
+|**dShapeCtrl**|0.7|
+|**dShapeExp**|0.8|
+|**dScaleCtrl**|20.26|
+|**dScaleExp**|25.30|
+
+This example demonstrates how an R function can be used to simulate data differently from East Horizon's or East's default simulation approach.
 
 ```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Decreasing Hazard Example ####
+
+par(bg = "white")  # Set background to white
 
 dMedianCtrl <- 12
 dMedianExp  <- 16
@@ -125,58 +246,81 @@ dShapeExp  <- 0.8
 dScaleCtrl <- ComputeScaleGivenShapeMedian( dShapeCtrl, dMedianCtrl)
 dScaleExp  <- ComputeScaleGivenShapeMedian( dShapeExp, dMedianExp)
 
-# dShapeCtrl 
-# dShapeExp 
-# dScaleCtrl 
-# dScaleExp  
-
 vTime <- seq( 0.01, 50, 0.01)
 vHazCtrl <- ComputeHazardWeibull( vTime, dShapeCtrl, dScaleCtrl )
 vHazExp  <- ComputeHazardWeibull( vTime, dShapeExp, dScaleExp )
 
-
 plot( vTime, vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard", main = "Decreasing Hazards (Ctrl = Black, Exp = Blue)", ylim = c( 0, 1))
 lines( vTime, vHazExp, lty =2, col =4, lwd=2)
 plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard Ratio", main = "Hazard Ratio with Decreasing Hazards")
-
 ```
 
 ## Example 2 - Simulation of Patient Time-To-Event Data from a Mixture of Distributions
 
-Simulate patient data from a mixture of exponential distributions.  The mixture is based on having any number of patient subgroups in the study where each group has a different Exponential distribution for simulating the time-to-event (TTE) from. In the East workbook, four simulations are conducted.   The simulations are:
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R" class="alert-link">SimulatePatientSurvivalMixtureExponentials.R</a></p>
+</div>
 
-1. Both subgroups have the same HR = 0.75 with same median TTE, e.g., subgroup has no impact.
-2. 25% of patients are in subgroup 1, with a median TTE lower than in group 2 and both subgroups have a HR = 0.75.
-3. 25% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has a HR = 0.75.
-4. 40% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has a HR = 0.75.
+This example simulates patient data using a mixture of exponential distributions, allowing for multiple patient subgroups within the study. Each subgroup follows a distinct exponential distribution for modeling time-to-event (TTE), capturing variability in patient outcomes. Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|---|------|
+|**QtyOfSubgroups**|Number of patient subgroups.|
+|**ProbSubgroup1**|Probability a patient is in subgroup 1.|
+|**MedianTTECtrlSubgroup1**|Median time-to-event for a patient in subgroup 1 that receives control treatment.|
+|**MedianTTEExpSubgroup1**|Median time-to-event for a patient in subgroup 1 that receives experimental treatment.|
+|**ProbSubgroup2**|Probability a patient is in subgroup 2.|
+|**MedianTTECtrlSubgroup2**|Median time-to-event for a patient in subgroup 2 that receives control treatment.|
+|**MedianTTEExpSubgroup2**|Median time-to-event for a patient in subgroup 2 that receives experimental treatment.|
+|*...*||Probabilities and median time-to-event for additional subgroups follow the same format, incrementing the subgroup number (e.g., ProbSubgroup3, MedianTTECtrlSubgroup3, MedianTTEExpSubgroup3, etc.).|
+|**ProbSubgroup`QtyOfSubgroups`**|Probability a patient is in the final subgroup. `QtyOfSubgroups` should be replaced by the number of subgroups.|
+|**MedianTTECtrlSubgroup`QtyOfSubgroups`**|Median time-to-event for a patient in the final subgroup that receives control treatment. `QtyOfSubgroups` should be replaced by the number of subgroups.|
+|**MedianTTEExpSubgroup`QtyOfSubgroups`**|Median time-to-event for a patient in the final subgroup that receives experimental treatment. `QtyOfSubgroups` should be replaced by the number of subgroups.|
+
+### Example 2.1
+
+Both subgroups have the same HR = 0.75 with same median TTE, i.e., subgroup has no impact.
+
+### Example 2.2
+
+25% of patients are in subgroup 1, with a median TTE lower than in group 2 and both subgroups have a HR = 0.75.
+
+### Example 2.3
+
+25% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has a HR = 0.75.
+
+### Example 2.4
+
+40% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has a HR = 0.75.
 
 The intent of the example is to illustrate the impact that the patient subgroup may have on the operating characteristics of the design.
 
+## Notes about the Exponential and Weibull Distributions
 
-# Notes about the Exponential and Weibull Distributions
-In R the Weibull distribution has a shape parameter $\alpha$ and scale parameter, $\sigma$ and has a density given by:
-
-$$
-f(x) = \frac{\alpha}{\sigma}\left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
-$$
-
-
-The hazard function is:
+In R, the Weibull distribution is defined by a shape parameter $\alpha$ and a scale parameter $\sigma$, with a probability density function (PDF) given by:
 
 $$
-h(x) = \frac{\alpha}{\sigma}\left( \frac{x}{\sigma}\right)^{\alpha-1}
+f(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
 $$
 
-In R, an Exponential distribution has a rate parameter, $\lambda$ and has density given by:
+Its corresponding hazard function is:
+
+$$
+h(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1}
+$$
+
+The Exponential distribution in R is parameterized by a rate parameter $\lambda$, with a PDF given by:
 
 $$
 f(x) = \lambda e^{-\lambda x}
 $$
-The hazard function is constant:
+
+Its hazard function remains constant:
 
 $$
 h(x) = \lambda
 $$
 
-The exponential distribution is a special case of the Weibull and can be obtained by setting the shape parameter, $\alpha=1$, and scale parameter, $\sigma = \frac{1}{\lambda}$.  Functions to help with computation of Weibull parameters are found in [HelperFunctionsWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R).
+We can see that the Exponential distribution is a special case of the Weibull distribution, obtained by setting the shape parameter $\alpha = 1$ and the scale parameter $\sigma = \frac{1}{\lambda}$.  
 
+Functions to assist in the computation of Weibull parameters can be found in [HelperFunctionsWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R).

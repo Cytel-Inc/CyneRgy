@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">Valeria A. G.
 Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">January 30, 2025</h4>
+            <h4 data-toc-skip class="date">February 10, 2025</h4>
       
 
       <div class="d-none name"><code>2ArmTimeToEventOutcomePatientSimulationDescription.Rmd</code></div>
@@ -120,15 +120,23 @@ Mazzanti, J. Kyle Wathen</h4>
 
     
     
-<div class="section level3">
-<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h3>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+These examples are related to the <strong>Integration Point: Response -
+Time-to-Event Outcome</strong>.
+<a href="IntegrationPointResponseTimeToEvent.html" class="alert-link">Click
+here for more information about this integration point.</a>
+</p>
+</div>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>The following examples demonstrate how to add new patient outcome
-simulation capabilities into East using an R function in the context of
-a two-arm trial with a time-to-event patient outcome. For all examples,
-we assume the trial design consists of standard of care and an
-experimental treatment and the trial design assumes patient outcomes are
-normally distributed.</p>
+simulation (<em>response</em>) capabilities into East Horizon or East
+using an R function in the context of a two-arm trial with a
+time-to-event patient outcome. For all examples, we assume the trial
+design consists of standard of care and an experimental treatment and
+the trial design assumes patient outcomes are normally distributed.</p>
 <p>Once CyneRgy is installed, you can load this example in RStudio with
 the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -151,112 +159,320 @@ different exponential distribution for simulating the time-to-event
 from.</p></li>
 </ol>
 </div>
-<div class="section level3">
-<h3 id="example-1---simulation-of-patient-time-to-event-data-from-a-weibull-distribution">Example 1 - Simulation of Patient Time-To-Event Data from a Weibull
+<div class="section level2">
+<h2 id="example-1---simulation-of-patient-time-to-event-data-from-a-weibull-distribution">Example 1 - Simulation of Patient Time-To-Event Data from a Weibull
 Distribution<a class="anchor" aria-label="anchor" href="#example-1---simulation-of-patient-time-to-event-data-from-a-weibull-distribution"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R" class="external-link alert-link">SimulatePatientSurvivalWeibull.R</a>
+</p>
+</div>
+<p>In this example, the R function
+<em>SimulatePatientSurvivalWeibull</em> is provided to simulate patient
+data with hazards and hazard ratios that change over time, allowing for
+an exploration of their impact on expected study power. Refer to the
+table below for the definitions of the user-defined parameters used in
+this example.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dShapeCtrl</strong></td>
+<td>Shape parameter of the Weibull distribution for the control
+arm.</td>
+</tr>
+<tr class="even">
+<td><strong>dShapeExp</strong></td>
+<td>Shape parameter of the Weibull distribution for the experimental
+arm.</td>
+</tr>
+<tr class="odd">
+<td><strong>dScaleCtrl</strong></td>
+<td>Scale parameter of the Weibull distribution for the control
+arm.</td>
+</tr>
+<tr class="even">
+<td><strong>dScaleExp</strong></td>
+<td>Scale parameter of the Weibull distribution for the experimental
+arm.</td>
+</tr>
+</tbody>
+</table>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<div class="section level3">
+<h3 id="example-1-1-constant-hazards">Example 1.1 – Constant Hazards<a class="anchor" aria-label="anchor" href="#example-1-1-constant-hazards"></a>
 </h3>
-<p>In this example, an R function is provided to help explore how to
-simulate patient data that follows a pattern where hazards and hazard
-ratio are changing over time and the impact on expected study power.</p>
-<p>To replace the patient outcome simulation, the function used is
-SimulatePatientSurvivalWeibull. The required user-specified parameters
-are the shape and scale for each arm’s distribution, specifically,
-dShapeCtrl, dShapeExp, dScaleCtrl, and dScaleExp.</p>
-<ol style="list-style-type: decimal">
-<li>Example 1.1 – Assume that the difference in risk of death for
-patients in the control arm compared to the risk of death for patients
-in the experimental arm remains the same over time. The time to death or
+<p>Assume that the difference in risk of death for patients in the
+control arm compared to the risk of death for patients in the
+experimental arm remains the same over time. The time to death or
 progression of patients is simulated from a Weibull distribution with
-the shape and scale for each arm provided in East and sent to R. For
-this example, the required parameters are the shape and scale for each
-arm, specifically, dShapeCtrl = 1.0, dShapeExp = 1.0, dScaleCtrl =
-17.31, and dScaleExp = 23.08. The Scale parameters are computed based on
-the median Survival time for each arm. This example is included to
-demonstrate using an R function if the data is simulated as it is in
-East without the use of an R function.</li>
-</ol>
-<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
-<ol start="2" style="list-style-type: decimal">
-<li>Example 1.2 – This function assumes that the hazard of death or
-progression is increasing over time for both arms. The control arm’s
-hazards, however, increase at a slower rate than the experimental arm’s
-hazards. The time to death or progression of patients is simulated from
-a Weibull distribution with the shape and scale for each arm provided in
-East and sent to R. For this example, the required parameters are the
-shape and scale for each arm, specifically, dShapeCtrl = 3.0, dShapeExp
-= 4.0, dScaleCtrl = 13.56, and dScaleExp = 17.54. This example is
-included to demonstrate using an R function if the data is simulated
-differently to how it is in East without the use of an R function.</li>
-</ol>
+the shape and scale for each arm provided in East Horizon or East and
+sent to R. Refer to the table below for the values of the user-defined
+parameters used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dShapeCtrl</strong></td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td><strong>dShapeExp</strong></td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td><strong>dScaleCtrl</strong></td>
+<td>17.31</td>
+</tr>
+<tr class="even">
+<td><strong>dScaleExp</strong></td>
+<td>23.08</td>
+</tr>
+</tbody>
+</table>
+<p>The scale parameters are calculated based on the median survival time
+for each arm. This example demonstrates that using the R function with
+these parameters produces the same results as simulating the data
+directly in East without an R function.</p>
 <p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-5-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
-<ol start="3" style="list-style-type: decimal">
-<li>Example 1.3 – This example is similar to the previous example,
-however, this function assumes that both the arms’ hazards are
-decreasing over time. The control arm’s hazards decrease at a slower
-rate than the experimental arm’s hazards. The time to death or
-progression of patients is simulated from a Weibull distribution with
-the shape and scale for each arm provided in East and sent to R. For
-this example, the required parameters are the shape and scale for each
-arm, specifically, dShapeCtrl = 0.7, dShapeExp = 0.8, dScaleCtrl =
-20.26, and dScaleExp = 25.30. This example is included to demonstrate
-using an R function if the data is simulated differently to how it is in
-East without the use of an R function.</li>
-</ol>
+</div>
+<div class="section level3">
+<h3 id="example-1-2-increasing-hazards">Example 1.2 – Increasing Hazards<a class="anchor" aria-label="anchor" href="#example-1-2-increasing-hazards"></a>
+</h3>
+<p>This function assumes that the hazard of death or disease progression
+increases over time in both arms, but at different rates: the control
+arm’s hazard increases more slowly than that of the experimental arm.
+The time to death or progression is simulated using a Weibull
+distribution, with shape and scale parameters specified for each arm in
+East Horizon or East and then sent to R. Refer to the table below for
+the values of the user-defined parameters used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dShapeCtrl</strong></td>
+<td>3.0</td>
+</tr>
+<tr class="even">
+<td><strong>dShapeExp</strong></td>
+<td>4.0</td>
+</tr>
+<tr class="odd">
+<td><strong>dScaleCtrl</strong></td>
+<td>13.56</td>
+</tr>
+<tr class="even">
+<td><strong>dScaleExp</strong></td>
+<td>17.54</td>
+</tr>
+</tbody>
+</table>
+<p>This example demonstrates how an R function can be used to simulate
+data in a way that differs from East Horizon’s or East’s default
+simulation approach.</p>
 <p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-6-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-6-2.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="example-2---simulation-of-patient-time-to-event-data-from-a-mixture-of-distributions">Example 2 - Simulation of Patient Time-To-Event Data from a Mixture
-of Distributions<a class="anchor" aria-label="anchor" href="#example-2---simulation-of-patient-time-to-event-data-from-a-mixture-of-distributions"></a>
+<h3 id="example-1-3-decreasing-hazards">Example 1.3 – Decreasing Hazards<a class="anchor" aria-label="anchor" href="#example-1-3-decreasing-hazards"></a>
 </h3>
-<p>Simulate patient data from a mixture of exponential distributions.
-The mixture is based on having any number of patient subgroups in the
-study where each group has a different Exponential distribution for
-simulating the time-to-event (TTE) from. In the East workbook, four
-simulations are conducted. The simulations are:</p>
-<ol style="list-style-type: decimal">
-<li>Both subgroups have the same HR = 0.75 with same median TTE, e.g.,
-subgroup has no impact.</li>
-<li>25% of patients are in subgroup 1, with a median TTE lower than in
-group 2 and both subgroups have a HR = 0.75.</li>
-<li>25% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2
-has a HR = 0.75.</li>
-<li>40% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2
-has a HR = 0.75.</li>
-</ol>
+<p>This example is similar to the previous one, but here the function
+assumes that hazards decrease over time in both arms. However, the
+control arm’s hazard decreases at a slower rate than that of the
+experimental arm. The time to death or progression is simulated using a
+Weibull distribution, with shape and scale parameters specified for each
+arm in East Horizon or East and then sent to R. Refer to the table below
+for the values of the user-defined parameters used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dShapeCtrl</strong></td>
+<td>0.7</td>
+</tr>
+<tr class="even">
+<td><strong>dShapeExp</strong></td>
+<td>0.8</td>
+</tr>
+<tr class="odd">
+<td><strong>dScaleCtrl</strong></td>
+<td>20.26</td>
+</tr>
+<tr class="even">
+<td><strong>dScaleExp</strong></td>
+<td>25.30</td>
+</tr>
+</tbody>
+</table>
+<p>This example demonstrates how an R function can be used to simulate
+data differently from East Horizon’s or East’s default simulation
+approach.</p>
+<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-7-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="example-2---simulation-of-patient-time-to-event-data-from-a-mixture-of-distributions">Example 2 - Simulation of Patient Time-To-Event Data from a Mixture
+of Distributions<a class="anchor" aria-label="anchor" href="#example-2---simulation-of-patient-time-to-event-data-from-a-mixture-of-distributions"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R" class="external-link alert-link">SimulatePatientSurvivalMixtureExponentials.R</a>
+</p>
+</div>
+<p>This example simulates patient data using a mixture of exponential
+distributions, allowing for multiple patient subgroups within the study.
+Each subgroup follows a distinct exponential distribution for modeling
+time-to-event (TTE), capturing variability in patient outcomes. Refer to
+the table below for the definitions of the user-defined parameters used
+in this example.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>QtyOfSubgroups</strong></td>
+<td>Number of patient subgroups.</td>
+</tr>
+<tr class="even">
+<td><strong>ProbSubgroup1</strong></td>
+<td>Probability a patient is in subgroup 1.</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTECtrlSubgroup1</strong></td>
+<td>Median time-to-event for a patient in subgroup 1 that receives
+control treatment.</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTEExpSubgroup1</strong></td>
+<td>Median time-to-event for a patient in subgroup 1 that receives
+experimental treatment.</td>
+</tr>
+<tr class="odd">
+<td><strong>ProbSubgroup2</strong></td>
+<td>Probability a patient is in subgroup 2.</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTECtrlSubgroup2</strong></td>
+<td>Median time-to-event for a patient in subgroup 2 that receives
+control treatment.</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTEExpSubgroup2</strong></td>
+<td>Median time-to-event for a patient in subgroup 2 that receives
+experimental treatment.</td>
+</tr>
+<tr class="even">
+<td><em>…</em></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>ProbSubgroup<code>QtyOfSubgroups</code></strong></td>
+<td>Probability a patient is in the final subgroup.
+<code>QtyOfSubgroups</code> should be replaced by the number of
+subgroups.</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTECtrlSubgroup<code>QtyOfSubgroups</code></strong></td>
+<td>Median time-to-event for a patient in the final subgroup that
+receives control treatment. <code>QtyOfSubgroups</code> should be
+replaced by the number of subgroups.</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTEExpSubgroup<code>QtyOfSubgroups</code></strong></td>
+<td>Median time-to-event for a patient in the final subgroup that
+receives experimental treatment. <code>QtyOfSubgroups</code> should be
+replaced by the number of subgroups.</td>
+</tr>
+</tbody>
+</table>
+<div class="section level3">
+<h3 id="example-2-1">Example 2.1<a class="anchor" aria-label="anchor" href="#example-2-1"></a>
+</h3>
+<p>Both subgroups have the same HR = 0.75 with same median TTE, i.e.,
+subgroup has no impact.</p>
+</div>
+<div class="section level3">
+<h3 id="example-2-2">Example 2.2<a class="anchor" aria-label="anchor" href="#example-2-2"></a>
+</h3>
+<p>25% of patients are in subgroup 1, with a median TTE lower than in
+group 2 and both subgroups have a HR = 0.75.</p>
+</div>
+<div class="section level3">
+<h3 id="example-2-3">Example 2.3<a class="anchor" aria-label="anchor" href="#example-2-3"></a>
+</h3>
+<p>25% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has
+a HR = 0.75.</p>
+</div>
+<div class="section level3">
+<h3 id="example-2-4">Example 2.4<a class="anchor" aria-label="anchor" href="#example-2-4"></a>
+</h3>
+<p>40% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has
+a HR = 0.75.</p>
 <p>The intent of the example is to illustrate the impact that the
 patient subgroup may have on the operating characteristics of the
 design.</p>
 </div>
+</div>
 <div class="section level2">
 <h2 id="notes-about-the-exponential-and-weibull-distributions">Notes about the Exponential and Weibull Distributions<a class="anchor" aria-label="anchor" href="#notes-about-the-exponential-and-weibull-distributions"></a>
 </h2>
-<p>In R the Weibull distribution has a shape parameter
+<p>In R, the Weibull distribution is defined by a shape parameter
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
-and scale parameter,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
-and has a density given by:</p>
+and a scale parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>,
+with a probability density function (PDF) given by:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>α</mi></msup></mrow></msup></mrow><annotation encoding="application/x-tex">
-f(x) = \frac{\alpha}{\sigma}\left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
+f(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
 </annotation></semantics></math></p>
-<p>The hazard function is:</p>
+<p>Its corresponding hazard function is:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-h(x) = \frac{\alpha}{\sigma}\left( \frac{x}{\sigma}\right)^{\alpha-1}
+h(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1}
 </annotation></semantics></math></p>
-<p>In R, an Exponential distribution has a rate parameter,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
-and has density given by:</p>
+<p>The Exponential distribution in R is parameterized by a rate
+parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>,
+with a PDF given by:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>λ</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi><mi>x</mi></mrow></msup></mrow><annotation encoding="application/x-tex">
 f(x) = \lambda e^{-\lambda x}
-</annotation></semantics></math> The hazard function is constant:</p>
+</annotation></semantics></math></p>
+<p>Its hazard function remains constant:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">
 h(x) = \lambda
 </annotation></semantics></math></p>
-<p>The exponential distribution is a special case of the Weibull and can
-be obtained by setting the shape parameter,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>,
-and scale parameter,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mfrac><mn>1</mn><mi>λ</mi></mfrac></mrow><annotation encoding="application/x-tex">\sigma = \frac{1}{\lambda}</annotation></semantics></math>.
-Functions to help with computation of Weibull parameters are found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R" class="external-link">HelperFunctionsWeibull.R</a>.</p>
+<p>We can see that the Exponential distribution is a special case of the
+Weibull distribution, obtained by setting the shape parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha = 1</annotation></semantics></math>
+and the scale parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mfrac><mn>1</mn><mi>λ</mi></mfrac></mrow><annotation encoding="application/x-tex">\sigma = \frac{1}{\lambda}</annotation></semantics></math>.</p>
+<p>Functions to assist in the computation of Weibull parameters can be
+found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R" class="external-link">HelperFunctionsWeibull.R</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

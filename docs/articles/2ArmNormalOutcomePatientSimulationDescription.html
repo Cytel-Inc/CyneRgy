@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">January 30, 2025</h4>
+            <h4 data-toc-skip class="date">February 10, 2025</h4>
       
 
       <div class="d-none name"><code>2ArmNormalOutcomePatientSimulationDescription.Rmd</code></div>
@@ -132,11 +132,11 @@ here for more information about this integration point.</a>
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>The following examples demonstrate how to add new patient outcome
-simulation capabilities into East using R functions in the context of a
-two-arm trial with a normally distributed patient outcome. For all
-examples, we assume the trial design consists of standard of care and an
-experimental treatment and the trial design assumes patient outcomes are
-normally distributed.</p>
+simulation (<em>response</em>) capabilities into East Horizon or East
+using R functions in the context of a two-arm trial with a normally
+distributed patient outcome. For all examples, we assume the trial
+design consists of standard of care and an experimental treatment and
+the trial design assumes patient outcomes are normally distributed.</p>
 <p>Once CyneRgy is installed, you can load this example in RStudio with
 the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -178,109 +178,122 @@ This example is related to this R file:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.R" class="external-link alert-link">SimulatePatientOutcomePercentAtZero.R</a>
 </p>
 </div>
-<div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">
-Definition of the user parameters used in this example:
-</p>
-<ul style="margin-bottom:0">
-<li>
-<strong>dProbOfZeroOutcomeCtrl</strong>: Probability a patient is a
-non-responder (null response) in the control arm.
-</li>
-<li>
-<strong>dProbOfZeroOutcomeExp</strong>: Probability a patient is a
-non-responder (null response) in the experimental arm.
-</li>
-</ul>
-</div>
+<p>In this example, the patient outcome is measured as a change from
+baseline. However, a certain proportion of patients will not respond to
+treatment, resulting in no change from baseline (i.e., non-responders).
+Based on historical data, this proportion is estimated to be between 20%
+and 40%. The R function <em>SimulatePatientOutcomePercentAtZero</em>,
+provided in the R file, allows users to explore the impact of varying
+proportions of non-responders on the expected study power. Refer to the
+table below for the definitions of the user-defined parameters used in
+this example.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dProbOfZeroOutcomeCtrl</strong></td>
+<td>Value between 0 and 1 representing the probability a patient is a
+non-responder in the control arm.</td>
+</tr>
+<tr class="even">
+<td><strong>dProbOfZeroOutcomeExp</strong></td>
+<td>Value between 0 and 1 representing the probability a patient is a
+non-responder in the experimental arm.</td>
+</tr>
+</tbody>
+</table>
 <p>The figure below illustrates where this example fits within the R
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>
 <p><img src="2ArmNormalOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>In this example, the patient outcome is change from baseline.
-However, there is an unknown proportion of patients that will not
-respond to treatment, and thus, have a change from baseline of 0, a
-non-responder. Using historical data, it is estimated that the
-proportion of patients that will not respond to treatment is between 20%
-and 40%. In this example, an R function is provided to help explore the
-proportion of patients that do not respond and the impact on expected
-study power. The function used for this example is
-SimulatePatientOutcomePercentAtZero. The required user-specified
-parameters are the probability a patient is a non-responder for each
-arm, specifically, dProbOfZeroOutcomeCtrl and dProbOfZeroOutcomeExp.</p>
 <div class="section level3">
 <h3 id="example-1-1---all-patients-respond">Example 1.1 - All Patients Respond<a class="anchor" aria-label="anchor" href="#example-1-1---all-patients-respond"></a>
 </h3>
-<div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">
-These user parameters are set in this example:
-</p>
-<ul style="margin-bottom:0">
-<li>
-<strong>dProbOfZeroOutcomeCtrl = 0.0</strong>
-</li>
-<li>
-<strong>dProbOfZeroOutcomeExp = 0.0</strong>
-</li>
-</ul>
-</div>
 <p>Assume that all patients will respond to treatment. A binomial
-distribution is utilized to simulate if the patient is a non-responder
-or a responder. If the patient is a responder, then their outcome is
-simulated from a normal distribution with the mean and standard
-deviation provided in East and sent to R. For this example, the required
-parameters are the probability a patient is a non-responder for each
-arm, specifically, dProbOfZeroOutcomeCtrl = 0.0 and
-dProbOfZeroOutcomeExp = 0.0. This example is included to demonstrate
-using an R function if the data is simulated as it is in East without
-the use of an R function.</p>
+distribution is used to determine whether a patient is a responder or a
+non-responder. If the patient is a responder, their outcome is simulated
+from a normal distribution using the mean and standard deviation
+specified in East Horizon or East and sent to R. In this example, the
+probability of a patient being a non-responder is set to zero. Refer to
+the table below for the values of the user-defined parameters used in
+this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dProbOfZeroOutcomeCtrl</strong></td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td><strong>dProbOfZeroOutcomeExp</strong></td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<p>This demonstrates that using the R function with a non-responder
+probability of zero produces the same results as simulating the data
+directly with the default engine of East Horizon or East.</p>
 </div>
 <div class="section level3">
-<h3 id="example-1-2---20-dont-respond">Example 1.2 - 20% Don’t Respond<a class="anchor" aria-label="anchor" href="#example-1-2---20-dont-respond"></a>
+<h3 id="example-1-2---20-of-non-responders">Example 1.2 - 20% of Non-Responders<a class="anchor" aria-label="anchor" href="#example-1-2---20-of-non-responders"></a>
 </h3>
-<div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">
-These user parameters are set in this example:
-</p>
-<ul style="margin-bottom:0">
-<li>
-<strong>dProbOfZeroOutcomeCtrl = 0.2</strong>
-</li>
-<li>
-<strong>dProbOfZeroOutcomeExp = 0.2</strong>
-</li>
-</ul>
-</div>
-<p>This function assumes that 20% of patients, on average, will not
-respond to treatment. A binomial distribution is utilized to simulate if
-the patient is a non-responder. If the patient is a responder, then
-their outcome is simulated from a normal distribution with the mean and
-standard deviation provided in East and sent to R. For this example, the
-required parameters are the probability a patient is a non-responder for
-each arm, specifically, dProbOfZeroOutcomeCtrl = 0.2 and
-dProbOfZeroOutcomeExp = 0.2.</p>
+<p>Now, assume that, on average, 20% of patients will not respond to
+treatment. A binomial distribution is used to determine whether a
+patient is a non-responder. If the patient is a responder, their outcome
+is simulated from a normal distribution using the mean and standard
+deviation specified in East or East Horizon and sent to R. Refer to the
+table below for the values of the user-defined parameters used in this
+example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dProbOfZeroOutcomeCtrl</strong></td>
+<td>0.2</td>
+</tr>
+<tr class="even">
+<td><strong>dProbOfZeroOutcomeExp</strong></td>
+<td>0.2</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="example-1-3---40-dont-respond">Example 1.3 - 40% Don’t Respond<a class="anchor" aria-label="anchor" href="#example-1-3---40-dont-respond"></a>
+<h3 id="example-1-3---40-of-non-responders">Example 1.3 - 40% of Non-Responders<a class="anchor" aria-label="anchor" href="#example-1-3---40-of-non-responders"></a>
 </h3>
-<div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">
-These user parameters are set in this example:
-</p>
-<ul style="margin-bottom:0">
-<li>
-<strong>dProbOfZeroOutcomeCtrl = 0.4</strong>
-</li>
-<li>
-<strong>dProbOfZeroOutcomeExp = 0.4</strong>
-</li>
-</ul>
-</div>
-<p>This example is similar to the previous example, however, this
-function assumes that 40% of patients, on average, will not respond to
-treatment. For this example, the required parameters are the probability
-a patient is a non-responder for each arm, specifically,
-dProbOfZeroOutcomeCtrl = 0.4 and dProbOfZeroOutcomeExp = 0.4.</p>
+<p>This example is similar to the previous one, but here we assume that,
+on average, 40% of patients will not respond to treatment. Refer to the
+table below for the values of the user-defined parameters used in this
+example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dProbOfZeroOutcomeCtrl</strong></td>
+<td>0.4</td>
+</tr>
+<tr class="even">
+<td><strong>dProbOfZeroOutcomeExp</strong></td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section level2">
@@ -293,108 +306,127 @@ This example is related to this R file:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.R" class="external-link alert-link">SimulatePatientOutcomePercentAtZeroBetaDist.R</a>
 </p>
 </div>
-<div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">
-Definition of the user parameters used in this example:
-</p>
-<ul style="margin-bottom:0">
-<li>
-<strong>dCtrlBetaParam1</strong>: Parameter 1 (alpha) for the Beta
-Distribution used to get the probability a patient is a non-responder
-(null response) in the control arm.
-</li>
-<li>
-<strong>dCtrlBetaParam2</strong>: Parameter 2 (beta) for the Beta
-Distribution used to get the probability a patient is a non-responder
-(null response) in the control arm.
-</li>
-<li>
-<strong>dExpBetaParam1</strong>: Parameter 1 (alpha) for the Beta
-Distribution used to get the probability a patient is a non-responder
-(null response) in the experimental arm.
-</li>
-<li>
-<strong>dExpBetaParam2</strong>: Parameter 2 (beta) for the Beta
-Distribution used to get the probability a patient is a non-responder
-(null response) in the experimental arm.
-</li>
-</ul>
-</div>
+<p>In this example, the probability of a patient being a non-responder
+is treated as a random variable following a Beta distribution. This
+approach accounts for the uncertainty in the true probability of
+non-response. Additionally, the R function
+<em>SimulatePatientOutcomePercentAtZeroBetaDist</em>, provided in the
+script, allows for different Beta distributions to be assigned to each
+treatment. This feature can help assess how a treatment that reduces the
+likelihood of non-response would impact trial outcomes. Refer to the
+table below for the definitions of the user-defined parameters used in
+this example.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dCtrlBetaParam1</strong></td>
+<td>Parameter 1 (alpha) for the Beta Distribution used to get the
+probability a patient is a non-responder in the control arm.</td>
+</tr>
+<tr class="even">
+<td><strong>dCtrlBetaParam2</strong></td>
+<td>Parameter 2 (beta) for the Beta Distribution used to get the
+probability a patient is a non-responder in the control arm.</td>
+</tr>
+<tr class="odd">
+<td><strong>dExpBetaParam1</strong></td>
+<td>Parameter 1 (alpha) for the Beta Distribution used to get the
+probability a patient is a non-responder in the experimental arm.</td>
+</tr>
+<tr class="even">
+<td><strong>dExpBetaParam2</strong></td>
+<td>Parameter 2 (beta) for the Beta Distribution used to get the
+probability a patient is a non-responder in the experimental arm.</td>
+</tr>
+</tbody>
+</table>
 <p>The figure below illustrates where this example fits within the R
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>
 <p><img src="2ArmNormalOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<p>This function assumes that the probability that a patient is a
-non-responder is random and follows a Beta distribution. The intent of
-this option is to incorporate the variability in the unknown probability
-of null response. In addition, the provided function allows for a
-different Beta distribution for each treatment, which may be used to
-understand how a treatment that reduces the likelihood of a null
-response would perform in the trial. The function used for this example
-is SimulatePatientOutcomePercentAtZeroBetaDist. The required
-user-specified parameters are the prior parameters for each treatment,
-specifically, 1) dCtrlBetaParam1, 2) dCtrlBetaParam2, 3) dExpBetaParam1,
-4) dExpBetaParam2.</p>
 <div class="section level3">
-<h3 id="example-2-1---20-40-95-ci-dont-respond">Example 2.1 - 20%-40% (95% CI) Don’t Respond<a class="anchor" aria-label="anchor" href="#example-2-1---20-40-95-ci-dont-respond"></a>
+<h3 id="example-2-1---20-40-95-ci-of-non-responders">Example 2.1 - 20%-40% (95% CI) of Non-Responders<a class="anchor" aria-label="anchor" href="#example-2-1---20-40-95-ci-of-non-responders"></a>
 </h3>
-<div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">
-These user parameters are set in this example:
-</p>
-<ul style="margin-bottom:0">
-<li>
-<strong>dCtrlBetaParam1 = 23.1</strong>
-</li>
-<li>
-<strong>dCtrlBetaParam2 = 55.2</strong>
-</li>
-<li>
-<strong>dExpBetaParam1 = 23.1</strong>
-</li>
-<li>
-<strong>dExpBetaParam2 = 55.2</strong>
-</li>
-</ul>
-</div>
-<p>For this example, independent Beta( 23.1, 55.2 ) are utilized, which
-have a 95% credible interval of (0.2, 0.4). This function first
-simulates the probability of no response from Beta distributions for the
-control and experimental arms, then uses the simulated probability to
-simulate the proportion of patients with a null response. In this
-example, it is assumed that the two probabilities are sampled from the
-same distribution but are not identical in a given simulation. The R
-code could easily be adapted to accomplish this.</p>
+<p>For this example, independent Beta( 23.1, 55.2 ) distributions are
+used, which have a 95% credible interval of (0.2, 0.4). The function
+first simulates the probability of non-response for both the control and
+experimental arms using these Beta distributions. It then uses the
+simulated probabilities to determine the proportion of patients with a
+null response. Refer to the table below for the values of the
+user-defined parameters used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dCtrlBetaParam1</strong></td>
+<td>23.1</td>
+</tr>
+<tr class="even">
+<td><strong>dCtrlBetaParam2</strong></td>
+<td>55.2</td>
+</tr>
+<tr class="odd">
+<td><strong>dExpBetaParam1</strong></td>
+<td>23.1</td>
+</tr>
+<tr class="even">
+<td><strong>dExpBetaParam2</strong></td>
+<td>55.2</td>
+</tr>
+</tbody>
+</table>
+<p>In this example, it is assumed that the two probabilities are sampled
+from the same distribution but are not identical within a given
+simulation. The R code can be easily adapted to modify this assumption
+if needed.</p>
 </div>
 <div class="section level3">
-<h3 id="example-2-2---20-40-95-ci-of-controls-dont-respond-10-30-95-ci-of-exp-dont-respond">Example 2.2 - 20%-40% (95% CI) of Controls Don’t Respond, 10%-30%
-(95% CI) of Exp Don’t Respond<a class="anchor" aria-label="anchor" href="#example-2-2---20-40-95-ci-of-controls-dont-respond-10-30-95-ci-of-exp-dont-respond"></a>
+<h3 id="example-2-2---20-40-95-ci-of-control-non-responders-10-30-95-ci-of-experimental-non-responders">Example 2.2 - 20%-40% (95% CI) of Control Non-Responders, 10%-30%
+(95% CI) of Experimental Non-Responders<a class="anchor" aria-label="anchor" href="#example-2-2---20-40-95-ci-of-control-non-responders-10-30-95-ci-of-experimental-non-responders"></a>
 </h3>
-<div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">
-These user parameters are set in this example:
-</p>
-<ul style="margin-bottom:0">
-<li>
-<strong>dCtrlBetaParam1 = 23.1</strong>
-</li>
-<li>
-<strong>dCtrlBetaParam2 = 55.2</strong>
-</li>
-<li>
-<strong>dExpBetaParam1 = 10.8</strong>
-</li>
-<li>
-<strong>dExpBetaParam2 = 46.3</strong>
-</li>
-</ul>
-</div>
-<p>For this example, the treatment reduces the probability of null
-response by 10%, on average, when compared to control. In particular,
-assume the probability of null response follows a Beta( 23.1, 55.2 )
-which has a 95% credible interval of (0.2, 0.4). For experimental
-treatment assume the probability of no response follows a Beta ( 10.8,
-46.3 ) which has a 95% credible interval of (0.1, 0.3).</p>
+<p>In this example, the treatment reduces the probability of
+non-response by 10% on average compared to the control. Specifically,
+assume that the probability of non-response in the control group follows
+a Beta( 23.1, 55.2 ) distribution, with a 95% credible interval of (0.2,
+0.4). For the experimental treatment, assume the probability of
+non-response follows a Beta( 10.8, 46.3 ) distribution, with a 95%
+credible interval of (0.1, 0.3). Refer to the table below for the values
+of the user-defined parameters used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dCtrlBetaParam1</strong></td>
+<td>23.1</td>
+</tr>
+<tr class="even">
+<td><strong>dCtrlBetaParam2</strong></td>
+<td>55.2</td>
+</tr>
+<tr class="odd">
+<td><strong>dExpBetaParam1</strong></td>
+<td>10.8</td>
+</tr>
+<tr class="even">
+<td><strong>dExpBetaParam2</strong></td>
+<td>46.3</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
