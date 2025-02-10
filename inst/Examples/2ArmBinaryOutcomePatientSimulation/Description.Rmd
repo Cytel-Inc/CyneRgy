@@ -2,14 +2,16 @@
 title: "2-Arm, Binary Outcome - Patient Simulation"
 author: "J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document: default
-  word_document: default
 ---
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response - Binary Outcome</strong>.
+  <a href="IntegrationPointResponseBinary.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
 
 ## Introduction
 
-The following examples demonstrate how to add new patient outcome simulation capabilities into East using R functions in the context of a 2-arm trial with a binary patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes binary.      
+The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes modeled as binary data.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
@@ -17,7 +19,6 @@ CyneRgy::RunExample( "2ArmBinaryOutcomePatientSimulation" )
 ```
 
 Running the command above will load the RStudio project in RStudio. 
-
 
 **East Workbook**: [2ArmBinaryOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/2ArmBinaryOutcomePatientSimulation.cywx)
 
@@ -31,27 +32,261 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 ## Example 1 - Simulate Binary Data from a Mixture Distribution 
 
-In this example, the patient outcome is binary where a value of 0 represents a treatment failure, e.g., non-response, and a value of 1 is a response. However, there is an unknown proportion of patients that are treatment-resistant and will not respond to treatment, and thus, have an outcome of 0.  Using historical data, it is estimated that the proportion of patients that will not respond to treatment is between 20% and 40%. In this example, an R function is provided to help explore the proportion of patients that are treatment resistant and the impact on expected study power. The function used for this example is SimulatePatientOutcomePercentAtZero.Binary. The required user-specified parameters are the probability a patient is a non-responder for each arm, specifically, dProbOfTreatmentResistantCtrl and dProbOfTreatmentResistantExp.
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.Binary.R" class="alert-link">SimulatePatientOutcomePercentAtZero.Binary.R</a></p>
+</div>
 
-For these examples, a binomial distribution is utilized to simulate if the patient is treatment resistant. If the patient is not treatment resistant, then their outcome is simulated from a binomial distribution with the response in East and sent to R. In the East workbook - Example 1 :
+In this example, the patient outcome is binary, where 0 represents treatment failure (non-response), and 1 indicates a successful response. However, an unknown proportion of patients are treatment-resistant and will not respond, resulting in an outcome of 0. Based on historical data, it is estimated that between 20% and 40% of patients fall into this category. The R function *SimulatePatientOutcomePercentAtZero.Binary* is provided to explore the proportion of treatment-resistant patients and assess its impact on expected study power. In these examples, a binomial distribution is used to determine whether a patient is treatment-resistant. If a patient is not treatment-resistant, their outcome is then simulated from a binomial distribution based on the response probability specified in East Horizon or East and then sent to R. Refer to the table below for the definitions of the user-defined parameters used in this example.
 
-1. Prob(0) = 0, assumes that no patients are treatment resistant. 
+|**User parameter**|**Definition**|
+|---|------|
+|**dProbOfTreatmentResistantCtrl**|Value between 0 and 1 representing the probability a patient is treatment-resistant in the control arm.|
+|**dProbOfTreatmentResistantExp**|Value between 0 and 1 representing the probability a patient is treatment-resistant in the experimental arm.|
 
-1. Prob(0) = 0.2, assumes that 20% of patients are treatment resistant. 
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-1. Prob(0) = 0.4, assumes that 40% of patients are treatment resistant.
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
 
+bigcolxmin = 5
+bigcolxmax = 8
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(2, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox*2
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.3, 5),
+  xmax = rep(7.7, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load probabilities of resistance \n (dProbOfTreatmentResistantCtrl and \n dProbOfTreatmentResistantExp)", 
+            "Loop through patients", 
+            "Simulate whether patient is treatment- \n resistant using binomial distribution", 
+            "If not resistant, simulate response \n using binomial distribution", 
+            "Return responses"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(1.5, 1.5),
+  ymax = c(1.8, 1.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+
+print(p)
+```
+
+### Example 1.1 - All Patients Respond
+
+Assume that no patient will be treatment-resistant. A binomial distribution is used to determine whether a patient is treatment-resistant or not. If the patient is not treatment-resistant, their outcome is simulated from a binomial distribution using the parameters specified in East Horizon or East and sent to R. In this example, the probability of a patient being treatment-resistant is set to zero. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|---|---|
+|**dProbOfTreatmentResistantCtrl**|0.0|
+|**dProbOfTreatmentResistantExp**|0.0|
+
+This demonstrates that using the R function with a treatment resistance probability of zero produces the same results as simulating the data directly with the default engine of East Horizon or East.
+
+### Example 1.2 - 20% of Treatment-Resistant Patients
+
+Now, assume that, on average, 20% of patients will be treatment-resistant. A binomial distribution is used to determine whether a patient is treatment-resistant or not. If the patient is not treatment-resistant, their outcome is simulated from a binomial distribution using the parameters specified in East Horizon or East and sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|---|---|
+|**dProbOfTreatmentResistantCtrl**|0.2|
+|**dProbOfTreatmentResistantExp**|0.2|
+
+### Example 1.3 - 40% of Treatment-Resistant Patients
+
+This example is similar to the previous one, but here we assume that, on average, 40% of patients will be treatment-resistant. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|---|---|
+|**dProbOfTreatmentResistantCtrl**|0.4|
+|**dProbOfTreatmentResistantExp**|0.4|
 
 ## Example 2 - Simulation of Patient Data from a Mixture Distribution with Mixture Percent Sampled from a Beta Distribution
 
-Similar to example 1, in this function, the patient outcome is binary where a value of 0 represent a treatment failure, e.g., non-response, and a value of 1 is a response. However, there is an unknown proportion of patients that are treatment resistant and will not respond to treatment, and thus, have an outcome of 0.This function assumes that the probability that a patient is treatment resistant is random and follows a Beta distribution. The intent of this option is to incorporate the variability in the unknown probability that a patient is treatment resistant. In addition, the provided function allows for a different Beta distribution for each treatment, which may be used to understand how a treatment that reduces the likelihood of a treatment failure would perform in the trial. The function used for this example is SimulatePatientOutcomePercentAtZeroBetaDist.Binary. The required user-specified parameters are the prior parameters for each treatment, specifically, 1) dCtrlBetaParam1, 2) dCtrlBetaParam2, 3) dExpBetaParam1, 4) dExpBetaParam2.
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R" class="alert-link">SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R</a></p>
+</div>
 
-For these examples, a Beta distribution is utilized to simulate if the patient is treatment resistant. If the patient is not treatment resistant, then their outcome is simulated from a binomial distribution with the response in East and sent to R.
+Similar to Example 1, this function models a binary patient outcome, where 0 represents treatment failure (non-response) and 1 indicates a successful response. However, an unknown proportion of patients are treatment-resistant and will not respond, resulting in an outcome of 0. The function *SimulatePatientOutcomePercentAtZeroBetaDist.Binary* assumes that the probability of a patient being treatment-resistant is random and follows a Beta distribution, incorporating variability in the unknown probability of treatment resistance. Additionally, the function allows for a different Beta distribution for each treatment arm, enabling the evaluation of how a treatment that reduces the likelihood of failure would perform in the trial. In these examples, a Beta distribution is used to determine whether a patient is treatment-resistant. If the patient is not treatment-resistant, their outcome is then simulated from a binomial distribution based on the response probability specified in East Horizon or East, with the data sent to R for further analysis. Refer to the table below for the definitions of the user-defined parameters used in this example.
 
-1. Example 2.1 For this example, independent Beta( 23.1, 55.2 ) are utilized, which have a 95% credible interval of (0.2, 0.4).  This function first simulates the probability of null response from the Beta distribution for control and experimental arms, then uses the simulated probability to simulate the proportion of patients with a null response.  In this example, it is assumed that the two probabilities are sampled from the same distribution but are not identical in a given simulation.  The R code could easily be adapted to accomplish this.  In East, you will need to add variables that are sent to R. 
+|**User parameter**|**Definition**|
+|---|------|
+|**dCtrlBetaParam1**|Parameter 1 (alpha) for the Beta Distribution used to get the probability a patient is treatment-resistant in the control arm.|
+|**dCtrlBetaParam2**|Parameter 2 (beta) for the Beta Distribution used to get the probability a patient is treatment-resistant in the control arm.|
+|**dExpBetaParam1**|Parameter 1 (alpha) for the Beta Distribution used to get the probability a patient is treatment-resistant in the experimental arm.|
+|**dExpBetaParam2**|Parameter 2 (beta) for the Beta Distribution used to get the probability a patient is treatment-resistant in the experimental arm.|
 
-2. Example 2.2 - For this example, the treatment reduces the probability of null response by 10%, on average, when compared to control. In particular, assume the probability of null response follows a Beta( 23.1, 55.2 ) which has a 95% credible interval of (0.2, 0.4). For experimental treatment assume the probability of treatment failure follows a Beta ( 10.8, 46.3 ) which has a 95% credible interval of (0.1, 0.3). In East, you will need to add variables that are sent to R. 
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 5
+bigcolxmax = 8
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(0.5, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox*2
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+ymaxsixthbox = yminfifthbox - spaceybox
+yminsixthbox = ymaxsixthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.3, 6),
+  xmax = rep(7.7, 6),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox, ymaxsixthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox, yminsixthbox),
+  label = c("Load Beta parameters \n (dCtrlBetaParam1, dCtrlBetaParam2, \n dExpBetaParam1, dExpBetaParam2)", 
+            "Simulate the probabilities of treatment \n resistance using Beta distribution",
+            "Loop through patients", 
+            "Simulate whether patient is treatment- \n resistant using binomial distribution", 
+            "If not resistant, simulate response \n using binomial distribution", 
+            "Return responses"),
+  fill = rep("#cfe2ff", 6)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 5),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 5),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4], flowchart$ymin[5]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5], flowchart$ymax[6])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(-0.1, -0.1),
+  ymax = c(0.2, 0.2),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.8, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
 
 
+print(p)
+```
 
 
+### Example 2.1 - 20%-40% (95% CI) of Treatment-Resistant Patients
+
+For this example, independent Beta( 23.1, 55.2 ) distributions are used, which have a 95% credible interval of (0.2, 0.4). The function first simulates the probability of treatment resistance for both the control and experimental arms using these Beta distributions. It then uses the simulated probabilities to determine the proportion of treatment-resistant patients. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|---|---|
+|**dCtrlBetaParam1**|23.1|
+|**dCtrlBetaParam2**|55.2|
+|**dExpBetaParam1**|23.1|
+|**dExpBetaParam2**|55.2|
+
+In this example, it is assumed that the two probabilities are sampled from the same distribution but are not identical within a given simulation. The R code can be easily adapted to modify this assumption if needed.
+
+### Example 2.2 - 20%-40% (95% CI) of Control Treatment-Resistant Patients, 10%-30% (95% CI) of Experimental Treatment-Resistant Patients
+
+In this example, the treatment reduces the probability of treatment resistance by 10% on average compared to the control. Specifically, assume that the probability of being treatment-resistant in the control group follows a Beta( 23.1, 55.2 ) distribution, with a 95% credible interval of (0.2, 0.4). For the experimental treatment, assume the probability of being treatment-resistant follows a Beta( 10.8, 46.3 ) distribution, with a 95% credible interval of (0.1, 0.3). Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|---|---|
+|**dCtrlBetaParam1**|23.1|
+|**dCtrlBetaParam2**|55.2|
+|**dExpBetaParam1**|10.8|
+|**dExpBetaParam2**|46.3|
