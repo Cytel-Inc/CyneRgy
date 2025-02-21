@@ -8,10 +8,10 @@
 #'        \describe
 #'        {
 #'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
-#'          \item{ArrTimeVisit[VisitID]}{A numeric value with the time the patient arrived in the trial for the [VisitID]th visit.}
+#'          \item{ArrTimeVisit<VisitID>}{A numeric value with the time the patient arrived in the trial for the <VisitID>th visit.}
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
-#'          \item{Response[VisitID]}{Numeric value for the response from the patient at the [VisitID]th visit. }
-#'          \item{CensorInd[VisitID]}{A binary (0-1) value where 1 indicates that the patient was censored at the [VisitID]th visit.}
+#'          \item{Response<VisitID>}{Numeric value for the response from the patient at the <VisitID>th visit. }
+#'          \item{CensorInd<VisitID>}{A binary (0-1) value where 1 indicates that the patient was censored at the <VisitID>th visit.}
 #'          \item{DropoutVisitID}{An integer value which indicates the ID of the visit where the patient was censored. }
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
@@ -94,85 +94,92 @@
 #'                      
 Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-  library(CyneRgy)
+    # This example is for the case of no dropouts only
+    nError <- 0
+    nDecision <- 0
+    dPrimDelta <- 0
+    dSecDelta <- 0
     
-  # This example is for the case of no dropouts only
-  nError <- 0
-  nDecision <- 0
-  dPrimDelta <- 0
-  dSecDelta <- 0
-  
-  # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
-  if(  !is.null( LookInfo )  )
-  {
-    nQtyOfLooks          <- LookInfo$NumLooks
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfPatsForInterim <- LookInfo$CumCompleters[ nLookIndex ]
-    nAnalysisVisit       <- LookInfo$InterimVisit
-    RejType              <- LookInfo$RejType
-    TailType             <- DesignParam$TailType
-  } else
-  {
-    nLookIndex           <- 1
-    nQtyOfLooks          <- 1
-    nQtyOfPatsForInterim <- nrow( SimData )
-    TailType             <- DesignParam$TailType
-  }
-
-  dfWideData <- data.frame(id = 1:DesignParam$SampleSize, TreatmentID = SimData$TreatmentID)
-  vResponseColumns <- c()
-  vVisitTimesColumns <- c()
-  for (i in 1:DesignParam$NumVisit) {
-      dfWideData[[paste0("Response", i)]] <- SimData[, paste0("Response",i)]
-      vResponseColumns <- c(vResponseColumns, paste0("Response", i))
-      dfWideData[[paste0("CalendarVisitTime", i)]] <- SimData[,'ArrivalTime'] + SimData[, paste0("ArrTimeVisit", i)]
-      vVisitTimesColumns <- c(vVisitTimesColumns, paste0("CalendarVisitTime", i))
-  }
-  
-  dfLongData <- reshape(dfWideData, varying = c(vResponseColumns, vVisitTimesColumns),
-                      direction = "long", sep = "", idvar = "id", timevar = "Visit")
-  dfLongData <- dfLongData[order(dfLongData$Visit, dfLongData$CalendarVisitTime),]
-  
-  if(  !is.null( LookInfo )  )
-  {
-      dAnalysisTime <- dfLongData[dfLongData[['Visit']] == nAnalysisVisit, ][nQtyOfPatsForInterim, "CalendarVisitTime"]
-      
-      if (LookInfo$IncludePipeline == 0)
-      {
-          vSubjectsForAnalysis <- unique(dfLongData[dfLongData[['Visit']] == nAnalysisVisit & dfLongData[['CalendarVisitTime']] <= dAnalysisTime, 'id'])
-      } else 
-      {
-          vSubjectsForAnalysis <- unique(dfLongData[dfLongData[['CalendarVisitTime']] <= dAnalysisTime, 'id'])
-      }
-      
-      dfAnalysisData <- dfLongData[dfLongData[['id']] %in% vSubjectsForAnalysis, ]
-  } else
-  {
-      dfAnalysisData <- dfLongData
-  }
-  
-  
-  mmrm <- gls(Response ~ TreatmentID,
-              na.action = na.omit, data = dfAnalysisData,
-              correlation = nlme::corSymm(form = ~ Visit | id),
-              weights = nlme::varIdent(form = ~ 1|Visit))
-  
-  dpValue <- summary(mmrm)$tTable["TreatmentID", "p-value"]
-  
-  # Get group sequential boundaries
-  if( !is.null( LookInfo ) ){
-      vGroupSequentialBoundaries <- getDesignGroupSequential(kMax = nQtyOfLooks, alpha = DesignParam$Alpha, sided = 1, typeOfDesign = "OF")
-      dAlpha <- vGroupSequentialBoundaries$alphaSpent[nLookIndex]
-  } else
-  {
-      dAlpha <- DesignParam$Alpha
-  }
-
-  # Generate decision using GetDecisionString and GetDecision helpers
-  strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                             bIAEfficacyCondition = dpValue <= dAlpha,
-                                             bFAEfficacyCondition = dpValue <= dAlpha)
-  nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-  
-  return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDelta), SecDelta = as.double(dSecDelta), ErrorCode = as.integer(nError)))
+    if(  !is.null( LookInfo )  )
+    {
+        nQtyOfLooks          <- LookInfo$NumLooks
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfPatsForInterim <- LookInfo$CumCompleters[ nLookIndex ]
+        nAnalysisVisit       <- LookInfo$InterimVisit
+    } else
+    {
+        nLookIndex           <- 1
+        nQtyOfLooks          <- 1
+        nQtyOfPatsForInterim <- nrow( SimData )
+    }
+    
+    dfWideData <- data.frame(id = 1:DesignParam$SampleSize, TreatmentID = SimData$TreatmentID)
+    vResponseColumns <- c()
+    vVisitTimesColumns <- c()
+    for (i in 1:DesignParam$NumVisit) {
+        dfWideData[[paste0("Response", i)]] <- SimData[, paste0("Response",i)]
+        vResponseColumns <- c(vResponseColumns, paste0("Response", i))
+        dfWideData[[paste0("CalendarVisitTime", i)]] <- SimData[,'ArrivalTime'] + SimData[, paste0("ArrTimeVisit", i)]
+        vVisitTimesColumns <- c(vVisitTimesColumns, paste0("CalendarVisitTime", i))
+    }
+    
+    dfLongData <- reshape(dfWideData, varying = c(vResponseColumns, vVisitTimesColumns),
+                          direction = "long", sep = "", idvar = "id", timevar = "Visit")
+    dfLongData <- dfLongData[order(dfLongData$Visit, dfLongData$CalendarVisitTime),]
+    
+    if(  !is.null( LookInfo )  )
+    {
+        dAnalysisTime <- dfLongData[dfLongData[['Visit']] == nAnalysisVisit, ][nQtyOfPatsForInterim, "CalendarVisitTime"]
+        
+        if (LookInfo$IncludePipeline == 0)
+        {
+            vSubjectsForAnalysis <- unique(dfLongData[dfLongData[['Visit']] == nAnalysisVisit & dfLongData[['CalendarVisitTime']] <= dAnalysisTime, 'id'])
+        } else 
+        {
+            vSubjectsForAnalysis <- unique(dfLongData[dfLongData[['CalendarVisitTime']] <= dAnalysisTime, 'id'])
+        }
+        
+        dfAnalysisData <- dfLongData[dfLongData[['id']] %in% vSubjectsForAnalysis, ]
+    } else
+    {
+        dfAnalysisData <- dfLongData
+    }
+    
+    
+    mmrm <- gls(Response ~ TreatmentID,
+                na.action = na.omit, data = dfAnalysisData,
+                correlation = nlme::corSymm(form = ~ Visit | id),
+                weights = nlme::varIdent(form = ~ 1|Visit))
+    
+    dpValue <- summary(mmrm)$tTable["TreatmentID", "p-value"]
+    
+    # Get group sequential boundaries
+    if( !is.null( LookInfo ) ){
+        vGroupSequentialBoundaries <- getDesignGroupSequential(kMax = nQtyOfLooks, alpha = DesignParam$Alpha, sided = 1, typeOfDesign = "OF")
+        dAlpha <- vGroupSequentialBoundaries$alphaSpent[nLookIndex]
+    } else
+    {
+        dAlpha <- DesignParam$Alpha
+    }
+    
+    # Check for efficacy
+    if(dpValue <= dAlpha)
+    {
+        nDecision <- 2
+    } else
+    {
+        nDecision <- 0 
+    }
+    
+    if( nDecision == 0 )
+    {
+        # At the final analysis we want to make a futility if efficacy was not achieved.
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
+    }
+    
+    return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDelta), SecDelta = as.double(dSecDelta), ErrorCode = as.integer(nError)))
 }

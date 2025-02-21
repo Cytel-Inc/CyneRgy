@@ -7,33 +7,33 @@
 #'        this data frame. For analysis the most relevant variables are:
 #'        \describe
 #'        {
-#'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}
-#'          \item{ArrTimeVisit[VisitID]}{A numeric value with the time the patient arrived in the trial for the [VisitID]th visit.}
+#'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
+#'          \item{ArrTimeVisit<VisitID>}{A numeric value with the time the patient arrived in the trial for the <VisitID>th visit.}
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
-#'          \item{Response[VisitID]}{Numeric value for the response from the patient at the [VisitID]th visit.}
-#'          \item{CensorInd[VisitID]}{A binary (0-1) value where 1 indicates that the patient was censored at the [VisitID]th visit.}
-#'          \item{DropoutVisitID}{An integer value which indicates the ID of the visit where the patient was censored.}
+#'          \item{Response<VisitID>}{Numeric value for the response from the patient at the <VisitID>th visit. }
+#'          \item{CensorInd<VisitID>}{A binary (0-1) value where 1 indicates that the patient was censored at the <VisitID>th visit.}
+#'          \item{DropoutVisitID}{An integer value which indicates the ID of the visit where the patient was censored. }
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
 #'      may need to compute test statistic and perform test. User should access the variables
-#'      using names for e.g., DesignParam$Alpha and not order. Them items are as follows:
+#'      using names for eg. DesignParam$Alpha and not order.  Them items are as follows:
 #'      \describe{
 #'          \item{SampleSize}{Sample size of the trial}
 #'          \item{Alpha}{Type I Error}
-#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2}
+#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2 }
 #'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
-#'          \item{LowerAlpha}{Two Sided Asymmetric Tests}
-#'          \item{UpperAlpha}{Two Sided Asymmetric Tests}
+#'          \item{LowerAlpha}{Two Sided Asymmetric Tests }
+#'          \item{UpperAlpha}{Two Sided Asymmetric Tests }
 #'          \item{MaxCompleters}{Maximum Completers for a Continuous ep design}
-#'          \item{ResponseLag}{Fixed Followup time between first visit and Final visit}
-#'          \item{AllocInfo}{Allocation ratio on Control and Experimental arm}
+#'          \item{ResponseLag}{Fixed Followup time between first visit and Final visit }
+#'          \item{AllocInfo}{Allocation ratio on Control and Experimental arm }
 #'          \item{CriticalPoint}{Z Critical value for a given Alpha}
 #'          \item{NumVisit}{Integer number of visits in a Design}
 #'          \item{VisitTime}{Numeric vector containing visit times}
-#'          \item{VisitStatus}{Integer vector indicating the visit selection status. 0 - Visit selected for analysis. 1 - Otherwise}
-#'          \item{PrimContrastCoeff}{Numeric vector containing Primary Contrast Coefficient per visit}
-#'          \item{SecContrastCoeff}{Numeric vector containing Secondary Contrast Coefficient per visit}
-#'          \item{DropImpt}{Integer value for Dropout imputation method. 1 indicates None, 0 indicates LOCF}
+#'          \item{VisitStatus}{Integer vector indicating the visit selection status. 0 - Visit selected for analysis. 1 - Otherwise }
+#'          \item{PrimContrastCoeff}{Numeric vector containing Primary Contrast Coefficient per visit }
+#'          \item{SecContrastCoeff}{Numeric vector containing Secondary Contrast Coefficient per visit }
+#'          \item{DropImpt}{Integer value for Dropout imputation method. 1 indicates None, 0 indicates LOCF }
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
 #'                 and perform test. User should access the variables using names, 
@@ -72,7 +72,7 @@
 #'                                    }
 #'                  \item{ErrorCode}{ Optional value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
@@ -92,43 +92,26 @@
 #'                      }
 #'                      
 #'                      
-{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-     library(CyneRgy)
+    nError        <- 0
+    nDecision     <- 0
+    dPrimDeltaEst <- 0
+    dSecDeltaEst  <- 0
     
-     nError           <- 0
-     nDecision        <- 0
-     dPrimDeltaEst    <- 0
-     dSecDeltaEst     <- 0
-     bIAEfficayCheck  <- TRUE
-     bIAFutilityCheck <- FALSE
-     bFAEfficacyCheck <- TRUE
-     
-     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
-     # Retrieve necessary information from the objects East sent. You may not need all the variables ####
-     if(  !is.null( LookInfo )  )
-     {
-         nQtyOfLooks          <- LookInfo$NumLooks
-         nLookIndex           <- LookInfo$CurrLookIndex
-         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-         RejType              <- LookInfo$RejType
-         TailType             <- DesignParam$TailType
-     }
-     else
-     {
-         nQtyOfLooks          <- 1
-         nLookIndex           <- 1
-         nQtyOfPatsInAnalysis <- nrow( SimData )
-         TailType             <- DesignParam$TailType
-     }
-     
-     # Generate decision using GetDecisionString and GetDecision helpers
-     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                                bIAEfficacyCondition = bIAEfficayCheck,
-                                                bIAFutilityCondition = bIAFutilityCheck,
-                                                bFAEfficacyCondition = bFAEfficacyCheck)
-     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-     
-     
-     return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDeltaEst), SecDelta = as.double(dSecDeltaEst), ErrorCode = as.integer(nError)))
+    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
+    nLookIndex           <- 1 
+    if(  !is.null( LookInfo )  )
+    {
+        nQtyOfLooks          <- LookInfo$NumLooks
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    }
+    else
+    {
+        nQtyOfLooks          <- 1
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+    }
+    
+    return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDeltaEst), SecDelta = as.double(dSecDeltaEst), ErrorCode = as.integer(nError)))
 }

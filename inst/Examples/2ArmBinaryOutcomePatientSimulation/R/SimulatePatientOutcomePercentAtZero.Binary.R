@@ -20,7 +20,7 @@
 #'  UserParam$dProbOfTreatmentReistantExp
 #'  Step 2: If the value in Step 1, indicating the patient is treatment resistant then their outcome is set to 0, otherwise the simulate their
 #'  outcome from a binomial distribution using the response probabilities provided in PropRest.  
-SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+SimulatePatientOutcomePercentAtZero.Binary <- function(NumSub, NumArm, TreatmentID, PropResp,UserParam = NULL)
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file
@@ -68,5 +68,5 @@ SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, Treatmen
     if(  any( is.na( vPatientOutcome )==TRUE) )
         nError <- -100
    
-    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))
 }

@@ -42,7 +42,7 @@
 #'                                    }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
@@ -64,10 +64,10 @@
 
 AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    library(CyneRgy)
-    library(survival)
-    
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # saveRDS( SimData,     "SimData.Rds")
+    # saveRDS( DesignParam, "DesignParam.Rds" )
+    # saveRDS( LookInfo,    "LookInfo.Rds" )
+    # Retrieve necessary information from the objects East sent
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
@@ -76,8 +76,6 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
         CumEvents            <- LookInfo$InfoFrac*DesignParam$MaxEvents
         nQtyOfEvents         <- CumEvents[ nLookIndex ]
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
-        RejType              <- LookInfo$RejType
-        TailType             <- DesignParam$TailType
     }
     else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
@@ -85,9 +83,8 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
         nLookIndex           <- 1
         nQtyOfEvents         <- DesignParam$MaxEvents
         dEffBdry             <- DesignParam$CriticalPoint
-        TailType             <- DesignParam$TailType
     }
-
+    
     SimData$TimeOfEvent      <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
     
     # Compute the time of analysis 
@@ -103,7 +100,7 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     SimData                  <- SimData[ order( SimData$ObservedTime), ]
     
     # Compute Observed HR
-
+    
     coxModel                 <- coxph(Surv(ObservedTime, Event) ~ TreatmentID, data = SimData)
     dTrueHR                  <- exp(coxModel$coefficients)
     
@@ -154,12 +151,19 @@ AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL
     
     # Compute the logrank test statistic
     dTS       <- dNum/sqrt( dDen )
-
-    # Generate decision using GetDecisionString and GetDecision helpers
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = dTS <  dEffBdry, 
-                                               bFAEfficacyCondition = dTS <  dEffBdry)
-    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+    
+    # A decision of 1 means success, 0 means continue the trial
+    nDecision <- ifelse( dTS < dEffBdry, 1, 0 )
+    
+    if( nDecision == 0 )
+    {
+        # Did not hit efficacy, so check futility 
+        # We are at the FA, efficacy decision was not made yet so the decision is futility
+        if( nLookIndex == nQtyOfLooks ) 
+        {
+            nDecision <- 3 # Code for futility 
+        }
+    }
     
     Error    <- 0
     

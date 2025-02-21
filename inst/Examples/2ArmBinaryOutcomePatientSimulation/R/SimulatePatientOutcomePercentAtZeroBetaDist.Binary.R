@@ -17,7 +17,7 @@
 #' The probability of 0 outcome on the control treatment is sampled from a Beta( UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 ) distribution.
 #' The probability of 0 outcome on the experimental treatment is sampled from a Beta( UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution.
 #' The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.  
-SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function(NumSub, NumArm, TreatmentID, PropResp,UserParam = NULL)
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file
@@ -67,6 +67,6 @@ SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function( NumSub, NumArm, 
     if(  any( is.na( vPatientOutcome )==TRUE) )
         nError <- -100
     
-    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))
     
 }
