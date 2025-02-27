@@ -1,116 +1,113 @@
-#' This function simulates from exponential, just included as a simple example as a starting point. 
-# Parameter Description 
-# NumSub - The number of patients (subjects) in the trial.  NumSub survival times need to be generated for the trial.  
-#           This is a single numeric value, eg 250.
-# NumArm - The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-# The SurvParam depends on input in East. In the simulation window on the Response Generation tab 
-# SurvMethod - This values is pulled from the Input Method drop-down list.  
-# SurvParam - Depends on the table in the Response Generation tab. 2‐D array of parameters usds to generate time of events.
-# If SurvMethod is 1:
-#   SurvParam is an array that specifies arm by arm hazard rates (one rate per arm per piece). Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
-#   Arms are in columns with column 1 is control, column 2 is experimental
-#   Time periods are in rows
-# If SurvMethod is 2:
-#   SurvParam is an array specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.
-# If SurvMethod is 3:
-#   SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental 
-#  
-# Description: This function simulates from exponential, just included as a simple example as a starting point 
-#' @export
-SimulatePatientSurvivalMixtureExponentials <- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
+######################################################################################################################## .
+#' @title Simulate patient outcomes from a Mixture Exponential distribution 
+#' @param NumSub The number of patient times to generate for the trial. This is a single numeric value, e.g., 250.
+#' @param NumArm The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
+#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
+#' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
+#' @param NumPrd Number of time periods that are provided. 
+#' @param PrdTime \describe{ 
+#'      \item{If SurvMethod = 1}{PrdTime is a vector of starting times of hazard pieces.}
+#'      \item{If SurvMethod = 2}{Times at which the cumulative % survivals are specified.}
+#'      \item{If SurvMethod = 3}{Period time is 0 by default}
+#'      }
+#' @param SurvParam \describe{Depends on the table in the Response Generation tab. 2‐D array of parameters to generate the survival times
+#'    \item{If SurvMethod is 1}{SurvParam is an array (NumPrd rows, NumArm columns) that specifies arm by arm hazard rates (one rate per arm per piece). 
+#'    Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
+#'    Arms are in columns with column 1 is control, column 2 is experimental
+#'    Time periods are in rows, row 1 is time period 1, row 2 is time period 2...}
+#'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
+#'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
+#'  }
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#'  If UserParam is supplied it must contain the following 
+#'  \describe{
+#'       \item{UserParam$QtyOfSubgroups}{The quantity of patient subgroups. For each subgroup II = 1,2..,QtyOfSubgroups, 
+#'       you must specify ProbSubgroupII, MedianTTECtrlSubgroupII, MedianTTEExpSubgroupII }
+#'       \item{UserParam$ProbSubgroup1}{The probability a patient is in subgroup 1}  
+#'       \item{UserParam$MedianTTECtrlSubgroup1}{The median time-to-event for a patient in subgroup 1 that receives control treatment}
+#'       \item{UserParam$MedianTTEExpSubgroup1}{The median time-to-event for a patient in subgroup 1 that receives experimental treatment} 
+#'       \item{UserParam$ProbSubgroup2}{The probability a patient is in subgroup 2}  
+#'       \item{UserParam$MedianTTECtrlSubgroup2}{The median time-to-event for a patient in subgroup 2 that receives control treatment}
+#'       \item{UserParam$MedianTTEExpSubgroup2}{The median time-to-event for a patient in subgroup 2 that receives experimental treatment} 
+#'  }
+#'  @description
+#'  This function simulates patient data from a mixture of Exponential distributions. The mixture is based on patient subgroups.  For each,
+#'  subgroup you specify the median time-to-event for the control and experimental treatments as well as the probability a patient belongs in a specific group.
+#'  The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
+#'  and only the parameters in UserParam are utilized.  
+######################################################################################################################## .
+
+SimulatePatientSurvivalMixtureExponentials <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
-    #It can often be helpful to save the objects that East send.   This can be done by setting the working directory to a location
-    # of your choice and the using SaveRDS
-    #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    #saveRDS( NumSub, "NumSub.Rds")
-    #saveRDS( NumArm, "NumArm.Rds" )
-    #saveRDS( TreatmentID, "TreatmentID.Rds" )
-    #saveRDS( SurvMethod, "SurvMethod.Rds" )
-    #saveRDS( NumPrd, "NumPrd.Rds" )
-    #saveRDS( SurvParam, "SurvParam.Rds" )
-    #saveRDS( UserParam, "UserParam.Rds" )
+    # Create a fatal error when user parameters are missing to avoid misleading results
+    vRequiredParams <- c("nQtyOfSubgroups")
+    vMissingParams  <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
     
-    # The SurvParam depends on input in East, EAST sends the Median (see the Simulation->Response Generation tab for what is sent)
+    if( is.null( UserParam ) || length( vMissingParams ) > 0 )
+    {
+        return(list(Response  = as.double(0), 
+                    ErrorCode = as.integer(-1)))
+    }
+    else
+    {
+        vSubgroupMissingParams <- c()
+        for (nGroup in 1:UserParam$nQtyOfSubgroups ) {
+            vSubgroupParams <- c(paste0("ProbSubgroup", nGroup),
+                                 paste0("MedianTTECtrlSubgroup", nGroup),
+                                 paste0("MedianTTEExpSubgroup", nGroup))
+            vSubgroupMissingParams <- c(vSubgroupMissingParams, vSubgroupParams[!vSubgroupParams %in% names(UserParam)])
+        }
+        
+        if( length( vSubgroupMissingParams ) > 0 )
+        {
+            return(list(Response  = as.double(0), 
+                        ErrorCode = as.integer(-1)))
+        }
+    }
     
-    vSurvTime <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
+    # Step 1 - Setup variables that we need ####  
+    vSurvTime    <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
     
-    vTreatmentID <- TreatmentID +1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
+    vTreatmentID <- TreatmentID + 1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
     ErrorCode    <- as.integer( 0 ) 
     
-    
-    if(SurvMethod == 1)   # Hazard Rates
+    ## Step 1.1 Read the UserParam and create required variables ####
+    nQtyOfSubgroups <- UserParam$QtyOfSubgroups 
+    vProbOfSubgroup <- rep( NA, nQtyOfSubgroups )   # The probability a patient is in each group
+    vMedianTTECtrl  <- rep( NA, nQtyOfSubgroups )   # The medians for the control treatment for each subgroup
+    vMedianTTEExp   <- rep( NA, nQtyOfSubgroups )   # The medians for the experimental treatment for each subgroup
+    for( nGroup in 1:nQtyOfSubgroups )
     {
-        
-        if( NumPrd == 1 )
-        {
-            vRates <- SurvParam[1, ]
-            
-            # Simulate the patient survival times based on the treatment
-            # For the Hazard Rate input with 1 piece, this is just simulating from an exponential distribution as an example and results will match
-            # East if you used the build hazard option.
-            for( nPatIndx in 1:NumSub)
-            {
-                nPatientTreatment     <- vTreatmentID[ nPatIndx ]
-                vSurvTime[ nPatIndx ] <- rexp( 1, vRates[ nPatientTreatment ] )
-                
-            }
-        }
-        else 
-        {
-            # This version is using the input to generate a mixture distribution.  
-            # The SurvParam matrix is used to simulate a mixture distribution.
-            # Assuming the values in the SurvParam is a matrix of MEDIAN survival times, treatments in columns, groups in rows.
-            # Column 1 is control, Column 2 is experimental
-            # The PrdTime is used to provide the probability of each group.  Since East fixes PrdTime[1] = 0 in this case the probability of this being in this group
-            # would be 1 - sum( PrdTime ) 
-            # Note: Even though East sent the SurvMethod = 1 this example is treating the SurvParam matrix as medians.  This was done so 
-            #       so the PrdTime could provide the group probabilities and the matrix the median but could have easily used the matrix as rates
-            vProbs            <- PrdTime
-            vProbs[1]         <- 1-sum( vProbs[2:length(vProbs)])
-            nQtyPatientGroups <- length( vProbs )
-            
-            if( nQtyPatientGroups == NumPrd )
-            {
-                
-                mMedians  <- SurvParam
-                mMeans    <- mMedians/log(2)
-                mRates    <- 1/mMeans
-                
-                # Now we have the mRates matrix that has a row for each group, a column for each treatment, Column 1 is Control, column 2 is treatment
-                
-                # Simulate the patient groups
-                vPatientGroup <- sample( c(1:nQtyPatientGroups), NumSub, replace = TRUE, prob = vProbs )
-                
-                
-                # Simulate the patient survival times based on the patient group and treatment
-                for( nPatIndx in 1:NumSub)  
-                {
-                    nPatientTreatment     <- vTreatmentID[ nPatIndx ]
-                    nPatientGroup         <- vPatientGroup[ nPatIndx ]
-                    dRate                 <- mRates[ nPatientGroup, nPatientTreatment ]
-                    vSurvTime[ nPatIndx ] <- rexp( 1, dRate )
-                }
-                ErrorCode    <- as.integer( 0 ) 
-            }
-            else
-            {
-                ErrorCode <- -1
-                
-            }
-        }
-        
-    }
-    else if(SurvMethod == 2)   # Cumulative % Survivals
-    {
-        ErrorCode <- -1 # < 0 --> Stop the simulations
-        
-    }
-    else if(SurvMethod == 3)   # Median Survival Times
-    {
-        ErrorCode <- -2   # < 0 --> Stop simulations
+        vProbOfSubgroup[ nGroup ] <- UserParam[[ paste0( "ProbSubgroup", nGroup ) ]]
+        vMedianTTECtrl[ nGroup ]  <- UserParam[[ paste0( "MedianTTECtrlSubgroup", nGroup ) ]]
+        vMedianTTEExp[ nGroup ]   <- UserParam[[ paste0( "MedianTTEExpSubgroup", nGroup ) ]]
     }
     
-    return(list(SurvivalTime = as.double(vSurvTime), ErrorCode = as.integer( ErrorCode ) ) )
+    # To use the rexp function to generate the TTE we need the rate parameter. 
+    # In the case where data is simulated from an exponential distribution the following statement are helpful:
+    #     rate   = 1/Mean
+    #     Median = ln(2) * Mean 
+    #     Median = ln(2)/rate 
+    #     rate   = ln(2)/Median
+    
+    vRateCtrl <- log(2)/vMedianTTECtrl
+    vRateExp  <- log(2)/vMedianTTEExp 
+    
+    mRates    <- rbind( vRateCtrl, vRateExp)  # Now mRates has the rates for Ctrl in row 1, Exp in row 2 and the columns are the groups
+    
+    # Step 2 - Simulate the patient data using the variables above ####
+    
+    # Simulate the patient groups
+    vPatientGroup <- sample( c(1:nQtyOfSubgroups), NumSub, replace = TRUE, prob = vProbOfSubgroup )
+    
+    # Simulate the patient survival times based on the patient group and treatment
+    for( nPatIndx in 1:NumSub)  
+    {
+        nPatientTreatment     <- vTreatmentID[ nPatIndx ]
+        nPatientGroup         <- vPatientGroup[ nPatIndx ]
+        dRate                 <- mRates[ nPatientTreatment, nPatientGroup ]
+        vSurvTime[ nPatIndx ] <- rexp( 1, dRate )
+    }
+    
+    return(list(SurvivalTime = as.double(vSurvTime), Subgroup = as.double( vPatientGroup ), ErrorCode = ErrorCode) )
 }
-
-

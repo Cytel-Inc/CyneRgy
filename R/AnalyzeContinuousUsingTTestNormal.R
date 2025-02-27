@@ -1,5 +1,5 @@
 ######################################################################################################################## .
-#' @param AnalyzeUsingTTestNormal
+#' @param AnalyzeContinuousUsingTTestNormal
 #' @title Analyze using the t.test function in base R.
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
@@ -32,19 +32,9 @@
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-#' @note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
-#' @export
 ######################################################################################################################## .
 
-AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzeContinuousUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {   
     # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )

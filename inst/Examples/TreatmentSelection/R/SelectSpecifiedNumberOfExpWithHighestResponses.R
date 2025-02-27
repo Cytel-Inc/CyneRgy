@@ -57,19 +57,8 @@
 #'
 #'       The above code will save each of the input objects to a file so they may be examined within R.
 #' @export
-SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
+SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
-          
-    # Input objects can be saved through the following lines:
-    # First set the working directory
-    # setwd(Sys.getenv("R_USER")) # You could specify the location directly. 
-    # setwd( "C://TreatmentSelection" )
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-    # saveRDS( UserParam, "UserParam.Rds")
-
-
     if( !exists( "UserParam" ) | is.null( UserParam ) )
     {
         # Default is to select the treatment with highest number of responses and allocation of 2:1 (Experimental:Control)
@@ -82,8 +71,6 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     # Now, only the experimental treatments are left
     tabResults   <- tabResults[ -1, ]   
     
-
-        
     # Sort in descending order based on the number of responses (column 2)
     # After the sort, the matrix will have the largest number of responses in the first row and the smallest number of responses in the last row
     mSortedMatrix      <- tabResults[order( tabResults[, 2], decreasing =  TRUE), ]
@@ -102,20 +89,18 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
         vAllocationRatio <- c( vAllocationRatio, UserParam[[ paste0( "Rank", iRank, "AllocationRatio" )]])
     }
     
-    
     # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$Rank1AllocationRatio and
     # vReturnTreatmentID[ 2 ] a ratio of UserParam$Rank2AllocationRatio, and control is always 1
     
-    nErrrorCode <- 0
+    nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
     if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
         #Fatal error because the R code is incorrect
-        nErrrorCode <- -1  
+        nErrorCode <- -1  
     }
     lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ),
                      AllocRatio  = as.double( vAllocationRatio ),
-                     ErrorCode   = as.integer( nErrrorCode ) )
+                     ErrorCode   = as.integer( nErrorCode ) )
     return( lReturn )
-    
 }

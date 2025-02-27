@@ -46,7 +46,7 @@
 #' @export
 ######################################################################################################################## .
 
-SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserParam= NULL)
+SelectExpUsingBayesianRule  <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Brief overview of what steps this function takes ####
     # 1)    For each experimental treatment j, calculate the posterior probability distribution based on the observed data in ‘SimData’ and the 
@@ -55,13 +55,6 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     # 2)	Determine whether any experimental treatment has at least a UserParam$dMinPosteriorProbability chance pj > UserParam$dHistoricResponseRate, eg for any treatment j if Pr( pj > UserParam$dHistoricResponseRate | data ) > UserParam$dMinPosteriorProbability, select treatment j for stage 2.
     # 3)	If none of the treatments meet the above criteria for selection, then select the treatment with the largest Pr( pj > UserParam$dHistoricResponseRate | data ).
     # 4)	After selecting the treatments, use a randomization ratio of 2:1 (experimental: control) for all experimental treatments that are selected for stage 2
-
-          
-    #Input objects can be saved through the following lines:
-    #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
     
     # The below lines set the values of the parameters if a user does not specify a value
     
@@ -74,8 +67,8 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     # Calculate the number of responses (Yj) and treatment failures per treatment (Y'j) 
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
     tabResults               <- table( SimData$TreatmentID, SimData$Response )
-   
-     # Only want data on experimental treatments is wanted, experimental data starts in row 2
+    
+    # Only want data on experimental treatments is wanted, experimental data starts in row 2
     tabResultsExperimental   <- tabResults[ c( 2:nrow( tabResults )), ]  
     nQtyOfExperimentalArms   <- nrow( tabResultsExperimental ) 
     
@@ -101,9 +94,6 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
         #         If so, add it to the list of treatments to select for stage 2
         if( vPostProbGreaterThanHistory[ iArm ] > UserParam$dMinPosteriorProbability )
             vReturnTreatmentID <- c( vReturnTreatmentID, iArm )
-        
-       
-        
     }
     # Step 4: If none of the experimental treatments had a response rate greater than control, select the treatment with the largest response rate 
     # No treatments met the criteria for selection so use the one with the largest Prob( pi > UserParam$dHistoricResponseRate | data )
@@ -115,7 +105,7 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     # Set the allocation ratio
     # We want to allocation ratio to be 2:1 for all selected treatments 
     vAllocationRatio   <- rep( 2, length( vReturnTreatmentID ) )    
-      
+    
     nErrrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
     if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
@@ -128,5 +118,4 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
                      ErrorCode   = as.integer( nErrrorCode ) )
     
     return( lReturn )
-    
 }

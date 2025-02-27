@@ -1,5 +1,3 @@
-
-
 # Function for performing statistical analysis using a Beta-Binomial Bayesian model
 
 ProbExpGreaterCtrlBeta <- function(vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlphaE, dBetaE) 

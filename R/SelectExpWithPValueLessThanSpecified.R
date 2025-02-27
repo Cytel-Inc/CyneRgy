@@ -1,9 +1,9 @@
 ######################################################################################################################## .
 #' Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value. 
-# '@param SimData Data frame which consists of data generated in current simulation
-# '@param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
-# '@param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
-# '@param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param SimData Dataframe which consists of data generated in current simulation
+#' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
+#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 #'  If UserParam is supplied, the list must contain the following named element:
 #'  \describe{
 #'  \item{UserParam$dMaxPValue}{A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
@@ -17,7 +17,7 @@
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#'                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+#'                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #' @note The length of TreatmentID and AllocRatio must be the same.
 #' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
@@ -42,32 +42,20 @@
 #'                                    AllocRatio  = vAllocationRatio,
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
-#'
-#' @note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
-#' @export
 ######################################################################################################################## .
-SelectExpWithPValueLessThanSpecified  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
+
+SelectExpWithPValueLessThanSpecified  <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    #Input objects can be saved through the following lines:
-    #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
-
+    # Create a fatal error when user parameters are missing to avoid misleading results
+    vRequiredParams <- c("dMaxPValue")
+    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
     
-    if( is.null( UserParam ) )
+    if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        UserParam <- list( dMaxPValue = 0 )
+        return(list(TreatmentID  = as.integer(0), 
+                    ErrorCode    = as.integer(-1), 
+                    AllocRatio   = as.double(0)))
     }
-
     
     # Calculate the number of responders and treatment failures for each treatment
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
@@ -101,30 +89,28 @@ SelectExpWithPValueLessThanSpecified  <- function(SimData, DesignParam, LookInfo
         }
     }
     
-    
     # If none of the experimental treatments had p-value < dMaxPValue, select the treatment with the smallest p-value 
     if( length( vReturnTreatmentID ) == 0)
     {
         vReturnTreatmentID <-  which.min( vPValue  )
     }
- 
+    
     # Step 3: Create the allocation ratios for all selected treatments ####
-    # In this case, all selected treatments should have an allocation ratio of 1:1
+    # In this case, all selected treatments should have an allocation ration of 1:1
     # The allocation will put twice as many patients on the treatment with the highest number of responses 
     vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ) )    
-                                       
-    nErrrorCode <- 0
+    
+    nErrorCode <- 0
     # Note: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
     if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
         #  Fatal error because the R code is incorrect
-        nErrrorCode <- -1  
+        nErrorCode <- -1  
     }
     
     lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ) ,
                      AllocRatio  = as.double( vAllocationRatio ),
-                     ErrorCode   = as.integer( nErrrorCode ) )
+                     ErrorCode   = as.integer( nErrorCode ) )
     
     return( lReturn )
-    
 }

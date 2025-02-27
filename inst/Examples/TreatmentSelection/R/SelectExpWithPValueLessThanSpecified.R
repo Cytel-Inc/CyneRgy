@@ -54,20 +54,14 @@
 #'       The above code will save each of the input objects to a file so they may be examined within R.
 #' @export
 ######################################################################################################################## .
-SelectExpWithPValueLessThanSpecified  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
-{
-    #Input objects can be saved through the following lines:
-    #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
 
-    
+SelectExpWithPValueLessThanSpecified  <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
     if( is.null( UserParam ) )
     {
         UserParam <- list( dMaxPValue = 0 )
     }
-
+    
     
     # Calculate the number of responders and treatment failures for each treatment
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
@@ -101,30 +95,28 @@ SelectExpWithPValueLessThanSpecified  <- function(SimData, DesignParam, LookInfo
         }
     }
     
-    
     # If none of the experimental treatments had p-value < dMaxPValue, select the treatment with the smallest p-value 
     if( length( vReturnTreatmentID ) == 0)
     {
         vReturnTreatmentID <-  which.min( vPValue  )
     }
- 
+    
     # Step 3: Create the allocation ratios for all selected treatments ####
     # In this case, all selected treatments should have an allocation ration of 1:1
     # The allocation will put twice as many patients on the treatment with the highest number of responses 
     vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ) )    
-                                       
-    nErrrorCode <- 0
+    
+    nErrorCode <- 0
     # Note: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
     if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
         #  Fatal error because the R code is incorrect
-        nErrrorCode <- -1  
+        nErrorCode <- -1  
     }
     
     lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ) ,
                      AllocRatio  = as.double( vAllocationRatio ),
-                     ErrorCode   = as.integer( nErrrorCode ) )
+                     ErrorCode   = as.integer( nErrorCode ) )
     
     return( lReturn )
-    
 }

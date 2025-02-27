@@ -37,7 +37,6 @@
 #'                                    AllocRatio  = vAllocationRatio,
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
-#'
 #' @note Helpful Hints:
 #'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
 #'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
@@ -51,15 +50,9 @@
 #'       The above code will save each of the input objects to a file so they may be examined within R.
 #' @export
 ######################################################################################################################## .
-SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo, UserParam=NULL)
+
+SelectExpThatAreBetterThanCtrl  <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    
-    # Input objects can be saved through the following lines:
-    #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
-    
     # Calculate the number of responders and treatment failures for each treatment
     
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
@@ -83,7 +76,6 @@ SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo, User
         # If the response rate > response rate on control, add the treatment ID to the list
         if( vProbabilityResponseOnExperimental[ nIndex ] > dProbabilityOfResponseOnControl )   
             vReturnTreatmentID <- c( vReturnTreatmentID, nIndex  )    
-        
     }
     
     # If none of the experimental treatments had a response rate greater than control, select the treatment with the largest response rate 
@@ -97,21 +89,19 @@ SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo, User
     # eg. the Treatment vReturnTreatmentID[ 1 ] will receive twice as many patients as vReturnTreatmentID[ 2 ]
     vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ))    
     
-    
     # Treatment vReturnTreatmentID[ 1 ] will have a ratio of 2, vReturnTreatmentID[ 2 ] a ratio of 1, and control is always 1
     
-    nErrrorCode <- 0
+    nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
     if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
         #  Fatal error because the R code is incorrect 
-        nErrrorCode <- -1  
+        nErrorCode <- -1  
     }
     
     lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ) ,
                      AllocRatio  = as.double( vAllocationRatio ),
-                     ErrorCode   = as.integer( nErrrorCode ) )
+                     ErrorCode   = as.integer( nErrorCode ) )
     
     return( lReturn )
-    
 }

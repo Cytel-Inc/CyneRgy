@@ -2,7 +2,7 @@
 # Helper function to go with the Weibull example.  ####
 ######################################################################################################################## .
 
-#' @param  vTime A vector of times to compute the hazard of the Weibull distribution at
+#' @param vTime A vector of times to compute the hazard of the Weibull distribution at
 #' @param dShape The shape of the Weibull distribution, see rweibull
 #' @param dScale The scale of the Weibull distribution, see rweibull
 #' @description Function to compute the hazard of the Weibull distribution 
