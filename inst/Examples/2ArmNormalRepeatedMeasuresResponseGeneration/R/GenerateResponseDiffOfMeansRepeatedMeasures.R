@@ -27,7 +27,6 @@
 
 GenRespDiffOfMeansRepMeasures      <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
-  library(MASS)
   Error 	                         <- 0
   lReturn                          <- list()
   nQtyTimePoints                   <- length( MeanControl )
@@ -39,13 +38,12 @@ GenRespDiffOfMeansRepMeasures      <- function( NumSub, NumVisit, TreatmentID, I
   
   # mIntermediate is an n*n matrix whose generic term is StdDev[i]*StdDev[j] (n is your number of Time points)
   
-  mCovarianceControl               <- mIntermediateControl * CorrMat  
   mCovarianceTrt                   <- mIntermediateTrt * CorrMat
   
   vQtyPatientsPerArm               <- table( TreatmentID )
   
-  mCtrl                            <- mvrnorm( vQtyPatientsPerArm[ 1 ], MeanControl, Sigma = mCovarianceControl ) 
-  mExp                             <- mvrnorm( vQtyPatientsPerArm[ 2 ], MeanTrt,  Sigma = mCovarianceTrt ) 
+  mCtrl                            <- MASS::mvrnorm()( vQtyPatientsPerArm[ 1 ], MeanControl, Sigma = mCovarianceControl ) 
+  mExp                             <- MASS::mvrnorm()( vQtyPatientsPerArm[ 2 ], MeanTrt,  Sigma = mCovarianceTrt ) 
  
   # Initialize a matrix to hold the outcomes
   mOutcomes                        <- matrix( nrow = sum( vQtyPatientsPerArm ), ncol = nQtyTimePoints )
