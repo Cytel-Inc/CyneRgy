@@ -34,7 +34,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="alert-link">GeneratePoissonArrival.R</a></p>
 </div>
 
-In this example, we use the built-in inputs of East Horizon or East to implement a user-specified ramp-up in accrual. Suppose the user defines the start periods as 0, 6, 12, 18, 24, and 48 (*Starting at Time* in East Horizon, *PrdStart* in the R script) and specifies the expected accrual rates (*Average Subjects Enrolled* in East Horizon, *AccrRate* in the R script) as 1, 4, 12, 24, and 48. This means:
+In this example, we use the built-in inputs of East Horizon or East to implement a user-specified ramp-up in accrual using Poisson. Suppose the user defines the start periods as 0, 6, 12, 18, 24, and 48 (*Starting at Time* in East Horizon, *PrdStart* in the R script) and specifies the expected accrual rates (*Average Subjects Enrolled* in East Horizon, *AccrRate* in the R script) as 1, 4, 12, 24, and 48. This means:
 
 - From time 0 to 6, the expected accrual rate is 1 patient per time unit.
 - From time 6 to 12, the rate increases to 4 patients per time unit.
@@ -58,7 +58,7 @@ plot( lRet2$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time",main = "Number of 
 abline( v = PrdStart, lty =2)
 ```
 
-This example does not use any user-defined parameters. It demonstrates that applying the R function without custom inputs produces the same results as simulating data directly in East Horizon or East, without the use of an R function.
+This example does not use any user-defined parameters.
 
 # Example 2 - Ramp-Up In Accrual Using UserParam
 
@@ -66,7 +66,7 @@ This example does not use any user-defined parameters. It demonstrates that appl
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="alert-link">GeneratePoissonArrival.R</a></p>
 </div>
 
-Now, let's extend this approach by incorporating a custom variable (*UserParam*). In this example, we use a custom R script and specify seven accrual rates. When custom variables are provided, the built-in variables *PrdStart* and *AccrRate* are ignored. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+Now, let's extend this approach by incorporating custom variables (*UserParam*). In this example, we use a custom R script and specify seven accrual rates. When custom variables are provided, the built-in variables *PrdStart* and *AccrRate* are ignored. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
 |**User parameter**|**Definition**|**Value**|
 |---|------|---|

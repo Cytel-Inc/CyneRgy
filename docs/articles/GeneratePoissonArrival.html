@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">February 10, 2025</h4>
+            <h4 data-toc-skip class="date">February 28, 2025</h4>
       
 
       <div class="d-none name"><code>GeneratePoissonArrival.Rmd</code></div>
@@ -163,12 +163,12 @@ This example is related to this R file:
 </p>
 </div>
 <p>In this example, we use the built-in inputs of East Horizon or East
-to implement a user-specified ramp-up in accrual. Suppose the user
-defines the start periods as 0, 6, 12, 18, 24, and 48 (<em>Starting at
-Time</em> in East Horizon, <em>PrdStart</em> in the R script) and
-specifies the expected accrual rates (<em>Average Subjects Enrolled</em>
-in East Horizon, <em>AccrRate</em> in the R script) as 1, 4, 12, 24, and
-48. This means:</p>
+to implement a user-specified ramp-up in accrual using Poisson. Suppose
+the user defines the start periods as 0, 6, 12, 18, 24, and 48
+(<em>Starting at Time</em> in East Horizon, <em>PrdStart</em> in the R
+script) and specifies the expected accrual rates (<em>Average Subjects
+Enrolled</em> in East Horizon, <em>AccrRate</em> in the R script) as 1,
+4, 12, 24, and 48. This means:</p>
 <ul>
 <li>From time 0 to 6, the expected accrual rate is 1 patient per time
 unit.</li>
@@ -184,10 +184,7 @@ per time unit.</li>
 with dashed lines marking the time points where accrual rates
 change:</p>
 <p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>This example does not use any user-defined parameters. It
-demonstrates that applying the R function without custom inputs produces
-the same results as simulating data directly in East Horizon or East,
-without the use of an R function.</p>
+<p>This example does not use any user-defined parameters.</p>
 </div>
 <div class="section level2">
 <h2 id="example-2---ramp-up-in-accrual-using-userparam">Example 2 - Ramp-Up In Accrual Using UserParam<a class="anchor" aria-label="anchor" href="#example-2---ramp-up-in-accrual-using-userparam"></a>
@@ -198,7 +195,7 @@ This example is related to this R file:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link alert-link">GeneratePoissonArrival.R</a>
 </p>
 </div>
-<p>Now, let’s extend this approach by incorporating a custom variable
+<p>Now, let’s extend this approach by incorporating custom variables
 (<em>UserParam</em>). In this example, we use a custom R script and
 specify seven accrual rates. When custom variables are provided, the
 built-in variables <em>PrdStart</em> and <em>AccrRate</em> are ignored.

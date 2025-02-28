@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">Shubham
 Lahoti</h4>
             
-            <h4 data-toc-skip class="date">February 10, 2025</h4>
+            <h4 data-toc-skip class="date">February 28, 2025</h4>
       
 
       <div class="d-none name"><code>PatientDropout.Rmd</code></div>
@@ -120,16 +120,26 @@ Lahoti</h4>
 
     
     
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+These examples are related to the <strong>Integration Point:
+Dropout</strong>.
+<a href="IntegrationPointDropout.html" class="alert-link">Click here for
+more information about this integration point.</a>
+</p>
+</div>
 <div class="section level3">
 <h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h3>
-<p>For all examples, we assume the trial design consist of control and
-an experimental treatment. Patients may dropout of a trial for a variety
-of reasons such as safety issues, treatment burden or other non-trial
-related issues. The dropout rate can be as high as 30% in some trials if
-the drug has adverse side effects. The introduction of dropout
-probabilities or dropout hazard rate plays a significant role during
-data generation that can be further utilized during the analysis.</p>
+<p>The following examples illustrate how to customize the dropout
+distribution in East Horizon or East using R functions. Patients may
+drop out of a trial for various reasons, including safety concerns,
+treatment burden, or non-trial-related factors. In some cases, dropout
+rates can reach 30%, particularly if the drug has adverse side effects.
+Incorporating dropout probabilities or hazard rates is crucial during
+data generation and can significantly impact subsequent analysis. In all
+examples, we assume a trial design consisting of a control group and an
+experimental treatment.</p>
 <p>Once CyneRgy is installed, you can load this example in RStudio with
 the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -141,39 +151,188 @@ RStudio.</p>
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="external-link">GenerateCensoringUsingBinomialProportion.R</a>
-- Contains a function named GenerateCensoringUsingBinomialProportion to
-demonstrate the R code necessary for Example 1 as described
-below.</p></li>
+- Contains a function named
+<em>GenerateCensoringUsingBinomialProportion</em> to demonstrate the R
+code necessary for Example 1 as described below.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="external-link">GenerateDropoutTimeForSurvival.R</a>
-- Contains a function named GenDropoutTimeForSurvival to demonstrate the
-R code necessary for Example 2 as described below.</p></li>
+- Contains a function named <em>GenerateDropoutTimeForSurvival</em> to
+demonstrate the R code necessary for Example 2 as described
+below.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM" class="external-link">GenerateDropoutTimeForRM</a>
+- Contains a function named <em>GenerateDropoutTimeForRM</em> to
+demonstrate the R code necessary for Example 3 as described
+below.</p></li>
 </ol>
 </div>
 <div class="section level2">
 <h2 id="example-1---dropout-using-binomial-proportion">Example 1 - Dropout Using Binomial Proportion<a class="anchor" aria-label="anchor" href="#example-1---dropout-using-binomial-proportion"></a>
 </h2>
-<p>The R function named “GenerateCensoringUsingBinomialProportion” in
-the file generates the censor ID using the same dropout probability for
-both treatment using rbinom(). In this case, the Dropout probability is
-a common value across both treatments.</p>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="external-link alert-link">GenerateCensoringUsingBinomialProportion.R.R</a>
+</p>
+</div>
+<p>The R function <em>GenerateCensoringUsingBinomialProportion</em>
+generates the censoring indicator using the dropout probability
+specified in East Horizon (<em>ProbDrop</em> in the script,
+<em>Probability of Dropout</em> in East Horizon) for continuous or
+binary outcome. This function applies the binomial distribution to
+determine dropout status. In this case, the dropout probability is the
+same across both treatment groups, but this can be customized using
+user-defined parameters.</p>
+<p>This function does not use any user-defined parameters, but uses
+parameters specified in East Horizon. Refer to the table below for more
+information.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Parameter in East Horizon</strong></th>
+<th><strong>Section of East Horizon</strong></th>
+<th><strong>Variable in the R script</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td><em>Probability of Dropout</em></td>
+<td><em>Response Card</em></td>
+<td><em>ProbDrop</em></td>
+</tr></tbody>
+</table>
 <p>Steps:</p>
+<ol style="list-style-type: decimal">
+<li>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">pd</annotation></semantics></math>
+be the dropout probability.<br>
+</li>
+<li>Draw a random sample from a Bernoulli distribution with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>1</mn><mo>−</mo><mi>p</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">p = 1 - pd</annotation></semantics></math>,
+i.e.,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>i</mi><mi>n</mi><mi>o</mi><mi>m</mi><mi>i</mi><mi>a</mi><mi>l</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>,</mo><mi>p</mi><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Binomial(1, pd)</annotation></semantics></math>,
+of size
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mi>N</mi><mi>u</mi><mi>m</mi><mi>S</mi><mi>u</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">n = NumSub</annotation></semantics></math>.<br>
+</li>
+<li>The generated sample serves as a censoring indicator:
 <ul>
-<li>Let pd = Dropout probability.</li>
-<li>Draw a random sample from Bernoulli distribution with p = 1 - pd,
-i.e., Binomial(1, pd) of a size n = NumSub.</li>
-<li>The sample generated in step (2) is a censoring indicator where 1 is
-a patient that does NOT drop out, e.g., completer, and 0 for a patient
-that drops out, e.g., non-completer.</li>
+<li>
+<strong>1</strong> indicates a patient who completes the trial (does
+not drop out).<br>
+</li>
+<li>
+<strong>0</strong> indicates a patient who drops out
+(non-completer).</li>
 </ul>
+</li>
+</ol>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="PatientDropout_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="example-2---dropout-time-for-survival">Example 2 - Dropout Time For Survival<a class="anchor" aria-label="anchor" href="#example-2---dropout-time-for-survival"></a>
 </h2>
-<p>The function named “GenDropoutTimeForSurvival” generates dropout time
-for 2-arm survival design. In this cases, there is an option to provide
-a dropout information for each arm which then is utilized to generate
-dropout times for each arm from Exponential distribution. We fix Number
-of periods = 1 and Dropout distribution = Exponential.</p>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="external-link alert-link">GenerateDropoutTimeForSurvival.R</a>
+</p>
+</div>
+<p>The function <em>GenerateDropoutTimeForSurvival</em> generates
+dropout times for a two-arm survival design. In this case, dropout
+information can be specified separately for each arm (in East Horizon,
+<em>Control</em> and <em>Treatment</em> in the <em>Dropout Rate</em>
+tab), and dropout times are drawn from an exponential distribution
+accordingly. The number of periods is fixed at 1.</p>
+<p>This function does not use any user-defined parameters, but uses
+parameters specified in East Horizon. Refer to the table below for more
+information.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Parameter in East Horizon</strong></th>
+<th><strong>Section of East Horizon</strong></th>
+<th><strong>Variable in the R script</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Probability of Dropout: <em>Control</em>
+</td>
+<td>
+<em>Response Card</em>, <em>Dropout Rate</em> tab</td>
+<td><em>DropParam[ 1 ]</em></td>
+</tr>
+<tr class="even">
+<td>Probability of Dropout: <em>Treatment</em>
+</td>
+<td>
+<em>Response Card</em>, <em>Dropout Rate</em> tab</td>
+<td><em>DropParam[ 2 ]</em></td>
+</tr>
+</tbody>
+</table>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="PatientDropout_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="example-3---dropout-time-for-repeated-measures">Example 3 - Dropout Time for Repeated Measures<a class="anchor" aria-label="anchor" href="#example-3---dropout-time-for-repeated-measures"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM.R" class="external-link alert-link">GenerateDropoutTimeForRM.R</a>
+</p>
+</div>
+<p>The function <em>GenerateDropoutTimeForRM</em> generates dropout
+times for a continuous outcome with repeated measures design. In this
+case, dropout information can be specified separately for each arm (in
+East Horizon, <em>Control</em> and <em>Treatment</em> in the <em>Dropout
+Rate</em> tab), and dropout times are drawn from an exponential
+distribution accordingly. The <em>Input Method</em> in East Horizon has
+to be set to <em>Cumulative Probability of Dropout by Time</em>.</p>
+<p>This function does not use any user-defined parameters, but uses
+parameters specified in East Horizon. Refer to the table below for more
+information.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Parameter in East Horizon</strong></th>
+<th><strong>Section of East Horizon</strong></th>
+<th><strong>Variable in the R script</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Probability of Dropout: <em>Control</em>
+</td>
+<td>
+<em>Response Card</em>, <em>Dropout Rate</em> tab</td>
+<td><em>DropParamControl</em></td>
+</tr>
+<tr class="even">
+<td>Probability of Dropout: <em>Treatment</em>
+</td>
+<td>
+<em>Response Card</em>, <em>Dropout Rate</em> tab</td>
+<td><em>DropParamTrt</em></td>
+</tr>
+</tbody>
+</table>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="PatientDropout_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
