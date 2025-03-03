@@ -2,12 +2,16 @@
 title: '2-Arm - Randomization of Subjects'
 author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document: default
-  word_document: default
 ---
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Randomization</strong>.
+  <a href="IntegrationPointRandomization.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
+
 # Introduction
+
+The following examples illustrate how to integrate new custom randomization methods and control how subjects are assigned to designated arms into East Horizon or East using R functions in the context of a two-arm trial.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
@@ -20,43 +24,347 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/RandomizeSubjects/R) you will find the following R files:
 
-1. [RandomizationSubjectsUsingUniformDistribution.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R) - Contains a function named RandomizationSubjectsUsingUniformDistribution to demonstrate the R code necessary for Example 1 as described below.
+1. [RandomizationSubjectsUsingUniformDistribution.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R) - Contains a function named *RandomizationSubjectsUsingUniformDistribution* to demonstrate the R code necessary for Example 1 as described below.
 
-2. [RandomizationSubjectsUsingSampleFunctionInR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R) - Contains a function named RandomizationSubjectsUsingSampleFunctionInR to demonstrate the R code necessary for Example 2 as described below.
+2. [RandomizationSubjectsUsingSampleFunctionInR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R) - Contains a function named *RandomizationSubjectsUsingSampleFunctionInR* to demonstrate the R code necessary for Example 2 as described below.
 
-3. [BlockRandomizationSubjectsUsingRPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R) - Contains a function named BlockRandomizationSubjectsUsingRPackage to demonstrate the R code necessary for Example 3 as described below.
+3. [BlockRandomizationSubjectsUsingRPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R) - Contains a function named *BlockRandomizationSubjectsUsingRPackage* to demonstrate the R code necessary for Example 3 as described below.
 
-4. [LoadrandomizeR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/LoadRandomizeR.R) - This file is used to install the "randomizeR" package for execution of Block Randomization in R.
+4. [LoadrandomizeR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/LoadRandomizeR.R) - This file is used to install the *randomizeR* package for execution of Block Randomization in R.
 
 # Example 1 - Randomize Subjects Usings Uniform Distribution
 
-The R function named "RandomizationSubjectsUsingUniformDistribution" in the file randomly allots the subjects to either of two arms using Uniform Distribution.
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R" class="alert-link">RandomizationSubjectsUsingUniformDistribution.R</a></p>
+</div>
+
+The R function *RandomizationSubjectsUsingUniformDistribution* randomly assigns subjects to one of two arms using a uniform distribution.
+
+This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
+
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Allocation Ratio|Design Card|$AllocRatio$|
 
 Steps:
 
-- We generate a random number from Uniform(0, 1). Save it as u.
-- Let p = Allocation fraction on control arm and 1 - p = Allocation fraction on treatment arm.
-- If u <= p then allot the subject to the control arm else allot the subject to treatment arm.
-- Make sure that Total sample size = Sample size on control + Sample size on treatment arm.
+1. Generate a random number $u$ from a $Uniform(0,1)$ distribution.
+2. Define $p$ as the allocation fraction for the control arm, with $1 - p$ as the allocation fraction for the treatment arm.
+3. If $u \leq p$, assign the subject to the control arm; otherwise, assign them to the treatment arm.
+4. Ensure that the total sample size equals the sum of subjects in the control and treatment arms.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 2
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, bigcolxmin, 5.5, 6.5, 7.5, 8.5),
+  xmax = c(0.5, 1.5, bigcolxmax, 6, 7, 8, 9),
+  ymin = rep(1.8, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+ymaxsixthbox = yminfifthbox - spaceybox
+yminsixthbox = ymaxsixthbox - unitybox
+
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 6),
+  xmax = rep(bigcolxmax - 0.3, 6),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox, ymaxsixthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox, yminsixthbox),
+  label = c("Load allocation ratio", 
+            "Convert allocation ratios to fractions",
+            "Calculate sample size per arm",
+            "Loop through patients",
+            "Assign subjects to arms using\nuniform distribution",
+            "Return allocation indices"),
+  fill = rep("#cfe2ff", 6)
+)
+
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 5),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 5),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4], flowchart$ymin[5]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5], flowchart$ymax[6])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(1.2, 1.2),
+  ymax = c(1.5, 1.5),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
 
 # Example 2 - Randomize Subjects Using Sample Function
 
-The R function named "RandomizationSubjectsUsingSampleFunctionInR" in the file makes use of Sample() function in R to randomly allot the patients on control and treatment arm.
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R" class="alert-link">RandomizationSubjectsUsingSampleFunctionInR.R</a></p>
+</div>
+
+The R function *RandomizationSubjectsUsingSampleFunctionInR* uses the `sample()` function in R to randomly assign patients to the control and treatment arms.
+
+This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
+
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Allocation Ratio|Design Card|$AllocRatio$|
 
 Steps:
 
-- Let p = Allocation fraction on control arm and 1 - p = Allocation fraction on treatment arm.
-- Compute Expected Sample size (rounded) for control and treatment arms using Allocation Fraction and Total sample size.
-- Randomly allot the indices to the control and treatment arms using the sample() function available in R.
-- Create a vector of zeroes of size = NumSub (Number of subjects) and then replace the zeroes by 1 for the Indices that correspond to treatment. 
+1. Let $p$ be the allocation fraction for the control arm, with $1 - p$ as the allocation fraction for the treatment arm.
+2. Compute the expected sample sizes (rounded) for both arms using the allocation fraction and total sample size.
+3. Randomly assign subject indices to the control and treatment arms using the `sample()` function in R.
+4. Create a vector of zeros with size equal to the total number of subjects ($NumSub$), then replace the zeros with ones for indices corresponding to the treatment arm.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 2
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, bigcolxmin, 5.5, 6.5, 7.5, 8.5),
+  xmax = c(0.5, 1.5, bigcolxmax, 6, 7, 8, 9),
+  ymin = rep(1.8, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+ymaxsixthbox = yminfifthbox - spaceybox
+yminsixthbox = ymaxsixthbox - unitybox
+
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 6),
+  xmax = rep(bigcolxmax - 0.3, 6),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox, ymaxsixthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox, yminsixthbox),
+  label = c("Load allocation ratio", 
+            "Convert allocation ratios to fractions",
+            "Calculate sample size per arm",
+            "Loop through patients",
+            "Assign subjects to arms using\nsample function",
+            "Return allocation indices"),
+  fill = rep("#cfe2ff", 6)
+)
+
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 5),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 5),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4], flowchart$ymin[5]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5], flowchart$ymax[6])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(1.2, 1.2),
+  ymax = c(1.5, 1.5),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
 
 # Example 3 - Randomize Subjects Using randomizeR Package
 
-The function named "BlockRandomizationSubjectsUsingRPackage.R" in the file makes use of pbrPar() function from the "randomizeR" library to perform the Block randomization.
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R" class="alert-link">BlockRandomizationSubjectsUsingRPackage.R</a></p>
+</div>
 
-Description: 
+The function *BlockRandomizationSubjectsUsingRPackage.R* uses the `randomizeR::pbrPar()` function from the **randomizeR** package to perform block randomization.
 
-Imbalances between groups can be minimized in small sample–size studies by restricting the randomization procedure. Restricted randomization means applying randomization in a manner that helps ensure the desired proportions of treatment groups, beyond random chance, within defined groups of patients.
+In small-sample studies, imbalances between groups can be minimized by using restricted randomization. This approach ensures that treatment groups are allocated in the desired proportions while maintaining randomness.
 
-The permuted block technique randomizes patients into groups within a set of study participants, called a block. 
-Treatment assignments within blocks are determined so that they are random in order but that the desired allocation proportions are achieved exactly within each block.
+The **permuted block randomization** technique divides study participants into blocks, within which subjects are randomly assigned to treatment groups. This method ensures that the desired allocation proportions are exactly maintained within each block while keeping the order of assignments random.
+
+Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|---|------|
+|**BlockSize1**|Size of the first block for the randomization process.|
+|**BlockSize2**|Size of the second block for the randomization process.|
+|*...*|Block sizes for additional blocks follow the same format, incrementing the block number (e.g., BlockSize3, BlockSize4, etc.).|
+
+This function also uses parameters specified in East Horizon. Refer to the tables below for more information.
+
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Allocation Ratio|Design Card|$AllocRatio$|
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 2
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, bigcolxmin, 5.5, 6.5, 7.5, 8.5),
+  xmax = c(0.5, 1.5, bigcolxmax, 6, 7, 8, 9),
+  ymin = rep(4.2, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+ymaxsixthbox = yminfifthbox - spaceybox
+yminsixthbox = ymaxsixthbox - unitybox
+
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 4),
+  xmax = rep(bigcolxmax - 0.3, 4),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
+  label = c("Load allocation ratio and block sizes", 
+            "Loop through patients",
+            "Assign subjects to arms using\nblock randomization",
+            "Return allocation indices"),
+  fill = rep("#cfe2ff", 4)
+)
+
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 3),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3.7, 3.7),
+  ymax = c(4, 4),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
+

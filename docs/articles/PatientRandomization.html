@@ -120,9 +120,21 @@ Lahoti</h4>
 
     
     
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+These examples are related to the <strong>Integration Point:
+Randomization</strong>.
+<a href="IntegrationPointRandomization.html" class="alert-link">Click
+here for more information about this integration point.</a>
+</p>
+</div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>The following examples illustrate how to integrate new custom
+randomization methods and control how subjects are assigned to
+designated arms into East Horizon or East using R functions in the
+context of a two-arm trial.</p>
 <p>Once CyneRgy is installed, you can load this example in RStudio with
 the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -135,74 +147,202 @@ directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R" class="external-link">RandomizationSubjectsUsingUniformDistribution.R</a>
 - Contains a function named
-RandomizationSubjectsUsingUniformDistribution to demonstrate the R code
-necessary for Example 1 as described below.</p></li>
+<em>RandomizationSubjectsUsingUniformDistribution</em> to demonstrate
+the R code necessary for Example 1 as described below.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R" class="external-link">RandomizationSubjectsUsingSampleFunctionInR.R</a>
-- Contains a function named RandomizationSubjectsUsingSampleFunctionInR
-to demonstrate the R code necessary for Example 2 as described
-below.</p></li>
+- Contains a function named
+<em>RandomizationSubjectsUsingSampleFunctionInR</em> to demonstrate the
+R code necessary for Example 2 as described below.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R" class="external-link">BlockRandomizationSubjectsUsingRPackage.R</a>
-- Contains a function named BlockRandomizationSubjectsUsingRPackage to
-demonstrate the R code necessary for Example 3 as described
-below.</p></li>
+- Contains a function named
+<em>BlockRandomizationSubjectsUsingRPackage</em> to demonstrate the R
+code necessary for Example 3 as described below.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/LoadRandomizeR.R" class="external-link">LoadrandomizeR.R</a>
-- This file is used to install the “randomizeR” package for execution of
-Block Randomization in R.</p></li>
+- This file is used to install the <em>randomizeR</em> package for
+execution of Block Randomization in R.</p></li>
 </ol>
 </div>
 <div class="section level2">
 <h2 id="example-1---randomize-subjects-usings-uniform-distribution">Example 1 - Randomize Subjects Usings Uniform Distribution<a class="anchor" aria-label="anchor" href="#example-1---randomize-subjects-usings-uniform-distribution"></a>
 </h2>
-<p>The R function named “RandomizationSubjectsUsingUniformDistribution”
-in the file randomly allots the subjects to either of two arms using
-Uniform Distribution.</p>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R" class="external-link alert-link">RandomizationSubjectsUsingUniformDistribution.R</a>
+</p>
+</div>
+<p>The R function <em>RandomizationSubjectsUsingUniformDistribution</em>
+randomly assigns subjects to one of two arms using a uniform
+distribution.</p>
+<p>This function does not use any user-defined parameters, but uses
+parameters specified in East Horizon. Refer to the table below for more
+information.</p>
+<table class="table">
+<colgroup>
+<col width="38%">
+<col width="38%">
+<col width="23%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Name of the parameter in East Horizon</strong></th>
+<th><strong>Where to find the parameter in East Horizon</strong></th>
+<th><strong>Name of the variable in the R script</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>Allocation Ratio</td>
+<td>Design Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>l</mi><mi>l</mi><mi>o</mi><mi>c</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi></mrow><annotation encoding="application/x-tex">AllocRatio</annotation></semantics></math></td>
+</tr></tbody>
+</table>
 <p>Steps:</p>
-<ul>
-<li>We generate a random number from Uniform(0, 1). Save it as u.</li>
-<li>Let p = Allocation fraction on control arm and 1 - p = Allocation
-fraction on treatment arm.</li>
-<li>If u &lt;= p then allot the subject to the control arm else allot
-the subject to treatment arm.</li>
-<li>Make sure that Total sample size = Sample size on control + Sample
-size on treatment arm.</li>
-</ul>
+<ol style="list-style-type: decimal">
+<li>Generate a random number
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
+from a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>n</mi><mi>i</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Uniform(0,1)</annotation></semantics></math>
+distribution.</li>
+<li>Define
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+as the allocation fraction for the control arm, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">1 - p</annotation></semantics></math>
+as the allocation fraction for the treatment arm.</li>
+<li>If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>≤</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">u \leq p</annotation></semantics></math>,
+assign the subject to the control arm; otherwise, assign them to the
+treatment arm.</li>
+<li>Ensure that the total sample size equals the sum of subjects in the
+control and treatment arms.</li>
+</ol>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="PatientRandomization_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="example-2---randomize-subjects-using-sample-function">Example 2 - Randomize Subjects Using Sample Function<a class="anchor" aria-label="anchor" href="#example-2---randomize-subjects-using-sample-function"></a>
 </h2>
-<p>The R function named “RandomizationSubjectsUsingSampleFunctionInR” in
-the file makes use of Sample() function in R to randomly allot the
-patients on control and treatment arm.</p>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R" class="external-link alert-link">RandomizationSubjectsUsingSampleFunctionInR.R</a>
+</p>
+</div>
+<p>The R function <em>RandomizationSubjectsUsingSampleFunctionInR</em>
+uses the <code><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample()</a></code> function in R to randomly assign patients
+to the control and treatment arms.</p>
+<p>This function does not use any user-defined parameters, but uses
+parameters specified in East Horizon. Refer to the table below for more
+information.</p>
+<table class="table">
+<colgroup>
+<col width="38%">
+<col width="38%">
+<col width="23%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Name of the parameter in East Horizon</strong></th>
+<th><strong>Where to find the parameter in East Horizon</strong></th>
+<th><strong>Name of the variable in the R script</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>Allocation Ratio</td>
+<td>Design Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>l</mi><mi>l</mi><mi>o</mi><mi>c</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi></mrow><annotation encoding="application/x-tex">AllocRatio</annotation></semantics></math></td>
+</tr></tbody>
+</table>
 <p>Steps:</p>
-<ul>
-<li>Let p = Allocation fraction on control arm and 1 - p = Allocation
-fraction on treatment arm.</li>
-<li>Compute Expected Sample size (rounded) for control and treatment
-arms using Allocation Fraction and Total sample size.</li>
-<li>Randomly allot the indices to the control and treatment arms using
-the sample() function available in R.</li>
-<li>Create a vector of zeroes of size = NumSub (Number of subjects) and
-then replace the zeroes by 1 for the Indices that correspond to
-treatment.</li>
-</ul>
+<ol style="list-style-type: decimal">
+<li>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+be the allocation fraction for the control arm, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">1 - p</annotation></semantics></math>
+as the allocation fraction for the treatment arm.</li>
+<li>Compute the expected sample sizes (rounded) for both arms using the
+allocation fraction and total sample size.</li>
+<li>Randomly assign subject indices to the control and treatment arms
+using the <code><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample()</a></code> function in R.</li>
+<li>Create a vector of zeros with size equal to the total number of
+subjects
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mi>u</mi><mi>m</mi><mi>S</mi><mi>u</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">NumSub</annotation></semantics></math>),
+then replace the zeros with ones for indices corresponding to the
+treatment arm.</li>
+</ol>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="PatientRandomization_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="example-3---randomize-subjects-using-randomizer-package">Example 3 - Randomize Subjects Using randomizeR Package<a class="anchor" aria-label="anchor" href="#example-3---randomize-subjects-using-randomizer-package"></a>
 </h2>
-<p>The function named “BlockRandomizationSubjectsUsingRPackage.R” in the
-file makes use of pbrPar() function from the “randomizeR” library to
-perform the Block randomization.</p>
-<p>Description:</p>
-<p>Imbalances between groups can be minimized in small sample–size
-studies by restricting the randomization procedure. Restricted
-randomization means applying randomization in a manner that helps ensure
-the desired proportions of treatment groups, beyond random chance,
-within defined groups of patients.</p>
-<p>The permuted block technique randomizes patients into groups within a
-set of study participants, called a block. Treatment assignments within
-blocks are determined so that they are random in order but that the
-desired allocation proportions are achieved exactly within each
-block.</p>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R" class="external-link alert-link">BlockRandomizationSubjectsUsingRPackage.R</a>
+</p>
+</div>
+<p>The function <em>BlockRandomizationSubjectsUsingRPackage.R</em> uses
+the <code><a href="https://rdrr.io/pkg/randomizeR/man/pbrPar.html" class="external-link">randomizeR::pbrPar()</a></code> function from the
+<strong>randomizeR</strong> package to perform block randomization.</p>
+<p>In small-sample studies, imbalances between groups can be minimized
+by using restricted randomization. This approach ensures that treatment
+groups are allocated in the desired proportions while maintaining
+randomness.</p>
+<p>The <strong>permuted block randomization</strong> technique divides
+study participants into blocks, within which subjects are randomly
+assigned to treatment groups. This method ensures that the desired
+allocation proportions are exactly maintained within each block while
+keeping the order of assignments random.</p>
+<p>Refer to the table below for the definitions of the user-defined
+parameters used in this example.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>BlockSize1</strong></td>
+<td>Size of the first block for the randomization process.</td>
+</tr>
+<tr class="even">
+<td><strong>BlockSize2</strong></td>
+<td>Size of the second block for the randomization process.</td>
+</tr>
+<tr class="odd">
+<td><em>…</em></td>
+<td>Block sizes for additional blocks follow the same format,
+incrementing the block number (e.g., BlockSize3, BlockSize4, etc.).</td>
+</tr>
+</tbody>
+</table>
+<p>This function also uses parameters specified in East Horizon. Refer
+to the tables below for more information.</p>
+<table class="table">
+<colgroup>
+<col width="38%">
+<col width="38%">
+<col width="23%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Name of the parameter in East Horizon</strong></th>
+<th><strong>Where to find the parameter in East Horizon</strong></th>
+<th><strong>Name of the variable in the R script</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>Allocation Ratio</td>
+<td>Design Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>l</mi><mi>l</mi><mi>o</mi><mi>c</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi></mrow><annotation encoding="application/x-tex">AllocRatio</annotation></semantics></math></td>
+</tr></tbody>
+</table>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="PatientRandomization_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

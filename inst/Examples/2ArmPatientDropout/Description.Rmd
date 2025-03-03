@@ -1,10 +1,7 @@
 ---
-title: '2-Arm, Single Endpoint - Simulate Patient Dropout'
-author: "Shubham Lahoti, J. Kyle Wathen, Gabriel Potvin"
+title: "2-Arm, Single Endpoint - Simulate Patient Dropout"
+author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document: default
-  word_document: default
 ---
 
 <div class="alert alert-primary" role="alert">
@@ -39,7 +36,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="alert-link">GenerateCensoringUsingBinomialProportion.R.R</a></p>
 </div>
 
-The R function *GenerateCensoringUsingBinomialProportion* generates the censoring indicator using the dropout probability specified in East Horizon (*ProbDrop* in the script, *Probability of Dropout* in East Horizon) for continuous or binary outcome. This function applies the binomial distribution to determine dropout status. In this case, the dropout probability is the same across both treatment groups, but this can be customized using user-defined parameters. 
+The R function *GenerateCensoringUsingBinomialProportion* generates the censoring indicator using the dropout probability specified in East Horizon (*ProbDrop* in the script, *Probability of Dropout* in East Horizon) for continuous or binary outcome. This function applies the binomial distribution using the `rbinom()` function in R to determine dropout status. In this case, the dropout probability is the same across both treatment groups, but this can be customized using user-defined parameters. 
 
 This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
 
@@ -88,7 +85,7 @@ yminfourthbox = ymaxfourthbox - unitybox
 ymaxfifthbox = yminfourthbox - spaceybox
 yminfifthbox = ymaxfifthbox - unitybox
 
-# Define flowchart steps inside "Dropout"
+# Define flowchart steps 
 flowchart <- data.frame(
   xmin = rep(bigcolxmin + 0.3, 4),
   xmax = rep(bigcolxmax - 0.3, 4),
@@ -101,7 +98,7 @@ flowchart <- data.frame(
   fill = rep("#cfe2ff", 4)
 )
 
-# Define arrows for flowchart inside "Dropout"
+# Define arrows for flowchart 
 flowchart_arrows <- data.frame(
   x = rep((bigcolxmin+bigcolxmax)/2, 3),
   xend = rep((bigcolxmin+bigcolxmax)/2, 3),
@@ -127,7 +124,7 @@ p <- ggplot() +
   scale_fill_identity() +
   # Add labels for the columns
   geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart inside "Dropout"
+  # Add flowchart 
   geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
   geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
   # Add arrows between flowchart boxes
@@ -190,7 +187,7 @@ yminfourthbox = ymaxfourthbox - unitybox*1.5
 ymaxfifthbox = yminfourthbox - spaceybox
 yminfifthbox = ymaxfifthbox - unitybox
 
-# Define flowchart steps inside "Dropout"
+# Define flowchart steps 
 flowchart <- data.frame(
   xmin = rep(bigcolxmin + 0.3, 5),
   xmax = rep(bigcolxmax - 0.3, 5),
@@ -204,7 +201,7 @@ flowchart <- data.frame(
   fill = rep("#cfe2ff", 5)
 )
 
-# Define arrows for flowchart inside "Dropout"
+# Define arrows for flowchart 
 flowchart_arrows <- data.frame(
   x = rep((bigcolxmin+bigcolxmax)/2, 4),
   xend = rep((bigcolxmin+bigcolxmax)/2, 4),
@@ -230,7 +227,7 @@ p <- ggplot() +
   scale_fill_identity() +
   # Add labels for the columns
   geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart inside "Dropout"
+  # Add flowchart 
   geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
   geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
   # Add arrows between flowchart boxes
@@ -293,7 +290,7 @@ yminfourthbox = ymaxfourthbox - unitybox*1.5
 ymaxfifthbox = yminfourthbox - spaceybox
 yminfifthbox = ymaxfifthbox - unitybox
 
-# Define flowchart steps inside "Dropout"
+# Define flowchart steps 
 flowchart <- data.frame(
   xmin = rep(bigcolxmin + 0.3, 5),
   xmax = rep(bigcolxmax - 0.3, 5),
@@ -307,7 +304,7 @@ flowchart <- data.frame(
   fill = rep("#cfe2ff", 5)
 )
 
-# Define arrows for flowchart inside "Dropout"
+# Define arrows for flowchart 
 flowchart_arrows <- data.frame(
   x = rep((bigcolxmin+bigcolxmax)/2, 4),
   xend = rep((bigcolxmin+bigcolxmax)/2, 4),
@@ -333,7 +330,7 @@ p <- ggplot() +
   scale_fill_identity() +
   # Add labels for the columns
   geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart inside "Dropout"
+  # Add flowchart 
   geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
   geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
   # Add arrows between flowchart boxes

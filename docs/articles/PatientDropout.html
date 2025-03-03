@@ -177,10 +177,10 @@ This example is related to this R file:
 generates the censoring indicator using the dropout probability
 specified in East Horizon (<em>ProbDrop</em> in the script,
 <em>Probability of Dropout</em> in East Horizon) for continuous or
-binary outcome. This function applies the binomial distribution to
-determine dropout status. In this case, the dropout probability is the
-same across both treatment groups, but this can be customized using
-user-defined parameters.</p>
+binary outcome. This function applies the binomial distribution using
+the <code><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom()</a></code> function in R to determine dropout status. In
+this case, the dropout probability is the same across both treatment
+groups, but this can be customized using user-defined parameters.</p>
 <p>This function does not use any user-defined parameters, but uses
 parameters specified in East Horizon. Refer to the table below for more
 information.</p>

@@ -269,7 +269,7 @@ This example simulates patient data using a mixture of exponential distributions
 |**ProbSubgroup2**|Probability a patient is in subgroup 2.|
 |**MedianTTECtrlSubgroup2**|Median time-to-event for a patient in subgroup 2 that receives control treatment.|
 |**MedianTTEExpSubgroup2**|Median time-to-event for a patient in subgroup 2 that receives experimental treatment.|
-|*...*||Probabilities and median time-to-event for additional subgroups follow the same format, incrementing the subgroup number (e.g., ProbSubgroup3, MedianTTECtrlSubgroup3, MedianTTEExpSubgroup3, etc.).|
+|*...*|Probabilities and median time-to-event for additional subgroups follow the same format, incrementing the subgroup number (e.g., ProbSubgroup3, MedianTTECtrlSubgroup3, MedianTTEExpSubgroup3, etc.).|
 |**ProbSubgroup`QtyOfSubgroups`**|Probability a patient is in the final subgroup. `QtyOfSubgroups` should be replaced by the number of subgroups.|
 |**MedianTTECtrlSubgroup`QtyOfSubgroups`**|Median time-to-event for a patient in the final subgroup that receives control treatment. `QtyOfSubgroups` should be replaced by the number of subgroups.|
 |**MedianTTEExpSubgroup`QtyOfSubgroups`**|Median time-to-event for a patient in the final subgroup that receives experimental treatment. `QtyOfSubgroups` should be replaced by the number of subgroups.|

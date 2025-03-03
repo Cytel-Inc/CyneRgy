@@ -34,7 +34,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="alert-link">GeneratePoissonArrival.R</a></p>
 </div>
 
-This example does not use any user-defined parameters, but uses built-in parameters specified in East Horizon. We use the built-in inputs of start periods and expected accrual rates to implement a user-specified ramp-up in accrual using Poisson. Refer to the table below for more information.
+This example does not use any user-defined parameters, but uses built-in parameters specified in East Horizon. We use the built-in inputs of start periods and expected accrual rates (*Starting at Time* and *Average Subjects Enrolled* in the *Enrollment Card*) to implement a user-specified ramp-up in accrual using Poisson. Refer to the table below for more information.
 
 |**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|**Value**
 |-----|----|---|-|
@@ -106,7 +106,7 @@ yminfourthbox = ymaxfourthbox - unitybox*1.5
 ymaxfifthbox = yminfourthbox - spaceybox
 yminfifthbox = ymaxfifthbox - unitybox
 
-# Define flowchart steps inside "Dropout"
+# Define flowchart steps 
 flowchart <- data.frame(
   xmin = rep(bigcolxmin + 0.3, 5),
   xmax = rep(bigcolxmax - 0.3, 5),
@@ -120,7 +120,7 @@ flowchart <- data.frame(
   fill = rep("#cfe2ff", 5)
 )
 
-# Define arrows for flowchart inside "Dropout"
+# Define arrows for flowchart 
 flowchart_arrows <- data.frame(
   x = rep((bigcolxmin+bigcolxmax)/2, 4),
   xend = rep((bigcolxmin+bigcolxmax)/2, 4),
@@ -146,7 +146,7 @@ p <- ggplot() +
   scale_fill_identity() +
   # Add labels for the columns
   geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart inside "Dropout"
+  # Add flowchart 
   geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
   geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
   # Add arrows between flowchart boxes
@@ -238,7 +238,7 @@ yminfourthbox = ymaxfourthbox - unitybox*1.5
 ymaxfifthbox = yminfourthbox - spaceybox
 yminfifthbox = ymaxfifthbox - unitybox
 
-# Define flowchart steps inside "Dropout"
+# Define flowchart steps 
 flowchart <- data.frame(
   xmin = rep(bigcolxmin + 0.3, 5),
   xmax = rep(bigcolxmax - 0.3, 5),
@@ -252,7 +252,7 @@ flowchart <- data.frame(
   fill = rep("#cfe2ff", 5)
 )
 
-# Define arrows for flowchart inside "Dropout"
+# Define arrows for flowchart 
 flowchart_arrows <- data.frame(
   x = rep((bigcolxmin+bigcolxmax)/2, 4),
   xend = rep((bigcolxmin+bigcolxmax)/2, 4),
@@ -278,7 +278,7 @@ p <- ggplot() +
   scale_fill_identity() +
   # Add labels for the columns
   geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart inside "Dropout"
+  # Add flowchart 
   geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
   geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
   # Add arrows between flowchart boxes
