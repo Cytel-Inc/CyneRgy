@@ -34,7 +34,22 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="alert-link">GeneratePoissonArrival.R</a></p>
 </div>
 
-In this example, we use the built-in inputs of East Horizon or East to implement a user-specified ramp-up in accrual using Poisson. Suppose the user defines the start periods as 0, 6, 12, 18, 24, and 48 (*Starting at Time* in East Horizon, *PrdStart* in the R script) and specifies the expected accrual rates (*Average Subjects Enrolled* in East Horizon, *AccrRate* in the R script) as 1, 4, 12, 24, and 48. This means:
+This example does not use any user-defined parameters, but uses built-in parameters specified in East Horizon. We use the built-in inputs of start periods and expected accrual rates to implement a user-specified ramp-up in accrual using Poisson. Refer to the table below for more information.
+
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|**Value**
+|-----|----|---|-|
+|Starting at Time (Period 1)|Enrollment Card|$PrdStart[ 1 ]$|0|
+|Starting at Time (Period 2)|Enrollment Card|$PrdStart[ 2 ]$|6|
+|Starting at Time (Period 3)|Enrollment Card|$PrdStart[ 3 ]$|12|
+|Starting at Time (Period 4)|Enrollment Card|$PrdStart[ 4 ]$|18|
+|Starting at Time (Period 5)|Enrollment Card|$PrdStart[ 5 ]$|24|
+|Average Subjects Enrolled (Period 1)|Enrollment Card|$AccrRate[ 1 ]$|1|
+|Average Subjects Enrolled (Period 2)|Enrollment Card|$AccrRate[ 2 ]$|4|
+|Average Subjects Enrolled (Period 3)|Enrollment Card|$AccrRate[ 3 ]$|12|
+|Average Subjects Enrolled (Period 4)|Enrollment Card|$AccrRate[ 4 ]$|24|
+|Average Subjects Enrolled (Period 5)|Enrollment Card|$AccrRate[ 5 ]$|48|
+
+This means:
 
 - From time 0 to 6, the expected accrual rate is 1 patient per time unit.
 - From time 6 to 12, the rate increases to 4 patients per time unit.
@@ -54,11 +69,97 @@ NumPrd   <- 1
 AccrRate <- c( 1, 4, 12, 24, 48)
 PrdStart <- c( 0, 6, 12, 18, 24 )
 lRet2 <- GeneratePoissonArrival( NumSub, NumPrd, PrdStart, AccrRate  )
-plot( lRet2$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time",main = "Number of Patients Enrolled Using PrdStart and AccrRate", ylab = "Number of Patients Enrolled", ylim = c(0,300), xlim = c(0,26))
+plot( lRet2$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time", main = "Number of Patients Enrolled Using PrdStart and AccrRate", ylab = "Number of Patients Enrolled", ylim = c(0,300), xlim = c(0,26))
 abline( v = PrdStart, lty =2)
 ```
 
-This example does not use any user-defined parameters.
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 1
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, bigcolxmin, 4.5, 5.5, 6.5, 7.5, 8.5),
+  xmax = c(0.5, bigcolxmax, 5, 6, 7, 8, 9),
+  ymin = rep(3, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps inside "Dropout"
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 5),
+  xmax = rep(bigcolxmax - 0.3, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load period starts and accrual rates", 
+            "Calculate duration of accrual periods",
+            "Loop through patients", 
+            "Simulate patient arrival times\nusing Poisson process", 
+            "Return arrival times"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart inside "Dropout"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Dropout"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
 
 # Example 2 - Ramp-Up In Accrual Using UserParam
 
@@ -66,17 +167,17 @@ This example does not use any user-defined parameters.
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="alert-link">GeneratePoissonArrival.R</a></p>
 </div>
 
-Now, let's extend this approach by incorporating custom variables (*UserParam*). In this example, we use a custom R script and specify seven accrual rates. When custom variables are provided, the built-in variables *PrdStart* and *AccrRate* are ignored. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+Now, let's extend this approach by incorporating custom user-defined variables (*UserParam*). In this example, we use the same R function as before but we specify seven accrual rates as user parameters in East Horizon after selecting the R script. When custom variables are provided, the built-in variables *PrdStart* and *AccrRate* are ignored. Here, we cannot specify the start of the periods. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
 |**User parameter**|**Definition**|**Value**|
 |---|------|---|
-|**Rate1**|Accural rate in the first unit of time|3|
-|**Rate2**|Accural rate in the second unit of time|6|
-|**Rate3**|Accural rate in the third unit of time|10|
-|**Rate4**|Accural rate in the fourth unit of time|15|
-|**Rate5**|Accural rate in the fifth unit of time|18|
-|**Rate6**|Accural rate in the sixth unit of time|25|
-|**Rate7**|Accural rate in the seventh unit of time|35|
+|$UserParam\$dRate1$|Accrual rate in the first unit of time|3|
+|$UserParam\$dRate2$|Accrual rate in the second unit of time|6|
+|$UserParam\$dRate3$|Accrual rate in the third unit of time|10|
+|$UserParam\$dRate4$|Accrual rate in the fourth unit of time|15|
+|$UserParam\$dRate5$|Accrual rate in the fifth unit of time|18|
+|$UserParam\$dRate6$|Accrual rate in the sixth unit of time|25|
+|$UserParam\$dRate7$|Accrual rate in the seventh unit of time|35|
 
 Warning, the first time unit is 0, not 1. This means:
 
@@ -104,6 +205,90 @@ lRet <- GeneratePoissonArrival( NumSub, NumPrd, PrdStart, AccrRate, UserParam )
 plot( lRet$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time", ylab ="Number of Patients Enrolled", main = "Number of Patients Enrolled Using UserParam")
 ```
 
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
 
+bigcolxmin = 1
+bigcolxmax = bigcolxmin + 3
 
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, bigcolxmin, 4.5, 5.5, 6.5, 7.5, 8.5),
+  xmax = c(0.5, bigcolxmax, 5, 6, 7, 8, 9),
+  ymin = rep(3, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps inside "Dropout"
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 5),
+  xmax = rep(bigcolxmax - 0.3, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load accrual rates", 
+            "Calculate duration of accrual periods",
+            "Loop through patients", 
+            "Simulate patient arrival times\nusing Poisson process", 
+            "Return arrival times"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart inside "Dropout"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Dropout"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```

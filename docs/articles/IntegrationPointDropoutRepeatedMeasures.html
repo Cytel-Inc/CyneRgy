@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">February 28, 2025</h4>
+            <h4 data-toc-skip class="date">March 03, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointDropoutRepeatedMeasures.Rmd</code></div>
@@ -197,7 +197,7 @@ times.</td>
 <td>Parameter(s) used to generate dropout times for control arm.</td>
 </tr>
 <tr class="odd">
-<td><strong>DropParamTrt</strong></td>
+<td><strong>DropParamtrt</strong></td>
 <td>– If <code>DropMethod = 1</code>: Vector of Numeric of length
 <code>NumVisit</code><br>– If <code>DropMethod = 2</code>: Numeric</td>
 <td>Parameter(s) used to generate dropout times for treatment arm.</td>
@@ -377,7 +377,7 @@ available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Tem
 <h3 id="minimal-template-for-option-1">Minimal Template for Option 1<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-1"></a>
 </h3>
 <pre><code><span><span class="va">GenDropTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">NumVisit</span>, <span class="va">VisitTime</span>, <span class="va">TreatmentID</span>,</span>
-<span>                          <span class="va">DropMethod</span>, <span class="va">ByTime</span>, <span class="va">DropParamControl</span>, <span class="va">DropParamTrt</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span>                          <span class="va">DropMethod</span>, <span class="va">ByTime</span>, <span class="va">DropParamControl</span>, <span class="va">DropParamtrt</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">vDropoutTime</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="cn">Inf</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing dropout times vector to Inf (all patients are completers)  </span></span>
@@ -392,7 +392,7 @@ available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Tem
 <h3 id="minimal-template-for-option-2">Minimal Template for Option 2<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-2"></a>
 </h3>
 <pre><code><span><span class="va">GenDropVisitID</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">NumVisit</span>, <span class="va">VisitTime</span>, <span class="va">TreatmentID</span>,</span>
-<span>                            <span class="va">DropMethod</span>, <span class="va">ByTime</span>, <span class="va">DropParamControl</span>, <span class="va">DropParamTrt</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span>                            <span class="va">DropMethod</span>, <span class="va">ByTime</span>, <span class="va">DropParamControl</span>, <span class="va">DropParamtrt</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">vDropoutVisitID</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">1</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing dropout visit IDs vector to 1 (all patients drop out after first visit)  </span></span>
@@ -407,7 +407,7 @@ available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Tem
 <h3 id="minimal-template-for-option-3">Minimal Template for Option 3<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-3"></a>
 </h3>
 <pre><code><span><span class="va">GenCensorInd</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">NumVisit</span>, <span class="va">VisitTime</span>, <span class="va">TreatmentID</span>,</span>
-<span>                          <span class="va">DropMethod</span>, <span class="va">ByTime</span>, <span class="va">DropParamControl</span>, <span class="va">DropParamTrt</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span>                          <span class="va">DropMethod</span>, <span class="va">ByTime</span>, <span class="va">DropParamControl</span>, <span class="va">DropParamtrt</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">vCensorInd</span>        <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span>

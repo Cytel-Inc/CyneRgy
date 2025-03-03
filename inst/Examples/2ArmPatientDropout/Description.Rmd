@@ -43,9 +43,9 @@ The R function *GenerateCensoringUsingBinomialProportion* generates the censorin
 
 This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
 
-|**Parameter in East Horizon**|**Section of East Horizon**|**Variable in the R script**|
-|---|---|---|
-|*Probability of Dropout*|*Response Card*|*ProbDrop*|
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Probability of Dropout|Response Card|$ProbDrop$|
 
 Steps:  
 
@@ -152,10 +152,10 @@ The function *GenerateDropoutTimeForSurvival* generates dropout times for a two-
 
 This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
 
-|**Parameter in East Horizon**|**Section of East Horizon**|**Variable in the R script**|
-|---|---|---|
-|Probability of Dropout: *Control*|*Response Card*, *Dropout Rate* tab|*DropParam[ 1 ]*|
-|Probability of Dropout: *Treatment*|*Response Card*, *Dropout Rate* tab|*DropParam[ 2 ]*|
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Probability of Dropout: Control|Response Card, Dropout Rate tab|$DropParam[ 1 ]$|
+|Probability of Dropout: Treatment|Response Card, Dropout Rate tab|$DropParam[ 2 ]$|
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -196,7 +196,7 @@ flowchart <- data.frame(
   xmax = rep(bigcolxmax - 0.3, 5),
   ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
   ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
-  label = c("Load dropout probabilities (cont./exp.)", 
+  label = c("Load dropout probabilities", 
             "Calculate dropout rates",
             "Loop through patients", 
             "Simulate whether patient drops out\nusing exponential distribution", 
@@ -255,10 +255,10 @@ The function *GenerateDropoutTimeForRM* generates dropout times for a continuous
 
 This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
 
-|**Parameter in East Horizon**|**Section of East Horizon**|**Variable in the R script**|
-|---|---|---|
-|Probability of Dropout: *Control*|*Response Card*, *Dropout Rate* tab|*DropParamControl*|
-|Probability of Dropout: *Treatment*|*Response Card*, *Dropout Rate* tab|*DropParamTrt*|
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Probability of Dropout: Control|Response Card, Dropout Rate tab|$DropParamControl$|
+|Probability of Dropout: Treatment|Response Card, Dropout Rate tab|$DropParamtrt$|
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -299,7 +299,7 @@ flowchart <- data.frame(
   xmax = rep(bigcolxmax - 0.3, 5),
   ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
   ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
-  label = c("Load dropout probabilities (cont./exp.)", 
+  label = c("Load dropout probabilities", 
             "Calculate dropout rates",
             "Loop through patients", 
             "Simulate whether patient drops out\nusing exponential distribution", 

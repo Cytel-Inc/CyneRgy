@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">February 28, 2025</h4>
+            <h4 data-toc-skip class="date">March 03, 2025</h4>
       
 
       <div class="d-none name"><code>GeneratePoissonArrival.Rmd</code></div>
@@ -162,13 +162,88 @@ This example is related to this R file:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link alert-link">GeneratePoissonArrival.R</a>
 </p>
 </div>
-<p>In this example, we use the built-in inputs of East Horizon or East
-to implement a user-specified ramp-up in accrual using Poisson. Suppose
-the user defines the start periods as 0, 6, 12, 18, 24, and 48
-(<em>Starting at Time</em> in East Horizon, <em>PrdStart</em> in the R
-script) and specifies the expected accrual rates (<em>Average Subjects
-Enrolled</em> in East Horizon, <em>AccrRate</em> in the R script) as 1,
-4, 12, 24, and 48. This means:</p>
+<p>This example does not use any user-defined parameters, but uses
+built-in parameters specified in East Horizon. We use the built-in
+inputs of start periods and expected accrual rates to implement a
+user-specified ramp-up in accrual using Poisson. Refer to the table
+below for more information.</p>
+<table class="table">
+<colgroup>
+<col width="38%">
+<col width="30%">
+<col width="23%">
+<col width="7%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Name of the parameter in East Horizon</strong></th>
+<th><strong>Where to find the parameter in East Horizon</strong></th>
+<th><strong>Name of the variable in the R script</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Starting at Time (Period 1)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 1 ]</annotation></semantics></math></td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>Starting at Time (Period 2)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>2</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 2 ]</annotation></semantics></math></td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>Starting at Time (Period 3)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>3</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 3 ]</annotation></semantics></math></td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>Starting at Time (Period 4)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>4</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 4 ]</annotation></semantics></math></td>
+<td>18</td>
+</tr>
+<tr class="odd">
+<td>Starting at Time (Period 5)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>5</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 5 ]</annotation></semantics></math></td>
+<td>24</td>
+</tr>
+<tr class="even">
+<td>Average Subjects Enrolled (Period 1)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 1 ]</annotation></semantics></math></td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Average Subjects Enrolled (Period 2)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>2</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 2 ]</annotation></semantics></math></td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>Average Subjects Enrolled (Period 3)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>3</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 3 ]</annotation></semantics></math></td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>Average Subjects Enrolled (Period 4)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>4</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 4 ]</annotation></semantics></math></td>
+<td>24</td>
+</tr>
+<tr class="even">
+<td>Average Subjects Enrolled (Period 5)</td>
+<td>Enrollment Card</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>5</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 5 ]</annotation></semantics></math></td>
+<td>48</td>
+</tr>
+</tbody>
+</table>
+<p>This means:</p>
 <ul>
 <li>From time 0 to 6, the expected accrual rate is 1 patient per time
 unit.</li>
@@ -184,7 +259,10 @@ per time unit.</li>
 with dashed lines marking the time points where accrual rates
 change:</p>
 <p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>This example does not use any user-defined parameters.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="example-2---ramp-up-in-accrual-using-userparam">Example 2 - Ramp-Up In Accrual Using UserParam<a class="anchor" aria-label="anchor" href="#example-2---ramp-up-in-accrual-using-userparam"></a>
@@ -195,12 +273,14 @@ This example is related to this R file:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link alert-link">GeneratePoissonArrival.R</a>
 </p>
 </div>
-<p>Now, let’s extend this approach by incorporating custom variables
-(<em>UserParam</em>). In this example, we use a custom R script and
-specify seven accrual rates. When custom variables are provided, the
-built-in variables <em>PrdStart</em> and <em>AccrRate</em> are ignored.
-Refer to the table below for the definitions and values of the
-user-defined parameters used in this example.</p>
+<p>Now, let’s extend this approach by incorporating custom user-defined
+variables (<em>UserParam</em>). In this example, we use the same R
+function as before but we specify seven accrual rates as user parameters
+in East Horizon after selecting the R script. When custom variables are
+provided, the built-in variables <em>PrdStart</em> and <em>AccrRate</em>
+are ignored. Here, we cannot specify the start of the periods. Refer to
+the table below for the definitions and values of the user-defined
+parameters used in this example.</p>
 <table class="table">
 <thead><tr class="header">
 <th><strong>User parameter</strong></th>
@@ -209,38 +289,38 @@ user-defined parameters used in this example.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><strong>Rate1</strong></td>
-<td>Accural rate in the first unit of time</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate1</annotation></semantics></math></td>
+<td>Accrual rate in the first unit of time</td>
 <td>3</td>
 </tr>
 <tr class="even">
-<td><strong>Rate2</strong></td>
-<td>Accural rate in the second unit of time</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate2</annotation></semantics></math></td>
+<td>Accrual rate in the second unit of time</td>
 <td>6</td>
 </tr>
 <tr class="odd">
-<td><strong>Rate3</strong></td>
-<td>Accural rate in the third unit of time</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate3</annotation></semantics></math></td>
+<td>Accrual rate in the third unit of time</td>
 <td>10</td>
 </tr>
 <tr class="even">
-<td><strong>Rate4</strong></td>
-<td>Accural rate in the fourth unit of time</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate4</annotation></semantics></math></td>
+<td>Accrual rate in the fourth unit of time</td>
 <td>15</td>
 </tr>
 <tr class="odd">
-<td><strong>Rate5</strong></td>
-<td>Accural rate in the fifth unit of time</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate5</annotation></semantics></math></td>
+<td>Accrual rate in the fifth unit of time</td>
 <td>18</td>
 </tr>
 <tr class="even">
-<td><strong>Rate6</strong></td>
-<td>Accural rate in the sixth unit of time</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>6</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate6</annotation></semantics></math></td>
+<td>Accrual rate in the sixth unit of time</td>
 <td>25</td>
 </tr>
 <tr class="odd">
-<td><strong>Rate7</strong></td>
-<td>Accural rate in the seventh unit of time</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>7</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate7</annotation></semantics></math></td>
+<td>Accrual rate in the seventh unit of time</td>
 <td>35</td>
 </tr>
 </tbody>
@@ -257,7 +337,11 @@ time.</li>
 over a six-month period, with the accrual rate stabilizing at
 <em>dRate7</em> (35) from month 6 onward. This could produce an accrual
 pattern resembling the following:</p>
-<p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
