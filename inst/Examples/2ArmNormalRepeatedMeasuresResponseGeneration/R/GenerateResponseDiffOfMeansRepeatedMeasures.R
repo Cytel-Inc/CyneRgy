@@ -42,8 +42,8 @@ GenRespDiffOfMeansRepMeasures      <- function( NumSub, NumVisit, TreatmentID, I
   
   vQtyPatientsPerArm               <- table( TreatmentID )
   
-  mCtrl                            <- MASS::mvrnorm()( vQtyPatientsPerArm[ 1 ], MeanControl, Sigma = mCovarianceControl ) 
-  mExp                             <- MASS::mvrnorm()( vQtyPatientsPerArm[ 2 ], MeanTrt,  Sigma = mCovarianceTrt ) 
+  mCtrl                            <- MASS::mvrnorm( vQtyPatientsPerArm[ 1 ], MeanControl, Sigma = mCovarianceControl ) 
+  mExp                             <- MASS::mvrnorm( vQtyPatientsPerArm[ 2 ], MeanTrt,  Sigma = mCovarianceTrt ) 
  
   # Initialize a matrix to hold the outcomes
   mOutcomes                        <- matrix( nrow = sum( vQtyPatientsPerArm ), ncol = nQtyTimePoints )
