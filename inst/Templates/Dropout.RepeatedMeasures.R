@@ -26,7 +26,7 @@
 #'                                     }
 #'                                     }
 #'                  \item{DropOutTime}{ Applicable for Repeated measures. A numeric array of generated dropout times.}
-#'                  \item{CensorInd[NumVisit]}{Applicable for Repeated Measures design. A set of arrays of censor indicator values for all subjects. Each array corresponds to each visit user has specified.}
+#'                  \item{CensorInd<NumVisit>}{Applicable for Repeated Measures design. A set of arrays of censor indicator values for all subjects. Each array corresponds to each visit user has specified.}
 #'                  \item{DropoutVisitID}{Applicable for Repeated Measures design. An array of 1-based Visit ID after which the patient dropped out.}
 #'                      }
 
@@ -63,7 +63,7 @@
     retval$ErrorCode <- as.integer(Error)
     
     # Repeated Measures Dropout Output Hierarchy
-    # Step 1: If user has returned Censor Indicator arrays CensorInd1, CensorInd2, ..., CensorInd[NumVisit] from their R code, 
+    # Step 1: If user has returned Censor Indicator arrays CensorInd1, CensorInd2, ..., CensorInd<NumVisit> from their R code, 
     # then no other outputs are required. In that case, all other outputs become optional and the workflow ends here. 
     # If user has not returned Censor Indicator arrays from their R code, please go to Step 2.
     # 

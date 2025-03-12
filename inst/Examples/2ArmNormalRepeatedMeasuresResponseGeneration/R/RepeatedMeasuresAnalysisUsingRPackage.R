@@ -2,8 +2,6 @@
 
 MMRMAna <-function(SimData, DesignParam, UserParam = NULL )
 {
-  library(nlme)
-  library(stats)
   Error <- 0
   primdeltaest = 0
   secdeltaest = 0
@@ -23,10 +21,10 @@ y0 <- rep(y0, each = NumVisit - 1)
 
 trt <- longData[longData$time != 5,]$TreatmentID
 
-mmrm <- gls(y~y0+trt,
-            na.action=na.omit, data=longData,
-            correlation=nlme::corSymm(form=~time | id),
-            weights=nlme::varIdent(form=~1|time))
+mmrm <- nlme::gls(y~y0+trt,
+                  na.action=na.omit, data=longData,
+                  correlation=nlme::corSymm(form=~time | id),
+                  weights=nlme::varIdent(form=~1|time))
 # mmrm <- gls(y~y0*factor(t)+TreatmentID*factor(t),
 #             na.action=na.omit, data=longData,
 #             correlation=nlme::corSymm(form=~time | id),

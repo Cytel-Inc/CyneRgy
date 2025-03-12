@@ -111,14 +111,7 @@
     bFAEfficacyCheck <- TRUE
     
     # Setup look decision logic
-    # Generate decision using GetDecisionString and GetDecision helpers
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = bIAEfficayCheck,
-                                               bIAFutilityCondition = bIAFutilityCheck,
-                                               bFAEfficacyCondition = bFAEfficacyCheck)
-    
-    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-    
+    nDecision <- 0
     vDecision <- rep( nDecision, DesignParam$NumTreatments )
     return( list(Decision  = as.integer(vDecision), 
                  ErrorCode = as.integer(nError)) )
@@ -126,8 +119,8 @@
     # Option 2: Script returns adjusted p value ####
     # Use this option if you want to calculate the adjusted p value with your own logic
     # but want to use the Decision generation logic of East Horizon
-    vAdjPVal <- 0
-    vDelta <- 0
+    vAdjPVal <- rep( 0, DesignParam$NumTreatments )
+    vDelta <- rep( 0, DesignParam$NumTreatments )
     # Setup adjusted p value calculation logic
     return( list(AdjPVal = vAdjPVal,
                  Delta = vDelta,
@@ -136,8 +129,8 @@
     # Option 3: Script returns raw p value ####
     # Use this option if you want to calculate the raw p values with your own logic
     # but want to use the Decision generation logic of East Horizon
-    vRawPVal <- 0
-    vDelta <- 0
+    vRawPVal <- rep( 0, DesignParam$NumTreatments )
+    vDelta <- rep( 0, DesignParam$NumTreatments )
     # Setup raw p value calculation logic
     return( list(RawPVal = vRawPVal,
                  Delta = vDelta,
@@ -146,8 +139,8 @@
     # Option 4: Script returns test statistic ####
     # Use this option if you want to calculate the test statistic with your own logic
     # but want to use the Decision generation logic of East Horizon
-    vTestStat <- 0
-    vDelta <- 0
+    vTestStat <- rep( 0, DesignParam$NumTreatments )
+    vDelta <- rep( 0, DesignParam$NumTreatments )
     # Setup test statistic calculation logic
     return( list(TestStat = vTestStat,
                  Delta = vDelta,

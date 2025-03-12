@@ -23,7 +23,7 @@
 #'                                     }
 #'                                     }
 #'                                     
-#'                  \item{Response[NumVisit]}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}             
+#'                  \item{Response<NumVisit>}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}             
 #'                      
 #'                      
 {{FUNCTION_NAME}} <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
