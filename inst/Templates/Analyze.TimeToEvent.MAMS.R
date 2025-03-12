@@ -99,7 +99,8 @@
         TailType             <- DesignParam$TailType
     }
     
-    # User can create the analysis script in one of the following ways: ####
+    # User must choose one from the following 4 options (Labelled Option 1, Option 2,..) to create the analysis script.
+    # Remember to delete the three return statements from the unused options. ####
     # Option 1: Script returns Decision ####
 
     bIAEfficayCheck  <- TRUE
