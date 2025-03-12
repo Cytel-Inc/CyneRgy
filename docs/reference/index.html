@@ -90,64 +90,58 @@
 
       <dl><dt>
 
-          <code><a href="AnalyzeUsingBetaBinomial.html">AnalyzeUsingBetaBinomial()</a></code>
+          <code><a href="AnalyzeBinaryUsingBetaBinomial.html">AnalyzeBinaryUsingBetaBinomial()</a></code>
 
         </dt>
-        <dd>Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care.</dd>
+        <dd>Analyze for efficacy using a beta( alpha, beta ) prior to compute the posterior probability that experimental is better than control treatment care.</dd>
       </dl><dl><dt>
 
-          <code><a href="AnalyzeUsingEastManualFormula.html">AnalyzeUsingEastManualFormula()</a></code>
+          <code><a href="AnalyzeBinaryUsingEastManualFormula.html">AnalyzeBinaryUsingEastManualFormula()</a></code>
 
         </dt>
-        <dd>Compute the statistic using formula 28.2 in the East manual</dd>
+        <dd>Compute the statistic using formula 28.2 in the East manual.</dd>
       </dl><dl><dt>
 
-          <code><a href="AnalyzeUsingEastManualFormula_Normal.html">AnalyzeUsingEastManualFormulaNormal()</a></code>
-
-        </dt>
-        <dd>Last Modified Date: 04/18/2024</dd>
-      </dl><dl><dt>
-
-          <code><a href="AnalyzeUsingHazardRatioLimitsOfCI.html">AnalyzeUsingHazardRatioLimitsOfCI()</a></code>
+          <code><a href="AnalyzeBinaryUsingPropLimitsOfCI.html">AnalyzeBinaryUsingPropLimitsOfCI()</a></code>
 
         </dt>
         <dd>Analyze using a simplified limits of confidence interval design</dd>
       </dl><dl><dt>
 
-          <code><a href="AnalyzeUsingMeanLimitsOfCI.html">AnalyzeUsingMeanLimitsOfCI()</a></code>
-
-        </dt>
-        <dd>Analyze using a simplified limits of confidence interval design</dd>
-      </dl><dl><dt>
-
-          <code><a href="AnalyzeUsingPropLimitsOfCI.html">AnalyzeUsingPropLimitsOfCI()</a></code>
-
-        </dt>
-        <dd>Analyze using a simplified limits of confidence interval design.</dd>
-      </dl><dl><dt>
-
-          <code><a href="AnalyzeUsingPropTest.html">AnalyzeUsingPropTest()</a></code>
+          <code><a href="AnalyzeBinaryUsingPropTest.html">AnalyzeBinaryUsingPropTest()</a></code>
 
         </dt>
         <dd>Analyze using the prop.test function in base R.</dd>
       </dl><dl><dt>
 
-          <code><a href="AnalyzeUsingTTestNormal.html">AnalyzeUsingTTestNormal()</a></code>
+          <code><a href="AnalyzeContinuousUsingEastManualFormula.html">AnalyzeContinuousUsingEastManualFormula()</a></code>
 
         </dt>
-        <dd>Analyze Using t-test Normal</dd>
+        <dd>Compute the statistic using formula Q.3.3 in the East manual.</dd>
+      </dl><dl><dt>
+
+          <code><a href="AnalyzeContinuousUsingMeanLimitsOfCI.html">AnalyzeContinuousUsingMeanLimitsOfCI()</a></code>
+
+        </dt>
+        <dd>Analyze using a simplified limits of confidence interval design</dd>
+      </dl><dl><dt>
+
+          <code><a href="AnalyzeContinuousUsingTTestNormal.html">AnalyzeContinuousUsingTTestNormal()</a></code>
+
+        </dt>
+        <dd>Analyze using the t.test function in base R.</dd>
+      </dl><dl><dt>
+
+          <code><a href="AnalyzeTTEUsingHazardRatioLimitsOfCI.html">AnalyzeTTEUsingHazardRatioLimitsOfCI()</a></code>
+
+        </dt>
+        <dd>Analyze using a simplified limits of confidence interval design</dd>
       </dl><dl><dt>
 
           <code><a href="CombineAllRFiles.html">CombineAllRFiles()</a></code>
 
         </dt>
         <dd>This function combines the contents of all R files in a specified directory into one file.</dd>
-      </dl><dl><dt>
-
-          <code><a href="ComputeScaleGivenShapeMedian.html">ComputeScaleGivenShapeMedian()</a></code>
-
-        </dt>
-        <dd>Compute the scale parameter for the Weibull distribution with median = dMedian and scale parameter = dScale</dd>
       </dl><dl><dt>
 
           <code><a href="CreateCyneRgyExample.html">CreateCyneRgyExample()</a></code>
@@ -201,13 +195,13 @@
           <code><a href="SelectExpUsingBayesianRule.html">SelectExpUsingBayesianRule()</a></code>
 
         </dt>
-        <dd>Select treatments to advance based on a Bayesian rule to select any that have at least a user-specified probability of being greater than a user-specified historical response rate.</dd>
+        <dd>Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate.</dd>
       </dl><dl><dt>
 
           <code><a href="SelectExpWithPValueLessThanSpecified.html">SelectExpWithPValueLessThanSpecified()</a></code>
 
         </dt>
-        <dd>Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value. If UserParam is supplied, the list must contain the following named element: <dl><dt>UserParam$dMaxPValue</dt> <dd><p>A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. Any treatment with less than the specified p-value will be advanced to the second stage</p></dd> </dl></dd>
+        <dd>Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value.</dd>
       </dl><dl><dt>
 
           <code><a href="SelectSpecifiedNumberOfExpWithHighestResponses.html">SelectSpecifiedNumberOfExpWithHighestResponses()</a></code>
@@ -231,13 +225,13 @@
           <code><a href="SimulatePatientSurvivalMixtureExponentials.html">SimulatePatientSurvivalMixtureExponentials()</a></code>
 
         </dt>
-        <dd>This function simulates from exponential, just included as a simple example as a starting point.</dd>
+        <dd>Simulate patient outcomes from a Mixture Exponential distribution</dd>
       </dl><dl><dt>
 
           <code><a href="SimulatePatientSurvivalWeibull.html">SimulatePatientSurvivalWeibull()</a></code>
 
         </dt>
-        <dd>Simulate patient outcomes from a Weibull distribution.</dd>
+        <dd>Simulate patient outcomes from a Weibull distribution</dd>
       </dl></div>
   </main></div>
 

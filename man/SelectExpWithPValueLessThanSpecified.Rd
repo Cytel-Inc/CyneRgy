@@ -2,19 +2,28 @@
 % Please edit documentation in R/SelectExpWithPValueLessThanSpecified.R
 \name{SelectExpWithPValueLessThanSpecified}
 \alias{SelectExpWithPValueLessThanSpecified}
-\title{Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value. 
- If UserParam is supplied, the list must contain the following named element:
- \describe{
- \item{UserParam$dMaxPValue}{A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
-      Any treatment with less than the specified p-value will be advanced to the second stage}
-          }}
+\title{Compare treatment and experimental to control with a chi-squared test, selecting treatments with a p-value less than specified value.}
 \usage{
 SelectExpWithPValueLessThanSpecified(
   SimData,
   DesignParam,
-  LookInfo,
+  LookInfo = NULL,
   UserParam = NULL
 )
+}
+\arguments{
+\item{SimData}{Dataframe which consists of data generated in current simulation}
+
+\item{DesignParam}{List of Design and Simulation Parameters required to perform treatment selection.}
+
+\item{LookInfo}{List containing Design and Simulation Parameters, which might be required to perform treatment selection}
+
+\item{UserParam}{A list of user defined parameters in East or East Horizon. The default must be NULL.
+If UserParam is supplied, the list must contain the following named element:
+\describe{
+\item{UserParam$dMaxPValue}{A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance. 
+     Any treatment with less than the specified p-value will be advanced to the second stage}
+         }}
 }
 \value{
 TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
@@ -22,7 +31,7 @@ TreatmentID  A vector that consists of the experimental treatments that were sel
 AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 
 ErrorCode An integer value:  ErrorCode = 0 --> No Error
-                                      ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+                                      ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 }
 \description{
@@ -41,16 +50,6 @@ The order of AllocRatio should be the same as TreatmentID, and the  correspondin
 The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 
 You must return at LEAST one treatment and one allocation ratio
-
-Helpful Hints:
-      There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-      objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-
-      saveRDS( SimData,     "SimData.Rds")
-      saveRDS( DesignParam, "DesignParam.Rds" )
-      saveRDS( LookInfo,    "LookInfo.Rds" )
-
-      The above code will save each of the input objects to a file so they may be examined within R.
 }
 \examples{
  Example Output Object:
@@ -71,5 +70,4 @@ Helpful Hints:
                                    AllocRatio  = vAllocationRatio,
                                    ErrorCode   = nErrorCode )
       return( lReturn )
-
 }

@@ -5,9 +5,18 @@
 #   Change History:
 #   Last Modified Date: 03/18/2024
 #################################################################################################### .
-#' Create new CyneRgy example using provided templates. The directory created can be used in connection with Cytel-R integration.
-#' @description { Description: This function will create a new directory containing the necessary files for the desired CyneRgy template. }
-#' @export
+#' @title Create a new CyneRgy example using templates
+#'
+#' @description This function creates a new directory containing the necessary files 
+#' for the desired CyneRgy template. The directory can be used in connection with Cytel-R integration.
+#' 
+#' @param strFunctionType The type of CyneRgy template to use. Must be a valid template name.
+#' @param strNewExampleName A string representing the name of the new example directory. Defaults to an empty string.
+#' @param strDirectory The directory path where the example will be created. If not provided, the current working directory is used.
+#' 
+#' @return Creates the specified example directory and files within the provided or default directory path.
+#################################################################################################### .
+
 CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDirectory = NA)
 {
     strNewFileExt  <- ".R"
@@ -18,10 +27,6 @@ CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDi
         strNewDirName <- strNewExampleName    
     }
     
-    
-    #TODO: Make sure the strFunctionType is a valid type, eg GenerateArrivalTimes etc.
-    # Make sure the file does not already exist
-    # create it and open it
     strPackage <- "CyneRgy"
     
     # Exiting template names, remove extensions

@@ -2,28 +2,33 @@
 % Please edit documentation in R/SelectExpUsingBayesianRule.R
 \name{SelectExpUsingBayesianRule}
 \alias{SelectExpUsingBayesianRule}
-\title{Select treatments to advance based on a Bayesian rule to select any that have at least a user-specified probability of being greater than a user-specified historical response rate.}
+\title{Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate.}
 \usage{
-SelectExpUsingBayesianRule(SimData, DesignParam, LookInfo, UserParam = NULL)
+SelectExpUsingBayesianRule(
+  SimData,
+  DesignParam,
+  LookInfo = NULL,
+  UserParam = NULL
+)
 }
 \arguments{
-\item{SimData}{Data frame which consists of data generated in current simulation}
+\item{SimData}{Dataframe which consists of data generated in current simulation}
 
 \item{DesignParam}{List of Design and Simulation Parameters required to perform treatment selection.}
 
 \item{LookInfo}{List containing Design and Simulation Parameters, which might be required to perform treatment selection}
 
-\item{UserParam}{A list of user defined parameters in East. The default must be NULL.
+\item{UserParam}{A list of user defined parameters in East or East Horizon. The default must be NULL.
 If UserParam is supplied, the list must contain the following named element:
 \describe{
-\item{UserParam$dPriorAlpha}{A value (0,1) that defines the prior alpha parameter of the beta distribution. 
+\item {UserParam$dPriorAlpha} {A value (0,1) that defines the prior alpha parameter of the beta distribution. 
                         If this value is not specified, the default is 0.2.}  
-\item{UserParam$dPriorBeta}{A value (0,1) that specifies the prior beta parameter of the beta distribution. 
+\item {UserParam$dPriorBeta} {A value (0,1) that specifies the prior beta parameter of the beta distribution. 
                             If this value is not specified, the default is 0.8.}
-\item{UserParam$historicResponseRate}{ A value (0,1) that specifies the historic response rate.
-                                If this value is not specified, the default is 0.1.}
-\item{UserParam$treatmentPValue}{A value (0,1) that specifies the probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
-                            If this value is not specified, the default is 0.2.}
+\item {UserParam$dHistoricResponseRate} { A value (0,1) that specifies the historic response rate.
+                                If this value is not specified, the default is 0.2.}
+\item {UserParam$dMinPosteriorProbability} {A value (0,1) that specifies the posterior probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
+                            If this value is not specified, the default is 0.5.}
          }}
 }
 \value{
@@ -32,56 +37,23 @@ TreatmentID  A vector that consists of the experimental treatments that were sel
 AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 
 ErrorCode An integer value:  ErrorCode = 0 --> No Error
-                                      ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
-                                      ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 }
 \description{
-{This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
- At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (treatmentPValue) of being greater than a user-specified historical 
- response rate (historicResponseRate). Specifically, if Pr( pj > historicResponseRate | data ) > treatmentPValue, then experimental treatment j is selected for stage 2.
- If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > historiceResponseRate | data ).
- User-specified pj ~ Beta( dPriorAlpha, dPriorBeta )
- After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.}
+This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
+At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (UserParam$dMinPosteriorProbability) of being greater than a user-specified historical 
+response rate (UserParam$dHistoricResponseRate). Specifically, if Pr( pj > UserParam$dHistoricResponseRate | data ) > UserParam$dMinPosteriorProbability, then experimental treatment j is selected for stage 2.
+If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > UserParam$dHistoricResponseRate | data ).
+User-specified pj ~ Beta( UserParam$dPriorAlpha, UserParam$dPriorBeta ). All experimental arms assume the same prior. 
+After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
 }
 \note{
 The length of TreatmentID and AllocRatio must be the same.
 
-The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
+The allocation ratio for control will be 1, AllocRatio are relative to this value. So, a 2 will randomize twice as many to experimental
 
-The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
+The order of AllocRatio should be the same as TreatmentID, and the corresponding elements will have the assigned allocation ratio
 
-The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
+The returned vector ONLY includes TreatmentIDs for experimental treatments, e.g., TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 
 You must return at LEAST one treatment and one allocation ratio
-
-Helpful Hints:
-      There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-      objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-
-      saveRDS( SimData,     "SimData.Rds")
-      saveRDS( DesignParam, "DesignParam.Rds" )
-      saveRDS( LookInfo,    "LookInfo.Rds" )
-
-      The above code will save each of the input objects to a file so they may be examined within R.
-}
-\examples{
- Example Output Object:
-      Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
-      vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
-      vAllocationRatio    <- c( 2, 2 )
-      nErrorCode          <- 0
-      lReturn             <- list( TreatmentID = vSelectedTreatments, 
-                                   AllocRatio  = vAllocationRatio,
-                                   ErrorCode   = nErrorCode )
-      return( lReturn )
-      
-     Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-      vSelectedTreatments <- c( 1, 2 )  # Experimental 2 will receive twice as many as Experimental 1 or Control. 
-      vAllocationRatio    <- c( 1, 2 )
-      nErrorCode          <- 0
-      lReturn             <- list( TreatmentID = vSelectedTreatments, 
-                                   AllocRatio  = vAllocationRatio,
-                                   ErrorCode   = nErrorCode )
-      return( lReturn )
-
 }

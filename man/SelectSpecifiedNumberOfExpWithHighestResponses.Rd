@@ -8,27 +8,24 @@
 SelectSpecifiedNumberOfExpWithHighestResponses(
   SimData,
   DesignParam,
-  LookInfo,
+  LookInfo = NULL,
   UserParam = NULL
 )
 }
 \arguments{
-\item{SimData}{Data frame which consists of data generated in current simulation}
+\item{SimData}{Dataframe which consists of data generated in current simulation}
 
 \item{DesignParam}{List of Design and Simulation Parameters required to perform treatment selection.}
 
 \item{LookInfo}{List containing Design and Simulation Parameters, which might be required to perform treatment selection}
 
-\item{UserParam}{A list of user defined parameters in East. The default must be NULL.
+\item{UserParam}{A list of user defined parameters in East or East Horizon. The default must be NULL.
 If UserParam is supplied, the list must contain the following named elements:
 \describe{
 \item{UserParam$QtyOfArmsToSelect}{A value that defines how many treatment arms are chosen to advance. 
-                         Note this number must match the number of user-specified allocation values.
-                         If this value is not specified, the default is 2.}  
-\item{UserParam$Rank1AllocationRatio}{A value that specifies the allocation to the arm with the highest response
-                            If this value is not specified, the default is 2.}
-\item{UserParam$Rank2AllocationRatio}{A value that specifies the allocation to the arm with the next highest response
-                                If this value is not specified, the default is 1.}
+                         Note this number must match the number of user-specified allocation values.}  
+\item{UserParam$Rank1AllocationRatio}{A value that specifies the allocation to the arm with the highest response}
+\item{UserParam$Rank2AllocationRatio}{A value that specifies the allocation to the arm with the next highest response}
          }}
 }
 \value{
@@ -37,7 +34,7 @@ TreatmentID  A vector that consists of the experimental treatments that were sel
 AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 
 ErrorCode An integer value:  ErrorCode = 0 --> No Error
-                                      ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
+                                      ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 }
 \description{
@@ -55,16 +52,6 @@ The order of AllocRatio should be the same as TreatmentID, and the  correspondin
 The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 
 You must return at LEAST one treatment and one allocation ratio
-
-Helpful Hints:
-      There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-      objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-
-      saveRDS( SimData,     "SimData.Rds")
-      saveRDS( DesignParam, "DesignParam.Rds" )
-      saveRDS( LookInfo,    "LookInfo.Rds" )
-
-      The above code will save each of the input objects to a file so they may be examined within R.
 }
 \examples{
  Example Output Object:
@@ -85,5 +72,4 @@ Helpful Hints:
                                    AllocRatio  = vAllocationRatio,
                                    ErrorCode   = nErrorCode )
       return( lReturn )
-
 }

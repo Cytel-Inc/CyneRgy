@@ -2,7 +2,7 @@
 % Please edit documentation in R/SimulatePatientOutcomePercentAtZeroBetaDist.R
 \name{SimulatePatientOutcomePercentAtZeroBetaDist}
 \alias{SimulatePatientOutcomePercentAtZeroBetaDist}
-\title{Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0 where the probability of a 0 is drawn from a Beta distribution.}
+\title{Simulate patient outcomes with a probability of zero from a Beta distribution}
 \usage{
 SimulatePatientOutcomePercentAtZeroBetaDist(
   NumSub,
@@ -13,28 +13,25 @@ SimulatePatientOutcomePercentAtZeroBetaDist(
 )
 }
 \arguments{
-\item{NumSub}{The number of subjects that need to be simulated, integer value}
+\item{NumSub}{The number of subjects that need to be simulated, integer value.}
 
-\item{TreatmentID}{A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub}
+\item{TreatmentID}{A vector of treatment IDs, 0 = treatment 1, 1 = treatment 2. Length(TreatmentID) = NumSub.}
 
-\item{Mean}{A vector of length = 2 with the means of the two treatments.}
+\item{Mean}{A vector of length 2 with the means of the two treatments.}
 
-\item{StdDev}{A vector of length = 2 with the standard deviations of each treatment}
+\item{StdDev}{A vector of length 2 with the standard deviations of each treatment.}
 
-\item{UserParam}{A list of user defined parameters in East.   The default must be NULL resulting in ignoring the percent of patients at 0.
+\item{UserParam}{A list of user-defined parameters in East or East Horizon. The default must be NULL, resulting in ignoring the percent of patients at 0.
 If UserParam is supplied, the list must contain the following named elements:
-\describe{
-     \item{UserParam$dCtrlBetaParam1}{First parameter in the Beta distribution for the control (ctrl) treatment.}
-     \item{UserParam$dCtrlBetaParam2}{Second parameter in the Beta distribution for the control (ctrl) treatment.}
-     \item{UserParam$dExpBetaParam1}{First parameter in the Beta distribution for the experimental (exp) treatment.}
-     \item{UserParam$dExpBetaParam2}{Second parameter in the Beta distribution for the experimental (exp) treatment.}
-     \item{Exmaple Input In East}{ \figure{../../articles/Example2_1Variables.png}{Example input in East} }
-     }}
+  - UserParam$dCtrlBetaParam1: First parameter in the Beta distribution for the control (ctrl) treatment.
+  - UserParam$dCtrlBetaParam2: Second parameter in the Beta distribution for the control (ctrl) treatment.
+  - UserParam$dExpBetaParam1: First parameter in the Beta distribution for the experimental (exp) treatment.
+  - UserParam$dExpBetaParam2: Second parameter in the Beta distribution for the experimental (exp) treatment.}
 }
 \description{
-The function assumes that the probability a patient has a zero response is random and follows a Beta( a, b ) distribution.
-Each distribution must provide 2 parameters for the beta distribution and the probability of 0 outcome is selected from the corresponding Beta distribution.
-The probability of 0 outcome on the control treatment is sampled from a Beta( UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 ) distribution.
-The probability of 0 outcome on the experimental treatment is sampled from a Beta( UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution.
+The function assumes that the probability a patient has a zero response is random and follows a Beta(a, b) distribution.
+Each distribution must provide 2 parameters for the Beta distribution, and the probability of a 0 outcome is selected from the corresponding Beta distribution.
+The probability of 0 outcome on the control treatment is sampled from a Beta(UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2) distribution.
+The probability of 0 outcome on the experimental treatment is sampled from a Beta(UserParam$dExpBetaParam1, UserParam$dExpBetaParam2) distribution.
 The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.
 }

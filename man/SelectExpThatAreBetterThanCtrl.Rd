@@ -7,18 +7,18 @@
 SelectExpThatAreBetterThanCtrl(
   SimData,
   DesignParam,
-  LookInfo,
+  LookInfo = NULL,
   UserParam = NULL
 )
 }
 \arguments{
-\item{SimData}{Data frame which consists of data generated in current simulation.}
+\item{SimData}{Dataframe which consists of data generated in current simulation.}
 
 \item{DesignParam}{List of Design and Simulation Parameters required to perform treatment selection.}
 
 \item{LookInfo}{List containing Design and Simulation Parameters, which might be required to perform treatment selection}
 
-\item{UserParam}{A list of user defined parameters in East. The default must be NULL.}
+\item{UserParam}{A list of user defined parameters in East or East Horizon. The default must be NULL.}
 }
 \value{
 TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
@@ -42,23 +42,11 @@ The order of AllocRatio should be the same as TreatmentID, and the  correspondin
 The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 
 You must return at LEAST one treatment and one allocation ratio
-
-Helpful Hints:
-      There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-      objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-
-      saveRDS( SimData,     "SimData.Rds")
-      
-      saveRDS( DesignParam, "DesignParam.Rds" )
-      
-      saveRDS( LookInfo,    "LookInfo.Rds" )
-
-      The above code will save each of the input objects to a file so they may be examined within R.
 }
 \examples{
  
       # Example Output Object:
-      #Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
+      # Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
       vAllocationRatio    <- c( 2, 2 )
       nErrorCode          <- 0
@@ -75,5 +63,4 @@ Helpful Hints:
                                    AllocRatio  = vAllocationRatio,
                                    ErrorCode   = nErrorCode )
       return( lReturn )
-
 }
