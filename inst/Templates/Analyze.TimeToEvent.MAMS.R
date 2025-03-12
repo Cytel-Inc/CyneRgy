@@ -127,14 +127,14 @@
                  HR = vHR,
                  ErrorCode = as.integer(nError)) )
     
-    # Option 3: Script returns raw p value
+    # Option 3: Script returns raw p value ####
     vRawPVal <- 0
     vHR <- 0
     # Setup raw p value calculation logic
     return( list(RawPVal = vRawPVal,
                  HR = vHR,
                  ErrorCode = as.integer(nError)) )
-    # Option 4: Script returns test statistic
+    # Option 4: Script returns test statistic ####
     vTestStat <- 0
     vHR <- 0
     # Setup test statistic calculation logic
