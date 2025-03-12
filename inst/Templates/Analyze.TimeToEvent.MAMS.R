@@ -100,8 +100,11 @@
     }
     
     # User must choose one from the following 4 options (Labelled Option 1, Option 2,..) to create the analysis script.
+    # Option 1 is the most flexible since it lets you setup your own Decision logic.
+    # The other options allow you to partially customize the analysis logic while relying on East Horizon to do the rest of the computations.
     # Remember to delete the three return statements from the unused options. ####
     # Option 1: Script returns Decision ####
+    # Use this option if you want to use your own decision rules.
 
     bIAEfficayCheck  <- TRUE
     bIAFutilityCheck <- FALSE
@@ -121,6 +124,8 @@
                  ErrorCode = as.integer(nError)) )
     
     # Option 2: Script returns adjusted p value ####
+    # Use this option if you want to calculate the adjusted p value with your own logic
+    # but want to use the Decision generation logic of East Horizon
     vAdjPVal <- 0
     vHR <- 0
     # Setup adjusted p value calculation logic
@@ -129,6 +134,8 @@
                  ErrorCode = as.integer(nError)) )
     
     # Option 3: Script returns raw p value ####
+    # Use this option if you want to calculate the raw p values with your own logic
+    # but want to use the Decision generation logic of East Horizon
     vRawPVal <- 0
     vHR <- 0
     # Setup raw p value calculation logic
@@ -136,6 +143,8 @@
                  HR = vHR,
                  ErrorCode = as.integer(nError)) )
     # Option 4: Script returns test statistic ####
+    # Use this option if you want to calculate the test statistic with your own logic
+    # but want to use the Decision generation logic of East Horizon
     vTestStat <- 0
     vHR <- 0
     # Setup test statistic calculation logic
