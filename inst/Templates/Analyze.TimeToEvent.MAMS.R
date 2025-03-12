@@ -29,7 +29,7 @@
 #'          \item{AlphaProp}{Vector of Proportions of Alpha for each treatment arm}
 #'          \item{TestSeq}{Vector of integer Test Sequence for each comparison which corresponds to each treatment arm.}
 #'          \item{CriticalPoint}{Numeric. Critical Value for a fixed sample design.}
-#'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of arms. Values are Dropped in the interim: 0, Still present in the trial: 1}
+#'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of arms. First value is control and fixed to 1 for all looks. Values are Dropped in the interim: 0, Still present in the trial: 1}
 #'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of arms. First value is control.}
 #'          \item{MaxEvents}{Integer. Maximum Events.}
 #'          \item{FollowUpType}{Integer. Follow up Type. Values are Until end of the study: 0, For fixed period: 1}
@@ -47,7 +47,7 @@
 #'                      \item{CumAlpha}{Vector of numeric Cumulative alpha spent, one sided tests. Length = Number of looks.}
 #'                      \item{EffBdryScale}{Integer. Efficacy boundary scale. Possible vaues are: Z Scale: 0}
 #'                      \item{EffBdry}{Vector of numeric efficacy bondaries, one sided tests. Length = Number of looks.}
-#'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible value are: HR Scale: 2}
+#'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible value are: HR Scale: 6}
 #'                      \item{FutBdry}{Vector of numeric futility bondaries, one sided tests. Length = Number of looks.}
 #'                      \item{RejType}{Integer. Rejection Type. Values are: 1 Sided Efficacy Upper: 0, 1 Sided Futility Upper: 1, 1 Sided Efficacy Lower: 2, 1 Sided Futility Lower: 3, 1 Sided Efficacy Upper Futility Lower: 4, 1 Sided Efficacy Lower Futility Upper: 5}
 #'                 }
@@ -103,6 +103,7 @@
     # Option 1 is the most flexible since it lets you setup your own Decision logic.
     # The other options allow you to partially customize the analysis logic while relying on East Horizon to do the rest of the computations.
     # Remember to delete the three return statements from the unused options. ####
+    
     # Option 1: Script returns Decision ####
     # Use this option if you want to use your own decision rules.
 
@@ -142,6 +143,7 @@
     return( list(RawPVal = vRawPVal,
                  HR = vHR,
                  ErrorCode = as.integer(nError)) )
+
     # Option 4: Script returns test statistic ####
     # Use this option if you want to calculate the test statistic with your own logic
     # but want to use the Decision generation logic of East Horizon
