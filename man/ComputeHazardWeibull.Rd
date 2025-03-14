@@ -9,9 +9,9 @@ ComputeHazardWeibull(vTime, dShape, dScale)
 \arguments{
 \item{vTime}{A vector of times to compute the hazard of the Weibull distribution.}
 
-\item{dShape}{The shape parameter of the Weibull distribution. See `rweibull`.}
+\item{dShape}{The shape parameter of the Weibull distribution. See \code{rweibull}.}
 
-\item{dScale}{The scale parameter of the Weibull distribution. See `rweibull`.}
+\item{dScale}{The scale parameter of the Weibull distribution. See \code{rweibull}.}
 }
 \description{
 Function to compute the hazard of the Weibull distribution.

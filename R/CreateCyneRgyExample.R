@@ -5,7 +5,7 @@
 #   Change History:
 #   Last Modified Date: 03/18/2024
 #################################################################################################### .
-#' @title Create a new CyneRgy example using templates
+#' @title Create a New CyneRgy Example Using Templates
 #'
 #' @description This function creates a new directory containing the necessary files 
 #' for the desired CyneRgy template. The directory can be used in connection with Cytel-R integration.
@@ -15,6 +15,7 @@
 #' @param strDirectory The directory path where the example will be created. If not provided, the current working directory is used.
 #' 
 #' @return Creates the specified example directory and files within the provided or default directory path.
+#' @export
 #################################################################################################### .
 
 CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDirectory = NA)

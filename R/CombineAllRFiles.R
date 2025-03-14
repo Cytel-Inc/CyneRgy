@@ -5,7 +5,7 @@
 #   Change History:
 #   Last Modified Date: 04/26/2024
 #################################################################################################### .
-#' @title Combine all R files
+#' @title Combine All R Files
 #'
 #' @description
 #' This function combines the contents of all R files in a specified directory into one file.
@@ -16,11 +16,10 @@
 #' @param strFileNameToIgnore The name of any file to be ignored during the combination process. Defaults to NA.
 #'
 #' @return A list containing the following elements:
-#' \itemize{
-#'   \item{nQtyCombinedFiles: The number of files combined.}
-#'   \item{strCombinedContents: The combined content of all the R files (only if strOutFileName is NA).}
-#'   \item{strReturn: A string summarizing the operation, including the names of the combined files.}
-#' }
+#'   \item{nQtyCombinedFiles}{The number of files combined.}
+#'   \item{strCombinedContents}{The combined content of all the R files (only if strOutFileName is NA).}
+#'   \item{strReturn}{A string summarizing the operation, including the names of the combined files.}
+#'   
 #' @examples
 #' \dontrun{
 #'   result <- CombineAllRFiles(strOutFileName = "combined.R", strDirectory = "/path/to/your/directory")
@@ -28,6 +27,7 @@
 #' }
 #'
 #' @seealso \code{\link[base]{list.files}}, \code{\link[base]{file}}, \code{\link[base]{readLines}}, \code{\link[base]{writeLines}}
+#' @export
 #################################################################################################### .
 
 CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileNameToIgnore = NA) {

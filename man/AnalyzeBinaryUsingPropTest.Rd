@@ -2,7 +2,7 @@
 % Please edit documentation in R/AnalyzeBinaryUsingPropTest.R
 \name{AnalyzeBinaryUsingPropTest}
 \alias{AnalyzeBinaryUsingPropTest}
-\title{Analyze using the prop.test function in base R.}
+\title{Analyze Binary Data Using the prop.test Function}
 \usage{
 AnalyzeBinaryUsingPropTest(
   SimData,
@@ -12,42 +12,59 @@ AnalyzeBinaryUsingPropTest(
 )
 }
 \arguments{
-\item{SimData}{Data frame which consists of data generated in current simulation.}
+\item{SimData}{Data frame containing the data generated in the current simulation.}
 
-\item{DesignParam}{List of Design and Simulation Parameters required to perform analysis.}
+\item{DesignParam}{List of design and simulation parameters required to perform the analysis.}
 
-\item{LookInfo}{A list containing input parameters related to multiple looks, which the user may need to compute 
-test statistics and perform tests. Users should access the variables using their names 
-(e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
+\item{LookInfo}{A list containing input parameters related to multiple looks, which the user may need to compute
+test statistics and perform tests. Users should access the variables using their names
+(e.g., \code{LookInfo$NumLooks}) rather than by their order. Important variables in group sequential designs include:
+\itemize{
+\item \code{LookInfo$NumLooks}: Integer, number of looks in the study.
+\item \code{LookInfo$CurrLookIndex}: Integer, current look index (starting from 1).
+\item \code{LookInfo$CumEvents}: Vector, cumulative number of events at each look.
+\item \code{LookInfo$RejType}: Code representing rejection types. Possible values include:
+\item \strong{Efficacy Only:}
+\itemize{
+\item \code{0}: 1-Sided Efficacy Upper.
+\item \code{2}: 1-Sided Efficacy Lower.
+}
+\item \strong{Futility Only:}
+\itemize{
+\item \code{1}: 1-Sided Futility Upper.
+\item \code{3}: 1-Sided Futility Lower.
+}
+\item \strong{Efficacy and Futility:}
+\itemize{
+\item \code{4}: 1-Sided Efficacy Upper and Futility Lower.
+\item \code{5}: 1-Sided Efficacy Lower and Futility Upper.
+}
+}}
 
-- `LookInfo$NumLooks`: An integer representing the number of looks in the study.
-- `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
-- `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
-- `LookInfo$RejType`: A code representing rejection types. Possible values are:
-  - **Efficacy Only:**
-    - `0`: 1-Sided Efficacy Upper.
-    - `2`: 1-Sided Efficacy Lower.
-  - **Futility Only:**
-    - `1`: 1-Sided Futility Upper.
-    - `3`: 1-Sided Futility Lower.
-  - **Efficacy and Futility:**
-    - `4`: 1-Sided Efficacy Upper and Futility Lower.
-    - `5`: 1-Sided Efficacy Lower and Futility Upper.}
-
-\item{UserParam}{A list of user defined parameters in East or East Horizon. The default must be NULL.}
+\item{UserParam}{A list of user-defined parameters in East or East Horizon. Default is \code{NULL}. No user parameters are defined for this example.}
 }
 \value{
-TestStat A double value of the computed test statistic
-
-Decision An integer value: Decision = 0 --> No boundary crossed
-                                   Decision = 1 --> Lower Efficacy Boundary Crossed
-                                   Decision = 2 --> Upper Efficacy Boundary Crossed
-                                   Decision = 3 --> Futility Boundary Crossed
-                                   Decision = 4 --> Equivalence Boundary Crossed
-
-ErrorCode An integer value:  ErrorCode = 0 --> No Error
+A list containing the following elements:
+\describe{
+\item{TestStat}{A double representing the computed test statistic.}
+\item{Decision}{Required integer value indicating the decision made:
+\describe{
+\item{0}{No boundary crossed (neither efficacy nor futility).}
+\item{1}{Lower efficacy boundary crossed.}
+\item{2}{Upper efficacy boundary crossed.}
+\item{3}{Futility boundary crossed.}
+\item{4}{Equivalence boundary crossed.}
+}}
+\item{ErrorCode}{Optional integer value:
+\describe{
+\item{0}{No error.}
+\item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
+\item{< 0}{Fatal error; no further simulations are attempted.}
+}}
+}
 }
 \description{
-This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East as an input.  
-             This example does NOT include a futility rule.
+This function analyzes binary data using the \code{prop.test} function in base R. The calculated p-value from \code{prop.test}
+is used to compute the Z statistic, which is then compared to the upper boundary provided as an input by East.
+Note that this example does not include a futility rule.
 }

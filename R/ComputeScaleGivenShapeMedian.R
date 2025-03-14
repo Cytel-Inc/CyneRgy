@@ -7,6 +7,7 @@
 #'
 #' @param dShape The shape parameter of the Weibull distribution.
 #' @param dMedian The median of the Weibull distribution.
+#' @export
 ######################################################################################################################## .
 
 ComputeScaleGivenShapeMedian <- function( dShape, dMedian )

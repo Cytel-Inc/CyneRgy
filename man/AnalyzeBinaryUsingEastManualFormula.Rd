@@ -2,7 +2,7 @@
 % Please edit documentation in R/AnalyzeBinaryUsingEastManualFormula.R
 \name{AnalyzeBinaryUsingEastManualFormula}
 \alias{AnalyzeBinaryUsingEastManualFormula}
-\title{Compute the statistic using formula 28.2 in the East manual.}
+\title{Analyze Binary Data Using Formula 28.2 from the East Manual}
 \usage{
 AnalyzeBinaryUsingEastManualFormula(
   SimData,
@@ -12,42 +12,62 @@ AnalyzeBinaryUsingEastManualFormula(
 )
 }
 \arguments{
-\item{SimData}{Data frame which consists of data generated in current simulation.}
+\item{SimData}{A data frame containing data generated in the current simulation.}
 
-\item{DesignParam}{List of Design and Simulation Parameters required to perform analysis.}
+\item{DesignParam}{A list of design and simulation parameters required for analysis.}
 
-\item{LookInfo}{A list containing input parameters related to multiple looks, which the user may need to compute 
-test statistics and perform tests. Users should access the variables using their names 
-(e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
+\item{LookInfo}{A list of input parameters related to multiple looks in group sequential designs.
+Variables should be accessed by names (e.g., \code{LookInfo$NumLooks}). Important variables include:
+\itemize{
+\item \code{LookInfo$NumLooks}: Integer, number of looks in the study.
+\item \code{LookInfo$CurrLookIndex}: Integer, current look index (starting from 1).
+\item \code{LookInfo$CumEvents}: Vector, cumulative number of events at each look.
+\item \code{LookInfo$RejType}: Code representing rejection types. Possible values include:
+\item \strong{Efficacy Only:}
+\itemize{
+\item \code{0}: 1-Sided Efficacy Upper.
+\item \code{2}: 1-Sided Efficacy Lower.
+}
+\item \strong{Futility Only:}
+\itemize{
+\item \code{1}: 1-Sided Futility Upper.
+\item \code{3}: 1-Sided Futility Lower.
+}
+\item \strong{Efficacy and Futility:}
+\itemize{
+\item \code{4}: 1-Sided Efficacy Upper and Futility Lower.
+\item \code{5}: 1-Sided Efficacy Lower and Futility Upper.
+}
+}}
 
-- `LookInfo$NumLooks`: An integer representing the number of looks in the study.
-- `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
-- `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
-- `LookInfo$RejType`: A code representing rejection types. Possible values are:
-  - **Efficacy Only:**
-    - `0`: 1-Sided Efficacy Upper.
-    - `2`: 1-Sided Efficacy Lower.
-  - **Futility Only:**
-    - `1`: 1-Sided Futility Upper.
-    - `3`: 1-Sided Futility Lower.
-  - **Efficacy and Futility:**
-    - `4`: 1-Sided Efficacy Upper and Futility Lower.
-    - `5`: 1-Sided Efficacy Lower and Futility Upper.}
-
-\item{UserParam}{A list of user defined parameters in East or East Horizon. The default must be NULL. For this example, user defined parameters are not included.}
+\item{UserParam}{A list of user-defined parameters provided by East or East Horizon. Defaults to \code{NULL}.
+In this example, user-defined parameters are not included.}
 }
 \value{
-TestStat A double value of the computed test statistic
-
-Decision An integer value: Decision = 0 --> No boundary crossed
-                                   Decision = 1 --> Lower Efficacy Boundary Crossed
-                                   Decision = 2 --> Upper Efficacy Boundary Crossed
-                                   Decision = 3 --> Futility Boundary Crossed
-                                   Decision = 4 --> Equivalence Boundary Crossed
-
-ErrorCode An integer value:  ErrorCode = 0 --> No Error
+A list containing the following elements:
+\describe{
+\item{TestStat}{A double representing the computed test statistic.}
+\item{Decision}{Required integer value indicating the decision made:
+\describe{
+\item{0}{No boundary crossed (neither efficacy nor futility).}
+\item{1}{Lower efficacy boundary crossed.}
+\item{2}{Upper efficacy boundary crossed.}
+\item{3}{Futility boundary crossed.}
+\item{4}{Equivalence boundary crossed.}
+}}
+\item{ErrorCode}{Optional integer value:
+\describe{
+\item{0}{No error.}
+\item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
+\item{< 0}{Fatal error; no further simulations are attempted.}
+}}
+\item{Delta}{Estimated difference between experimental and control treatments.}
+}
 }
 \description{
-Use the formula 28.2 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
-             The test statistic is compared to the upper boundary computed and sent by East or East Horizon as an input. This example does NOT include a futility rule.
+This function computes the test statistic using formula 28.2 from the East manual,
+which is designed for analyzing binary data in group sequential designs.
+It demonstrates how analysis and decision-making can be customized in a simple approach.
+The test statistic is compared to the upper efficacy boundary provided by East or East Horizon as input.
+Note that this example does not include a futility rule.
 }

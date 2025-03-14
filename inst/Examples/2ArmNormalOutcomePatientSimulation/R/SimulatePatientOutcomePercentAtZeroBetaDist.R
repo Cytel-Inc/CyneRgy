@@ -1,23 +1,37 @@
 ######################################################################################################################## .
-#' @title Simulate patient outcomes with a probability of zero from a Beta distribution
+#' @title Simulate Continuous Patient Outcomes with Probability of Zero from a Beta Distribution
+#' 
+#' @description Simulates patient outcomes from a normal distribution, with the probability of a zero outcome being random and sampled from a Beta distribution. 
+#' The probability of a zero outcome is determined as follows:
+#' - For the control treatment, it is sampled from a \eqn{Beta(UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2)} distribution.
+#' - For the experimental treatment, it is sampled from a \eqn{Beta(UserParam$dExpBetaParam1, UserParam$dExpBetaParam2)} distribution.
+#' This approach incorporates variability in the unknown probability of no response.
 #'
-#' @description
-#' The function assumes that the probability a patient has a zero response is random and follows a Beta(a, b) distribution.
-#' Each distribution must provide 2 parameters for the Beta distribution, and the probability of a 0 outcome is selected from the corresponding Beta distribution.
-#' The probability of 0 outcome on the control treatment is sampled from a Beta(UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2) distribution.
-#' The probability of 0 outcome on the experimental treatment is sampled from a Beta(UserParam$dExpBetaParam1, UserParam$dExpBetaParam2) distribution.
-#' The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.
+#' @param NumSub The number of subjects to simulate. Must be an integer value.
+#' @param TreatmentID A vector of treatment IDs, where:
+#' - `0` represents Treatment 1.
+#' - `1` represents Treatment 2.
+#' The length of `TreatmentID` must equal `NumSub`.
+#' @param Mean A numeric vector of length 2 specifying the mean values for the two treatments.
+#' @param StdDev A numeric vector of length 2 specifying the standard deviations for each treatment.
+#' @param UserParam A list of user-defined parameters. Must contain the following named elements:
+#' \describe{
+#'   \item{UserParam$dCtrlBetaParam1}{Numeric; first parameter in the Beta distribution for the control (Treatment 1).}
+#'   \item{UserParam$dCtrlBetaParam2}{Numeric; second parameter in the Beta distribution for the control (Treatment 1).}
+#'   \item{UserParam$dExpBetaParam1}{Numeric; first parameter in the Beta distribution for the experimental (Treatment 2).}
+#'   \item{UserParam$dExpBetaParam2}{Numeric; second parameter in the Beta distribution for the experimental (Treatment 2).}
+#' }
 #'
-#' @param NumSub The number of subjects that need to be simulated, integer value.
-#' @param TreatmentID A vector of treatment IDs, 0 = treatment 1, 1 = treatment 2. Length(TreatmentID) = NumSub.
-#' @param Mean A vector of length 2 with the means of the two treatments.
-#' @param StdDev A vector of length 2 with the standard deviations of each treatment.
-#' @param UserParam A list of user-defined parameters in East or East Horizon. The default must be NULL, resulting in ignoring the percent of patients at 0.
-#' If UserParam is supplied, the list must contain the following named elements:
-#'   - UserParam$dCtrlBetaParam1: First parameter in the Beta distribution for the control (ctrl) treatment.
-#'   - UserParam$dCtrlBetaParam2: Second parameter in the Beta distribution for the control (ctrl) treatment.
-#'   - UserParam$dExpBetaParam1: First parameter in the Beta distribution for the experimental (exp) treatment.
-#'   - UserParam$dExpBetaParam2: Second parameter in the Beta distribution for the experimental (exp) treatment.
+#' @return A list containing the following elements:
+#' \describe{
+#'   \item{Response}{A numeric vector representing the simulated outcomes for each patient.}
+#'   \item{ErrorCode}{Optional integer value:
+#'                      \describe{
+#'                        \item{0}{No error.}
+#'                        \item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
+#'                        \item{< 0}{Fatal error; no further simulations are attempted.}
+#'                      }}
+#' }
 ######################################################################################################################## .
 
 SimulatePatientOutcomePercentAtZeroBetaDist <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)

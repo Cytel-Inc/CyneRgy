@@ -2,7 +2,7 @@
 % Please edit documentation in R/AnalyzeContinuousUsingMeanLimitsOfCI.R
 \name{AnalyzeContinuousUsingMeanLimitsOfCI}
 \alias{AnalyzeContinuousUsingMeanLimitsOfCI}
-\title{Analyze using a simplified limits of confidence interval design}
+\title{Analyze Continuous Data Using Mean Limits of Confidence Interval}
 \usage{
 AnalyzeContinuousUsingMeanLimitsOfCI(
   SimData,
@@ -12,66 +12,76 @@ AnalyzeContinuousUsingMeanLimitsOfCI(
 )
 }
 \arguments{
-\item{SimData}{Data frame which consists of data generated in current simulation.}
+\item{SimData}{Data frame consisting of data generated in the current simulation.}
 
-\item{DesignParam}{List of Design and Simulation Parameters required to perform analysis.}
+\item{DesignParam}{List of design and simulation parameters required to perform the analysis.}
 
-\item{LookInfo}{A list containing input parameters related to multiple looks, which the user may need to compute 
-test statistics and perform tests. Users should access the variables using their names 
-(e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
+\item{LookInfo}{A list of input parameters related to multiple looks in group sequential designs.
+Variables should be accessed by names (e.g., \code{LookInfo$NumLooks}). Important variables include:
+\itemize{
+\item \code{LookInfo$NumLooks}: Integer, number of looks in the study.
+\item \code{LookInfo$CurrLookIndex}: Integer, current look index (starting from 1).
+\item \code{LookInfo$CumEvents}: Vector, cumulative number of events at each look.
+\item \code{LookInfo$RejType}: Code representing rejection types. Possible values include:
+\item \strong{Efficacy Only:}
+\itemize{
+\item \code{0}: 1-Sided Efficacy Upper.
+\item \code{2}: 1-Sided Efficacy Lower.
+}
+\item \strong{Futility Only:}
+\itemize{
+\item \code{1}: 1-Sided Futility Upper.
+\item \code{3}: 1-Sided Futility Lower.
+}
+\item \strong{Efficacy and Futility:}
+\itemize{
+\item \code{4}: 1-Sided Efficacy Upper and Futility Lower.
+\item \code{5}: 1-Sided Efficacy Lower and Futility Upper.
+}
+}}
 
-- `LookInfo$NumLooks`: An integer representing the number of looks in the study.
-- `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
-- `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
-- `LookInfo$RejType`: A code representing rejection types. Possible values are:
-  - **Efficacy Only:**
-    - `0`: 1-Sided Efficacy Upper.
-    - `2`: 1-Sided Efficacy Lower.
-  - **Futility Only:**
-    - `1`: 1-Sided Futility Upper.
-    - `3`: 1-Sided Futility Lower.
-  - **Efficacy and Futility:**
-    - `4`: 1-Sided Efficacy Upper and Futility Lower.
-    - `5`: 1-Sided Efficacy Lower and Futility Upper.}
-
-\item{UserParam}{A list of user defined parameters in East or East Horizon. UserParam must be supplied, the list must contain the following named elements:
+\item{UserParam}{A list of user-defined parameters. Must contain the following named elements:
 \describe{
-  \item{UserParam$dMAV}{A value (-Inf, Inf) that specifics the Minimum Acceptable Value (MAV).}
-  \item{UserParam$dTV}{A value (-Inf, Inf) that specifies the Target Value (TV).}
-  \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the t.test() function in base R library.}
+\item{UserParam$dMAV}{Numeric; specifies the Minimum Acceptable Value (MAV).}
+\item{UserParam$dTV}{Numeric; specifies the Target Value (TV).}
+\item{UserParam$dConfLevel}{Numeric (0,1); specifies the confidence level for the \code{t.test()} function.}
 }}
 }
 \value{
-TestStat A double value of the computed test statistic
-
-Decision An integer value: Decision = 0 --> No boundary crossed
-                                   Decision = 1 --> Lower Efficacy Boundary Crossed
-                                   Decision = 2 --> Upper Efficacy Boundary Crossed
-                                   Decision = 3 --> Futility Boundary Crossed
-                                   Decision = 4 --> Equivalence Boundary Crossed
-
-Delta The difference in the estimates, is utilized in East Horizon Explore to create the observed graph
-
-ErrorCode An integer value:  ErrorCode = 0 --> No Error
+A list containing the following elements:
+\describe{
+\item{TestStat}{A double representing the computed test statistic.}
+\item{Decision}{Required integer value indicating the decision made:
+\describe{
+\item{0}{No boundary crossed (neither efficacy nor futility).}
+\item{1}{Lower efficacy boundary crossed.}
+\item{2}{Upper efficacy boundary crossed.}
+\item{3}{Futility boundary crossed.}
+\item{4}{Equivalence boundary crossed.}
+}}
+\item{ErrorCode}{Optional integer value:
+\describe{
+\item{0}{No error.}
+\item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
+\item{< 0}{Fatal error; no further simulations are attempted.}
+}}
+\item{Delta}{Estimated difference between experimental and control treatments.}
+}
 }
 \description{
-In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above 
-              the Minimum Acceptable Value (MAV) then a Go decision is made.  
-              If a Go decision is not made, then if is is unlikely that the treatment difference is above the Target Value (TV) a No-Go decision is made.      
-              In this example, the t.test() from base package in R is utilized to analyze the data and compute at user-specified confidence interval using UserParam$dConfLevel.  
-              The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV.  
-              If a Go decision is not made, then a No-Go decision is made if there is less than a 10% chance the difference is greater than the TV.  
-              Using a frequentist CI an approximation to this design can be done by the logic described below.
-              At an analysis, if the Lower Limit of the CI, denoted by LL, is greater than user-specified UserParam$dMAV then a Go decision is made.  
-              
-              If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than user-specified UserParam$TV a No-Go decision is made.  
-              Specifically, 
-                 if LL > UserParam$dMAV --> Go
-                 if UL < UserParam$dTV --> No-Go
-              Otherwise, continue to the next analysis. 
-              At the Final Analysis: If LL > UserParam$dMAV  then a Go decision is made, otherwise, a No-Go decision is made
+This function performs analysis using a simplified limits of confidence interval design for continuous outcomes.
+The analysis determines whether a "Go" or "No-Go" decision is made based on the lower and upper limits of
+a user-specified confidence interval. It uses the \code{t.test} function from the base R library to compute the
+confidence interval. The decision-making process is based on the following logic:
+\itemize{
+\item If the lower limit of the confidence interval (LL) is greater than the Minimum Acceptable Value (MAV), a "Go" decision is made.
+\item If a "Go" decision is not made, and the upper limit of the confidence interval (UL) is less than the Target Value (TV), a "No-Go" decision is made.
+\item Otherwise, continue to the next analysis.
+\item At the final analysis, if LL > MAV, a "Go" decision is made; otherwise, a "No-Go" decision is made.
+}
+
+This function assumes MAV ≤ TV and ignores boundary information sent from East or East Horizon to implement this decision approach.
 }
 \note{
-This function is only applicable to the case where MAV <= TV.  
-      In this example, the boundary information that is computed and sent from East or East Horizon is ignored in order to implement this decision approach.
+This function is applicable only when MAV ≤ TV.
 }

@@ -12,6 +12,6 @@ ComputeScaleGivenShapeMedian(dShape, dMedian)
 \item{dMedian}{The median of the Weibull distribution.}
 }
 \description{
-Compute the scale parameter for the Weibull distribution 
-with a given median (`dMedian`) and shape parameter (`dShape`).
+Compute the scale parameter for the Weibull distribution
+with a given median (\code{dMedian}) and shape parameter (\code{dShape}).
 }

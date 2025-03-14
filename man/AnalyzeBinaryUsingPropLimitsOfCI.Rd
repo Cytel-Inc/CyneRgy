@@ -2,7 +2,7 @@
 % Please edit documentation in R/AnalyzeBinaryUsingPropLimitsOfCI.R
 \name{AnalyzeBinaryUsingPropLimitsOfCI}
 \alias{AnalyzeBinaryUsingPropLimitsOfCI}
-\title{Analyze using a simplified limits of confidence interval design}
+\title{Analyze Binary Data Using Proportion Limits of Confidence Interval}
 \usage{
 AnalyzeBinaryUsingPropLimitsOfCI(
   SimData,
@@ -12,64 +12,81 @@ AnalyzeBinaryUsingPropLimitsOfCI(
 )
 }
 \arguments{
-\item{SimData}{Data frame which consists of data generated in current simulation.}
+\item{SimData}{A data frame containing the data generated in the current simulation.}
 
-\item{DesignParam}{List of Design and Simulation Parameters required to perform analysis.}
+\item{DesignParam}{A list of design and simulation parameters required for the analysis.}
 
-\item{LookInfo}{A list containing input parameters related to multiple looks, which the user may need to compute 
-test statistics and perform tests. Users should access the variables using their names 
-(e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
+\item{LookInfo}{A list containing input parameters related to multiple looks, which are used to compute test statistics
+and perform tests. Important variables include:
+\itemize{
+\item \code{LookInfo$NumLooks}: Integer, number of looks in the study.
+\item \code{LookInfo$CurrLookIndex}: Integer, current look index (starting from 1).
+\item \code{LookInfo$CumEvents}: Vector, cumulative number of events at each look.
+\item \code{LookInfo$RejType}: Code representing rejection types. Possible values include:
+\item \strong{Efficacy Only:}
+\itemize{
+\item \code{0}: 1-Sided Efficacy Upper.
+\item \code{2}: 1-Sided Efficacy Lower.
+}
+\item \strong{Futility Only:}
+\itemize{
+\item \code{1}: 1-Sided Futility Upper.
+\item \code{3}: 1-Sided Futility Lower.
+}
+\item \strong{Efficacy and Futility:}
+\itemize{
+\item \code{4}: 1-Sided Efficacy Upper and Futility Lower.
+\item \code{5}: 1-Sided Efficacy Lower and Futility Upper.
+}
+}}
 
-- `LookInfo$NumLooks`: An integer representing the number of looks in the study.
-- `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
-- `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
-- `LookInfo$RejType`: A code representing rejection types. Possible values are:
-  - **Efficacy Only:**
-    - `0`: 1-Sided Efficacy Upper.
-    - `2`: 1-Sided Efficacy Lower.
-  - **Futility Only:**
-    - `1`: 1-Sided Futility Upper.
-    - `3`: 1-Sided Futility Lower.
-  - **Efficacy and Futility:**
-    - `4`: 1-Sided Efficacy Upper and Futility Lower.
-    - `5`: 1-Sided Efficacy Lower and Futility Upper.}
-
-\item{UserParam}{A list of user defined parameters in East or East Horizon. UserParam must be supplied, the list must contain the following named elements:
+\item{UserParam}{A list of user-defined parameters with the following required elements:
 \describe{
-  \item{UserParam$dLowerLimit}{A value (0,1) that specifics the lower limit, eg  Minimum Acceptable Value (MAV).}
-  \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg Target Value (TV).}
-  \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the prop.test function in base R.}
+\item{dLowerLimit}{A value (0,1) specifying the lower limit, e.g., Minimum Acceptable Value (MAV).}
+\item{dUpperLimit}{A value (0,1) specifying the upper limit for the confidence interval, e.g., Target Value (TV).}
+\item{dConfLevel}{A value (0,1) specifying the confidence level for the \code{prop.test} function.}
 }}
 }
 \value{
-TestStat A double value of the computed test statistic
-
-Decision An integer value: Decision = 0 --> No boundary crossed
-                                   Decision = 1 --> Lower Efficacy Boundary Crossed
-                                   Decision = 2 --> Upper Efficacy Boundary Crossed
-                                   Decision = 3 --> Futility Boundary Crossed
-                                   Decision = 4 --> Equivalence Boundary Crossed
-
-Delta The difference in the estimates, is utilzied in East Horizon Explore to create the observed graph
-
-ErrorCode An integer value:  ErrorCode = 0 --> No Error
+A list containing the following elements:
+\describe{
+\item{TestStat}{A double representing the computed test statistic.}
+\item{Decision}{Required integer value indicating the decision made:
+\describe{
+\item{0}{No boundary crossed (neither efficacy nor futility).}
+\item{1}{Lower efficacy boundary crossed.}
+\item{2}{Upper efficacy boundary crossed.}
+\item{3}{Futility boundary crossed.}
+\item{4}{Equivalence boundary crossed.}
+}}
+\item{ErrorCode}{Optional integer value:
+\describe{
+\item{0}{No error.}
+\item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
+\item{< 0}{Fatal error; no further simulations are attempted.}
+}}
+\item{Delta}{Estimated difference between experimental and control treatments.}
+}
 }
 \description{
-In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made.  
-              If a Go decision is not made, then if is is unlikely that the treatment difference is above the Target Value (TV) a No Go decision is made.      
-              In this example, the prop.test from base R is utilized to analyze the data and compute at user-specified confidence interval (dConfLevel).  
-              The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV.  
-              If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the difference is greater than the TV.  
-              Using a frequentist CI an approximation to this design can be done by the logic described below.
-              At an analysis, if the Lower Limit of the CI, denoted by LL, is greater than user-specified dLowerLimit then a Go decision is made.  
-              
-              If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than user-specified dUpperLimit a No Go decision is made.  
-              Specifically, 
-                 if LL > UserParam$dLowerLimit --> Go
-                 if UL < UserParam$dUpperLimit --> No Go
-              Otherwise, continue to the next analysis. 
-              At the Final Analysis: If LL > UserParam$dLowerLimit then a Go decision is made, otherwise, a No Go decision is made
+This function analyzes binary data using a simplified confidence interval (CI) limits design.
+It determines whether to make a "Go" or "No Go" decision based on the treatment difference
+and user-specified thresholds for the CI lower and upper limits. The analysis uses the \code{prop.test}
+function from base R to compute CIs at a user-defined confidence level.
+
+The decision logic is as follows:
+\itemize{
+\item If the lower limit (LL) of the CI is greater than \code{UserParam$dLowerLimit}, a "Go" decision is made.
+\item If a "Go" decision is not made, and the upper limit (UL) of the CI is less than \code{UserParam$dUpperLimit}, a "No Go" decision is made.
+\item Otherwise, continue to the next analysis.
+\item At the final analysis:
+\itemize{
+\item If LL > \code{UserParam$dLowerLimit}, a "Go" decision is made.
+\item Otherwise, a "No Go" decision is made.
+}
+}
 }
 \note{
-In this example, the boundary information that is computed and sent from East or East Horizon is ignored in order to implement this decision approach.
+In this example, the boundary information computed and sent from East or East Horizon is ignored
+to implement this decision approach.
 }

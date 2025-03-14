@@ -1,76 +1,70 @@
 ######################################################################################################################## .
-#' @param AnalyzeBinaryUsingBetaBinomial
-#' @title Analyze for efficacy using a beta( alpha, beta ) prior to compute the posterior probability that experimental is better than control treatment care. 
-#' @param SimData Data frame which consists of data generated in current simulation.
-#' @param DesignParam Input Parameters which user may need to compute test statistic and perform test. 
-#'                    User should access the variables using names, for example, DesignParam$Alpha, and not order. 
-#' @param LookInfo A list containing input parameters related to multiple looks, which the user may need to compute 
-#'                 test statistics and perform tests. Users should access the variables using their names 
-#'                 (e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
-#'                 
-#'                 - `LookInfo$NumLooks`: An integer representing the number of looks in the study.
-#'                 - `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
-#'                 - `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
-#'                 - `LookInfo$RejType`: A code representing rejection types. Possible values are:
-#'                   - **Efficacy Only:**
-#'                     - `0`: 1-Sided Efficacy Upper.
-#'                     - `2`: 1-Sided Efficacy Lower.
-#'                   - **Futility Only:**
-#'                     - `1`: 1-Sided Futility Upper.
-#'                     - `3`: 1-Sided Futility Lower.
-#'                   - **Efficacy and Futility:**
-#'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
-#'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon.
-#'                  UserParam must be supplied and contain the following named elements:
+#' @title Analyze Binary Data Using Beta-Binomial Model
+#' 
+#' @description Perform analysis for efficacy using a Beta(\eqn{\alpha}, \eqn{\beta}) prior to compute the posterior probability that the experimental treatment is better than the control treatment care.
+#' The analysis assumes a Bayesian model and uses posterior probabilities for decision-making:
+#'
+#' - **Efficacy:** If \eqn{Pr(\pi_{Exp} > \pi_{Ctrl} | \text{data}) > \text{Upper Cutoff Efficacy}}, declare efficacy.
+#' - **Futility:** If \eqn{Pr(\pi_{Exp} > \pi_{Ctrl} | \text{data}) < \text{Lower Cutoff Futility}}, declare futility.
+#' - At final analysis (FA): Declare efficacy or futility based on the posterior probability.
+#'
+#' When simulating under the null case, setting \eqn{dLowerCutoffForFutility = 0} provides the false-positive rate for the non-binding futility rule. 
+#' Setting \eqn{dLowerCutoffForFutility > 0} provides the operating characteristics (OC) of the binding futility rule, as the rule is always followed.
+#'
+#' @param SimData A data frame containing the data generated in the current simulation.
+#' @param DesignParam A list of input parameters necessary to compute the test statistic and perform the test. 
+#'                    Variables should be accessed using names (e.g., `DesignParam$Alpha`).
+#' @param LookInfo A list of input parameters related to multiple looks in group sequential designs. 
+#' Variables should be accessed by names (e.g., `LookInfo$NumLooks`). Important variables include:
+#'
+#' - `LookInfo$NumLooks`: Integer, number of looks in the study.
+#' - `LookInfo$CurrLookIndex`: Integer, current look index (starting from 1).
+#' - `LookInfo$CumEvents`: Vector, cumulative number of events at each look.
+#' - `LookInfo$RejType`: Code representing rejection types. Possible values include:
+#'  - **Efficacy Only:**
+#'      - `0`: 1-Sided Efficacy Upper.
+#'      - `2`: 1-Sided Efficacy Lower.
+#'  - **Futility Only:**
+#'      - `1`: 1-Sided Futility Upper.
+#'      - `3`: 1-Sided Futility Lower.
+#'  - **Efficacy and Futility:**
+#'      - `4`: 1-Sided Efficacy Upper and Futility Lower.
+#'      - `5`: 1-Sided Efficacy Lower and Futility Upper.
+#'
+#' @param UserParam A list of user-defined parameters. Must contain the following named elements:
 #'  \describe{
-#'      \item{UserParam$dAlphaCtrl}{Prior alpha parameter for control treatment.  Equivalent to the prior number of treatment successes.}
-#'      \item{UserParam$dBetaCtrl}{Prior beta parameter for control treatment.  Equivalent to the prior number of treatment failures.}
-#'      \item{UserParam$dAlphaExp}{Prior alpha parameter for experimental treatment. Equivalent to the prior number of treatment successes.}
-#'      \item{UserParam$dBetaExp}{Prior beta parameter for experimental treatment. Equivalent to the prior number of treatment failures.}
-#'      \item{UserParam$dUpperCutoffEfficacy}{A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy.}
-#'      \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility.}
+#'      \item{dAlphaCtrl}{Prior alpha parameter for control treatment (prior successes).}
+#'      \item{dBetaCtrl}{Prior beta parameter for control treatment (prior failures).}
+#'      \item{dAlphaExp}{Prior alpha parameter for experimental treatment (prior successes).}
+#'      \item{dBetaExp}{Prior beta parameter for experimental treatment (prior failures).}
+#'      \item{dUpperCutoffEfficacy}{Upper cutoff (0,1) for efficacy check. Above this value declares efficacy.}
+#'      \item{dLowerCutoffForFutility}{Lower cutoff (0,1) for futility check. Below this value declares futility.}
 #'  }
-#'  If user variables are not specified then a Beta( 1, 1 ) prior is utilized for both standard of care and experimental.
-#'  
-#' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than control treatment.
-#'              The futility is based on posterior probability being less than dLowerCutoffForFutility.  
-#'              In this example we assume a Bayesian model and use posterior probabilities for decision making
-#'              If user variables are not specified we assume:
-#'              pi_Ctrl ~ beta( 10, 40 ); to reflect that knowledge that on control treatment 10/50 previous patients responded
-#'              pi_Exp ~ beta( 0.2, 0.8 ); non-informative prior for Experimental to have the same prior mean as S but only 1 prior patient observed
-#'              
-#'              At an IA: If Pr( pi_Ctrl > pi_Exp | data ) > 0.95 --> Stop for efficacy.
-#'              Otherwise if  Pr( pi_Ctrl > pi_Exp | data ) < 0.1 --> Stop for futility.
-#'              At an FA: If Pr( pi_Ctrl > pi_Exp | data ) > 0.95 --> Declare efficacy, otherwise, declare futility.
-#'              
-#'              When using simulation to obtain the frequentist Operating Characteristic (OC) 
-#'              of a Bayesian design, you should set dLowerCutoffForFutility = 0
-#'              when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  
-#'              When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed. 
-#' @return The function must return a list in the return statement of the function. The information below lists 
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'             \describe{
-#'                  \item{Decision}{Required value. Integer Value with the following meaning:
-#'                                  \describe{
-#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
-#'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
-#'                                    \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
-#'                                    \item{Decision = 3}{when the Futility Boundary Crossed}
-#'                                    \item{Decision = 4}{when the Equivalence Boundary Crossed}
-#'                                    } 
-#'                                    }
-#'                  \item{ErrorCode}{Optional integer value \describe{ 
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
-#'                  \item{Delta}{Estimated different between experimental and standard of care}
-#'                  }
+#'  If not specified, a Beta(1, 1) prior is used for both control and experimental treatments.
+#'
+#' @return A list containing the following elements:
+#'  \describe{
+#'      \item{TestStat}{A double representing the computed test statistic.}
+#'      \item{Decision}{Required integer value indicating the decision made:
+#'                      \describe{
+#'                        \item{0}{No boundary crossed (neither efficacy nor futility).}
+#'                        \item{1}{Lower efficacy boundary crossed.}
+#'                        \item{2}{Upper efficacy boundary crossed.}
+#'                        \item{3}{Futility boundary crossed.}
+#'                        \item{4}{Equivalence boundary crossed.}
+#'                      }}
+#'      \item{ErrorCode}{Optional integer value:
+#'                      \describe{
+#'                        \item{0}{No error.}
+#'                        \item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
+#'                        \item{< 0}{Fatal error; no further simulations are attempted.}
+#'                      }}
+#'      \item{Delta}{Estimated difference between experimental and control treatments.}
+#'  }
+#' @export
 ######################################################################################################################## .
 
-AnalyzeBinaryUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
+AnalyzeBinaryUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Step 1: Retrieve necessary information from the objects East or East Horizon sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )

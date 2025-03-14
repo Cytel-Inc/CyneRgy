@@ -1,21 +1,36 @@
 ######################################################################################################################## .
-#' @param SimulatePatientOutcomePercentAtZero
-#' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
-#' @param Mean A vector of length = 2 with the means of the two treatments.
-#' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
-#' If UseParam is supplied, the list must contain the following named elements:
-#'  UserParam$dProbOfZeroOutcomeCtrl - A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
-#'  UserParam$dProbOfZeroOutcomeExp - A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
-#' @description
-#' In this example, the continuous outcome is a patient's change from baseline. For this function, 20% of patients are believed to have no change due to treatment.  
-#' As such, this function simulations patient outcome where, on average, 20% will have a value of 0 for the outcome and 80%, on average, will have their value
-#' simulated from a normal distribution with the mean and standard deviation as sent from East. 
+#' @title Simulate Continuous Patient Outcomes with Proportion at Zero
+#' 
+#' @description Simulates patient outcomes from a normal distribution, with a specified percentage of patients having an outcome of 0. In this example, the continuous outcome represents a patient's change from baseline. This function generates patient outcomes such that, on average:
+#' - A specified proportion of patients will have a value of 0 for the outcome, as defined by `UserParam`.
+#' - The remaining patients will have their values simulated from a normal distribution using the provided mean and standard deviation parameters.
+#'
+#' @param NumSub The number of subjects to simulate. Must be an integer value.
+#' @param TreatmentID A vector of treatment IDs, where:
+#' - `0` represents Treatment 1.
+#' - `1` represents Treatment 2.
+#' The length of `TreatmentID` must equal `NumSub`.
+#' @param Mean A numeric vector of length 2 specifying the mean values for the two treatments.
+#' @param StdDev A numeric vector of length 2 specifying the standard deviations for each treatment.
+#' @param UserParam A list of user-defined parameters. Must contain the following named elements:
+#' \describe{
+#'   \item{UserParam$dProbOfZeroOutcomeCtrl}{Numeric (0, 1); defines the probability that a patient has an outcome of 0 for the control (Treatment 1).}
+#'   \item{UserParam$dProbOfZeroOutcomeExp}{Numeric (0, 1); defines the probability that a patient has an outcome of 0 for the experimental (Treatment 2).}
+#' }
+#' @return A list containing the following elements:
+#' \describe{
+#'   \item{Response}{A numeric vector representing the simulated outcomes for each patient.}
+#'   \item{ErrorCode}{Optional integer value:
+#'                      \describe{
+#'                        \item{0}{No error.}
+#'                        \item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
+#'                        \item{< 0}{Fatal error; no further simulations are attempted.}
+#'                      }}
+#' }
+#' @export
 ######################################################################################################################## .
 
-SimulatePatientOutcomePercentAtZero <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
+SimulateContinuousPatientOutcomePercentAtZero <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
     vRequiredParams <- c("dProbOfZeroOutcomeCtrl", "dProbOfZeroOutcomeExp")

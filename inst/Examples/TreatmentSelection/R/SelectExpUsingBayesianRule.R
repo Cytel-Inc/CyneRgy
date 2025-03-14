@@ -1,49 +1,46 @@
 ######################################################################################################################## .
-#' Select treatments to advance based on a Bayesian rule to select any that has at least a user-specified probability of being greater than a user-specified historical response rate. 
-#' @param SimData Dataframe which consists of data generated in current simulation
-#' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
-#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
-#'  If UserParam is supplied, the list must contain the following named element:
+#' @title Select Experimental Treatments Using a Bayesian Rule
+#' 
+#' @description 
+#' This function implements the MAMS design for binary outcomes and performs treatment selection at the interim analysis (IA) using a Bayesian decision rule. 
+#' At IA, an experimental treatment is selected for stage 2 if its posterior probability of exceeding a user-specified historical response rate 
+#' (`UserParam$dHistoricResponseRate`) is greater than a user-defined threshold (`UserParam$dMinPosteriorProbability`):  
+#' `Pr(pj > UserParam$dHistoricResponseRate | data) > UserParam$dMinPosteriorProbability`. 
+#' If no treatment satisfies this criterion, the treatment with the highest posterior probability is selected. 
+#' All experimental arms assume the same prior distribution: `pj ~ Beta(UserParam$dPriorAlpha, UserParam$dPriorBeta)`. 
+#' For stage 2, selected treatments are randomized against the control arm in a 2:1 ratio (experimental:control).
+#' 
+#' @param SimData Dataframe containing data generated in the current simulation.
+#' @param DesignParam List of design and simulation parameters required to perform treatment selection.
+#' @param LookInfo List containing design and simulation parameters, which might be required to perform treatment selection.
+#' @param UserParam A list of user-defined parameters in East or East Horizon. The default is NULL.
+#'  If UserParam is supplied, the list must contain the following named elements:
 #'  \describe{
-#'  \item {UserParam$dPriorAlpha} {A value (0,1) that defines the prior alpha parameter of the beta distribution. 
-#'                          If this value is not specified, the default is 0.2.}  
-#'  \item {UserParam$dPriorBeta} {A value (0,1) that specifies the prior beta parameter of the beta distribution. 
-#'                              If this value is not specified, the default is 0.8.}
-#'  \item {UserParam$dHistoricResponseRate} { A value (0,1) that specifies the historic response rate.
-#'                                  If this value is not specified, the default is 0.2.}
-#'  \item {UserParam$dMinPosteriorProbability} {A value (0,1) that specifies the posterior probability needed of being greater than the historic response rate for an experimental treatment to be selected. 
-#'                              If this value is not specified, the default is 0.5.}
-#'           }
-#' @description
-#' This function is used for the MAMS design with a binary outcome and will perform treatment selection at the interim analysis (IA).   
-#' At the IA, utilize a Bayesian rule to select any experimental treatment that has at least a user-specified probability (UserParam$dMinPosteriorProbability) of being greater than a user-specified historical 
-#' response rate (UserParam$dHistoricResponseRate). Specifically, if Pr( pj > UserParam$dHistoricResponseRate | data ) > UserParam$dMinPosteriorProbability, then experimental treatment j is selected for stage 2.
-#' If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > UserParam$dHistoricResponseRate | data ).
-#' User-specified pj ~ Beta( UserParam$dPriorAlpha, UserParam$dPriorBeta ). All experimental arms assume the same prior. 
-#' After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
-
-#' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
-#' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-#' @note The length of TreatmentID and AllocRatio must be the same.
-#' @note The allocation ratio for control will be 1, AllocRatio are relative to this value. So, a 2 will randomize twice as many to experimental
-#' @note The order of AllocRatio should be the same as TreatmentID, and the corresponding elements will have the assigned allocation ratio
-#' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, e.g., TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
-#' @note You must return at LEAST one treatment and one allocation ratio
-#' @note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example. It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them. This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'       saveRDS( UserParam,   "UserParam.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
-#' @export
+#'  \item{UserParam$dPriorAlpha}{A value (0,1) defining the prior alpha parameter of the beta distribution. Default is 0.2.}
+#'  \item{UserParam$dPriorBeta}{A value (0,1) specifying the prior beta parameter of the beta distribution. Default is 0.8.}
+#'  \item{UserParam$dHistoricResponseRate}{A value (0,1) specifying the historic response rate. Default is 0.2.}
+#'  \item{UserParam$dMinPosteriorProbability}{A value (0,1) specifying the posterior probability needed to exceed the historic response rate for experimental treatment selection. Default is 0.5.}
+#'  }
+#' 
+#' @return A list containing:
+#'   \item{TreatmentID}{A vector of experimental treatment IDs selected to advance, e.g., 1, 2, ..., number of experimental treatments.}
+#'   \item{AllocRatio}{A vector of allocation ratios for the selected treatments relative to control.}
+#'   \item{ErrorCode}{An integer indicating success or error status:
+#'     \describe{
+#'       \item{ErrorCode = 0}{No error.}
+#'       \item{ErrorCode > 0}{Nonfatal error, current simulation aborted but subsequent simulations will run.}
+#'       \item{ErrorCode < 0}{Fatal error, no further simulations attempted.}
+#'     }
+#'   }
+#' 
+#' @note 
+#' \itemize{
+#' \item The length of `TreatmentID` and `AllocRatio` must be the same.
+#' \item The allocation ratio for control is always 1, and `AllocRatio` values are relative to this. For example, an allocation value of 2 means twice as many participants are randomized to the experimental treatment compared to control.
+#' \item The order of `AllocRatio` should match `TreatmentID`, with corresponding elements assigned their respective allocation ratios.
+#' \item The returned vector includes only `TreatmentID` values for experimental treatments. For example, `TreatmentID = c(0, 1, 2)` is invalid because control (`0`) should not be included.
+#' \item At least one treatment and one allocation ratio must be returned.
+#' }
 ######################################################################################################################## .
 
 SelectExpUsingBayesianRule  <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )

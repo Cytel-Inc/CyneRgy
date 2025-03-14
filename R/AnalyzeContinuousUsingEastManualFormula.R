@@ -1,38 +1,54 @@
 ######################################################################################################################## .
-#' @param AnalyzeContinuousUsingEastManualFormula
-#' @title Compute the statistic using formula Q.3.3 in the East manual.
-#' @param SimData Data frame which consists of data generated in current simulation.
-#' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
-#' @param LookInfo A list containing input parameters related to multiple looks, which the user may need to compute 
-#'                 test statistics and perform tests. Users should access the variables using their names 
-#'                 (e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
-#'                 
-#'                 - `LookInfo$NumLooks`: An integer representing the number of looks in the study.
-#'                 - `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
-#'                 - `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
-#'                 - `LookInfo$RejType`: A code representing rejection types. Possible values are:
-#'                   - **Efficacy Only:**
-#'                     - `0`: 1-Sided Efficacy Upper.
-#'                     - `2`: 1-Sided Efficacy Lower.
-#'                   - **Futility Only:**
-#'                     - `1`: 1-Sided Futility Upper.
-#'                     - `3`: 1-Sided Futility Lower.
-#'                   - **Efficacy and Futility:**
-#'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
-#'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. For this example, user defined parameters are not included. 
-#' @description Use the formula Q.3.3 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
-#'              The test statistic is compared to the upper boundary computed and sent by East or East Horizon as an input. This example does NOT include a futility rule. 
-#'              Two sample Z test for Normal distribution. Number of Looks > 1.
-#' @return TestStat A double value of the computed test statistic
-#' @return Decision An integer value: Decision = 0 --> No boundary crossed
-#'                                    Decision = 1 --> Lower Efficacy Boundary Crossed
-#'                                    Decision = 2 --> Upper Efficacy Boundary Crossed
-#'                                    Decision = 3 --> Futility Boundary Crossed
-#'                                    Decision = 4 --> Equivalence Boundary Crossed
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
+#' @title Analyze Continuous Data Using East Manual Formula
+#' 
+#' @description Compute the test statistic using formula Q.3.3 in the East manual. 
+#'              This example demonstrates how analysis and decision-making can be modified 
+#'              in a simple approach. The test statistic is compared to the upper boundary 
+#'              computed and sent by East or East Horizon as an input. Note that this example 
+#'              does not include a futility rule. It performs a two-sample Z test for a normal 
+#'              distribution with the assumption that the number of looks is greater than one.
+#' 
+#' @param SimData Data frame consisting of data generated in the current simulation.
+#' @param DesignParam List of design and simulation parameters required to perform analysis.
+#' @param LookInfo A list of input parameters related to multiple looks in group sequential designs. 
+#' Variables should be accessed by names (e.g., `LookInfo$NumLooks`). Important variables include:
+#'
+#' - `LookInfo$NumLooks`: Integer, number of looks in the study.
+#' - `LookInfo$CurrLookIndex`: Integer, current look index (starting from 1).
+#' - `LookInfo$CumEvents`: Vector, cumulative number of events at each look.
+#' - `LookInfo$RejType`: Code representing rejection types. Possible values include:
+#'  - **Efficacy Only:**
+#'      - `0`: 1-Sided Efficacy Upper.
+#'      - `2`: 1-Sided Efficacy Lower.
+#'  - **Futility Only:**
+#'      - `1`: 1-Sided Futility Upper.
+#'      - `3`: 1-Sided Futility Lower.
+#'  - **Efficacy and Futility:**
+#'      - `4`: 1-Sided Efficacy Upper and Futility Lower.
+#'      - `5`: 1-Sided Efficacy Lower and Futility Upper.
+#' 
+#' @param UserParam A list of user-defined parameters in East or East Horizon. The default is `NULL`. 
+#'                  For this example, user-defined parameters are not included.
+#' 
+#' @return A list containing the following elements:
+#'  \describe{
+#'      \item{TestStat}{A double representing the computed test statistic.}
+#'      \item{Decision}{Required integer value indicating the decision made:
+#'                      \describe{
+#'                        \item{0}{No boundary crossed (neither efficacy nor futility).}
+#'                        \item{1}{Lower efficacy boundary crossed.}
+#'                        \item{2}{Upper efficacy boundary crossed.}
+#'                        \item{3}{Futility boundary crossed.}
+#'                        \item{4}{Equivalence boundary crossed.}
+#'                      }}
+#'      \item{ErrorCode}{Optional integer value:
+#'                      \describe{
+#'                        \item{0}{No error.}
+#'                        \item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
+#'                        \item{< 0}{Fatal error; no further simulations are attempted.}
+#'                      }}
+#'  }
+#' @export
 ######################################################################################################################## .
 
 AnalyzeContinuousUsingEastManualFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
