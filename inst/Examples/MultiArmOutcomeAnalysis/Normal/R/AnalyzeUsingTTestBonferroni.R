@@ -1,6 +1,5 @@
-######################################################################################################################## .
-#' @name AnalyzeUsingPropTestBonferroni
-#' @title Analyze using the prop.test function in base R.
+#' @name AnalyzeUsingTTestBonferroni
+#' @title Analyze using the t.test function in base R.
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
 #'        It will have headers indicating the names of the columns. These names will be same as those used in 
 #'        Data Generation. User should access the variables using headers, for example, SimData$ArrivalTime, 
@@ -34,6 +33,7 @@
 #'          \item{RespLag}{Numeric. Follow up duration.}
 #'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of arms. First value is control and fixed to 1 for all looks. Values are Dropped in the interim: 0, Still present in the trial: 1}
 #'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of arms. First value is control.}
+#'          \item{TestStatType}{Integer. Test Statistic Type. Values are t-Test: 4}
 #'      
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
@@ -77,7 +77,7 @@
 #'                                     }
 #'                                     }
 #'                      }
-AnalyzeUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzeUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Step 1: Retrieve necessary information from the objects East sent ####
     if(  !is.null( LookInfo )  )
@@ -87,7 +87,7 @@ AnalyzeUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NUL
         nQtyOfPatsInAnalysis     <- LookInfo$CumCompleters[ nLookIndex ]
         vInfoFrac                <- LookInfo$InfoFrac
         vEfficacyBoundary        <- gsDesign::gsDesign(k = nQtyOfLooks, test.type = 1, alpha = DesignParam$Alpha, 
-                                                sfu = gsDesign::sfLDOF, timing = vInfoFrac)
+                                                       sfu = gsDesign::sfLDOF, timing = vInfoFrac)
         vEfficacyBoundaryPScale  <- 1 - pnorm(vEfficacyBoundary$upper$bound)
     }
     else
@@ -112,9 +112,9 @@ AnalyzeUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NUL
     for( nTrtID in 1:DesignParam$NumTreatments ){
         if (vIsTrtPresent[ nTrtID ] == 1){
             vOutcomesE           <- vPatientOutcome[ vPatientTreatment == nTrtID ]
-            mData                <- cbind(table(vOutcomesS), table(vOutcomesE))
-            lAnalysisResult      <- prop.test(mData, alternative = "greater", correct = FALSE)
-            dPValue              <- lAnalysisResult$p.value
+            lAnalysisResult      <- t.test( vOutcomesE, vOutcomesS, alternative = "greater",
+                                             var.equal = TRUE)
+            dPValue              <- lAnalysisResult$p.value    # extract p value for the t test
         } else
         {
             dPValue              <- NA
@@ -124,7 +124,7 @@ AnalyzeUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NUL
     
     # Calculate Bonferroni adjusted p values
     vAdjPValues                  <- vPValues * sum( vIsTrtPresent ) 
-
+    
     # Perform the desired analysis. NA should be returned for arms that are not available at this look
     vDecision                    <- ifelse( vAdjPValues < vEfficacyBoundaryPScale[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
     
@@ -144,5 +144,6 @@ AnalyzeUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NUL
     
     return( list(Decision  = as.integer(vDecision), 
                  ErrorCode = as.integer(nError)) )
+    
 }
 
