@@ -126,7 +126,7 @@ AnalyzeUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, 
     vAdjPValues                  <- vPValues * sum( vIsTrtPresent ) 
     
     # Perform the desired analysis. NA should be returned for arms that are not available at this look
-    vDecision                    <- ifelse( vAdjPValues > vEfficacyBoundaryPScale[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
+    vDecision                    <- ifelse( vAdjPValues < vEfficacyBoundaryPScale[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
     
     for( i in 1:length(vDecision) ){
         if( vDecision[i] == 0 )
