@@ -65,6 +65,8 @@ navbar:
                 - text: Advanced Examples
                 - text: Bayesian Assurance of Consecutive Studies
                   href: articles/AssuranceConsecutiveStudies.html
+                - text: Probability of Success for Dual Endpoints (PFS & OS)
+                  href: articles/ProbabilitySuccessDualEndpointsPFSOS.html
                 - text: --------------------
                 - text: Other Integration Points
                 - text: Poisson Arrival Times
