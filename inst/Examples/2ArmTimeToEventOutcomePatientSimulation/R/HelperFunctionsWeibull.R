@@ -1,35 +1,24 @@
 ######################################################################################################################## .
-# Helper functions to go with the Weibull example.  ####
+# Helper function to go with the Weibull example.  ####
 ######################################################################################################################## .
 
-######################################################################################################################## .
-#' @title Compute Hazard of Weibull Distribution
-#'
-#' @description 
-#' Function to compute the hazard of the Weibull distribution.
-#'
-#' @param vTime A vector of times to compute the hazard of the Weibull distribution.
-#' @param dShape The shape parameter of the Weibull distribution. See `rweibull`.
-#' @param dScale The scale parameter of the Weibull distribution. See `rweibull`.
-######################################################################################################################## .
-
+#' @param vTime A vector of times to compute the hazard of the Weibull distribution
+#' @param dShape The shape of the Weibull distribution, see rweibull
+#' @param dScale The scale of the Weibull distribution, see rweibull
+#' @description
+#' Function to compute the hazard of the Weibull distribution 
+#' 
 ComputeHazardWeibull <- function( vTime, dShape, dScale )
 {
-    vHaz <- ( dShape/dScale ) * ( vTime/dScale )^( dShape-1 )
+    vHaz <- (dShape/dScale) * (vTime/dScale )^(dShape-1)
     return ( vHaz )
 }
 
-######################################################################################################################## .
-#' @title Compute Weibull scale parameter
-#' 
+#' @param dShape The shape of the Weibull distribution
+#' @param dMedian The median of the Weibull distribution
 #' @description
-#' Compute the scale parameter for the Weibull distribution 
-#' with a given median (`dMedian`) and shape parameter (`dShape`).
-#'
-#' @param dShape The shape parameter of the Weibull distribution.
-#' @param dMedian The median of the Weibull distribution.
-######################################################################################################################## .
-
+#' Compute the scale parameter for the Weibull distribution with median = dMedian and scale parameter = dScale
+#' 
 ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 {
     dScale <- dMedian/exp( log( -log( 0.5) )/dShape )

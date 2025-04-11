@@ -1,52 +1,39 @@
-######################################################################################################################## .
-#' @title Analyze Continuous Data Using t-Test
-#' 
-#' @description Performs hypothesis testing using the `t.test()` function in base R to analyze continuous data under the assumption of a normal distribution. This function demonstrates how analysis and decision-making can be modified in a simple approach. The test statistic is compared to the upper boundary computed and sent by East as an input. Note that this example does not include a futility rule.
-#' 
-#' @param SimData Data frame that contains simulated data for the current simulation.
-#' @param DesignParam List of design and simulation parameters required to perform the analysis.
-#' @param LookInfo A list of input parameters related to multiple looks in group sequential designs. 
-#' Variables should be accessed by names (e.g., `LookInfo$NumLooks`). Important variables include:
+#  Last Modified Date: 04/30/2024
+#' @name AnalyzeUsingTTestNormal
+#' @param SimData Data frame which consists of data generated in current simulation.
+#' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
+#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
+#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#' @description Use the t.test() function in the base package to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
+#'              The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule. 
+#' @return TestStat A double value of the computed test statistic
+#' @return Decision An integer value: Decision = 0 --> No boundary crossed
+#'                                    Decision = 1 --> Lower Efficacy Boundary Crossed
+#'                                    Decision = 2 --> Upper Efficacy Boundary Crossed
+#'                                    Decision = 3 --> Futility Boundary Crossed
+#'                                    Decision = 4 --> Equivalence Boundary Crossed
+#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
+#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
+#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
+
+#'@note Helpful Hints:
+#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
+#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
 #'
-#' - `LookInfo$NumLooks`: Integer, number of looks in the study.
-#' - `LookInfo$CurrLookIndex`: Integer, current look index (starting from 1).
-#' - `LookInfo$CumEvents`: Vector, cumulative number of events at each look.
-#' - `LookInfo$RejType`: Code representing rejection types. Possible values include:
-#'  - **Efficacy Only:**
-#'      - `0`: 1-Sided Efficacy Upper.
-#'      - `2`: 1-Sided Efficacy Lower.
-#'  - **Futility Only:**
-#'      - `1`: 1-Sided Futility Upper.
-#'      - `3`: 1-Sided Futility Lower.
-#'  - **Efficacy and Futility:**
-#'      - `4`: 1-Sided Efficacy Upper and Futility Lower.
-#'      - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#'      
-#' @param UserParam A list of user-defined parameters in East or East Horizon. The default is `NULL`.
-#' For this example, user-defined parameters are not included.
+#'       saveRDS( SimData,     "SimData.Rds")
+#'       saveRDS( DesignParam, "DesignParam.Rds" )
+#'       saveRDS( LookInfo,    "LookInfo.Rds" )
+#'
+#'       The above code will save each of the input objects to a file so they may be examined within R.
+#' @export
 #' 
-#' @return A list containing the following elements:
-#'  \describe{
-#'      \item{TestStat}{A double representing the computed test statistic.}
-#'      \item{Decision}{Required integer value indicating the decision made:
-#'                      \describe{
-#'                        \item{0}{No boundary crossed (neither efficacy nor futility).}
-#'                        \item{1}{Lower efficacy boundary crossed.}
-#'                        \item{2}{Upper efficacy boundary crossed.}
-#'                        \item{3}{Futility boundary crossed.}
-#'                        \item{4}{Equivalence boundary crossed.}
-#'                      }}
-#'      \item{ErrorCode}{Optional integer value:
-#'                      \describe{
-#'                        \item{0}{No error.}
-#'                        \item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
-#'                        \item{< 0}{Fatal error; no further simulations are attempted.}
-#'                      }}
-#'  }
-######################################################################################################################## .
+#' 
+#######################################################################################################################################################################################################################
 
 AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {   
+    library(CyneRgy)
+    
     # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )
     {
@@ -71,16 +58,20 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, User
     vOutcomesS           <- vPatientOutcome[ vPatientTreatment == 0 ]
     vOutcomesE           <- vPatientOutcome[ vPatientTreatment == 1 ]
     
-    # compute the estimates for mean for (E and S)
+    # compute the estimates for mean and Std. Dev for (E and S)
     dMeanOfResponsesOnE   <- mean( vOutcomesE )
+    dStdDevOfResponsesOnE <- sd( vOutcomesE)
+    nQtyOfPatsOnE         <- length( vOutcomesE )
+    
     dMeanOfResponsesOnS   <- mean( vOutcomesS )
+    dStdDevOfResponsesOnS <- sd( vOutcomesS)
+    nQtyOfPatsOnS         <- length( vOutcomesS )
     
+
     # delta = mean(E) - mean(S). Change the alternative if delta < 0, put alternative = "less"
-    delta <- dMeanOfResponsesOnE - dMeanOfResponsesOnS
-    alternativeHypothesis <- ifelse(delta < 0, "less", "greater")
-    
-    # Assumes the variances of both arms to be same, so the intermediate computations uses Pooled std deviation estimate.
-    lAnalysisResult       <- t.test( vOutcomesE, vOutcomesS, alternative = alternativeHypothesis,
+    # var.equal = TRUE assumes the variances of both arms to be same, so the intermediate computations
+    # uses Pooled std deviation estimate. This will be consistent with Example - 1.
+    lAnalysisResult       <- t.test( vOutcomesE, vOutcomesS, alternative = "greater",
                                      var.equal = TRUE)
     
     dTValue              <- lAnalysisResult$statistic    # extract t-test statistic value
@@ -94,8 +85,10 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, User
     
     Error <-  0
     
+    
     lRet <- list( TestStat = as.double( dTValue ),
                   Decision  = as.integer( nDecision ), 
                   ErrorCode = as.integer( Error ))
     return( lRet )
 }
+
