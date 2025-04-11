@@ -181,8 +181,8 @@ Refer to the table below for the definitions of the user-defined parameters used
 
 |**User parameter**|**Definition**|
 |---|------|
-|$UserParam\$HazardRatioCutoffIA$|OS hazard ratio threshold for interim analysis|
-|$UserParam\$HazardRatioCutoffFA$|OS hazard ratio threshold for final analysis|
+|**HazardRatioCutoffIA**|OS hazard ratio threshold for interim analysis|
+|**HazardRatioCutoffFA**|OS hazard ratio threshold for final analysis|
 
 ## Option 1: Fixed Sample Design
 
@@ -190,8 +190,8 @@ The first option is a fixed sample design with a hazard ratio threshold of 0.9. 
 
 |**User parameter**|**Value**|
 |---|------|
-|$UserParam\$HazardRatioCutoffIA$|0.8|
-|$UserParam\$HazardRatioCutoffFA$|0.9|
+|**HazardRatioCutoffIA**|0.8|
+|**HazardRatioCutoffFA**|0.9|
 
 As we don't have an interim analysis here (as we are using a fixed sample design), the first user parameter (*HazardRatioCutoffIA*) is skipped.
 
@@ -202,8 +202,8 @@ The second option is a group sequential design with hazard ratio thresholds of 0
 
 |**User parameter**|**Value**|
 |---|------|
-|$UserParam\$HazardRatioCutoffIA$|0.8|
-|$UserParam\$HazardRatioCutoffFA$|0.9|
+|**HazardRatioCutoffIA**|0.8|
+|**HazardRatioCutoffFA**|0.9|
 
 ## Option 3: Low Marginal PoS for OS
 
@@ -211,8 +211,8 @@ The third option is a fixed sample design with a lower hazard ratio threshold of
 
 |**User parameter**|**Value**|
 |---|------|
-|$UserParam\$HazardRatioCutoffIA$|0.5|
-|$UserParam\$HazardRatioCutoffFA$|0.5|
+|**HazardRatioCutoffIA**|0.5|
+|**HazardRatioCutoffIA**|0.5|
 
 As we don't have an interim analysis here (as we are using a fixed sample design), the first user parameter (*HazardRatioCutoffIA*) is skipped.
 
@@ -222,8 +222,8 @@ The fourth option is a fixed sample design with a higher hazard ratio threshold 
 
 |**User parameter**|**Value**|
 |---|------|
-|$UserParam\$HazardRatioCutoffIA$|0.5|
-|$UserParam\$HazardRatioCutoffFA$|1.2|
+|**HazardRatioCutoffIA**|0.5|
+|**HazardRatioCutoffIA**|1.2|
 
 As we don't have an interim analysis here (as we are using a fixed sample design), the first user parameter (*HazardRatioCutoffIA*) is skipped.
 
@@ -321,12 +321,12 @@ We begin by directly inputting the median times and probabilities of death befor
 
 |**User parameter**|**Definition**|**Value**|
 |---|------|---|
-|$UserParam\$dMedianPFS0$|Median time to PFS event for control group|12|
-|$UserParam\$dMedianPFS1$|Median time to PFS event for treatment group|18|
-|$UserParam\$dMedianOS0$|Median time to OS event for control group|18|
-|$UserParam\$dMedianOS1$|Median time to OS event for treatment group|27|
-|$UserParam\$dProbOfDeathBeforeProgression0$|Probability of death before PFS for control group|0.2|
-|$UserParam\$dProbOfDeathBeforeProgression1$|Probability of death before PFS for treatment group|0.2|
+|**dMedianPFS0**|Median time to PFS event for control group|12|
+|**dMedianPFS1**|Median time to PFS event for treatment group|18|
+|**dMedianOS0**|Median time to OS event for control group|18|
+|**dMedianOS1**|Median time to OS event for treatment group|27|
+|**dProbOfDeathBeforeProgression0**|Probability of death before PFS for control group|0.2|
+|**dProbOfDeathBeforeProgression1**|Probability of death before PFS for treatment group|0.2|
 
 Here, the median times are in months and the hazard ratio for both groups is equal to $\frac{12}{18} = \frac{18}{27} = 0.6667$. The probability of death before progression is 20% for both groups.
 
@@ -343,19 +343,19 @@ All three parameters are treated as random variables, sampled from prior distrib
 Refer to the table below for the definitions of the user-defined parameters used in this example.
 
 |**User parameter**|**Definition**|
-|---|------|---|
-|$UserParam\$dMedianPFS0PriorShape$|Shape parameter for the median time to PFS event for control group|
-|$UserParam\$dMedianPFS0PriorRate$|Rate parameter for the median time to PFS event for control group|
-|$UserParam\$dMedianOS0PriorShape$|Shape parameter for the median time to OS event for control group|
-|$UserParam\$dMedianOS0PriorRate$|Rate parameter for the median time to OS event for control group|
-|$UserParam\$dMedianPFS1PriorShape$|Shape parameter for the median time to PFS event for treatment group|
-|$UserParam\$dMedianPFS1PriorRate$|Rate parameter for the median time to PFS event for treatment group|
-|$UserParam\$dMedianOS1PriorShape$|Shape parameter for the median time to OS event for treatment group|
-|$UserParam\$dMedianOS1PriorRate$|Rate parameter for the median time to OS event for treatment group|
-|$UserParam\$dProbOfDeathBeforeProgression0Param1$|Alpha parameter for probability of death before PFS for control group|
-|$UserParam\$dProbOfDeathBeforeProgression0Param2$|Beta parameter for probability of death before PFS for control group|
-|$UserParam\$dProbOfDeathBeforeProgression1Param1$|Alpha parameter for probability of death before PFS for treatment group|
-|$UserParam\$dProbOfDeathBeforeProgression1Param2$|Beta parameter for probability of death before PFS for treatment group|
+|---|------|
+|**dMedianPFS0PriorShape**|Shape parameter for the median time to PFS event for control group|
+|**dMedianPFS0PriorRate**|Rate parameter for the median time to PFS event for control group|
+|**dMedianOS0PriorShape**|Shape parameter for the median time to OS event for control group|
+|**dMedianOS0PriorRate**|Rate parameter for the median time to OS event for control group|
+|**dMedianPFS1PriorShape**|Shape parameter for the median time to PFS event for treatment group|
+|**dMedianPFS1PriorRate**|Rate parameter for the median time to PFS event for treatment group|
+|**dMedianOS1PriorShape**|Shape parameter for the median time to OS event for treatment group|
+|**dMedianOS1PriorRate**|Rate parameter for the median time to OS event for treatment group|
+|**dProbOfDeathBeforeProgression0Param1**|Alpha parameter for probability of death before PFS for control group|
+|**dProbOfDeathBeforeProgression0Param2**|Beta parameter for probability of death before PFS for control group|
+|**dProbOfDeathBeforeProgression1Param1**|Alpha parameter for probability of death before PFS for treatment group|
+|**dProbOfDeathBeforeProgression1Param2**|Beta parameter for probability of death before PFS for treatment group|
 
 The shape and rate parameters can be calculated from the desired mean and variance. You can use the following tool. 
 
@@ -415,19 +415,19 @@ Using the tool above, we get:
 Refer to the table below for the values of all user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
-|---|------|---|
-|$UserParam\$dMedianPFS0PriorShape$|14.4|
-|$UserParam\$dMedianPFS0PriorRate$|1.2|
-|$UserParam\$dMedianOS0PriorShape$|32.4|
-|$UserParam\$dMedianOS0PriorRate$|1.8|
-|$UserParam\$dMedianPFS1PriorShape$|32.4|
-|$UserParam\$dMedianPFS1PriorRate$|1.8|
-|$UserParam\$dMedianOS1PriorShape$|72.9|
-|$UserParam\$dMedianOS1PriorRate$|2.7|
-|$UserParam\$dProbOfDeathBeforeProgression0Param1$|20|
-|$UserParam\$dProbOfDeathBeforeProgression0Param2$|80|
-|$UserParam\$dProbOfDeathBeforeProgression1Param1$|20|
-|$UserParam\$dProbOfDeathBeforeProgression1Param2$|80|
+|---|------|
+|**dMedianPFS0PriorShape**|14.4|
+|**dMedianPFS0PriorRate**|1.2|
+|**dMedianOS0PriorShape**|32.4|
+|**dMedianOS0PriorRate**|1.8|
+|**dMedianPFS1PriorShape**|32.4|
+|**dMedianPFS1PriorRate**|1.8|
+|**dMedianOS1PriorShape**|72.9|
+|**dMedianOS1PriorRate**|2.7|
+|**dProbOfDeathBeforeProgression0Param1**|20|
+|**dProbOfDeathBeforeProgression0Param2**|80|
+|**dProbOfDeathBeforeProgression1Param1**|20|
+|**dProbOfDeathBeforeProgression1Param2**|80|
 
 ### Scenario 2: Alternative & Higher Variance
 
@@ -453,19 +453,19 @@ Using the tool above, we get:
 Refer to the table below for the values of all user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
-|---|------|---|
-|$UserParam\$dMedianPFS0PriorShape$|14.4|
-|$UserParam\$dMedianPFS0PriorRate$|1.2|
-|$UserParam\$dMedianOS0PriorShape$|32.4|
-|$UserParam\$dMedianOS0PriorRate$|1.8|
-|$UserParam\$dMedianPFS1PriorShape$|16.2|
-|$UserParam\$dMedianPFS1PriorRate$|0.9|
-|$UserParam\$dMedianOS1PriorShape$|36.45|
-|$UserParam\$dMedianOS1PriorRate$|1.35|
-|$UserParam\$dProbOfDeathBeforeProgression0Param1$|20|
-|$UserParam\$dProbOfDeathBeforeProgression0Param2$|80|
-|$UserParam\$dProbOfDeathBeforeProgression1Param1$|20|
-|$UserParam\$dProbOfDeathBeforeProgression1Param2$|80|
+|---|------|
+|**dMedianPFS0PriorShape**|14.4|
+|**dMedianPFS0PriorRate**|1.2|
+|**dMedianOS0PriorShape**|32.4|
+|**dMedianOS0PriorRate**|1.8|
+|**dMedianPFS1PriorShape**|16.2|
+|**dMedianPFS1PriorRate**|0.9|
+|**dMedianOS1PriorShape**|36.45|
+|**dMedianOS1PriorRate**|1.35|
+|**dProbOfDeathBeforeProgression0Param1**|20|
+|**dProbOfDeathBeforeProgression0Param2**|80|
+|**dProbOfDeathBeforeProgression1Param1**|20|
+|**dProbOfDeathBeforeProgression1Param2**|80|
 
 ### Scenario 3: Null & Equal Variance
 
@@ -488,19 +488,19 @@ Using the tool above, we get:
 Refer to the table below for the values of all user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
-|---|------|---|
-|$UserParam\$dMedianPFS0PriorShape$|14.4|
-|$UserParam\$dMedianPFS0PriorRate$|1.2|
-|$UserParam\$dMedianOS0PriorShape$|32.4|
-|$UserParam\$dMedianOS0PriorRate$|1.8|
-|$UserParam\$dMedianPFS1PriorShape$|14.4|
-|$UserParam\$dMedianPFS1PriorRate$|1.2|
-|$UserParam\$dMedianOS1PriorShape$|32.4|
-|$UserParam\$dMedianOS1PriorRate$|1.8|
-|$UserParam\$dProbOfDeathBeforeProgression0Param1$|20|
-|$UserParam\$dProbOfDeathBeforeProgression0Param2$|80|
-|$UserParam\$dProbOfDeathBeforeProgression1Param1$|20|
-|$UserParam\$dProbOfDeathBeforeProgression1Param2$|80|
+|---|------|
+|**dMedianPFS0PriorShape**|14.4|
+|**dMedianPFS0PriorRate**|1.2|
+|**dMedianOS0PriorShape**|32.4|
+|**dMedianOS0PriorRate**|1.8|
+|**dMedianPFS1PriorShape**|14.4|
+|**dMedianPFS1PriorRate**|1.2|
+|**dMedianOS1PriorShape**|32.4|
+|**dMedianOS1PriorRate**|1.8|
+|**dProbOfDeathBeforeProgression0Param1**|20|
+|**dProbOfDeathBeforeProgression0Param2**|80|
+|**dProbOfDeathBeforeProgression1Param1**|20|
+|**dProbOfDeathBeforeProgression1Param2**|80|
 
 ### Scenario 4: Null & Higher Variance
 
@@ -526,19 +526,19 @@ Using the tool above, we get:
 Refer to the table below for the values of all user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
-|---|------|---|
-|$UserParam\$dMedianPFS0PriorShape$|14.4|
-|$UserParam\$dMedianPFS0PriorRate$|1.2|
-|$UserParam\$dMedianOS0PriorShape$|32.4|
-|$UserParam\$dMedianOS0PriorRate$|1.8|
-|$UserParam\$dMedianPFS1PriorShape$|7.2|
-|$UserParam\$dMedianPFS1PriorRate$|0.6|
-|$UserParam\$dMedianOS1PriorShape$|16.2|
-|$UserParam\$dMedianOS1PriorRate$|0.9|
-|$UserParam\$dProbOfDeathBeforeProgression0Param1$|20|
-|$UserParam\$dProbOfDeathBeforeProgression0Param2$|80|
-|$UserParam\$dProbOfDeathBeforeProgression1Param1$|20|
-|$UserParam\$dProbOfDeathBeforeProgression1Param2$|80|
+|---|------|
+|**dMedianPFS0PriorShape**|14.4|
+|**dMedianPFS0PriorRate**|1.2|
+|**dMedianOS0PriorShape**|32.4|
+|**dMedianOS0PriorRate**|1.8|
+|**dMedianPFS1PriorShape**|7.2|
+|**dMedianPFS1PriorRate**|0.6|
+|**dMedianOS1PriorShape**|16.2|
+|**dMedianOS1PriorRate**|0.9|
+|**dProbOfDeathBeforeProgression0Param1**|20|
+|**dProbOfDeathBeforeProgression0Param2**|80|
+|**dProbOfDeathBeforeProgression1Param1**|20|
+|**dProbOfDeathBeforeProgression1Param2**|80|
 
 # Conclusion
 
