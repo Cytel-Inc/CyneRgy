@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">Valeria A. G.
 Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">March 03, 2025</h4>
+            <h4 data-toc-skip class="date">April 11, 2025</h4>
       
 
       <div class="d-none name"><code>2ArmTimeToEventOutcomePatientSimulationDescription.Rmd</code></div>
@@ -177,8 +177,8 @@ table below for the definitions of the user-defined parameters used in
 this example.</p>
 <table class="table">
 <colgroup>
-<col width="33%">
-<col width="66%">
+<col width="25%">
+<col width="75%">
 </colgroup>
 <thead><tr class="header">
 <th><strong>User parameter</strong></th>
@@ -248,7 +248,7 @@ parameters used in this example.</p>
 <p>The scale parameters are calculated based on the median survival time
 for each arm. This example demonstrates that using the R function with
 these parameters produces the same results as simulating the data
-directly in East without an R function.</p>
+directly in East Horizon or East without an R function.</p>
 <p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-5-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
 </div>
 <div class="section level3">
@@ -343,9 +343,9 @@ This example is related to this R file:
 <p>This example simulates patient data using a mixture of exponential
 distributions, allowing for multiple patient subgroups within the study.
 Each subgroup follows a distinct exponential distribution for modeling
-time-to-event (TTE), capturing variability in patient outcomes. Refer to
-the table below for the definitions of the user-defined parameters used
-in this example.</p>
+TTE, capturing variability in patient outcomes. Refer to the table below
+for the definitions of the user-defined parameters used in this
+example.</p>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -392,52 +392,215 @@ experimental treatment.</td>
 <td><em>…</em></td>
 <td>Probabilities and median time-to-event for additional subgroups
 follow the same format, incrementing the subgroup number (e.g.,
-ProbSubgroup3, MedianTTECtrlSubgroup3, MedianTTEExpSubgroup3,
-etc.).</td>
+<em>ProbSubgroup3</em>, <em>MedianTTECtrlSubgroup3</em>,
+<em>MedianTTEExpSubgroup3</em>, etc.).</td>
 </tr>
 <tr class="odd">
-<td><strong>ProbSubgroup<code>QtyOfSubgroups</code></strong></td>
+<td><strong>ProbSubgroup&lt;<code>QtyOfSubgroups</code>&gt;</strong></td>
 <td>Probability a patient is in the final subgroup.
 <code>QtyOfSubgroups</code> should be replaced by the number of
 subgroups.</td>
 </tr>
 <tr class="even">
-<td><strong>MedianTTECtrlSubgroup<code>QtyOfSubgroups</code></strong></td>
+<td><strong>MedianTTECtrlSubgroup&lt;<code>QtyOfSubgroups</code>&gt;</strong></td>
 <td>Median time-to-event for a patient in the final subgroup that
 receives control treatment. <code>QtyOfSubgroups</code> should be
 replaced by the number of subgroups.</td>
 </tr>
 <tr class="odd">
-<td><strong>MedianTTEExpSubgroup<code>QtyOfSubgroups</code></strong></td>
+<td><strong>MedianTTEExpSubgroup&lt;<code>QtyOfSubgroups</code>&gt;</strong></td>
 <td>Median time-to-event for a patient in the final subgroup that
 receives experimental treatment. <code>QtyOfSubgroups</code> should be
 replaced by the number of subgroups.</td>
 </tr>
 </tbody>
 </table>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmTimeToEventOutcomePatientSimulationDescription_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <div class="section level3">
-<h3 id="example-2-1">Example 2.1<a class="anchor" aria-label="anchor" href="#example-2-1"></a>
+<h3 id="example-2-1---no-group-difference">Example 2.1 - No Group Difference<a class="anchor" aria-label="anchor" href="#example-2-1---no-group-difference"></a>
 </h3>
-<p>Both subgroups have the same HR = 0.75 with same median TTE, i.e.,
-subgroup has no impact.</p>
+<p>We are using two subgroups. Both subgroups have the same Hazard Ratio
+(HR),
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>R</mi><mo>=</mo><mfrac><mn>12</mn><mn>16</mn></mfrac><mo>=</mo><mn>0.75</mn></mrow><annotation encoding="application/x-tex">HR = \frac{12}{16} = 0.75</annotation></semantics></math>
+with same median TTE, i.e., subgroup has no impact. Refer to the table
+below for the values of the user-defined parameters used in this
+example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>QtyOfSubgroups</strong></td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><strong>ProbSubgroup1</strong></td>
+<td>0.25</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTECtrlSubgroup1</strong></td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTEExpSubgroup1</strong></td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td><strong>ProbSubgroup2</strong></td>
+<td>0.75</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTECtrlSubgroup2</strong></td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTEExpSubgroup2</strong></td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="example-2-2">Example 2.2<a class="anchor" aria-label="anchor" href="#example-2-2"></a>
+<h3 id="example-2-2---hr-0-75">Example 2.2 - HR = 0.75<a class="anchor" aria-label="anchor" href="#example-2-2---hr-0-75"></a>
 </h3>
 <p>25% of patients are in subgroup 1, with a median TTE lower than in
-group 2 and both subgroups have a HR = 0.75.</p>
+group 2. Both subgroups have an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>R</mi><mo>=</mo><mfrac><mn>9</mn><mn>12</mn></mfrac><mo>=</mo><mfrac><mn>12</mn><mn>16</mn></mfrac><mo>=</mo><mn>0.75</mn></mrow><annotation encoding="application/x-tex">HR = \frac{9}{12} = \frac{12}{16} = 0.75</annotation></semantics></math>.
+Refer to the table below for the values of the user-defined parameters
+used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>QtyOfSubgroups</strong></td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><strong>ProbSubgroup1</strong></td>
+<td>0.25</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTECtrlSubgroup1</strong></td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTEExpSubgroup1</strong></td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td><strong>ProbSubgroup2</strong></td>
+<td>0.75</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTECtrlSubgroup2</strong></td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTEExpSubgroup2</strong></td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="example-2-3">Example 2.3<a class="anchor" aria-label="anchor" href="#example-2-3"></a>
+<h3 id="example-2-3---group-1-hr-0-8-prob-0-25-group-2-hr-0-75">Example 2.3 - Group 1 HR = 0.8 (Prob = 0.25), Group 2 HR = 0.75<a class="anchor" aria-label="anchor" href="#example-2-3---group-1-hr-0-8-prob-0-25-group-2-hr-0-75"></a>
 </h3>
-<p>25% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has
-a HR = 0.75.</p>
+<p>25% of patients are in subgroup 1 with an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>R</mi><mo>=</mo><mfrac><mn>9</mn><mn>11.25</mn></mfrac><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">HR = \frac{9}{11.25} = 0.8</annotation></semantics></math>.
+Subgroup 2 has an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>R</mi><mo>=</mo><mfrac><mn>12</mn><mn>16</mn></mfrac><mo>=</mo><mn>0.75</mn></mrow><annotation encoding="application/x-tex">HR = \frac{12}{16} = 0.75</annotation></semantics></math>.
+Refer to the table below for the values of the user-defined parameters
+used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>QtyOfSubgroups</strong></td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><strong>ProbSubgroup1</strong></td>
+<td>0.25</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTECtrlSubgroup1</strong></td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTEExpSubgroup1</strong></td>
+<td>11.25</td>
+</tr>
+<tr class="odd">
+<td><strong>ProbSubgroup2</strong></td>
+<td>0.75</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTECtrlSubgroup2</strong></td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTEExpSubgroup2</strong></td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="example-2-4">Example 2.4<a class="anchor" aria-label="anchor" href="#example-2-4"></a>
+<h3 id="example-2-4---group-1-hr-0-8-prob-0-4-group-2-hr-0-75">Example 2.4 - Group 1 HR = 0.8 (Prob = 0.4), Group 2 HR = 0.75<a class="anchor" aria-label="anchor" href="#example-2-4---group-1-hr-0-8-prob-0-4-group-2-hr-0-75"></a>
 </h3>
-<p>40% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has
-a HR = 0.75.</p>
+<p>40% of patients are in subgroup 1 with an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>R</mi><mo>=</mo><mfrac><mn>9</mn><mn>11.25</mn></mfrac><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">HR = \frac{9}{11.25} = 0.8</annotation></semantics></math>.
+Subgroup 2 has an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>R</mi><mo>=</mo><mfrac><mn>12</mn><mn>16</mn></mfrac><mo>=</mo><mn>0.75</mn></mrow><annotation encoding="application/x-tex">HR = \frac{12}{16} = 0.75</annotation></semantics></math>.
+Refer to the table below for the values of the user-defined parameters
+used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>QtyOfSubgroups</strong></td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><strong>ProbSubgroup1</strong></td>
+<td>0.4</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTECtrlSubgroup1</strong></td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTEExpSubgroup1</strong></td>
+<td>11.25</td>
+</tr>
+<tr class="odd">
+<td><strong>ProbSubgroup2</strong></td>
+<td>0.75</td>
+</tr>
+<tr class="even">
+<td><strong>MedianTTECtrlSubgroup2</strong></td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td><strong>MedianTTEExpSubgroup2</strong></td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
 <p>The intent of the example is to illustrate the impact that the
 patient subgroup may have on the operating characteristics of the
 design.</p>

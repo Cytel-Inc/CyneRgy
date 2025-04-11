@@ -39,7 +39,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 In this example, the R function *SimulatePatientSurvivalWeibull* is provided to simulate patient data with hazards and hazard ratios that change over time, allowing for an exploration of their impact on expected study power. Refer to the table below for the definitions of the user-defined parameters used in this example.
 
 |**User parameter**|**Definition**|
-|---|------|
+|---|---------|
 |**dShapeCtrl**|Shape parameter of the Weibull distribution for the control arm.|
 |**dShapeExp**|Shape parameter of the Weibull distribution for the experimental arm.|
 |**dScaleCtrl**|Scale parameter of the Weibull distribution for the control arm.|
@@ -140,7 +140,7 @@ Assume that the difference in risk of death for patients in the control arm comp
 |**dScaleCtrl**|17.31|
 |**dScaleExp**|23.08|
 
-The scale parameters are calculated based on the median survival time for each arm. This example demonstrates that using the R function with these parameters produces the same results as simulating the data directly in East without an R function.
+The scale parameters are calculated based on the median survival time for each arm. This example demonstrates that using the R function with these parameters produces the same results as simulating the data directly in East Horizon or East without an R function.
 
 ```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Constant Hazard Example ###
@@ -258,7 +258,7 @@ plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazar
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R" class="alert-link">SimulatePatientSurvivalMixtureExponentials.R</a></p>
 </div>
 
-This example simulates patient data using a mixture of exponential distributions, allowing for multiple patient subgroups within the study. Each subgroup follows a distinct exponential distribution for modeling time-to-event (TTE), capturing variability in patient outcomes. Refer to the table below for the definitions of the user-defined parameters used in this example.
+This example simulates patient data using a mixture of exponential distributions, allowing for multiple patient subgroups within the study. Each subgroup follows a distinct exponential distribution for modeling TTE, capturing variability in patient outcomes. Refer to the table below for the definitions of the user-defined parameters used in this example.
 
 |**User parameter**|**Definition**|
 |---|------|
@@ -269,26 +269,153 @@ This example simulates patient data using a mixture of exponential distributions
 |**ProbSubgroup2**|Probability a patient is in subgroup 2.|
 |**MedianTTECtrlSubgroup2**|Median time-to-event for a patient in subgroup 2 that receives control treatment.|
 |**MedianTTEExpSubgroup2**|Median time-to-event for a patient in subgroup 2 that receives experimental treatment.|
-|*...*|Probabilities and median time-to-event for additional subgroups follow the same format, incrementing the subgroup number (e.g., ProbSubgroup3, MedianTTECtrlSubgroup3, MedianTTEExpSubgroup3, etc.).|
-|**ProbSubgroup`QtyOfSubgroups`**|Probability a patient is in the final subgroup. `QtyOfSubgroups` should be replaced by the number of subgroups.|
-|**MedianTTECtrlSubgroup`QtyOfSubgroups`**|Median time-to-event for a patient in the final subgroup that receives control treatment. `QtyOfSubgroups` should be replaced by the number of subgroups.|
-|**MedianTTEExpSubgroup`QtyOfSubgroups`**|Median time-to-event for a patient in the final subgroup that receives experimental treatment. `QtyOfSubgroups` should be replaced by the number of subgroups.|
+|*...*|Probabilities and median time-to-event for additional subgroups follow the same format, incrementing the subgroup number (e.g., *ProbSubgroup3*, *MedianTTECtrlSubgroup3*, *MedianTTEExpSubgroup3*, etc.).|
+|**ProbSubgroup<`QtyOfSubgroups`>**|Probability a patient is in the final subgroup. `QtyOfSubgroups` should be replaced by the number of subgroups.|
+|**MedianTTECtrlSubgroup<`QtyOfSubgroups`>**|Median time-to-event for a patient in the final subgroup that receives control treatment. `QtyOfSubgroups` should be replaced by the number of subgroups.|
+|**MedianTTEExpSubgroup<`QtyOfSubgroups`>**|Median time-to-event for a patient in the final subgroup that receives experimental treatment. `QtyOfSubgroups` should be replaced by the number of subgroups.|
 
-### Example 2.1
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-Both subgroups have the same HR = 0.75 with same median TTE, i.e., subgroup has no impact.
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
 
-### Example 2.2
+bigcolxmin = 5
+bigcolxmax = 8
 
-25% of patients are in subgroup 1, with a median TTE lower than in group 2 and both subgroups have a HR = 0.75.
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(3.5, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
 
-### Example 2.3
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.85
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
 
-25% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has a HR = 0.75.
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.3, 5),
+  xmax = rep(7.7, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load probabilities of subgroups\nand median times", 
+            "Calculate rates from median times", 
+            "Loop through patients", 
+            "Simulate survival time\nusing exponential distribution", 
+            "Return survival times"),
+  fill = rep("#cfe2ff", 5)
+)
 
-### Example 2.4
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
 
-40% of patients are in subgroup 1 with an HR = 0.8 and subgroup 2 has a HR = 0.75.
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3, 3),
+  ymax = c(3.3, 3.3),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
+
+### Example 2.1 - No Group Difference
+
+We are using two subgroups. Both subgroups have the same Hazard Ratio (HR), $HR = \frac{12}{16} = 0.75$ with same median TTE, i.e., subgroup has no impact. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|-----|---|
+|**QtyOfSubgroups**|2|
+|**ProbSubgroup1**|0.25|
+|**MedianTTECtrlSubgroup1**|12|
+|**MedianTTEExpSubgroup1**|16|
+|**ProbSubgroup2**|0.75|
+|**MedianTTECtrlSubgroup2**|12|
+|**MedianTTEExpSubgroup2**|16|
+
+### Example 2.2 - HR = 0.75
+
+25% of patients are in subgroup 1, with a median TTE lower than in group 2. Both subgroups have an $HR = \frac{9}{12} = \frac{12}{16} = 0.75$. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|-----|---|
+|**QtyOfSubgroups**|2|
+|**ProbSubgroup1**|0.25|
+|**MedianTTECtrlSubgroup1**|9|
+|**MedianTTEExpSubgroup1**|12|
+|**ProbSubgroup2**|0.75|
+|**MedianTTECtrlSubgroup2**|12|
+|**MedianTTEExpSubgroup2**|16|
+
+### Example 2.3 - Group 1 HR = 0.8 (Prob = 0.25), Group 2 HR = 0.75
+
+25% of patients are in subgroup 1 with an $HR = \frac{9}{11.25} = 0.8$. Subgroup 2 has an $HR = \frac{12}{16} = 0.75$. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|-----|---|
+|**QtyOfSubgroups**|2|
+|**ProbSubgroup1**|0.25|
+|**MedianTTECtrlSubgroup1**|9|
+|**MedianTTEExpSubgroup1**|11.25|
+|**ProbSubgroup2**|0.75|
+|**MedianTTECtrlSubgroup2**|12|
+|**MedianTTEExpSubgroup2**|16|
+
+### Example 2.4 - Group 1 HR = 0.8 (Prob = 0.4), Group 2 HR = 0.75
+
+40% of patients are in subgroup 1 with an $HR = \frac{9}{11.25} = 0.8$. Subgroup 2 has an $HR = \frac{12}{16} = 0.75$. Refer to the table below for the values of the user-defined parameters used in this example.
+
+|**User parameter**|**Value**|
+|-----|---|
+|**QtyOfSubgroups**|2|
+|**ProbSubgroup1**|0.4|
+|**MedianTTECtrlSubgroup1**|9|
+|**MedianTTEExpSubgroup1**|11.25|
+|**ProbSubgroup2**|0.75|
+|**MedianTTECtrlSubgroup2**|12|
+|**MedianTTEExpSubgroup2**|16|
 
 The intent of the example is to illustrate the impact that the patient subgroup may have on the operating characteristics of the design.
 
