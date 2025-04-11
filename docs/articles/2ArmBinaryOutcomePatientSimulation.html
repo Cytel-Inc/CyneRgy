@@ -175,20 +175,21 @@ treatment failure (non-response), and 1 indicates a successful response.
 However, an unknown proportion of patients are treatment-resistant and
 will not respond, resulting in an outcome of 0. Based on historical
 data, it is estimated that between 20% and 40% of patients fall into
-this category. The R function
-<em>SimulatePatientOutcomePercentAtZero.Binary</em> is provided to
-explore the proportion of treatment-resistant patients and assess its
-impact on expected study power. In these examples, a binomial
+this category.</p>
+<p>The R function <em>SimulatePatientOutcomePercentAtZero.Binary</em> is
+provided to explore the proportion of treatment-resistant patients and
+assess its impact on expected study power. In these examples, a binomial
 distribution is used to determine whether a patient is
 treatment-resistant. If a patient is not treatment-resistant, their
 outcome is then simulated from a binomial distribution based on the
 response probability specified in East Horizon or East and then sent to
-R. Refer to the table below for the definitions of the user-defined
+R.</p>
+<p>Refer to the table below for the definitions of the user-defined
 parameters used in this example.</p>
 <table class="table">
 <colgroup>
-<col width="33%">
-<col width="66%">
+<col width="40%">
+<col width="60%">
 </colgroup>
 <thead><tr class="header">
 <th><strong>User parameter</strong></th>
@@ -304,27 +305,29 @@ This example is related to this R file:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R" class="external-link alert-link">SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R</a>
 </p>
 </div>
-<p>Similar to Example 1, this function models a binary patient outcome,
-where 0 represents treatment failure (non-response) and 1 indicates a
-successful response. However, an unknown proportion of patients are
-treatment-resistant and will not respond, resulting in an outcome of 0.
-The function <em>SimulatePatientOutcomePercentAtZeroBetaDist.Binary</em>
-assumes that the probability of a patient being treatment-resistant is
-random and follows a Beta distribution, incorporating variability in the
-unknown probability of treatment resistance. Additionally, the function
-allows for a different Beta distribution for each treatment arm,
-enabling the evaluation of how a treatment that reduces the likelihood
-of failure would perform in the trial. In these examples, a Beta
-distribution is used to determine whether a patient is
-treatment-resistant. If the patient is not treatment-resistant, their
-outcome is then simulated from a binomial distribution based on the
-response probability specified in East Horizon or East, with the data
-sent to R for further analysis. Refer to the table below for the
-definitions of the user-defined parameters used in this example.</p>
+<p>Similarly to Example 1, this function models a binary patient
+outcome, where 0 represents treatment failure (non-response) and 1
+indicates a successful response, and an unknown proportion of patients
+are treatment-resistant and will not respond, resulting in an outcome of
+0.</p>
+<p>Now, the function
+<em>SimulatePatientOutcomePercentAtZeroBetaDist.Binary</em> assumes that
+the probability of a patient being treatment-resistant is random and
+follows a Beta distribution, incorporating variability in the unknown
+probability of treatment resistance. Additionally, the function allows
+for a different Beta distribution for each treatment arm, enabling the
+evaluation of how a treatment that reduces the likelihood of failure
+would perform in the trial. In these examples, a Beta distribution is
+used to determine whether a patient is treatment-resistant. If the
+patient is not treatment-resistant, their outcome is then simulated from
+a binomial distribution based on the response probability specified in
+East Horizon or East, with the data sent to R for further analysis.</p>
+<p>Refer to the table below for the definitions of the user-defined
+parameters used in this example.</p>
 <table class="table">
 <colgroup>
-<col width="33%">
-<col width="66%">
+<col width="30%">
+<col width="70%">
 </colgroup>
 <thead><tr class="header">
 <th><strong>User parameter</strong></th>
@@ -333,25 +336,24 @@ definitions of the user-defined parameters used in this example.</p>
 <tbody>
 <tr class="odd">
 <td><strong>dCtrlBetaParam1</strong></td>
-<td>Parameter 1 (alpha) for the Beta Distribution used to get the
+<td>Alpha parameter for the Beta Distribution used to get the
 probability a patient is treatment-resistant in the control arm.</td>
 </tr>
 <tr class="even">
 <td><strong>dCtrlBetaParam2</strong></td>
-<td>Parameter 2 (beta) for the Beta Distribution used to get the
-probability a patient is treatment-resistant in the control arm.</td>
+<td>Beta parameter for the Beta Distribution used to get the probability
+a patient is treatment-resistant in the control arm.</td>
 </tr>
 <tr class="odd">
 <td><strong>dExpBetaParam1</strong></td>
-<td>Parameter 1 (alpha) for the Beta Distribution used to get the
+<td>Alpha parameter for the Beta Distribution used to get the
 probability a patient is treatment-resistant in the experimental
 arm.</td>
 </tr>
 <tr class="even">
 <td><strong>dExpBetaParam2</strong></td>
-<td>Parameter 2 (beta) for the Beta Distribution used to get the
-probability a patient is treatment-resistant in the experimental
-arm.</td>
+<td>Beta parameter for the Beta Distribution used to get the probability
+a patient is treatment-resistant in the experimental arm.</td>
 </tr>
 </tbody>
 </table>
@@ -362,13 +364,14 @@ outlining the general steps performed by the R code.</p>
 <div class="section level3">
 <h3 id="example-2-1---20-40-95-ci-of-treatment-resistant-patients">Example 2.1 - 20%-40% (95% CI) of Treatment-Resistant Patients<a class="anchor" aria-label="anchor" href="#example-2-1---20-40-95-ci-of-treatment-resistant-patients"></a>
 </h3>
-<p>For this example, independent Beta( 23.1, 55.2 ) distributions are
-used, which have a 95% credible interval of (0.2, 0.4). The function
-first simulates the probability of treatment resistance for both the
-control and experimental arms using these Beta distributions. It then
-uses the simulated probabilities to determine the proportion of
-treatment-resistant patients. Refer to the table below for the values of
-the user-defined parameters used in this example.</p>
+<p>For this example, independent
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>e</mi><mi>t</mi><mi>a</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>23.1</mn><mo>,</mo><mn>55.2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Beta( 23.1, 55.2 )</annotation></semantics></math>
+distributions are used, which have a 95% credible interval of (0.2,
+0.4). The function first simulates the probability of treatment
+resistance for both the control and experimental arms using these Beta
+distributions. It then uses the simulated probabilities to determine the
+proportion of treatment-resistant patients. Refer to the table below for
+the values of the user-defined parameters used in this example.</p>
 <table class="table">
 <thead><tr class="header">
 <th><strong>User parameter</strong></th>
@@ -406,9 +409,12 @@ Patients<a class="anchor" aria-label="anchor" href="#example-2-2---20-40-95-ci-o
 <p>In this example, the treatment reduces the probability of treatment
 resistance by 10% on average compared to the control. Specifically,
 assume that the probability of being treatment-resistant in the control
-group follows a Beta( 23.1, 55.2 ) distribution, with a 95% credible
-interval of (0.2, 0.4). For the experimental treatment, assume the
-probability of being treatment-resistant follows a Beta( 10.8, 46.3 )
+group follows a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>e</mi><mi>t</mi><mi>a</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>23.1</mn><mo>,</mo><mn>55.2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Beta( 23.1, 55.2 )</annotation></semantics></math>
+distribution, with a 95% credible interval of (0.2, 0.4). For the
+experimental treatment, assume the probability of being
+treatment-resistant follows a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>e</mi><mi>t</mi><mi>a</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>10.8</mn><mo>,</mo><mn>46.3</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Beta( 10.8, 46.3 )</annotation></semantics></math>
 distribution, with a 95% credible interval of (0.1, 0.3). Refer to the
 table below for the values of the user-defined parameters used in this
 example.</p>
