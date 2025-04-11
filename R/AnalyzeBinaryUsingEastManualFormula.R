@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name AnalyzeBinaryUsingEastManualFormula
 #' @title Analyze Binary Data Using Formula 28.2 from the East Manual
 #' 
 #' @description This function computes the test statistic using formula 28.2 from the East manual, 
@@ -91,16 +92,16 @@ AnalyzeBinaryUsingEastManualFormula <- function( SimData, DesignParam, LookInfo 
     dPiHatj              <- ( nQtyOfResponsesOnE +  nQtyOfResponsesOnS )/( nQtyOfPatsOnE + nQtyOfPatsOnS )
     
     # Equation 28.2 in East manual
-    dZj                  <- ( dPiHatExperimental - dPiHatControl )/sqrt( dPiHatj*( 1- dPiHatj ) * ( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS)  ) 
-    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex])
+    dZj                  <- ( dPiHatExperimental - dPiHatControl )/sqrt( dPiHatj*( 1- dPiHatj ) * ( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ) ) 
+    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
     
     # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
                                                bIAEfficacyCondition = dZj > dBoundary, 
-                                               bFAEfficacyCondition = dZj > dBoundary)
+                                               bFAEfficacyCondition = dZj > dBoundary )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error <-  0
     
-    return(list(TestStat = as.double(dZj), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ), Delta = as.double( dPiHatExperimental - dPiHatControl ) ))
+    return( list( TestStat = as.double( dZj ), ErrorCode = as.integer( Error ), Decision = as.integer( nDecision ), Delta = as.double( dPiHatExperimental - dPiHatControl ) ) )
 }

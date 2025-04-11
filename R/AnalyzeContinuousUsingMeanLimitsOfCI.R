@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name AnalyzeContinuousUsingMeanLimitsOfCI
 #' @title Analyze Continuous Data Using Mean Limits of Confidence Interval
 #' 
 #' @description This function performs analysis using a simplified limits of confidence interval design for continuous outcomes. 
@@ -62,7 +63,7 @@
 #' @export
 ######################################################################################################################## .
 
-AnalyzeContinuousUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
+AnalyzeContinuousUsingMeanLimitsOfCI <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Step 1: Retrieve necessary information from the objects East or East Horizon sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )
@@ -82,15 +83,15 @@ AnalyzeContinuousUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo 
     }
     
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dMAV", "dTV", "dConfLevel")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dMAV", "dTV", "dConfLevel" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(TestStat  = as.double(0), 
-                    ErrorCode = as.integer(-1), 
-                    Decision  = as.integer( 0 ),
-                    Delta     = as.double( 0 )))
+        return( list( TestStat  = as.double( 0 ), 
+                      ErrorCode = as.integer( -1 ), 
+                      Decision  = as.integer( 0 ),
+                      Delta     = as.double( 0 ) ) )
     }
     
     # Create the vector of simulated data for this IA - East or East Horizon sends all of the simulated data ####
@@ -114,7 +115,7 @@ AnalyzeContinuousUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo 
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
                                                bIAEfficacyCondition = dLowerLimitCI > UserParam$dMAV,
                                                bIAFutilityCondition = dUpperLimitCI < UserParam$dTV,
-                                               bFAEfficacyCondition = dLowerLimitCI > UserParam$dMAV)
+                                               bFAEfficacyCondition = dLowerLimitCI > UserParam$dMAV )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0
@@ -122,5 +123,5 @@ AnalyzeContinuousUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo 
     return( list( TestStat  = as.double( dLowerLimitCI ), 
                   ErrorCode = as.integer( Error ), 
                   Decision  = as.integer( nDecision ),
-                  Delta     = as.double( lAnalysisResult$estimate[1] - lAnalysisResult$estimate[2] ) ) )
+                  Delta     = as.double( lAnalysisResult$estimate[ 1 ] - lAnalysisResult$estimate[ 2 ] ) ) )
 }

@@ -1,4 +1,5 @@
 #################################################################################################### .
+#' @name RunExample
 #' @title Launch Example from the CyneRgy Package
 #' 
 #' @description 
@@ -15,33 +16,33 @@
 #' @export
 #################################################################################################### .
 
-RunExample <- function(strExample) {
+RunExample <- function( strExample ) {
     strPackage <- "CyneRgy"
     # locate all the examples that exist  call using runExample("myapp")
-    validExamples <- list.files(system.file("Examples", package = strPackage))
+    validExamples <- list.files( system.file( "Examples", package = strPackage ) )
 
     validExamplesMsg <-
         paste0(
             "Valid examples are: '",
-            paste(validExamples, collapse = "', '"),
-            "'")
+            paste( validExamples, collapse = "', '" ),
+            "'" )
 
     # if an invalid example is given, throw an error
-    if (missing(strExample) || !nzchar(strExample) ||  !strExample %in% validExamples) {
+    if ( missing( strExample ) || !nzchar( strExample ) ||  !strExample %in% validExamples ) {
         print( paste0( 
-            'Please run `RunExample()` with a valid example app as an argument.',
-            validExamplesMsg ))
+              'Please run `RunExample()` with a valid example app as an argument.',
+               validExamplesMsg ) )
     
     }
     else
     {
         # find and launch the app
         
-        strRStudioProjFile <- system.file("Examples", strExample, package = strPackage)
-        if (rstudioapi::isAvailable()) {
-            rstudioapi::openProject(strRStudioProjFile, newSession = TRUE)
+        strRStudioProjFile <- system.file( "Examples", strExample, package = strPackage )
+        if ( rstudioapi::isAvailable() ) {
+             rstudioapi::openProject( strRStudioProjFile, newSession = TRUE )
         } else {
-            warning("RStudio API is not available. Please open the project manually.")
+            warning( "RStudio API is not available. Please open the project manually." )
         }
     }
 }

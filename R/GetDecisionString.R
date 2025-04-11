@@ -5,6 +5,7 @@
 #   Change History:
 #   Last Modified Date: 10/09/2024
 #################################################################################################### .
+#' @name GetDecisionString
 #' @title Generate Decision String Based on Interim and Final Analysis Conditions
 #' 
 #' @description This function evaluates look information, efficacy conditions, and futility conditions to generate the decision string (`strDecision`) required for the `GetDecision` function.
@@ -41,11 +42,11 @@ GetDecisionString <- function( LookInfo, nLookIndex, nQtyOfLooks, bIAEfficacyCon
 {
     if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
-        if( bIAEfficacyCondition & LookInfo$RejType %in% c(0, 2, 4, 5) )
+        if( bIAEfficacyCondition & LookInfo$RejType %in% c( 0, 2, 4, 5 ) )
         {
             strDecision <- "Efficacy"
         }
-        else if( bIAFutilityCondition & LookInfo$RejType %in% c(1, 3, 4, 5) )
+        else if( bIAFutilityCondition & LookInfo$RejType %in% c( 1, 3, 4, 5 ) )
         {
             strDecision <- "Futility"
         }

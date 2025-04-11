@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name AnalyzeTTEUsingHazardRatioLimitsOfCI
 #' @title Analyze Time-to-Event Data Using Hazard Ratio Limits of Confidence Interval
 #' 
 #' @description This function analyzes time-to-event data using a simplified design based on upper and lower confidence boundaries for hazard ratios (HR). 
@@ -62,7 +63,7 @@
 #' @export
 ######################################################################################################################## .
 
-AnalyzeTTEUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
+AnalyzeTTEUsingHazardRatioLimitsOfCI <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {   
     # Step 1: Retrieve necessary information from the objects East or East Horizon sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
@@ -85,15 +86,15 @@ AnalyzeTTEUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo 
     }
     
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dMAV", "dTV", "dConfLevel")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dMAV", "dTV", "dConfLevel" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(TestStat  = as.double(0), 
-                    ErrorCode = as.integer(-1), 
-                    Decision  = as.integer( 0 ),
-                    Delta     = as.double( 0 )))
+        return( list( TestStat  = as.double( 0 ), 
+                      ErrorCode = as.integer( -1 ), 
+                      Decision  = as.integer( 0 ),
+                      Delta     = as.double( 0 )))
     }
     
     SimData$TimeOfEvent      <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
@@ -103,7 +104,7 @@ AnalyzeTTEUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo 
     dTimeOfAnalysis          <- SimData[ nQtyOfEvents, ]$TimeOfEvent
     
     # Add the Observed Time variable 
-    SimData                  <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis ,]   # Exclude any patients that were not enrolled by the time of the analysis
+    SimData                  <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ]   # Exclude any patients that were not enrolled by the time of the analysis
     SimData$Event            <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )  # If the event is observed after the analysis it is not observed, eg censored 
     SimData$ObservedTime     <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
     
@@ -128,9 +129,9 @@ AnalyzeTTEUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo 
     
     # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = dUpperLimitCI < log(UserParam$dMAV),
+                                               bIAEfficacyCondition = dUpperLimitCI < log( UserParam$dMAV ),
                                                bIAFutilityCondition = dLowerLimitCI > UserParam$dTV,
-                                               bFAEfficacyCondition = dUpperLimitCI < log(UserParam$dMAV))
+                                               bFAEfficacyCondition = dUpperLimitCI < log( UserParam$dMAV ) )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0

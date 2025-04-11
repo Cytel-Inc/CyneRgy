@@ -5,6 +5,7 @@
 #   Change History:
 #   Last Modified Date: 04/26/2024
 #################################################################################################### .
+#' @name CombineAllRFiles
 #' @title Combine All R Files
 #'
 #' @description
@@ -30,77 +31,77 @@
 #' @export
 #################################################################################################### .
 
-CombineAllRFiles <- function(strOutFileName = NA, strDirectory = "", strFileNameToIgnore = NA) {
+CombineAllRFiles <- function( strOutFileName = NA, strDirectory = "", strFileNameToIgnore = NA ) {
     bReturnContents <- FALSE 
-    if(is.na(strOutFileName)) {
+    if( is.na( strOutFileName ) ) {
         bReturnContents <- TRUE 
     }
     
     # Get the list of files in the specified directory
-    vFileList <- list.files(path = strDirectory, pattern = "\\.R$|\\.r$", full.names = TRUE)
+    vFileList <- list.files( path = strDirectory, pattern = "\\.R$|\\.r$", full.names = TRUE )
     
     # Create or open the output file
     strCombinedContents <- ""
-    if(!bReturnContents)
-        outputStream <- file(strOutFileName, open = "w")
+    if( !bReturnContents )
+         outputStream <- file( strOutFileName, open = "w" )
     
     # Vector to store the names of the combined files
     vCombineFiles <- c()
     
     # Loop through each file in the directory
     iFileCount <- 0
-    for (strFileName in vFileList) 
+    for ( strFileName in vFileList ) 
     {
         # Skip the file if its name contains strFileNameToIgnore
-        if (!is.na(strFileNameToIgnore) && grepl(strFileNameToIgnore, strFileName)) 
+        if ( !is.na( strFileNameToIgnore ) && grepl( strFileNameToIgnore, strFileName ) ) 
         {
             next
         }
         
         iFileCount <- iFileCount + 1 
         # Read the content of the current file
-        strFileContent       <- readLines(strFileName, warn = FALSE)
-        strFileTimeStamp     <- file.info(strFileName)$mtime
-        strFormatedTimeStamp <- format(strFileTimeStamp, "%Y-%m-%d %H:%M:%S")
+        strFileContent       <- readLines( strFileName, warn = FALSE )
+        strFileTimeStamp     <- file.info( strFileName )$mtime
+        strFormatedTimeStamp <- format( strFileTimeStamp, "%Y-%m-%d %H:%M:%S" )
         
         # Insert a comment with file name and timestamp
-        strComment     <- paste("\n")
-        strComment     <- paste0(strComment, "##################################################################################### #\n")
-        strComment     <- paste0(strComment, "# File ", iFileCount , ": ", basename(strFileName), " Timestamp: ", strFormatedTimeStamp, " ####\n")
-        strComment     <- paste0(strComment, "##################################################################################### #\n\n")
+        strComment     <- paste( "\n" )
+        strComment     <- paste0( strComment, "##################################################################################### #\n" )
+        strComment     <- paste0( strComment, "# File ", iFileCount , ": ", basename( strFileName ), " Timestamp: ", strFormatedTimeStamp, " ####\n" 
+        strComment     <- paste0( strComment, "##################################################################################### #\n\n" )
         
-        strFileContent <- c(strComment, strFileContent)
+        strFileContent <- c( strComment, strFileContent )
         
         # Write the content to the output file or a append to the other input read in
-        if(!bReturnContents)
-            writeLines(strFileContent, outputStream)
+        if( !bReturnContents )
+            writeLines( strFileContent, outputStream )
         else {
-            strCombinedContents <- paste(paste0(strFileContent, collapse= "\n"), strCombinedContents, collapse = "\n")
+            strCombinedContents <- paste( paste0( strFileContent, collapse= "\n" ), strCombinedContents, collapse = "\n" )
         }
         
         # Add the name of the combined file to the vector
-        vCombineFiles <- c(vCombineFiles, basename(strFileName))
+        vCombineFiles <- c( vCombineFiles, basename( strFileName ) )
     }
     
-    lReturn <- list(nQtyCombinedFiles = iFileCount)
+    lReturn <- list( nQtyCombinedFiles = iFileCount )
     
     # Close the output file
-    if(!bReturnContents)
-        close(outputStream)
+    if( !bReturnContents )
+        close( outputStream )
     else {
         # Remove all "\n" and replace any duplicate white spaces with a single white space
-        strCombinedContents <- gsub("\n", " ", strCombinedContents)
-        strCombinedContents <- gsub("\\s+", " ", strCombinedContents)
+        strCombinedContents <- gsub( "\n", " ", strCombinedContents )
+        strCombinedContents <- gsub( "\\s+", " ", strCombinedContents )
         
         # Remove any duplicate '#' characters
-        strCombinedContents <- gsub("#+", "#", strCombinedContents)
+        strCombinedContents <- gsub( "#+", "#", strCombinedContents )
         
         lReturn$strCombinedContents <- strCombinedContents
     }
     
     # Print the names of the combined files
-    lReturn$strReturn <- paste(paste(iFileCount, "Files combined successfully:\n"), paste(vCombineFiles, collapse = "\n"), "\n")
+    lReturn$strReturn <- paste( paste( iFileCount, "Files combined successfully:\n" ), paste( vCombineFiles, collapse = "\n" ), "\n" )
     
-    return(lReturn)
+    return( lReturn )
 }
 

@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name ComputeHazardWeibull
 #' @title Compute Hazard of Weibull Distribution
 #'
 #' @description 

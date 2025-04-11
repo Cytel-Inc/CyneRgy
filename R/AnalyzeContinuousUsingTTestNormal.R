@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name AnalyzeContinuousUsingTTestNormal
 #' @title Analyze Continuous Data Using t-Test
 #' 
 #' @description Performs hypothesis testing using the `t.test()` function in base R to analyze continuous data under the assumption of a normal distribution. This function demonstrates how analysis and decision-making can be modified in a simple approach. The test statistic is compared to the upper boundary computed and sent by East as an input. Note that this example does not include a futility rule.
@@ -78,11 +79,11 @@ AnalyzeContinuousUsingTTestNormal <- function( SimData, DesignParam, LookInfo = 
     
     # delta = mean(E) - mean(S). Change the alternative if delta < 0, put alternative = "less"
     delta <- dMeanOfResponsesOnE - dMeanOfResponsesOnS
-    alternativeHypothesis <- ifelse(delta < 0, "less", "greater")
+    alternativeHypothesis <- ifelse( delta < 0, "less", "greater" )
     
     # Assumes the variances of both arms to be same, so the intermediate computations uses Pooled std deviation estimate.
     lAnalysisResult       <- t.test( vOutcomesE, vOutcomesS, alternative = alternativeHypothesis,
-                                     var.equal = TRUE)
+                                     var.equal = TRUE )
     
     dTValue              <- lAnalysisResult$statistic    # extract t-test statistic value
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
@@ -90,13 +91,13 @@ AnalyzeContinuousUsingTTestNormal <- function( SimData, DesignParam, LookInfo = 
     # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
                                                bIAEfficacyCondition = dTValue > dBoundary, 
-                                               bFAEfficacyCondition = dTValue > dBoundary)
+                                               bFAEfficacyCondition = dTValue > dBoundary )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error <-  0
     
     lRet <- list( TestStat = as.double( dTValue ),
                   Decision  = as.integer( nDecision ), 
-                  ErrorCode = as.integer( Error ))
+                  ErrorCode = as.integer( Error ) )
     return( lRet )
 }

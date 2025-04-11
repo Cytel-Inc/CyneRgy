@@ -5,6 +5,7 @@
 #   Change History:
 #   Last Modified Date: 12/21/2023
 #################################################################################################### .
+#' @name ReplaceTagsInFile
 #' @title Replace Tags in a File
 #'
 #' @description This function replaces {{tags}} in template files with corresponding values.
@@ -30,13 +31,13 @@ ReplaceTagsInFile <- function( strFileName, vTags, vReplace )
     {
         strInput <- readLines( strFileName )
         lData    <- list()
-        nQtyTags <- length(vTags)
+        nQtyTags <- length( vTags )
         for( iTag in 1:nQtyTags )
         {
             lData[[vTags[ iTag ]]] <- vReplace[ iTag ]
         }
         
-        strRet  <- WhiskerKeepUnrender(strInput, lData)
+        strRet  <- WhiskerKeepUnrender( strInput, lData )
         writeLines( strRet, con = strFileName )
         
     }

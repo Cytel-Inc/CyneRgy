@@ -1,4 +1,5 @@
 #################################################################################################### .
+#' @name InitLoadCyneRgy
 #' @title Initialize CyneRgy Library for Simulations
 #' 
 #' @description
@@ -37,5 +38,5 @@ InitLoadCyneRgy <- function( Seed , UserParam = NULL )
     ######################################################################################################################## .
    
     Error <- 0
-    return(as.integer(Error))
+    return( as.integer( Error ) )
 }

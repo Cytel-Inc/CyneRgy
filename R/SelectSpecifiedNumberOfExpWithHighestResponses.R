@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name SelectSpecifiedNumberOfExpWithHighestResponses
 #' @title Select Treatments with the Highest Number of Responses
 #'
 #' @description This function is used for the Multi-Arm Multi-Stage (MAMS) design with a binary outcome and performs treatment selection at the interim analysis (IA). 
@@ -60,17 +61,17 @@
 #' @export
 ######################################################################################################################## .
 
-SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
+SelectSpecifiedNumberOfExpWithHighestResponses  <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("QtyOfArmsToSelect", "Rank1AllocationRatio", "Rank2AllocationRatio")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "QtyOfArmsToSelect", "Rank1AllocationRatio", "Rank2AllocationRatio" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(TreatmentID  = as.integer(0), 
-                    ErrorCode    = as.integer(-1), 
-                    AllocRatio   = as.double(0)))
+        return( list( TreatmentID  = as.integer( 0 ), 
+                      ErrorCode    = as.integer( -1 ), 
+                      AllocRatio   = as.double( 0 ) ) )
     }
     
     # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
@@ -82,11 +83,11 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     
     # Sort in descending order based on the number of responses (column 2)
     # After the sort, the matrix will have the largest number of responses in the first row and the smallest number of responses in the last row
-    mSortedMatrix      <- tabResults[order( tabResults[, 2], decreasing =  TRUE), ]
+    mSortedMatrix      <- tabResults[order( tabResults[ , 2 ], decreasing =  TRUE), ]
     
     # Select the user-specified (QtyOfArmsToSelect) number of treatments with the largest number of responses
     vSortedNames       <- row.names( mSortedMatrix )  # Get the names of the treatments in order by number of responses
-    vReturnTreatmentID <- as.integer( vSortedNames[1:UserParam$QtyOfArmsToSelect ] )  # Select the number of desired treatments.         
+    vReturnTreatmentID <- as.integer( vSortedNames[ 1:UserParam$QtyOfArmsToSelect ] )  # Select the number of desired treatments.         
     
     # The treatment with the highest number of responses should receive the user-specified Rank1AllocationRatio times as many patients as the next highest.
     # The allocation will put user-specified Rank1AllocationRatio times as many patients on the treatment with the highest number of responses
@@ -95,7 +96,7 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     vAllocationRatio <- c()
     for( iRank in 1:UserParam$QtyOfArmsToSelect )
     {
-        vAllocationRatio <- c( vAllocationRatio, UserParam[[ paste0( "Rank", iRank, "AllocationRatio" )]])
+        vAllocationRatio <- c( vAllocationRatio, UserParam[[ paste0( "Rank", iRank, "AllocationRatio" ) ]] )
     }
     
     # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$Rank1AllocationRatio and
@@ -103,7 +104,7 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     
     nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
-    if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
+    if( length( vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
         #Fatal error because the R code is incorrect
         nErrorCode <- -1  

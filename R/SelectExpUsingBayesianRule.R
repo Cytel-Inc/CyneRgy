@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name SelectExpUsingBayesianRule
 #' @title Select Experimental Treatments Using a Bayesian Rule
 #' 
 #' @description 
@@ -55,14 +56,14 @@ SelectExpUsingBayesianRule  <- function( SimData, DesignParam, LookInfo = NULL, 
     # 4)	After selecting the treatments, use a randomization ratio of 2:1 (experimental: control) for all experimental treatments that are selected for stage 2
     
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dPriorAlpha", "dPriorBeta", "dHistoricResponseRate", "dMinPosteriorProbability")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dPriorAlpha", "dPriorBeta", "dHistoricResponseRate", "dMinPosteriorProbability" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(TreatmentID  = as.integer(0), 
-                    ErrorCode    = as.integer(-1), 
-                    AllocRatio   = as.double(0)))
+        return( list( TreatmentID  = as.integer( 0 ), 
+                      ErrorCode    = as.integer( -1 ), 
+                      AllocRatio   = as.double( 0 ) ) )
     }
     
     #### Determine the posterior parameters based on SimData and the prior parameters ####
@@ -71,7 +72,7 @@ SelectExpUsingBayesianRule  <- function( SimData, DesignParam, LookInfo = NULL, 
     tabResults               <- table( SimData$TreatmentID, SimData$Response )
     
     # Only want data on experimental treatments is wanted, experimental data starts in row 2
-    tabResultsExperimental   <- tabResults[ c( 2:nrow( tabResults )), ]  
+    tabResultsExperimental   <- tabResults[ c( 2:nrow( tabResults ) ), ]  
     nQtyOfExperimentalArms   <- nrow( tabResultsExperimental ) 
     
     # Loop over the experimental arms and record which treatments are selected for stage 2
@@ -101,7 +102,7 @@ SelectExpUsingBayesianRule  <- function( SimData, DesignParam, LookInfo = NULL, 
     # No treatments met the criteria for selection so use the one with the largest Prob( pi > UserParam$dHistoricResponseRate | data )
     if( length( vReturnTreatmentID ) == 0 ) 
     {
-        vReturnTreatmentID <-  which.max( vPostProbGreaterThanHistory  )
+        vReturnTreatmentID <-  which.max( vPostProbGreaterThanHistory )
     }
     
     # Set the allocation ratio
@@ -110,7 +111,7 @@ SelectExpUsingBayesianRule  <- function( SimData, DesignParam, LookInfo = NULL, 
     
     nErrrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
-    if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
+    if( length( vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
         nErrrorCode <- -1  #  Fatal error because the R code is incorrect
     }

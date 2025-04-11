@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name SelectExpThatAreBetterThanCtrl
 #' @title Select Experimental Treatments Better Than Control
 #' 
 #' @description Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.
@@ -57,12 +58,12 @@ SelectExpThatAreBetterThanCtrl  <- function( SimData, DesignParam, LookInfo = NU
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
     
     # Compute the response probability as # of responses/(  # of treatment failures + # of responses )
-    vProbabilityResponse                <- as.vector( tabResults[,2]/(tabResults[,1] + tabResults[,2] ) )
+    vProbabilityResponse                <- as.vector( tabResults[ ,2 ]/(tabResults[ ,1 ] + tabResults[ ,2 ] ) )
     
     # Create a variable with the probability of response on control to be used in decision making
     dProbabilityOfResponseOnControl     <- vProbabilityResponse[ 1 ]     
     # Create vector with only the estimated probability of response on experimentals
-    vProbabilityResponseOnExperimental  <- vProbabilityResponse[ c(2:length(vProbabilityResponse)) ]     
+    vProbabilityResponseOnExperimental  <- vProbabilityResponse[ c( 2:length( vProbabilityResponse ) ) ]     
     
     # Note: vProbabilityResponseOnExperimental now contains only the response rates for the experimental treatments
     
@@ -77,21 +78,21 @@ SelectExpThatAreBetterThanCtrl  <- function( SimData, DesignParam, LookInfo = NU
     }
     
     # If none of the experimental treatments had a response rate greater than control, select the treatment with the largest response rate 
-    if( length( vReturnTreatmentID ) == 0)
+    if( length( vReturnTreatmentID ) == 0 )
     {
-        vReturnTreatmentID <-  which.max( vProbabilityResponseOnExperimental  )
+        vReturnTreatmentID <-  which.max( vProbabilityResponseOnExperimental )
     }
     
     # We want all treatments to have a randomization ratio of 1 
     # The allocation will put twice as many on the treatment with the highest number of responses, 
     # eg. the Treatment vReturnTreatmentID[ 1 ] will receive twice as many patients as vReturnTreatmentID[ 2 ]
-    vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ))    
+    vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ) )    
     
     # Treatment vReturnTreatmentID[ 1 ] will have a ratio of 2, vReturnTreatmentID[ 2 ] a ratio of 1, and control is always 1
     
     nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
-    if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
+    if( length( vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
         #  Fatal error because the R code is incorrect 
         nErrorCode <- -1  

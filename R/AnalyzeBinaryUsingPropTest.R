@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name AnalyzeBinaryUsingPropTest
 #' @title Analyze Binary Data Using the prop.test Function
 #' 
 #' @description This function analyzes binary data using the `prop.test` function in base R. The calculated p-value from `prop.test` 
@@ -76,8 +77,8 @@ AnalyzeBinaryUsingPropTest <- function( SimData, DesignParam, LookInfo = NULL, U
     vOutcomesE           <- vPatientOutcome[ vPatientTreatment == 1 ]
     
     # Perform the desired analysis 
-    mData                <- cbind(table(vOutcomesS), table(vOutcomesE))
-    lAnalysisResult      <- prop.test(mData, alternative = "greater", correct = FALSE)
+    mData                <- cbind( table( vOutcomesS ), table( vOutcomesE ) )
+    lAnalysisResult      <- prop.test( mData, alternative = "greater", correct = FALSE )
     dPValue              <- lAnalysisResult$p.value
     dZValue              <- qnorm( 1 - dPValue )
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint,
@@ -89,7 +90,7 @@ AnalyzeBinaryUsingPropTest <- function( SimData, DesignParam, LookInfo = NULL, U
                                                bFAEfficacyCondition = dZValue > dBoundary)
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
-    Error 	= 0
+    Error <- 0
     
-    return(list(TestStat = as.double(dZValue), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ) ))
+    return( list( TestStat = as.double( dZValue ), ErrorCode = as.integer( Error ), Decision = as.integer( nDecision ) ) )
 }

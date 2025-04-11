@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name SimulateTTEPatientWeibull
 #' @title Simulate TTE Patient Outcomes from a Weibull Distribution
 #'
 #' @description
@@ -55,13 +56,13 @@
 SimulateTTEPatientWeibull <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dShapeCtrl", "dScaleCtrl", "dShapeExp", "dScaleExp")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dShapeCtrl", "dScaleCtrl", "dShapeExp", "dScaleExp" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(Response  = as.double(0), 
-                    ErrorCode = as.integer(-1)))
+        return( list( Response  = as.double( 0 ), 
+                      ErrorCode = as.integer( -1 ) ) )
     }
 
     # Step 1 - Initialize the return variables or other variables needed ####    
@@ -76,12 +77,12 @@ SimulateTTEPatientWeibull <- function( NumSub, NumArm, TreatmentID, SurvMethod, 
     # Simulate the patient survival times based on the treatment
     # For the Hazard Rate input with 1 piece, this is just simulating from an exponential distribution as an example and results will match
     # East or East Horizon if you used the build hazard option.
-    for( nPatIndx in 1:NumSub)
+    for( nPatIndx in 1:NumSub )
     {
         nPatientTreatment     <- vTreatmentID[ nPatIndx ]
         vSurvTime[ nPatIndx ] <- rweibull( 1, vShapes[ nPatientTreatment ], vScales[ nPatientTreatment ] )
         
     }
 
-    return( list(SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode) )
+    return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode ) )
 }

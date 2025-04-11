@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name ComputeScaleGivenShapeMedian
 #' @title Compute Weibull scale parameter
 #' 
 #' @description

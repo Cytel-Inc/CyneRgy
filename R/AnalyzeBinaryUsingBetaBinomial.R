@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name AnalyzeBinaryUsingBetaBinomial
 #' @title Analyze Binary Data Using Beta-Binomial Model
 #' 
 #' @description Perform analysis for efficacy using a Beta(\eqn{\alpha}, \eqn{\beta}) prior to compute the posterior probability that the experimental treatment is better than the control treatment care.
@@ -88,15 +89,15 @@ AnalyzeBinaryUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NUL
     }
     
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dAlphaCtrl", "dBetaCtrl", "dAlphaExp", "dBetaExp", "dUpperCutoffEfficacy", "dLowerCutoffForFutility")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dAlphaCtrl", "dBetaCtrl", "dAlphaExp", "dBetaExp", "dUpperCutoffEfficacy", "dLowerCutoffForFutility" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(TestStat  = as.double(0), 
-                    ErrorCode = as.integer(-1), 
-                    Decision  = as.integer( 0 ),
-                    Delta     = as.double( 0 )))
+        return( list( TestStat  = as.double( 0 ), 
+                      ErrorCode = as.integer( -1 ), 
+                      Decision  = as.integer( 0 ),
+                      Delta     = as.double( 0 ) ) )
     }
     
     # Step 2 - Create the vector of simulated data for this IA - East or East Horizon sends all of the simulated data ####
@@ -116,12 +117,12 @@ AnalyzeBinaryUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NUL
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
                                                bIAEfficacyCondition = lRet$dPostProb > UserParam$dUpperCutoffEfficacy, 
                                                bIAFutilityCondition = lRet$dPostProb <  UserParam$dLowerCutoffForFutility,
-                                               bFAEfficacyCondition = lRet$dPostProb > UserParam$dUpperCutoffEfficacy)
+                                               bFAEfficacyCondition = lRet$dPostProb > UserParam$dUpperCutoffEfficacy )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0
     
-    return(list(TestStat = as.double(lRet$dPostProb), ErrorCode = as.integer(Error), Decision = as.integer( nDecision ), Delta = as.double( lRet$dDelta ) ) )
+    return( list( TestStat = as.double( lRet$dPostProb ), ErrorCode = as.integer( Error ), Decision = as.integer( nDecision ), Delta = as.double( lRet$dDelta ) ) )
 }
 
 
@@ -150,46 +151,46 @@ ProbExpGreaterCtrlBeta <- function( vOutcomesCtrl, vOutcomesExp, dAlphaCtrl, dBe
     dPostProb  <- mean( dPostProb )
     
     # Compute Delta: mean( Pi_E ) - mean( Pi_C )
-    dDelta     <- ( dAlphaExp/( dAlphaExp + dBetaExp) ) - ( dAlphaCtrl/( dAlphaCtrl +  dBetaCtrl ))
-    return(list(dPostProb = dPostProb, dDelta = dDelta))
+    dDelta     <- ( dAlphaExp/( dAlphaExp + dBetaExp ) ) - ( dAlphaCtrl/( dAlphaCtrl +  dBetaCtrl ) )
+    return( list( dPostProb = dPostProb, dDelta = dDelta ) )
 }
 
 
 
 
 # Function to compute Bayesian predictive probability of success
-ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function(dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams) {
+ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams ) {
     # Compute the posterior parameters based on observed data
-    posteriorAlphaS <- priorAlphaS + sum(dataS)
-    posteriorBetaS  <- priorBetaS + length(dataS) - sum(dataS)
+    posteriorAlphaS <- priorAlphaS + sum( dataS )
+    posteriorBetaS  <- priorBetaS + length( dataS ) - sum( dataS )
     
-    posteriorAlphaE <- priorAlphaE + sum(dataE)
-    posteriorBetaE  <- priorBetaE + length(dataE) - sum(dataE)
+    posteriorAlphaE <- priorAlphaE + sum( dataE )
+    posteriorBetaE  <- priorBetaE + length( dataE ) - sum( dataE )
     
     # Initialize counters for successful trials
     successfulTrials <- 0
     
     # Simulate the remaining trials and compute the predictive probability
-    for (i in 1:nSimulations) {
+    for ( i in 1:nSimulations ) {
         # Sample response rates from posterior distributions
-        posteriorRateS <- rbeta(1, posteriorAlphaS, posteriorBetaS)
-        posteriorRateE <- rbeta(1, posteriorAlphaE, posteriorBetaE)
+        posteriorRateS <- rbeta( 1, posteriorAlphaS, posteriorBetaS )
+        posteriorRateE <- rbeta( 1, posteriorAlphaE, posteriorBetaE )
         
         # Simulate patient outcomes for for the current virtual trial based on sampled rates
         # The data at the end of the trial is a combination of the data at the interim, dataS, and the simulated data to the end of the trial, remainingDataS
-        remainingDataS <- SimulatePatientOutcome(nQtyOfPatsS - length(dataS), posteriorRateS)
-        combinedDataS  <- c(dataS, remainingDataS)
+        remainingDataS <- SimulatePatientOutcome( nQtyOfPatsS - length( dataS ), posteriorRateS )
+        combinedDataS  <- c( dataS, remainingDataS )
         
-        remainingDataE <- SimulatePatientOutcome(nQtyOfPatsE - length(dataE), posteriorRateE)
-        combinedDataE  <- c(dataE, remainingDataE)
+        remainingDataE <- SimulatePatientOutcome( nQtyOfPatsE - length( dataE ), posteriorRateE )
+        combinedDataE  <- c( dataE, remainingDataE )
         
         
         # Perform the analysis with combined data to check if the trial is successful
-        result <- ProbSGreaterEBeta(combinedDataS, combinedDataE, lAnalysisParams )
+        result <- ProbSGreaterEBeta( combinedDataS, combinedDataE, lAnalysisParams )
         
         # Check if the result meets the cutoff for success
-        if (result$dPostProb <= finalBoundary) {
-            successfulTrials <- successfulTrials + 1
+        if ( result$dPostProb <= finalBoundary ) {
+             successfulTrials <- successfulTrials + 1
         }
     }
     
@@ -197,5 +198,5 @@ ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function(dataS, data
     predictiveProbabilityS <- successfulTrials / nSimulations
     
     # Return the result
-    return(list(predictiveProbabilityS = predictiveProbabilityS))
+    return( list( predictiveProbabilityS = predictiveProbabilityS ) )
 }

@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name SimulateContinuousPatientOutcomePercentAtZero
 #' @title Simulate Continuous Patient Outcomes with Proportion at Zero
 #' 
 #' @description Simulates patient outcomes from a normal distribution, with a specified percentage of patients having an outcome of 0. In this example, the continuous outcome represents a patient's change from baseline. This function generates patient outcomes such that, on average:
@@ -33,13 +34,13 @@
 SimulateContinuousPatientOutcomePercentAtZero <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dProbOfZeroOutcomeCtrl", "dProbOfZeroOutcomeExp")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dProbOfZeroOutcomeCtrl", "dProbOfZeroOutcomeExp" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(Response  = as.double(0), 
-                    ErrorCode = as.integer(-1)))
+        return( list( Response  = as.double( 0 ), 
+                      ErrorCode = as.integer( -1 ) ) )
     }
     
     # Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
@@ -63,11 +64,11 @@ SimulateContinuousPatientOutcomePercentAtZero <- function( NumSub, TreatmentID, 
         
         
         if( nResponseIsZero == 0  )  # The patient responded, so we need to simulate their outcome from a normal distribution with the specified mean and standard deviation 
-            vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ])
+            vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ] )
     }
     
     if(  any( is.na( vPatientOutcome ) == TRUE ) )
         nError <- -100
     
-    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
 }

@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name SelectExpWithPValueLessThanSpecified
 #' @title Select Experimental Treatments Using P-value Comparison
 #' 
 #' @description
@@ -60,14 +61,14 @@
 SelectExpWithPValueLessThanSpecified  <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dMaxPValue")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dMaxPValue" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(TreatmentID  = as.integer(0), 
-                    ErrorCode    = as.integer(-1), 
-                    AllocRatio   = as.double(0)))
+        return( list( TreatmentID  = as.integer( 0 ), 
+                      ErrorCode    = as.integer( -1 ), 
+                      AllocRatio   = as.double( 0 ) ) )
     }
     
     # Calculate the number of responders and treatment failures for each treatment
@@ -88,14 +89,14 @@ SelectExpWithPValueLessThanSpecified  <- function( SimData, DesignParam, LookInf
         vPValue[ nIndex - 1 ]   <- chisq.test( tabAnalysisData )$p.value    
         
         # Error checking - If the data had no patient responses, the p-value may not be able to be computed.
-        if( is.nan( vPValue[ nIndex - 1 ] ))
+        if( is.nan( vPValue[ nIndex - 1 ] ) )
         {
             # The Chi Squared Test did not calculate a p-value, which can occur if no patients respond, so make the p-value 1
             vPValue[ nIndex - 1 ] <- 1   
         }
         
         # Step 2 - Create the vector of selected treatments, with p-value < dMaxPValue ####
-        if( vPValue[ nIndex - 1 ]  < as.numeric(UserParam$dMaxPValue))
+        if( vPValue[ nIndex - 1 ]  < as.numeric( UserParam$dMaxPValue ) )
         {
             # Note: the TreatmentID is nIndex - 1
             vReturnTreatmentID <- c( vReturnTreatmentID, nIndex - 1 )   
@@ -115,7 +116,7 @@ SelectExpWithPValueLessThanSpecified  <- function( SimData, DesignParam, LookInf
     
     nErrorCode <- 0
     # Note: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
-    if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
+    if( length( vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
         #  Fatal error because the R code is incorrect
         nErrorCode <- -1  

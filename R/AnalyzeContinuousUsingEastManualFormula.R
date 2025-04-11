@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name AnalyzeContinuousUsingEastManualFormula
 #' @title Analyze Continuous Data Using East Manual Formula
 #' 
 #' @description Compute the test statistic using formula Q.3.3 in the East manual. 
@@ -88,19 +89,19 @@ AnalyzeContinuousUsingEastManualFormula <- function(SimData, DesignParam, LookIn
     nQtyOfPatsOnS         <- length( vOutcomesS )
     
     # Equation from Appendix Q - 3.3 in East manual for the estimate of Pooled Std. Deviation
-    dStdDevPooled        <- sqrt( ( ( nQtyOfPatsOnE - 1) * dStdDevOfResponsesOnE ^ 2 + ( nQtyOfPatsOnS - 1 ) * dStdDevOfResponsesOnS ^ 2 )/( nQtyOfPatsOnE + nQtyOfPatsOnS - 2 ) )
+    dStdDevPooled        <- sqrt( ( ( nQtyOfPatsOnE - 1 ) * dStdDevOfResponsesOnE ^ 2 + ( nQtyOfPatsOnS - 1 ) * dStdDevOfResponsesOnS ^ 2 )/( nQtyOfPatsOnE + nQtyOfPatsOnS - 2 ) )
     
     # Equation from Appendix Q - 3.3 in East manual
-    dZj                  <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS )/( dStdDevPooled * sqrt( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ))
-    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex])
+    dZj                  <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS )/( dStdDevPooled * sqrt( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ) )
+    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex] )
     
     # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
                                                bIAEfficacyCondition = dZj > dBoundary, 
-                                               bFAEfficacyCondition = dZj > dBoundary)
+                                               bFAEfficacyCondition = dZj > dBoundary )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error <-  0
     
-    return(list(TestStat = as.double( dZj ), ErrorCode = as.integer( Error ), Decision = as.integer( nDecision ) ))
+    return( list( TestStat = as.double( dZj ), ErrorCode = as.integer( Error ), Decision = as.integer( nDecision ) ) )
 }

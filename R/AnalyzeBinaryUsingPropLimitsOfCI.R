@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name AnalyzeBinaryUsingPropLimitsOfCI
 #' @title Analyze Binary Data Using Proportion Limits of Confidence Interval
 #' 
 #' @description This function analyzes binary data using a simplified confidence interval (CI) limits design. 
@@ -88,15 +89,15 @@ AnalyzeBinaryUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo = N
     }
     
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dLowerLimit", "dUpperLimit", "dConfLevel")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dLowerLimit", "dUpperLimit", "dConfLevel" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(TestStat  = as.double(0), 
-                    ErrorCode = as.integer(-1), 
-                    Decision  = as.integer( 0 ),
-                    Delta     = as.double( 0 )))
+        return( list( TestStat  = as.double( 0 ), 
+                      ErrorCode = as.integer( -1 ), 
+                      Decision  = as.integer( 0 ),
+                      Delta     = as.double( 0 ) ) )
     }
     
     # Create the vector of simulated data for this IA - East or East Horizon sends all of the simulated data ####
@@ -108,8 +109,8 @@ AnalyzeBinaryUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo = N
     vOutcomesE           <- vPatientOutcome[ vPatientTreatment == 1 ]
     
     # Perform the desired analysis, then determine if the lower limit of the confidence interval is greater than the user-specified value ####
-    mData                <- cbind(table(vOutcomesS), table(vOutcomesE)) 
-    lAnalysisResult      <- prop.test(mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel)
+    mData                <- cbind( table( vOutcomesS ), table( vOutcomesE ) ) 
+    lAnalysisResult      <- prop.test( mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel )
     dLowerLimitCI        <- lAnalysisResult$conf.int[ 1 ]
     dUpperLimitCI        <- lAnalysisResult$conf.int[ 2 ]
     
@@ -117,13 +118,13 @@ AnalyzeBinaryUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo = N
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
                                                bIAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit,
                                                bIAFutilityCondition = dUpperLimitCI < UserParam$dUpperLimit,
-                                               bFAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit)
+                                               bFAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     Error 	<- 0
     
-    return(list(TestStat  = as.double(dLowerLimitCI), 
-                ErrorCode = as.integer(Error), 
-                Decision  = as.integer( nDecision ),
-                Delta     = as.double( lAnalysisResult$estimate[1] - lAnalysisResult$estimate[2])))
+    return( list( TestStat  = as.double( dLowerLimitCI ), 
+                  ErrorCode = as.integer( Error ), 
+                  Decision  = as.integer( nDecision ),
+                  Delta     = as.double( lAnalysisResult$estimate[ 1 ] - lAnalysisResult$estimate[ 2 ] ) ) )
 }

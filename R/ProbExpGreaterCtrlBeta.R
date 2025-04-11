@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name ProbExpGreaterCtrlBeta
 #' @title Compute Posterior Probability of Experimental Treatment Being Greater than Control
 #'
 #' @description 
@@ -28,7 +29,7 @@
 #' @export
 ######################################################################################################################## .
 
-ProbExpGreaterCtrlBeta <- function(vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlphaE, dBetaE) 
+ProbExpGreaterCtrlBeta <- function( vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlphaE, dBetaE ) 
 {
     # In the beta-binomial model if we make the assumption that 
     # pi ~ Beta( a, b )
@@ -49,5 +50,5 @@ ProbExpGreaterCtrlBeta <- function(vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlp
     dPostProb  <- ifelse( vPiExp > vPiCtrl, 1, 0 )
     dPostProb  <- sum( dPostProb )/length( dPostProb )
     
-    return(list(dPostProb = dPostProb))
+    return( list( dPostProb = dPostProb ) )
 }

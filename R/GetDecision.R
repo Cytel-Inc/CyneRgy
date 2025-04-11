@@ -5,6 +5,7 @@
 #   Change History:
 #   Last Modified Date: 08/21/2024
 #################################################################################################### .
+#' @name GetDecision
 #' @title Determine Decision Based on Decision String, Design and Look Information
 #' 
 #' @description This function takes a string indicating the desired decision ("Efficacy", "Futility", or "Continue"), design parameters, and look information, and returns the appropriate decision value. 
@@ -37,7 +38,7 @@
 #' @param LookInfo A list containing look information sent from East Horizon Explore to the R integration for analysis.
 #' @export
 #################################################################################################### .
-GetDecision <- function(  strDecision, DesignParam, LookInfo )
+GetDecision <- function( strDecision, DesignParam, LookInfo )
 {
     nReturnDecision <- -1   # This is an error 
     strDesignType   <- NA
@@ -98,9 +99,9 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 0
                 }
-                else if(strDecision == "Efficacy")
+                else if( strDecision == "Efficacy" )
                 {
-                    stop("CyneRgy::GetDecision - Efficacy check is not enabled at this look. Therefore, 'EFficacy' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Futility'.")
+                    stop( "CyneRgy::GetDecision - Efficacy check is not enabled at this look. Therefore, 'EFficacy' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Futility'." )
                 }
                 
             }
@@ -114,9 +115,9 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 0
                 }
-                else if( strDecision == "Continue")
+                else if( strDecision == "Continue" )
                 {
-                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
+                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
                 }
                 
             }
@@ -130,13 +131,13 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 2
                 }
-                else if(strDecision == "Continue"  )
+                else if( strDecision == "Continue"  )
                 {
                     nReturnDecision <- 0
                 }
-                else if(strDecision == "Futility")
+                else if( strDecision == "Futility" )
                 {
-                    stop("CyneRgy::GetDecision - Futility check is not enabled at this look. Therefore, 'Futility' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Efficacy'.")
+                    stop( "CyneRgy::GetDecision - Futility check is not enabled at this look. Therefore, 'Futility' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Efficacy'." ) 
                 }
             }
             else
@@ -145,13 +146,13 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 2
                 }
-                else if(strDecision == "Futility"  )
+                else if( strDecision == "Futility" )
                 {
                     nReturnDecision <- 0
                 }
-                else if(strDecision == "Continue")
+                else if( strDecision == "Continue" )
                 {
-                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
+                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
                 }
                 
             }
@@ -165,11 +166,11 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 2
                 }
-                else if(strDecision == "Futility"  )
+                else if( strDecision == "Futility" )
                 {
                     nReturnDecision <- 3
                 }
-                else if(strDecision == "Continue"  )
+                else if( strDecision == "Continue" )
                 {
                     nReturnDecision <- 0
                 }
@@ -180,13 +181,13 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 2
                 }
-                else if(strDecision == "Futility"  )
+                else if( strDecision == "Futility" )
                 {
                     nReturnDecision <- 3
                 }
-                else if(strDecision == "Continue")
+                else if( strDecision == "Continue")
                 {
-                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
+                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
                 }
                 
             }
@@ -207,9 +208,9 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 0
                 }
-                else if(strDecision == "Efficacy")
+                else if( strDecision == "Efficacy" )
                 {
-                    stop("CyneRgy::GetDecision - EFficacy check is not enabled at this look. Therefore, 'Efficacy' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Futility'.")
+                    stop( "CyneRgy::GetDecision - EFficacy check is not enabled at this look. Therefore, 'Efficacy' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Futility'." )
                 }
                 
             }
@@ -223,9 +224,9 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 0
                 }
-                else if(strDecision == "Continue")
+                else if( strDecision == "Continue" )
                 {
-                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
+                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
                 }
                 
             }
@@ -239,13 +240,13 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 1
                 }
-                else if(strDecision == "Continue"  )
+                else if( strDecision == "Continue" )
                 {
                     nReturnDecision <- 0
                 }
-                else if(strDecision == "Futility")
+                else if( strDecision == "Futility" )
                 {
-                    stop("CyneRgy::GetDecision - Futility check is not enabled at this look. Therefore, 'Futility' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Efficacy'.")
+                    stop( "CyneRgy::GetDecision - Futility check is not enabled at this look. Therefore, 'Futility' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Efficacy'." )
                 }
             }
             else
@@ -254,13 +255,13 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 1
                 }
-                else if(strDecision == "Futility"  )
+                else if( strDecision == "Futility" )
                 {
                     nReturnDecision <- 0
                 }
-                else if(strDecision == "Continue")
+                else if( strDecision == "Continue" )
                 {
-                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
+                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
                 }
                 
             }
@@ -274,11 +275,11 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 1
                 }
-                else if(strDecision == "Futility"  )
+                else if( strDecision == "Futility" )
                 {
                     nReturnDecision <- 3
                 }
-                else if(strDecision == "Continue"  )
+                else if( strDecision == "Continue" )
                 {
                     nReturnDecision <- 0
                 }
@@ -289,13 +290,13 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
                 {
                     nReturnDecision <- 1
                 }
-                else if(strDecision == "Futility"  )
+                else if( strDecision == "Futility" )
                 {
                     nReturnDecision <- 3
                 }
-                else if(strDecision == "Continue")
+                else if( strDecision == "Continue" )
                 {
-                    stop("CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'.")
+                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
                 }
                 
             }
@@ -304,5 +305,5 @@ GetDecision <- function(  strDecision, DesignParam, LookInfo )
     }
     
     
-    return( as.integer(nReturnDecision) )
+    return( as.integer( nReturnDecision ) )
 }

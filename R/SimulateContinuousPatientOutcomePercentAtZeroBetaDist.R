@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name SimulateContinuousPatientOutcomePercentAtZeroBetaDist
 #' @title Simulate Continuous Patient Outcomes with Probability of Zero from a Beta Distribution
 #' 
 #' @description Simulates patient outcomes from a normal distribution, with the probability of a zero outcome being random and sampled from a Beta distribution. 
@@ -38,13 +39,13 @@
 SimulateContinuousPatientOutcomePercentAtZeroBetaDist <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("dCtrlBetaParam1", "dCtrlBetaParam2", "dExpBetaParam1", "dExpBetaParam2")
-    vMissingParams <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "dCtrlBetaParam1", "dCtrlBetaParam2", "dExpBetaParam1", "dExpBetaParam2" )
+    vMissingParams <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(Response  = as.double(0), 
-                    ErrorCode = as.integer(-1)))
+        return( list( Response  = as.double( 0 ), 
+                      ErrorCode = as.integer( -1 ) ) )
     }
     
     nError           <- 0 # No error occurred 
@@ -63,7 +64,7 @@ SimulateContinuousPatientOutcomePercentAtZeroBetaDist <- function( NumSub, Treat
             nResponseIsZero <- 1
         
         if( nResponseIsZero == 0  )  # The patient responded, so we need to simulate their outcome from a normal distribution with the specified mean and standard deviation 
-            vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ])
+            vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ] )
     }
     
     if(  any( is.na( vPatientOutcome ) == TRUE ) )

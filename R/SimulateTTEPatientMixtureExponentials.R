@@ -1,4 +1,5 @@
 ######################################################################################################################## .
+#' @name SimulateTTEPatientMixtureExponentials
 #' @title Simulate TTE Patient Outcomes from a Mixture Exponential Distribution
 #'
 #' @description
@@ -55,28 +56,28 @@
 SimulateTTEPatientMixtureExponentials <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
-    vRequiredParams <- c("nQtyOfSubgroups")
-    vMissingParams  <- vRequiredParams[!vRequiredParams %in% names(UserParam)]
+    vRequiredParams <- c( "nQtyOfSubgroups" )
+    vMissingParams  <- vRequiredParams[ !vRequiredParams %in% names( UserParam ) ]
     
     if( is.null( UserParam ) || length( vMissingParams ) > 0 )
     {
-        return(list(Response  = as.double(0), 
-                    ErrorCode = as.integer(-1)))
+        return( list( Response  = as.double( 0 ), 
+                      ErrorCode = as.integer( -1 ) ) )
     }
     else
     {
         vSubgroupMissingParams <- c()
-        for (nGroup in 1:UserParam$nQtyOfSubgroups ) {
-            vSubgroupParams <- c(paste0("ProbSubgroup", nGroup),
-                                 paste0("MedianTTECtrlSubgroup", nGroup),
-                                 paste0("MedianTTEExpSubgroup", nGroup))
-            vSubgroupMissingParams <- c(vSubgroupMissingParams, vSubgroupParams[!vSubgroupParams %in% names(UserParam)])
+        for ( nGroup in 1:UserParam$nQtyOfSubgroups ) {
+            vSubgroupParams <- c( paste0( "ProbSubgroup", nGroup ),
+                                  paste0( "MedianTTECtrlSubgroup", nGroup ),
+                                  paste0( "MedianTTEExpSubgroup", nGroup ) )
+            vSubgroupMissingParams <- c( vSubgroupMissingParams, vSubgroupParams[ !vSubgroupParams %in% names( UserParam ) ] )
         }
         
         if( length( vSubgroupMissingParams ) > 0 )
         {
-            return(list(Response  = as.double(0), 
-                        ErrorCode = as.integer(-1)))
+            return( list( Response  = as.double( 0 ), 
+                          ErrorCode = as.integer( -1 ) ) )
         }
     }
     
@@ -105,18 +106,18 @@ SimulateTTEPatientMixtureExponentials <- function( NumSub, NumArm, TreatmentID, 
     #     Median = ln(2)/rate 
     #     rate   = ln(2)/Median
     
-    vRateCtrl <- log(2)/vMedianTTECtrl
-    vRateExp  <- log(2)/vMedianTTEExp 
+    vRateCtrl <- log( 2 )/vMedianTTECtrl
+    vRateExp  <- log( 2 )/vMedianTTEExp 
     
     mRates    <- rbind( vRateCtrl, vRateExp)  # Now mRates has the rates for Ctrl in row 1, Exp in row 2 and the columns are the groups
     
     # Step 2 - Simulate the patient data using the variables above ####
     
     # Simulate the patient groups
-    vPatientGroup <- sample( c(1:nQtyOfSubgroups), NumSub, replace = TRUE, prob = vProbOfSubgroup )
+    vPatientGroup <- sample( c( 1:nQtyOfSubgroups ), NumSub, replace = TRUE, prob = vProbOfSubgroup )
     
     # Simulate the patient survival times based on the patient group and treatment
-    for( nPatIndx in 1:NumSub)  
+    for( nPatIndx in 1:NumSub )  
     {
         nPatientTreatment     <- vTreatmentID[ nPatIndx ]
         nPatientGroup         <- vPatientGroup[ nPatIndx ]
@@ -124,5 +125,5 @@ SimulateTTEPatientMixtureExponentials <- function( NumSub, NumArm, TreatmentID, 
         vSurvTime[ nPatIndx ] <- rexp( 1, dRate )
     }
     
-    return(list(SurvivalTime = as.double(vSurvTime), Subgroup = as.double( vPatientGroup ), ErrorCode = ErrorCode) )
+    return( list( SurvivalTime = as.double( vSurvTime ), Subgroup = as.double( vPatientGroup ), ErrorCode = ErrorCode ) )
 }
