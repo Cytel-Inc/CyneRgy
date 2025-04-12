@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">Shubham
 Lahoti</h4>
             
-            <h4 data-toc-skip class="date">April 11, 2025</h4>
+            <h4 data-toc-skip class="date">April 12, 2025</h4>
       
 
       <div class="d-none name"><code>2ArmNormalRepeatedMeasuresResponseGeneration.Rmd</code></div>
@@ -120,6 +120,14 @@ Lahoti</h4>
 
     
     
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+These examples are related to the <strong>Integration Point: Response -
+Continuous Outcome with Repeated Measures</strong>.
+<a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">Click
+here for more information about this integration point.</a>
+</p>
+</div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -128,9 +136,10 @@ same variable from the same subjects across multiple time periods. This
 method provides insights into the subjects’ development and changes over
 time. In this context, a single subject can have multiple responses over
 time, and these responses can be correlated across different visits.</p>
-<p>For a normal endpoint in repeated measures, the generation of
-responses primarily depends on the mean and standard deviation across
-all visits, as well as the correlation between these visits.</p>
+<p>The following example illustrates how to integrate new patient
+outcome simulation (<em>response</em>) capabilities into East Horizon or
+East using R functions in the context of a two-arm trial with repeated
+measures.</p>
 <p>Once CyneRgy is installed, you can load this example in RStudio with
 the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -142,13 +151,34 @@ RStudio.</p>
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R" class="external-link">GenerateResponseDiffOfMeansRepeatedMeasures.R</a>
-- The R function named “GenRespDiffOfMeansRepMeasures” in the file is
-used to generate the normal responses across multiple visits for 2-arm
-normal repeated measures design.</p></li>
+- The R function named <em>GenRespDiffOfMeansRepMeasures</em> in the
+file is used to generate the normal responses across multiple visits for
+2-arm normal repeated measures design.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R" class="external-link">LibraryMASS.R</a>
-- This file is used to load the library “MASS” to run mvrnorm()
-function.</p></li>
+- This file is used to load the library <code>MASS</code> to run the
+<code>mvrnorm</code> function.</p></li>
 </ol>
+</div>
+<div class="section level2">
+<h2 id="example-1---normal-endpoint">Example 1 - Normal Endpoint<a class="anchor" aria-label="anchor" href="#example-1---normal-endpoint"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R" class="external-link alert-link">GenerateResponseDiffOfMeansRepeatedMeasures.R</a>
+</p>
+</div>
+<p>For a normal endpoint with repeated measures, the generation of
+responses primarily depends on the mean and standard deviation across
+all visits, as well as the correlation between these visits. This
+examples uses built-in input variables coming from East Horizon or East
+to simulate repeated measures data. It uses the
+<code><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html" class="external-link">MASS::mvrnorm</a></code> function. This example does not use any
+user-defined parameters.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmNormalRepeatedMeasuresResponseGeneration_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -7,11 +7,16 @@ output:
   word_document: default
 ---
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response - Continuous Outcome with Repeated Measures</strong>.
+  <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
+
 ## Introduction
 
 Repeated measures involve collecting multiple data points for the same variable from the same subjects across multiple time periods. This method provides insights into the subjects' development and changes over time. In this context, a single subject can have multiple responses over time, and these responses can be correlated across different visits.
 
-For a normal endpoint in repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits.
+The following example illustrates how to integrate new patient outcome simulation (*response*) capabilities into East Horizon or East using R functions in the context of a two-arm trial with repeated measures.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
@@ -24,8 +29,104 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R) you will find the following R files:
 
-1. [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R) - The R function named "GenRespDiffOfMeansRepMeasures" in the file is used to generate the normal responses across multiple visits for 2-arm normal repeated measures design.
+1. [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R) - The R function named *GenRespDiffOfMeansRepMeasures* in the file is used to generate the normal responses across multiple visits for 2-arm normal repeated measures design.
+
+2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R) - This file is used to load the library `MASS` to run the `mvrnorm` function. 
+
+## Example 1 - Normal Endpoint
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R" class="alert-link">GenerateResponseDiffOfMeansRepeatedMeasures.R</a></p>
+</div>
+
+For a normal endpoint with repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits. This examples uses built-in input variables coming from East Horizon or East to simulate repeated measures data. It uses the `MASS::mvrnorm` function. This example does not use any user-defined parameters.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 5
+bigcolxmax = 8
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(3.5, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.2, 4),
+  xmax = rep(7.8, 4),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
+  label = c("Load means, standard deviations,\nand correlation matrix", 
+            "Convert correlation matrix\nto covariance matrices", 
+            "Generate multivariate normal responses\n for control and treatment groups", 
+            "Return responses matrix"),
+  fill = rep("#cfe2ff", 4)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 3),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3, 3),
+  ymax = c(3.3, 3.3),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
 
 
-2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R) - This file is used to load the library "MASS" to run mvrnorm() function. 
+
+
+
 
