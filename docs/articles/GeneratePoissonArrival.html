@@ -150,11 +150,90 @@ directory of this example</a> you will find the following R file:</p>
 <ol style="list-style-type: decimal">
 <li>
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link">GeneratePoissonArrival.R</a>
-- This file provides the code used for the two examples below.</li>
+- This file provides the code used for the two examples below.à</li>
 </ol>
 </div>
 <div class="section level2">
-<h2 id="example-1---ramp-up-in-accrual-using-built-in-input">Example 1 - Ramp-Up In Accrual Using Built In Input<a class="anchor" aria-label="anchor" href="#example-1---ramp-up-in-accrual-using-built-in-input"></a>
+<h2 id="example-1---ramp-up-in-accrual-using-userparam">Example 1 - Ramp-Up In Accrual Using UserParam<a class="anchor" aria-label="anchor" href="#example-1---ramp-up-in-accrual-using-userparam"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link alert-link">GeneratePoissonArrival.R</a>
+</p>
+</div>
+<p>In this example, we use seven accrual rates as user parameters in
+East Horizon after selecting the R script. When custom variables are
+provided, the built-in variables <em>PrdStart</em> and <em>AccrRate</em>
+from East Horizon are ignored. Note that in this example, the start of
+the accrual periods cannot be specified. See <a href="#example-2---ramp-up-in-accrual">Example 2</a> for that. Unless
+otherwise stated in East Horizon, the default time unit is months. Refer
+to the table below for the definitions and values of the user-defined
+parameters used in this example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate1</annotation></semantics></math></td>
+<td>Accrual rate in the first unit of time</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate2</annotation></semantics></math></td>
+<td>Accrual rate in the second unit of time</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate3</annotation></semantics></math></td>
+<td>Accrual rate in the third unit of time</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate4</annotation></semantics></math></td>
+<td>Accrual rate in the fourth unit of time</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate5</annotation></semantics></math></td>
+<td>Accrual rate in the fifth unit of time</td>
+<td>18</td>
+</tr>
+<tr class="even">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>6</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate6</annotation></semantics></math></td>
+<td>Accrual rate in the sixth unit of time</td>
+<td>25</td>
+</tr>
+<tr class="odd">
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>7</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate7</annotation></semantics></math></td>
+<td>Accrual rate in the seventh unit of time</td>
+<td>35</td>
+</tr>
+</tbody>
+</table>
+<p>Warning, the first time unit is 0, not 1. This means:</p>
+<ul>
+<li>At time 0, the accrual rate is <em>dRate1</em> (3) per unit
+time.</li>
+<li>At time 1, the rate changes to <em>dRate2</em> (6).</li>
+<li>At time 2, the rate changes to <em>dRate3</em> (10), and so on.</li>
+<li>After time 6, the accrual rate remains at <em>dRate7</em> (35).</li>
+</ul>
+<p>For example, if the time unit is months, this setup models a ramp-up
+over a six-month period, with the accrual rate stabilizing at
+<em>dRate7</em> (35) from month 6 onward. This could produce an accrual
+pattern resembling the following:</p>
+<p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="example-2---ramp-up-in-accrual-using-built-in-input">Example 2 - Ramp-Up In Accrual Using Built In Input<a class="anchor" aria-label="anchor" href="#example-2---ramp-up-in-accrual-using-built-in-input"></a>
 </h2>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
@@ -163,11 +242,12 @@ This example is related to this R file:
 </p>
 </div>
 <p>This example does not use any user-defined parameters, but uses
-built-in parameters specified in East Horizon. We use the built-in
-inputs of start periods and expected accrual rates (<em>Starting at
-Time</em> and <em>Average Subjects Enrolled</em> in the <em>Enrollment
-Card</em>) to implement a user-specified ramp-up in accrual using
-Poisson. Refer to the table below for more information.</p>
+built-in parameters specified in East Horizon. We use the same file as
+before, but we now use built-in inputs of start periods and expected
+accrual rates (<em>Starting at Time</em> and <em>Average Subjects
+Enrolled</em> in the <em>Enrollment Card</em>) to implement a
+user-specified ramp-up in accrual using Poisson. Refer to the table
+below for more information.</p>
 <table class="table">
 <colgroup>
 <col width="38%">
@@ -259,85 +339,6 @@ per time unit.</li>
 <p>This would yield accrual patterns resembling the following figure,
 with dashed lines marking the time points where accrual rates
 change:</p>
-<p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>The figure below illustrates where this example fits within the R
-integration points of Cytel products, accompanied by a flowchart
-outlining the general steps performed by the R code.</p>
-<p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-</div>
-<div class="section level2">
-<h2 id="example-2---ramp-up-in-accrual-using-userparam">Example 2 - Ramp-Up In Accrual Using UserParam<a class="anchor" aria-label="anchor" href="#example-2---ramp-up-in-accrual-using-userparam"></a>
-</h2>
-<div class="alert alert-primary" role="alert">
-<p style="margin-bottom:0">
-This example is related to this R file:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link alert-link">GeneratePoissonArrival.R</a>
-</p>
-</div>
-<p>Now, let’s extend this approach by incorporating custom user-defined
-variables (<em>UserParam</em>). In this example, we use the same R
-function as before but we specify seven accrual rates as user parameters
-in East Horizon after selecting the R script. When custom variables are
-provided, the built-in variables <em>PrdStart</em> and <em>AccrRate</em>
-are ignored. Here, we cannot specify the start of the periods. Refer to
-the table below for the definitions and values of the user-defined
-parameters used in this example.</p>
-<table class="table">
-<thead><tr class="header">
-<th><strong>User parameter</strong></th>
-<th><strong>Definition</strong></th>
-<th><strong>Value</strong></th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate1</annotation></semantics></math></td>
-<td>Accrual rate in the first unit of time</td>
-<td>3</td>
-</tr>
-<tr class="even">
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate2</annotation></semantics></math></td>
-<td>Accrual rate in the second unit of time</td>
-<td>6</td>
-</tr>
-<tr class="odd">
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate3</annotation></semantics></math></td>
-<td>Accrual rate in the third unit of time</td>
-<td>10</td>
-</tr>
-<tr class="even">
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate4</annotation></semantics></math></td>
-<td>Accrual rate in the fourth unit of time</td>
-<td>15</td>
-</tr>
-<tr class="odd">
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate5</annotation></semantics></math></td>
-<td>Accrual rate in the fifth unit of time</td>
-<td>18</td>
-</tr>
-<tr class="even">
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>6</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate6</annotation></semantics></math></td>
-<td>Accrual rate in the sixth unit of time</td>
-<td>25</td>
-</tr>
-<tr class="odd">
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>$</mi><mi>d</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mn>7</mn></mrow><annotation encoding="application/x-tex">UserParam\$dRate7</annotation></semantics></math></td>
-<td>Accrual rate in the seventh unit of time</td>
-<td>35</td>
-</tr>
-</tbody>
-</table>
-<p>Warning, the first time unit is 0, not 1. This means:</p>
-<ul>
-<li>At time 0, the accrual rate is <em>dRate1</em> (3) per unit
-time.</li>
-<li>At time 1, the rate changes to <em>dRate2</em> (6).</li>
-<li>At time 2, the rate changes to <em>dRate3</em> (10), and so on.</li>
-<li>After time 6, the accrual rate remains at <em>dRate7</em> (35).</li>
-</ul>
-<p>For example, if the time unit is months, this setup models a ramp-up
-over a six-month period, with the accrual rate stabilizing at
-<em>dRate7</em> (35) from month 6 onward. This could produce an accrual
-pattern resembling the following:</p>
 <p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>The figure below illustrates where this example fits within the R
 integration points of Cytel products, accompanied by a flowchart
