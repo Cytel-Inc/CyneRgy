@@ -1,6 +1,6 @@
 ---
 title: "2-Arm, Time-To-Event Outcome - Analysis"
-author: "Anoop Singh Rawat"
+author: "Anoop Singh Rawat and Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   word_document: default

@@ -1,6 +1,6 @@
 ---
 title: "Multiarm, Binary Outcome - Treatment Selection"
-author: "J. Kyle Wathen"
+author: "Sydney Ringold, J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default

@@ -277,7 +277,7 @@ print(p)
 
 ### Example 2.1 - 20%-40% (95% CI) of Treatment-Resistant Patients
 
-For this example, independent $Beta( 23.1, 55.2 )$ distributions are used, which have a 95% credible interval of (0.2, 0.4). The function first simulates the probability of treatment resistance for both the control and experimental arms using these Beta distributions. It then uses the simulated probabilities to determine the proportion of treatment-resistant patients. Refer to the table below for the values of the user-defined parameters used in this example.
+For this example, independent $\text{Beta} ( 23.1, 55.2 )$ distributions are used, which have a 95% credible interval of (0.2, 0.4). The function first simulates the probability of treatment resistance for both the control and experimental arms using these Beta distributions. It then uses the simulated probabilities to determine the proportion of treatment-resistant patients. Refer to the table below for the values of the user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
 |---|---|
@@ -290,7 +290,7 @@ In this example, it is assumed that the two probabilities are sampled from the s
 
 ### Example 2.2 - 20%-40% (95% CI) of Control Treatment-Resistant Patients, 10%-30% (95% CI) of Experimental Treatment-Resistant Patients
 
-In this example, the treatment reduces the probability of treatment resistance by 10% on average compared to the control. Specifically, assume that the probability of being treatment-resistant in the control group follows a $Beta( 23.1, 55.2 )$ distribution, with a 95% credible interval of (0.2, 0.4). For the experimental treatment, assume the probability of being treatment-resistant follows a $Beta( 10.8, 46.3 )$ distribution, with a 95% credible interval of (0.1, 0.3). Refer to the table below for the values of the user-defined parameters used in this example.
+In this example, the treatment reduces the probability of treatment resistance by 10% on average compared to the control. Specifically, assume that the probability of being treatment-resistant in the control group follows a $\text{Beta} ( 23.1, 55.2 )$ distribution, with a 95% credible interval of (0.2, 0.4). For the experimental treatment, assume the probability of being treatment-resistant follows a $\text{Beta} ( 10.8, 46.3 )$ distribution, with a 95% credible interval of (0.1, 0.3). Refer to the table below for the values of the user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
 |---|---|
