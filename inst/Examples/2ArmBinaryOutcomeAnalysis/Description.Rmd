@@ -37,9 +37,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 4.  [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R) - Contains a function named *AnalyzeUsingBetaBinomial* to demonstrate the R code necessary for Example 4 as described below.
 
-
-In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type 
-code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
+In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
 
 ## Example 1 - Using Formula 24.2 from the East manual
 
@@ -401,7 +399,7 @@ $$\pi_{\text{Exp}} \mid X_{\text{Exp}}, N_{\text{Exp}} \sim \text{Beta}(0.2 + X_
 
 For analysis and decision-making, the posterior distributions are used to determine whether to stop the trial early. The trial is stopped for efficacy if there is strong evidence that the response rate in the experimental group is higher than in the control group, and for futility if there is little evidence to support a benefit of the experimental treatment over the standard of care. The primary quantity of interest is the posterior probability that the experimental treatment has a higher response rate than the standard of care:
 
-$$\rho = Pr(\pi_{\text{Exp}} > \pi_{\text{Ctrl}} \mid X_{\text{Ctrl}}, N_{\text{Ctrl}}, X_{\text{Exp}}, N_{\text{Exp}})$$
+$$\rho = \Pr(\pi_{\text{Exp}} > \pi_{\text{Ctrl}} \mid X_{\text{Ctrl}}, N_{\text{Ctrl}}, X_{\text{Exp}}, N_{\text{Exp}})$$
 Specifically,
 
 **At Interim Analysis**
