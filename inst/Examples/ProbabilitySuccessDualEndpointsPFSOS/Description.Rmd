@@ -13,7 +13,7 @@ output:
 
 # Introduction
 
-This example demonstrates how to compute the probability of success of clinical trial by extending East Horizon’s single-endpoint framework to handle dual endpoints (Progression-Free Survival and Overall Survival) using custom R scripts for the **Analysis** and **Response (Patient Simulation)** endpoints. This example could be extended to other types of endpoints by modifying the R code. 
+Valeria test: This example demonstrates how to compute the probability of success of clinical trial by extending East Horizon’s single-endpoint framework to handle dual endpoints (Progression-Free Survival and Overall Survival) using custom R scripts for the **Analysis** and **Response (Patient Simulation)** endpoints. This example could be extended to other types of endpoints by modifying the R code. 
 
 To try out this example, start by creating a new project on East Horizon using the **Two Arm Confirmatory** study objective and the **Time to Event** single endpoint, and then create an input set using the **Explore** task.
 
