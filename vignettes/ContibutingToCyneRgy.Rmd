@@ -47,7 +47,7 @@ This document is intended to help with development of this package. In this docu
 1. [pkgdown](https://pkgdown.r-lib.org/reference/build_home.html) - Package used to create the package website.
  ```
 usethis::use_pkgdown_github_pages()  # Likely you do not need to run this again as it was set up already.
-roxygen2::roxygenize() # Build the Rd scripts in /man for the reference section using the R scripts in /R.
+devtools::document() # Build the Rd scripts in /man for the reference section using the R scripts in /R.
 pkgdown::build_site() # Build the site pages using Rmd scripts in /vignettes. Preview the site locally before publishing.
 ```
 2. [testthat](https://testthat.r-lib.org/) - Useful for creating and testing R packages.

@@ -67,7 +67,7 @@ CombineAllRFiles <- function( strOutFileName = NA, strDirectory = "", strFileNam
         # Insert a comment with file name and timestamp
         strComment     <- paste( "\n" )
         strComment     <- paste0( strComment, "##################################################################################### #\n" )
-        strComment     <- paste0( strComment, "# File ", iFileCount , ": ", basename( strFileName ), " Timestamp: ", strFormatedTimeStamp, " ####\n" 
+        strComment     <- paste0( strComment, "# File ", iFileCount , ": ", basename( strFileName ), " Timestamp: ", strFormatedTimeStamp, " ####\n" ) 
         strComment     <- paste0( strComment, "##################################################################################### #\n\n" )
         
         strFileContent <- c( strComment, strFileContent )
