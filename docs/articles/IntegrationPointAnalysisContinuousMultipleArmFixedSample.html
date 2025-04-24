@@ -113,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">April 11, 2025</h4>
+            <h4 data-toc-skip class="date">April 17, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysisContinuousMultipleArmFixedSample.Rmd</code></div>
@@ -520,7 +520,7 @@ available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Tem
 </h3>
 <pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span> <span class="va"><a href="https://Cytel-Inc.github.io/CyneRgy">CyneRgy</a></span> <span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span> <span class="va">CyneRgy</span> <span class="op">)</span></span>
 <span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
 <span>    <span class="va">vDecision</span>           <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing decision vector to 0</span></span>

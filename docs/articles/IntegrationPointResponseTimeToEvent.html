@@ -113,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">April 11, 2025</h4>
+            <h4 data-toc-skip class="date">April 17, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseTimeToEvent.Rmd</code></div>
@@ -191,16 +191,16 @@ are specified.<br>– If <code>SurvMethod = 3</code>: Defaults to 0.</td>
 <td>Survival parameters dependent on <code>SurvMethod</code>:<br>– If
 <code>SurvMethod = 1</code>: Specifies hazard rates per arm per period.
 Size: <code>NumPrd</code> rows
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumArm</code> columns, where <code>SurvParam[i, j]</code>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumArm</code> columns, where <code>SurvParam[i, j]</code>
 represents the hazard rate for the <code>jth</code> arm in the
 <code>ith</code> period.<br>– If <code>SurvMethod = 2</code>: Specifies
 cumulative % survival rates per arm per period. Size:
 <code>NumPrd</code> rows
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumArm</code> columns, where <code>SurvParam[i, j]</code>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumArm</code> columns, where <code>SurvParam[i, j]</code>
 represents the cumulative % survival for the <code>jth</code> arm in the
 <code>ith</code> period.<br>– If <code>SurvMethod = 3</code>: Contains
 median survival times for each arm. Size: 1 row
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
 2 columns, where column 1 is control and column 2 is experimental.</td>
 </tr>
 <tr class="even">
