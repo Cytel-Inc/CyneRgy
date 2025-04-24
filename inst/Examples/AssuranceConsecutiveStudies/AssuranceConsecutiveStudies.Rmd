@@ -38,13 +38,13 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 # Example 1 - Fixed Sample Design with a Mixture of Normal Distributions
 
-This example considers a fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm. It demonstrates how to customize the **Analysis** endpoint to compute the probability of success, and the **Response (Patient Simulation)** endpoint to simulate a mixture of normal distributions.
+This example considers a fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm. It demonstrates how to customize the **Analysis** element of East Horizon's simulation to compute the probability of success, and the **Response (Patient Simulation)** element of East Horizon's simulation to simulate a mixture of normal distributions.
 
-By integrating an R function into the Analysis endpoint, users can evaluate the frequentist operating characteristics of the Bayesian design in East Horizon. Additionally, by modifying the Response endpoint, the simulation will incorporate Bayesian assurance. Specifically, an R function first samples from the assurance prior, then generates the patient data. The resulting power from this simulation reflects the Bayesian assurance, assuming the two-component prior.
+By integrating an R function into the Analysis integration point, users can evaluate the frequentist operating characteristics of the Bayesian design in East Horizon. Additionally, by modifying the Response integration point, the simulation will incorporate Bayesian assurance. Specifically, an R function first samples from the assurance prior, then generates the patient data. The resulting power from this simulation reflects the Bayesian assurance, assuming the two-component prior.
 
 Often, it is important to examine the posterior distributions of both the observed and true treatment differences following a Go decision. These posterior distributions provide valuable insights for planning subsequent study phases and assessing potential risks. The process of obtaining these posterior distributions is detailed in the next example, and their application to Phase 2 and Phase 3 studies is explored in later sections.
 
-## Analysis Endpoint
+## Analysis Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
@@ -95,7 +95,7 @@ Refer to the table below for the definitions and values of the user-defined para
 |**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
 |**dPU**|Go threshold (posterior probability cutoff).|0.8|
 
-## Response (Patient Simulation) Endpoint
+## Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
@@ -215,26 +215,57 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
 
 
 # Example 2
-## Study Design
 
-Same study design as previous example, however, this design includes an interim analysis to check for futility when 50% of the patients have their outcome observed.  The futility rule is based on a Bayesian predictive probability of a No-Go at the end of the study.   That is, at the interim analysis if it is likely that the study will make a No-Go decision at the final analysis, then the study is stopped early for futility. 
+## Introduction
 
-Denote the data at the interim analysis by $X_1$ and data for patients enrolled after the IA by $X_2$. If the predictive probability of a No-Go at the final analysis is greater than $PU_{Futility} = 90$% then the trial is stopped for futility. Specifically, if $Pr( \text{End of Study No-Go} | X_1 ) > PU_{Futility} = 90\%$ then the trial is stopped for futility. The prediction formula becomes:
+This example follows the same structure and uses the same code as Example 1 but introduces an interim analysis (IA) for futility assessment when outcomes are observed for 50% of the enrolled patients. The futility decision is based on the Bayesian predictive probability of a No-Go decision at the end of the trial. Specifically, if the predictive probability suggests that a No-Go is likely at the final analysis, the trial is stopped early for futility.
 
-$$
-Pr( \text{End of Study No-Go} | X_1 ) = Pr[ \{ Pr( \mu_E > \mu_S + MAV | X_1, X_2 ) > PU \} | X_1  ] > PU_{Futility}
-$$
+Let $X_1$ represent the data available at the interim analysis and $X_2$ the data for patients enrolled thereafter. If the predictive probability of a No-Go decision at the end of the study, given $X_1$, exceeds a pre-specified threshold $PU_{\text{Futility}} = 90%$, the trial is stopped. Formally, the stopping rule is:
 
-## R Integration
+$$\Pr( \text{No-Go at end of study} \mid X_1 ) > PU_{\text{Futility}} = 90\%$$
 
-In order to evaluate the design above, one can develop an R function for analysis that can be called from East during simulation.  By replacing only the analysis function with an R function, one can obtain the frequentist operating characteristics of the Bayesian design using East that includes the interim analysis and futility check based on a Bayesian predictive probability.  In addition, by replacing how the patient data is simulated one can obtain the Bayesian assurance.  Specifically, in the simulation when the patient data is simulated an R function will first sample the assurance prior then sample the patient data.   The resulting power of this simulation will be the Bayesian assurance assuming the 2 component prior given in Example 1 and including the futility check.  
-  
+This can be expressed as:
 
-### Required R Functions
+$$\Pr\left( \left\{ \Pr( \mu_E > \mu_S + MAV \mid X_1, X_2 ) > PU \right\} \Big| X_1 \right) > PU_{\text{Futility}}$$
 
-Same as example 1, just need to provide the $PU_{Futility}$ parameter.  The same R code function is used for Example 1 and 2.   The only difference between this example and Example 1 is the addition of the dPUFutility and the interim analysis.   
+## Analysis Integration Point
 
-![Input for test statistitic input](Example2TestStatisticInput.jpg)
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div>
+
+The function for the Analysis Integration Point is the same as in Example 1, with the addition of the *dPUFutility* variable to incorporate the interim analysis. *dPUFutility* is a user-defined threshold that specifies the minimum predictive probability of a No-Go decision required to stop the trial early for futility at the interim analysis. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
+|**dPU**|Go threshold (posterior probability cutoff).|0.8|
+|**dPUFutility**|Threshold to stop the trial early for futility.|0.9|
+
+## Response (Patient Simulation) Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
+</div>
+
+The function for the Response Integration Point is the same as in Example 1. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Weight of prior component 1.|0.25|
+|**dWeight2**|Weight of prior component 2.|0.75|
+|**dMean1**|Mean of prior component 1.|0|
+|**dMean2**|Mean of prior component 2.|0.7|
+|**dSD1**|Standard deviation of prior component 1.|0.05|
+|**dSD2**|Standard deviation of prior component 2.|0.3|
+|**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
+|**dSDCtrl**|Standard deviation for control arm.|1.9|
+|**dSDExp**|Standard deviation for experimental arm.|1.9|
 
 ## Results
 
@@ -263,9 +294,6 @@ dProbOfEndOfStudyStop <- mean( ifelse( dfResult$BdryStopCode==3 & dfResult$LookI
 # Probability of interim futility
 dProbOfFutilityAtInterim <- mean( ifelse( dfResult$BdryStopCode==3 & dfResult$LookIndex ==1, 1, 0) )
 
-
-
-
 dfSuccess <- dfResult[ dfResult$BdryStopCode==2, ]  # Get just the successful trial
 
 # Probability of Go Conditional on not stopping for futility IA
@@ -278,33 +306,27 @@ dProbOfNoGoCondOnNotStopping <-mean( ifelse( dfEndOfStudy$BdryStopCode==3,1,0) )
 
 The results of the design are as follows:
 
-   * The probability of an end of study Go is: `r dfProbEndOfStudyGo`
-   * The probability of an end of study No-Go (Stop) is: `r dProbOfEndOfStudyStop`
-   * The probability of futility at the interim: `r dProbOfFutilityAtInterim`
-   * The probability of a Go conditional on not stopping at the interim: `r dProbOfGoCondOnNotStopping`
-   * The probability of a No-Go conditional on not stopping at the interim: `r dProbOfNoGoCondOnNotStopping`
-
+- The probability of an end of study Go is: `r dfProbEndOfStudyGo`
+- The probability of an end of study No-Go (Stop) is: `r dProbOfEndOfStudyStop`
+- The probability of futility at the interim: `r dProbOfFutilityAtInterim`
+- The probability of a Go conditional on not stopping at the interim: `r dProbOfGoCondOnNotStopping`
+- The probability of a No-Go conditional on not stopping at the interim: `r dProbOfNoGoCondOnNotStopping`
 
 ```{r  echo=FALSE,  warning=FALSE }
-
 
 dfSuccess <- dfEastResults[ dfEastResults$BdryStopCode==2 & dfEastResults$LookIndex ==2, ]
 
 # Mean of true delta given a Go 
 dPostMeanTrueDelta <- mean( dfSuccess$dTrueDelta )
-
-
 ```
 
 The posterior mean of the true delta, $\mu_E-\mu_S$, given a Go decision is: `r round( dPostMeanTrueDelta, 3)`
-
 
 The summary of the true delta given a Go decision is: 
 
 ```{r echo=FALSE}
 # Summary of true delta given a Go
 round( summary( dfSuccess$dTrueDelta ), 3)
-
 ```
 
 The scaled posterior distribution of the true delta given a Go decision is:
@@ -328,7 +350,6 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
             axis.line = element_line(color = "black")  # Add black axis line
         ) 
 ```
-
 
 
 # Example 3

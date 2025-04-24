@@ -41,7 +41,7 @@ library(ggplot2)
 gPlot <- ggplot(dfPatientData, aes(x=PatientOutcome, fill=factor(TreatmentID))) +
         geom_histogram(binwidth=1, alpha=0.5, position="identity") +
         labs(x="Patient Outcome", y="Count", fill="Treatment ID") +
-        theme_minimal() +
+        theme_bw() +
         facet_grid(~factor(TreatmentID), scales = "free_y") +
         ggtitle("Histogram of Patient Outcomes by Treatment")
 

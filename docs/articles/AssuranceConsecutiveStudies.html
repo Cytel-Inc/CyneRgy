@@ -112,7 +112,7 @@
                         <h4 data-toc-skip class="author">J. Kyle Wathen
 and Laurent Spiess</h4>
             
-            <h4 data-toc-skip class="date">April 17, 2025</h4>
+            <h4 data-toc-skip class="date">April 24, 2025</h4>
       
 
       <div class="d-none name"><code>AssuranceConsecutiveStudies.Rmd</code></div>
@@ -176,13 +176,14 @@ Distributions<a class="anchor" aria-label="anchor" href="#example-1---fixed-samp
 distributed outcomes
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>,
 with 80 patients per treatment arm. It demonstrates how to customize the
-<strong>Analysis</strong> endpoint to compute the probability of
-success, and the <strong>Response (Patient Simulation)</strong> endpoint
-to simulate a mixture of normal distributions.</p>
-<p>By integrating an R function into the Analysis endpoint, users can
-evaluate the frequentist operating characteristics of the Bayesian
-design in East Horizon. Additionally, by modifying the Response
-endpoint, the simulation will incorporate Bayesian assurance.
+<strong>Analysis</strong> element of East Horizon’s simulation to
+compute the probability of success, and the <strong>Response (Patient
+Simulation)</strong> element of East Horizon’s simulation to simulate a
+mixture of normal distributions.</p>
+<p>By integrating an R function into the Analysis integration point,
+users can evaluate the frequentist operating characteristics of the
+Bayesian design in East Horizon. Additionally, by modifying the Response
+integration point, the simulation will incorporate Bayesian assurance.
 Specifically, an R function first samples from the assurance prior, then
 generates the patient data. The resulting power from this simulation
 reflects the Bayesian assurance, assuming the two-component prior.</p>
@@ -194,7 +195,7 @@ obtaining these posterior distributions is detailed in the next example,
 and their application to Phase 2 and Phase 3 studies is explored in
 later sections.</p>
 <div class="section level3">
-<h3 id="analysis-endpoint">Analysis Endpoint<a class="anchor" aria-label="anchor" href="#analysis-endpoint"></a>
+<h3 id="analysis-integration-point">Analysis Integration Point<a class="anchor" aria-label="anchor" href="#analysis-integration-point"></a>
 </h3>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
@@ -302,7 +303,7 @@ user-defined parameters used in this example.</p>
 </table>
 </div>
 <div class="section level3">
-<h3 id="response-patient-simulation-endpoint">Response (Patient Simulation) Endpoint<a class="anchor" aria-label="anchor" href="#response-patient-simulation-endpoint"></a>
+<h3 id="response-patient-simulation-integration-point">Response (Patient Simulation) Integration Point<a class="anchor" aria-label="anchor" href="#response-patient-simulation-integration-point"></a>
 </h3>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
@@ -404,57 +405,171 @@ user-defined parameters used in this example.</p>
 <h2 id="example-2">Example 2<a class="anchor" aria-label="anchor" href="#example-2"></a>
 </h2>
 <div class="section level3">
-<h3 id="study-design">Study Design<a class="anchor" aria-label="anchor" href="#study-design"></a>
+<h3 id="introduction-1">Introduction<a class="anchor" aria-label="anchor" href="#introduction-1"></a>
 </h3>
-<p>Same study design as previous example, however, this design includes
-an interim analysis to check for futility when 50% of the patients have
-their outcome observed. The futility rule is based on a Bayesian
-predictive probability of a No-Go at the end of the study. That is, at
-the interim analysis if it is likely that the study will make a No-Go
-decision at the final analysis, then the study is stopped early for
-futility.</p>
-<p>Denote the data at the interim analysis by
+<p>This example follows the same structure as Example 1 but introduces
+an interim analysis (IA) for futility assessment when outcomes are
+observed for 50% of the enrolled patients. The futility decision is
+based on the Bayesian predictive probability of a No-Go decision at the
+end of the trial. Specifically, if the predictive probability suggests
+that a No-Go is likely at the final analysis, the trial is stopped early
+for futility.</p>
+<p>Let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mn>1</mn></msub><annotation encoding="application/x-tex">X_1</annotation></semantics></math>
-and data for patients enrolled after the IA by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mn>2</mn></msub><annotation encoding="application/x-tex">X_2</annotation></semantics></math>.
-If the predictive probability of a No-Go at the final analysis is
-greater than
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><msub><mi>U</mi><mrow><mi>F</mi><mi>u</mi><mi>t</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></msub><mo>=</mo><mn>90</mn></mrow><annotation encoding="application/x-tex">PU_{Futility} = 90</annotation></semantics></math>%
-then the trial is stopped for futility. Specifically, if
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">End of Study No-Go</mtext><mo stretchy="false" form="prefix">|</mo><msub><mi>X</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>&gt;</mo><mi>P</mi><msub><mi>U</mi><mrow><mi>F</mi><mi>u</mi><mi>t</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></msub><mo>=</mo><mn>90</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">Pr( \text{End of Study No-Go} | X_1 ) &gt; PU_{Futility} = 90\%</annotation></semantics></math>
-then the trial is stopped for futility. The prediction formula
-becomes:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">End of Study No-Go</mtext><mo stretchy="false" form="prefix">|</mo><msub><mi>X</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>P</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">[</mo><mo stretchy="false" form="prefix">{</mo><mi>P</mi><mi>r</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mi>E</mi></msub><mo>&gt;</mo><msub><mi>μ</mi><mi>S</mi></msub><mo>+</mo><mi>M</mi><mi>A</mi><mi>V</mi><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mi>P</mi><mi>U</mi><mo stretchy="false" form="postfix">}</mo><mo stretchy="true" form="postfix">|</mo></mrow><msub><mi>X</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">]</mo></mrow><mo>&gt;</mo><mi>P</mi><msub><mi>U</mi><mrow><mi>F</mi><mi>u</mi><mi>t</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
-Pr( \text{End of Study No-Go} | X_1 ) = Pr[ \{ Pr( \mu_E &gt; \mu_S + MAV | X_1, X_2 ) &gt; PU \} | X_1  ] &gt; PU_{Futility}
-</annotation></semantics></math></p>
+represent the data available at the interim analysis and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mn>2</mn></msub><annotation encoding="application/x-tex">X_2</annotation></semantics></math>
+the data for patients enrolled thereafter. If the predictive probability
+of a No-Go decision at the end of the study, given
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mn>1</mn></msub><annotation encoding="application/x-tex">X_1</annotation></semantics></math>,
+exceeds a pre-specified threshold
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><msub><mi>U</mi><mtext mathvariant="normal">Futility</mtext></msub><mo>=</mo><mn>90</mn></mrow><annotation encoding="application/x-tex">PU_{\text{Futility}} = 90%</annotation></semantics></math>,
+the trial is stopped. Formally, the stopping rule is:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">No-Go at end of study</mtext><mo>∣</mo><msub><mi>X</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>&gt;</mo><mi>P</mi><msub><mi>U</mi><mtext mathvariant="normal">Futility</mtext></msub><mo>=</mo><mn>90</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">\Pr( \text{No-Go at end of study} \mid X_1 ) &gt; PU_{\text{Futility}} = 90\%</annotation></semantics></math></p>
+<p>This can be expressed as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mo stretchy="true" form="prefix">{</mo><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mi>E</mi></msub><mo>&gt;</mo><msub><mi>μ</mi><mi>S</mi></msub><mo>+</mo><mi>M</mi><mi>A</mi><mi>V</mi><mo>∣</mo><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>&gt;</mo><mi>P</mi><mi>U</mi><mo stretchy="true" form="postfix">}</mo></mrow><mo minsize="1.8" maxsize="1.8" stretchy="false" form="prefix">|</mo><msub><mi>X</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>&gt;</mo><mi>P</mi><msub><mi>U</mi><mtext mathvariant="normal">Futility</mtext></msub></mrow><annotation encoding="application/x-tex">\Pr\left( \left\{ \Pr( \mu_E &gt; \mu_S + MAV \mid X_1, X_2 ) &gt; PU \right\} \Big| X_1 \right) &gt; PU_{\text{Futility}}</annotation></semantics></math></p>
 </div>
 <div class="section level3">
-<h3 id="r-integration">R Integration<a class="anchor" aria-label="anchor" href="#r-integration"></a>
+<h3 id="analysis-integration-point-1">Analysis Integration Point<a class="anchor" aria-label="anchor" href="#analysis-integration-point-1"></a>
 </h3>
-<p>In order to evaluate the design above, one can develop an R function
-for analysis that can be called from East during simulation. By
-replacing only the analysis function with an R function, one can obtain
-the frequentist operating characteristics of the Bayesian design using
-East that includes the interim analysis and futility check based on a
-Bayesian predictive probability. In addition, by replacing how the
-patient data is simulated one can obtain the Bayesian assurance.
-Specifically, in the simulation when the patient data is simulated an R
-function will first sample the assurance prior then sample the patient
-data. The resulting power of this simulation will be the Bayesian
-assurance assuming the 2 component prior given in Example 1 and
-including the futility check.</p>
-<div class="section level4">
-<h4 id="required-r-functions">Required R Functions<a class="anchor" aria-label="anchor" href="#required-r-functions"></a>
-</h4>
-<p>Same as example 1, just need to provide the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><msub><mi>U</mi><mrow><mi>F</mi><mi>u</mi><mi>t</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></msub></mrow><annotation encoding="application/x-tex">PU_{Futility}</annotation></semantics></math>
-parameter. The same R code function is used for Example 1 and 2. The
-only difference between this example and Example 1 is the addition of
-the dPUFutility and the interim analysis.</p>
-<div class="float">
-<img src="Example2TestStatisticInput.jpg" alt="Input for test statistitic input"><div class="figcaption">Input for test statistitic input</div>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This endpoint is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="external-link alert-link">AnalyzeUsingBayesianNormals.R</a>
+</p>
 </div>
+<p>The function for the Analysis Integration Point is the same as in
+Example 1, with the addition of the <em>dPUFutility</em> variable to
+incorporate the interim analysis. <em>dPUFutility</em> is a user-defined
+threshold that specifies the minimum predictive probability of a No-Go
+decision required to stop the trial early for futility at the interim
+analysis. Refer to the table below for the definitions and values of the
+user-defined parameters used in this example.</p>
+<table class="table">
+<colgroup>
+<col width="27%">
+<col width="54%">
+<col width="18%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dPriorMeanCtrl</strong></td>
+<td>Prior mean for control arm.</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><strong>dPriorStdDevCtrl</strong></td>
+<td>Prior standard deviation for control arm.</td>
+<td>1000</td>
+</tr>
+<tr class="odd">
+<td><strong>dPriorMeanExp</strong></td>
+<td>Prior mean for experimental arm.</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><strong>dPriorStdDevExp</strong></td>
+<td>Prior standard deviation for experimental arm.</td>
+<td>1000</td>
+</tr>
+<tr class="odd">
+<td><strong>dSigma</strong></td>
+<td>Known sampling standard deviation.</td>
+<td>1.9</td>
+</tr>
+<tr class="even">
+<td><strong>dMAV</strong></td>
+<td>Minimum Acceptable Value (clinically meaningful difference).</td>
+<td>0.8</td>
+</tr>
+<tr class="odd">
+<td><strong>dPU</strong></td>
+<td>Go threshold (posterior probability cutoff).</td>
+<td>0.8</td>
+</tr>
+<tr class="even">
+<td><strong>dPUFutility</strong></td>
+<td>Threshold to stop the trial early for futility.</td>
+<td>0.9</td>
+</tr>
+</tbody>
+</table>
 </div>
+<div class="section level3">
+<h3 id="response-patient-simulation-integration-point-1">Response (Patient Simulation) Integration Point<a class="anchor" aria-label="anchor" href="#response-patient-simulation-integration-point-1"></a>
+</h3>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This endpoint is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link alert-link">SimulatePatientOutcomeNormalAssurance.R</a>
+</p>
+</div>
+<p>The function for the Response Integration Point is the same as in
+Example 1. Refer to the table below for the definitions and values of
+the user-defined parameters used in this example.</p>
+<table class="table">
+<colgroup>
+<col width="20%">
+<col width="60%">
+<col width="20%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dWeight1</strong></td>
+<td>Weight of prior component 1.</td>
+<td>0.25</td>
+</tr>
+<tr class="even">
+<td><strong>dWeight2</strong></td>
+<td>Weight of prior component 2.</td>
+<td>0.75</td>
+</tr>
+<tr class="odd">
+<td><strong>dMean1</strong></td>
+<td>Mean of prior component 1.</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><strong>dMean2</strong></td>
+<td>Mean of prior component 2.</td>
+<td>0.7</td>
+</tr>
+<tr class="odd">
+<td><strong>dSD1</strong></td>
+<td>Standard deviation of prior component 1.</td>
+<td>0.05</td>
+</tr>
+<tr class="even">
+<td><strong>dSD2</strong></td>
+<td>Standard deviation of prior component 2.</td>
+<td>0.3</td>
+</tr>
+<tr class="odd">
+<td><strong>dMeanCtrl</strong></td>
+<td>Mean of control arm (experimental arm will be sampled).</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><strong>dSDCtrl</strong></td>
+<td>Standard deviation for control arm.</td>
+<td>1.9</td>
+</tr>
+<tr class="odd">
+<td><strong>dSDExp</strong></td>
+<td>Standard deviation for experimental arm.</td>
+<td>1.9</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
 <h3 id="results-1">Results<a class="anchor" aria-label="anchor" href="#results-1"></a>
@@ -484,7 +599,7 @@ decision is:</p>
 <h2 id="example-3">Example 3<a class="anchor" aria-label="anchor" href="#example-3"></a>
 </h2>
 <div class="section level3">
-<h3 id="study-design-1">Study Design<a class="anchor" aria-label="anchor" href="#study-design-1"></a>
+<h3 id="study-design">Study Design<a class="anchor" aria-label="anchor" href="#study-design"></a>
 </h3>
 <p>This study is a two-arm fixed sample size design with a time-to-event
 endpoint. Total sample size is 600 patients with 300 patients per arm.
@@ -507,10 +622,10 @@ rescaled between -0.4 and 0.</li>
 <p><img src="AssuranceConsecutiveStudies_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="r-integration-1">R Integration<a class="anchor" aria-label="anchor" href="#r-integration-1"></a>
+<h3 id="r-integration">R Integration<a class="anchor" aria-label="anchor" href="#r-integration"></a>
 </h3>
 <div class="section level4">
-<h4 id="required-r-functions-1">Required R Functions<a class="anchor" aria-label="anchor" href="#required-r-functions-1"></a>
+<h4 id="required-r-functions">Required R Functions<a class="anchor" aria-label="anchor" href="#required-r-functions"></a>
 </h4>
 <p>This are 3 required R files and functions needed to evaluate this
 design. The first file is used to initialize the R environment and load
