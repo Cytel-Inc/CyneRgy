@@ -38,62 +38,11 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 # Example 1 - Fixed Sample Design with a Mixture of Normal Distributions
 
-This example considers a fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm. It demonstrates how to customize the **Analysis** element of East Horizon's simulation to compute the probability of success, and the **Response (Patient Simulation)** element of East Horizon's simulation to simulate a mixture of normal distributions.
+This example considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm. It demonstrates how to customize the **Analysis** element of East Horizon's simulation to compute the probability of success, and the **Response (Patient Simulation)** element of East Horizon's simulation to simulate a mixture of normal distributions.
 
 By integrating an R function into the Analysis integration point, users can evaluate the frequentist operating characteristics of the Bayesian design in East Horizon. Additionally, by modifying the Response integration point, the simulation will incorporate Bayesian assurance. Specifically, an R function first samples from the assurance prior, then generates the patient data. The resulting power from this simulation reflects the Bayesian assurance, assuming the two-component prior.
 
 Often, it is important to examine the posterior distributions of both the observed and true treatment differences following a Go decision. These posterior distributions provide valuable insights for planning subsequent study phases and assessing potential risks. The process of obtaining these posterior distributions is detailed in the next example, and their application to Phase 2 and Phase 3 studies is explored in later sections.
-
-## Analysis Integration Point
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
-</div>
-
-This function evaluates the posterior probability that the experimental treatment arm is better than the control arm by more than a clinically meaningful threshold, and returns a Go/No-Go decision based on a cutoff ($P_U$).
-
-For patients receiving treatment $j \in \{\text{S}, \text{E}\}$ (S = standard/control, E = experimental), we assume the outcomes $Y \sim \mathcal{N}(\mu_j, \sigma^2)$, where $\mu_j$ is an unknown mean and $\sigma^2$ is a known, fixed variance.
-
-We assume *a priori* that:
-
-$$
-\mu_j \sim \mathcal{N}(\theta_j, \tau_j^2 = 1000^2), \quad j \in \{\text{S}, \text{E}\}
-$$
-
-After observing $n$ patients on treatment $j$, the posterior distribution of $\mu_j$ becomes:
-
-$$
-\mu_j \mid \bar{y} \sim \mathcal{N}(\theta_j^*, \tau_j^{2*})
-$$
-where:
-
-$$
-\theta_j^* = \frac{\frac{\theta_j}{\tau_j^2} + \frac{n \bar{y}}{\sigma^2}}{\frac{1}{\tau_j^2} + \frac{n}{\sigma^2}}, \quad \text{and} \quad
-\frac{1}{\tau_j^{2*}} = \frac{1}{\tau_j^2} + \frac{n}{\sigma^2}
-$$
-
-At the conclusion of the study, the posterior probability that the experimental arm exceeds the control arm by more than the minimum acceptable value (MAV) is calculated as:
-
-$$
-\rho = \Pr(\mu_E > \mu_S + \text{MAV} \mid \text{data})
-$$
-
-The decision rule is as follows:
-
-- If $\rho > P_U \rightarrow$ Go.
-- If $\rho \leq P_U \rightarrow$ No-Go.
-
-Refer to the table below for the definitions and values of the user-defined parameters used in this example.
-
-|**User parameter**|**Definition**|**Value**|
-|---|------|--|
-|**dPriorMeanCtrl**|Prior mean for control arm.|0|
-|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
-|**dPriorMeanExp**|Prior mean for experimental arm.|0|
-|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
-|**dSigma**|Known sampling standard deviation.|1.9|
-|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
-|**dPU**|Go threshold (posterior probability cutoff).|0.8|
 
 ## Response (Patient Simulation) Integration Point
 
@@ -101,7 +50,7 @@ Refer to the table below for the definitions and values of the user-defined para
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
 </div>
 
-This function simulates patient-level outcomes within a Bayesian assurance framework, using a two-component mixture prior to reflect uncertainty about the true treatment effect. It allows for assessing the probability of trial success (assurance) under uncertainty about the true treatment effect.
+This function simulates patient-level outcomes within a Bayesian assurance framework, using a two-component mixture prior to reflect uncertainty about the true treatment effect. It allows for assessing the probability of trial success (assurance) under uncertainty about the true treatment effect. Information generated from this simulation will be used later for the [Analysis Integration Point](#analysis-integration-point).
 
 In this example, the true treatment effect ($\mu_E - \mu_S$) is sampled from a mixture of two normal priors:
 
@@ -157,6 +106,57 @@ Refer to the table below for the definitions and values of the user-defined para
 |**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
 |**dSDCtrl**|Standard deviation for control arm.|1.9|
 |**dSDExp**|Standard deviation for experimental arm.|1.9|
+
+## Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div> 
+
+This function evaluates the posterior probability that the experimental treatment arm is better than the control arm by more than a clinically meaningful threshold, and returns a Go/No-Go decision based on a cutoff ($P_U$). It uses information from the simulation that is generated by the [Response](#response-patient-simulation-integration-point) element of East Horizon's simulation, explained above.
+
+For patients receiving treatment $j \in \{\text{S}, \text{E}\}$ (S = standard/control, E = experimental), we assume the outcomes $Y \sim \mathcal{N}(\mu_j, \sigma^2)$, where $\mu_j$ is an unknown mean and $\sigma^2$ is a known, fixed variance.
+
+We assume *a priori* that:
+
+$$
+\mu_j \sim \mathcal{N}(\theta_j, \tau_j^2 = 1000^2), \quad j \in \{\text{S}, \text{E}\}
+$$
+
+After observing $n$ patients on treatment $j$, the posterior distribution of $\mu_j$ becomes:
+
+$$
+\mu_j \mid \bar{y} \sim \mathcal{N}(\theta_j^*, \tau_j^{2*})
+$$
+where:
+
+$$
+\theta_j^* = \frac{\frac{\theta_j}{\tau_j^2} + \frac{n \bar{y}}{\sigma^2}}{\frac{1}{\tau_j^2} + \frac{n}{\sigma^2}}, \quad \text{and} \quad
+\frac{1}{\tau_j^{2*}} = \frac{1}{\tau_j^2} + \frac{n}{\sigma^2}
+$$
+
+At the conclusion of the study, the posterior probability that the experimental arm exceeds the control arm by more than the minimum acceptable value (MAV) is calculated as:
+
+$$
+\rho = \Pr(\mu_E > \mu_S + \text{MAV} \mid \text{data})
+$$
+
+The decision rule is as follows:
+
+- If $\rho > P_U \rightarrow$ Go.
+- If $\rho \leq P_U \rightarrow$ No-Go.
+
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
+|**dPU**|Go threshold (posterior probability cutoff).|0.8|
 
 ## Results
 
@@ -214,38 +214,11 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
 ```
 
 
-# Example 2
+# Example 2 - Group Sequential Design with a Mixture of Normal Distributions
 
 ## Introduction
 
 This example follows the same structure and uses the same code as Example 1 but introduces an interim analysis (IA) for futility assessment when outcomes are observed for 50% of the enrolled patients. The futility decision is based on the Bayesian predictive probability of a No-Go decision at the end of the trial. Specifically, if the predictive probability suggests that a No-Go is likely at the final analysis, the trial is stopped early for futility.
-
-Let $X_1$ represent the data available at the interim analysis and $X_2$ the data for patients enrolled thereafter. If the predictive probability of a No-Go decision at the end of the study, given $X_1$, exceeds a pre-specified threshold $PU_{\text{Futility}} = 90%$, the trial is stopped. Formally, the stopping rule is:
-
-$$\Pr( \text{No-Go at end of study} \mid X_1 ) > PU_{\text{Futility}} = 90\%$$
-
-This can be expressed as:
-
-$$\Pr\left( \left\{ \Pr( \mu_E > \mu_S + MAV \mid X_1, X_2 ) > PU \right\} \Big| X_1 \right) > PU_{\text{Futility}}$$
-
-## Analysis Integration Point
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
-</div>
-
-The function for the Analysis Integration Point is the same as in Example 1, with the addition of the *dPUFutility* variable to incorporate the interim analysis. *dPUFutility* is a user-defined threshold that specifies the minimum predictive probability of a No-Go decision required to stop the trial early for futility at the interim analysis. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
-
-|**User parameter**|**Definition**|**Value**|
-|---|------|--|
-|**dPriorMeanCtrl**|Prior mean for control arm.|0|
-|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
-|**dPriorMeanExp**|Prior mean for experimental arm.|0|
-|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
-|**dSigma**|Known sampling standard deviation.|1.9|
-|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
-|**dPU**|Go threshold (posterior probability cutoff).|0.8|
-|**dPUFutility**|Threshold to stop the trial early for futility.|0.9|
 
 ## Response (Patient Simulation) Integration Point
 
@@ -253,7 +226,7 @@ The function for the Analysis Integration Point is the same as in Example 1, wit
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
 </div>
 
-The function for the Response Integration Point is the same as in Example 1. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+The function for the Response Integration Point is the same as in [Example 1](#response-patient-simulation-integration-point). Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
 |**User parameter**|**Definition**|**Value**|
 |--|------|--|
@@ -266,6 +239,35 @@ The function for the Response Integration Point is the same as in Example 1. Ref
 |**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
 |**dSDCtrl**|Standard deviation for control arm.|1.9|
 |**dSDExp**|Standard deviation for experimental arm.|1.9|
+
+## Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div>
+
+The function for the Analysis Integration Point is the same as in [Example 1](#analysis-integration-point), with the addition of the *dPUFutility* variable to incorporate the interim analysis. *dPUFutility* is a user-defined threshold that specifies the minimum predictive probability of a No-Go decision required to stop the trial early for futility at the interim analysis.
+
+Let $X_1$ represent the data available at the interim analysis and $X_2$ the data for patients enrolled thereafter. If the predictive probability of a No-Go decision at the end of the study, given $X_1$, exceeds a pre-specified threshold $PU_{\text{Futility}} = 90\%$, the trial is stopped. Formally, the stopping rule is:
+
+$$\Pr( \text{No-Go at end of study} \mid X_1 ) > PU_{\text{Futility}} = 90\%$$
+
+This can be expressed as:
+
+$$\Pr\left( \left\{ \Pr( \mu_E > \mu_S + MAV \mid X_1, X_2 ) > PU \right\} \Big| X_1 \right) > PU_{\text{Futility}}$$
+
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
+|**dPU**|Go threshold (posterior probability cutoff).|0.8|
+|**dPUFutility**|Threshold to stop the trial early for futility.|0.9|
 
 ## Results
 
@@ -352,17 +354,22 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
 ```
 
 
-# Example 3
-## Study Design
+# Example 3 - Fixed Sample Design With a Time-To-Event Outcome
 
-This study is a two-arm fixed sample size design with a time-to-event endpoint.   Total sample size is 600 patients with 300 patients per arm.  There is a single analysis when 50% of the patients have had their event observed.  A hazard ratio (HR) below 1 is considered to favor the experimental arm.   The analysis is assumed to be a cox proportional hazard model where a Go decision is made if the p-value $\leq$ 0.025.
+## Introduction
 
+This example considers a two-arm fixed sample design with a time-to-event endpoint, with 300 patients per arm. It demonstrates how to customize the **Analysis** element of East Horizon's simulation to perform the analysis using a Cox model, and the **Response (Patient Simulation)** element of East Horizon's simulation to simulate the true hazard ratio from the prior and then simulate the patient data using the sampled hazard ratio.
 
-For assurance, a bi-modal prior on the Log(HR) is used.   The components of the prior are:
+## Response (Patient Simulation) Integration Point
 
-  * Weight: 25% on $N( 0, 0.02 )$
-  * Weight: 75% on $Beta( 2, 2)$, rescaled between -0.4 and 0.
-  
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientSurvivalAssurance.R" class="alert-link">SimulatePatientSurvivalAssurance.R</a></p>
+</div>
+
+This function simulates patient-level outcomes within a Bayesian assurance framework. Information generated from this simulation will be used later for the [Analysis Integration Point](#analysis-integration-point-2). In this example, a bi-modal prior on the $\log(HR)$ is used. The components of the prior are:
+ 
+- 25% weight on $\mathcal{N}(0, 0.02)$.
+- 75% weight on $\mathcal{Beta}(2, 2)$, rescaled between -0.4 and 0.
 
 ```{r echo=FALSE,  warning=FALSE}
 
@@ -404,26 +411,31 @@ ggplot(dfDensity, aes(x = x, y = y)) +
     xlim(-0.4, 0.1)  # Set x-axis range from 0 to 1
 ```
 
-## R Integration
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
-### Required R Functions
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Probability of using the normal prior for log(HR).|0.25|
+|**dPriorMean**|Mean of the normal prior for log(HR).|0|
+|**dPriorSD**|Standard deviation of the normal prior for log(HR).|0.02|
+|**dAlpha**|Alpha parameter of the Beta prior for log(HR).|2|
+|**dBeta**|Beta parameter of the Beta prior for log(HR).|2|
+|**dUpper**|Upper bound for scaling the Beta prior.|0|
+|**dLower**|Lower bound for scaling the Beta prior.|-0.4|
+|**dMeanTTEControl**|Mean time-to-event for the control group.|12|
 
-This are 3 required R files and functions needed to evaluate this design.   The first file is used to initialize the R environment and load the survival package.   The second file is used to perform the analysis using a Cox model.  The third required file is used to first simulate the true HR from the prior and then simulate the patient data using the sampled HR.   
+## Analysis Integration Point
 
-The initialize function InitializeSurvival is found in the file [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/InitializeSurvival.R).   The function used for analysis is AnalyzeSurivalDataUsingCoxPH, is found in the file [R/AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeSurvivalDataUsingCoxPH.R)  The function used for simulating patient data is SimulatePatientOutcomeNormalAssurance and is found in the file [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R)
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeSurvivalDataUsingCoxPH.R" class="alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a></p>
+</div>
 
-### Integration with East
+A single analysis is conducted once 50% of patients have experienced the event of interest. Using the function in the file, the analysis employs a Cox proportional hazards model, with a hazard ratio (HR) less than 1 indicating a benefit in favor of the experimental arm. It uses information from the simulation that is generated by the [Response](#response-patient-simulation-integration-point-2) element of East Horizon's simulation, explained above. A Go decision is made if the resulting p-value is less than or equal to 0.025. Refer to the table below for the definitions of the user-defined parameters used in this example.
 
-The required user input for generating patient survival in East is provided below.  
-
-![Input for generate response](Example3GenerateResponseInput.jpg)
-
-### Integration with East Horizon Explore
-
-
-The required user input for generating patient survival in East Horizon Explore is provided below.  
-
-![Input for generate response](Example3GenerateResponseSolara.jpg)
+|**User parameter**|**Definition**|
+|---|------|
+|**bReturnLogTrueHazard**|If `True`, the function returns the natural logarithm of the true hazard ratio instead of its raw value.|
+|**bReturnNAForNoGoTrials**|If `True` and the trial does not meet the Go decision criterion, the function returns `NA` for the hazard ratio.|
 
 ## Results
 
@@ -436,14 +448,11 @@ The required user input for generating patient survival in East Horizon Explore 
 ######################################################################################################################## .
 
 dfEastResultsEx3 <- read_csv("EastOutput/Example3/Example3.csv")
-
 vGo       <- ifelse( dfEastResultsEx3$BdryStopCode ==2, 1, 0)
-
 dProbGo   <- mean( vGo )  # Pr( Go )
 
-
 ```
-The probability of a Go decision is `r round( dProbGo*100, 0)`% and the probability of a No-Go Decision is  is `r 100 - round( dProbGo*100, 0)`%.  The posterior distribution of the true Log( HR ) given a Go decision is:
+The probability of a Go decision is `r round( dProbGo*100, 0)`% and the probability of a No-Go Decision is  is `r 100 - round( dProbGo*100, 0)`%. The posterior distribution of the true $\log( HR )$ given a Go decision is:
 
 ```{r echo = FALSE, warning = FALSE}
 
@@ -507,6 +516,13 @@ ggplot(dfPostDensity, aes(x = x, y = y)) +
     xlim(-0.4, 0.1)  # Set x-axis range from 0 to 1
 
 ```
+
+
+
+
+
+
+
 
 
 

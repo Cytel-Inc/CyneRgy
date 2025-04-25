@@ -4,6 +4,7 @@
 #' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
 AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
+    library( survival )
     Error <- 0 
     # Example of saving parameters (EAST ONLY)
     # setwd( "C:\\AssuranceNormal\\ExampleArgumentsFromEast\\Example3")
