@@ -113,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin,
 Valeria A. G. Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">April 25, 2025</h4>
+            <h4 data-toc-skip class="date">April 28, 2025</h4>
       
 
       <div class="d-none name"><code>ProbabilitySuccessDualEndpointsPFSOS.Rmd</code></div>
@@ -464,7 +464,7 @@ tool to compute these required parameters.</p>
 <p style="margin-bottom:0">
 Enter your desired <strong>mean</strong> and <strong>variance</strong>
 to calculate the <strong>shape</strong> and <strong>rate</strong>
-parameters:
+parameters for the Gamma distribution:
 </p>
 <p><label for="mean">Mean:</label>
 <input type="number" id="mean" value="1" step="any"><br><label for="variance">Variance:</label>
@@ -1057,7 +1057,10 @@ control and treatment arm as well as a positive trend in overall
 survival (OS), i.e. the time to overall survival (OS) is longer in
 magnitude for the patients in the treatment arm compared to those in the
 control arm. Below is an example of the heatmap that could be generated
-by East Horizon following the simulation.</p>
+by East Horizon following the simulation. Each square represents the
+simulated probability of success for a trial, based on a specific
+combination of Response scenario (columns) and Analysis option
+(rows).</p>
 <p><img src="ProbabilitySuccessDualEndpointsPFSOS_files/Results-heatmap.png"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
