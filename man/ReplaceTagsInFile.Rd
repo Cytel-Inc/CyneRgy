@@ -2,27 +2,28 @@
 % Please edit documentation in R/ReplaceTagsInFile.R
 \name{ReplaceTagsInFile}
 \alias{ReplaceTagsInFile}
-\title{Replace tags in a file.}
+\title{Replace Tags in a File}
 \usage{
 ReplaceTagsInFile(strFileName, vTags, vReplace)
 }
 \arguments{
-\item{strFileName}{The name of the file to use as input.  In tags, defined by {{tags}}, will be replaced with the corresponding values.}
+\item{strFileName}{The name of the file to use as input. Tags, defined by {{tags}}, will be replaced with the corresponding values.}
 
-\item{vTags}{Vector of tag names, eg FUNCTION_NAME, VARIABLE_NAME that will be replaced with the values in vReplace}
+\item{vTags}{A vector of tag names, e.g., FUNCTION_NAME, VARIABLE_NAME, that will be replaced with the values in vReplace.}
 
-\item{vreplace}{Vector of values to replace the tags with.}
+\item{vReplace}{A vector of values to replace the tags with.}
 }
 \value{
-A TRUE/FALSE value if the functions was successful.
+A logical value (TRUE/FALSE) indicating whether the function was successful.
 }
 \description{
-{ Description: This function is used to replace {{tags}} in template files. }
+This function replaces {{tags}} in template files with corresponding values.
 }
 \examples{
- \dontrun{
-vTags    <- c("FUNCTION_NAME",  "CREATION_DATE")
+\dontrun{
+vTags    <- c("FUNCTION_NAME", "CREATION_DATE")
 vReplace <- c(strNewFunctionName, strToday)
 strFileName <- "MyTemplate.R" # A file that contains {{FUNCTION_NAME}} and {{CREATION_DATE}}
-ReplaceTagsInFile( strFileName, vTags, vReplace )}
+ReplaceTagsInFile(strFileName, vTags, vReplace)
+}
 }
