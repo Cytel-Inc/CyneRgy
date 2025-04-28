@@ -2,19 +2,20 @@
 % Please edit documentation in R/RunExample.R
 \name{RunExample}
 \alias{RunExample}
-\title{Run an example from CyneRgy.}
+\title{Launch Example from the CyneRgy Package}
 \usage{
 RunExample(strExample)
 }
 \description{
-{This function is used to open the examples included in this package.  A new instance of R Studio will launch and open the example. 
-  For a current list of example call
-  CyneRgy::RunExample() and you will get a list of the available examples.
-
-  This function opens the example in R Studio. 
-  }
+This function opens an example included in the CyneRgy package. A new instance of RStudio will launch and open the requested example.
+To obtain a current list of available examples, call \code{CyneRgy::RunExample()}, and it will display the list.
+}
+\note{
+The function requires RStudio to open the example projects automatically. If the RStudio API is unavailable, a manual process will be needed.
 }
 \examples{
-\dontrun{CyneRgy::RunExample( "TreatmentSelection" )
+\dontrun{
+CyneRgy::RunExample("TreatmentSelection")
 }
+
 }
