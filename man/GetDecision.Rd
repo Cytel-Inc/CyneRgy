@@ -2,44 +2,53 @@
 % Please edit documentation in R/GetDecision.R
 \name{GetDecision}
 \alias{GetDecision}
-\title{GetDecision}
+\title{Determine Decision Based on Decision String, Design and Look Information}
 \usage{
 GetDecision(strDecision, DesignParam, LookInfo)
 }
 \arguments{
-\item{strDecision}{is a  string with either "Efficacy", "Futility" or "Continue"}
+\item{strDecision}{A string indicating the desired decision: "Efficacy", "Futility", or "Continue".}
 
-\item{DesignParam}{This is the DesignParam sent from East Horizon Explore to the R integration for analysis.}
+\item{DesignParam}{A list containing design parameters sent from East Horizon Explore to the R integration for analysis.}
 
-\item{LookInfo}{The LookInfo parameter sent from East Horizon Explore to the R integration for analysis.}
+\item{LookInfo}{A list containing look information sent from East Horizon Explore to the R integration for analysis.}
 }
 \description{
-{ Description: This function takes a string for the desired decision, design and look info and return the correct decision value.  
-If LookInfo is not Null then looking at LookInfo$RejType can help determine the design type
-  LookInfo$RejType Codes:
-    Efficacy Only:
-      1 Sided Efficacy Upper = 0
-      1 Sided Efficacy Lower = 2
-    
-    Futility Only:
-      1 Sided Futility Upper = 1
-      1 Sided Futility Lower = 3
-    
-    Efficacy Futility:
-      1 Sided Efficacy Upper Futility Lower = 4 
-      1 Sided Efficacy Lower Futility Upper = 5
-    
-    Not in East Horizon Explore Yet:
-      2 Sided Efficacy Only = 6
-      2 Sided Futility Only = 7
-      2 Sided Efficacy Futility = 8
-      Equivalence = 9
-
-  Then using DesignParam$TailType
-      0: Left Tailed
-      1: Right Tailed
-
-
-
+This function takes a string indicating the desired decision ("Efficacy", "Futility", or "Continue"), design parameters, and look information, and returns the appropriate decision value.
+If \code{LookInfo} is not NULL, the function uses \code{LookInfo$RejType} to help determine the design type:
+\itemize{
+\item \strong{LookInfo$RejType Codes}:
+\itemize{
+\item \emph{Efficacy Only}:
+\itemize{
+\item 1-Sided Efficacy Upper = 0
+\item 1-Sided Efficacy Lower = 2
 }
+\item \emph{Futility Only}:
+\itemize{
+\item 1-Sided Futility Upper = 1
+\item 1-Sided Futility Lower = 3
+}
+\item \emph{Efficacy and Futility}:
+\itemize{
+\item 1-Sided Efficacy Upper & Futility Lower = 4
+\item 1-Sided Efficacy Lower & Futility Upper = 5
+}
+\item \emph{Additional Scenarios Not in East Horizon Explore}:
+\itemize{
+\item 2-Sided Efficacy Only = 6
+\item 2-Sided Futility Only = 7
+\item 2-Sided Efficacy & Futility = 8
+\item Equivalence = 9
+}
+}
+}
+
+The function also uses \code{DesignParam$TailType} to determine tail direction:
+\itemize{
+\item 0: Left-tailed
+\item 1: Right-tailed
+}
+
+Based on the design type and tail direction, the function evaluates the decision and returns the corresponding integer decision value. Errors are raised for invalid input combinations.
 }

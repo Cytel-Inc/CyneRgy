@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetDecisionString.R
 \name{GetDecisionString}
 \alias{GetDecisionString}
-\title{GetDecisionString}
+\title{Generate Decision String Based on Interim and Final Analysis Conditions}
 \usage{
 GetDecisionString(
   LookInfo,
@@ -15,42 +15,47 @@ GetDecisionString(
 )
 }
 \arguments{
-\item{LookInfo}{The LookInfo parameter sent from East Horizon Explore to the R integration for analysis.}
+\item{LookInfo}{List containing look information passed from East Horizon Explore to the R integration for analysis.}
 
-\item{nLookIndex}{is an integer indicating the current look. This is created by the user in the analysis code.}
+\item{nLookIndex}{Integer indicating the current look index, created by the user in the analysis code.}
 
-\item{nQtyOfLooks}{is an integer indicating the total number of looks in the study. This is created by the user in the analysis code.}
+\item{nQtyOfLooks}{Integer indicating the total number of looks in the study, created by the user in the analysis code.}
 
-\item{bIAEfficacyCondition}{is a condition that renders to a boolean. If available and applicable, this condition is checked to declare efficacy at an interim look.}
+\item{bIAEfficacyCondition}{Logical condition evaluated to determine interim efficacy at a look (defaults to \code{FALSE}).}
 
-\item{bIAfutilityCondition}{is a condition that renders to a boolean. If available and applicable, this condition is checked to declare futility at an interim look.}
+\item{bIAFutilityCondition}{Logical condition evaluated to determine interim futility at a look (defaults to \code{FALSE}).}
 
-\item{bFAefficacyCondition}{is a condition that renders to a boolean. If available and applicable, this condition is checked to declare efficacy at the final look.}
+\item{bFAEfficacyCondition}{Logical condition evaluated to determine final efficacy at the last look (defaults to \code{FALSE}).}
 
-\item{bFAfutilityCondition}{is a condition that renders to a boolean. If available and applicable, this condition is checked to declare futility at the final look.}
+\item{bFAFutilityCondition}{Logical condition evaluated to determine final futility at the last look (defaults to \code{FALSE}).}
 }
 \description{
-{ Description: This function takes look information and efficacy and futility conditions to be checked and returns the strDecision needed for the GetDecision function.  
-If LookInfo is not Null then looking at LookInfo$RejType can help determine the design type
-  LookInfo$RejType Codes:
-    Efficacy Only:
-      1 Sided Efficacy Upper = 0
-      1 Sided Efficacy Lower = 2
-    
-    Futility Only:
-      1 Sided Futility Upper = 1
-      1 Sided Futility Lower = 3
-    
-    Efficacy Futility:
-      1 Sided Efficacy Upper Futility Lower = 4 
-      1 Sided Efficacy Lower Futility Upper = 5
-    
-    Not in East Horizon Explore Yet:
-      2 Sided Efficacy Only = 6
-      2 Sided Futility Only = 7
-      2 Sided Efficacy Futility = 8
-      Equivalence = 9
+This function evaluates look information, efficacy conditions, and futility conditions to generate the decision string (\code{strDecision}) required for the \code{GetDecision} function.
+If \code{LookInfo} is not \code{NULL}, the \code{LookInfo$RejType} parameter can be used to determine the design type.
 
-
+\code{LookInfo$RejType} Codes:
+\itemize{
+\item \strong{Efficacy Only}:
+\itemize{
+\item 1-Sided Efficacy Upper = 0
+\item 1-Sided Efficacy Lower = 2
+}
+\item \strong{Futility Only}:
+\itemize{
+\item 1-Sided Futility Upper = 1
+\item 1-Sided Futility Lower = 3
+}
+\item \strong{Efficacy and Futility}:
+\itemize{
+\item 1-Sided Efficacy Upper and Futility Lower = 4
+\item 1-Sided Efficacy Lower and Futility Upper = 5
+}
+\item \strong{Not in East Horizon Explore Yet}:
+\itemize{
+\item 2-Sided Efficacy Only = 6
+\item 2-Sided Futility Only = 7
+\item 2-Sided Efficacy and Futility = 8
+\item Equivalence = 9
+}
 }
 }

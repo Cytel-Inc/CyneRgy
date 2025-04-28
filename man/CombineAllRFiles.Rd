@@ -2,7 +2,7 @@
 % Please edit documentation in R/CombineAllRFiles.R
 \name{CombineAllRFiles}
 \alias{CombineAllRFiles}
-\title{This function combines the contents of all R files in a specified directory into one file.}
+\title{Combine All R Files}
 \usage{
 CombineAllRFiles(
   strOutFileName = NA,
@@ -19,21 +19,20 @@ CombineAllRFiles(
 }
 \value{
 A list containing the following elements:
-\itemize{
-  \item{nQtyCombinedFiles: The number of files combined.}
-  \item{strCombinedContents: The combined content of all the R files (only if strOutFileName is NA).}
-  \item{strReturn: A string summarizing the operation, including the names of the combined files.}
-}
+\item{nQtyCombinedFiles}{The number of files combined.}
+\item{strCombinedContents}{The combined content of all the R files (only if strOutFileName is NA).}
+\item{strReturn}{A string summarizing the operation, including the names of the combined files.}
 }
 \description{
 This function combines the contents of all R files in a specified directory into one file.
-It also replaces any sequence of one or more `#` characters with a single `#`.
+It also replaces any sequence of one or more \verb{#} characters with a single \verb{#}.
 }
 \examples{
 \dontrun{
   result <- CombineAllRFiles(strOutFileName = "combined.R", strDirectory = "/path/to/your/directory")
   print(result$strReturn)
 }
+
 }
 \seealso{
 \code{\link[base]{list.files}}, \code{\link[base]{file}}, \code{\link[base]{readLines}}, \code{\link[base]{writeLines}}
