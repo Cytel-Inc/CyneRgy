@@ -7,13 +7,14 @@ output:
   word_document: default
 ---
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Analysis - Binary Outcome</strong>.
+  <a href="IntegrationPointAnalysisBinary.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
+
 ## Introduction
 
-This example demonstrates how to add new analysis functionality into East using R functions.  
-
-For all examples, we assume the trial design consists of a control and an experimental treatment. There are 2 Interim Analyses (IA) and a Final Analysis (FA). At the IA, the analysis is performed and, depending on the example, may determine early efficacy or early futility depending on the design.
-
-The examples included here are to provide different approaches for analyzing the data in the trial. 
+The following examples illustrate how to integrate new analysis capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes modeled as binary data. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
@@ -28,85 +29,475 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R) you will find the following R files:
 
-1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R) - Contains a function named AnalyzeUsingEastManualFormula to demonstrate the R code necessary for this example as described below.
+1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R) - Contains a function named *AnalyzeUsingEastManualFormula* to demonstrate the R code necessary for Example 1 as described below.
 
-2.  [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R) - Contains a function named AnalyzeUsingPropTest to demonstrate the R code necessary for this example as described below.
+2.  [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R) - Contains a function named *AnalyzeUsingPropTest* to demonstrate the R code necessary for Example 2 as described below.
 
-3.  [AnalyzeUsingPropLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R) - Contains a function named AnalyzeUsingPropLimitsOfCI to demonstrate the R code necessary for this example as described below.
+3.  [AnalyzeUsingPropLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R) - Contains a function named *AnalyzeUsingPropLimitsOfCI* to demonstrate the R code necessary for Example 3 as described below.
 
-4.  [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R) - Contains a function named AnalyzeUsingBetaBinomial to demonstrate the R code necessary for this example as described below.
+4.  [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R) - Contains a function named *AnalyzeUsingBetaBinomial* to demonstrate the R code necessary for Example 4 as described below.
+
+In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
+
+## Example 1 - Using Formula 24.2 from the East manual
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
+</div>
+
+In this example, the analysis is customized by replacing the default method with a user-defined calculation based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2).
+
+**Test Statistic:**
+
+$$Z_j = \frac{\hat{\pi}_{tj} - \hat{\pi}_{cj}}{\sqrt{\hat{\pi}_j \cdot (1 - \hat{\pi}_j) \cdot ( \frac{1}{n_{tj}} + \frac{1}{n_{cj}} )}}$$
+
+Where:
+
+- $\hat{\pi}_{tj}$ and $\hat{\pi}_{cj}$ are the observed response rate at the jth interim look in the treatment and control groups, respectively.
+- $n_{tj}$ and $n_{cj}$ are the numbers of patients at the jth interim look in the treatment and control groups, respectively.
+- $\hat{\pi}_{j} = \frac{n_{tj} \cdot \hat{\pi}_{tj} + n_{cj} \cdot \hat{\pi}_{cj}}{n_{tj} + n_{cj}}$ is the pooled response rate estimate.
+
+The objective is to demonstrate a straightforward way to modify both the analysis and decision-making process. The computed test statistic is compared to the efficacy boundary provided by East Horizon or East as input. This example does not include a futility rule and does not use any user-defined parameters.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 6
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, 5, bigcolxmin),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, 5.5, bigcolxmax),
+  ymin = rep(3.5, 7),
+  ymax = rep(8.2, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 8
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(6.2, 4),
+  xmax = rep(8.8, 4),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
+
+  label = c("Load responses from East Horizon", 
+            "Calculate response rates and estimates", 
+            "Calculate Z-statistic (formula)", 
+            "Return decision using EH boundary"),
+  fill = rep("#cfe2ff", 4)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 3),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3, 3),
+  ymax = c(3.3, 3.3),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
+
+## Example 2 - Using the `prop.test()` Function in R
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R" class="alert-link">AnalyzeUsingPropTest.R</a></p>
+</div>
+
+This example utilizes the base R `prop.test()` function to perform the interim and final analyses. The p-value is used to compute the Z-statistic, which is compared against the efficacy boundary provided by East Horizon or East. Like Example 1, this example does not include a futility rule and does not use any user-defined parameters.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 6
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, 5, bigcolxmin),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, 5.5, bigcolxmax),
+  ymin = rep(3.5, 7),
+  ymax = rep(8.2, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 8
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(6.2, 4),
+  xmax = rep(8.8, 4),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
+
+  label = c("Load responses from East Horizon", 
+            "Run proportions test (treatment > control)", 
+            "Extract Z-statistic from p-value", 
+            "Return decision using EH boundary"),
+  fill = rep("#cfe2ff", 4)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 3),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3, 3),
+  ymax = c(3.3, 3.3),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
 
 
-In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type 
-code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
+## Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision-Making
 
-## Example 1 - Two-Arm Binary Analysis Using Formula 28.2 in the East Manual
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R" class="alert-link">AnalyzeUsingPropLimitsOfCI.R</a></p>
+</div>
 
-To replace the analysis, use the formula 28.2 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making could be modified in a simple approach.  The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule. 
+In many Phase II trials, Go/No-Go decisions are made based on whether a treatment shows sufficient promise to justify further development. These decisions are often guided by two key thresholds:
 
-## Example 2 - Two-Arm Binary Analysis Using the prop.test Function in Base R  
+- **Minimum Acceptable Value (MAV)**: The smallest treatment effect considered meaningful.
+- **Target Value (TV)**: A highly desirable treatment effect based on clinical or strategic considerations.
 
-This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East as an input.  This example does NOT include a futility rule. 
+This example demonstrates how to approximate probabilistic decision-making using frequentist confidence intervals (CIs), ignoring the boundaries provided by East Horizon or East in favor of a CI-based logic. We use the function `prop.test()` from base R to analyze the data and compute the desired confidence intervals. If the treatment difference is likely to exceed the MAV, a Go decision is made. If not, and it is unlikely to exceed the TV, a No-Go decision is made. Specifically:
+
+**At Interim Analysis**
+
+- Let LL and UL be the lower and upper limits of the confidence interval for the treatment effect.
+- If $LL > \text{MAV} \rightarrow \text{Go}$
+- If $UL < \text{TV} \rightarrow \text{No-Go}$
+- Otherwise $\rightarrow$ Continue to the next analysis
+
+**At Final Analysis**
+
+- If $LL > \text{MAV} \rightarrow \text{Go}$
+- Otherwise $\rightarrow$ No-Go
+
+Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|--|------|
+|**dMAV**|Minimum Acceptable Value: the smallest treatment effect considered clinically meaningful to warrant further development.|
+|**dTV**|Target Value: the desired treatment effect that would represent a strong clinical benefit or strategic advantage.|
+|**dConfLevel**|Confidence Level: the level of confidence used to construct the confidence interval for Go/No-Go decision-making (e.g., 0.80 for an 80% CI).|
+
+**Note:** In this example, the boundary information that is computed in East Horizon or East is ignored. User-defined parameters and the function `prop.test()` from base R are used to analyze the data and compute the desired confidence intervals.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 6
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, 5, bigcolxmin),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, 5.5, bigcolxmax),
+  ymin = rep(2, 7),
+  ymax = rep(8.5, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 8
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(6.2, 5),
+  xmax = rep(8.8, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load responses from East Horizon",
+            "Load MAV, TV, and confidence level",
+            "Run proportions test (treatment > control)", 
+            "Calculate CI lower and upper limits", 
+            "Return decision using CI thresholds"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(1.5, 1.5),
+  ymax = c(1.8, 1.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
 
 
-## Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision Making
-
-In many phase II trials, teams like to utilize the upper and lower boundaries of a confidence interval (CI) for making Go and No-Go type decision. In this type of trial, teams often set a Minimum Acceptable Value (MAV), the minimum treatment difference that would warrant further development in a product, and a Target Value (TV), the value that is highly desirable based on other consideration.  In this simplified example, if it is likely that the treatment difference is above the MAV then a Go decision is made. If a Go decision is not made, then if it is unlikely that the treatment difference is above the TV, a No-Go decision is made.      
-
-In this example, the prop.test from base R is utilized to analyze the data and compute a user-specified confidence interval. If user-specified variables are not defined, we assume the MAV = 0.1 and TV = 0.2. The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV.  If a Go decision is not made, then a No-Go decision is made if there is less than a 10% chance the difference is greater than the TV.  Using a frequentist CI an approximation to this design can be done by the logic described below.
-
-### At an Interim Analysis
-
-- If the Lower Limit of the CI (LL) is greater than a user-specified amount then a Go decision is made.  Specifically, if LL > user-specified lower limit --> Go.
-- If a Go decision is not made, then if the Upper Limit of the CI (UL) is less than a user-specified value a No-Go decision is made.  Specifically, if UL < user-specified upper limit --> No-Go.
-- Otherwise, continue to the next analysis.
-
-### At the Final Analysis
-
-- If the Lower Limit of the CI, denoted by LL, is greater than a user-specified values then a Go decision is made.  Specifically, if LL > user-specified value --> Go.
-- Otherwise, a No-Go decision is made.
-    
-Note, in this example the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
-
+print(p)
+```
 
 ## Example 4 - Bayesian Analysis
 
-In this example, the default values of user-specified variables utilize prior data on 50 patients and incorporate the data directly into the Bayesian model. The Beta distributions for both standard of care and experimental as well as the upper limit for efficacy and lower limit for futility can be user-specified variables. With the default user-specified values in the prior data, 10 patients had a response and 40 patients had a treatment failure.   Denote the response rate for standard of care by $\pi_S$ and on experimental by $\pi_E$ and we assume the following prior distributions:
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R" class="alert-link">AnalyzeUsingBetaBinomial.R</a></p>
+</div>
 
-$\pi_S \sim$ Beta( 10, 40 ) which has a prior mean response rate of 20% and is equivalent to observing 50 prior patients with 10 responses.
+This example illustrates how prior data on patients can be incorporated directly into a Bayesian model. The user can specify Beta prior distributions for both the standard of care and experimental arms, as well as set decision thresholds for efficacy and futility. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
-$\pi_E \sim$ Beta( 0.2, 0.8 ) which has a prior mean response rate of 20% and is equivalent to observing 1 prior patient.
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dAlphaCtrl**|Alpha parameter of the Beta prior for the control group.|10|
+|**dBetaCtrl**|Beta parameter of the Beta prior for the control group.|40|
+|**dAlphaExp**|Alpha parameter of the Beta prior for the treatment group.|0.2|
+|**dBetaExp**|Beta parameter of the Beta prior for the treatment group.|0.8|
+|**dUpperCutoffEfficacy**|Upper threshold for declaring efficacy (between 0 and 1). If the posterior probability exceeds this value, efficacy is declared.|0.95|
+|**dLowerCutoffForFutility**|Lower threshold for declaring futility (between 0 and 1). If the posterior probability falls below this value, futility is declared.|0.10|
 
-The Beta distribution is conjugate for binary data.  Assuming $N_{Ctrl}$ and $N_{Exp}$ patients have enrolled on Control (Ctrl) and Experimental (Exp), respectively, the following data are observed at an interim analysis:
+In this example and with the values specified above, the prior data includes 10 responders and 40 non-responders. Let $\pi_S$ denote the response rate under the standard of care, and $\pi_E$ the response rate under the experimental treatment. The prior distributions are defined as:
 
+- $\pi_S \sim \text{Beta}(10, 40)$: implies a prior mean of 20%, equivalent to observing 50 prior patients with 10 responses.
+- $\pi_E \sim \text{Beta}(0.2, 0.8)$: implies a prior mean of 20%, but corresponds to just 1 prior patient, reflecting a weakly informative prior.
 
+The Beta distribution is conjugate for binary (binomial) data, making it convenient for Bayesian updating. Suppose $N_{\text{Ctrl}}$ and $N_{\text{Exp}}$ patients have enrolled in the control and experimental arms, respectively, and we observe at an interim analysis:
 
 | Treatment | Number of Responses | Number of Treatment Failures |
 |-----------|---------------------|------------------------------|
-|    Ctrl   | $X_{Ctrl}$          | $N_{Ctrl} - X_{Ctrl}$        |
-|    Exp    | $X_{Exp}$           | $N_{Exp} - X_{Exp}$          |
+|    Control   | 	$X_{\text{Ctrl}}$          | $N_{\text{Ctrl}} - X_{\text{Ctrl}}$        |
+|    Experimental    | $X_{\text{Exp}}$           | $N_{\text{Exp}} - X_{\text{Exp}}$          |
 
 
-Then posterior distributions are:
+The posterior distributions for the response rates become:
 
-$\pi_{Ctrl} | N_{Ctrl}, X_{Ctrl} \sim$ Beta( 10 + $X_{Ctrl}$, 40 + $N_{Ctrl} - X_{Ctrl}$ )
+$$\pi_{\text{Ctrl}} \mid X_{\text{Ctrl}}, N_{\text{Ctrl}} \sim \text{Beta}(10 + X_{\text{Ctrl}},\ 40 + N_{\text{Ctrl}} - X_{\text{Ctrl}})$$
 
-$\pi_{Ctrl} | N_{Exp}, X_{Exp} \sim$ Beta( 0.2 + $X_{Exp}$, 0.8 + $N_{Exp} - X_{Exp}$ )
+$$\pi_{\text{Exp}} \mid X_{\text{Exp}}, N_{\text{Exp}} \sim \text{Beta}(0.2 + X_{\text{Exp}},\ 0.8 + N_{\text{Exp}} - X_{\text{Exp}})$$
 
-For analysis and decision making, the posterior distributions are used to stop the trial for efficacy if it is very likely that the response rate on E is higher than on S and stop for futility if it is unlikely that the response rate on E is better than S.  Specifically, compute the posterior probability that E has a higher response rate than S:
+For analysis and decision-making, the posterior distributions are used to determine whether to stop the trial early. The trial is stopped for efficacy if there is strong evidence that the response rate in the experimental group is higher than in the control group, and for futility if there is little evidence to support a benefit of the experimental treatment over the standard of care. The primary quantity of interest is the posterior probability that the experimental treatment has a higher response rate than the standard of care:
 
-$\rho = Pr( \pi_{Exp} > \pi_{Ctrl} | X_{Ctrl}, N_{Ctrl}, X_{Exp}, N_{Exp} )$  
+$$\rho = \Pr(\pi_{\text{Exp}} > \pi_{\text{Ctrl}} \mid X_{\text{Ctrl}}, N_{\text{Ctrl}}, X_{\text{Exp}}, N_{\text{Exp}})$$
+Specifically,
 
-### At the Interim Analysis
+**At Interim Analysis**
 
-- If $\rho > 0.975$ then make an early efficacy (Go) decision
-- If $\rho < 0.10$ then make an early futility (No-Go) decision.
+- If $\rho > 0.975 \rightarrow$ Make an early efficacy (Go) decision.
+- If $\rho < 0.10 \rightarrow$ Make an early futility (No-Go) decision.
 
-Note that the above values can be user-specified. 
+**At Final Analysis**
 
-### At the Final Analysis
+- If $\rho > 0.95 \rightarrow$ Make an efficacy decision.
+- Otherwise $\rightarrow$ Make a futility decision.
 
-- If $\rho > 0.95$ make an efficacy decision, otherwise a futility decision is made.
+Note that the above values can be user-specified. This example demonstrates how incorporating prior information on $\pi_S$ can influence decision-making during a trial. However, it is essential to conduct sensitivity analyses to assess how the choice of priors affects operating characteristics and overall conclusions.
 
-This example demonstrates how prior data and an informative prior on $\pi_S$ can impact decision making.   However, a full sensitivity analysis to the prior information and impact on Operating characteristics should be explored with approaches like this. 
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 6
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, 5, bigcolxmin),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, 5.5, bigcolxmax),
+  ymin = rep(2, 7),
+  ymax = rep(8.5, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 8.35
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(6.2, 5),
+  xmax = rep(8.8, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load responses from East Horizon",
+            "Load prior parameters and thresholds",
+            "Compute posterior parameters\nusing Beta-Binomial model", 
+            "Compute posterior probability\nthat experimental > control", 
+            "Return decision using thresholds"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(1.5, 1.5),
+  ymax = c(1.8, 1.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+
+print(p)
+```

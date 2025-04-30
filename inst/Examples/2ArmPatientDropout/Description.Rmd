@@ -1,15 +1,17 @@
 ---
-title: '2-Arm, Single Endpoint - Simulate Patient Dropout'
-author: "Shubham Lahoti, J. Kyle Wathen"
+title: "2-Arm, Single Endpoint - Simulate Patient Dropout"
+author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document: default
-  word_document: default
 ---
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Dropout</strong>.
+  <a href="IntegrationPointDropout.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
 
 ## Introduction
 
-For all examples, we assume the trial design consist of control and an experimental treatment. Patients may dropout of a trial for a variety of reasons such as safety issues, treatment burden or other non-trial related issues. The dropout rate can be as high as 30% in some trials if the drug has adverse side effects. The introduction of dropout probabilities or dropout hazard rate plays a significant role during data generation that can be further utilized during the analysis.
+The following examples illustrate how to customize the dropout distribution in East Horizon or East using R functions. Patients may drop out of a trial for various reasons, including safety concerns, treatment burden, or non-trial-related factors. In some cases, dropout rates can reach 30%, particularly if the drug has adverse side effects. Incorporating dropout probabilities or hazard rates is crucial during data generation and can significantly impact subsequent analysis. In all examples, we assume a trial design consisting of a control group and an experimental treatment.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
@@ -20,26 +22,326 @@ Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**: [2ArmPatientDropout.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/2ArmPatientDropout.Rproj)
 
-
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmPatientDropout/R) you will find the following R files:
 
-1. [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R) - Contains a function named GenerateCensoringUsingBinomialProportion to demonstrate the R code necessary for Example 1 as described below.
+1. [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R) - Contains a function named *GenerateCensoringUsingBinomialProportion* to demonstrate the R code necessary for Example 1 as described below.
 
-2. [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R) - Contains a function named GenDropoutTimeForSurvival to demonstrate the R code necessary for Example 2 as described below.
+2. [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R) - Contains a function named *GenerateDropoutTimeForSurvival* to demonstrate the R code necessary for Example 2 as described below.
+
+3. [GenerateDropoutTimeForRM](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM) - Contains a function named *GenerateDropoutTimeForRM* to demonstrate the R code necessary for Example 3 as described below.
 
 # Example 1 - Dropout Using Binomial Proportion
 
-The R function named "GenerateCensoringUsingBinomialProportion" in the file generates the censor ID using the same dropout probability for both treatment using rbinom(). In this case, the Dropout probability is a common value across both treatments. 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="alert-link">GenerateCensoringUsingBinomialProportion.R.R</a></p>
+</div>
 
-Steps: 
+The R function *GenerateCensoringUsingBinomialProportion* generates the censoring indicator using the dropout probability specified in East Horizon (*ProbDrop* in the script, *Probability of Dropout* in East Horizon) for continuous or binary outcome. This function applies the binomial distribution using the `rbinom()` function in R to determine dropout status. In this case, the dropout probability is the same across both treatment groups, but this can be customized using user-defined parameters. 
 
-- Let pd = Dropout probability.
-- Draw a random sample from Bernoulli distribution with p = 1 - pd, i.e., Binomial(1, pd) of a size n = NumSub.
-- The sample generated in step (2) is a censoring indicator where 1 is a patient that does NOT drop out, e.g., completer, and 0 for a patient that drops out, e.g., non-completer.  
+This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
+
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Probability of Dropout|Response Card|$ProbDrop$|
+
+Steps:  
+
+1. Let $pd$ be the dropout probability.  
+2. Draw a random sample from a Bernoulli distribution with $p = 1 - pd$, i.e., $Binomial(1, pd)$, of size $n = NumSub$.  
+3. The generated sample serves as a censoring indicator:  
+   - **1** indicates a patient who completes the trial (does not drop out).  
+   - **0** indicates a patient who drops out (non-completer).  
+   
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 3
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, bigcolxmin, 6.5, 7.5, 8.5),
+  xmax = c(0.5, 1.5, 2.5, bigcolxmax, 7, 8, 9),
+  ymin = rep(4.2, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 4),
+  xmax = rep(bigcolxmax - 0.3, 4),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
+  label = c("Load dropout probability", 
+            "Loop through patients", 
+            "Simulate whether patient drops out\nusing binomial distribution", 
+            "Return censoring indicators"),
+  fill = rep("#cfe2ff", 4)
+)
+
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 3),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3.5, 3.5),
+  ymax = c(3.8, 3.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
 
 # Example 2 - Dropout Time For Survival
 
-The function named "GenDropoutTimeForSurvival" generates dropout time for 2-arm survival design. 
-In this cases, there is an option to provide a dropout information for each arm which then is utilized to generate dropout times for each arm from Exponential distribution. We fix Number of periods = 1 and Dropout distribution = Exponential.
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="alert-link">GenerateDropoutTimeForSurvival.R</a></p>
+</div>
 
+The function *GenerateDropoutTimeForSurvival* generates dropout times for a two-arm survival design. In this case, dropout information can be specified separately for each arm (in East Horizon, *Control* and *Treatment* in the *Dropout Rate* tab), and dropout times are drawn from an exponential distribution accordingly. The number of periods is fixed at 1.
+
+This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
+
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Probability of Dropout: Control|Response Card, Dropout Rate tab|$DropParam[ 1 ]$|
+|Probability of Dropout: Treatment|Response Card, Dropout Rate tab|$DropParam[ 2 ]$|
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 3
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, bigcolxmin, 6.5, 7.5, 8.5),
+  xmax = c(0.5, 1.5, 2.5, bigcolxmax, 7, 8, 9),
+  ymin = rep(3, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 5),
+  xmax = rep(bigcolxmax - 0.3, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load dropout probabilities", 
+            "Calculate Hazard rates from probabilities",
+            "Loop through patients", 
+            "Simulate whether patient drops out\nusing exponential distribution", 
+            "Return dropout times"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
+
+# Example 3 - Dropout Time for Repeated Measures
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM.R" class="alert-link">GenerateDropoutTimeForRM.R</a></p>
+</div>
+
+The function *GenerateDropoutTimeForRM* generates dropout times for a continuous outcome with repeated measures design. In this case, dropout information can be specified separately for each arm (in East Horizon, *Control* and *Treatment* in the *Dropout Rate* tab), and dropout times are drawn from an exponential distribution accordingly. The *Input Method* in East Horizon has to be set to *Cumulative Probability of Dropout by Time*.
+
+This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
+
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
+|-----|-----|---|
+|Probability of Dropout: Control|Response Card, Dropout Rate tab|$DropParamControl$|
+|Probability of Dropout: Treatment|Response Card, Dropout Rate tab|$DropParamtrt$|
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 3
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, bigcolxmin, 6.5, 7.5, 8.5),
+  xmax = c(0.5, 1.5, 2.5, bigcolxmax, 7, 8, 9),
+  ymin = rep(3, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 5),
+  xmax = rep(bigcolxmax - 0.3, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load dropout probabilities", 
+            "Calculate dropout rates from probabilities",
+            "Loop through patients", 
+            "Simulate whether patient drops out\nusing exponential distribution", 
+            "Return dropout times"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
 

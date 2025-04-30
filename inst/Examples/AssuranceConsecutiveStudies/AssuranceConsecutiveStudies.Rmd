@@ -7,8 +7,21 @@ output:
   word_document: default
 ---
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
+</div>
+
 # Introduction
-The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of R with Cytel products using a series of examples.  These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance.  The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
+
+The intent of the following examples is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of R with Cytel products. The first example features a two-arm, fixed-sample trial with normally distributed outcomes, using a non-standard prior to compute assurance. Subsequent examples advance to more complex scenarios, including computing assurance for a sequential design involving a phase 2 trial with normal outcomes followed by a phase 3 trial with time-to-event outcomes.
+
+All examples involve two treatments: Standard of Care (S) and Experimental (E). The scenarios covered are as follows:
+
+1. Fixed sample design using a mixture of normal distributions to compute Bayesian assurance.
+2. Group sequential design, expanding on Example 1, with an interim analysis for futility based on Bayesian predictive probability.
+3. Fixed design with a time-to-event outcome, serving as both a standalone example and a reference for the later phase 2/phase 3 scenario.
+4. Two consecutive studies: phase 2 with a normal endpoint followed by phase 3, also with a normal endpoint.
+5. Two consecutive studies: phase 2 with a normal endpoint followed by phase 3 with a time-to-event outcome.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
@@ -23,41 +36,145 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/AssuranceConsecutiveStudies/R) you will find the R files used in the examples.
 
-The examples will all contain two treatments, Standard of Care (S) and Experimental (E) and are follows: 
+# Example 1 - Fixed Sample Design with a Mixture of Normal Distributions
 
-1. Fixed sample design using a mixture of normal distributions for computation of assurance
-1. Expand example 1 to a group sequential design with an interim for futility based on a Bayesian predictive probability
-1. Fixed design with a time-event-event outcome, this example provides the basis and a comparison for the phase 2 followed by a phase 3 example considered last
-1. Two consecutive studies, phase 2 with a normal endpoint followed by a phase 3 with a normal endpoint
-1. Two consecutive studies, phase 2 with a normal endpoint followed by a phase 3 with a time-to-event outcome
+This example considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm. It demonstrates how to customize the **Response (Patient Simulation)** element of East Horizon's simulation to simulate a mixture of normal distributions, and the **Analysis** element of East Horizon's simulation to compute the probability of success.
 
+By integrating an R function into the Analysis integration point, users can evaluate the frequentist operating characteristics of the Bayesian design in East Horizon. Additionally, by modifying the Response integration point, the simulation will incorporate Bayesian assurance. Specifically, an R function first samples from the assurance prior, then generates the patient data. The resulting power from this simulation reflects the Bayesian assurance, assuming the two-component prior.
 
-# Example 1
-## Study Design
-Fixed sample, with normally distributed outcomes Y. 
+Often, it is important to examine the posterior distributions of both the observed and true treatment differences following a Go decision. These posterior distributions provide valuable insights for planning subsequent study phases and assessing potential risks. The process of obtaining these posterior distributions is detailed in the next example, and their application to Phase 2 and Phase 3 studies is explored in later sections.
 
-  * Sample size: 80 patients per arm
-  * Assume standard deviation is known: $\sigma = 1.9$
- 
-Denote the minimum acceptable value by MAV.  For patients receiving treatment $j$ = S or E, we assume the outcomes Y $\sim N( \mu_j, \sigma^2)$ where, for simplicity,  $\mu_j$ is unknown and $\sigma$ is the known, fixed quantity. We assume *a priori* $\mu_j \sim$ Normal( $\theta_j$, $\tau_j^2$= $1000^2$ ), for $j=$ S or E.  At the end of the study the following is computed:
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
-$$
-    \rho = Pr( \mu_E > \mu_S + MAV | data ) \text{ and}
-$$
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+bigcolxmin = 5
+bigcolxmax = bigcolxmin + 3
+bigcolxmin2 = 8.5
+bigcolxmax2 = bigcolxmin2 + 3
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, bigcolxmin2),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, bigcolxmax2),
+  ymin = rep(3, 7),
+  ymax = rep(10.75, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
+)
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 10.5
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.1, 5),
+  xmax = rep(bigcolxmax - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load prior distribution parameters,\nmean, and standard deviations", 
+            "Sample treatment effect from\nmixture of normal distributions",
+            "Compute treatment means\nincluding sampled effect",
+            "Simulate patient outcomes\nbased on treatment assignment",
+            "Return simulated outcomes\nand true treatment effect"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+yminfirstbox2 = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox2 = yminfirstbox2 - spaceybox
+yminsecondbox2 = ymaxsecondbox2 - unitybox
+ymaxthirdbox2 = yminsecondbox2 - spaceybox
+yminthirdbox2 = ymaxthirdbox2 - unitybox*1.5
+ymaxfourthbox2 = yminthirdbox2 - spaceybox
+yminfourthbox2 = ymaxfourthbox2 - unitybox*1.5
+ymaxfifthbox2 = yminfourthbox2 - spaceybox
+yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
+# Define flowchart steps 
+flowchart2 <- data.frame(
+  xmin = rep(bigcolxmin2 + 0.1, 5),
+  xmax = rep(bigcolxmax2 - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2),
+  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2),
+  label = c("Load prior distribution parameters,\nSD, MAV and PU",
+            "Compute posterior parameters",
+            "Sample posterior distributions\nof each arm",
+            "Make decision based on posterior\nprobability and user-defined cutoff",
+            "Return posterior parameters,\nprobabilities, and decision"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows2 <- data.frame(
+  x = rep((bigcolxmin2+bigcolxmax2)/2, 4),
+  xend = rep((bigcolxmin2+bigcolxmax2)/2, 4),
+  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4]),
+  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5])
+)
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(9, 10.5),
+  xmax = c(10, 11.5),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 20, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Add flowchart 
+  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+print(p)
+```
 
+## Response (Patient Simulation) Integration Point
 
-$$  
-    \text{If } \rho > P_U \implies \text{ Go }
-$$
-$$
-    \text{ If } \rho \leq P_U \implies \text{ No-Go }
-$$
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
+</div>
 
-For decision making we assume $P_U = 0.8$. For assurance, a mixture of normal distributions is assumed.  The assurance prior is specified in terms of the prior weight, mean, and variance for each component of the mixture.   For simplicity, we assume mixture of two normal distributions as follows:
+This function simulates patient-level outcomes within a Bayesian assurance framework, using a two-component mixture prior to reflect uncertainty about the true treatment effect. It allows for assessing the probability of trial success (assurance) under uncertainty about the true treatment effect. Information generated from this simulation will be used later for the [Analysis Integration Point](#analysis-integration-point).
 
-  * Weight: 25% on $N( 0, 0.05 )$
-  * Weight: 75% on $N( 0.7, 0.3^2)$
+In this example, the true treatment effect ($\mu_E - \mu_S$) is sampled from a mixture of two normal priors:
+
+- 25% weight on $\mathcal{N}(0, 0.05^2)$.
+- 75% weight on $\mathcal{N}(0.7, 0.3^2)$.
   
+The control mean is fixed, while the experimental mean is computed as $d\text{MeanCtrl} + \text{treatment effect}$. Each patient’s response is then simulated from a normal distribution corresponding to their assigned treatment group, with standard deviations defined separately for each arm.
+
 ```{r echo=FALSE,  warning=FALSE}
 library(ggplot2)
 ######################################################################################################################## .
@@ -92,48 +209,72 @@ ggplot(dfSample, aes(SampleMean)) +
     xlim(-0.25, 1.75)  # Set x-axis range from 0 to 1
 ```
 
-## R Integration
-In order to evaluate the design above, one can develop an R function for analysis that can be called from East during simulation.  By replacing only the analysis function with an R function, one can obtain the frequentist operating characteristics of the Bayesian design using East.  In addition, by replacing how the patient data is simulated one can obtain the Bayesian assurance.  Specifically, in the simulation when the patient data is simulated an R function will first sample the assurance prior then sample the patient data.   The resulting power of this simulation will be the Bayesian assurance assuming the 2 component prior given above.  
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
-There is often a need for examination of posterior distribution of both observed and true treatment differences given a Go decision.   These posterior distributions can be useful for planning the next phase of study and understanding potential risks.  Obtaining the posterior distributions is described in the next section and they are applied to the phase 2 followed by phase 3 in later sections.  
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Weight of prior component 1.|0.25|
+|**dWeight2**|Weight of prior component 2.|0.75|
+|**dMean1**|Mean of prior component 1.|0|
+|**dMean2**|Mean of prior component 2.|0.7|
+|**dSD1**|Standard deviation of prior component 1.|0.05|
+|**dSD2**|Standard deviation of prior component 2.|0.3|
+|**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
+|**dSDCtrl**|Standard deviation for control arm.|1.9|
+|**dSDExp**|Standard deviation for experimental arm.|1.9|
 
-### Required R Functions
+## Analysis Integration Point
 
-The two functions that are needed to evaluate this design and obtain the Bayesian assurance are the analysis function, AnayzeUsingBayesianNormals, and patient simulation function, SimulatePatientOutcomeNormalAssurance.  
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div> 
 
-To help understand the AnayzeUsingBayesianNormals one must first derive the posterior distributions.  
+This function evaluates the posterior probability that the experimental treatment arm is better than the control arm by more than a clinically meaningful threshold, and returns a Go/No-Go decision based on a cutoff ($P_U$). It uses information from the simulation that is generated by the [Response](#response-patient-simulation-integration-point) element of East Horizon's simulation, explained above.
 
-After observing $n$ patients on treatment $j =$ S or E, the posterior distribution of $\mu_j$ is: 
+For patients receiving treatment $j \in \{\text{S}, \text{E}\}$ (S = standard/control, E = experimental), we assume the outcomes $Y \sim \mathcal{N}(\mu_j, \sigma^2)$, where $\mu_j$ is an unknown mean and $\sigma^2$ is a known, fixed variance.
+
+We assume *a priori* that:
 
 $$
-\mu_j | \bar{y} \sim N( \theta_j^*, \tau_j^{2*} )
-$$
-where 
-$$
-\theta_j^* = \frac{\frac{\theta_j}{\tau_j^2} + \frac{n}{\sigma^2}\bar{y}}{\frac{1}{\tau_j^2}+ \frac{1}{\sigma^2}} \text{ and }
-\frac{1}{\tau_j^{2*}} = \frac{1}{\tau_j^2} +\frac{n}{\sigma^2}
+\mu_j \sim \mathcal{N}(\theta_j, \tau_j^2 = 1000^2), \quad j \in \{\text{S}, \text{E}\}
 $$
 
-### Integration with East
+After observing $n$ patients on treatment $j$, the posterior distribution of $\mu_j$ becomes:
 
-Using the East workbook named Assurance.cywx with East version $>=$ 6.5.4 the Example 1 simulation can be used to obtain the results found in the next section.   After editing the simulation, on the User Define R Functions the Generate Response and Compute Test Statistic are both replaced with R code.   The Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R) and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in  [R/AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R) with input shown below. 
+$$
+\mu_j \mid \bar{y} \sim \mathcal{N}(\theta_j^*, \tau_j^{2*})
+$$
+where:
 
+$$
+\theta_j^* = \frac{\frac{\theta_j}{\tau_j^2} + \frac{n \bar{y}}{\sigma^2}}{\frac{1}{\tau_j^2} + \frac{n}{\sigma^2}}, \quad \text{and} \quad
+\frac{1}{\tau_j^{2*}} = \frac{1}{\tau_j^2} + \frac{n}{\sigma^2}
+$$
 
-![Input for generate response in East](Example1GenerateResponseInput.jpg)
+At the conclusion of the study, the posterior probability that the experimental arm exceeds the control arm by more than the minimum acceptable value (MAV) is calculated as:
 
-![Input for test statistitic input in East](Example1TestStatisticInput.jpg)
+$$
+\rho = \Pr(\mu_E > \mu_S + \text{MAV} \mid \text{data})
+$$
 
-### Integration with East Horizon Explore
+The decision rule is as follows:
 
-The setup in East Horizon Explore is very similar to East.  East Horizon Explore utilizes the same R functions.   In the Responses tab, the Generate Response utilizes the SimulatePatientOutcomeNormalAssurance found in the file named [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R) and has variables as shown below. For the Compute Test Statistic the function name AnalyzeUsingBayesianNormals found in [R/AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R) with input shown below. 
+- If $\rho > P_U \rightarrow$ Go.
+- If $\rho \leq P_U \rightarrow$ No-Go.
 
-![Input for generate response in East Horizon Explore](Example1GenerateResponseSolara.jpg)
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
-![Input for test statistic in East Horizon Explore](Example1TestStatisticSolara.jpg)
-
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
+|**dPU**|Go threshold (posterior probability cutoff).|0.8|
 
 ## Results
-
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 library(readr)
@@ -189,27 +330,177 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
 ```
 
 
-# Example 2
-## Study Design
+# Example 2 - Group Sequential Design with a Mixture of Normal Distributions
 
-Same study design as previous example, however, this design includes an interim analysis to check for futility when 50% of the patients have their outcome observed.  The futility rule is based on a Bayesian predictive probability of a No-Go at the end of the study.   That is, at the interim analysis if it is likely that the study will make a No-Go decision at the final analysis, then the study is stopped early for futility. 
+This example follows the same structure and uses the same code as Example 1. However, it introduces an interim analysis (IA) for futility assessment when outcomes are observed for 50% of the enrolled patients. The futility decision is based on the Bayesian predictive probability of a No-Go decision at the end of the trial. Specifically, if the predictive probability suggests that a No-Go is likely at the final analysis, the trial is stopped early for futility. If not, the trial continues to the final analysis (FA), which uses the same R code. The in Analysis element of East Horizon's simulation is thus customized to handle this case as explained below.
 
-Denote the data at the interim analysis by $X_1$ and data for patients enrolled after the IA by $X_2$. If the predictive probability of a No-Go at the final analysis is greater than $PU_{Futility} = 90$% then the trial is stopped for futility. Specifically, if $Pr( \text{End of Study No-Go} | X_1 ) > PU_{Futility} = 90\%$ then the trial is stopped for futility. The prediction formula becomes:
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
-$$
-Pr( \text{End of Study No-Go} | X_1 ) = Pr[ \{ Pr( \mu_E > \mu_S + MAV | X_1, X_2 ) > PU \} | X_1  ] > PU_{Futility}
-$$
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+bigcolxmin = 5
+bigcolxmax = bigcolxmin + 3
+bigcolxmin2 = 8.5
+bigcolxmax2 = bigcolxmin2 + 3
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, bigcolxmin2),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, bigcolxmax2),
+  ymin = rep(3, 7),
+  ymax = rep(12, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
+)
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 11.7
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.1, 5),
+  xmax = rep(bigcolxmax - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load prior distribution parameters,\nmean, and standard deviations", 
+            "Sample treatment effect from\nmixture of normal distributions",
+            "Compute treatment means\nincluding sampled effect",
+            "Simulate patient outcomes\nbased on treatment assignment",
+            "Return simulated outcomes\nand true treatment effect"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+yminfirstbox2 = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox2 = yminfirstbox2 - spaceybox
+yminsecondbox2 = ymaxsecondbox2 - unitybox
+ymaxthirdbox2 = yminsecondbox2 - spaceybox
+yminthirdbox2 = ymaxthirdbox2 - unitybox*1.5
+ymaxfourthbox2 = yminthirdbox2 - spaceybox
+yminfourthbox2 = ymaxfourthbox2 - unitybox*1.5
+ymaxfifthbox2 = yminfourthbox2 - spaceybox
+yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
+ymaxsixthbox2 = yminfifthbox2 - spaceybox
+yminsixthbox2 = ymaxsixthbox2 - unitybox*1.5
+# Define flowchart steps 
+flowchart2 <- data.frame(
+  xmin = rep(bigcolxmin2 + 0.1, 6),
+  xmax = rep(bigcolxmax2 - 0.1, 6),
+  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2, ymaxsixthbox2),
+  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2, yminsixthbox2),
+  label = c("Load prior distribution parameters,\nSD, MAV, PU, and PUFutility",
+            "Compute posterior parameters",
+            "If IA: simulate future data and\nestimate predictive prob. of futility",
+            "If FA: sample posterior\ndistributions of each arm",
+            "Make decision based on posterior\nprobability and user-defined cutoff",
+            "Return posterior parameters,\nprobabilities, and decision"),
+  fill = rep("#cfe2ff", 6)
+)
+# Define arrows for flowchart 
+flowchart_arrows2 <- data.frame(
+  x = rep((bigcolxmin2+bigcolxmax2)/2, 5),
+  xend = rep((bigcolxmin2+bigcolxmax2)/2, 5),
+  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4], flowchart2$ymin[5]),
+  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5], flowchart2$ymax[6])
+)
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(9, 10.5),
+  xmax = c(10, 11.5),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 1, label = label), size = 3, angle = 20, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Add flowchart 
+  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+print(p)
+```
 
-## R Integration
+## Response (Patient Simulation) Integration Point
 
-In order to evaluate the design above, one can develop an R function for analysis that can be called from East during simulation.  By replacing only the analysis function with an R function, one can obtain the frequentist operating characteristics of the Bayesian design using East that includes the interim analysis and futility check based on a Bayesian predictive probability.  In addition, by replacing how the patient data is simulated one can obtain the Bayesian assurance.  Specifically, in the simulation when the patient data is simulated an R function will first sample the assurance prior then sample the patient data.   The resulting power of this simulation will be the Bayesian assurance assuming the 2 component prior given in Example 1 and including the futility check.  
-  
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
+</div>
 
-### Required R Functions
+The function for the Response Integration Point is the same as in [Example 1](#response-patient-simulation-integration-point). Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
-Same as example 1, just need to provide the $PU_{Futility}$ parameter.  The same R code function is used for Example 1 and 2.   The only difference between this example and Example 1 is the addition of the dPUFutility and the interim analysis.   
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Weight of prior component 1.|0.25|
+|**dWeight2**|Weight of prior component 2.|0.75|
+|**dMean1**|Mean of prior component 1.|0|
+|**dMean2**|Mean of prior component 2.|0.7|
+|**dSD1**|Standard deviation of prior component 1.|0.05|
+|**dSD2**|Standard deviation of prior component 2.|0.3|
+|**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
+|**dSDCtrl**|Standard deviation for control arm.|1.9|
+|**dSDExp**|Standard deviation for experimental arm.|1.9|
 
-![Input for test statistitic input](Example2TestStatisticInput.jpg)
+## Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div>
+
+The function for the Analysis Integration Point is the same as in [Example 1](#analysis-integration-point), with the addition of the *dPUFutility* variable to incorporate the interim analysis. *dPUFutility* is a user-defined threshold that specifies the minimum predictive probability of a No-Go decision required to stop the trial early for futility at the interim analysis.
+
+Let $X_1$ represent the data available at the interim analysis and $X_2$ the data for patients enrolled thereafter. If the predictive probability of a No-Go decision at the end of the study, given $X_1$, exceeds a pre-specified threshold $PU_{\text{Futility}} = 90\%$, the trial is stopped. Formally, the stopping rule is:
+
+$$\Pr( \text{No-Go at end of study} \mid X_1 ) > PU_{\text{Futility}} = 90\%$$
+
+This can be expressed as:
+
+$$\Pr\left( \left\{ \Pr( \mu_E > \mu_S + MAV \mid X_1, X_2 ) > PU \right\} \Big| X_1 \right) > PU_{\text{Futility}}$$
+
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
+|**dPU**|Go threshold (posterior probability cutoff).|0.8|
+|**dPUFutility**|Threshold to stop the trial early for futility.|0.9|
 
 ## Results
 
@@ -238,9 +529,6 @@ dProbOfEndOfStudyStop <- mean( ifelse( dfResult$BdryStopCode==3 & dfResult$LookI
 # Probability of interim futility
 dProbOfFutilityAtInterim <- mean( ifelse( dfResult$BdryStopCode==3 & dfResult$LookIndex ==1, 1, 0) )
 
-
-
-
 dfSuccess <- dfResult[ dfResult$BdryStopCode==2, ]  # Get just the successful trial
 
 # Probability of Go Conditional on not stopping for futility IA
@@ -253,33 +541,27 @@ dProbOfNoGoCondOnNotStopping <-mean( ifelse( dfEndOfStudy$BdryStopCode==3,1,0) )
 
 The results of the design are as follows:
 
-   * The probability of an end of study Go is: `r dfProbEndOfStudyGo`
-   * The probability of an end of study No-Go (Stop) is: `r dProbOfEndOfStudyStop`
-   * The probability of futility at the interim: `r dProbOfFutilityAtInterim`
-   * The probability of a Go conditional on not stopping at the interim: `r dProbOfGoCondOnNotStopping`
-   * The probability of a No-Go conditional on not stopping at the interim: `r dProbOfNoGoCondOnNotStopping`
-
+- The probability of an end of study Go is: `r dfProbEndOfStudyGo`
+- The probability of an end of study No-Go (Stop) is: `r dProbOfEndOfStudyStop`
+- The probability of futility at the interim: `r dProbOfFutilityAtInterim`
+- The probability of a Go conditional on not stopping at the interim: `r dProbOfGoCondOnNotStopping`
+- The probability of a No-Go conditional on not stopping at the interim: `r dProbOfNoGoCondOnNotStopping`
 
 ```{r  echo=FALSE,  warning=FALSE }
-
 
 dfSuccess <- dfEastResults[ dfEastResults$BdryStopCode==2 & dfEastResults$LookIndex ==2, ]
 
 # Mean of true delta given a Go 
 dPostMeanTrueDelta <- mean( dfSuccess$dTrueDelta )
-
-
 ```
 
 The posterior mean of the true delta, $\mu_E-\mu_S$, given a Go decision is: `r round( dPostMeanTrueDelta, 3)`
-
 
 The summary of the true delta given a Go decision is: 
 
 ```{r echo=FALSE}
 # Summary of true delta given a Go
 round( summary( dfSuccess$dTrueDelta ), 3)
-
 ```
 
 The scaled posterior distribution of the true delta given a Go decision is:
@@ -305,18 +587,136 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
 ```
 
 
+# Example 3 - Fixed Sample Design With a Time-To-Event Outcome
 
-# Example 3
-## Study Design
+This example considers a two-arm fixed sample design with a time-to-event endpoint, with 300 patients per arm. It demonstrates how to customize the the **Response (Patient Simulation)** element of East Horizon's simulation to simulate the true hazard ratio from the prior and then simulate the patient data using the sampled hazard ratio, and the **Analysis** element of East Horizon's simulation to perform the analysis using a Cox model.
 
-This study is a two-arm fixed sample size design with a time-to-event endpoint.   Total sample size is 600 patients with 300 patients per arm.  There is a single analysis when 50% of the patients have had their event observed.  A hazard ratio (HR) below 1 is considered to favor the experimental arm.   The analysis is assumed to be a cox proportional hazard model where a Go decision is made if the p-value $\leq$ 0.025.
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+bigcolxmin = 5
+bigcolxmax = bigcolxmin + 3
+bigcolxmin2 = 8.5
+bigcolxmax2 = bigcolxmin2 + 3
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, bigcolxmin2),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, bigcolxmax2),
+  ymin = rep(3, 7),
+  ymax = rep(10.75, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
+)
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 10.5
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.1, 5),
+  xmax = rep(bigcolxmax - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load prior distribution parameters,\nscaling bounds, and mean TTE", 
+            "Sample from prior distribution\nfor log hazard ratio",
+            "Compute true hazard rates",
+            "Simulate patient survival times\nbased on treatment assignment",
+            "Return simulated survival times\nand true hazard ratio"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+yminfirstbox2 = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox2 = yminfirstbox2 - spaceybox
+yminsecondbox2 = ymaxsecondbox2 - unitybox*1.5
+ymaxthirdbox2 = yminsecondbox2 - spaceybox
+yminthirdbox2 = ymaxthirdbox2 - unitybox*1.5
+ymaxfourthbox2 = yminthirdbox2 - spaceybox
+yminfourthbox2 = ymaxfourthbox2 - unitybox*1.5
+ymaxfifthbox2 = yminfourthbox2 - spaceybox
+yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
+# Define flowchart steps 
+flowchart2 <- data.frame(
+  xmin = rep(bigcolxmin2 + 0.1, 5),
+  xmax = rep(bigcolxmax2 - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2),
+  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2),
+  label = c("Load survival data\nand user-defined parameters",
+            "Fit Cox proportional hazards model\nto observed data",
+            "Compute z-statistic and p-value\nfrom Cox model",
+            "Make Go/No-Go decision based on\np-value and alpha threshold",
+            "Return test statistic, decision,\np-value, and hazard ratio"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows2 <- data.frame(
+  x = rep((bigcolxmin2+bigcolxmax2)/2, 4),
+  xend = rep((bigcolxmin2+bigcolxmax2)/2, 4),
+  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4]),
+  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5])
+)
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(9, 10.5),
+  xmax = c(10, 11.5),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 20, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Add flowchart 
+  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+print(p)
+```
 
-For assurance, a bi-modal prior on the Log(HR) is used.   The components of the prior are:
+## Response (Patient Simulation) Integration Point
 
-  * Weight: 25% on $N( 0, 0.02 )$
-  * Weight: 75% on $Beta( 2, 2)$, rescaled between -0.4 and 0.
-  
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientSurvivalAssurance.R" class="alert-link">SimulatePatientSurvivalAssurance.R</a></p>
+</div>
+
+This function simulates patient-level outcomes within a Bayesian assurance framework. Information generated from this simulation will be used later for the [Analysis Integration Point](#analysis-integration-point-2). In this example, a bi-modal prior on the $\log(HR)$ is used. The components of the prior are:
+ 
+- 25% weight on $\mathcal{N}(0, 0.02)$.
+- 75% weight on $\mathcal{Beta}(2, 2)$, rescaled between -0.4 and 0.
 
 ```{r echo=FALSE,  warning=FALSE}
 
@@ -358,26 +758,31 @@ ggplot(dfDensity, aes(x = x, y = y)) +
     xlim(-0.4, 0.1)  # Set x-axis range from 0 to 1
 ```
 
-## R Integration
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
-### Required R Functions
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Probability of using the normal prior for log(HR).|0.25|
+|**dPriorMean**|Mean of the normal prior for log(HR).|0|
+|**dPriorSD**|Standard deviation of the normal prior for log(HR).|0.02|
+|**dAlpha**|Alpha parameter of the Beta prior for log(HR).|2|
+|**dBeta**|Beta parameter of the Beta prior for log(HR).|2|
+|**dUpper**|Upper bound for scaling the Beta prior.|0|
+|**dLower**|Lower bound for scaling the Beta prior.|-0.4|
+|**dMeanTTEControl**|Mean time-to-event for the control group.|12|
 
-This are 3 required R files and functions needed to evaluate this design.   The first file is used to initialize the R environment and load the survival package.   The second file is used to perform the analysis using a Cox model.  The third required file is used to first simulate the true HR from the prior and then simulate the patient data using the sampled HR.   
+## Analysis Integration Point
 
-The initialize function InitializeSurvival is found in the file [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/InitializeSurvival.R).   The function used for analysis is AnalyzeSurivalDataUsingCoxPH, is found in the file [R/AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeSurvivalDataUsingCoxPH.R)  The function used for simulating patient data is SimulatePatientOutcomeNormalAssurance and is found in the file [R/SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R)
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeSurvivalDataUsingCoxPH.R" class="alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a></p>
+</div>
 
-### Integration with East
+A single analysis is conducted once 50% of patients have experienced the event of interest. Using the function in the file, the analysis employs a Cox proportional hazards model, with a hazard ratio (HR) less than 1 indicating a benefit in favor of the experimental arm. It uses information from the simulation that is generated by the [Response](#response-patient-simulation-integration-point-2) element of East Horizon's simulation, explained above. A Go decision is made if the resulting p-value is less than or equal to 0.025. Refer to the table below for the definitions of the user-defined parameters used in this example.
 
-The required user input for generating patient survival in East is provided below.  
-
-![Input for generate response](Example3GenerateResponseInput.jpg)
-
-### Integration with East Horizon Explore
-
-
-The required user input for generating patient survival in East Horizon Explore is provided below.  
-
-![Input for generate response](Example3GenerateResponseSolara.jpg)
+|**User parameter**|**Definition**|
+|---|------|
+|**bReturnLogTrueHazard**|If `True`, the function returns the natural logarithm of the true hazard ratio instead of its raw value.|
+|**bReturnNAForNoGoTrials**|If `True` and the trial does not meet the Go decision criterion, the function returns `NA` for the hazard ratio.|
 
 ## Results
 
@@ -390,14 +795,11 @@ The required user input for generating patient survival in East Horizon Explore 
 ######################################################################################################################## .
 
 dfEastResultsEx3 <- read_csv("EastOutput/Example3/Example3.csv")
-
 vGo       <- ifelse( dfEastResultsEx3$BdryStopCode ==2, 1, 0)
-
 dProbGo   <- mean( vGo )  # Pr( Go )
 
-
 ```
-The probability of a Go decision is `r round( dProbGo*100, 0)`% and the probability of a No-Go Decision is  is `r 100 - round( dProbGo*100, 0)`%.  The posterior distribution of the true Log( HR ) given a Go decision is:
+The probability of a Go decision is `r round( dProbGo*100, 0)`% and the probability of a No-Go Decision is  is `r 100 - round( dProbGo*100, 0)`%. The posterior distribution of the true $\log( HR )$ given a Go decision is:
 
 ```{r echo = FALSE, warning = FALSE}
 
@@ -462,25 +864,145 @@ ggplot(dfPostDensity, aes(x = x, y = y)) +
 
 ```
 
+# Example 4 - Two Consecutive Studies (Normal Outcome) and De-risking
 
+In this section, we explore how to compute assurance and conditional assurance across two sequential studies: a Phase 2 trial followed by a Phase 3 trial, both with a normal endpoint (as in Example 1).
 
-# Example 4 - Two Consecutive Studies and De-risking
-In this section we explore computing assurance and conditional assurance for two consecutive studies.  A phase 2 with normal endpoints (similar  setup to Example 1) followed by a Phase 3 with a normal endpoint.   
+The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial. This *de-risking* is evaluated by comparing two scenarios: (1) the probability of a No-Go decision in Phase 3 if Phase 2 is skipped, and (2) the probability of a No-Go in Phase 3 if a preceding Phase 2 trial is conducted and yields a Go decision. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2.
 
-The goal is to understand how much the phase 3 trial can be de-risked by first running a phase 2 study to gather additional information.  De-risking is determined by comparing the probability of a No-Go in a phase 3 if the phase 2 was skipped versus the probability of a No-Go in phase 3 if the phase 2 was first conducted and successful.   Specifically, we compute the assurance of the phase 3 conditional on a Go decision in phase 2.  
+Each study of this example customizes the same Integration Points as [Example 1](#example-1---fixed-sample-design-with-a-mixture-of-normal-distributions), and utilizes the same R code. Please refer to it for more information. The only difference is that we now have two different studies: Phase 3 is conducted **only** if Phase 2 results in a Go decision.
 
-## Study Design - Phase 2
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
 
-Same priors as Example 1.
+# Data for boxes
+boxes <- data.frame(
+  label = c("Phase 2", "Phase 3"),
+  x = c(0, 1.5),
+  y = c(0, 0)
+)
 
-Fixed sample, with normally distributed outcomes Y. 
+# Data for arrows
+edges <- data.frame(
+  x = c(0.3),
+  y = c(0),
+  xend = c(1.2),
+  yend = c(0)
+)
 
-  * Sample size: 80 patients per arm
-  * Assume standard deviation is known: $\sigma = 1.9$
-  * MAV = 0.6
-  * $P_U = 0.8$ 
-  
-### Results For Phase 2
+# Plot
+ggplot() +
+  # Draw boxes
+  geom_rect(data = boxes, aes(xmin = x - 0.3, xmax = x + 0.3, ymin = y - 0.2, ymax = y + 0.2), 
+            fill = "lightblue", color = "black") +
+  # Add text inside boxes
+  geom_text(data = boxes, aes(x = x, y = y, label = label), size = 5) +
+  # Draw arrow
+  geom_segment(data = edges, aes(x = x, y = y, xend = xend, yend = yend), 
+               arrow = arrow(length = unit(0.03, "npc")), size = 1) +
+  # Add conditional label above the arrow
+  annotate("text", x = 0.75, y = 0.3, label = "Only if Go", size = 4, fontface = "italic") +
+  coord_fixed(ratio = 1, xlim = c(-0.5, 2), ylim = c(-0.5, 0.7)) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA),  
+    panel.background = element_rect(fill = "white", color = NA), 
+    plot.margin = margin(0, 0, 0, 0),
+    panel.spacing = margin(0, 0, 0, 0) 
+  )
+```
+
+## Phase 2 Study
+
+This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm.
+
+### Response (Patient Simulation) Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
+</div>
+
+The function for the Response Integration Point of the Phase 2 Study is the same as in [Example 1](#response-patient-simulation-integration-point). Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Weight of prior component 1.|0.25|
+|**dWeight2**|Weight of prior component 2.|0.75|
+|**dMean1**|Mean of prior component 1.|0|
+|**dMean2**|Mean of prior component 2.|0.7|
+|**dSD1**|Standard deviation of prior component 1.|0.05|
+|**dSD2**|Standard deviation of prior component 2.|0.3|
+|**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
+|**dSDCtrl**|Standard deviation for control arm.|1.9|
+|**dSDExp**|Standard deviation for experimental arm.|1.9|
+
+### Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div> 
+
+The function for the Analysis Integration Point of the Phase 2 Study is the same as in [Example 1](#analysis-integration-point).
+
+For this study, the *MAV* is set to 0.6 and $P_U$ to 0.8. Refer to the table below for all the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.6|
+|**dPU**|Go threshold (posterior probability cutoff).|0.8|
+
+## Phase 3 Study
+
+This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 200 patients per treatment arm.
+
+### Response (Patient Simulation) Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
+</div>
+
+The function for the Response Integration Point of the Phase 2 Study is the same as in [Example 1](#response-patient-simulation-integration-point). Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Weight of prior component 1.|0.25|
+|**dWeight2**|Weight of prior component 2.|0.75|
+|**dMean1**|Mean of prior component 1.|0|
+|**dMean2**|Mean of prior component 2.|0.7|
+|**dSD1**|Standard deviation of prior component 1.|0.05|
+|**dSD2**|Standard deviation of prior component 2.|0.3|
+|**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
+|**dSDCtrl**|Standard deviation for control arm.|1.9|
+|**dSDExp**|Standard deviation for experimental arm.|1.9|
+
+### Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div> 
+
+The function for the Analysis Integration Point of the Phase 2 Study is the same as in [Example 1](#analysis-integration-point).
+
+For this study, the *MAV* is set to 0.6 and $P_U$ to 0.5. This design is equivalent to a t-test because the critical value would be 0.6 and having a posterior probability greater than 0.5 would indicate that the estimated treatment difference is above the critical value. 
+
+Refer to the table below for all the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.6|
+|**dPU**|Go threshold (posterior probability cutoff).|0.5|
+
+## Results
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 
@@ -504,7 +1026,7 @@ dMeanTrueDetalGivenGo <- mean( dfSuccess$dTrueDelta )
 
 ```
 
-The probability of a Go is `r dProbGo`% and the probability of a No-Go is `r 100-dProbGo`%.  
+For the phase 2 study independently, the probability of a Go is `r dProbGo`% and the probability of a No-Go is `r 100-dProbGo`%.  
 
 ```{r echo = FALSE, warning = FALSE}
 
@@ -525,23 +1047,6 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
         axis.line = element_line(color = "black")  # Add black axis line
     ) 
 ```
-
-
-
-## Study Design - Phase 3
-
-
-Fixed sample, with normally distributed outcomes Y. 
-
-  * Sample size: 200 patients per arm
-  * Assume standard deviation is known: $\sigma = 1.9$
-  * MAV = 0.6
-  * $P_U = 0.5$ 
-
-With MAV = 0.6 and $P_U = 0.5$ this design is equivalent to using a t-test because the critical value would be 0.6 and having a posterior probability greater than 0.5 would indicate that the estimated treatment difference is above the critical value. 
-  
-
-### Results For Phase 3
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 
@@ -565,7 +1070,7 @@ dMeanTrueDetalGivenGo <- mean( dfSuccess$dTrueDelta )
 
 ```
 
-The probability of a Go in Phase 3 is `r dProbGoPh3`% and the probability of a No-Go is `r 100-dProbGoPh3`%.  
+For the phase 3 study independently, the probability of a Go is `r dProbGoPh3`% and the probability of a No-Go is `r 100-dProbGoPh3`%.  
 
 ```{r echo = FALSE, warning = FALSE}
 
@@ -586,33 +1091,6 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
         axis.line = element_line(color = "black")  # Add black axis line
     ) 
 ```
-
-
-
-## Phase 2 followed by Phase 3
-
-Using a Phase 2 design like above. 
-
-*Phase 2*
-
-Fixed sample, with normally distributed outcomes Y. 
-
-  * Sample size: 80 patients per arm
-  * Assume standard deviation is known: $\sigma = 1.9$
-  * MAV = 0.6
-  * $P_U = 0.8$ 
-
-If the Phase 2 makes a Go decision then the Phase 3 is conducted as follows:
-
-Fixed sample, with normally distributed outcomes Y. 
-
-  * Sample size: 200 patients per arm
-  * Assume standard deviation is known: $\sigma = 1.9$
-  * MAV = 0.6
-  * $P_U = 0.5$ 
-
-
-### Results For Phase 2 Followed by Phase 3
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 
@@ -636,8 +1114,7 @@ dMeanTrueDetalGivenGo <- mean( dfSuccess$dTrueDelta )
 
 ```
 
-Given a Go decision is made in Phase 2, the probability of a Go in Phase 3 is `r dProbGo`%  and the probability of a No-Go is `r 100-dProbGo`%.
-
+If the two studies are run sequentially, conducting Phase 3 only if Phase 2 results in a Go decision, the probability of a Go in Phase 3 is `r dProbGo`% and the probability of a No-Go is `r 100-dProbGo`%.
 
 ```{r echo = FALSE, warning = FALSE}
 
@@ -659,27 +1136,271 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
     ) 
 ```
 
+Comparing the option of running only a Phase 3 versus a Phase 2 followed by a Phase 3 if Phase 2 is successful, the probability of Go in phase 3 increases from **`r dProbGoPh3`%** to **`r dProbGo`%** and the probability of a No-Go in Phase 3 decreases from **`r 100-dProbGoPh3`%** to **`r 100-dProbGo`%**.
 
-### De-risking
+# Example 5 - Two Consecutive Studies (Normal and Time-To-Event outcomes) and De-risking
 
-Comparing the option of running only a Phase 3 versus a Phase 2 followed by a Phase 3 if Phase 2 is successful,  the probability of Go in phase 3 increases from `r dProbGoPh3`% to `r dProbGo`% and the probability of a No-Go in Phase 3 decreases from `r 100-dProbGoPh3`% to `r 100-dProbGo`%.
+Similarly to [Example 4](#example-4---two-consecutive-normal-studies-and-de-risking), in this section we explore how to compute assurance and conditional assurance across two sequential studies: a Phase 2 trial with a normal endpoint followed by a Phase 3 trial with a time-to-event endpoint.
 
+As before, Phase 3 is conducted **only** if Phase 2 results in a Go decision. The Phase 2 study of this example customizes the same Integration Points as [Example 1](#example-1---fixed-sample-design-with-a-mixture-of-normal-distributions), and utilizes the same R code. Please refer to it for more information. However, the Phase 3 study utilizes new Integration points and R code, as described below.
 
-# Example 5 - Two Consecutive Studies and De-risking
-In this section we explore computing assurance and conditional assurance for two consecutive studies.  A phase 2 with normal endpoints (similar  setup to Example 1) followed by a Phase 3 with a time-to-event endpoint.   
+## Phase 2 Study
 
-## Study Design Phase 2
+This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm.
 
-Same priors as Example 1.
+### Response (Patient Simulation) Integration Point
 
-Fixed sample, with normally distributed outcomes Y. 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
+</div>
 
-  * Sample size: 80 patients per arm
-  * Assume standard deviation is known: $\sigma = 1.9$
-  * MAV = 0.6
-  * $P_U = 0.8$ 
-  
-### Results For Phase 2
+The function for the Response Integration Point of the Phase 2 Study is the same as in [Example 1](#response-patient-simulation-integration-point). Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Weight of prior component 1.|0.25|
+|**dWeight2**|Weight of prior component 2.|0.75|
+|**dMean1**|Mean of prior component 1.|0|
+|**dMean2**|Mean of prior component 2.|0.7|
+|**dSD1**|Standard deviation of prior component 1.|0.05|
+|**dSD2**|Standard deviation of prior component 2.|0.3|
+|**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
+|**dSDCtrl**|Standard deviation for control arm.|1.9|
+|**dSDExp**|Standard deviation for experimental arm.|1.9|
+
+### Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div> 
+
+The function for the Analysis Integration Point of the Phase 2 Study is the same as in [Example 1](#analysis-integration-point).
+
+For this study, the *MAV* is set to 0.6 and $P_U$ to 0.8. Refer to the table below for all the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.6|
+|**dPU**|Go threshold (posterior probability cutoff).|0.8|
+
+## Phase 3 Study
+
+This study considers a two-arm fixed sample design with a time-to-event endpoint, with 300 patients per arm.
+
+The figure below illustrates where the integration points used in this study fit within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+bigcolxmin = 8.4
+bigcolxmax = bigcolxmin + 4.1
+bigcolxmin2 = 13
+bigcolxmax2 = bigcolxmin2 + 4
+bigcolxmin3 = 0
+bigcolxmax3 = 4
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(bigcolxmin3, 4.5, 5.5, 6.5, 7.5, bigcolxmin, bigcolxmin2),
+  xmax = c(bigcolxmax3, 5, 6, 7, 8, bigcolxmax, bigcolxmax2),
+  ymin = rep(3, 7),
+  ymax = rep(10.75, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
+  border = c("#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
+)
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 10.5
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.1, 5),
+  xmax = rep(bigcolxmax - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load prior distribution parameters,\nscaling bounds, and mean TTE", 
+            "Sample from prior distribution\nfor log hazard ratio",
+            "Compute true hazard rates",
+            "Simulate patient survival times\nbased on treatment assignment",
+            "Return simulated survival times\nand true hazard ratio"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+yminfirstbox2 = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox2 = yminfirstbox2 - spaceybox
+yminsecondbox2 = ymaxsecondbox2 - unitybox*1.5
+ymaxthirdbox2 = yminsecondbox2 - spaceybox
+yminthirdbox2 = ymaxthirdbox2 - unitybox*1.5
+ymaxfourthbox2 = yminthirdbox2 - spaceybox
+yminfourthbox2 = ymaxfourthbox2 - unitybox*1.5
+ymaxfifthbox2 = yminfourthbox2 - spaceybox
+yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
+# Define flowchart steps 
+flowchart2 <- data.frame(
+  xmin = rep(bigcolxmin2 + 0.1, 5),
+  xmax = rep(bigcolxmax2 - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2),
+  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2),
+  label = c("Load survival data, mean TTE,\nand relationship parameters",
+            "Sample true treatment effect\nfrom prior distribution",
+            "Compute true log hazard ratio\nand hazard rates for each arm",
+            "Generate exponential survival\ntimes based on hazard rates",
+            "Return simulated survival times\nand true hazard ratio"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows2 <- data.frame(
+  x = rep((bigcolxmin2+bigcolxmax2)/2, 4),
+  xend = rep((bigcolxmin2+bigcolxmax2)/2, 4),
+  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4]),
+  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5])
+)
+
+yminfirstbox3 = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox3 = yminfirstbox3 - spaceybox
+yminsecondbox3 = ymaxsecondbox3 - unitybox*1.5
+# Define flowchart steps 
+flowchart3 <- data.frame(
+  xmin = rep(bigcolxmin3 + 0.1, 2),
+  xmax = rep(bigcolxmax3 - 0.1, 2),
+  ymax = c(ymaxfirstbox, ymaxsecondbox3),
+  ymin = c(yminfirstbox3, yminsecondbox3),
+  label = c("Load true treatment differences\nfrom CSV or R file",
+            "Define prior and simulation\nindex global variables"),
+  fill = rep("#cfe2ff", 2)
+)
+# Define arrows for flowchart 
+flowchart_arrows3 <- data.frame(
+  x = rep((bigcolxmin3+bigcolxmax3)/2, 1),
+  xend = rep((bigcolxmin3+bigcolxmax3)/2, 1),
+  y = c(flowchart3$ymin[1]),
+  yend = c(flowchart3$ymax[2])
+)
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(14.5, 16),
+  xmax = c(15.5, 17),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 20, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Add flowchart 
+  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Add flowchart 
+  geom_rect(data = flowchart3, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart3, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows3, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+print(p)
+```
+
+## Initialize Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/ReadInPrior.R" class="alert-link">ReadInPrior.R</a></p>
+</div>
+
+During the Phase 2 simulation, the true treatment difference was sampled from the prior distribution and we manually saved it to an output CSV file.
+
+Both conditional and unconditional Phase 3 simulations use an R initialization function to load this output and extract the true treatment differences. These values are then converted to the log of the true hazard ratio (HR) using the linear link function shown in the [Response section](#response-patient-simulation-integration-point-6). Note that while unconditional assurance could be calculated by sampling directly from the Phase 2 prior, reading the saved values ensures a consistent comparison between conditional and unconditional assurance. This approach provides a more accurate assessment of the benefit of conducting a Phase 2 trial before Phase 3.
+
+If used with East, the *ReadExample5Phase2Output* function is used to load the true treatment differences from a CSV file. You can update the R code to specify your correct file path. In East Horizon, which does not support file uploads, use the *ReadExample5Phase2OutputSolara* function instead. There, the treatment differences are pasted directly into an R vector.
+
+In the R code, note that the `<<-` operator is used to define two global variables:
+
+- `vPrior`: a vector containing the true treatment differences.
+- `nSimIndex`: an index tracking the current replication being executed during the Phase 3 simulation.
+
+Both variables are used in the [Response Integration Point](#response-patient-simulation-integration-point-6) R function. The `nSimIndex` value is updated with each simulation iteration.
+
+This function relies on the user-defined parameter `bConditionalOnGo`. When set to 1, only the true treatment differences that led to a Go decision in Phase 2 are used to calculate conditional assurance. Note that the number of Phase 3 replications used in simulating for conditional assurance must be no greater than the number of successful Phase 2 simulations. When `bConditionalOnGo` is set to 0, all sampled treatment differences from Phase 2 are used to compute unconditional assurance. Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|---|------|
+|**bConditionalOnGo**|If `True`, uses only Phase 2 results that led to a Go decision. Otherwise, uses all results.|
+
+## Response (Patient Simulation) Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R" class="alert-link">SimulatePatientSurvivalAssuranceUsingPh2Prior.R</a></p>
+</div>
+
+This function simulates patient-level outcomes within a Bayesian assurance framework. The relationship between the continuous endpoint in Phase 2 and the time-to-event endpoint in Phase 3 is modeled using a linear function:
+
+$$ 
+\log(\text{True HR})_{\text{Phase 3}} = 0.1 - 0.4 \times (\text{True Treatment Difference})_{\text{Phase 2}}
+$$
+
+Note that this relationship is defined in terms of the true treatment effects. Since Phase 2 informs the prior on the true treatment difference and a direct link is established between the true difference and the true hazard ratio, there is no need to specify a separate prior for the true HR as done in Example 3.
+
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dMeanTTEControl**|Mean time-to-event for the control group.|12|
+|**dIntercept**|Intercept for the linear relationship between true treatment difference and log(HR).|0.1|
+|**dSlope**|Slope for the linear relationship between true treatment difference and log(HR).|-0.4|
+
+## Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/AnalyzeSurvivalDataUsingCoxPH.R" class="alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a></p>
+</div>
+
+Similarly to [Example 3](#analysis-integration-point-2), a single analysis is conducted once 50% of patients have experienced the event of interest. Using the function in the file, the analysis employs a Cox proportional hazards model, with a hazard ratio (HR) less than 1 indicating a benefit in favor of the experimental arm. A Go decision is made if the resulting p-value is less than or equal to 0.025.
+
+Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|---|------|
+|**bReturnLogTrueHazard**|If `True`, the function returns the natural logarithm of the true hazard ratio instead of its raw value.|
+|**bReturnNAForNoGoTrials**|If `True` and the trial does not meet the Go decision criterion, the function returns `NA` for the hazard ratio.|
+
+## Results
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 
@@ -703,7 +1424,7 @@ dMeanTrueDetalGivenGo <- mean( dfSuccess$dTrueDelta )
 
 ```
 
-The probability of a Go is `r dProbGo`% and the probability of a No-Go is `r 100-dProbGo`%.  
+For the phase 2 study independently, the probability of a Go is `r dProbGo`% and the probability of a No-Go is `r 100-dProbGo`%.  
 
 ```{r echo = FALSE, warning = FALSE}
 
@@ -725,36 +1446,6 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
     ) 
 ```
 
-
-## Study Design Phase 3
-
-This study is a two-arm fixed sample size design with a time-to-event endpoint.   Total sample size is 600 patients with 300 patients per arm.  There is a single analysis when 50% of the patients have had their event observed.  A hazard ratio (HR) below 1 is considered to favor the experimental arm.   The analysis is assumed to be a cox proportional hazard model where a Go decision is made if the p-value $\leq$ 0.025.
-
-The relationship between the continuous endpoint in phase 2 and the time-to-event endpoint in phase 3 is assumed to follow a linear function:
-
-$$ 
-log(\ True \ HR\ ) \text{ in phase 3 = 0.1 − 0.4 ∗ ( true treatment difference in phase  2)}
-$$ 
-    
-Note that the relationship is established on the true treatment effects.  Since the phase 2 provides a prior on the true treatment different and we have the linear link function between the true treatment difference and the true HR, we do not need to specify the prior on the true HR like in Example 3. 
-
-## East-R Integration
-For this example, in the East workbook Example 5 - Phase 2 is used to simulate the phase 2 and Example 5 - Phase 3 is used to simulate the phase 3 for both the conditional and unconditional assurance calculations.  When the phase 2 is simulated, the true treatment different is sampled from the prior is saved in the output file from phase 2.  Both the conditional and unconditional phase 3 use an R initialize function to read in the output from the phase 2 and obtain the true treatment difference which is then converted to the log of the true HR given the link function above.  Note, for the unconditional assurance an alternative approach would be to sample the phase 2 prior directly rather then read the output from phase 2.  However, reading the true values in from the phase 2 creates a more consistent comparison between the conditional and unconditional assurance calculations and a more accurate estimate of the benefit of running the phase 2 prior to the phase 3.   
-
-### Required R Function
-
-For the phase 2, the same functions are needed as Example 2.
-
-The two functions that are needed to evaluate this design and obtain the Bayesian assurance are the analysis function, AnayzeUsingBayesianNormals, and patient simulation function, SimulatePatientOutcomeNormalAssurance.  
-
-For the phase 3, three functions are needed: 1) ReadExample5Phase2Output, 2) AnalyzeSurvivalDataUsingCoxPh, and 3) SimulatePatientSurvivalAssuranceUsingPh2Pior and the functions are located in the R directory in the file with the matching file name.  The ReadExample5Phase2Output is called from the Initialize R Environment in East and loads the survival package as it is needed for the coxph function and also reads in the true treatment difference from phase 2.  Note the use of the <<- operator to create a global variables vPrior, the vector with the treatment difference, and nSimIndex to keep track of which simulation index or replication the simulation is executing when the call to  SimulatePatientSurvivalAssuranceUsingPh2Pior is executed. Both vPrior and nSimIndex are utilized in the function  SimulatePatientSurvivalAssuranceUsingPh2Pior and the nSimIndex variable is updated with each call. 
-
-The function ReadExample5Phase2Output utilizes the UserParam variables from East and if UserParam\$bConditionalOnGo is 1, then only the true treatment effects that resulted in a Go decision in Phase 2 are retained allowing the simulation to compute the conditional assurance.  Note that the number of replications used in simulating the phase 3 for conditional assurance must be less than or equal to the number of simulated phase 2 trials that were successful.   If UserParam\$bConditionalOnGo is 0 then all true treatment effects sampled in the Phase 2 are retained allowing the simulation to compute the unconditional assurance. 
-
-
-## Results Phase 3, No Phase 2 Conducted
-
-
 ```{r  echo=FALSE,  warning=FALSE, include = FALSE}
 
 ######################################################################################################################## .
@@ -771,7 +1462,8 @@ dProbGoUncond   <- mean( dfEastResultsEx5Ph3Uncond$BdryStopCode )  # Pr( Go )
 vCredIntervalUncond <- log( quantile(dfEastResultsEx5Ph3Uncond$TrueHR , probs=c(0.025,0.975)) )
 
 ```
-For Phase 3, the unconditional probability of a Go decision is `r round( dProbGoUncond*100, 0)`% and the unconditional probability of a No-Go Decision is `r 100 - round( dProbGoUncond*100, 0)`%.   The 95% posterior credible for the Log( True HR ) is (-$\infty$, `r round( vCredIntervalUncond[2],2)` ). The posterior distribution of the true Log( HR ) given a Go decision is:
+
+For the phase 3 study independently, the unconditional probability of a Go decision is `r round( dProbGoUncond*100, 0)`% and the unconditional probability of a No-Go Decision is `r 100 - round( dProbGoUncond*100, 0)`%. The 95% posterior credible for the Log( True HR ) is (-$\infty$, `r round( vCredIntervalUncond[2],2)` ). The posterior distribution of the true Log( HR ) given a Go decision is:
 
 ```{r echo = FALSE, warning = FALSE}
 
@@ -779,7 +1471,6 @@ For Phase 3, the unconditional probability of a Go decision is `r round( dProbGo
 dfSuccess <- dfEastResultsEx5Ph3Uncond[ dfEastResultsEx5Ph3Uncond$BdryStopCode==1, ]
 
 dfDensity <- density( log( dfSuccess$TrueHR) )
-
 
 #dfPostSample <- data.frame( SampleMean = dfSuccess$dTrueDelta )
 
@@ -811,12 +1502,6 @@ ggplot(dfPostDensity, aes(x = x, y = y)) +
 
 ```
 
-
-
-
-## Results Phase 3, Conditional on Phase 2 Go Decision
-
-
 ```{r  echo=FALSE,  warning=FALSE, include = FALSE}
 
 ######################################################################################################################## .
@@ -833,7 +1518,8 @@ vCredIntervalCond <- log( quantile(dfEastResultsEx5Ph3Cond$TrueHR , probs=c(0.02
 
 
 ```
-For Phase 3, conditional on the phase 2 making a go decision, the probability of a Go decision is `r round( dProbGoCond*100, 0)`% and the unconditional probability of a No-Go Decision is `r 100 - round( dProbGoCond*100, 0)`%.   The 95% posterior credible for the Log( True HR ) is (`r round( vCredIntervalCond[1],2)`, `r  round( vCredIntervalCond[2],2)`).  The posterior distribution of the true Log( HR ) given a Phase 3 Go decision is:
+
+If the two studies are run sequentially, conducting Phase 3 only if Phase 2 results in a Go decision, the probability of a Go decision is `r round( dProbGoCond*100, 0)`% and the unconditional probability of a No-Go Decision is `r 100 - round( dProbGoCond*100, 0)`%. The 95% posterior credible for the Log( True HR ) is (`r round( vCredIntervalCond[1],2)`, `r  round( vCredIntervalCond[2],2)`). The posterior distribution of the true Log( HR ) given a Phase 3 Go decision is:
 
 ```{r echo = FALSE, warning = FALSE}
 
@@ -873,9 +1559,4 @@ ggplot(dfPostDensity, aes(x = x, y = y)) +
 
 ```
 
-
-
-### De-risking
-
-Comparing the option of running only a Phase 3 versus a Phase 2 followed by a Phase 3 if Phase 2 is successful,  the probability of Go in phase 3 increases from `r round(100*dProbGoUncond,0)`% to `r round( 100*dProbGoCond,0)`% and the probability of a No-Go in Phase 3 decreases from `r 100-round(100*dProbGoUncond,0)`% to `r 100-round( 100*dProbGoCond,0)`%.
-
+Comparing the option of running only a Phase 3 versus a Phase 2 followed by a Phase 3 if Phase 2 is successful, the probability of Go in phase 3 increases from **`r round(100*dProbGoUncond,0)`%** to **`r round( 100*dProbGoCond,0)`%** and the probability of a No-Go in Phase 3 decreases from **`r 100-round(100*dProbGoUncond,0)`%** to **`r 100-round( 100*dProbGoCond,0)`%**.

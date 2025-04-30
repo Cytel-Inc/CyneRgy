@@ -2,16 +2,16 @@
 title: 'Generate Patient Arrival Times with Poisson Process'
 author: "J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output:
-  html_document: default
-  word_document: default
 ---
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Enrollment</strong>.
+  <a href="IntegrationPointEnrollment.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
 
 # Introduction
 
-This example demonstrates how to add the ability to generate patient arrival time according to a Poisson process with a ramp-up.  
-
-The examples included here are to provide different approaches for simulating arrival time according to a Poisson process. 
+The following examples demonstrate how to integrate the capability to generate patient arrival times following a Poisson process with a ramp-up phase into East Horizon or East using R functions. They showcase different approaches for simulating arrival times based on a Poisson process, offering flexibility in modeling patient recruitment dynamics.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
@@ -26,17 +26,39 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/R) you will find the following R file:
 
-1. [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R) - This file provides the code used for the two examples below.
+1. [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R) - This file provides the code used for the two examples below.à
 
+# Example 1 - Ramp-Up In Accrual Using UserParam
 
-# Example 1 - Ramp-Up In Accrual
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="alert-link">GeneratePoissonArrival.R</a></p>
+</div>
 
-In this example we make use of the UserParam and provide 7 rates, dRate1, dRate2, ..., dRate7.   Starting at time 0, the assume accrual rate is dRate1 per unit time, at time 1, the rate changes to dRate2, at time 3, the rate changes to dRate3, etc.    For example, if the time unit is months, then this example illustrates how to ramp up over a 6 month period, where at month 6 and beyond the accrual rate is assumed to be dRate7.  
+In this example, we use seven accrual rates as user parameters in East Horizon after selecting the R script. When custom variables are provided, the built-in variables *PrdStart* and *AccrRate* from East Horizon are ignored. Note that in this example, the start of the accrual periods cannot be specified. See [Example 2](#example-2---ramp-up-in-accrual) for that. Unless otherwise stated in East Horizon, the default time unit is months. Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
-Suppose that the expected accrual rates were 3, 6, 10, 15, 18, 25, 35 starting at time unit 0, 1, 2, 3, 4, 5, 6.  One example trial could have accrual that looks like the following:
+|**User parameter**|**Definition**|**Value**|
+|---|------|---|
+|$UserParam\$dRate1$|Accrual rate in the first unit of time|3|
+|$UserParam\$dRate2$|Accrual rate in the second unit of time|6|
+|$UserParam\$dRate3$|Accrual rate in the third unit of time|10|
+|$UserParam\$dRate4$|Accrual rate in the fourth unit of time|15|
+|$UserParam\$dRate5$|Accrual rate in the fifth unit of time|18|
+|$UserParam\$dRate6$|Accrual rate in the sixth unit of time|25|
+|$UserParam\$dRate7$|Accrual rate in the seventh unit of time|35|
+
+Warning, the first time unit is 0, not 1. This means:
+
+- At time 0, the accrual rate is *dRate1* (3) per unit time.
+- At time 1, the rate changes to *dRate2* (6).
+- At time 2, the rate changes to *dRate3* (10), and so on.
+- After time 6, the accrual rate remains at *dRate7* (35).
+
+For example, if the time unit is months, this setup models a ramp-up over a six-month period, with the accrual rate stabilizing at *dRate7* (35) from month 6 onward. This could produce an accrual pattern resembling the following:
 
 ```{r echo=FALSE,  warning=FALSE}
 source("R/GeneratePoissonArrival.R")
+
+par(bg = "white")  # Set background to white
 
 NumSub   <- 600
 NumPrd   <- 1  
@@ -48,28 +70,227 @@ lRet <- GeneratePoissonArrival( NumSub, NumPrd, PrdStart, AccrRate, UserParam )
 
 
 plot( lRet$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time", ylab ="Number of Patients Enrolled", main = "Number of Patients Enrolled Using UserParam")
-
-
-
 ```
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 1
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, bigcolxmin, 4.5, 5.5, 6.5, 7.5, 8.5),
+  xmax = c(0.5, bigcolxmax, 5, 6, 7, 8, 9),
+  ymin = rep(3, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 5),
+  xmax = rep(bigcolxmax - 0.3, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load accrual rates", 
+            "Calculate duration of accrual periods",
+            "Loop through patients", 
+            "Simulate patient arrival times\nusing Poisson process", 
+            "Return arrival times"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
+
 
 # Example 2 - Ramp-Up In Accrual Using Built In Input
 
-In this example we make use of the built-in inputs for East and East Horizon to provide a ramp-up in accrual that the user can specify.
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="alert-link">GeneratePoissonArrival.R</a></p>
+</div>
 
-Suppose that the user specified the start periods as 0, 6, 12, 18, 24, 48 and the expected accrual rates of 1, 4, 12, 24, 48.  Then, from time 0 to time 6, the expected rate is 1 patient per time unit, from time 6 to 12, the rate is 4 patients per time unit, time 12 to 18, expected accrual is 12, time 18 to 24, the rate is 24, and after time unit 24, it is assumed to be 48. One example trial could have accrual that looks like the following, with dashed lines at the time points where accrual rates change:
+This example does not use any user-defined parameters, but uses built-in parameters specified in East Horizon. We use the same file as before, but we now use built-in inputs of start periods and expected accrual rates (*Starting at Time* and *Average Subjects Enrolled* in the *Enrollment Card*) to implement a user-specified ramp-up in accrual using Poisson. Refer to the table below for more information.
+
+|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|**Value**
+|-----|----|---|-|
+|Starting at Time (Period 1)|Enrollment Card|$PrdStart[ 1 ]$|0|
+|Starting at Time (Period 2)|Enrollment Card|$PrdStart[ 2 ]$|6|
+|Starting at Time (Period 3)|Enrollment Card|$PrdStart[ 3 ]$|12|
+|Starting at Time (Period 4)|Enrollment Card|$PrdStart[ 4 ]$|18|
+|Starting at Time (Period 5)|Enrollment Card|$PrdStart[ 5 ]$|24|
+|Average Subjects Enrolled (Period 1)|Enrollment Card|$AccrRate[ 1 ]$|1|
+|Average Subjects Enrolled (Period 2)|Enrollment Card|$AccrRate[ 2 ]$|4|
+|Average Subjects Enrolled (Period 3)|Enrollment Card|$AccrRate[ 3 ]$|12|
+|Average Subjects Enrolled (Period 4)|Enrollment Card|$AccrRate[ 4 ]$|24|
+|Average Subjects Enrolled (Period 5)|Enrollment Card|$AccrRate[ 5 ]$|48|
+
+This means:
+
+- From time 0 to 6, the expected accrual rate is 1 patient per time unit.
+- From time 6 to 12, the rate increases to 4 patients per time unit.
+- From time 12 to 18, the rate further increases to 12 patients per time unit.
+- From time 18 to 24, the expected accrual rate is 24.
+- After time unit 24, the accrual rate is assumed to be 48 patients per time unit.
+
+This would yield accrual patterns resembling the following figure, with dashed lines marking the time points where accrual rates change:
 
 ```{r echo=FALSE,  warning=FALSE}
+source("R/GeneratePoissonArrival.R")
+
+par(bg = "white")  # Set background to white
+
+NumSub   <- 600
+NumPrd   <- 1  
 AccrRate <- c( 1, 4, 12, 24, 48)
 PrdStart <- c( 0, 6, 12, 18, 24 )
 lRet2 <- GeneratePoissonArrival( NumSub, NumPrd, PrdStart, AccrRate  )
-plot( lRet2$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time",main = "Number of Patients Enrolled Using PrdStart and AccrRate", ylab = "Number of Patients Enrolled", ylim = c(0,300), xlim = c(0,26))
+plot( lRet2$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time", main = "Number of Patients Enrolled Using PrdStart and AccrRate", ylab = "Number of Patients Enrolled", ylim = c(0,300), xlim = c(0,26))
 abline( v = PrdStart, lty =2)
-
-plot( lRet2$ArrivalTime , 1:NumSub, type = 'l', xlab = "Time",main = "Number of Patients Enrolled Using PrdStart and AccrRate", ylab = "Number of Patients Enrolled")
-abline( v = PrdStart, lty =2)
-
 ```
 
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+bigcolxmin = 1
+bigcolxmax = bigcolxmin + 3
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, bigcolxmin, 4.5, 5.5, 6.5, 7.5, 8.5),
+  xmax = c(0.5, bigcolxmax, 5, 6, 7, 8, 9),
+  ymin = rep(3, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray"),
+  border = c("lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox
+
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.3, 5),
+  xmax = rep(bigcolxmax - 0.3, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load period starts and accrual rates", 
+            "Calculate duration of accrual periods",
+            "Loop through patients", 
+            "Simulate patient arrival times\nusing Poisson process", 
+            "Return arrival times"),
+  fill = rep("#cfe2ff", 5)
+)
+
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
 
