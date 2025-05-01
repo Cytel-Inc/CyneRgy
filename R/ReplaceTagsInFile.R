@@ -5,17 +5,25 @@
 #   Change History:
 #   Last Modified Date: 12/21/2023
 #################################################################################################### .
-#' Replace tags in a file.  
-#' @param strFileName The name of the file to use as input.  In tags, defined by {{tags}}, will be replaced with the corresponding values.
-#' @param vTags Vector of tag names, eg FUNCTION_NAME, VARIABLE_NAME that will be replaced with the values in vReplace
-#' @param vreplace Vector of values to replace the tags with.
-#' @return A TRUE/FALSE value if the functions was successful. 
-#' @description { Description: This function is used to replace {{tags}} in template files. }
-#' @examples  \dontrun{
-#' vTags    <- c("FUNCTION_NAME",  "CREATION_DATE")
+#' @name ReplaceTagsInFile
+#' @title Replace Tags in a File
+#'
+#' @description This function replaces {{tags}} in template files with corresponding values.
+#'
+#' @param strFileName The name of the file to use as input. Tags, defined by {{tags}}, will be replaced with the corresponding values.
+#' @param vTags A vector of tag names, e.g., FUNCTION_NAME, VARIABLE_NAME, that will be replaced with the values in vReplace.
+#' @param vReplace A vector of values to replace the tags with.
+#' @return A logical value (TRUE/FALSE) indicating whether the function was successful.
+#' @examples
+#' \dontrun{
+#' vTags    <- c("FUNCTION_NAME", "CREATION_DATE")
 #' vReplace <- c(strNewFunctionName, strToday)
 #' strFileName <- "MyTemplate.R" # A file that contains {{FUNCTION_NAME}} and {{CREATION_DATE}}
-#' ReplaceTagsInFile( strFileName, vTags, vReplace )}
+#' ReplaceTagsInFile(strFileName, vTags, vReplace)
+#' }
+#' @export
+#################################################################################################### .
+
 ReplaceTagsInFile <- function( strFileName, vTags, vReplace )
 {
     bFileExists     <- file.exists( strFileName )
@@ -23,13 +31,13 @@ ReplaceTagsInFile <- function( strFileName, vTags, vReplace )
     {
         strInput <- readLines( strFileName )
         lData    <- list()
-        nQtyTags <- length(vTags)
+        nQtyTags <- length( vTags )
         for( iTag in 1:nQtyTags )
         {
             lData[[vTags[ iTag ]]] <- vReplace[ iTag ]
         }
         
-        strRet  <- WhiskerKeepUnrender(strInput, lData)
+        strRet  <- WhiskerKeepUnrender( strInput, lData )
         writeLines( strRet, con = strFileName )
         
     }

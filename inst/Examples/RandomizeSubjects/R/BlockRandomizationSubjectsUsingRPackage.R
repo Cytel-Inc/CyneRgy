@@ -49,9 +49,9 @@ BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio
         vBlockSize                <- c( vBlockSize, UserParam[[ paste0( "BlockSize", i )]])
     }
     
-    cPar                          <- pbrPar( bc = vBlockSize, K = 2, ratio = vAllocRatio, groups = c( "0", "1" ) ) 
-    cObject                       <- genSeq( cPar, r = 1 )                             
-    retval                        <- as.numeric( getRandList( cObject ) )
+    cPar                          <- randomizeR::pbrPar( bc = vBlockSize, K = 2, ratio = vAllocRatio, groups = c( "0", "1" ) ) 
+    cObject                       <- randomizeR::genSeq( cPar, r = 1 )                             
+    retval                        <- as.numeric( randomizeR::getRandList( cObject ) )
     
     return( list( TreatmentID = as.integer( retval ), ErrorCode = as.integer( Error ) ) )
 }

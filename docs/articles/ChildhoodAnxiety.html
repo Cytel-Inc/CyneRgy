@@ -17,6 +17,8 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Childhood Anxiety Trial">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -26,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +75,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6></li>
     <li><a class="dropdown-item" href="../articles/AssuranceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a></li>
+    <li><a class="dropdown-item" href="../articles/ProbabilitySuccessDualEndpointsPFSOS.html">Probability of Success for Dual Endpoints (PFS &amp; OS)</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6></li>
     <li><a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a></li>
@@ -112,7 +115,7 @@
                         <h4 data-toc-skip class="author">Audrey Wathen,
 J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">January 16, 2025</h4>
+            <h4 data-toc-skip class="date">May 01, 2025</h4>
       
 
       <div class="d-none name"><code>ChildhoodAnxiety.Rmd</code></div>
@@ -120,22 +123,35 @@ J. Kyle Wathen</h4>
 
     
     
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+These examples are related to the <strong>Integration Point: Response -
+Continuous Outcome</strong>.
+<a href="IntegrationPointResponseContinuous.html" class="alert-link">Click
+here for more information about this integration point.</a>
+</p>
+</div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>In this example, we cover the situation where the patient data
-simulation needs to be improved to match what is expected in a clinical
-trial in childhood anxiety. The primary outcome in this clinical trial
-is the change from baseline to follow-up of the Child Health Utility 9D
-(CHU9D), which is a health-related quality of life measure that assesses
-health status across nine dimensions for children with anxiety. This
-example focuses on developing an approach to simulate the patient data
-that is realistic and understanding the impact on the power or the
-study. Each item in the CHU9D is scored from 1 to 5 and the total of the
-scores on the 9 elements is the CHU9D. The higher the total value the
-lower the quality of life. Thus, the CHU9D ranges from 9 to 45 and the
-difference between baseline and follow-up must range between -36 and 36
-with all values being an integer value.</p>
+simulation (<em>response</em> endpoint) needs to be customized to match
+what is expected in a clinical trial in childhood anxiety.</p>
+<p>The primary outcome in this clinical trial is the change from
+baseline to follow-up of the Child Health Utility 9D (CHU9D), which is a
+health-related quality of life measure that assesses health status
+across nine dimensions for children with anxiety. This example focuses
+on developing an approach to simulate the patient data that is realistic
+and understanding the impact on the power or the study. Each item in the
+CHU9D is scored from 1 to 5 and the total of the scores on the 9
+elements is the CHU9D. The higher the total value the lower the quality
+of life. Thus, the CHU9D ranges from 9 to 45 and the difference between
+baseline and follow-up must range between -36 and 36 with all values
+being an integer value.</p>
+<p>To try out this example, start by creating a new project on East
+Horizon using the <strong>Two Arm Confirmatory</strong> study objective
+and the <strong>Continuous</strong> endpoint, and then create an input
+set using the <strong>Explore</strong> task.</p>
 <p>Once CyneRgy is installed, you can load this example in RStudio with
 the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -166,33 +182,77 @@ scenario cards to be setup in East Horizon Explore.<br>
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9V2.R" class="external-link">SimulatePatientOutcomeCHU9V2.R</a>
 - This file contains the R code for patient simulation. This version of
 the function utilizes an improved approach to make better use of the
-native East Horizon Explore parameters and UserParam to make simulation
-setup much easier.</li>
+native East Horizon Explore parameters and <em>UserParam</em> to make
+simulation setup much easier.</li>
 </ol>
 <p>This example demonstrates the importance of simulating patient data
 that is comparable to what is expected when the trial is executed and
 illustrates the impact this may have on the power of the study. In
 addition, it provides some insight into an efficient approach for
 utilizing the native parameters in East Horizon Explore and the
-UserParam that may be specified.</p>
+user-defined parameters that may be specified.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="ChildhoodAnxiety_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div class="section level2">
-<h2 id="checking-the-patient-simulation-function">Checking the Patient Simulation Function<a class="anchor" aria-label="anchor" href="#checking-the-patient-simulation-function"></a>
+<h2 id="patient-simulation-function">Patient Simulation Function<a class="anchor" aria-label="anchor" href="#patient-simulation-function"></a>
 </h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R" class="external-link alert-link">SimulatePatientOutcomeCHU9.R</a>
+</p>
+</div>
 <p>The first step is to create an R function for simulating patient
 outcomes. In the <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildPsychology.R" class="external-link">ChildPsychology.R</a>
 file you will find example code that was used to test and call the
 patient simulation function in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R" class="external-link">SimulatePatientOutcomeCHU9.R</a>.</p>
-<p>First, the script sets up the parameters for the simulation. It
-specifies the number of subjects (NumSub), the treatment each subject
-receives (TreatmentID), and the mean and standard deviation for the two
-treatments (Mean and StdDev). User-defined parameters for the mean and
-standard deviation at follow-up for both the control and experimental
-groups are also set (UserParam).</p>
-<p>The SimulatePatientOutcome function is then called with these
-parameters, and the results are stored in a dataframe, dfPatientData.
-The dataframe contains the TreatmentID for each patient and the
-corresponding simulated PatientOutcome.</p>
+<p>First, the script sets up the parameters for the simulation. From
+East Horizon built-in inputs, it uses the number of subjects
+(<em>NumSub</em>), the treatment each subject receives
+(<em>TreatmentID</em>), and the mean and standard deviation for the two
+treatments (<em>Mean</em> and <em>StdDev</em>). User-defined parameters
+for the mean and standard deviation at follow-up for both the control
+and experimental groups are also set. Refer to the table below for the
+definitions of the user-defined parameters used in this example.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dMeanFollowUpCtrl</strong></td>
+<td>Mean at follow-up for the control group.</td>
+</tr>
+<tr class="even">
+<td><strong>dMeanFollowUpExp</strong></td>
+<td>Mean at follow-up for the experimental group.</td>
+</tr>
+<tr class="odd">
+<td><strong>dStdDevFollowUpCtrl</strong></td>
+<td>Standard deviation at follow-up for the control group.</td>
+</tr>
+<tr class="even">
+<td><strong>dStdDevFollowUpExp</strong></td>
+<td>Standard deviation at follow-up for the experimental group.</td>
+</tr>
+</tbody>
+</table>
+<p>See the <a href="#initial-r-code-developement">Initial R Code
+Development</a> section for more information about the user
+parameters.</p>
+<p>The <em>SimulatePatientOutcome</em> function is then called with
+these parameters, and the results are stored in a dataframe,
+<em>dfPatientData</em>. The dataframe contains the <em>TreatmentID</em>
+for each patient and the corresponding simulated patient outcome
+response.</p>
 <p>The script then checks the validity of the simulated data. It
 verifies that the response values (which represent changes in CHU9D
 scores) lie within the expected range (-36 to 36), and that the mean
@@ -200,7 +260,7 @@ responses for the control and experimental groups match the expected
 values.</p>
 <p>As an example, one simulated data set could look like the
 following:</p>
-<p><img src="ChildhoodAnxiety_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="ChildhoodAnxiety_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="simulation-results">Simulation Results<a class="anchor" aria-label="anchor" href="#simulation-results"></a>
@@ -210,14 +270,18 @@ are key determinants of the study’s ability to detect true treatment
 effects. When we assume a sample size of 234 and a true difference of 5
 under normal data distribution, the statistical power is 90%. This power
 signifies that we have a 90% chance of detecting a true treatment
-effect, if one exists. Using East Horizon Explore the power computed
-using simulation, see Figure 1.</p>
+effect, if one exists. As shown in Figure 1, East Horizon Explore was
+used to compute the power using simulations.</p>
+<p><strong>Figure 1</strong>: Power assuming data is normally
+distributed <img src="ChildhoodAnxiety_files/PowerUnderNormalAssumptions.jpg" alt="Figure 1: Power assuming data is normally distributed"></p>
 <p>However, the power figure drops when we introduce a more realistic
 patient simulation method. In this context, the statistical power drops
 to approximately 85%. This decrease implies that, under these more
 realistic conditions, we would have an 85% chance of detecting a true
 treatment effect, given the same sample size of 234 and true treatment
-difference of 5, see Figure 2.</p>
+difference of 5. See Figure 2.</p>
+<p><strong>Figure 2</strong>: Power assuming realistic patient
+simulation <img src="ChildhoodAnxiety_files/PowerWithRealisticSimulations.jpg" alt="Figure 2: Power assuming realistic patient simulation"></p>
 <p>Knowing that a sample size of 234 is insufficient under realistic
 conditions, it would be prudent to conduct further tests with larger
 sample sizes. For instance, we could run simulations with sample sizes
@@ -231,6 +295,8 @@ provided in Figure 3. From Figure 3, we can see that a sample size of
 sample size from 234, the required sample size per standard sample size
 calculations, to 300, the sample size needed under realistic patient
 simulation.</p>
+<p><strong>Figure 3</strong>: Sample size determination using realistic
+patient simulation <img src="ChildhoodAnxiety_files/SampleSizeDeterminationWithRealisticPatientSimulation.jpg" alt="Figure 3: Sample size determination using realistic patient simulation"></p>
 <p>If we were to proceed with the original sample size of 234 under
 realistic conditions, our study would be under powered. Being under
 powered means that our study would have a reduced likelihood of
@@ -244,65 +310,133 @@ implement a more realistic patient simulation. This highlights the
 importance of considering realistic conditions when determining the
 sample size for a study, to ensure adequate power to detect true
 treatment effects.</p>
-<p><strong>Figure 1</strong>: Power assuming data is normally
-distributed <img src="ChildhoodAnxiety_files/PowerUnderNormalAssumptions.jpg" alt="Figure 1: Power assuming data is normally distributed"></p>
-<p><strong>Figure 2</strong>: Power assuming realistic patient
-simulation <img src="ChildhoodAnxiety_files/PowerWithRealisticSimulations.jpg" alt="Figure 2: Power assuming realistic patient simulation"></p>
-<p><strong>Figure 3</strong>: Sample size determination using realistic
-patient simulation <img src="ChildhoodAnxiety_files/SampleSizeDeterminationWithRealisticPatientSimulation.jpg" alt="Figure 3: Sample size determination using realistic patient simulation"></p>
 </div>
 <div class="section level2">
 <h2 id="initial-r-code-developement">Initial R Code Developement<a class="anchor" aria-label="anchor" href="#initial-r-code-developement"></a>
 </h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R" class="external-link alert-link">SimulatePatientOutcomeCHU9.R</a>
+</p>
+</div>
 <p>The initial R code was developed assuming the user would supply
-additional parameters via the UserParam variable in the R section of
-East Horizon to supply the follow-up mean for each treatment and the
-standard deviation for each treatment arm, since these variables are not
-native inputs in East Horizon. The UserParams is a list that holds user
-defined parameters. These parameters are used to define the mean and
-standard deviation of the follow-up scores for both the control group
-and experimental group in the simulation. Specifically, the UserParam
-list includes the following elements:</p>
-<p><strong>dMeanFollowUpCtrl</strong>: This parameter represents the
+additional parameters as user-defined parameters via the
+<em>UserParam</em> variable in the R section of East Horizon to supply
+the follow-up mean for each treatment and the standard deviation for
+each treatment arm, since these variables are not native inputs in East
+Horizon. The <em>UserParam</em> is a list that holds user defined
+parameters. These parameters are used to define the mean and standard
+deviation of the follow-up scores for both the control group and
+experimental group in the simulation. Specifically, the
+<em>UserParam</em> list includes the following elements:</p>
+<ul>
+<li>
+<strong>dMeanFollowUpCtrl</strong>: This parameter represents the
 mean follow-up score for the control group. It is used to generate
-simulated patient outcomes for individuals in the control group.</p>
-<p><strong>dMeanFollowUpExp</strong>: This parameter signifies the mean
+simulated patient outcomes for individuals in the control group.</li>
+<li>
+<strong>dMeanFollowUpExp</strong>: This parameter signifies the mean
 follow-up score for the experimental group. It is used to generate
 simulated patient outcomes for individuals in the experimental
-group.</p>
-<p><strong>dStdDevFollowUpCtrl</strong>: This parameter denotes the
+group.</li>
+<li>
+<strong>dStdDevFollowUpCtrl</strong>: This parameter denotes the
 standard deviation of the follow-up scores for the control group. It
 influences the spread of the simulated patient outcomes around the mean
-for the control group.</p>
-<p><strong>dStdDevFollowUpExp</strong>: This parameter indicates the
+for the control group.</li>
+<li>
+<strong>dStdDevFollowUpExp</strong>: This parameter indicates the
 standard deviation of the follow-up scores for the experimental group.
 It affects the spread of the simulated patient outcomes around the mean
-for the experimental group.</p>
+for the experimental group.</li>
+</ul>
 <p>In the original version of the code, we had to manually create 12
-different cards to represent the 12 distinct scenarios. This was
-necessary because the UserParam argument in our function was designed to
-accept only a single value for each variable.</p>
+different Response cards to represent the 12 distinct scenarios. This
+was necessary because the <em>UserParam</em> argument in our function
+was designed to accept only a single value for each variable. Refer to
+the table below for the values of the user-defined parameters used in
+the first card.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dMeanFollowUpCtrl</strong></td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td><strong>dMeanFollowUpExp</strong></td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td><strong>dStdDevFollowUpCtrl</strong></td>
+<td>10.6</td>
+</tr>
+<tr class="even">
+<td><strong>dStdDevFollowUpExp</strong></td>
+<td>10.6</td>
+</tr>
+</tbody>
+</table>
+<p>The second card has a <strong>dMeanFollowUpExp</strong> value of 19,
+the third card has 18, and so on, down to 10. For all Response cards,
+the built-in inputs of East Horizon are described in the table
+below.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>East Horizon parameter</strong></th>
+<th><strong>Name in the code</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Mean Control</strong></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">Mean [ 0 ]</annotation></semantics></math></td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td><strong>Mean Treatment</strong></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">Mean [ 1 ]</annotation></semantics></math></td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td><strong>SD Control</strong></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">StdDev [ 0 ]</annotation></semantics></math></td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td><strong>SD Treatment</strong></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">StdDev [ 1 ]</annotation></semantics></math></td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
 <p>This approach, however, was not only labor-intensive but also
 presented challenges in terms of data filtering. Specifically, it was
 difficult to extract and display the desired information from these
 scenarios. The process of setting up the scenarios and then filtering
 the results to show what we wanted was cumbersome and inefficient. See
 Figure 4 for the initial setup.</p>
-<p>To improve this, we could consider modifying the function to accept
-multiple values for each variable in the UserParam argument. This would
-allow us to streamline the process of creating and managing different
-scenarios, making the code more efficient and user-friendly for setting
-up simulation scenarios.</p>
 <p><strong>Figure 4</strong>: Initial input in East Horizon <img src="ChildhoodAnxiety_files/Approach1.jpg" alt="East Horizion R code Development"></p>
 </div>
 <div class="section level2">
 <h2 id="improved-r-code">Improved R Code<a class="anchor" aria-label="anchor" href="#improved-r-code"></a>
 </h2>
-<p>In utilizing the built-in parameters provided by East Horizon there
-is a valuable feature: the ability to input multiple values for each
-parameter on a single line. This streamlined the process, making it
-easier to manage and adjust the parameters. Unfortunately, the current
-UserParam list in our script does not offer this capability.</p>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9V2.R" class="external-link alert-link">SimulatePatientOutcomeCHU9V2.R</a>
+</p>
+</div>
+<p>To improve the process, we can use built-in parameters provided by
+East Horizon, which support the ability to input multiple values for
+each parameter on a single line (boxes with pink color). This
+streamlines the process, making it easier to manage and adjust the
+parameters. Unfortunately, the current <em>UserParam</em> list in our
+script does not offer this capability.</p>
 <p>Reflecting on this, it’s clear that the original structure of our
 input during the development phase can significantly impact the ease of
 design exploration. By considering the user experience and optimizing
@@ -311,18 +445,77 @@ less cumbersome and more intuitive process. This approach would be
 particularly beneficial when dealing with complex simulations or data
 models, where the ability to easily adjust and experiment with different
 parameters is crucial.</p>
-<p>In light of this, it might be worth revising the patient simulation
-function to utilize the UserParam in a slightly different way. This
-change could enhance the flexibility and user-friendliness of our code,
-making design input and exploration a smoother, more efficient process.
-The major change was to use the UserParam to input the baseline
+<p>In light of this, we can change the patient simulation function to
+utilize the <em>UserParam</em> in a slightly different way. This change
+can enhance the flexibility and user-friendliness of our code, making
+design input and exploration a smoother, more efficient process. The
+major change is to use the <em>UserParam</em> to input the baseline
 simulation information, since it stays constant for all scenarios, and
-utilize the native input from East Horizon to input the follow-up
-information, see Figure 5. This simple improvement allows the user to
-have just 1 input card and simulate the same scenarios as previously
-done with 10 cards. This also makes the native filters and other aspects
-of East Horizon easier to use.</p>
+utilize the native input from East Horizon (<em>Mean Treatment</em> as
+<em>0:10:1</em>) to input the follow-up information, as shown in Figure
+5. This simple improvement allows the user to have just 1 input card and
+simulate the same scenarios as previously done with 10 cards. This also
+makes the native filters and other aspects of East Horizon easier to
+use.</p>
 <p><strong>Figure 5</strong>: Updated input in East Horizon <img src="ChildhoodAnxiety_files/Approach2Input.jpg" alt="East Horizon Improved R code"></p>
+<p>Refer to the table below for the values of the user-defined
+parameters used in this improved example.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dMeanBaselineCtrl</strong></td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td><strong>dMeanBaselineExp</strong></td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td><strong>dStdDevBaselineCtrl</strong></td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td><strong>dStdDevBaselineExp</strong></td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>For this example, the built-in inputs of East Horizon are described
+in the table below.</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>East Horizon parameter</strong></th>
+<th><strong>Name in the code</strong></th>
+<th><strong>Value</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Mean Control</strong></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">Mean [ 0 ]</annotation></semantics></math></td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><strong>Mean Treatment</strong></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">Mean [ 1 ]</annotation></semantics></math></td>
+<td>0:10:1</td>
+</tr>
+<tr class="odd">
+<td><strong>SD Control</strong></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">StdDev [ 0 ]</annotation></semantics></math></td>
+<td>10.6</td>
+</tr>
+<tr class="even">
+<td><strong>SD Treatment</strong></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">StdDev [ 1 ]</annotation></semantics></math></td>
+<td>10.6</td>
+</tr>
+</tbody>
+</table>
+<p><em>0:10:1</em> means 0 to 10 with increments of 1.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -331,7 +524,7 @@ of East Horizon easier to use.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by J. Kyle Wathen, Valeria A. G. Mazzanti.</p>
+  <p>Developed by J. Kyle Wathen, Valeria A. G. Mazzanti, Gabriel Potvin.</p>
 </div>
 
 <div class="pkgdown-footer-right">

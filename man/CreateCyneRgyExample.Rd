@@ -2,7 +2,7 @@
 % Please edit documentation in R/CreateCyneRgyExample.R
 \name{CreateCyneRgyExample}
 \alias{CreateCyneRgyExample}
-\title{Create new CyneRgy example using provided templates. The directory created can be used in connection with Cytel-R integration.}
+\title{Create a New CyneRgy Example Using Templates}
 \usage{
 CreateCyneRgyExample(
   strFunctionType,
@@ -10,6 +10,17 @@ CreateCyneRgyExample(
   strDirectory = NA
 )
 }
+\arguments{
+\item{strFunctionType}{The type of CyneRgy template to use. Must be a valid template name.}
+
+\item{strNewExampleName}{A string representing the name of the new example directory. Defaults to an empty string.}
+
+\item{strDirectory}{The directory path where the example will be created. If not provided, the current working directory is used.}
+}
+\value{
+Creates the specified example directory and files within the provided or default directory path.
+}
 \description{
-{ Description: This function will create a new directory containing the necessary files for the desired CyneRgy template. }
+This function creates a new directory containing the necessary files
+for the desired CyneRgy template. The directory can be used in connection with Cytel-R integration.
 }

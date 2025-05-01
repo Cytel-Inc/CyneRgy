@@ -1,19 +1,15 @@
 Package: CyneRgy
 Type: Package
 Title: CyneRgy - Integration for Cytel Products and R
-Version: 1.1.3
+Version: 1.1.4
 Authors@R: c( person( given = "J. Kyle",       family = "Wathen",   email = "Kyle.Wathen@Cytel.com",      role = c("aut","cre")),
-              person( given = "Valeria A. G.", family = "Mazzanti", email = "Valeria.Mazzanti@Cytel.com", role = c("aut") ),
-              person( given = "Anoop Singh",   family = "Rawat",    role = c("ctb")),
-              person( given = "Sydney",        family = "Ringold",  email = "Sydney.Ringold@Cytel.com",   role = c("ctb") ),
-              person( given = "Shubham",       family = "Lahoti",   role = c("ctb")),
-              person( given = "Gabriel",       family = "Potvin",   role = c("ctb")))
+              person( given = "Valeria A. G.", family = "Mazzanti", email = "Valeria.Mazzanti@Cytel.com", role = c("aut")),
+              person( given = "Gabriel",       family = "Potvin",   email = "Gabriel.Potvin@Cytel.com", role = c("aut")),
+              person( given = "Anoop Singh",   family = "Rawat",    role = c("ctb")))
 Author: J. Kyle Wathen [aut, cre],
         Valeria A. G. Mazzanti [aut],
-        Anoop Singh Rawat [ctb],
-        Sydney Ringold [ctb],
-        Shubham Lahoti [ctb],
-        Gabriel Potvin [ctb]
+        Gabriel Potvin [aut],
+        Anoop Singh Rawat [ctb]
 Maintainer: J. Kyle Wathen <Kyle.Wathen@Cytel.com>
 Description: R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial 
  designs, without requiring you to develop an entire R code base. The CyneRgy R package illustrates the synergy of using R and 
@@ -21,6 +17,7 @@ Description: R integration with Cytel products provides a highly efficient appro
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Depends: R(>= 4.0.0),
          whisker,

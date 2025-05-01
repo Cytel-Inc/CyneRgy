@@ -2,28 +2,36 @@
 % Please edit documentation in R/InitLoadCyneRgy.R
 \name{InitLoadCyneRgy}
 \alias{InitLoadCyneRgy}
-\title{Initialize is used to load required libraries and create any global variables that other integration points need}
+\title{Initialize CyneRgy Library for Simulations}
 \usage{
 InitLoadCyneRgy(Seed, UserParam = NULL)
 }
 \arguments{
-\item{Seed}{An integer value to set the seed used in generating random numbers in R. Default is NULL.}
+\item{Seed}{An integer value to set the seed used for generating random numbers in R. Default is NULL.}
 
-\item{UserParam}{A named list to pass custom scalar variables defined by users. Users should access the variables using names, 
-for example UserParam$Var1. Default is NULL.}
+\item{UserParam}{A named list to pass custom scalar variables defined by users. Variables can be accessed using names,
+e.g., \code{UserParam$Var1}. Default is NULL.}
 }
 \value{
-An integer as follows:   
-          0 – No Error
-          Positive Integer – Non Fatal Error – Particular Simulation will be aborted but Next Simulation will be performed.
-          Negative Integer – Fatal Error – No further simulation will be attempted.
+A list containing:
+\item{ErrorCode}{An integer indicating success or error status:
+\describe{
+\item{ErrorCode = 0}{No error.}
+\item{ErrorCode > 0}{Nonfatal error, current simulation aborted but subsequent simulations will run.}
+\item{ErrorCode < 0}{Fatal error, no further simulations attempted.}
+}
+}
 }
 \description{
-Performs initialization for all simulations that use R. This optional function will be executed before executing any of the other user-defined functions. 
-It can be used for various reasons, such as:
-   Setting seed for R environment
-   Loading packages
+The Initialize function initializes the R environment for all simulations. It is optional and is executed before any user-defined functions.
+Key functionalities include:
+\itemize{
+\item Setting a seed for random number generation
+\item Loading required packages
+}
+
+Here, the CyneRgy library is initialized.
 }
 \note{
-Do not use install.package or attempt to install new R packages in Solara as this will fail. Please contact help to install libraries.
+Do not use \code{install.packages} or attempt to install new R packages in East Horizon, as this will fail. Please contact support to install libraries.
 }

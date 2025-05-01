@@ -17,6 +17,8 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="2-Arm, Normal Outcome, Repeated Measures - Patient Simulation">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -26,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +75,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6></li>
     <li><a class="dropdown-item" href="../articles/AssuranceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a></li>
+    <li><a class="dropdown-item" href="../articles/ProbabilitySuccessDualEndpointsPFSOS.html">Probability of Success for Dual Endpoints (PFS &amp; OS)</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6></li>
     <li><a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a></li>
@@ -112,7 +115,7 @@
                         <h4 data-toc-skip class="author">Shubham
 Lahoti</h4>
             
-            <h4 data-toc-skip class="date">January 16, 2025</h4>
+            <h4 data-toc-skip class="date">May 01, 2025</h4>
       
 
       <div class="d-none name"><code>2ArmNormalRepeatedMeasuresResponseGeneration.Rmd</code></div>
@@ -120,6 +123,14 @@ Lahoti</h4>
 
     
     
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+These examples are related to the <strong>Integration Point: Response -
+Continuous Outcome with Repeated Measures</strong>.
+<a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">Click
+here for more information about this integration point.</a>
+</p>
+</div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -128,9 +139,10 @@ same variable from the same subjects across multiple time periods. This
 method provides insights into the subjects’ development and changes over
 time. In this context, a single subject can have multiple responses over
 time, and these responses can be correlated across different visits.</p>
-<p>For a normal endpoint in repeated measures, the generation of
-responses primarily depends on the mean and standard deviation across
-all visits, as well as the correlation between these visits.</p>
+<p>The following example illustrates how to integrate new patient
+outcome simulation (<em>response</em>) capabilities into East Horizon or
+East using R functions in the context of a two-arm trial with repeated
+measures.</p>
 <p>Once CyneRgy is installed, you can load this example in RStudio with
 the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -142,13 +154,34 @@ RStudio.</p>
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R" class="external-link">GenerateResponseDiffOfMeansRepeatedMeasures.R</a>
-- The R function named “GenRespDiffOfMeansRepMeasures” in the file is
-used to generate the normal responses across multiple visits for 2-arm
-normal repeated measures design.</p></li>
+- The R function named <em>GenRespDiffOfMeansRepMeasures</em> in the
+file is used to generate the normal responses across multiple visits for
+2-arm normal repeated measures design.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R" class="external-link">LibraryMASS.R</a>
-- This file is used to load the library “MASS” to run mvrnorm()
-function.</p></li>
+- This file is used to load the library <code>MASS</code> to run the
+<code>mvrnorm</code> function.</p></li>
 </ol>
+</div>
+<div class="section level2">
+<h2 id="example-1---normal-endpoint">Example 1 - Normal Endpoint<a class="anchor" aria-label="anchor" href="#example-1---normal-endpoint"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R" class="external-link alert-link">GenerateResponseDiffOfMeansRepeatedMeasures.R</a>
+</p>
+</div>
+<p>For a normal endpoint with repeated measures, the generation of
+responses primarily depends on the mean and standard deviation across
+all visits, as well as the correlation between these visits. This
+examples uses built-in input variables coming from East Horizon or East
+to simulate repeated measures data. It uses the
+<code><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html" class="external-link">MASS::mvrnorm</a></code> function. This example does not use any
+user-defined parameters.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmNormalRepeatedMeasuresResponseGeneration_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -157,7 +190,7 @@ function.</p></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by J. Kyle Wathen, Valeria A. G. Mazzanti.</p>
+  <p>Developed by J. Kyle Wathen, Valeria A. G. Mazzanti, Gabriel Potvin.</p>
 </div>
 
 <div class="pkgdown-footer-right">

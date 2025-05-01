@@ -96,7 +96,7 @@ For a visual guide of where to find the option, refer to the screenshots below:
 
 ![](dropout.png)
 
-![]](dropout2.png)
+![](dropout2.png)
 
 </details>
 
