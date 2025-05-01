@@ -53,7 +53,7 @@ These examples provide multiple R functions to achieve a more complex design opt
 
 1. **[Bayesian Assurance of Consecutive Studies](AssuranceConsecutiveStudies.html)**: The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples. These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance. The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
 
-2. **[Probability of Success for Dual Endpoints (PFS & OS)](ProbabilitySuccessDualEndpointsPFSOS.html)**: This example demonstrates how to compute the probability of success of a trial and extend East Horizon's single-endpoint framework to handle dual endpoints (Progression-Free Survival and Overall Survival) using custom R scripts for the Analysis and Response endpoints.
+2. **[Probability of Success for Dual Endpoints (PFS & OS)](ProbabilitySuccessDualEndpointsPFSOS.html)**: This example demonstrates how to compute the probability of success of a trial and extend East Horizon's single-endpoint framework to handle dual endpoints (Progression-Free Survival and Overall Survival) using custom R scripts for the Analysis and Response integration points.
 
 
 ## Other Integration Points
@@ -62,6 +62,5 @@ These examples provide examples for other integration points.
 1. **[Poisson Arrival Times](GeneratePoissonArrival.html)**: This example demonstrates how to add the ability to generate patient arrival time according to a Poisson process with a ramp-up.  The examples included here are to provide different approaches for simulating arrival time according to a Poisson process. 
 
 1. **[Patient Dropout](PatientDropout.html)**: For all examples, we assume the trial design consists of a control and an experimental treatment. Patients may dropout of a trial for a variety of reasons such as safety issues, treatment burden or other non-trial related issues. The dropout rate can reach as high as 30% in some trials if the drug has adverse side effects. The introduction of dropout probabilities or dropout hazard rate plays a significant role during data generation that can be further utilized during the analysis.
-
 
 1. **[Patient Randomization](PatientRandomization.html)**: Examples of how to use R for randomization.
