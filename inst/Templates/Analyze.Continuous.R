@@ -24,7 +24,7 @@
 #'          \item{UpperAlpha}{Two Sided Asymmetric Tests}
 #'          \item{MaxCompleters}{Maximum Number of Completers}
 #'          \item{FollowUpType}{For survival tests, Follow Up Type.  Possible values are: Until End ofS Study: 0, For fixed period: 1}
-#'          \item{AllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size.}
+#'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms. }
 #'          \item{CriticalPoint}{Critical Value for a fixed sample design.}
 #'          \item{FollowUpType}{Follow up type. Integer value with the following meaning:\describe{
 #'                                    \item{FollowUpType = 0}{Until End of the Study}
