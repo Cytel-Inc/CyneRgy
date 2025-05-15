@@ -160,7 +160,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 1. [AnalyzePFSAndOS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/AnalyzePFSAndOS.R) - This file provides the code used for the Analysis integration point below.
 
-1. [Simulate2EndpointTTEWithMultiState.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.E) - This file provides the code used for the Response integration point below.
+1. [Simulate2EndpointTTEWithMultiState.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.R) - This file provides the code used for the Response integration point below.
 
 # Response (Patient Simulation) Integration Point
 
@@ -216,15 +216,15 @@ The median of an exponential distribution is given by:
 
 $$ M = \frac{\log(2)}{\alpha_{01} + \alpha_{02}} $$
 
-Substituting $alpha_{01}$ in terms of $alpha_{02}$:
+Substituting $\alpha_{01}$ in terms of $\alpha_{02}$:
 
 $$ M = \frac{1}{\alpha_{01} + \alpha_{02}} = \frac{1}{\frac{\alpha_{02} \cdot q}{p} + \alpha_{02}} = \frac{1}{\alpha_{02} \cdot \left(\frac{q}{p} + 1\right)} $$
 
-Solving for $alpha_{02}$:
+Solving for $\alpha_{02}$:
 
 $$ \alpha_{02} = \frac{\log(2)}{M \cdot \left(\frac{q}{p} + 1\right)} $$
 
-Once $alpha_{02}$ is calculated, $alpha_{01}$ can be derived using:
+Once $\alpha_{02}$ is calculated, $\alpha_{01}$ can be derived using:
 
 $$ \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} $$
 
@@ -244,7 +244,7 @@ The median OS ($M_{OS}$) is approximated as a weighted combination of these two 
 
 $$ M_{OS} = \text{Median}(X_2 \cdot p + (X_1 + X_3) \cdot q) = p \cdot \frac{\log(2)}{\alpha_{02}} + q \cdot (\frac{\log(2)}{\alpha_{01}} + \frac{\log(2)}{\alpha_{12}})$$
 
-To compute $alpha_{12}$, the model numerically solves for the rate using `uniroot`, ensuring consistency with the user-provided median OS.
+To compute $\alpha_{12}$, the model numerically solves for the rate using `uniroot`, ensuring consistency with the user-provided median OS.
 
 **Sources**
 

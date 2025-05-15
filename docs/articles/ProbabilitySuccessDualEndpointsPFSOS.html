@@ -115,7 +115,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin,
 Valeria A. G. Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">May 01, 2025</h4>
+            <h4 data-toc-skip class="date">May 15, 2025</h4>
       
 
       <div class="d-none name"><code>ProbabilitySuccessDualEndpointsPFSOS.Rmd</code></div>
@@ -165,7 +165,7 @@ directory of this example</a> you will find the following R files:</p>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/AnalyzePFSAndOS.R" class="external-link">AnalyzePFSAndOS.R</a>
 - This file provides the code used for the Analysis integration point
 below.</p></li>
-<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.E" class="external-link">Simulate2EndpointTTEWithMultiState.R</a>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.R" class="external-link">Simulate2EndpointTTEWithMultiState.R</a>
 - This file provides the code used for the Response integration point
 below.</p></li>
 </ol>
@@ -250,17 +250,17 @@ Time from Initial to Death without Progression.</li>
 <p>The median of an exponential distribution is given by:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex"> M = \frac{\log(2)}{\alpha_{01} + \alpha_{02}} </annotation></semantics></math></p>
 <p>Substituting
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><msub><mi>a</mi><mn>01</mn></msub></mrow><annotation encoding="application/x-tex">alpha_{01}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>01</mn></msub><annotation encoding="application/x-tex">\alpha_{01}</annotation></semantics></math>
 in terms of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><msub><mi>a</mi><mn>02</mn></msub></mrow><annotation encoding="application/x-tex">alpha_{02}</annotation></semantics></math>:</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>02</mn></msub><annotation encoding="application/x-tex">\alpha_{02}</annotation></semantics></math>:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mfrac><mn>1</mn><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mrow><mfrac><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mi>q</mi></mrow><mi>p</mi></mfrac><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>q</mi><mi>p</mi></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex"> M = \frac{1}{\alpha_{01} + \alpha_{02}} = \frac{1}{\frac{\alpha_{02} \cdot q}{p} + \alpha_{02}} = \frac{1}{\alpha_{02} \cdot \left(\frac{q}{p} + 1\right)} </annotation></semantics></math></p>
 <p>Solving for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><msub><mi>a</mi><mn>02</mn></msub></mrow><annotation encoding="application/x-tex">alpha_{02}</annotation></semantics></math>:</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>02</mn></msub><annotation encoding="application/x-tex">\alpha_{02}</annotation></semantics></math>:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>=</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>M</mi><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>q</mi><mi>p</mi></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex"> \alpha_{02} = \frac{\log(2)}{M \cdot \left(\frac{q}{p} + 1\right)} </annotation></semantics></math></p>
 <p>Once
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><msub><mi>a</mi><mn>02</mn></msub></mrow><annotation encoding="application/x-tex">alpha_{02}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>02</mn></msub><annotation encoding="application/x-tex">\alpha_{02}</annotation></semantics></math>
 is calculated,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><msub><mi>a</mi><mn>01</mn></msub></mrow><annotation encoding="application/x-tex">alpha_{01}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>01</mn></msub><annotation encoding="application/x-tex">\alpha_{01}</annotation></semantics></math>
 can be derived using:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mi>q</mi></mrow><mi>p</mi></mfrac></mrow><annotation encoding="application/x-tex"> \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} </annotation></semantics></math></p>
 <p>Overall Survival (OS) accounts for both pathways:</p>
@@ -298,7 +298,7 @@ where:
 is approximated as a weighted combination of these two pathways:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mrow><mi>O</mi><mi>S</mi></mrow></msub><mo>=</mo><mtext mathvariant="normal">Median</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>2</mn></msub><mo>⋅</mo><mi>p</mi><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mi>X</mi><mn>3</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mi>q</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>p</mi><mo>⋅</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>α</mi><mn>02</mn></msub></mfrac><mo>+</mo><mi>q</mi><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>α</mi><mn>01</mn></msub></mfrac><mo>+</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>α</mi><mn>12</mn></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> M_{OS} = \text{Median}(X_2 \cdot p + (X_1 + X_3) \cdot q) = p \cdot \frac{\log(2)}{\alpha_{02}} + q \cdot (\frac{\log(2)}{\alpha_{01}} + \frac{\log(2)}{\alpha_{12}})</annotation></semantics></math></p>
 <p>To compute
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><msub><mi>a</mi><mn>12</mn></msub></mrow><annotation encoding="application/x-tex">alpha_{12}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>12</mn></msub><annotation encoding="application/x-tex">\alpha_{12}</annotation></semantics></math>,
 the model numerically solves for the rate using <code>uniroot</code>,
 ensuring consistency with the user-provided median OS.</p>
 <p><strong>Sources</strong></p>
