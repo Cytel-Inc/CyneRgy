@@ -100,7 +100,7 @@ AnalyzeUsingLogrankTestBonferroni <- function( SimData, DesignParam, LookInfo = 
         vInfoFrac                <- 1
         vEfficacyBoundaryPScale  <- DesignParam$Alpha
     }
-    vIsTrtPresent                <- DesignParam$IsArmPresent[-1]
+    vIsTrtPresent                <- DesignParam$IsArmPresent
     
     SimData$TimeOfEvent          <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
     

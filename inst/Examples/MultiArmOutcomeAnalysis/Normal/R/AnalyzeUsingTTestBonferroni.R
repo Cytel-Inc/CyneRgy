@@ -99,7 +99,7 @@ AnalyzeUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, 
         vEfficacyBoundaryPScale  <- DesignParam$Alpha
     }
     
-    vIsTrtPresent                <- DesignParam$IsArmPresent[-1]
+    vIsTrtPresent                <- DesignParam$IsArmPresent
     # Create the vector of simulated data for this IA - East sends all of the simulated data
     vPatientOutcome              <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment            <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
