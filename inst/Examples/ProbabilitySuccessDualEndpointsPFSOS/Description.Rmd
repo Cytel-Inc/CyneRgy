@@ -190,7 +190,7 @@ By combining the above R functions with the East Horizon native inputs, users ar
 Before starting, make sure you have the required tools and files.
 
 1. [East Horizon](https://platform.cytel.com)
-2. Download R Files from our public github repo: [Simulate2EndpointTTEWithMultiState.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.R) and [AnalyzePFSAndOS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/AnalyzePFSAndOS.R).
+2. Download R Files from our public Github repo: [Simulate2EndpointTTEWithMultiState.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.R) and [AnalyzePFSAndOS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/AnalyzePFSAndOS.R).
 
 ## New Project Page
 
