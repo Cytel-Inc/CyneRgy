@@ -25,7 +25,7 @@
 #'          \item{UpperAlpha}{Two Sided Asymmetric Tests }
 #'          \item{MaxEvents}{Maximum Events in a time to event based trial}
 #'          \item{FollowUpType}{For survival tests, Follow Up Type.  Possible values are: Until End ofS Study: 0, For fixed period: 1}
-#'      
+#'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms }
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
 #'                 and perform test. User should access the variables using names, 

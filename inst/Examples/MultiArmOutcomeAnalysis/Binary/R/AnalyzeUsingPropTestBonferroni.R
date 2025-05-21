@@ -22,7 +22,7 @@
 #'          \item{TrialType}{Integer. Type of the Trial. Values are Superiority: 0}
 #'          \item{TestType}{Integer. Values are One side: 0}
 #'          \item{TailType}{Integer. Values are Left Tailed: 0, Right Tailed: 1}
-#'          \item{InitialAllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size.}
+#'          \item{InitialAllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size. Length = number of treatment arms.}
 #'          \item{VarType}{Integer. Variance Type. Values are Pooled: 0, Unpooled: 1}
 #'          \item{TestID}{Integer. Test ID. Values are Difference of Proportions: 303}
 #'          \item{MultAdjMethod}{Integer. Multiple Comparison Procedure. Values are Bonferroni: 0, Weighted Bonferroni: 2, Hochberg's Step Up: 4, Fixed Sequence: 6, Fallback: 7}
@@ -32,8 +32,8 @@
 #'          \item{MaxCompleters}{Integer. Maximum Number of Completers.}
 #'          \item{CriticalPoint}{Numeric. Critical Value for a fixed sample design.}
 #'          \item{RespLag}{Numeric. Follow up duration.}
-#'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of arms. First value is control and fixed to 1 for all looks. Values are Dropped in the interim: 0, Still present in the trial: 1}
-#'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of arms. First value is control.}
+#'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of treatment arms. Values are - Dropped in the interim: 0, Still present in the trial: 1}
+#'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of treatment arms.}
 #'      
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
@@ -99,7 +99,7 @@ AnalyzeUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NUL
         vEfficacyBoundaryPScale  <- DesignParam$Alpha
     }
     
-    vIsTrtPresent                <- DesignParam$IsArmPresent[-1]
+    vIsTrtPresent                <- DesignParam$IsArmPresent
     # Create the vector of simulated data for this IA - East sends all of the simulated data
     vPatientOutcome              <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment            <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
