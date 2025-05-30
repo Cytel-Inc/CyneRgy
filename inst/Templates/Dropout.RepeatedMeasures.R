@@ -32,7 +32,7 @@
 
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
-                     DropMethod, ByTime, DropParamControl, DropParamtrt, UserParam = NULL )
+                     DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
 {
   # TO DO : Modify this function appropriately 
     Error     <-  0
