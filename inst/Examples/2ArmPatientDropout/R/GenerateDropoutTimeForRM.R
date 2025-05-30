@@ -30,7 +30,7 @@
 #'                  \item{CensorInd<NumVisit>}{Applicable for Repeated Measures design. A set of arrays of censor indicator values for all subjects. Each array corresponds to each visit user has specified.}
 #'                  \item{DropoutVisitID}{Applicable for Repeated Measures design. An array of 1-based Visit ID after which the patient dropped out.}
 #'                      }
-GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime, DropParamControl, DropParamtrt, UserParam = NULL )
+GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
 {
     Error 	                   <- 0
     # Initializing Censor Dropout Times to Inf
@@ -56,9 +56,9 @@ GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, Treat
             
             vDropoutTime[ vIndexControl ]    <- rexp( nQtyOfPatientOnControl, rate = dExpDropoutControlRate )
         }
-        if( DropParamtrt > 0 )             # generate dropout time only in case of Non - zero dropout probability
+        if( DropParamTrt > 0 )             # generate dropout time only in case of Non - zero dropout probability
         {
-            dExpDropoutExperimentRate        <-  -log(1 - DropParamtrt) / ByTime
+            dExpDropoutExperimentRate        <-  -log(1 - DropParamTrt) / ByTime
             
             vDropoutTime[ vIndexExperiment ] <- rexp( nQtyOfPatientsOnExperiment, rate = dExpDropoutExperimentRate)
         }
