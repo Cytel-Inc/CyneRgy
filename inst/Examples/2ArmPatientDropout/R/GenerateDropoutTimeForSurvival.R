@@ -16,7 +16,7 @@
 #'     \item{ErrorCode (Optional)}{An integer value:  ErrorCode = 0 --> No Error
 #'                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.}
-#'     \item{DropOutTime (Mandatory)}{A vector of length NumSub of censor indicator values with 0 for patients that dropout eg non-completer, 1 for no dropout, eg compelter. }
+#'     \item{DropOutTime (Mandatory)}{A numeric vector of length NumSub representing dropout times. Inf means no dropout. }
 
 
 GenerateDropoutTimeForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
