@@ -1,5 +1,5 @@
-#  Last Modified Date: {{CREATION_DATE}}
-#' @name {{FUNCTION_NAME}}
+#' @name AnalyzeUsingTTestBonferroni
+#' @title Analyze using the t.test function in base R.
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
 #'        It will have headers indicating the names of the columns. These names will be same as those used in 
 #'        Data Generation. User should access the variables using headers, for example, SimData$ArrivalTime, 
@@ -9,9 +9,8 @@
 #'        {
 #'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}
 #'          \item{TreatmentID}{An integer value specifying the index of arms to which subjects are allocated (one arm index per subject). Index for control is 0}
-#'          \item{SurvivalTime}{Numeric value for the survival time or time-to-event for the patient, note this is not the time in the trial
-#'                               that the patient experiences the event.}
-#'          \item{DropOutTime}{Numeric value for the dropout time for the patient in a time to event trial.}
+#'          \item{Response}{An integer value where 1 indicates response and 0 indicates no response.}
+#'          \item{CensorInd}{An integer value indicating whether the subject was censored or not.}
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user
 #'      may need to compute test statistic and perform test. User should access the variables
@@ -22,18 +21,19 @@
 #'          \item{TrialType}{Integer. Type of the Trial. Values are Superiority: 0}
 #'          \item{TestType}{Integer. Values are One side: 0}
 #'          \item{TailType}{Integer. Values are Left Tailed: 0, Right Tailed: 1}
-#'          \item{InitialAllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size. Length = Number of treatment arms.}
+#'          \item{InitialAllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size. Length = number of treatment arms.}
+#'          \item{VarType}{Integer. Variance Type. Values are Pooled: 0, Unpooled: 1}
 #'          \item{TestID}{Integer. Test ID. Values are Difference of Proportions: 303}
 #'          \item{MultAdjMethod}{Integer. Multiple Comparison Procedure. Values are Bonferroni: 0, Weighted Bonferroni: 2, Hochberg's Step Up: 4, Fixed Sequence: 6, Fallback: 7}
 #'          \item{NumTreatments}{Integer. Number of Treatment arms}
 #'          \item{AlphaProp}{Vector of Proportions of Alpha for each treatment arm}
 #'          \item{TestSeq}{Vector of integer Test Sequence for each comparison which corresponds to each treatment arm.}
+#'          \item{MaxCompleters}{Integer. Maximum Number of Completers.}
 #'          \item{CriticalPoint}{Numeric. Critical Value for a fixed sample design.}
+#'          \item{RespLag}{Numeric. Follow up duration.}
 #'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of treatment arms. Values are - Dropped in the interim: 0, Still present in the trial: 1}
 #'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of treatment arms.}
-#'          \item{MaxEvents}{Integer. Maximum Events.}
-#'          \item{FollowUpType}{Integer. Follow up Type. Values are Until end of the study: 0, For fixed period: 1}
-#'          \item{FollowUpDur}{Numeric. Follow up duration.}
+#'          \item{TestStatType}{Integer. Test Statistic Type. Values are t-Test: 4}
 #'      
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic 
@@ -42,12 +42,12 @@
 #'                 \describe{
 #'                      \item{NumLooks}{An integer value with the number of looks in the study.}
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1.}
-#'                      \item{CumEvents}{Vector of Cumulative events. Length = Number of looks.}
+#'                      \item{CumCompleters}{Vector of Cumulative number of completer for all non time-to-event studies. Length = Number of looks.}
 #'                      \item{InfoFrac}{Vector of numeric Information fraction. Length = Number of looks.}
 #'                      \item{CumAlpha}{Vector of numeric Cumulative alpha spent, one sided tests. Length = Number of looks.}
 #'                      \item{EffBdryScale}{Integer. Efficacy boundary scale. Possible vaues are: Z Scale: 0}
 #'                      \item{EffBdry}{Vector of numeric efficacy bondaries, one sided tests. Length = Number of looks.}
-#'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible value are: HR Scale: 6}
+#'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible value are: Delta Scale: 2}
 #'                      \item{FutBdry}{Vector of numeric futility bondaries, one sided tests. Length = Number of looks.}
 #'                      \item{RejType}{Integer. Rejection Type. Values are: 1 Sided Efficacy Upper: 0, 1 Sided Futility Upper: 1, 1 Sided Efficacy Lower: 2, 1 Sided Futility Lower: 3, 1 Sided Efficacy Upper Futility Lower: 4, 1 Sided Efficacy Lower Futility Upper: 5}
 #'                 }
@@ -69,7 +69,7 @@
 #'                  \item{AdjPVal}{p-Value adjusted for MCP adjustment. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if AdjPVal is returned and if there is no Futility Boundary.}
 #'                  \item{RawPVal}{p-Value computed from test statistics. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if RawPVal is returned and if there is no Futility Boundary.}
 #'                  \item{TestStat}{Value of appropriate Test Statistic on Wald ﴾Z﴿ scale regardless of the Efficacy or Futility Boundary Scale for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if TestStat is returned and if there is no Futility Boundary.}
-#'                  \item{HR}{Estimate of Hazard Ratio for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. Required if Decision is not returned AND Futility Boundary scale is HR}
+#'                  \item{Delta}{Estimate of Delta (Difference from Control) for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. Required if Decision is not returned AND Futility Boundary scale is Delta.}
 #'                  \item{ErrorCode}{Integer. Optional value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
@@ -77,82 +77,80 @@
 #'                                     }
 #'                                     }
 #'                      }
-{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzeUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    nError 	         <- 0
-    
-    # If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
-    # Retrieve necessary information from the R objects. You may not need all the variables
+    # Step 1: Retrieve necessary information from the objects East sent ####
     if(  !is.null( LookInfo )  )
     {
-        nQtyOfLooks          <- LookInfo$NumLooks
-        nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfPatsInAnalysis <- LookInfo$CumEvents[ nLookIndex ]
-        RejType              <- LookInfo$RejType
-        TailType             <- DesignParam$TailType
+        nQtyOfLooks              <- LookInfo$NumLooks
+        nLookIndex               <- LookInfo$CurrLookIndex
+        nQtyOfPatsInAnalysis     <- LookInfo$CumCompleters[ nLookIndex ]
+        vInfoFrac                <- LookInfo$InfoFrac
+        vEfficacyBoundary        <- gsDesign::gsDesign(k = nQtyOfLooks, test.type = 1, alpha = DesignParam$Alpha, 
+                                                       sfu = gsDesign::sfLDOF, timing = vInfoFrac)
+        vEfficacyBoundaryPScale  <- 1 - pnorm(vEfficacyBoundary$upper$bound)
     }
     else
     {
-        nQtyOfLooks          <- 1
-        nLookIndex           <- 1
-        nQtyOfPatsInAnalysis <- DesignParam$MaxEvents
-        TailType             <- DesignParam$TailType
+        nQtyOfLooks              <- 1
+        nLookIndex               <- 1
+        nQtyOfPatsInAnalysis     <- nrow( SimData )
+        vInfoFrac                <- 1
+        vEfficacyBoundaryPScale  <- DesignParam$Alpha
     }
     
-    # User must choose one from the following 4 options (Labelled Option 1, Option 2,..) to create the analysis script.
-    # Option 1 is the most flexible since it lets you setup your own Decision logic.
-    # The other options allow you to partially customize the analysis logic while relying on East Horizon to do the rest of the computations.
-    # Remember to delete the three return statements from the unused options. ####
+    vIsTrtPresent                <- DesignParam$IsArmPresent
+    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    vPatientOutcome              <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
+    vPatientTreatment            <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
     
-    # Option 1: Script returns Decision ####
-    # Use this option if you want to use your own decision rules.
-
-    bIAEfficayCheck  <- TRUE
-    bIAFutilityCheck <- FALSE
-    bFAEfficacyCheck <- TRUE
+    # Create vector of data for control 
+    vOutcomesS                   <- vPatientOutcome[ vPatientTreatment == 0 ]
     
-    # Setup look decision logic
-    # Generate decision using GetDecisionString and GetDecision helpers
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = bIAEfficayCheck,
-                                               bIAFutilityCondition = bIAFutilityCheck,
-                                               bFAEfficacyCondition = bFAEfficacyCheck)
+    # Calculate p-value for each hypothesis. Return NA if arm not present in the current analysis
+    vPValues <- rep( NA, DesignParam$NumTreatments )
+    for( nTrtID in 1:DesignParam$NumTreatments ){
+        if (vIsTrtPresent[ nTrtID ] == 1){
+            vOutcomesE           <- vPatientOutcome[ vPatientTreatment == nTrtID ]
+            lAnalysisResult      <- t.test( vOutcomesE, vOutcomesS, alternative = "greater",
+                                             var.equal = TRUE)
+            dPValue              <- lAnalysisResult$p.value    # extract p value for the t test
+        } else
+        {
+            dPValue              <- NA
+        }
+        vPValues[nTrtID]         <- dPValue
+    }
     
-    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+    # Calculate Bonferroni adjusted p values
+    vAdjPValues                  <- vPValues * sum( vIsTrtPresent ) 
     
-    vDecision <- rep( nDecision, DesignParam$NumTreatments )
+    # Perform the desired analysis. NA should be returned for arms that are not available at this look
+    # vDecision                    <- ifelse( vAdjPValues < vEfficacyBoundaryPScale[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
+    vDecision <- c()
+    for ( i in 1:length(vAdjPValues) ){
+        strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
+                                                   bIAEfficacyCondition = vAdjPValues[i] < vEfficacyBoundaryPScale[ nLookIndex ], 
+                                                   bFAEfficacyCondition = vAdjPValues[i] < vEfficacyBoundaryPScale[ nLookIndex ])
+        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+        vDecision <- c(vDecision, nDecision)
+    }
+    # for( i in 1:length(vDecision) ){
+    #     if( vDecision[i] == 0 )
+    #     {
+    #         # Did not hit efficacy, so check futility 
+    #         # We are at the FA, efficacy decision was not made yet so the decision is futility
+    #         if( nLookIndex == nQtyOfLooks ) 
+    #         {
+    #             vDecision[i]     <- 3 # Code for futility 
+    #         }
+    #     }
+    # }
+    
+    nError 	                     <- 0
+    
     return( list(Decision  = as.integer(vDecision), 
                  ErrorCode = as.integer(nError)) )
-    
-    # Option 2: Script returns adjusted p value ####
-    # Use this option if you want to calculate the adjusted p value with your own logic
-    # but want to use the Decision generation logic of East Horizon
-    vAdjPVal <- 0
-    vHR <- 0
-    # Setup adjusted p value calculation logic
-    return( list(AdjPVal = vAdjPVal,
-                 HR = vHR,
-                 ErrorCode = as.integer(nError)) )
-    
-    # Option 3: Script returns raw p value ####
-    # Use this option if you want to calculate the raw p values with your own logic
-    # but want to use the Decision generation logic of East Horizon
-    vRawPVal <- 0
-    vHR <- 0
-    # Setup raw p value calculation logic
-    return( list(RawPVal = vRawPVal,
-                 HR = vHR,
-                 ErrorCode = as.integer(nError)) )
-
-    # Option 4: Script returns test statistic ####
-    # Use this option if you want to calculate the test statistic with your own logic
-    # but want to use the Decision generation logic of East Horizon
-    vTestStat <- 0
-    vHR <- 0
-    # Setup test statistic calculation logic
-    return( list(TestStat = vTestStat,
-                 HR = vHR,
-                 ErrorCode = as.integer(nError)))
     
 }
 

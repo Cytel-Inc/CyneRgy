@@ -26,7 +26,7 @@
 #'          \item{UpperAlpha}{Two Sided Asymmetric Tests }
 #'          \item{MaxCompleters}{Maximum Completers for a Continuous ep design}
 #'          \item{ResponseLag}{Fixed Followup time between first visit and Final visit }
-#'          \item{AllocInfo}{Allocation ratio on Control and Experimental arm }
+#'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms }
 #'          \item{CriticalPoint}{Z Critical value for a given Alpha}
 #'          \item{NumVisit}{Integer number of visits in a Design}
 #'          \item{VisitTime}{Numeric vector containing visit times}
