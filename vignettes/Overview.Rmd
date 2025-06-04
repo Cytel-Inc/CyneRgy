@@ -13,25 +13,8 @@ output: html_document
     justify-content: center;
     column-gap: 15px;
 }
-.button {
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    height: 50px;
-    text-decoration: none;
-    background-color: #007BFF;
-    color: white;
-    border-radius: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.3s;
-    padding: 30px;
-}
-.button:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-.button i {
-    margin-right: 10px;
+.btn i {
+    margin-right: 5px;
 }
 </style>
 
@@ -44,19 +27,19 @@ Cytel's products such as East Horizon support the customization of trial design 
 For comprehensive details about each integration point, please refer to the following pages:
 
 :::: {.button-container}
-<a href="IntegrationPointInitialization.html" class="button"><i class="fas fa-cogs"></i> Initialization</a>
+<a href="IntegrationPointInitialization.html" class="btn btn-primary"><i class="fas fa-cogs"></i> Initialization</a>
 
-<a href="IntegrationPointAnalysis.html" class="button"><i class="fas fa-chart-bar"></i> Analysis (Test Statistic)</a>
+<a href="IntegrationPointAnalysis.html" class="btn btn-primary"><i class="fas fa-chart-bar"></i> Analysis (Test Statistic)</a>
 
-<a href="IntegrationPointEnrollment.html" class="button"><i class="fas fa-user-clock"></i> Enrollment (Arrival Times)</a>
+<a href="IntegrationPointEnrollment.html" class="btn btn-primary"><i class="fas fa-user-clock"></i> Enrollment (Arrival Times)</a>
 
-<a href="IntegrationPointRandomization.html" class="button"><i class="fas fa-random"></i> Randomization (Assignment of Subjects)</a>
+<a href="IntegrationPointRandomization.html" class="btn btn-primary"><i class="fas fa-random"></i> Randomization (Assignment of Subjects)</a>
 
-<a href="IntegrationPointResponse.html" class="button"><i class="fas fa-user-md"></i> Response (Patient Simulation)</a>
+<a href="IntegrationPointResponse.html" class="btn btn-primary"><i class="fas fa-user-md"></i> Response (Patient Simulation)</a>
 
-<a href="IntegrationPointDropout.html" class="button"><i class="fas fa-user-slash"></i> Dropout</a>
+<a href="IntegrationPointDropout.html" class="btn btn-primary"><i class="fas fa-user-slash"></i> Dropout</a>
 
-<a href="IntegrationPointTreatmentSelection.html" class="button"><i class="fas fa-project-diagram"></i> Treatment Selection</a>
+<a href="IntegrationPointTreatmentSelection.html" class="btn btn-primary"><i class="fas fa-project-diagram"></i> Treatment Selection</a>
 
 [//]: # (Comment: Possibly to add - Survival Assurance?, Re-Estimate Events?, Adapt Test Statistics?)
 

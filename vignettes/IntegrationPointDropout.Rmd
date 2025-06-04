@@ -13,25 +13,8 @@ output: html_document
     justify-content: center;
     column-gap: 15px;
 }
-.button {
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    height: 50px;
-    text-decoration: none;
-    background-color: #007BFF;
-    color: white;
-    border-radius: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.3s;
-    padding: 30px;
-}
-.button:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-.button i {
-    margin-right: 10px;
+.btn i {
+    margin-right: 5px;
 }
 </style>
 
@@ -127,11 +110,11 @@ For a visual guide of where to find the option, refer to the screenshot below:
 The input variables, expected output variables, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
 
 :::: {.button-container}
-<a href="IntegrationPointDropoutContinuousOrBinary.html" class="button"><i class="fas fa-chart-line"></i> Continuous (Normal) Outcome</a>
+<a href="IntegrationPointDropoutContinuousOrBinary.html" class="btn btn-primary"><i class="fas fa-chart-line"></i> Continuous (Normal) Outcome</a>
 
-<a href="IntegrationPointDropoutTimeToEvent.html" class="button"><i class="fas fa-hourglass-half"></i> Time-to-Event (Survival) Outcome</a>
+<a href="IntegrationPointDropoutTimeToEvent.html" class="btn btn-primary"><i class="fas fa-hourglass-half"></i> Time-to-Event (Survival) Outcome</a>
 
-<a href="IntegrationPointDropoutRepeatedMeasures.html" class="button"><i class="fas fa-sync"></i> Continuous (Normal) Outcome with Repeated Measures</a>
+<a href="IntegrationPointDropoutRepeatedMeasures.html" class="btn btn-primary"><i class="fas fa-sync"></i> Continuous (Normal) Outcome with Repeated Measures</a>
 
-<a href="IntegrationPointDropoutContinuousOrBinary.html" class="button"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
+<a href="IntegrationPointDropoutContinuousOrBinary.html" class="btn btn-primary"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
 ::::
