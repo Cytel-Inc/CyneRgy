@@ -1,10 +1,11 @@
 ---
-title: 'Probability of Success for Dual Endpoints (PFS & OS)'
+title: "Probability of Success for Dual Endpoints (PFS & OS)"
 author: "Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  html_document: default
+  pdf_document: default
   word_document: default
+  html_document: default
 ---
 
 <div class="alert alert-primary" role="alert">
@@ -15,7 +16,40 @@ output:
 
 This example demonstrates how to compute the probability of success of a clinical trial by extending East Horizon’s single-endpoint framework to handle dual endpoints using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. This example uses Progression Free Survival and Overall Survival as endpoints, however, this could be extended to other types of endpoints by modifying the R code. 
 
-To try out this example, start by creating a new project on East Horizon using the **Two Arm Confirmatory** study objective and the **Time to Event** single endpoint, and then create an input set using the **Explore** task.
+## Why do we need R Integration for this example?
+
+To compute the Probability of Success of a trial, users need to simulate patient outcomes by sampling the true rates from prior distributions. This is something that East Horizon cannot handle yet with its current response generation algorithms, so we must integrate a custom R file for the simulation to do so.
+
+When a trial involves multiple success criteria, users must change how “Success” is defined from a traditional success analysis with only one endpoint. East Horizon cannot handle multiple success criteria for a Winning Condition yet, so we must integrate a custom R file for the simulation to take into account changing success criteria from the traditional “statistically significant” criteria. 
+
+## What do the R functions do?
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R) you will find the following R files:
+
+- **[Simulate2EndpointTTEWithMultiState.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.R)**
+
+   This R file contains a function that executes the response data generation for both PFS and OS endpoints. Due to the typically assumed correlation between PFS and OS, the timing of the events for each simulated patient must take into account that these endpoints are not completely independent of each other. This function therefore handles this concern by using a multi-state model that takes into consideration:
+
+   1. The rate at which events occur from trial start to a progression event, 
+   2. The rate at which events occur from trial start to a death, and
+   3. The probability that death takes place before a progression event.<br><br>
+   
+   As there may be uncertainty around each of these assumed parameters, the function simulates each of them based on prior distributions rather than single values for each. Users must provide input assumptions that parametrize the prior distributions that will be sampled from to simulate each patient’s response times. 
+
+   For more information on this function, see the [Response (Patient Simulation) Integration Point](#response-patient-simulation-integration-point) section below.
+
+- **[AnalyzePFSAndOS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/AnalyzePFSAndOS.R)**
+
+   This R file contains a function that executes the interim and final analyses of each simulated trial. The function takes into account that both PFS and OS event time stamps are being generated. The function computes the probability of success of the trial, where success is defined as: 
+
+   1. **Statistical significance for PFS**: PFS data and frequentist analysis using a Logrank test statistic proves that the difference between the control and treatment arms is proven to be statistically significant.
+   2. **Positive trend observed for OS**: OS data shows a positive trend in the difference between the control and treatment arms – the positive trend is defined by a user-specified threshold for the Hazard Ratio observation.<br><br>
+   
+   *The success criteria can be changed to compute the probability of success for varying success criteria. The lines in the code that need to be modified are line 170 for interim analyses and line 193 for final analysis.*
+
+   For more information on this function, see the [Analysis Integration Point](#analysis-integration-point) section below.
+
+## Combining it all together…
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
@@ -147,22 +181,224 @@ p <- ggplot() +
 print(p)
 ```
 
-Once CyneRgy is installed, you can load this example in RStudio with the following commands:
-```{r, eval=FALSE}
-CyneRgy::RunExample( "ProbabilitySuccessDualEndpointsPFSOS" )
-```
+By combining the above R functions with the East Horizon native inputs, users are able to simulate and compute the probability of success of each simulated trial. Users will also continue to benefit from East Horizon’s output visualizations – with the caveat that the Probability of Success metric will be labeled as “Power” in the native outputs of East Horizon.
 
-Running the command above will load the RStudio project in RStudio. 
+------
 
-**RStudio Project File**: [DualEndpoint.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/DualEndpoint.Rproj)
+# Step-by-Step Instructions
 
-In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R) you will find the following R files:
+Before starting, make sure you have the required tools and files.
 
-1. [AnalyzePFSAndOS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/AnalyzePFSAndOS.R) - This file provides the code used for the Analysis integration point below.
+1. [East Horizon](https://platform.cytel.com)
+2. Download R Files from our public Github repo: [Simulate2EndpointTTEWithMultiState.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.R) and [AnalyzePFSAndOS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/AnalyzePFSAndOS.R).
 
-1. [Simulate2EndpointTTEWithMultiState.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.E) - This file provides the code used for the Response integration point below.
+## New Project Page
 
-# Response (Patient Simulation) Integration Point
+1. On East Horizon, create a new project with a single endpoint.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step1.png){width=800px}
+
+## New Input Set Page
+
+2. Navigate to the Inputs tab, and create a new input set using the Explore task.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step2.png){width=800px}
+
+## Design Page
+
+3. Click on the input set you just created, then select “User Specified – R” in the Test Statistic field.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step3.png){width=800px}
+
+4. Click the “+” icon to open the R Integration pop-up window.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step4.png){width=800px}
+
+5. Click on “Select File” and then on “Continue”.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step5.png){width=800px}
+
+6. Select the file “AnalyzePFSAndOS.R”.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step6.png){width=800px}
+
+7. Check that the correct file has been imported and the correct Function Name has been specified by the system.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step7.png){width=800px}
+
+8. Note that the User Parameter variables have been automatically pulled from the R function that was imported. Specify the values for each of these variables.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step8.png){width=800px}
+
+These variables are the thresholds for the Hazard Ratio for Overall Survival to be considered “TRENDING” for the trial’s second success criteria. Users must specify a threshold for the interim analysis, if using a group sequential design, and always for the final analysis. See the [Analysis Integration Point](#analysis-integration-point) section below for more information about these variables and example values. 
+
+*Note: We typically make success criteria more CONSERVATIVE (i.e. making it more difficult to declare a “win”) on a trending OS at the interim analysis compared to the final analysis because you want to be “more sure” of your decision when you have less evidence/data available at the time of decision.*
+
+9. Click on the “Save” button to exit the R Integration details window.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step9.png){width=800px}
+
+## Response Page
+
+10. Start with identifying:
+
+a. Median time to PFS for Control arm & Variance.
+b. Median time to PFS for Experimental arm (this can be computed using above parameter and an assumed Hazard Ratio) & Variance.
+c. Median time to OS for Control arm & Variance.
+d. Median time to OS for Experimental arm (this can be computed using above parameter and an assumed Hazard Ratio) & Variance.
+e. Probability of Death event Happening BEFORE Progression event for Control arm.
+f. Probability of Death event Happening BEFORE Progression event for Treatment arm.
+
+See the [Response (Patient Simulation) Integration Point](#example-using-prior-distributions) section below for more information about these variables and example values.
+
+11. Use the Parameter Solving Tool below to convert Median Survival Time & Variance parameters into Shape & Rate parameters.
+
+<div class="alert alert-primary" role="alert">
+**Parameter Solving Tool**
+<p style="margin-bottom:0">Enter your desired **mean** and **variance** to calculate the **shape** and **rate** parameters for the Gamma distribution:</p>
+
+<label for="mean">Mean:</label>
+<input type="number" id="mean" value="1" step="any"> <br>
+<label for="variance">Variance:</label>
+<input type="number" id="variance" value="1" step="any"> <br>
+
+<button type="button" class="btn btn-primary" onclick="calculateGammaParams()">Calculate</button> <br>
+
+<p><strong>Shape:</strong> <span id="shapeOut">-</span></p>
+<p><strong>Rate:</strong> <span id="rateOut">-</span></p>
+
+<script>
+function calculateGammaParams() {
+  const mean = parseFloat(document.getElementById("mean").value);
+  const variance = parseFloat(document.getElementById("variance").value);
+
+  if (isNaN(mean) || isNaN(variance) || mean <= 0 || variance <= 0) {
+    alert("Please enter valid positive numbers for both mean and variance.");
+    return;
+  }
+
+  const shape = mean * mean / variance;
+  const rate = mean / variance;
+
+  document.getElementById("shapeOut").innerText = shape.toFixed(4);
+  document.getElementById("rateOut").innerText = rate.toFixed(4);
+}
+</script>
+</div>
+
+12. Navigate to the Response page, and then select “User Specified – R” in the Distribution field.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step12.png){width=800px}
+
+13. Click on the “+” icon to open the R Integration pop-up window. 
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step13.png){width=800px}
+
+14.	Click on “Select File” and then on “Continue”.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step14.png){width=800px}
+
+15. Select the file “Simulate2EndpointTTEWithMultiState.R”.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step15.png){width=800px}
+
+16. Check that the correct file has been imported and the correct Function Name has been specified by the system.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step16.png){width=800px}
+
+17. Note that the User Parameter variables have been automatically pulled from the R function that was imported. Delete the first six variables from the list, as we are not using them right now. As the Delete feature is not available yet, you can specify a value of 0 for each parameter instead.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step17.png){width=400px}
+
+18. Specify the values for each of the required User Parameter variables for the function.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step18.png){width=800px}
+
+See the [Response (Patient Simulation) Integration Point](#example-using-prior-distributions) section below for more information on these variables and example values.
+
+19. Click on the “Save” button to exit the R Integration details window.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step19.png){width=800px}
+
+20. Navigate to the “Dropout Rate” tab within the Response Card to include dropout information if needed.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step20.png){width=800px}
+
+## Enrollment Page
+
+21. Navigate to the Enrollment page, and specify the average number of subjects enrolled per time unit (e.g. default is per month).
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step21.png){width=800px}
+
+## Simulation Setup Page
+
+22. Specify the number of simulation runs as needed.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step22.png){width=800px}
+
+23.	Check the checkbox to save the simulation data for all simulated models.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step23.png){width=800px}
+
+24. Click the "Save & Simulate" button.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step24.png){width=800px}
+
+25. Confirm by clicking on "Simulate" in the pop-up window, and wait for the simulation runs to finish.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step25.png){width=500px}
+
+## Results Page
+
+26. Check whether the simulation failed or was completed by looking at the Status column.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step26.png){width=600px}
+
+27. If the simulation failed, open the Log window to see if there are any helpful error messages.
+
+   a. Click on the “?” icon in the top right corner of your screen.
+    
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step27a.png){width=800px}
+    
+   b. Click on “Log”.
+    
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step27b.png){width=800px}
+    
+   c. Identify any errors that appear. For example:
+    
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step27c.png){width=400px}
+
+28. If the simulation has completed, click on the Result name. If you have multiple scenarios in your simulation, you will be prompted to label at least one scenario from the list. Alternatively, you may also skip this step by selecting the “Skip” button in the bottom left corner.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step28.png){width=800px}
+
+29. The Explore page of the results appears. Hover over each cell in the heat map to see a summary of the outputs. Because of our custom R scripts, “Power” is actually now equivalent to “Probability of Success”, where success means that PFS is statistically significant and OS is trending.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step29.png){width=800px}
+
+See the [Results](#results) section below for more information.
+
+30. To visualize the Probability of Success at an interim look, click on the cell in the heat map to open the Detailed Model Output Card. Scroll to the bottom and open the “Simulation Boundaries and Boundary Crossing Probabilities” Table.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step30.png){width=800px}
+
+31. If you need to be reminded which threshold for the OS success criteria was used, scroll up to the top of the Detailed Output page and find details of your inputs in the “Summary” card.
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step31.png){width=800px}
+
+32. Compute the Probability of Success at each analysis by identifying the number of times the trial stopped for Efficacy at a given analysis over the total number of simulations. For example:
+
+![](ProbabilitySuccessDualEndpointsPFSOS_files/Step32.png){width=800px}
+
+- Probability of Success at interim: 4055/10000 = 40.55%
+- Probability of Success at the final analysis conditional on an unsuccessful interim: 3191/5945 = 53.68%
+- Probability of Success by the final analysis (either at IA1 or FA): 7246/10000 = 72.46%
+
+------
+
+# Technical Information and Example Values
+
+## Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/Simulate2EndpointTTEWithMultiState.R" class="alert-link">Simulate2EndpointTTEWithMultiState.R</a></p>
@@ -216,15 +452,15 @@ The median of an exponential distribution is given by:
 
 $$ M = \frac{\log(2)}{\alpha_{01} + \alpha_{02}} $$
 
-Substituting $alpha_{01}$ in terms of $alpha_{02}$:
+Substituting $\alpha_{01}$ in terms of $\alpha_{02}$:
 
 $$ M = \frac{1}{\alpha_{01} + \alpha_{02}} = \frac{1}{\frac{\alpha_{02} \cdot q}{p} + \alpha_{02}} = \frac{1}{\alpha_{02} \cdot \left(\frac{q}{p} + 1\right)} $$
 
-Solving for $alpha_{02}$:
+Solving for $\alpha_{02}$:
 
 $$ \alpha_{02} = \frac{\log(2)}{M \cdot \left(\frac{q}{p} + 1\right)} $$
 
-Once $alpha_{02}$ is calculated, $alpha_{01}$ can be derived using:
+Once $\alpha_{02}$ is calculated, $\alpha_{01}$ can be derived using:
 
 $$ \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} $$
 
@@ -244,16 +480,16 @@ The median OS ($M_{OS}$) is approximated as a weighted combination of these two 
 
 $$ M_{OS} = \text{Median}(X_2 \cdot p + (X_1 + X_3) \cdot q) = p \cdot \frac{\log(2)}{\alpha_{02}} + q \cdot (\frac{\log(2)}{\alpha_{01}} + \frac{\log(2)}{\alpha_{12}})$$
 
-To compute $alpha_{12}$, the model numerically solves for the rate using `uniroot`, ensuring consistency with the user-provided median OS.
+To compute $\alpha_{12}$, the model numerically solves for the rate using `uniroot`, ensuring consistency with the user-provided median OS.
 
 **Sources**
 
 - [1] Joint Modeling of progression-free and overall survival and computation of correlation measures, Meller M, Beyersmann J, Rufibach K, 2018
 - [2] Purdue University, [minimum_two_exponentials.pdf](https://web.archive.org/web/20221223040709/https://llc.stat.purdue.edu/2014/41600/notes/prob3205.pdf)
 
-## Example Using Median Times
+### Example Using Median Times
 
-We begin by directly inputting the median times and probabilities of death before progression into the script as user parameters. Refer to the table below for the definitions of these user-defined parameters.
+One option is to directly input the median times and probabilities of death before progression into the script as user parameters. Refer to the table below for the definitions and example values of these user-defined parameters.
 
 |**User parameter**|**Definition**|**Value**|
 |---|------|---|
@@ -266,9 +502,9 @@ We begin by directly inputting the median times and probabilities of death befor
 
 Here, the median times are in months and the hazard ratio for both endpoints (PFS & OS) is equal to $\frac{12}{18} = \frac{18}{27} = 0.6667$. The probability of death before progression is 20% for both control and treatment arms.
 
-## Example Using Prior Distributions
+### Example Using Prior Distributions
 
-Now we customize how patient data is simulated by building a more realistic model for both PFS and OS outcomes using prior distributions instead of directly using median times and probabilities. Using prior distributions allows us to account for uncertainty around the true treatment effect, which enables users to identify the Probability of Success of a trial rather than statistical Power. Here’s how the event data is generated:
+Another option is to customize how patient data is simulated by building a more realistic model for both PFS and OS outcomes using prior distributions instead of directly using median times and probabilities. Using prior distributions allows us to account for uncertainty around the true treatment effect, which enables users to identify the Probability of Success of a trial rather than statistical Power. Here’s how the event data is generated:
 
 - Time to PFS event is sampled from a Gamma distribution.
 - Time to OS event is also sampled from a Gamma distribution.
@@ -293,45 +529,13 @@ Refer to the table below for the definitions of the user-defined parameters used
 |**dProbOfDeathBeforeProgression1Param1**|Alpha parameter for probability of death before progression for treatment group|
 |**dProbOfDeathBeforeProgression1Param2**|Beta parameter for probability of death before progression for treatment group|
 
-The shape and rate parameters can be calculated from the assumed mean (i.e. median survival time) and its variance. You can use the following tool to compute these required parameters.
-
-<div class="alert alert-primary" role="alert">
-<p style="margin-bottom:0">Enter your desired **mean** and **variance** to calculate the **shape** and **rate** parameters for the Gamma distribution:</p>
-
-<label for="mean">Mean:</label>
-<input type="number" id="mean" value="1" step="any"> <br>
-<label for="variance">Variance:</label>
-<input type="number" id="variance" value="1" step="any"> <br>
-
-<button type="button" class="btn btn-primary" onclick="calculateGammaParams()">Calculate</button> <br>
-
-<p><strong>Shape:</strong> <span id="shapeOut">-</span></p>
-<p><strong>Rate:</strong> <span id="rateOut">-</span></p>
-
-<script>
-function calculateGammaParams() {
-  const mean = parseFloat(document.getElementById("mean").value);
-  const variance = parseFloat(document.getElementById("variance").value);
-
-  if (isNaN(mean) || isNaN(variance) || mean <= 0 || variance <= 0) {
-    alert("Please enter valid positive numbers for both mean and variance.");
-    return;
-  }
-
-  const shape = mean * mean / variance;
-  const rate = mean / variance;
-
-  document.getElementById("shapeOut").innerText = shape.toFixed(4);
-  document.getElementById("rateOut").innerText = rate.toFixed(4);
-}
-</script>
-</div>
+The shape and rate parameters can be calculated from the assumed mean (i.e. median survival time) and its variance. You can use the [Parameter Solving tool](#response-page) from the Step-by-Step section above to compute these required parameters.
 
 If you have the scale parameter for your assumption instead of the rate parameter, you can convert from one to the other using the formula $Rate = \frac{1}{Scale}$.
 
-### Scenario 1: Alternative Hypothesis & Equal Variance
+#### Scenario 1: Alternative Hypothesis & Equal Variance
 
-In this first scenario, we want:
+In this first example scenario, we want:
 
 - A variance of 10 for both endpoints (PFS and OS) and both arms (control and treatment).
 - For the control arm:
@@ -365,9 +569,9 @@ Refer to the table below for the values of all user-defined parameters used in t
 |**dProbOfDeathBeforeProgression1Param1**|20|
 |**dProbOfDeathBeforeProgression1Param2**|80|
 
-### Scenario 2: Alternative Hypothesis & Higher Variance
+#### Scenario 2: Alternative Hypothesis & Higher Variance
 
-In this second scenario, we want:
+In this second example scenario, we want:
 
 - For the control arm:
     - A variance of 10 for both endpoints (PFS and OS).
@@ -403,9 +607,9 @@ Refer to the table below for the values of all user-defined parameters used in t
 |**dProbOfDeathBeforeProgression1Param1**|20|
 |**dProbOfDeathBeforeProgression1Param2**|80|
 
-### Scenario 3: Null Hypothesis & Equal Variance
+#### Scenario 3: Null Hypothesis & Equal Variance
 
-In this third scenario, we want:
+In this third example scenario, we want:
 
 - A variance of 10 for both endpoints (PFS and OS) and both arms (control and treatment).
 - For the control arm:
@@ -438,9 +642,9 @@ Refer to the table below for the values of all user-defined parameters used in t
 |**dProbOfDeathBeforeProgression1Param1**|20|
 |**dProbOfDeathBeforeProgression1Param2**|80|
 
-### Scenario 4: Null Hypothesis & Higher Variance
+#### Scenario 4: Null Hypothesis & Higher Variance
 
-In this final scenario, we want:
+In this final example scenario, we want:
 
 - For the control arm:
     - A variance of 10 for both endpoints (PFS and OS)
@@ -476,7 +680,7 @@ Refer to the table below for the values of all user-defined parameters used in t
 |**dProbOfDeathBeforeProgression1Param1**|20|
 |**dProbOfDeathBeforeProgression1Param2**|80|
 
-# Analysis Integration Point
+## Analysis Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ProbabilitySuccessDualEndpointsPFSOS/R/AnalyzePFSAndOS.R" class="alert-link">AnalyzePFSAndOS.R</a></p>
@@ -498,42 +702,42 @@ Refer to the table below for the definitions of the user-defined parameters used
 |**HazardRatioCutoffIA**|OS hazard ratio threshold used for the interim analysis|
 |**HazardRatioCutoffFA**|OS hazard ratio threshold used for the final analysis|
 
-## Option 1: Fixed Sample Design
+### Option 1: Fixed Sample Design
 
-The first option is a fixed sample design with a hazard ratio threshold of 0.9. This option shows that we can still use this script without interim analyses. Refer to the table below for the values of the user-defined parameters used in this option.
+The first example option is a fixed sample design with a hazard ratio threshold of 0.9. This option shows that we can still use this script without interim analyses. Refer to the table below for the values of the user-defined parameters used in this option.
 
 |**User parameter**|**Value**|
 |---|------|
 |**HazardRatioCutoffFA**|0.9|
 
-## Option 2: Group Sequential Design
+### Option 2: Group Sequential Design
 
-The second option is a group sequential design with hazard ratio thresholds of 0.8 (for interim analysis) and 0.9 (for final analysis). Refer to the table below for the values of the user-defined parameters used in this option.
+The second example option is a group sequential design with hazard ratio thresholds of 0.8 (for interim analysis) and 0.9 (for final analysis). Refer to the table below for the values of the user-defined parameters used in this option.
 
 |**User parameter**|**Value**|
 |---|------|
 |**HazardRatioCutoffIA**|0.8|
 |**HazardRatioCutoffFA**|0.9|
 
-## Option 3: Low PoS Group Sequential Design
+### Option 3: Low PoS Group Sequential Design
 
-The third option is a group sequential design with a lower hazard ratio threshold of 0.5 for both interim and final analyses. Refer to the table below for the values of the user-defined parameters used in this option.
+The third example option is a group sequential design with a lower hazard ratio threshold of 0.5 for both interim and final analyses. Refer to the table below for the values of the user-defined parameters used in this option.
 
 |**User parameter**|**Value**|
 |---|------|
 |**HazardRatioCutoffIA**|0.5|
 |**HazardRatioCutoffIA**|0.5|
 
-## Option 4: High PoS Group Sequential Design
+### Option 4: High PoS Group Sequential Design
 
-The fourth option is a group sequential design with a lower hazard ratio threshold of 0.5 (for interim analysis) and a higher hazard ratio threshold of 1.2 (for final analysis). Refer to the table below for the values of the user-defined parameters used in this option.
+The fourth example option is a group sequential design with a lower hazard ratio threshold of 0.5 (for interim analysis) and a higher hazard ratio threshold of 1.2 (for final analysis). Refer to the table below for the values of the user-defined parameters used in this option.
 
 |**User parameter**|**Value**|
 |---|------|
 |**HazardRatioCutoffIA**|0.5|
 |**HazardRatioCutoffIA**|1.2|
 
-# Conclusion
+## Results
 
 In the Results section, *Power* now refers to the probability of success, where success is defined as a statistically significant difference in time to progression-free survival (PFS) between the control and treatment arm as well as a positive trend in overall survival (OS), i.e. the time to overall survival (OS) is longer in magnitude for the patients in the treatment arm compared to those in the control arm. Below is an example of the heatmap that could be generated by East Horizon following the simulation. Each square represents the simulated probability of success for a trial, based on a specific combination of Response scenario (columns) and Analysis option (rows).
 
