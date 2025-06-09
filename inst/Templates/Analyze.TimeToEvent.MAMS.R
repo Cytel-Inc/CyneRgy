@@ -45,10 +45,16 @@
 #'                      \item{CumEvents}{Vector of Cumulative events. Length = Number of looks.}
 #'                      \item{InfoFrac}{Vector of numeric Information fraction. Length = Number of looks.}
 #'                      \item{CumAlpha}{Vector of numeric Cumulative alpha spent, one sided tests. Length = Number of looks.}
+#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
+#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
 #'                      \item{EffBdryScale}{Integer. Efficacy boundary scale. Possible vaues are: Z Scale: 0}
 #'                      \item{EffBdry}{Vector of numeric efficacy bondaries, one sided tests. Length = Number of looks.}
+#'                      \item{EffBdryUpper}{Vector of upper efficacy bondaries. Present in right tailed and two sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
 #'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible value are: HR Scale: 6}
 #'                      \item{FutBdry}{Vector of numeric futility bondaries, one sided tests. Length = Number of looks.}
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
 #'                      \item{RejType}{Integer. Rejection Type. Values are: 1 Sided Efficacy Upper: 0, 1 Sided Futility Upper: 1, 1 Sided Efficacy Lower: 2, 1 Sided Futility Lower: 3, 1 Sided Efficacy Upper Futility Lower: 4, 1 Sided Efficacy Lower Futility Upper: 5}
 #'                 }
 #' @param UserParam User can pass custom scalar variables defined by users as a member of this list. 

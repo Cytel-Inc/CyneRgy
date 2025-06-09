@@ -22,12 +22,14 @@
 #'          \item{Alpha}{Type I Error}
 #'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2}
 #'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
-#'          \item{LowerAlpha}{Two Sided Asymmetric Tests}
-#'          \item{UpperAlpha}{Two Sided Asymmetric Tests}
+#'          \item{LowerAlpha}{Lower Type I error. Present for Left Tailed and Two Sided Asymmetric Tests }
+#'          \item{UpperAlpha}{Upper Type I error. Present for Right Tailed and Two Sided Asymmetric Tests }
 #'          \item{MaxCompleters}{Maximum Completers for a Continuous ep design}
 #'          \item{ResponseLag}{Fixed Followup time between first visit and Final visit}
 #'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms}
 #'          \item{CriticalPoint}{Z Critical value for a given Alpha}
+#'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
+#'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
 #'          \item{NumVisit}{Integer number of visits in a Design}
 #'          \item{VisitTime}{Numeric vector containing visit times}
 #'          \item{VisitStatus}{Integer vector indicating the visit selection status. 0 - Visit selected for analysis. 1 - Otherwise}
@@ -43,14 +45,17 @@
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
 #'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
+#'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
+#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
+#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
 #'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible vaues are: Z Scale: 0, p-Value Scale: 1}
-#'                      \item{EffBdry}{Vector of efficacy bondaries, one sided tests}
-#'                      \item{EffBdryUpper}{Vector of upper efficacy bondaries, two sided tests}
-#'                      \item{EffBdryLower}{Vector of lower efficacy boundary, two sided tests}
+#'                      \item{EffBdry}{Vector of efficacy bondaries. Present in one sided tests only }
+#'                      \item{EffBdryUpper}{Vector of upper efficacy bondaries. Present in right tailed and two sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
 #'                      \item{FutBdryScale}{Futility boundary scale. Possible value are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
-#'                      \item{FutBdry}{Vector of futility bondaries, one sided tests.}
-#'                      \item{FutBdryUpper}{Vector of upper futility boundaries, two sided tests}
-#'                      \item{FutBdryLower}{Vector of lower futility boundaries, two sided tests}
+#'                      \item{FutBdry}{Vector of futility bondaries. Present in one sided tests only }
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
 #'                      \item{InterimVisit}{1 based index of the visit which is driving the interims}
 #'                      \item{FutContrast}{The contrast based on which futility boundaries are being computed. 0- Primary, 1-Secondary}
 #'                      \item{IncludePipeline}{Flag indicating whether to include pipeline subjects in the interim or not. 0- Don't include. 1- Include}
