@@ -20,12 +20,14 @@
 #'          \item{Alpha}{Type I Error}
 #'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2 }
 #'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
-#'          \item{LowerAlpha}{Two Sided Asymmetric Tests }
-#'          \item{UpperAlpha}{Two Sided Asymmetric Tests }
+#'          \item{LowerAlpha}{Lower Type I error. Present for Left Tailed and Two Sided Asymmetric Tests }
+#'          \item{UpperAlpha}{Upper Type I error. Present for Right Tailed and Two Sided Asymmetric Tests }
 #'          \item{MaxCompleters}{Maximum Number of Completers}
 #'          \item{FollowUpType}{For survival tests, Follow Up Type.  Possible values are: Until End ofS Study: 0, For fixed period: 1}
 #'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms }
 #'          \item{CriticalPoint}{Critical Value for a fixed sample design. }
+#'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
+#'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
 #'          \item{FollowUpType}{Follow up type. Integer value with the following meaning:\describe{
 #'                                    \item{FollowUpType = 0}{Until End of the Study}
 #'                                    \item{FollowUpType = 1}{For Fixed Period}
@@ -44,14 +46,16 @@
 #'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{CumAlpha}{cumulative alpha spent, one sided tests}
+#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
+#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
 #'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible vaues are: Z Scale: 0, p-Value Scale: 1}
-#'                      \item{EffBdry}{Vector of efficacy bondaries, one sided tests}
-#'                      \item{EffBdryUpper}{Vector of upper efficacy bondaries, two sided tests}
-#'                      \item{EffBdryLower}{Vector of lower efficacy boundary, two sided tests}
+#'                      \item{EffBdry}{Vector of efficacy bondaries. Present in one sided tests only }
+#'                      \item{EffBdryUpper}{Vector of upper efficacy bondaries. Present in right tailed and two sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
 #'                      \item{FutBdryScale}{Futility boundary scale. Possible value are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
-#'                      \item{FutBdry}{Vector of futility bondaries, one sided tests.}
-#'                      \item{FutBdryUpper}{Vector of upper futility boundaries, two sided tests}
-#'                      \item{FutBdryLower}{Vector of lower futility boundaries, two sided tests}
+#'                      \item{FutBdry}{Vector of futility bondaries. Present in one sided tests only }
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
 #'                 }
 #' @param UserParam User can pass custom scalar variables defined by users as a member of this list. 
 #'                  User should access the variables using names, for example UserParam$Var1 and not order. 
