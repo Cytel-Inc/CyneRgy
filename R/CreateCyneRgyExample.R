@@ -52,7 +52,7 @@ CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDi
     }
     
     # Find the full path of the selected example
-    strSelectedExample <- vValidExamplesFullPath[ grep( strFunctionType, vValidExamples ) ]
+    strSelectedExample <- vValidExamplesFullPath[ which( vValidExamples == strFunctionType ) ]
     
     # Check if the file already exists in the destination directory
     #if (!is.na(strDirectory) && file.exists(file.path(strDirectory, basename(strSelectedExample)))) {
@@ -81,19 +81,18 @@ CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDi
         strToPath <- paste0( strTopDirPath, strNewDirName )
         bSuccess  <- file.rename( from = paste0( strTopDirPath,"ExampleTemplate" ), to = strToPath )
         
-        #Note: GitHub does not add blank directories and since the RCode directory is blank we need to add it here
+        #Note: GitHub does not add blank directories and since the R directory is blank we need to add it here
         if( bSuccess )
-            dir.create( paste0( strToPath, "/RCode") )
+            dir.create( paste0( strToPath, "/R") )
     }else{
-        stop( "Directory creation Problem!" )
+        stop( "Directory creation problem!" )
     }
     
     if( bSuccess ){
-        #Rcode 
-        strRCodeFileName <- paste0( strTopDirPath, strNewDirName, "/", "RCode", "/", strNewDirName, strNewFileExt )
+        strRCodeFileName <- paste0( strTopDirPath, strNewDirName, "/", "R", "/", strNewDirName, strNewFileExt )
         bSuccess         <- file.copy( strSelectedExample, strRCodeFileName )
     }else{
-        stop( "File copy problem inside RCode!" )
+        stop( "File copy problem inside R folder!" )
     }
     
     if(bSuccess){
