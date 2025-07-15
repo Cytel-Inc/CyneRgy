@@ -52,7 +52,7 @@ CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDi
     }
     
     # Find the full path of the selected example
-    strSelectedExample <- vValidExamplesFullPath[ grep( strFunctionType, vValidExamples ) ]
+    strSelectedExample <- vValidExamplesFullPath[ which( vValidExamples == strFunctionType ) ]
     
     # Check if the file already exists in the destination directory
     #if (!is.na(strDirectory) && file.exists(file.path(strDirectory, basename(strSelectedExample)))) {
