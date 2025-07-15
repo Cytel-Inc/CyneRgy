@@ -3,13 +3,102 @@ title: "Probability of Success for Dual Endpoints (PFS & OS)"
 author: "Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  pdf_document: default
-  word_document: default
   html_document: default
+  word_document: default
+  pdf_document: default
 ---
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0">The following scripts are related to both the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a> and the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>. Click on the links for more information about these integration points.</p>
+</div>
+
+<div class="alert alert-primary" role="alert">
+**Gamma Distribution Explorer**
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(plotly)
+library(htmlwidgets)
+
+# Dummy plot
+p <- plot_ly(x = seq(0, 50, length.out = 100), y = rep(0, 100), type = "scatter", mode = "lines") %>%
+  layout(title = "Gamma Priors: Control vs Treatment", xaxis = list(title = "x"), yaxis = list(title = "Density"))
+
+onRender(p, "
+  function(el, x) {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.6/jstat.min.js';
+    script.onload = function() {
+      const form = document.createElement('div');
+      form.innerHTML = `
+        <div style='display: flex; gap: 20px; flex-wrap: wrap; font-family: sans-serif;'>
+          <div>
+            <label>Control Shape (dMedianPFS0PriorShape):<br>
+              <input id='shape0' type='number' value='5' min='0.1' step='0.1' style='width:100px'>
+            </label><br>
+            <label>Control Rate (dMedianPFS0PriorRate):<br>
+              <input id='rate0' type='number' value='1' min='0.01' step='0.1' style='width:100px'>
+            </label>
+          </div>
+          <div>
+            <label>Treatment Shape (dMedianPFS1PriorShape):<br>
+              <input id='shape1' type='number' value='7' min='0.1' step='0.1' style='width:100px'>
+            </label><br>
+            <label>Treatment Rate (dMedianPFS1PriorRate):<br>
+              <input id='rate1' type='number' value='1' min='0.01' step='0.1' style='width:100px'>
+            </label>
+          </div>
+        </div>
+        <br>
+      `;
+      el.parentNode.insertBefore(form, el);
+
+      const xs = Array.from({length: 400}, (_, i) => i * 0.25);
+
+      function update() {
+        const shape0 = parseFloat(document.getElementById('shape0').value);
+        const rate0  = parseFloat(document.getElementById('rate0').value);
+        const shape1 = parseFloat(document.getElementById('shape1').value);
+        const rate1  = parseFloat(document.getElementById('rate1').value);
+
+        const ys0 = xs.map(x => jStat.gamma.pdf(x, shape0, 1 / rate0));
+        const ys1 = xs.map(x => jStat.gamma.pdf(x, shape1, 1 / rate1));
+
+        Plotly.react(el, [
+          {
+            x: xs,
+            y: ys0,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Control',
+            line: {color: 'blue'}
+          },
+          {
+            x: xs,
+            y: ys1,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Treatment',
+            line: {color: 'red', dash: 'dash'}
+          }
+        ], {
+          title: 'Gamma Priors for Median PFS',
+          xaxis: {title: 'x'},
+          yaxis: {title: 'Density'},
+          legend: {x: 0.7, y: 1}
+        });
+      }
+
+      // Add listeners
+      ['shape0', 'rate0', 'shape1', 'rate1'].forEach(id => {
+        document.getElementById(id).addEventListener('input', update);
+      });
+
+      update();
+    };
+    document.head.appendChild(script);
+  }
+")
+```
 </div>
 
 # Introduction
