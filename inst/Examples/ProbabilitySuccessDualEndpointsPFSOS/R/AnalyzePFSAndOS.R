@@ -111,7 +111,7 @@ AnalyzePFSAndOS <- function(SimData, DesignParam, LookInfo = NULL, UserParam = N
     library( survival )
     library( CyneRgy )
     
-    if( !is.null( LookInfo ) )
+    if( !is.null( LookInfo ) ) test
     {
         nQtyOfLooks  <- LookInfo$NumLooks
         nLookIndex   <- LookInfo$CurrLookIndex
