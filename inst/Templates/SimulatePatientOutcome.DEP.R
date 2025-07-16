@@ -61,6 +61,7 @@
 	Error               <- 0
   vPatientOutcomeEP1  <- rep( 0, NumSub )  
   vPatientOutcomeEP2  <- rep( 0, NumSub )  
+  Response            <- list()
   
 	# Step 2 - Validate custom variable input and set defaults ####
 	if( is.null( UserParam ) )
@@ -83,5 +84,8 @@
 	# Use appropriate error handling and modify the
 	# Error appropriately in each of the methods
 
-	return( list( Response = list( vPatientOutcomeEP1, vPatientOutcomeEP2  ), ErrorCode = as.integer( Error )))
+  Response[[EndpointName[[1]]]] <- vPatientOutcomeEP1
+  Response[[EndpointName[[2]]]] <- vPatientOutcomeEP2
+  
+	return( list( Response = as.list( Response ), ErrorCode = as.integer( Error )))
 }

@@ -106,7 +106,7 @@ SimulatePatientOutcomeSurvSurv.DEP <- function( NumSub, NumArm, ArrivalTime=NULL
     Response[[EndpointName[[1]]]] <- vPatientOutcomeEP1
     Response[[EndpointName[[2]]]] <- vPatientOutcomeEP2
     
-  return( list( Response = as.list(Response), ErrorCode = as.integer( Error ) ) )
+  return( list( Response = as.list( Response ), ErrorCode = as.integer( Error ) ) )
 }
 
 
