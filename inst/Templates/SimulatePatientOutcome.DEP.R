@@ -39,7 +39,7 @@
 #'    \item{-4} {Strong Negative} 
 #'    \item{-5} {Very Strong Negative}  
 #' @param  UserParam A list of user defined parameters in East.   You must have a default = NULL, as in this example.
-#' If UseParam are supplied in East or Solara, they will be an element in the list, eg UserParam$ParameterName.  
+#' If UseParam are supplied in East or East Horizon, they will be an element in the list, eg UserParam$ParameterName.  
 #' @return The function must return a list in the return statement of the function. The information below lists 
 #'             elements of the list, if the element is required or optional and a description of the return values if needed. 
 #'             \describe{
