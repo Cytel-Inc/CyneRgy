@@ -475,12 +475,9 @@ Overall Survival (OS) accounts for both pathways:
      - $X_1 \sim \text{Exp}(\alpha_{01})$ (time to progression),
      - $X_3 \sim \text{Exp}(\alpha_{12})$ (time from progression to death).
 
+Thus, OS is $X_2$ with probability $p$ and $X_1 + X_3$ and with probability $q$. We also know that the median OS is $M_{OS}$ since the user provides it and thus could solve for $\alpha_{12}$ numerically given $\alpha_{01}$ and $\alpha_{02}$.   This approach would require using a root finding function, such as uniroot, to compute $\alpha_{12}$ .  
 
-
-Thus, OS is X2 with probability p and X1 + X3 and with probability q.   We also know that the median OS is $M_{OS}$ since the user provides it and thus could solve for $\alpha_{12}$ numerically given $\alpha_{01}$ and $\alpha_{02}$.   This approach would require using a root finding function, such as uniroot, to compute $\alpha_{12}$ .  
-
-
-In this example, the function SimulateDualMultiStateTTE has arguments for the median PFS, median OS, and probability of death before progression and will solve for the desired $\alpha$ parameters and simulate patient data from the multistate model for each treatment independently. 
+In this example, the function SimulateDualMultiStateTTE has arguments for the median PFS, median OS, and probability of death before progression, and will solve for the desired $\alpha$ parameters and simulate patient data from the multistate model for each treatment independently. 
 
 **Sources**
 
