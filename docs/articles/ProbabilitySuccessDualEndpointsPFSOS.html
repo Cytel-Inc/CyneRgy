@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,7 +117,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin,
 Valeria A. G. Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">June 04, 2025</h4>
+            <h4 data-toc-skip class="date">August 07, 2025</h4>
       
 
       <div class="d-none name"><code>ProbabilitySuccessDualEndpointsPFSOS.Rmd</code></div>
@@ -583,16 +583,16 @@ Transition rate from Progression to Death.</li>
 </ol>
 <p>From Meller et al. [1], the probability of progression before death
 is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mfrac><msub><mi>α</mi><mn>01</mn></msub><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex"> q = \frac{\alpha_{01}}{\alpha_{01} + \alpha_{02}} </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mfrac><msub><mi>α</mi><mn>01</mn></msub><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> q = \frac{\alpha_{01}}{\alpha_{01} + \alpha_{02}} \ \ \ \ \ (1) </annotation></semantics></math></p>
 <p>Where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">q = 1 - p</annotation></semantics></math>,
 with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
 being the probability of Death before Progression.</p>
 <p>Using this relationship:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>⋅</mo><mi>p</mi></mrow><mi>q</mi></mfrac></mrow><annotation encoding="application/x-tex"> \alpha_{02} = \frac{\alpha_{01} \cdot p}{q} </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>01</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>q</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mi>q</mi></mfrac><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>⋅</mo><mi>p</mi></mrow><mi>q</mi></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> \alpha_{02} = \frac{\alpha_{01}(1-q)}{q} =  \frac{\alpha_{01} \cdot p}{q} \ \ \ \ \ (2) </annotation></semantics></math></p>
 <p>Or equivalently:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mi>q</mi></mrow><mi>p</mi></mfrac></mrow><annotation encoding="application/x-tex"> \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mi>q</mi></mrow><mi>p</mi></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>3</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} \ \ \ \ \ (3) </annotation></semantics></math></p>
 <p>Progression-Free Survival (PFS) is treated as the minimum of two
 competing times:</p>
 <ul>
@@ -606,8 +606,8 @@ Time from Initial to Death without Progression.</li>
 <p>Using the property of the minimum of two exponential random variables
 [2]:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mo>min</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> Z = \min(X_1, X_2) \sim \text{Exp}(\alpha_{01} + \alpha_{02}) </annotation></semantics></math></p>
-<p>The median of an exponential distribution is given by:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex"> M = \frac{\log(2)}{\alpha_{01} + \alpha_{02}} </annotation></semantics></math></p>
+<p>The mean of an exponential distribution is given by:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mfrac><mn>1</mn><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex"> M = \frac{1}{\alpha_{01} + \alpha_{02}} </annotation></semantics></math></p>
 <p>Substituting
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>01</mn></msub><annotation encoding="application/x-tex">\alpha_{01}</annotation></semantics></math>
 in terms of
@@ -615,13 +615,11 @@ in terms of
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mfrac><mn>1</mn><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mrow><mfrac><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mi>q</mi></mrow><mi>p</mi></mfrac><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>q</mi><mi>p</mi></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex"> M = \frac{1}{\alpha_{01} + \alpha_{02}} = \frac{1}{\frac{\alpha_{02} \cdot q}{p} + \alpha_{02}} = \frac{1}{\alpha_{02} \cdot \left(\frac{q}{p} + 1\right)} </annotation></semantics></math></p>
 <p>Solving for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>02</mn></msub><annotation encoding="application/x-tex">\alpha_{02}</annotation></semantics></math>:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>=</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>M</mi><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>q</mi><mi>p</mi></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex"> \alpha_{02} = \frac{\log(2)}{M \cdot \left(\frac{q}{p} + 1\right)} </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mi>M</mi><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>q</mi><mi>p</mi></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex"> \alpha_{02} = \frac{1}{M \cdot \left(\frac{q}{p} + 1\right)} </annotation></semantics></math></p>
 <p>Once
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>02</mn></msub><annotation encoding="application/x-tex">\alpha_{02}</annotation></semantics></math>
-is calculated,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>01</mn></msub><annotation encoding="application/x-tex">\alpha_{01}</annotation></semantics></math>
-can be derived using:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mi>q</mi></mrow><mi>p</mi></mfrac></mrow><annotation encoding="application/x-tex"> \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} </annotation></semantics></math></p>
+is calculated, it can be plugged into (3) to obtain
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>01</mn></msub><annotation encoding="application/x-tex">\alpha_{01}</annotation></semantics></math>.</p>
 <p>Overall Survival (OS) accounts for both pathways:</p>
 <ol style="list-style-type: decimal">
 <li>Directly Initial to Death without Progression:
@@ -652,14 +650,32 @@ where:
 </ul>
 </li>
 </ol>
-<p>The median OS
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mrow><mi>O</mi><mi>S</mi></mrow></msub><annotation encoding="application/x-tex">M_{OS}</annotation></semantics></math>)
-is approximated as a weighted combination of these two pathways:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mrow><mi>O</mi><mi>S</mi></mrow></msub><mo>=</mo><mtext mathvariant="normal">Median</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>2</mn></msub><mo>⋅</mo><mi>p</mi><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mi>X</mi><mn>3</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mi>q</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>p</mi><mo>⋅</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>α</mi><mn>02</mn></msub></mfrac><mo>+</mo><mi>q</mi><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>α</mi><mn>01</mn></msub></mfrac><mo>+</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>α</mi><mn>12</mn></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> M_{OS} = \text{Median}(X_2 \cdot p + (X_1 + X_3) \cdot q) = p \cdot \frac{\log(2)}{\alpha_{02}} + q \cdot (\frac{\log(2)}{\alpha_{01}} + \frac{\log(2)}{\alpha_{12}})</annotation></semantics></math></p>
-<p>To compute
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>12</mn></msub><annotation encoding="application/x-tex">\alpha_{12}</annotation></semantics></math>,
-the model numerically solves for the rate using <code>uniroot</code>,
-ensuring consistency with the user-provided median OS.</p>
+<p>Thus, OS is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mn>2</mn></msub><annotation encoding="application/x-tex">X_2</annotation></semantics></math>
+with probability
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>+</mo><msub><mi>X</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">X_1 + X_3</annotation></semantics></math>
+and with probability
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>.
+We also know that the median OS is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mrow><mi>O</mi><mi>S</mi></mrow></msub><annotation encoding="application/x-tex">M_{OS}</annotation></semantics></math>
+since the user provides it and thus could solve for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>12</mn></msub><annotation encoding="application/x-tex">\alpha_{12}</annotation></semantics></math>
+numerically given
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>01</mn></msub><annotation encoding="application/x-tex">\alpha_{01}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>02</mn></msub><annotation encoding="application/x-tex">\alpha_{02}</annotation></semantics></math>.
+This approach would require using a root finding function, such as
+uniroot, to compute
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>12</mn></msub><annotation encoding="application/x-tex">\alpha_{12}</annotation></semantics></math>
+.</p>
+<p>In this example, the function SimulateDualMultiStateTTE has arguments
+for the median PFS, median OS, and probability of death before
+progression, and will solve for the desired
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+parameters and simulate patient data from the multistate model for each
+treatment independently.</p>
 <p><strong>Sources</strong></p>
 <ul>
 <li>[1] Joint Modeling of progression-free and overall survival and

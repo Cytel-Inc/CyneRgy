@@ -3,9 +3,9 @@ title: "Probability of Success for Dual Endpoints (PFS & OS)"
 author: "Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  pdf_document: default
-  word_document: default
   html_document: default
+  word_document: default
+  pdf_document: default
 ---
 
 <div class="alert alert-primary" role="alert">
@@ -427,17 +427,17 @@ There are also three transitions between states:
 
 From Meller et al. [1], the probability of progression before death is:
 
-$$ q = \frac{\alpha_{01}}{\alpha_{01} + \alpha_{02}} $$
+$$ q = \frac{\alpha_{01}}{\alpha_{01} + \alpha_{02}} \ \ \ \ \ (1) $$
 
 Where $q = 1 - p$, with $p$ being the probability of Death before Progression.
 
 Using this relationship:
 
-$$ \alpha_{02} = \frac{\alpha_{01} \cdot p}{q} $$
+$$ \alpha_{02} = \frac{\alpha_{01}(1-q)}{q} =  \frac{\alpha_{01} \cdot p}{q} \ \ \ \ \ (2) $$
 
 Or equivalently:
 
-$$ \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} $$
+$$ \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} \ \ \ \ \ (3) $$
 
 Progression-Free Survival (PFS) is treated as the minimum of two competing times:
 
@@ -448,9 +448,9 @@ Using the property of the minimum of two exponential random variables [2]:
 
 $$ Z = \min(X_1, X_2) \sim \text{Exp}(\alpha_{01} + \alpha_{02}) $$
 
-The median of an exponential distribution is given by:
+The mean of an exponential distribution is given by:
 
-$$ M = \frac{\log(2)}{\alpha_{01} + \alpha_{02}} $$
+$$ M = \frac{1}{\alpha_{01} + \alpha_{02}} $$
 
 Substituting $\alpha_{01}$ in terms of $\alpha_{02}$:
 
@@ -458,11 +458,10 @@ $$ M = \frac{1}{\alpha_{01} + \alpha_{02}} = \frac{1}{\frac{\alpha_{02} \cdot q}
 
 Solving for $\alpha_{02}$:
 
-$$ \alpha_{02} = \frac{\log(2)}{M \cdot \left(\frac{q}{p} + 1\right)} $$
+$$ \alpha_{02} = \frac{1}{M \cdot \left(\frac{q}{p} + 1\right)} $$
 
-Once $\alpha_{02}$ is calculated, $\alpha_{01}$ can be derived using:
+Once $\alpha_{02}$ is calculated, it can be plugged into (3) to obtain $\alpha_{01}$.
 
-$$ \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} $$
 
 Overall Survival (OS) accounts for both pathways:
 
@@ -476,11 +475,9 @@ Overall Survival (OS) accounts for both pathways:
      - $X_1 \sim \text{Exp}(\alpha_{01})$ (time to progression),
      - $X_3 \sim \text{Exp}(\alpha_{12})$ (time from progression to death).
 
-The median OS ($M_{OS}$) is approximated as a weighted combination of these two pathways:
+Thus, OS is $X_2$ with probability $p$ and $X_1 + X_3$ and with probability $q$. We also know that the median OS is $M_{OS}$ since the user provides it and thus could solve for $\alpha_{12}$ numerically given $\alpha_{01}$ and $\alpha_{02}$.   This approach would require using a root finding function, such as uniroot, to compute $\alpha_{12}$ .  
 
-$$ M_{OS} = \text{Median}(X_2 \cdot p + (X_1 + X_3) \cdot q) = p \cdot \frac{\log(2)}{\alpha_{02}} + q \cdot (\frac{\log(2)}{\alpha_{01}} + \frac{\log(2)}{\alpha_{12}})$$
-
-To compute $\alpha_{12}$, the model numerically solves for the rate using `uniroot`, ensuring consistency with the user-provided median OS.
+In this example, the function SimulateDualMultiStateTTE has arguments for the median PFS, median OS, and probability of death before progression, and will solve for the desired $\alpha$ parameters and simulate patient data from the multistate model for each treatment independently. 
 
 **Sources**
 
