@@ -1,0 +1,31 @@
+---
+title: 'MMRM Analysis'
+author: "Jacob Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 5
+    number_sections: true
+    latex_engine: tinytex
+  word_document: default
+  pdf_document:
+    toc: true
+    toc_depth: '5'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library( CyneRgy )
+```
+
+# Introduction
+# This code is able to generate and analyize patient data for a Mixed Model for Repeated Measures (MMRM).
+# It shows the ability of East Horizon using R integration
+# MMRM is a statistical model used for longitudinal continious outcomes for clinical trials.
+# This code currently is intended to work for 2-Arm studies
+# The example code uses a Schizophrenia study by:
+# Comparing the difference in PANSS (Positive and Neagative Syndrome Scale) scores of control vs treatment groups of patients with Schizophrenia. 
+# Patients were treated for 7 weeks (1 week screening, 4 weeks of treatment, and a follow up after 2 weeks).
