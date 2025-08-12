@@ -1,0 +1,37 @@
+---
+title: 'PK/PD Modeling'
+author: "Anton Sun"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 5
+    number_sections: true
+    latex_engine: tinytex
+  word_document: default
+  pdf_document:
+    toc: true
+    toc_depth: '5'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library( CyneRgy )
+```
+
+# Introduction
+The following example demonstrates the integration capabilities of PK/PD modeling into East Horizon using R functions. In the example, we are performing a two arm trial, including a control arm and an experimental treatment arm. In our function, we are utilizing a one-compartment model with first-order absorption and first-order elimination to output the plasma concentration.
+
+<!-- PK:
+     Show equations and variables
+     Initial conditions of A1 and A2
+     Use cases
+     
+     PD:
+     EMaxMOdel
+     - Direct Effect
+     - Indirect Effect
+     
+     
