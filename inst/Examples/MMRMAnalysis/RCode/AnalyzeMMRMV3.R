@@ -213,16 +213,16 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
         
         nDecision <- CyneRgy::GetDecision(strDecision, DesignParam, LookInfo )
     }
-     if (nDecision == 0L && nLookIndex == nQtyOfLooks) {
-         
-         strDecision <- CyneRgy::GetDecisionString(
-             LookInfo = LookInfo,
-             nLookIndex = nQtyOfLooks, 
-             nQtyOfLooks = nQtyOfLooks)
-         
-         nDecision <- CyneRgy::GetDecision(strDecision, DesignParam, LookInfo )
-     }
-    
+    # if (nDecision == 0L && nLookIndex == nQtyOfLooks) {
+    #     
+    #     strDecision <- CyneRgy::GetDecisionString(
+    #         LookInfo = LookInfo,
+    #         nLookIndex = nQtyOfLooks, 
+    #         nQtyOfLooks = nQtyOfLooks)
+    #     
+    #     nDecision <- CyneRgy::GetDecision(strDecision, DesignParam, LookInfo )
+    # }
+       
     # —————————————————————————————————————————————————————————————
     # Final return
     # —————————————————————————————————————————————————————————————
@@ -234,4 +234,5 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
         ErrorCode = as.integer(nError)
     )
 }
+
 
