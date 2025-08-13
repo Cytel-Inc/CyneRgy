@@ -116,7 +116,7 @@ PlotSelectedPatients(SimData, DesignParam, vPatientIDs = vPlotPatients)
 # —————————————————————————————————————————————————————————————
 # -- How many repetitions in the for loop
 # —————————————————————————————————————————————————————————————
-nQtyReps = 100
+nQtyReps = 10
 
 
 # —————————————————————————————————————————————————————————————
@@ -127,10 +127,16 @@ mResultsFA <- matrix(0, nrow = nQtyReps, ncol = 4)
 
 
 # —————————————————————————————————————————————————————————————
-# -- Create a list to store ggplots
+# -- Create a list to store Simulated Data Across Simulations
+# —————————————————————————————————————————————————————————————
+lLoopSimData <- list()
+
+
+# —————————————————————————————————————————————————————————————
+# -- Create a list to store ggplots for Trails and Select Patients
 # —————————————————————————————————————————————————————————————
 lTrialPlots <- list()
-
+lPlotPatients <- list()
 
 # —————————————————————————————————————————————————————————————
 # -- Get the start time before the for loop
@@ -178,6 +184,8 @@ for(iRep in 1:nQtyReps){
         ArrTimeVisit5 = rep( vVisitTime[ 5 ], nNumSub)
     )
     
+    lLoopSimData[[iRep]] <- SimData
+    
     DesignParam <- list( SampleSize = nNumSub, Alpha = 0.05, NumVisit = length( vVisitTime ), TailType =0 )
     
     LookInfoIA <- list( NumLooks = 2, CurrLookIndex = 1, CumCompleters = c(nNumSub/2, nNumSub), InterimVisit = 2, IncludePipeline = 0, RejType=2 )
@@ -208,6 +216,14 @@ for(iRep in 1:nQtyReps){
     
     lTrialPlots[[iRep]] <- PlotTreatmentControlCI(SimData, DesignParam)
     
+    # —————————————————————————————————————————————————————————————
+    # Plot Select Patients and Store in a List Automatically
+    # —————————————————————————————————————————————————————————————
+    
+    PlotSelectedPatients(SimData, DesignParam, vPatientIDs = vPlotPatients)
+    
+    lPlotPatients[[iRep]] <- PlotSelectedPatients(SimData, DesignParam, vPatientIDs = vPlotPatients) 
+    
 }
 
 
@@ -217,5 +233,13 @@ for(iRep in 1:nQtyReps){
 # —————————————————————————————————————————————————————————————
 dEndTime <- Sys.time()
 dEndTime - dStartTime
+
+
+# —————————————————————————————————————————————————————————————------------
+# -- Command to see individual patient plots from each simulation manually
+# —————————————————————————————————————————————————————————————-------------
+# PlotSelectedPatients(lLoopSimData[[iRep]], DesignParam, vPatientIDs = vPlotPatients)
+
+
 
 
