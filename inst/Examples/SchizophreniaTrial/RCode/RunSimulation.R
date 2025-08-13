@@ -1,12 +1,13 @@
-source('SimulatePatientData.r')
-source('PlotTrialData2.r')
-source('PlotPatientData2.r')
+source('PlotTrialData.r')
+source('PlotPatientData.r')
 source('GenerateMMRMResponses.r')
-source('AnalyzeMMRMV3.r')
+source('AnalyzeMMRM.r')
+
 
 # —————————————————————————————————————————————————————————————
 # Install required packages if needed
-# install.packages(c("dplyr", "tidyr", "ggplot2", "MASS"))
+# —————————————————————————————————————————————————————————————
+
 #install.packages('MASS')
 #install.packages('dplyr')
 #install.packages('tidyr')
@@ -14,9 +15,9 @@ source('AnalyzeMMRMV3.r')
 #install.packages("nlme") 
 #install.packages("rpact")
 #install.packages("RColorBrewer")
-#install.packages('CyneRgy')
+#install.packages('remotes')
+#remotes::install_github( "Cytel-Inc/CyneRgy@main" )
 
-# —————————————————————————————————————————————————————————————
 
 # —————————————————————————————————————————————————————————————
 # Load libraries
@@ -28,6 +29,9 @@ library(ggplot2)
 library(nlme)
 library(rpact)
 library(RColorBrewer)
+library(remotes)
+library(CyneRgy)
+
 
 
 # —————————————————————————————————————————————————————————————
@@ -42,10 +46,7 @@ vMeanControl   <- c(90.1, 85.9, 82.6, 81.3, 79.8)
 vMeanTrt       <- c(90.1, 82.2, 79.5, 77.3, 75.6)
 vStdDevControl <- rep(9.5, nNumVisit)
 vStdDevTrt     <- rep(11.1, nNumVisit)
-
-
-vStdDevControl <- rep(2, nNumVisit)
-vStdDevTrt     <- rep(2, nNumVisit)
+vPlotPatients <- c(1:5, 595:600) #Vector to plot select patients
 
 mCorrMat       <- matrix(0.5, nrow = nNumVisit, ncol = nNumVisit) + diag(0.5, nNumVisit)
 lUserParamDataGen <- NULL
@@ -58,8 +59,8 @@ lUserParamDataGen <- NULL
 # —————————————————————————————————————————————————————————————-------------------------------------------------
 
 lGeneratedData <- GenerateMMRMResponses( nNumSub, nNumVisit, vTreatmentID, nInputmethod, vVisitTime,
-                                          vMeanControl, vMeanTrt, vStdDevControl, vStdDevTrt, mCorrMat,
-                                          UserParam = lUserParamDataGen)
+                                         vMeanControl, vMeanTrt, vStdDevControl, vStdDevTrt, mCorrMat,
+                                         UserParam = lUserParamDataGen)
 
 # —————————————————————————————————————————————————————————————
 # Create arrival times in order
@@ -99,12 +100,12 @@ MMRMAnalysis(SimData, DesignParam, LookInfo, UserParam = NULL)
 # —————————————————————————————————————————————————————————————
 # Plot both Control and Treatment
 # —————————————————————————————————————————————————————————————
-PlotTreatmentControlCI_Clean(SimData, DesignParam)
+PlotTreatmentControlCI(SimData, DesignParam)
 
 # —————————————————————————————————————————————————————————————
 # Plot Select Patients
 # —————————————————————————————————————————————————————————————
-PlotSelectedPatients_Clean(SimData, DesignParam, vPatientIDs = c(1:5, 95:100))
+PlotSelectedPatients(SimData, DesignParam, vPatientIDs = vPlotPatients) 
 
 
 
@@ -112,42 +113,36 @@ PlotSelectedPatients_Clean(SimData, DesignParam, vPatientIDs = c(1:5, 95:100))
 
 
 
+# —————————————————————————————————————————————————————————————
+# -- How many repetitions in the for loop
+# —————————————————————————————————————————————————————————————
+nQtyReps = 100
 
 
+# —————————————————————————————————————————————————————————————
+# -- Define Matrix to store results
+# —————————————————————————————————————————————————————————————
+mResultsIA <- matrix(0, nrow = nQtyReps, ncol = 4)
+mResultsFA <- matrix(0, nrow = nQtyReps, ncol = 4)
 
 
+# —————————————————————————————————————————————————————————————
+# -- Create a list to store ggplots
+# —————————————————————————————————————————————————————————————
+lTrialPlots <- list()
 
 
-
-
-
-
-
+# —————————————————————————————————————————————————————————————
+# -- Get the start time before the for loop
+# —————————————————————————————————————————————————————————————
 dStartTime <- Sys.time()
 
-for(iRep in 1:1000){
-    
-    # —————————————————————————————————————————————————————————————
-    # -- Define parameters 
-    # —————————————————————————————————————————————————————————————
-    nNumSub        <- 600
-    nNumVisit      <- 5
-    vTreatmentID   <- sample( c(rep(0, nNumSub/2), rep(1, nNumSub/2)) )
-    nInputmethod   <- 0
-    vVisitTime     <- c(0, 1, 2, 3, 4)   # This means when we generate the data we will have Response1, Response2,... Response5
-    vMeanControl   <- c(90.1, 85.9, 82.6, 81.3, 79.8)
-    vMeanTrt       <- c(90.1, 82.2, 79.5, 77.3, 75.6)
-    vStdDevControl <- rep(9.5, nNumVisit)
-    vStdDevTrt     <- rep(11.1, nNumVisit)
-    
-    
-    vStdDevControl <- rep(2, nNumVisit)
-    vStdDevTrt     <- rep(2, nNumVisit)
-    
-    mCorrMat       <- matrix(0.5, nrow = nNumVisit, ncol = nNumVisit) + diag(0.5, nNumVisit)
-    lUserParamDataGen <- NULL
-    
-    
+
+# —————————————————————————————————————————————————————————————
+# -- For loop for running multiple simulations
+# —————————————————————————————————————————————————————————————
+for(iRep in 1:nQtyReps){
+  
     # —————————————————————————————————————————————————————————————-------------------------------------------------
     # Note: The functions that can be used for data generation for East Horizon all return a list. 
     #       However, the Analysis functions require a dataframe so after generating the data with you function 
@@ -205,15 +200,23 @@ for(iRep in 1:1000){
     mResultsFA[iRep, 3] <- lAnalysisFA$p.value
     mResultsFA[iRep, 4] <- lAnalysisFA$Error
     
+    # —————————————————————————————————————————————————————————————
+    # Plot both Control and Treatment and Store all Trial Plots in a List
+    # —————————————————————————————————————————————————————————————
+    PlotTreatmentControlCI(SimData, DesignParam)
+    
+    
+    lTrialPlots[[iRep]] <- PlotTreatmentControlCI(SimData, DesignParam)
+    
 }
+
+
+
+# —————————————————————————————————————————————————————————————
+# -- Get the completion time of the simulation 
+# —————————————————————————————————————————————————————————————
 dEndTime <- Sys.time()
 dEndTime - dStartTime
-
-
-mResultsIA <- matrix(0, nrow = nQtyReps, ncol = 4)
-mResultsFA <- matrix(0, nrow = nQtyReps, ncol = 4)
-
-nQtyReps = 1000
 
 
 
