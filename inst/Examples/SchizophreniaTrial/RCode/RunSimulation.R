@@ -219,7 +219,3 @@ dEndTime <- Sys.time()
 dEndTime - dStartTime
 
 
-
-
-
-MMRMAnalysis(SimData, DesignParam, LookInfoFA, UserParam = NULL)
