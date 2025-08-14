@@ -1,8 +1,3 @@
-# Check and verify your code before running.
-# Run the code to see the results.
-# Extract the function before saving or uploading to East Horizon.
-# Visit this help page for more information: https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseRepeatedMeasures.html
-
 #' @name GenerateDrugConcentration
 #' @param NumSub: Mandatory. The integer number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
 #' @param NumVisit: Mandatory. Integer number of Visits
@@ -30,11 +25,13 @@
 #'                  \item{Response<NumVisit>}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}             
 
 
-
-library(deSolve)
+# Temporarily omitted
+#library(deSolve)
 
 
 # Define ODE function for one-compartment model with first-order absorption
+# This function is omitted temporarily until DeSovle Package is installed withing EH
+
 # OneCompartmentModelPK <- function(time, state, parameters) {
 #     with(as.list(c(state, parameters)), {
 #         dA1 <- -ka * A1  # Change in drug amount in absorption compartment
@@ -50,36 +47,39 @@ GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     
     
     # Parameters for ODE model
+    # Parameters and check are temporarily omitted
+    
     # ka <- UserParam$ka  # Absorption rate constant
     # ke <- UserParam$ke  # Elimination rate constant
     # Dose <- UserParam$Dose  # Dose administered
     
-    if (is.null(ka) || is.null(ke) || is.null(Dose)) {
-        Error <- -1  # Fatal error if required parameters are missing
-        retval$ErrorCode <- as.integer(Error)
-        return(retval)
-    }
+    # if (is.null(ka) || is.null(ke) || is.null(Dose)) {
+    #     Error <- -1  # Fatal error if required parameters are missing
+    #     retval$ErrorCode <- as.integer(Error)
+    #     return(retval)
+    # }
+    
+    # Hard coded vectors for concentration:
+    # Take out once DeSolve is ready
     
     # Control Arm:
     # state <- c( A1 = 500, A2 = 0) 
     # parameters <- c( ka = 1, ke = 0.2)
     # VisitTime <- c( 1,2,3,4,5 )
     # NumVisit <- 5
-    vConcentration1 <- c(281.78192, 311.89025, 186.69717,  84.55619,  31.11674 )
+    vConcentration1 <- c( 281.78192, 311.89025, 186.69717,  84.55619,  31.11674 )
     
     # Experimental Arm:
     # state <- c( A1 = 100, A2 = 0) 
     # parameters <- c( ka = 1, ke = 0.2)
     # VisitTime <- c( 1,2,3,4,5 )
     # NumVisit <- 5
-    
     vConcentration2 <- c( 56.356387, 62.378049, 37.339433, 16.911244,  6.223347 )
     
     # Simulate drug concentration for each subject
     for (i in 1:NumSub) {
         
         # Initial state: A1 = Dose (amount in absorption compartment), A2 = 0 (concentration in central compartment)
-        
         # Note: We are commenting out because EH does not have deSolve package installed.
         
         # state <- c(A1 = Dose, A2 = 0) #this is a full dose in absorption compartment, none in central

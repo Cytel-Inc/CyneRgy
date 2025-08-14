@@ -1,5 +1,7 @@
 library(deSolve)
 
+# Use this script to generate concentration vectors using ODE 
+
 # Define ODE function for one-compartment model with first-order absorption
 OneCompartmentModelPK <- function(time, state, parameters) {
     with(as.list(c(state, parameters)), {
@@ -28,5 +30,5 @@ for (j in 1:NumVisit) {
     concentration[j] <- state["A2"]  # Extract concentration at current visit
 }
 
-print(concentration)
+# print(concentration)
 

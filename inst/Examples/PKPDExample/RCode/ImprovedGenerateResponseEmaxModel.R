@@ -24,7 +24,7 @@
 #'                                     
 #'                  \item{Response<NumVisit>}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}             
 #'                      
-GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL) {
+GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL) {
   Error <- 0
   retval <- list()
   
@@ -40,14 +40,20 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
   mResponses <- matrix(0, nrow = NumSub, ncol = NumVisit)
   
   # Define the Emax model parameters from UserParam
-  E0 <- UserParam$E0  # Baseline effect
+  E0   <- UserParam$E0    # Baseline effect
   Emax <- UserParam$Emax  # Maximum effect
   EC50 <- UserParam$EC50  # Concentration at 50% of Emax
-  Dose <- UserParam$Dose  # Dose level for treatment group
-  
+  Dose <- UserParam$Dose  # Vector of dose/concetration per visit
+
   # Check if all required Emax parameters are provided
   if (is.null(E0) || is.null(Emax) || is.null(EC50) || is.null(Dose)) {
     Error <- -2
+    retval$ErrorCode <- as.integer(Error)
+    return(retval)
+  }
+  
+  if (!is.numeric(Dose) || length(Dose) != NumVisit) {
+    Error <- 3
     retval$ErrorCode <- as.integer(Error)
     return(retval)
   }
@@ -61,8 +67,8 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     # Generates response for control group 
     mResponses[TreatmentID == 0, i] <- rnorm( n = sum(TreatmentID == 0), mean = MeanControl[i], sd = StdDevControl[i] )
     
-    # Generates response for treatment group
-    mResponses[TreatmentID == 1, i] <- rnorm( n = sum(TreatmentID == 1), mean = MeanTrt[i] + TreatmentEffect, sd = StdDevTrt[i])
+    # Generates response for treatment group (Emax model output)
+    mResponses[TreatmentID == 1, i] <- rnorm( n = sum(TreatmentID == 1), mean = TreatmentEffect[i], sd = StdDevTrt[i])
   }
   
   # Add responses to return list
