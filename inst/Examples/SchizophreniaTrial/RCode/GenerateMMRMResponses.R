@@ -1,5 +1,8 @@
 
+# ————————————————————————————————————————————————————————————— 
 # Define the simulation function
+# ————————————————————————————————————————————————————————————— 
+
 GenerateMMRMResponses <- function(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime,
                                   MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat,
                                   UserParam = NULL) {

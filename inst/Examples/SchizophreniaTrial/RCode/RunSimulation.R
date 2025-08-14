@@ -123,8 +123,10 @@ nQtyReps = 10
 # -- Define Matrix to store results
 # —————————————————————————————————————————————————————————————
 mResultsIA <- matrix(0, nrow = nQtyReps, ncol = 4)
-mResultsFA <- matrix(0, nrow = nQtyReps, ncol = 4)
+colnames(mResultsIA) <- c('Decision', 'Prime Delta', 'P-Value', 'Error')
 
+mResultsFA <- matrix(0, nrow = nQtyReps, ncol = 4)
+colnames(mResultsFA) <- c('Decision', 'Prime Delta', 'P-Value', 'Error')
 
 # —————————————————————————————————————————————————————————————
 # -- Create a list to store Simulated Data Across Simulations
