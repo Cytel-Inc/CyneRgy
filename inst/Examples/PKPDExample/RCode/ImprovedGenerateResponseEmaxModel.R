@@ -43,11 +43,11 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
   E0   <- UserParam$E0    # Baseline effect
   Emax <- UserParam$Emax  # Maximum effect
   EC50 <- UserParam$EC50  # Concentration at 50% of Emax
-  Dose0 <- UserParam$Dose # Starting dose/concentration
+  C0 <- UserParam$Concentration # Starting concetration
   Ke   <- UserParam$Ke    # Elimination rate constant
 
   # Check if all required Emax parameters are provided
-  if (is.null(E0) || is.null(Emax) || is.null(EC50) || is.null(Dose0) || is.null(Ke)) {
+  if (is.null(E0) || is.null(Emax) || is.null(EC50) || is.null(C0) || is.null(Ke)) {
     Error <- -2
     retval$ErrorCode <- as.integer(Error)
     return(retval)
@@ -55,10 +55,10 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
   
   # Use this to calculate the concetration at each visit using first-order elimination
   # C(t) = Dose0 * exp(-Ke * t)
-  Dose <- Dose0 * exp(-Ke * VisitTime)
+  Cp <- C0 * exp(-Ke * VisitTime)
   
   # Calculate treatment effect using the Emax model formula
-  TreatmentEffect <- E0 + (Emax * Dose) / (EC50 + Dose)
+  TreatmentEffect <- E0 + (Emax * Cp) / (EC50 + Cp)
   
   
   # Simulate responses for each visit
@@ -81,20 +81,20 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
 }
 
 # Test Call
-# UserParam <- list(E0 = 5, Emax = 20, EC50 = 50, Dose = 100, Ke = 0.2)
-# VisitTime <- c(0, 1, 2, 4, 8)  # in hours or days
-# TreatmentID <- rep(c(0,1), each = 5)
-# 
-# res <- GenerateResponseEmaxModel(
-#     NumSub = 10,
-#     NumVisit = length(VisitTime),
-#     TreatmentID = TreatmentID,
-#     Inputmethod = NULL,
-#     VisitTime = VisitTime,
-#     MeanControl = rep(5, length(VisitTime)),
-#     StdDevControl = rep(1, length(VisitTime)),
-#     StdDevTrt = rep(1.5, length(VisitTime)),
-#     UserParam = UserParam
-# )
-# 
-# res
+UserParam <- list(E0 = 5, Emax = 20, EC50 = 50, Concentration = 100, Ke = 0.2)
+VisitTime <- c(0, 1, 2, 4, 8)  # in hours or days
+TreatmentID <- rep(c(0,1), each = 5)
+
+res <- GenerateResponseEmaxModel(
+    NumSub = 10,
+    NumVisit = length(VisitTime),
+    TreatmentID = TreatmentID,
+    Inputmethod = NULL,
+    VisitTime = VisitTime,
+    MeanControl = rep(5, length(VisitTime)),
+    StdDevControl = rep(1, length(VisitTime)),
+    StdDevTrt = rep(1.5, length(VisitTime)),
+    UserParam = UserParam
+)
+
+res
