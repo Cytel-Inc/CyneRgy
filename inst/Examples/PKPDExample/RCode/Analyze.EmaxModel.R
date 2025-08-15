@@ -52,7 +52,6 @@ Analyze.EmaxModel <- function(SimData, DesignParam, LookInfo = NULL, UserParam =
     library(nlme)
     library(CyneRgy)  # Needed for decision helpers
     
-    
     nError <- 0
     nDecision <- 0
     dPrimDelta <- 0
@@ -71,8 +70,10 @@ Analyze.EmaxModel <- function(SimData, DesignParam, LookInfo = NULL, UserParam =
     }
     
     # Step 2: Wide → Long format ------------------------------------
-    dfWideData <- data.frame(id = 1:DesignParam$SampleSize,
-                             TreatmentID = SimData$TreatmentID)
+    dfWideData <- data.frame(
+        id = 1:DesignParam$SampleSize,
+        TreatmentID = SimData$TreatmentID
+    )
     vResponseColumns <- c()
     
     for (i in 1:DesignParam$NumVisit) {
@@ -80,9 +81,15 @@ Analyze.EmaxModel <- function(SimData, DesignParam, LookInfo = NULL, UserParam =
         vResponseColumns <- c(vResponseColumns, paste0("Response", i))
     }
     
-    dfLongData <- reshape(dfWideData, varying = vResponseColumns,
-                          direction = "long", sep = "", idvar = "id", timevar = "Visit")
-    dfLongData <- dfLongData[ order(dfLongData$id, dfLongData$Visit), ]
+    dfLongData <- reshape(
+        dfWideData,
+        varying = vResponseColumns,
+        direction = "long",
+        sep = "",
+        idvar = "id",
+        timevar = "Visit"
+    )
+    dfLongData <- dfLongData[order(dfLongData$id, dfLongData$Visit), ]
     
     dfLongData$TreatmentID <- factor(dfLongData$TReatmentID)
     
@@ -112,19 +119,25 @@ Analyze.EmaxModel <- function(SimData, DesignParam, LookInfo = NULL, UserParam =
     
     # Step 5: Alpha for this look -----------------------------------
     if (!is.null(LookInfo)) {
-        vBounds <- getDesignGroupSequential(kMax = nQtyOfLooks,
-                                            alpha = DesignParam$Alpha,
-                                            sided = 1, 
-                                            typeOfDesign = "OF")
+        vBounds <- getDesignGroupSequential(
+            kMax = nQtyOfLooks,
+            alpha = DesignParam$Alpha,
+            sided = 1, 
+            typeOfDesign = "OF"
+        )
         dAlpha <- vBounds$alphaSpent[nLookIndex]
     } else {
         dAlpha <- DesignParam$Alpha
     }
     
     # Step 6: Make decision -----------------------------------------
-    strDecision <- CyneRgy::GetDecisionString(LookInfo, nLookIndex, nQtyOfLooks,
-                                              bIAEfficacyCondition = dpValue <= dAlpha,
-                                              bFAEfficacyCondition = dpValue <= dAlpha)
+    strDecision <- CyneRgy::GetDecisionString(
+        LookInfo,
+        nLookIndex,
+        nQtyOfLooks,
+        bIAEfficacyCondition = dpValue <= dAlpha,
+        bFAEfficacyCondition = dpValue <= dAlpha
+    )
     nDecision <- CyneRgy::GetDecision(strDecision, DesignParam, LookInfo)
     
     # Step 7: Return -------------------------------------------------

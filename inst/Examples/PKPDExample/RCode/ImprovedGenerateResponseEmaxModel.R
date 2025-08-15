@@ -80,21 +80,21 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
   
 }
 
-# Test Call
-UserParam <- list(E0 = 5, Emax = 20, EC50 = 50, Concentration = 100, Ke = 0.2)
-VisitTime <- c(0, 1, 2, 4, 8)  # in hours or days
-TreatmentID <- rep(c(0,1), each = 5)
-
-res <- GenerateResponseEmaxModel(
-    NumSub = 10,
-    NumVisit = length(VisitTime),
-    TreatmentID = TreatmentID,
-    Inputmethod = NULL,
-    VisitTime = VisitTime,
-    MeanControl = rep(5, length(VisitTime)),
-    StdDevControl = rep(1, length(VisitTime)),
-    StdDevTrt = rep(1.5, length(VisitTime)),
-    UserParam = UserParam
-)
-
-res
+# # Test Call
+# UserParam <- list(E0 = 5, Emax = 20, EC50 = 50, Concentration = 100, Ke = 0.2)
+# VisitTime <- c(0, 1, 2, 4, 8)  # in hours or days
+# TreatmentID <- rep(c(0,1), each = 5)
+# 
+# res <- GenerateResponseEmaxModel(
+#     NumSub = 10,
+#     NumVisit = length(VisitTime),
+#     TreatmentID = TreatmentID,
+#     Inputmethod = NULL,
+#     VisitTime = VisitTime,
+#     MeanControl = rep(5, length(VisitTime)),
+#     StdDevControl = rep(1, length(VisitTime)),
+#     StdDevTrt = rep(1.5, length(VisitTime)),
+#     UserParam = UserParam
+# )
+# 
+# res
