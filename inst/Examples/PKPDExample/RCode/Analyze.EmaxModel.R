@@ -94,17 +94,28 @@ Analyze.EmaxModel <- function(SimData, DesignParam, LookInfo = NULL, UserParam =
     }
     
     # Step 4: Fit Repeated Measures Model --------------------------
-    mmrm <- gls(Response ~ TreatmentID * factor(Visit),
-                na.action = na.omit, data = dfAnalysisData,
-                correlation = corSymm(form = ~ Visit | id),
-                weights = varIdent(form = ~ 1 | Visit))
-    dpValue <- summary(mmrm)$tTable["TreatmentID", "p-value"]
+    model_result <- tryCatch({
+        mmrm <- gls(
+            Response ~ TreatmentID * factor(Visit),
+            na.action = na.omit, 
+            data = dfAnalysisData,
+            correlation = corSymm(form = ~ Visit | id),
+            weights = varIdent(form = ~ 1 | Visit)
+        )
+        summary(mmrm)$tTable["TreatmentID", "p-value"]
+    }, error = function(e) {
+        nError <<- -1
+        return(NA)
+    })
+
+    dpValue <- model_result
     
     # Step 5: Alpha for this look -----------------------------------
     if (!is.null(LookInfo)) {
         vBounds <- getDesignGroupSequential(kMax = nQtyOfLooks,
                                             alpha = DesignParam$Alpha,
-                                            sided = 1, typeOfDesign = "OF")
+                                            sided = 1, 
+                                            typeOfDesign = "OF")
         dAlpha <- vBounds$alphaSpent[nLookIndex]
     } else {
         dAlpha <- DesignParam$Alpha
