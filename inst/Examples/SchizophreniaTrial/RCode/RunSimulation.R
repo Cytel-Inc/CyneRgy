@@ -46,7 +46,7 @@ vMeanControl   <- c(90.1, 85.9, 82.6, 81.3, 79.8)
 vMeanTrt       <- c(90.1, 82.2, 79.5, 77.3, 75.6)
 vStdDevControl <- rep(9.5, nNumVisit)
 vStdDevTrt     <- rep(11.1, nNumVisit)
-vPlotPatients <- c(1:5, 595:600) #Vector to plot select patients
+vPlotPatients <- c(1:5) #Vector to plot select patients
 
 mCorrMat       <- matrix(0.5, nrow = nNumVisit, ncol = nNumVisit) + diag(0.5, nNumVisit)
 lUserParamDataGen <- NULL
@@ -92,7 +92,7 @@ DesignParam <- list( SampleSize = nNumSub, Alpha = 0.05, NumVisit = length( vVis
 LookInfo <- list( NumLooks = 2, CurrLookIndex = 1, CumCompleters = c(nNumSub/2, nNumSub), InterimVisit = 2, IncludePipeline = 0, RejType=2 )
 
 # —————————————————————————————————————————————————————————————
-#Run Analysis
+# Run Analysis
 # —————————————————————————————————————————————————————————————
 
 MMRMAnalysis(SimData, DesignParam, LookInfo, UserParam = NULL)
@@ -139,6 +139,9 @@ lLoopSimData <- list()
 # —————————————————————————————————————————————————————————————
 lTrialPlots <- list()
 lPlotPatients <- list()
+
+
+
 
 # —————————————————————————————————————————————————————————————
 # -- Get the start time before the for loop
@@ -238,10 +241,10 @@ dEndTime - dStartTime
 
 
 # —————————————————————————————————————————————————————————————------------
-# -- Command to see individual patient plots from each simulation manually
+# -- Command to See individual patient plots from each simulation manually
 # —————————————————————————————————————————————————————————————-------------
-# PlotSelectedPatients(lLoopSimData[[iRep]], DesignParam, vPatientIDs = vPlotPatients)
 
+# PlotSelectedPatients(lLoopSimData[[iRep]], DesignParam, vPatientIDs = vPlotPatients)
 
 
 

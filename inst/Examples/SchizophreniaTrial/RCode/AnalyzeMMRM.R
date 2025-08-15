@@ -57,7 +57,11 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
     # Step 3: Interim‐look filtering using dplyr
     # —————————————————————————————————————————————————————————————
     if (!is.null(LookInfo)) {
+        
+        # —————————————————————————————————————————————————————————————
         # 3a) compute cutoff time
+        # —————————————————————————————————————————————————————————————
+        
         dAnalysisTime <- dfLongData %>%
             filter(Visit == nAnalysisVisit) %>%
             slice(nQtyOfPatsForInterim) %>%
@@ -67,7 +71,6 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
         # 3b) pick subjects
         # —————————————————————————————————————————————————————————————
         
-        # TODO(Kyle) I think we always want to include the pipleline patients
         
         if (LookInfo$IncludePipeline == 0) {
             vSubjectsForAnalysis <- dfLongData %>%
@@ -182,8 +185,7 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
     # Step 7: Decision rules
     # —————————————————————————————————————————————————————————————
     
-    #Remove this line later
-    #dAlpha <- 0.025
+
     if(dpValue <= dAlpha) 
     {
         if( nLookIndex == nQtyOfLooks )
@@ -217,16 +219,8 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
         
         nDecision <- CyneRgy::GetDecision(strDecision, DesignParam, LookInfo )
     }
-    # if (nDecision == 0L && nLookIndex == nQtyOfLooks) {
-    #     
-    #     strDecision <- CyneRgy::GetDecisionString(
-    #         LookInfo = LookInfo,
-    #         nLookIndex = nQtyOfLooks, 
-    #         nQtyOfLooks = nQtyOfLooks)
-    #     
-    #     nDecision <- CyneRgy::GetDecision(strDecision, DesignParam, LookInfo )
-    # }
-       
+
+    
     # —————————————————————————————————————————————————————————————
     # Final return
     # —————————————————————————————————————————————————————————————
@@ -238,5 +232,4 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
         ErrorCode = as.integer(nError)
     )
 }
-
 
