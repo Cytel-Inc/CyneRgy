@@ -43,20 +43,19 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
   E0   <- UserParam$E0    # Baseline effect
   Emax <- UserParam$Emax  # Maximum effect
   EC50 <- UserParam$EC50  # Concentration at 50% of Emax
-  Dose <- UserParam$Dose  # Vector of dose/concetration per visit
+  Dose0 <- UserParam$Dose # Starting dose/concentration
+  Ke   <- UserParam$Ke    # Elimination rate constant
 
   # Check if all required Emax parameters are provided
-  if (is.null(E0) || is.null(Emax) || is.null(EC50) || is.null(Dose)) {
+  if (is.null(E0) || is.null(Emax) || is.null(EC50) || is.null(Dose0) || is.null(Ke)) {
     Error <- -2
     retval$ErrorCode <- as.integer(Error)
     return(retval)
   }
   
-  if (!is.numeric(Dose) || length(Dose) != NumVisit) {
-    Error <- 3
-    retval$ErrorCode <- as.integer(Error)
-    return(retval)
-  }
+  # Use this to calculate the concetration at each visit using first-order elimination
+  # C(t) = Dose0 * exp(-Ke * t)
+  Dose <- Dose0 * exp(-Ke * VisitTime)
   
   # Calculate treatment effect using the Emax model formula
   TreatmentEffect <- E0 + (Emax * Dose) / (EC50 + Dose)
@@ -81,18 +80,21 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
   
 }
 
-# Example call to the function
-# NumSub <- 100
-# NumVisit <- 5
-# TreatmentID <- c(rep(0, 50), rep(1, 50))
-# Inputmethod <- 0
-# VisitTime <- c(0, 1, 2, 3, 4)
-# MeanControl <- c(10, 12, 14, 16, 18)
-# MeanTrt <- c(10, 13, 16, 19, 22)
-# StdDevControl <- c(2, 2, 2, 2, 2)
-# StdDevTrt <- c(2, 2, 2, 2, 2)
-# CorrMat <- diag(5)
-# UserParam <- list(E0 = 0, Emax = 10, EC50 = 5, Dose = 10)
+# Test Call
+# UserParam <- list(E0 = 5, Emax = 20, EC50 = 50, Dose = 100, Ke = 0.2)
+# VisitTime <- c(0, 1, 2, 4, 8)  # in hours or days
+# TreatmentID <- rep(c(0,1), each = 5)
 # 
-# GenerateResponseEmaxModel(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam)
-
+# res <- GenerateResponseEmaxModel(
+#     NumSub = 10,
+#     NumVisit = length(VisitTime),
+#     TreatmentID = TreatmentID,
+#     Inputmethod = NULL,
+#     VisitTime = VisitTime,
+#     MeanControl = rep(5, length(VisitTime)),
+#     StdDevControl = rep(1, length(VisitTime)),
+#     StdDevTrt = rep(1.5, length(VisitTime)),
+#     UserParam = UserParam
+# )
+# 
+# res
