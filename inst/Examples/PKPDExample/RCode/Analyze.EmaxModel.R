@@ -48,46 +48,58 @@
 #'        }
 
 Analyze.EmaxModel <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL) {
+    
     library(nlme)
     library(CyneRgy)  # Needed for decision helpers
+    
+    
     nError <- 0
     nDecision <- 0
     dPrimDelta <- 0
     dSecDelta <- 0
-    # Step 1: Handle LookInfo (Interim Analysis) --------------------
+    
+    # Step 1: Handle LookInfo (Interim Analysis)
     if (!is.null(LookInfo)) {
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfPatsForInterim <- LookInfo$CumCompleters[nLookIndex]
+        nQtyOfPatsForInterim <- LookInfo$CumCompleters[ nLookIndex ]
         nAnalysisVisit       <- LookInfo$InterimVisit
     } else {
         nLookIndex           <- 1
         nQtyOfLooks          <- 1
         nQtyOfPatsForInterim <- nrow(SimData)
     }
+    
     # Step 2: Wide → Long format ------------------------------------
     dfWideData <- data.frame(id = 1:DesignParam$SampleSize,
                              TreatmentID = SimData$TreatmentID)
     vResponseColumns <- c()
+    
     for (i in 1:DesignParam$NumVisit) {
         dfWideData[[paste0("Response", i)]] <- SimData[[paste0("Response", i)]]
         vResponseColumns <- c(vResponseColumns, paste0("Response", i))
     }
+    
     dfLongData <- reshape(dfWideData, varying = vResponseColumns,
                           direction = "long", sep = "", idvar = "id", timevar = "Visit")
-    dfLongData <- dfLongData[order(dfLongData$Visit, dfLongData$id), ]
+    dfLongData <- dfLongData[ order(dfLongData$id, dfLongData$Visit), ]
+    
+    dfLongData$TreatmentID <- factor(dfLongData$TReatmentID)
+    
     # Step 3: Interim subject filtering ----------------------------
     if (!is.null(LookInfo)) {
         dfAnalysisData <- dfLongData[dfLongData$id <= nQtyOfPatsForInterim, ]
     } else {
         dfAnalysisData <- dfLongData
     }
+    
     # Step 4: Fit Repeated Measures Model --------------------------
-    mmrm <- gls(Response ~ TreatmentID,
+    mmrm <- gls(Response ~ TreatmentID * factor(Visit),
                 na.action = na.omit, data = dfAnalysisData,
                 correlation = corSymm(form = ~ Visit | id),
                 weights = varIdent(form = ~ 1 | Visit))
     dpValue <- summary(mmrm)$tTable["TreatmentID", "p-value"]
+    
     # Step 5: Alpha for this look -----------------------------------
     if (!is.null(LookInfo)) {
         vBounds <- getDesignGroupSequential(kMax = nQtyOfLooks,
@@ -97,11 +109,13 @@ Analyze.EmaxModel <- function(SimData, DesignParam, LookInfo = NULL, UserParam =
     } else {
         dAlpha <- DesignParam$Alpha
     }
+    
     # Step 6: Make decision -----------------------------------------
     strDecision <- CyneRgy::GetDecisionString(LookInfo, nLookIndex, nQtyOfLooks,
                                               bIAEfficacyCondition = dpValue <= dAlpha,
                                               bFAEfficacyCondition = dpValue <= dAlpha)
     nDecision <- CyneRgy::GetDecision(strDecision, DesignParam, LookInfo)
+    
     # Step 7: Return -------------------------------------------------
     return(list(
         Decision  = as.integer(nDecision),
