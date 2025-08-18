@@ -50,7 +50,7 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     # Ke   <- UserParam$Ke    # Elimination rate constant
     
     # Check if all required Emax parameters are provided
-    if (is.null(E0) || is.null(Emax) || is.null(EC50) || is.null(C0) || is.null(Ke)) {
+    if (is.null(E0) || is.null(Emax) || is.null(EC50)) {
         Error <- -2
         retval$ErrorCode <- as.integer(Error)
         return(retval)
@@ -66,14 +66,14 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     for (i in 1:NumSub) {
         for (j in 1:NumVisit) {
             # Possibility of single loop??
-            Cp <- pkResult[[j]] [i]
+            Cp <- pkResult[[ paste0("Response", j) ]] [i]
             TreatmentEffect <- E0 + (Emax * Cp) / (EC50 + Cp) # Calculate Emax
             
-            # Generates response for control group 
-            mResponses[TreatmentID == 0, i] <- rnorm( n = sum(TreatmentID == 0), mean = MeanControl[i], sd = StdDevControl[i] )
-            
-            # Generates response for treatment group (Emax model output)
-            mResponses[TreatmentID == 1, i] <- rnorm( n = sum(TreatmentID == 1), mean = TreatmentEffect[i], sd = StdDevTrt[i])
+            if (TreatmentID == 0) {
+                mResponses[i, j] <- rnorm( 1, mean = MeanControl[j], sd = StdDevControl[j] ) # Generates response for control group 
+            } else {
+                mResponses[i, j] <- rnorm( 1, mean = TreatmentEffect, sd = StdDevTrt[j] ) # Generates response for treatment group (Emax model output)
+            }
             
         }
     }
