@@ -26,7 +26,7 @@
 
 
 #PD Model for Emax Response ####
-GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL) {
+GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL) {
     Error <- 0
     retval <- list()
     
@@ -45,8 +45,9 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     E0   <- UserParam$E0    # Baseline effect
     Emax <- UserParam$Emax  # Maximum effect
     EC50 <- UserParam$EC50  # Concentration at 50% of Emax
-    C0 <- UserParam$Concentration # Starting concetration
-    Ke   <- UserParam$Ke    # Elimination rate constant
+    # Dose <- UserParam$Dose # Starting dose
+    # Ka <- UserParam$Ka      # Absorption rate constant
+    # Ke   <- UserParam$Ke    # Elimination rate constant
     
     # Check if all required Emax parameters are provided
     if (is.null(E0) || is.null(Emax) || is.null(EC50) || is.null(C0) || is.null(Ke)) {
@@ -55,21 +56,26 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
         return(retval)
     }
     
-    # Use this to calculate the concetration at each visit using first-order elimination
-    # C(t) = Dose0 * exp(-Ke * t)
-    Cp <- C0 * exp(-Ke * VisitTime)
+    # Call PK function to get concentration responses for treatment group
+    pkResult <- GenerateDrugConcentration(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL)
     
-    # Calculate treatment effect using the Emax model formula
-    TreatmentEffect <- E0 + (Emax * Cp) / (EC50 + Cp)
+
     
     
-    # Simulate responses for each visit
-    for (i in 1:NumVisit) {
-        # Generates response for control group 
-        mResponses[TreatmentID == 0, i] <- rnorm( n = sum(TreatmentID == 0), mean = MeanControl[i], sd = StdDevControl[i] )
-        
-        # Generates response for treatment group (Emax model output)
-        mResponses[TreatmentID == 1, i] <- rnorm( n = sum(TreatmentID == 1), mean = TreatmentEffect[i], sd = StdDevTrt[i])
+    # Simulate response for each patient
+    for (i in 1:NumSub) {
+        for (j in 1:NumVisit) {
+            # Possibility of single loop??
+            Cp <- pkResult[[j]] [i]
+            TreatmentEffect <- E0 + (Emax * Cp) / (EC50 + Cp) # Calculate Emax
+            
+            # Generates response for control group 
+            mResponses[TreatmentID == 0, i] <- rnorm( n = sum(TreatmentID == 0), mean = MeanControl[i], sd = StdDevControl[i] )
+            
+            # Generates response for treatment group (Emax model output)
+            mResponses[TreatmentID == 1, i] <- rnorm( n = sum(TreatmentID == 1), mean = TreatmentEffect[i], sd = StdDevTrt[i])
+            
+        }
     }
     
     # Add responses to return list

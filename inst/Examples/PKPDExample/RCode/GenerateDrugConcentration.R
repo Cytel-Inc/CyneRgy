@@ -117,3 +117,19 @@ GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     return(retval)
 }
 
+
+result <- GenerateDrugConcentration(
+    NumSub = 100,
+    NumVisit = 5,
+    TreatmentID = sample(c(0, 1), 100, replace = TRUE),  # Random assignment to control (0) or treatment (1)
+    Inputmethod = 0,
+    VisitTime = c(1, 2, 3, 4, 5),
+    MeanControl = 0,  # Mean noise added to control arm
+    MeanTrt = 0,      # Mean noise added to treatment arm
+    StdDevControl = 10,  # Standard deviation of noise for control
+    StdDevTrt = 15,      # Standard deviation of noise for treatment
+    CorrMat = diag(5),   # Identity matrix as placeholder for correlation
+    UserParam = list(ka = 1, ke = 0.2, Dose = 100)  # Optional parameters, currently unused
+)
+
+result
