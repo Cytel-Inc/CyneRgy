@@ -54,7 +54,7 @@ lUserParamDataGen <- NULL
 
 # —————————————————————————————————————————————————————————————-------------------------------------------------
 # Note: The functions that can be used for data generation for East Horizon all return a list. 
-#       However, the Analysis functions require a dataframe so after generating the data with you function 
+#       However, the Analysis functions require a dataframe, so after generating the data with your function 
 #       we need to make a dataframe to send to the analysis 
 # —————————————————————————————————————————————————————————————-------------------------------------------------
 
@@ -156,7 +156,7 @@ for(iRep in 1:nQtyReps){
   
     # —————————————————————————————————————————————————————————————-------------------------------------------------
     # Note: The functions that can be used for data generation for East Horizon all return a list. 
-    #       However, the Analysis functions require a dataframe so after generating the data with you function 
+    #       However, the Analysis functions require a dataframe, so after generating the data with your function 
     #       we need to make a dataframe to send to the analysis 
     # —————————————————————————————————————————————————————————————-------------------------------------------------
     
@@ -245,6 +245,7 @@ dEndTime - dStartTime
 # —————————————————————————————————————————————————————————————-------------
 
 # PlotSelectedPatients(lLoopSimData[[iRep]], DesignParam, vPatientIDs = vPlotPatients)
+
 
 
 
