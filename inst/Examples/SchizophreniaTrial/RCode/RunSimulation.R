@@ -54,7 +54,7 @@ lUserParamDataGen <- NULL
 
 # —————————————————————————————————————————————————————————————-------------------------------------------------
 # Note: The functions that can be used for data generation for East Horizon all return a list. 
-#       However, the Analysis functions require a dataframe, so after generating the data with your function 
+#       However, the Analysis functions require a dataframe so after generating the data with your function 
 #       we need to make a dataframe to send to the analysis 
 # —————————————————————————————————————————————————————————————-------------------------------------------------
 
@@ -95,17 +95,17 @@ LookInfo <- list( NumLooks = 2, CurrLookIndex = 1, CumCompleters = c(nNumSub/2, 
 # Run Analysis
 # —————————————————————————————————————————————————————————————
 
-MMRMAnalysis(SimData, DesignParam, LookInfo, UserParam = NULL)
+lAnalysis <- MMRMAnalysis(SimData, DesignParam, LookInfo, UserParam = NULL)
 
 # —————————————————————————————————————————————————————————————
 # Plot both Control and Treatment
 # —————————————————————————————————————————————————————————————
-PlotTreatmentControlCI(SimData, DesignParam)
+TrialPlot <- PlotTreatmentControlCI(SimData, DesignParam)
 
 # —————————————————————————————————————————————————————————————
 # Plot Select Patients
 # —————————————————————————————————————————————————————————————
-PlotSelectedPatients(SimData, DesignParam, vPatientIDs = vPlotPatients) 
+PatientPlot <- PlotSelectedPatients(SimData, DesignParam, vPatientIDs = vPlotPatients) 
 
 
 
@@ -137,8 +137,8 @@ lLoopSimData <- list()
 # —————————————————————————————————————————————————————————————
 # -- Create a list to store ggplots for Trails and Select Patients
 # —————————————————————————————————————————————————————————————
-lTrialPlots <- list()
-lPlotPatients <- list()
+lLoopTrialPlots <- list()
+lLoopPlotPatients <- list()
 
 
 
@@ -245,6 +245,8 @@ dEndTime - dStartTime
 # —————————————————————————————————————————————————————————————-------------
 
 # PlotSelectedPatients(lLoopSimData[[iRep]], DesignParam, vPatientIDs = vPlotPatients)
+
+
 
 
 
