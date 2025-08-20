@@ -7,12 +7,12 @@ GenerateMMRMResponses <- function(NumSub, NumVisit, TreatmentID, Inputmethod, Vi
                                   MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat,
                                   UserParam = NULL) {
     # —————————————————————————————————————————————————————————————
-     # Libraries use in function
+     # Libraries used in the function
     # library(MASS)
     # —————————————————————————————————————————————————————————————
     
     # ————————————————————————————————————————————————————————————— 
-    # Initialize an inputs
+    # Initialize an input
     # —————————————————————————————————————————————————————————————
     Error <- 0
     retval <- list()
@@ -80,4 +80,5 @@ GenerateMMRMResponses <- function(NumSub, NumVisit, TreatmentID, Inputmethod, Vi
     # —————————————————————————————————————————————————————————————
     retval$ErrorCode <- as.integer(Error)
     return(retval)
+
 }
