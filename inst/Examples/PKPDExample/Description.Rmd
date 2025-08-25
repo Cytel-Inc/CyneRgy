@@ -22,7 +22,21 @@ library( CyneRgy )
 ```
 
 # Introduction
-The following example demonstrates the integration capabilities of PK/PD modeling into East Horizon using R functions. In the example, we are performing a two arm trial, including a control arm and an experimental treatment arm. In our function, we are utilizing a one-compartment model with first-order absorption and first-order elimination to output the plasma concentration.
+The following example demonstrates the integration capabilities of PK/PD modeling into East Horizon using R functions. In the example, we are performing a two arm trial, including a control arm and an experimental treatment arm. In our function, we are utilizing a one-compartment model with first-order absorption and first-order elimination to output plasma concentration.
+
+Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+```{r, eval=FALSE}
+CyneRgy::RunExample( "PKPDExample" )
+```
+**RStudio Project File**: [PKPDExample.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/PKPDExample.Rproj)
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/RCode) you will find the following R files:
+
+1. [GenerateDrugConcentration.R](https://github.com/Cytel-Inc/CyneRgy/blob/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/RCode/GenerateDrugConcentration.R)
+
+2. [ImprovedGenerateResponseEmaxModel.R](https://github.com/Cytel-Inc/CyneRgy/blob/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/RCode/ImprovedGenerateResponseEmaxModel.R)
+
+3. [PKPDResponseGeneration.R](https://github.com/Cytel-Inc/CyneRgy/blob/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/RCode/PKPDResponseGeneration.R)
 
 <!-- PK:
      Show equations and variables
@@ -34,4 +48,4 @@ The following example demonstrates the integration capabilities of PK/PD modelin
      - Direct Effect
      - Indirect Effect
      
-     
+     ImprovedGenerateResponseEmax

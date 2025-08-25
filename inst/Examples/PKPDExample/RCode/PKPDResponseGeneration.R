@@ -30,14 +30,6 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     Error <- 0
     retval <- list()
     
-    # # Check if correlation matrix is valid
-    # if (!is.matrix(CorrMat) || nrow(CorrMat) != NumVisit || ncol(CorrMat) != NumVisit) {
-    #   Error <- -1
-    #   retval$ErrorCode <- as.integer(Error)
-    #   return(retval)
-    # }
-    
-    
     # Initialize simulated response matrix
     mResponses <- matrix(0, nrow = NumSub, ncol = NumVisit)
     
@@ -58,10 +50,7 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     
     # Call PK function to get concentration responses for treatment group
     pkResult <- GenerateDrugConcentration(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL)
-    
 
-    
-    
     # Simulate response for each patient
     for (i in 1:NumSub) {
         for (j in 1:NumVisit) {
@@ -74,7 +63,6 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
             } else {
                 mResponses[i, j] <- rnorm( 1, mean = TreatmentEffect, sd = StdDevTrt[j] ) # Generates response for treatment group (Emax model output)
             }
-            
         }
     }
     
@@ -168,26 +156,27 @@ GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod
 }
 
 
-# Function Call
-set.seed(123)
+# # # Function Call
+# set.seed(123)
+# 
+# NumSub      <- 100
+# NumVisit    <- 5
+# TreatmentID <- c(rep(0, 50), rep(1, 50))  # 50 control, 50 treatment
+# VisitTime   <- 1:5
+# 
+# MeanControl <- c(10, 10, 9, 9, 8)
+# MeanTrt     <- c(12, 13, 14, 14, 15)
+# StdDevControl <- rep(2, 5)
+# StdDevTrt     <- rep(3, 5)
+# 
+# CorrMat <- diag(5) # placeholder, not used yet
+# 
+# UserParam <- list(E0 = 5, Emax = 20, EC50 = 50)
+# 
+# result <- GenerateResponseEmaxModel(
+#     NumSub, NumVisit, TreatmentID, Inputmethod = 0, VisitTime,
+#     MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam
+# )
+# 
+# result
 
-NumSub      <- 100
-NumVisit    <- 5
-TreatmentID <- c(rep(0, 50), rep(1, 50))  # 50 control, 50 treatment
-VisitTime   <- 1:5
-
-MeanControl <- c(10, 10, 9, 9, 8)
-MeanTrt     <- c(12, 13, 14, 14, 15)
-StdDevControl <- rep(2, 5)
-StdDevTrt     <- rep(3, 5)
-
-CorrMat <- diag(5) # placeholder, not used yet
-
-UserParam <- list(E0 = 5, Emax = 20, EC50 = 50)
-
-result <- GenerateResponseEmaxModel(
-    NumSub, NumVisit, TreatmentID, Inputmethod = 0, VisitTime,
-    MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam
-)
-
-str(result)
