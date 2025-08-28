@@ -2,6 +2,8 @@ source('PlotTrialData.r')
 source('PlotPatientData.r')
 source('GenerateMMRMResponses.r')
 source('AnalyzeMMRM.r')
+source('AnalyzeMMRM_GLS.r')
+source('CreateAnalysisDataset.r')
 
 
 # —————————————————————————————————————————————————————————————
@@ -100,7 +102,6 @@ LookInfo <- list( NumLooks = 2, CurrLookIndex = 1, CumCompleters = c(nNumSub/2, 
 # —————————————————————————————————————————————————————————————
 
 lAnalysis        <- MMRMAnalysis(SimData, DesignParam, LookInfo, UserParam = NULL)
-lAnalysisUpdated <- MMRMAnalysisUpdated(SimData, DesignParam, LookInfo, UserParam = NULL)
 
 lAnalysisGLS     <- MMRMAnalysisGLS(SimData, DesignParam, LookInfo, UserParam = NULL)
 
@@ -142,12 +143,12 @@ nQtyReps <- 1000
 mResultsIA <- matrix(0, nrow = nQtyReps, ncol = 4)
 colnames(mResultsIA) <- c('Decision', 'Prime Delta', 'P-Value', 'Error' ) #, 'Pval.GLS', 'Est.GLS')
 
-mResultsIAUpdated <- mResultsIA
+mResultsIA        <- mResultsIA
 mResultsIAGLS     <- mResultsIA
 
 mResultsFA <- matrix(0, nrow = nQtyReps, ncol = 4)
 colnames(mResultsFA) <- c('Decision', 'Prime Delta', 'P-Value', 'Error' )#, 'Pval.GLS', 'Est.GLS')
-mResultsFAUpdated <- mResultsFA
+mResultsFA        <- mResultsFA
 mResultsFAGLS     <- mResultsFA
 # —————————————————————————————————————————————————————————————
 # -- Create a list to store Simulated Data Across Simulations
@@ -222,47 +223,35 @@ for(iRep in 1:nQtyReps){
     #Run Analysis
     # —————————————————————————————————————————————————————————————
     
-    lAnalysisIA <- MMRMAnalysis(SimData, DesignParam, LookInfoIA, UserParam = NULL)
-    mResultsIA[iRep, 1] <- lAnalysisIA$Decision
-    mResultsIA[iRep, 2] <- lAnalysisIA$PrimDelta
-    mResultsIA[iRep, 3] <- lAnalysisIA$p.value
-    mResultsIA[iRep, 4] <- lAnalysisIA$Error
-    
-    lAnalysisIA <- MMRMAnalysisUpdated(SimData, DesignParam, LookInfoIA, UserParam = NULL)
-    mResultsIAUpdated[iRep, 1] <- lAnalysisIA$Decision
-    mResultsIAUpdated[iRep, 2] <- lAnalysisIA$PrimDelta
-    mResultsIAUpdated[iRep, 3] <- lAnalysisIA$p.value
-    mResultsIAUpdated[iRep, 4] <- lAnalysisIA$Error
+
+     lAnalysisIA <- MMRMAnalysis(SimData, DesignParam, LookInfoIA, UserParam = NULL)
+     mResultsIA[iRep, 1] <- lAnalysisIA$Decision
+     mResultsIA[iRep, 2] <- lAnalysisIA$PrimDelta
+     mResultsIA[iRep, 3] <- lAnalysisIA$p.value
+     mResultsIA[iRep, 4] <- lAnalysisIA$Error
     
     
-    lAnalysisIA <- MMRMAnalysisGLS(SimData, DesignParam, LookInfoIA, UserParam = NULL)
-    mResultsIAGLS[iRep, 1] <- lAnalysisIA$Decision
-    mResultsIAGLS[iRep, 2] <- lAnalysisIA$PrimDelta
-    mResultsIAGLS[iRep, 3] <- lAnalysisIA$p.value
-    mResultsIAGLS[iRep, 4] <- lAnalysisIA$Error
+     lAnalysisIA <- MMRMAnalysisGLS(SimData, DesignParam, LookInfoIA, UserParam = NULL)
+     mResultsIAGLS[iRep, 1] <- lAnalysisIA$Decision
+     mResultsIAGLS[iRep, 2] <- lAnalysisIA$PrimDelta
+     mResultsIAGLS[iRep, 3] <- lAnalysisIA$p.value
+     mResultsIAGLS[iRep, 4] <- lAnalysisIA$Error
     
     
-    # Final Analysis
-    lAnalysisFA <- MMRMAnalysis(SimData, DesignParam, LookInfoFA, UserParam = NULL)
-    mResultsFA[iRep, 1] <- lAnalysisFA$Decision
-    mResultsFA[iRep, 2] <- lAnalysisFA$PrimDelta
-    mResultsFA[iRep, 3] <- lAnalysisFA$p.value
-    mResultsFA[iRep, 4] <- lAnalysisFA$Error
-    
-    
-    lAnalysisFA <- MMRMAnalysisUpdated(SimData, DesignParam, LookInfoFA, UserParam = NULL)
-    mResultsFAUpdated[iRep, 1] <- lAnalysisFA$Decision
-    mResultsFAUpdated[iRep, 2] <- lAnalysisFA$PrimDelta
-    mResultsFAUpdated[iRep, 3] <- lAnalysisFA$p.value
-    mResultsFAUpdated[iRep, 4] <- lAnalysisFA$Error
+
+     lAnalysisFA <- MMRMAnalysis(SimData, DesignParam, LookInfoFA, UserParam = NULL)
+     mResultsFA[iRep, 1] <- lAnalysisFA$Decision
+     mResultsFA[iRep, 2] <- lAnalysisFA$PrimDelta
+     mResultsFA[iRep, 3] <- lAnalysisFA$p.value
+     mResultsFA[iRep, 4] <- lAnalysisFA$Error
     
     
     
-    lAnalysisFA <- MMRMAnalysisGLS(SimData, DesignParam, LookInfoFA, UserParam = NULL)
-    mResultsFAGLS[iRep, 1] <- lAnalysisFA$Decision
-    mResultsFAGLS[iRep, 2] <- lAnalysisFA$PrimDelta
-    mResultsFAGLS[iRep, 3] <- lAnalysisFA$p.value
-    mResultsFAGLS[iRep, 4] <- lAnalysisFA$Error
+     lAnalysisFA <- MMRMAnalysisGLS(SimData, DesignParam, LookInfoFA, UserParam = NULL)
+     mResultsFAGLS[iRep, 1] <- lAnalysisFA$Decision
+     mResultsFAGLS[iRep, 2] <- lAnalysisFA$PrimDelta
+     mResultsFAGLS[iRep, 3] <- lAnalysisFA$p.value
+     mResultsFAGLS[iRep, 4] <- lAnalysisFA$Error
     
     # —————————————————————————————————————————————————————————————
     # Plot both Control and Treatment and Store all Trial Plots in a List
@@ -299,29 +288,25 @@ dEndTime - dStartTime
 
 # Power estimates
 mean( mResultsFA[,1] == 1 | mResultsIA[,1] == 1) # Proportion of simulations that had a decision to reject the null hypothesis at either look
-mean( mResultsFAUpdated[,1] == 1 | mResultsIAUpdated[,1] == 1) # Proportion of simulations that had a decision to reject the null hypothesis at either look
 mean( mResultsFAGLS[,1] == 1 | mResultsIAGLS[,1] == 1) # Proportion of simulations that had a decision to reject the null hypothesis at either look
 
 
 
 mean( mResultsFA[,3] < 0.025 | mResultsIA[,3] < 0.025) # Proportion of simulations that had a decision to reject the null hypothesis at either look
-mean( mResultsFAUpdated[,3] < 0.025 | mResultsIAUpdated[,3] < 0.025) # Proportion of simulations that had a decision to reject the null hypothesis at either look
 mean( mResultsFAGLS[,3] < 0.025 | mResultsIAGLS[,3] < 0.025) # Proportion of simulations that had a decision to reject the null hypothesis at either look
 
 
 # Examinte estimtes from each analysis
 
 mean( mResultsFA[,2])
-mean( mResultsFAUpdated[,2])
 mean( mResultsFAGLS[,2])
 
 
 
-mean( mResultsFA[,6])
+mean( mResultsFA[,2])
 
 
-mean( mResultsFA[,5] < 0.025 | mResultsIA[,5] < 0.025) # Proportion of simulations that had a decision to reject the null hypothesis at either look
-
+mean( mResultsFA[,3] < 0.025 | mResultsIA[,3] < 0.025) # Proportion of simulations that had a decision to reject the null hypothesis at either look
 
 
 
