@@ -52,7 +52,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
   CreateODE.Temp.R</a></p>
 </div>
 
-In the R function *GenerateDrugConcentration*, the patient outcome is defined as a list of vectors, the exact quantity of vectors determined by the number of visits defined in the function parameters. Each vector contains the drug concentration for each patient at the given *visitTime*. In addition, an output of either 0 or -1 will also be printed, where the former represents a successful response and latter is a failure.
+In the R function *GenerateDrugConcentration*, we use a one-compartment PK model with first-order absorption to generate simulate plasma concentrations for patients. The patient outcome is defined as a list of vectors, the exact quantity of vectors determined by the number of visits defined in the function parameters. Each vector contains the drug concentration for each patient at the given *visitTime*. In addition, an output of either 0 or -1 will also be printed, where the former represents a successful response and latter is a failure.
 
 Refer to the table below for the definitions of the user-defined parameters used in this example.
 
@@ -151,8 +151,6 @@ print(p)
 ### Note
 East Horizon does not currently support the deSolve package that is utilized to solve Ordinary Differential Equations (ODE). Thus, we are unable to use it to generate our PK response. To combat this, here is a temporary solution in which we store the necessary code in a separate file, namely [CreateODE.Temp.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/CreateODE.Temp.R). Use this file to generate your concentration vector, and manually assign your vector to a variable named *vConcentrationXX* within the main *GenerateDrugConcentration.R* file.
 
-
-
 ## Example 2 - Simulate Treatment Effect with Emax Model
 
 <div class="alert alert-primary" role="alert">
@@ -160,7 +158,9 @@ East Horizon does not currently support the deSolve package that is utilized to 
   This example is related to the R files: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/PKPDResponseGeneration.R" class="alert-link">PKPDResponseGeneration.R</a></p>
 </div>
 
-*PKPDResponseGeneration.R* serves as an extension of *GenerateDrugConcentration.R*. 
+*PKPDResponseGeneration.R* serves as an extension of *GenerateDrugConcentration.R*. It will convert per-visit plasma concentrations into treatment responses using the Emax PD model. It first calls the PK function to generate drug concentrations per subject per visit, then applies the Emax equation *E0 + (Emax \* Cp) / (EC50 + Cp)* to convert the concentrations to our expected treatment effect. 
+
+Control group subjects are simulated from normal distributions around control means and std, while treatment subjects receive responses from the Emax-predicted effect with added variability. The output of this function is shown as visit-level response arrays for all subjects, along with an error code of 0 for success, and an error code of -2 if parameter requirements are not met.
 
 Refer to the table below for the definitions of the user-defined parameters used in this example.
 

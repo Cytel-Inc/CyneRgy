@@ -26,12 +26,12 @@
 
 
 #PD Model for Emax Response ####
-GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL) {
-    Error <- 0
-    retval <- list()
+GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+    nError <- 0
+    lRetval <- list()
     
     # Initialize simulated response matrix
-    mResponses <- matrix(0, nrow = NumSub, ncol = NumVisit)
+    mResponses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
     
     # Define the Emax model parameters from UserParam
     E0   <- UserParam$E0    # Baseline effect
@@ -42,37 +42,41 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     # Ke   <- UserParam$Ke    # Elimination rate constant
     
     # Check if all required Emax parameters are provided
-    if (is.null(E0) || is.null(Emax) || is.null(EC50)) {
-        Error <- -2
-        retval$ErrorCode <- as.integer(Error)
-        return(retval)
+    if ( is.null( E0 ) || is.null( Emax ) || is.null( EC50 )) {
+        nError <- -2
+        lRetval$ErrorCode <- as.integer( nError )
+        return( lRetval )
     }
     
     # Call PK function to get concentration responses for treatment group
-    pkResult <- GenerateDrugConcentration(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL)
+    lPkResult <- GenerateDrugConcentration(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL)
 
     # Simulate response for each patient
-    for (i in 1:NumSub) {
-        for (j in 1:NumVisit) {
-            # Possibility of single loop??
-            Cp <- pkResult[[ paste0("Response", j) ]] [i]
-            TreatmentEffect <- E0 + (Emax * Cp) / (EC50 + Cp) # Calculate Emax
+    for ( nPatIndx in 1:NumSub ) {
+        
+        for ( nVisitIndx in 1:NumVisit ) {
             
-            if (TreatmentID[i] == 0) {
-                mResponses[i, j] <- rnorm( 1, mean = MeanControl[j], sd = StdDevControl[j] ) # Generates response for control group 
+            # Possibility of single loop??
+            Cp <- lPkResult[[ paste0( "Response", nVisitIndx ) ]] [ nPatIndx ]
+            
+            dTreatmentEffect <- E0 + ( Emax * Cp ) / ( EC50 + Cp ) # Calculate Emax
+            
+            if ( TreatmentID[ nPatIndx ] == 0 ) {
+                mResponses[ nPatIndx, nVisitIndx ] <- rnorm( 1, mean = MeanControl[ nVisitIndx ], sd = StdDevControl[ nVisitIndx ] ) # Generates response for control group 
             } else {
-                mResponses[i, j] <- rnorm( 1, mean = TreatmentEffect, sd = StdDevTrt[j] ) # Generates response for treatment group (Emax model output)
+                mResponses[ nPatIndx, nVisitIndx ] <- rnorm( 1, mean = dTreatmentEffect, sd = StdDevTrt[ nVisitIndx ] ) # Generates response for treatment group (Emax model output)
             }
         }
     }
     
     # Add responses to return list
-    for (i in 1:NumVisit) {
-        retval[[paste0("Response", i)]] <- as.double(mResponses[, i])
+    for ( nVisitIndx in 1:NumVisit ) {
+        
+        lRetval[[ paste0( "Response", nVisitIndx )]] <- as.double( mResponses[ , nVisitIndx ])
     }
     
-    retval$ErrorCode <- as.integer(Error)
-    return(retval)
+    lRetval$ErrorCode <- as.integer( nError )
+    return( lRetval )
     
 }
 
@@ -80,8 +84,8 @@ GenerateResponseEmaxModel <- function(NumSub, NumVisit, TreatmentID, Inputmethod
 
 GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL) {
     # Initialize error code and return list
-    Error <- 0
-    retval <- list()
+    nError <- 0
+    lRetval <- list()
     
     
     # Parameters for ODE model
@@ -91,10 +95,10 @@ GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     # ke <- UserParam$ke  # Elimination rate constant
     # Dose <- UserParam$Dose  # Dose administered
     
-    # if (is.null(ka) || is.null(ke) || is.null(Dose)) {
-    #     Error <- -1  # Fatal error if required parameters are missing
-    #     retval$ErrorCode <- as.integer(Error)
-    #     return(retval)
+    # if ( is.null( ka ) || is.null( ke ) || is.null( Dose ) ) {
+    #     nError <- -1  # Fatal error if required parameters are missing
+    #     lRetval$ErrorCode <- as.integer( nError )
+    #     return( lRetval )
     # }
     
     # Hard coded vectors for concentration:
@@ -115,42 +119,42 @@ GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     vConcentration2 <- c( 56.356387, 62.378049, 37.339433, 16.911244,  6.223347 )
     
     # Simulate drug concentration for each subject
-    for (i in 1:NumSub) {
+    for ( nPatIndx in 1:NumSub ) {
         
         # Initial state: A1 = Dose (amount in absorption compartment), A2 = 0 (concentration in central compartment)
         # Note: We are commenting out because EH does not have deSolve package installed.
         
-        # state <- c(A1 = Dose, A2 = 0) #this is a full dose in absorption compartment, none in central
-        # parameters <- c(ka = ka, ke = ke)
+        # vState <- c( A1 = Dose, A2 = 0 ) # this is a full dose in absorption compartment, none in central
+        # vParameters <- c( ka = ka, ke = ke )
         
         # Solve ODE for each visit time
-        # concentration <- numeric(NumVisit) #prepare a vector (NumVisit length) to store concentrations at each visit
-        # for (j in 1:NumVisit) {
-        #     time <- c(0, VisitTime[j])  # Time points for ODE solver
-        #     result <- deSolve::ode(y = state, times = time, func = OneCompartmentModelPK, parms = parameters)
-        #     state <- result[nrow(result), -1]  # Update state for next visit
-        #     concentration[j] <- state["A2"]  # Extract concentration at current visit
+        # vConcentration <- numeric( NumVisit ) #prepare a vector (NumVisit length) to store concentrations at each visit
+        # for ( nVisitIndx in 1:NumVisit ) {
+        #     vTime <- c( 0, VisitTime[ nVisitIndx ])  # Time points for ODE solver
+        #     mResult <- deSolve::ode( y = vState, times = vTime, func = OneCompartmentModelPK, parms = vParameters)
+        #     vState <- mResult[ nrow( result ), -1 ]  # Update state for next visit
+        #     vConcentration[ nVisitIndx ] <- vState[ "A2" ]  # Extract concentration at current visit
         # }
         
         # Add noise based on treatment group
-        if (TreatmentID[i] == 0) {
-            concentration <- vConcentration1 + rnorm(NumVisit, mean = MeanControl, sd = StdDevControl)
+        if ( TreatmentID[ nPatIndx ] == 0 ) {
+            vConcentration <- vConcentration1 + rnorm( NumVisit, mean = MeanControl, sd = StdDevControl )
         } else {
-            concentration <- vConcentration2 + rnorm(NumVisit, mean = MeanTrt, sd = StdDevTrt)
+            vConcentration <- vConcentration2 + rnorm( NumVisit, mean = MeanTrt, sd = StdDevTrt )
         }
         
         # Store concentration for each visit
-        for (j in 1:NumVisit) {
-            visitName <- paste0("Response", j)
-            if (!is.null(retval[[visitName]])) {
-                retval[[visitName]] <- c(retval[[visitName]], concentration[j])
+        for ( nVisitIndx in 1:NumVisit ) {
+            strVisitName <- paste0( "Response", nVisitIndx )
+            if ( !is.null( lRetval[[ strVisitName ]])) {
+                lRetval[[ strVisitName ]] <- c( lRetval[[ strVisitName ]], vConcentration[ nVisitIndx ])
             } else {
-                retval[[visitName]] <- concentration[j]
+                lRetval[[ strVisitName ]] <- vConcentration[ nVisitIndx ]
             }
         }
     }
     
     # Set error code and return results
-    retval$ErrorCode <- as.integer(Error)
-    return(retval)
+    lRetval$ErrorCode <- as.integer( nError )
+    return( lRetval )
 }
