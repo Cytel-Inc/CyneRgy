@@ -1,5 +1,5 @@
-source("ImprovedGenerateResponseEmaxModel")
-source("Analayze.EmaxModel")
+source("PKPDResponseGeneration")
+source("PlotEmax")
 
 # —————————————————————————————————————————————————————————————
 

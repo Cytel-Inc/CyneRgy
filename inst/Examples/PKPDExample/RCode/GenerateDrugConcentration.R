@@ -86,28 +86,28 @@ GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod
         # parameters <- c(ka = ka, ke = ke)
         
         # Solve ODE for each visit time
-        # concentration <- numeric(NumVisit) #prepare a vector (NumVisit length) to store concentrations at each visit
+        # vConcentration <- numeric(NumVisit) #prepare a vector (NumVisit length) to store concentrations at each visit
         # for (j in 1:NumVisit) {
         #     time <- c(0, VisitTime[j])  # Time points for ODE solver
         #     result <- deSolve::ode(y = state, times = time, func = OneCompartmentModelPK, parms = parameters)
         #     state <- result[nrow(result), -1]  # Update state for next visit
-        #     concentration[j] <- state["A2"]  # Extract concentration at current visit
+        #     vConcentration[j] <- state["A2"]  # Extract concentration at current visit
         # }
         
         # Add noise based on treatment group
         if (TreatmentID[i] == 0) {
-            concentration <- vConcentration1 + rnorm(NumVisit, mean = MeanControl, sd = StdDevControl)
+            vConcentration <- vConcentration1 + rnorm(NumVisit, mean = MeanControl, sd = StdDevControl)
         } else {
-            concentration <- vConcentration2 + rnorm(NumVisit, mean = MeanTrt, sd = StdDevTrt)
+            vConcentration <- vConcentration2 + rnorm(NumVisit, mean = MeanTrt, sd = StdDevTrt)
         }
         
         # Store concentration for each visit
         for (j in 1:NumVisit) {
             visitName <- paste0("Response", j)
             if (!is.null(retval[[visitName]])) {
-                retval[[visitName]] <- c(retval[[visitName]], concentration[j])
+                retval[[visitName]] <- c(retval[[visitName]], vConcentration[j])
             } else {
-                retval[[visitName]] <- concentration[j]
+                retval[[visitName]] <- vConcentration[j]
             }
         }
     }
@@ -116,20 +116,3 @@ GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     retval$ErrorCode <- as.integer(Error)
     return(retval)
 }
-
-
-result <- GenerateDrugConcentration(
-    NumSub = 100,
-    NumVisit = 5,
-    TreatmentID = sample(c(0, 1), 100, replace = TRUE),  # Random assignment to control (0) or treatment (1)
-    Inputmethod = 0,
-    VisitTime = c(1, 2, 3, 4, 5),
-    MeanControl = 0,  # Mean noise added to control arm
-    MeanTrt = 0,      # Mean noise added to treatment arm
-    StdDevControl = 10,  # Standard deviation of noise for control
-    StdDevTrt = 15,      # Standard deviation of noise for treatment
-    CorrMat = diag(5),   # Identity matrix as placeholder for correlation
-    UserParam = list(ka = 1, ke = 0.2, Dose = 100)  # Optional parameters, currently unused
-)
-
-result

@@ -21,31 +21,240 @@ knitr::opts_chunk$set(echo = TRUE)
 library( CyneRgy )
 ```
 
-# Introduction
-The following example demonstrates the integration capabilities of PK/PD modeling into East Horizon using R functions. In the example, we are performing a two arm trial, including a control arm and an experimental treatment arm. In our function, we are utilizing a one-compartment model with first-order absorption and first-order elimination to output plasma concentration.
+## Introduction
+The following example demonstrates the capabilities of PK/PD modeling in East Horizon using R integration. We will simulate plasma drug concentrations using a one-compartment model with first-order absorption and elimination, then transform concentration to effect via an Emax model to generate continuous outcomes for a two-arm trial (control vs treatment).
 
 Once CyneRgy is installed, you can load this example in RStudio with the following commands:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "PKPDExample" )
 ```
-**RStudio Project File**: [PKPDExample.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/PKPDExample.Rproj)
+**RStudio Project File**: [PKPDExample.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/PKPDExample.Rproj)
 
-In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/RCode) you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDExample/RCode) you will find the following R files:
 
-1. [GenerateDrugConcentration.R](https://github.com/Cytel-Inc/CyneRgy/blob/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/RCode/GenerateDrugConcentration.R)
+1. [GenerateDrugConcentration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/GenerateDrugConcentration.R) - This file contains the R code for simulating drug concentrations. (Note: Temporary workaround in generating concentration vectors)
 
-2. [ImprovedGenerateResponseEmaxModel.R](https://github.com/Cytel-Inc/CyneRgy/blob/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/RCode/ImprovedGenerateResponseEmaxModel.R)
+2. [CreateODE.Temp.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/CreateODE.Temp.R) - This file contains code utilizing deSolve package to generate the drug concentrations for [GenerateDrugConcentration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/GenerateDrugConcentration.R) (Note: This is temporary, cannot upload into East Horizon)
 
-3. [PKPDResponseGeneration.R](https://github.com/Cytel-Inc/CyneRgy/blob/f31e872bad8b241627b251789a0b6e0e40d05ac9/inst/Examples/PKPDExample/RCode/PKPDResponseGeneration.R)
+3. [PKPDResponseGeneration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/PKPDResponseGeneration.R) - This file contains the R code to simulate treatment effect responses for patients. (Note: Contains *GenerateDrugConcetration.R* function inside)
 
-<!-- PK:
-     Show equations and variables
-     Initial conditions of A1 and A2
-     Use cases
-     
-     PD:
-     EMaxMOdel
-     - Direct Effect
-     - Indirect Effect
-     
-     ImprovedGenerateResponseEmax
+4. [PlotEmax.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/PlotEmax.R) - This file plots a visual that shows the mean response for each treatment group as a function of time.
+
+
+## Example 1 - Simulate Drug Concentration Response from a One-Compartment Model with First-order Absoprtion
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> 
+  This example is related to the R files: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/GenerateDrugConcentration.R" class="alert-link">GenerateDrugConcentration.R</a></p>
+  <a>
+  and 
+  <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/CreateODE.Temp.R" class="alert-link">
+  CreateODE.Temp.R</a></p>
+</div>
+
+In the R function *GenerateDrugConcentration*, the patient outcome is defined as a list of vectors, the exact quantity of vectors determined by the number of visits defined in the function parameters. Each vector contains the drug concentration for each patient at the given *visitTime*. In addition, an output of either 0 or -1 will also be printed, where the former represents a successful response and latter is a failure.
+
+Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|----|------|
+|**ka**|This is the dose first-order absorption rate constant. It describes the rate at which a drug moves from the site of administration into the central compartment.|
+|**ke**|This is the dose first-order elimination rate constant. It describes the fraction of drug eliminated from the body per unit of time once the drug is in the central compartment.|
+|**Dose**|This is amount of drug administered to the body at the start of the model.|
+
+The *OneCompartmentModelPK* function is called inside of the main function, and *deSolve* will generate a vector of concentrations that are stored inside the *concentration* variable. Then, depending on whether a patient is assigned to the control or treatment group, a normal distribution with their respective means and standard deviations are added to the concentration vector.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 5
+bigcolxmax = 8
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(3.5, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.2, 4),
+  xmax = rep(7.8, 4),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
+  label = c("Load means, standard deviations,\nand user parameters", 
+            "Generate concentration output \nusing deSolve package", 
+            "Generate normal responses\n for control and treatment groups", 
+            "Store patient response data"),
+  fill = rep("#cfe2ff", 4)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 3),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3, 3),
+  ymax = c(3.3, 3.3),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
+
+### Note
+East Horizon does not currently support the deSolve package that is utilized to solve Ordinary Differential Equations (ODE). Thus, we are unable to use it to generate our PK response. To combat this, here is a temporary solution in which we store the necessary code in a separate file, namely [CreateODE.Temp.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/CreateODE.Temp.R). Use this file to generate your concentration vector, and manually assign your vector to a variable named *vConcentrationXX* within the main *GenerateDrugConcentration.R* file.
+
+
+
+## Example 2 - Simulate Treatment Effect with Emax Model
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> 
+  This example is related to the R files: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDExample/RCode/PKPDResponseGeneration.R" class="alert-link">PKPDResponseGeneration.R</a></p>
+</div>
+
+*PKPDResponseGeneration.R* serves as an extension of *GenerateDrugConcentration.R*. 
+
+Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|----|------|
+|**E0**|This is the baseline effect, when there is an absence of the drug. This can also be interpreted as the intercept in a effect vs concentration graph,|
+|**Emax**|This is the maximum drug effect the system can achieve above baseline.|
+|**EC50**|This is the drug concentration at which 50% of the maximum effect is achieved.|
+|**ka**|This is the dose first-order absorption rate constant. It describes the rate at which a drug moves from the site of administration into the central compartment. *Currently omitted until Q3 release.|
+|**ke**|This is the dose first-order elimination rate constant. It describes the fraction of drug eliminated from the body per unit of time once the drug is in the central compartment. *Currently omitted until Q3 release.|
+|**Dose**|This is amount of drug administered to the body at the start of the model. *Currently omitted until Q3 release.|
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+
+bigcolxmin = 5
+bigcolxmax = 8
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
+  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
+  ymin = rep(3.5, 7),
+  ymax = rep(10, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
+  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
+)
+
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 9.4
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox*1.5
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox
+
+# Define flowchart steps inside "Response"
+flowchart <- data.frame(
+  xmin = rep(5.2, 4),
+  xmax = rep(7.8, 4),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
+  label = c("Load means, standard deviations,\nand user parameters", 
+            "Calls GenerateDrugConcentration \nto get concentrations", 
+            "Use concentrations as input \nto calculate TreatmentEffect", 
+            "Generate patient responses \nwith treatment data",
+            "Store results in response matrix"),
+  fill = rep("#cfe2ff", 4)
+)
+
+# Define arrows for flowchart inside "Response"
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 3),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
+)
+
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(6.8, 8),
+  xmax = c(7.8, 9),
+  ymin = c(3, 3),
+  ymax = c(3.3, 3.3),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
+  # Add flowchart inside "Response"
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+
+print(p)
+```
+

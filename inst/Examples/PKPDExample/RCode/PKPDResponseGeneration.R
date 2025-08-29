@@ -154,29 +154,3 @@ GenerateDrugConcentration <- function(NumSub, NumVisit, TreatmentID, Inputmethod
     retval$ErrorCode <- as.integer(Error)
     return(retval)
 }
-
-
-# # # Function Call
-# set.seed(123)
-# 
-# NumSub      <- 100
-# NumVisit    <- 5
-# TreatmentID <- c(rep(0, 50), rep(1, 50))  # 50 control, 50 treatment
-# VisitTime   <- 1:5
-# 
-# MeanControl <- c(10, 10, 9, 9, 8)
-# MeanTrt     <- c(12, 13, 14, 14, 15)
-# StdDevControl <- rep(2, 5)
-# StdDevTrt     <- rep(3, 5)
-# 
-# CorrMat <- diag(5) # placeholder, not used yet
-# 
-# UserParam <- list(E0 = 5, Emax = 20, EC50 = 50)
-# 
-# result <- GenerateResponseEmaxModel(
-#     NumSub, NumVisit, TreatmentID, Inputmethod = 0, VisitTime,
-#     MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam
-# )
-# 
-# result
-

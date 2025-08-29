@@ -29,6 +29,3 @@ for (j in 1:NumVisit) {
     state <- result[nrow(result), -1]  # Update state for next visit
     concentration[j] <- state["A2"]  # Extract concentration at current visit
 }
-
-# print(concentration)
-
