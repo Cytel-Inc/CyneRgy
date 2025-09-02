@@ -1,0 +1,181 @@
+---
+title: "Time-To-Event Weighted Conditional Power Futility Analysis"
+author: "Gabriel Potvin, Valeria A. G. Mazzanti, Sheetal Solanki"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">The following scripts are related to the <strong>Integration Point: Analysis</strong>. <a href="IntegrationPointAnalysis.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
+
+# Introduction
+
+This example demonstrates how to perform a time-to-event (TTE) analysis with conditional power and futility boundaries by extending East Horizon’s functionalities using a custom R script for the Analysis integration point. The analysis is based on the logrank test and allows users to compute conditional power at interim looks, make futility decisions, and optionally use weighted hazard ratios.
+
+## Why do we need R Integration for this example?
+
+East Horizon’s built-in analysis algorithms do not natively support computation of conditional power or custom futility rules based on interim survival data. To make these decisions, users need to compute test statistics and hazard ratios dynamically from simulated or observed patient data at each look. This requires integrating a custom R file for the Analysis step to:
+
+- Compute the logrank test statistic and p-value at interim analyses.
+- Estimate the hazard ratio from interim data.
+- Compute conditional power using either the target hazard ratio, the estimated hazard ratio, or a weighted combination of the two.
+- Apply futility or efficacy decision rules based on conditional power and pre-specified boundaries.
+
+By integrating this R file, East Horizon users can perform adaptive interim analyses with custom decision rules that are not supported in the default framework, allowing more flexible and realistic trial simulations.
+
+## What do the R function do?
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R) you will find the following R file:
+
+- **[Analysis_WeightedCP.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/Analysis_WeightedCP.R)**
+
+   This R file contains a function that
+   
+   For more information on this function, see the [Technical Information and Example Values](#technical-information-and-example-values) section below.
+
+## Combining it all together…
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+```
+
+
+------
+
+# Step-by-Step Instructions
+
+
+------
+
+# Technical Information and Example Values
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/Analysis_WeightedCP.R" class="alert-link">Analysis_WeightedCP.R</a></p>
+</div>
+
+We compute the logrank test statistic ($Z$) as:
+
+$$
+Z = \sqrt{\chi^2} \cdot \operatorname{sign}(O_2 - E_2)
+$$
+
+where:
+
+- $\chi^2$ is the logrank chi-square statistic.
+- $O_2$ and $E_2$ are the observed and the expected number of events in the treatment group.
+
+The $p$-value ($p$) is:
+
+$$
+p = 1 - F_{\chi^2_1}(\chi^2)
+$$
+
+where $F_{\chi^2_1}(\chi^2)$ is the cumulative distribution function (CDF) of a chi-square with 1 degree of freedom.
+
+The standard error of log hazard ratio ($\text{se}_{\ln HR}$) is:
+
+$$
+\text{se}_{\ln HR} = \frac{1}{\sqrt{n \cdot r (1-r)}}
+$$
+
+where:
+
+- $n$ is the number of completers at the first look.
+- $r = \frac{\text{AllocInfo}}{1+\text{AllocInfo}}$ where $\text{AllocInfo}$ is the ratio of the treatment group sample size to the control group sample size.
+
+
+The conditional power ($CP$) is calculated as:
+
+$$
+CP = \Phi \left(
+  z_\alpha \sqrt{1 + \frac{n_1}{n_2 - n_1}}
+  - Z \sqrt{\frac{n_1}{n_2 - n_1}}
+  - \ln(HR^*) \sqrt{r(1-r)} \sqrt{n_2 - n_1}
+\right)
+$$
+
+where:
+
+- $\Phi(.)$ is the standard normal cumulative distribution function (CDF).
+- $z_\alpha = \Phi^{-1}(0.025)$ is the critical value we set for the efficacy boundary (one-sided significance level of 2.5%).
+- $n_1$ is the number of completers at the first look (interim).
+- $n_2$ is the number of completers at the second look (final analysis).
+- $HR^*$ depends on the option (see below).
+
+The futility decision rule at interim is:
+
+$$
+\text{If } CP < \theta_{\text{futility}} \rightarrow \text{stop for futility.}
+$$
+
+The final analysis decision rule is:
+
+$$
+\text{If } Z \leq z_\alpha \rightarrow \text{stop for efficacy.}
+$$
+$$
+\text{If } Z > z_\alpha \rightarrow \text{stop for futility.}
+$$
+
+
+### Option 1: Target Hazard Ratio
+
+For this option, $HR^*$ is a user-specified target hazard ratio. 
+
+|**User parameter**|**Definition**|**Example Value**|
+|---|------|---|
+|**nComputationOption**|Computation Option|1|
+|**FutilityThreshold**|Futility Threshold|0.1|
+|**TargetHazardRatio**|Target Hazard Ratio|0.66|
+
+
+### Option 2: Estimated Hazard Ratio
+
+For this option, $HR^*$ is an estimated hazard ratio from interim data.
+
+The estimated hazard ratio ($\widehat{HR}$) is:
+
+$$
+HR^* = \widehat{HR} = \exp\big( Z \cdot \text{se}_{\ln HR} \big)
+$$
+
+where:
+
+- $Z$ is the logrank test statistic, as defined before.
+- $\text{se}_{\ln HR}$ is the standard error of log hazard ratio, as defined before.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|---|
+|**nComputationOption**|Computation Option|2|
+|**FutilityThreshold**|Futility Threshold|0.1|
+
+### Option 3: Weighted Hazard Ratio
+
+For this option, $HR^*$ is a weighted hazard ratio combining estimated and user-specified target.
+
+The weighted hazard ratio ($HR_w$) is:
+
+$$
+HR^* = HR_w = w_{\text{est}} \cdot \widehat{HR} + w_{\text{target}} \cdot HR_{\text{target}}
+$$
+
+where:
+
+- w_{\text{est}} is the weight assigned to the estimated hazard ratio. 
+- w_{\text{target}} is the weight assigned to the target hazard ratio.
+- HR_{\text{target}} is the user-specified target hazard ratio.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|---|
+|**nComputationOption**|Computation Option|3|
+|**FutilityThreshold**|Futility Threshold|0.1|
+|**TargetHazardRatio**|Target Hazard Ratio|0.7|
+|**WeightEstimatedHR**|Weight assigned to the estimated hazard ratio|0.5|
+|**WeightTargetHR**|Weight assigned to the target hazard ratio|0.5|
+
+
