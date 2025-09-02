@@ -43,7 +43,8 @@ Repeated measures involve collecting multiple data points for the same variable 
 
 1. **[2-Arm, Binary Outcome - Analysis](2ArmBinaryOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for binary data into Cytel products using an R function.  For all examples, we assume the trial design consists of control and an experimental treatments. There are 2 Interim Analysis (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
 
-1. **[Time-To-Event Weighted Conditional Power Futility Analysis](TimeToEventConditionalPowerFutilityAnalysis.html)**
+1. **[Time-To-Event Weighted Conditional Power Futility Analysis](TimeToEventConditionalPowerFutilityAnalysis.html)**: This example demonstrates how to perform a time-to-event (TTE) analysis with conditional power and futility boundaries based on the logrank test.
+
 
 
 ## Treatment Selection 
