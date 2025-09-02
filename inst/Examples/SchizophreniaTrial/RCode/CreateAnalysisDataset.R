@@ -1,5 +1,10 @@
 CreateAnalysisDataset <- function( SimData, LookInfo )
 {
+    
+    # —————————————————————————————————————————————————————————————
+    # Step 1: Setup looks
+    # —————————————————————————————————————————————————————————————
+    
     if (!is.null(LookInfo)) {
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex

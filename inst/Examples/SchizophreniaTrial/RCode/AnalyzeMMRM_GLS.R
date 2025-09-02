@@ -300,6 +300,10 @@ MMRMAnalysisGLS <- function(SimData, DesignParam, LookInfo = NULL, UserParam = N
 
 CreateAnalysisDataset <- function( SimData, LookInfo )
 {
+    
+    # —————————————————————————————————————————————————————————————
+    # Step 1: Setup looks
+    # —————————————————————————————————————————————————————————————
     if (!is.null(LookInfo)) {
         nQtyOfLooks          <- LookInfo$NumLooks
         nLookIndex           <- LookInfo$CurrLookIndex
@@ -412,19 +416,20 @@ GetLSDiffGLS <-  function( glsFit, nTrt, nTime, bPlacMinusTrt )
     nDOF        <- diff(unlist(glsFit$dims)[2:1])
     
     #This gives an estimate of Exp - Plac (if you want Plac - Exp use a -sum(...))
-    #print( paste( vVarNames ))
     dEst        <- sum(vCoeff[ vVarNames ])
     
     if( bPlacMinusTrt )
         dEst <- dEst*-1
-    #dEstPlac    <- sum( vCoeff[ vVarNamesPlac ])
-    #dEstTrt     <- sum( vCoeff[ vVarNamesTrt])
+
     dSE         <- sqrt(sum(vcov(glsFit)[ vVarNames, vVarNames ]))
     dTStat      <- dEst/dSE
     dPVal       <- pt( dTStat, nDOF )
     
+    
+
     lRet <- list( dPVal = dPVal, dEst = dEst, nDOF = nDOF, dSE = dSE, dTStat = dTStat )
     return( lRet)
     
 }
+
 
