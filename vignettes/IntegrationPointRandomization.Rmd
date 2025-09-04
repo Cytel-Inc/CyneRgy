@@ -15,33 +15,79 @@ The Randomization integration point allows you to incorporate custom randomizati
 
 ## East Horizon Explore
 
-This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
+This integration point is available in East Horizon Explore for the following study objective and endpoint type combinations:
 
-- **Two Arm Confirmatory**: continuous, continuous with repeated measures, binary, and time-to-event outcomes.
-- ***Two Arm Confirmatory**: dual time-to-event/time-to-event, dual time-to-event/binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
-- ***Multiple Arm Confirmatory**: continuous and binary outcomes.* <span class="badge text-bg-secondary">Coming soon</span>
+||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
+|----------------|--|--|--|--|--|--|--|--|
+|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
+|Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
+|Dose Finding|-|-|❌|-|-|-|-|-|
 
-## East Horizon Design <span class="badge text-bg-secondary">Coming soon</span>
+**Legend**
 
-*This integration point will be available in East Horizon Design in the future.*
+|Icon|Meaning|
+|--|----------|
+|✅|Available|
+|❌|Not available|
+|🔜|Coming soon|
+|-|Combination does not exist|
+
+## East Horizon Design
+
+<details>
+<summary>This integration point is available in East Horizon Design for the following tests (click to expand/collapse):</summary>
+
+|Test|Study Objective|Endpoint|Availability|
+|-------|-----|-----|--|
+|Single Mean (One Arm Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
+|Mean of Paired Differences (Paired Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
+|Mean of paired Ratios (Paired Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
+|Single Proportion (One Arm Design)|One Arm Exploratory/Confirmatory|Binary|❌|
+|Simon's Two Stage (One Arm Design)|One Arm Exploratory/Confirmatory|Binary|❌|
+|Logrank Weibull Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
+|Parametric Weibull Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
+|Logrank Exponential Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
+|Single Poisson Rate (One Arm Design)|One Arm Exploratory/Confirmatory|Count|❌|
+|Difference of Means (Parallel Design)|Two Arm Confirmatory|Continuous|🔜|
+|Ratio of Means (Parallel Design)|Two Arm Confirmatory|Continuous|❌|
+|Difference of Means (Crossover Design)|Two Arm Confirmatory|Continuous|❌|
+|Ratio of Means (Crossover Design)|Two Arm Confirmatory|Continuous|❌|
+|Difference of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|🔜|
+|Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|🔜|
+|Odds Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|🔜|
+|Fisher's Exact (Parallel Design)|Two Arm Confirmatory|Binary|❌|
+|Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design)|Two Arm Confirmatory|Time to Event|🔜|
+|Logrank Test Given Accrual Duration and Study Duration (Parallel Design)|Two Arm Confirmatory|Time to Event|🔜|
+|Logrank Test Given Accrual Duration and Accrual Rates (Population Enrichment)|Two Arm Confirmatory|Time to Event|❌|
+|Ratio of Poisson Rates (Parallel Design)|Two Arm Confirmatory|Count|❌|
+|Ratio of Negative Binomial Rates (Parallel Design)|Two Arm Confirmatory|Count|❌|
+|Win Ratio (Parallel Design)|Two Arm Confirmatory|Composite|❌|
+|MAMS Difference of Means (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Continuous|🔜|
+|MAMS Difference of Means: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Continuous|🔜|
+|MAMS Difference of Proportions (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Binary|🔜|
+|MAMS Difference of Proportions: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Binary|🔜|
+|MAMS Logrank (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Time to Event|🔜|
+|MAMS Logrank: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Time to Event|🔜|
+</details>
 
 ## East
 
 <details>
 <summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
 
-- Design, Continuous Endpoint
-    - Two-Sample Test, Parallel Design, Difference of Means (MN-2S-DI)
-- Design, Discrete Endpoint
-    - Two-Sample Test, Parallel Design
-        - Difference of Proportions (PN-2S-DI)
-        - Ratio of Proportions (PN-2S-RA)
-        - Odds Ratio of Proportions (PN-2S-OR)
-- Design, Survival Endpoint
-    - Two-Sample Test, Parallel Design
-        - Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)
-        - Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)
-
+|Test|Number of Samples|Endpoint|Availability|
+|-------|-----|-----|--|
+|Difference of Means (Parallel Design)|Two Samples|Continuous|✅|
+|Difference of Proportions (Parallel Design)|Two Samples|Discrete|✅|
+|Ratio of Proportions (Parallel Design)|Two Samples|Discrete|✅|
+|Odds Ratio of Proportions (Parallel Design)|Two Samples|Discrete|✅|
+|Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design)|Two Samples|Survival|✅|
+|Logrank Test Given Accrual Duration and Study Duration (Parallel Design)|Two Samples|Survival|✅|
+|Chi-Square for Specified Proportions in C Categories (Single Arm Design)|Many Samples|Discrete|❌|
+|Two Group Chi-Square for Proportions in C Categories (Parallel Design)|Many Samples|Discrete|❌|
+|Multiple Looks - Combining P-Values (Pairwise Comparisons to Control - Difference of Means)|Many Samples|Continuous|❌|
+|Multiple Looks - Combining P-Values (Multiple Pairwise Comparisons to Control - Difference of Proportions)|Many Samples|Discrete|❌|
+|Multiple Looks - Combining P-Values (Pairwise Comparisons to Control - Logrank Test)|Many Samples|Survival|❌|
 </details>
 
 # Instructions
