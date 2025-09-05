@@ -48,16 +48,16 @@ This integration point is available in East Horizon Explore for the following st
 |Parametric Weibull Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
 |Logrank Exponential Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
 |Single Poisson Rate (One Arm Design)|One Arm Exploratory/Confirmatory|Count|❌|
-|Difference of Means (Parallel Design)|Two Arm Confirmatory|Continuous|🔜|
+|Difference of Means (Parallel Design)|Two Arm Confirmatory|Continuous|✅|
 |Ratio of Means (Parallel Design)|Two Arm Confirmatory|Continuous|❌|
 |Difference of Means (Crossover Design)|Two Arm Confirmatory|Continuous|❌|
 |Ratio of Means (Crossover Design)|Two Arm Confirmatory|Continuous|❌|
-|Difference of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|🔜|
-|Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|🔜|
-|Odds Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|🔜|
+|Difference of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|✅|
+|Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|✅|
+|Odds Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|✅|
 |Fisher's Exact (Parallel Design)|Two Arm Confirmatory|Binary|❌|
-|Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design)|Two Arm Confirmatory|Time to Event|🔜|
-|Logrank Test Given Accrual Duration and Study Duration (Parallel Design)|Two Arm Confirmatory|Time to Event|🔜|
+|Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design)|Two Arm Confirmatory|Time to Event|✅|
+|Logrank Test Given Accrual Duration and Study Duration (Parallel Design)|Two Arm Confirmatory|Time to Event|✅|
 |Logrank Test Given Accrual Duration and Accrual Rates (Population Enrichment)|Two Arm Confirmatory|Time to Event|❌|
 |Ratio of Poisson Rates (Parallel Design)|Two Arm Confirmatory|Count|❌|
 |Ratio of Negative Binomial Rates (Parallel Design)|Two Arm Confirmatory|Count|❌|
@@ -94,7 +94,7 @@ This integration point is available in East Horizon Explore for the following st
 
 ## In East Horizon Explore
 
-You can set up a response function in East Horizon Explore under **Randomization Method** in a **Design Card** while creating or editing an **Input Set**.
+You can set up a randomization function under **Randomization Method** in a **Design Card** while creating or editing an **Input Set**.
 
 <details>
 <summary>Follow these steps (click to expand/collapse):</summary>
@@ -107,7 +107,28 @@ You can set up a response function in East Horizon Explore under **Randomization
 
 For a visual guide of where to find the option, refer to the screenshot below:
 
-![Screenshot of East Horizon](randomization.png)
+![](GettingStarted_files/randomization.png)
+</details>
+
+## In East Horizon Design
+
+You can set up a randomization function under **Randomization Method** in the **Design** section of an **Input Set** created by simulation.
+
+<details>
+<summary>Follow these steps (click to expand/collapse):</summary>
+
+1. Create and compute a first **analytical design input set**.
+1. Navigate to the Results section and **simulate** the analytical design.
+1. Navigate to the new **simulation input set** that was created.
+1. Select **User Specified-R** from the dropdown in the **Randomization Method** field in the **Design** tab.
+1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
+1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
+1. Continue creating your project.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![](GettingStarted_files/randomizationDesign.png)
 </details>
 
 ## In East
@@ -128,7 +149,7 @@ You can set up a randomization function in East by navigating to the **Randomize
 
 For a visual guide of where to find the option, refer to the screenshot below:
 
-![](randomizationEast.png)
+![](GettingStarted_files/randomizationEast.png)
 </details>
 
 # Input Variables
