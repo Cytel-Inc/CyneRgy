@@ -151,9 +151,13 @@ When creating a custom R script, you can optionally use certain variables provid
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
-|**NumPrd**|Integer|Number of accrual periods in the trial.|
-|**PrdStart**|Vector of Numeric|Vector of length `NumPrd`, indicating the start time of each period, with `PrdStarr[ 1 ] = 0`.|
-|**AccrRate**|Vector of Numeric|Vector of length `NumPrd`, indicating the accrual rate of each period.|
+|**Type**|Integer|Enrollment type specified by the user:<br>– `0`: Global<br>– `1`: Regional.|
+|**NumPrd**|Integer|Number of accrual periods in the trial. Only applicable if `Type = 0` (Global).|
+|**PrdStart**|Vector of Numeric|Vector of length `NumPrd`, indicating the start time of each period, with `PrdStarr[ 1 ] = 0`. Only applicable if `Type = 0` (Global).|
+|**RegionName**|Array of Character|Vector of length equal to the number of regions, indicating the geography/region names. Only applicable if `Type = 1` (Regional).|
+|**RegionStart**|Array of Numeric|Vector of length equal to the number of regions, indicating the start times for each geography. Only applicable if `Type = 1` (Regional).|
+|**EnrollmentCapPcnt**|Array of Numeric|Vector of length equal to the number of regions, indicating the enrollment caps (%) for each geography. Only applicable if `Type = 1` (Regional).|
+|**AccrRate**|Vector of Numeric|Vector of length `NumPrd` (if `Type = 0`, Global) or length equal to the number of regions (if `Type = 1`, Regional), indicating the accrual rate for each accrual period or each geography.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in East Horizon's or East's interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -173,10 +177,27 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in the interface.
+Your R script could contain a function such as this one, with a name of your choice. All the applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on the enrollment type) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in the interface. `Type` needs to be declared with a default value.
+
+## If `Type = 0` (Global Enrollment)
 
 ```
-GenArrTimes <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+GenArrTimes <- function( NumSub, Type = 0, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+{
+  nError        	    <- 0 # Error handling (no error)
+  vPatientArrivalTime 	<- rep( 0, NumSub ) # Initializing arrival time array to 0
+  
+  # Write the actual code here.
+  # Store the generated arrival times in a vector called vPatientArrivalTime.
+
+  return( list( ArrivalTime = as.double( vPatientArrivalTime ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+## If `Type = 1` (Regional Enrollment)
+
+```
+GenArrTimes <- function( NumSub, Type = 1, RegionName, EnrollmentCapPcnt, AccrRate, UserParam = NULL )
 {
   nError        	    <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumSub ) # Initializing arrival time array to 0
@@ -190,9 +211,9 @@ GenArrTimes <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 
 A detailed template with step-by-step explanations is available here: [GenerateArrivalTimes.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/GenerateArrivalTimes.R) 
 
-# Examples
+# Example
 
-Explore the following examples for more context:
+Explore the following example for more context:
 
 1. [**Generate Patient Arrival Times with Poisson Process**](GeneratePoissonArrival.html)
     - [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R)
