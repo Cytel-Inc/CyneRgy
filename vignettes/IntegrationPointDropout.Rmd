@@ -175,7 +175,7 @@ The input variables, expected output variables, examples, and templates for this
 :::: {.button-container}
 <a href="IntegrationPointDropoutContinuousOrBinary.html" class="btn btn-primary"><i class="fas fa-chart-line"></i> Continuous (Normal) Outcome</a>
 
-<a href="IntegrationPointDropoutTimeToEvent.html" class="btn btn-primary"><i class="fas fa-hourglass-half"></i> Time-to-Event (Survival) Outcome</a>
+<a href="IntegrationPointDropoutTimeToEvent.html" class="btn btn-primary"><i class="fas fa-hourglass-half"></i> Time-to-Event (Survival) or Dual Outcome</a>
 
 <a href="IntegrationPointDropoutRepeatedMeasures.html" class="btn btn-primary"><i class="fas fa-sync"></i> Continuous (Normal) Outcome with Repeated Measures</a>
 

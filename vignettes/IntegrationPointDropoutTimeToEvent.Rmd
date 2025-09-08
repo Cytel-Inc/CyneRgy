@@ -1,5 +1,5 @@
 ---
-title: "Integration Point: Dropout - Time-to-Event Outcome"
+title: "Integration Point: Dropout - Time-to-Event Outcome or Dual (TTE-TTE or TTE-Binary) Outcome"
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document

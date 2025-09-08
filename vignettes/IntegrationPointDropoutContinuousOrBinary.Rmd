@@ -13,5 +13,3 @@ The input variables, expected output variables, examples, and templates for this
 
 1. [**Two Arm Confirmatory**](IntegrationPointDropoutContinuousOrBinaryTwoArm.html)
 1. [**Multiple Arm Confirmatory**](IntegrationPointDropoutContinuousOrBinaryMultipleArm.html)
-
-Please note that R integration with the Multiple Arm Confirmatory study objective is not currently available in East Horizon Explore, but it is expected to be added in a future update.
