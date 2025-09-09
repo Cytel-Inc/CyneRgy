@@ -182,4 +182,7 @@ The input variables, expected output variables, examples, and templates for this
 <a href="IntegrationPointResponseRepeatedMeasures.html" class="btn btn-primary"><i class="fas fa-sync"></i> Continuous (Normal) Outcome with Repeated Measures</a>
 
 <a href="IntegrationPointResponseBinary.html" class="btn btn-primary"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
+
+<a href="IntegrationPointResponseDual.html" class="btn btn-primary"><i class="fas fa-project-diagram"></i> Dual Outcomes (TTE-TTE or TTE-Binary)</a>
+
 ::::

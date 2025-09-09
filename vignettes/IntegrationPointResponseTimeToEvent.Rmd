@@ -49,7 +49,7 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMeth
   vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
   
   # Write the actual code here.
-  # Store the generated binary response values in a vector called vPatientOutcome.
+  # Store the generated survival time values in a vector called vSurvTime.
 
   return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = as.integer( nError ) ) )
 }
