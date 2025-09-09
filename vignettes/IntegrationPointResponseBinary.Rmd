@@ -41,7 +41,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on standard binary outcome vs. Vaccine Efficacy) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. For Vaccine Efficacy, `OneMinusROP` must be declared with default value `NULL`.
 
-**For standard binary outcome (`Better Response = Larger Value`, `Test = Difference of Proportions or Custom`):**
+## For standard binary outcome (`Better Response = Larger Value`, `Test = Difference of Proportions or Custom`)
 
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
@@ -56,7 +56,7 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp
 }
 ```
 
-**For Vaccine Efficacy (`Better Response = Smaller Value`, `Test = 1 - Ratio of Proportions`):**
+## For Vaccine Efficacy (`Better Response = Smaller Value`, `Test = 1 - Ratio of Proportions`)
 
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, FollowUpDur, PropResp, OneMinusROP = NULL, UserParam = NULL )

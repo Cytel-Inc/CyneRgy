@@ -40,7 +40,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on the study objective) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
-**For `Study Objective = Two Arm Confirmatory`:**
+## For `Study Objective = Two Arm Confirmatory`
 
 ```
 GenerateResponse <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
@@ -55,7 +55,7 @@ GenerateResponse <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, Us
 }
 ```
 
-**For `Study Objective = Multiple Arm Confirmatory`:**
+## For `Study Objective = Multiple Arm Confirmatory`
 
 ```
 GenerateResponse <- function( NumSub, NumArms, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )

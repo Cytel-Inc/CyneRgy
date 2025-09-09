@@ -173,11 +173,11 @@ For a visual guide of where to find the option, refer to the screenshot below:
 The input variables, expected output variables, examples, and templates for this integration point depend on the endpoint type (or outcome) you are using. Refer to the relevant pages below:
 
 :::: {.button-container}
-<a href="IntegrationPointDropoutContinuousOrBinary.html" class="btn btn-primary"><i class="fas fa-chart-line"></i> Continuous (Normal) Outcome</a>
+<a href="IntegrationPointDropoutContinuous.html" class="btn btn-primary"><i class="fas fa-chart-line"></i> Continuous (Normal) Outcome</a>
 
 <a href="IntegrationPointDropoutTimeToEvent.html" class="btn btn-primary"><i class="fas fa-hourglass-half"></i> Time-to-Event (Survival) or Dual Outcome</a>
 
 <a href="IntegrationPointDropoutRepeatedMeasures.html" class="btn btn-primary"><i class="fas fa-sync"></i> Continuous (Normal) Outcome with Repeated Measures</a>
 
-<a href="IntegrationPointDropoutContinuousOrBinary.html" class="btn btn-primary"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
+<a href="IntegrationPointDropoutBinary.html" class="btn btn-primary"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
 ::::

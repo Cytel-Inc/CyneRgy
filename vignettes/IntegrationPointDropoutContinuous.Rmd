@@ -1,11 +1,11 @@
 ---
-title: "Integration Point: Dropout - Continuous or Binary Outcome, Multiple Arm"
+title: "Integration Point: Dropout - Continuous Outcome"
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-[$\leftarrow$ Go back to the *Integration Point: Dropout - Continuous or Binary Outcome* page](IntegrationPointDropoutContinuousOrBinary.html)
+[$\leftarrow$ Go back to the *Integration Point: Dropout* page](IntegrationPointDropout.html)
 
 # Input Variables
 
@@ -14,9 +14,9 @@ When creating a custom R script, you can optionally use specific variables provi
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
-|**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
-|**ProbDrop**|Vector of Numeric|Vector of length `NumArm`, indicating the probability of dropout for each arm. The first element corresponds to the control group, followed by the probabilities for each experimental arm in sequence.|
-|**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
+|**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿. Only applicable when `Study Objective = Multiple Arm Confirmatory`.|
+|**ProbDrop**|Numeric or Vector of Numeric|- For `Study Objective = Two Arm Confirmatory`: Numeric probability of dropout, assumed to be the same across the two arms. If you need different probabilities, you can use a custom `UserParam`.<br/>- For `Study Objective = Multiple Arm Confirmatory`: Vector of length `NumArm`, indicating the probability of dropout for each arm. The first element corresponds to the control group, followed by the probabilities for each experimental arm in sequence.|
+|**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. Only applicable when `Study Objective = Multiple Arm Confirmatory`.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointDropout.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -36,7 +36,24 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on the study objective) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+## For `Study Objective = Two Arm Confirmatory`
+
+```
+GenCensorInd <- function( NumSub, ProbDrop, UserParam = NULL )
+{
+  nError        	    <- 0 # Error handling (no error)
+  vCensoringIndicator 	<- rep( 1, NumSub ) # Initializing vector to 1 (all patients are completers)	
+  
+  # Write the actual code here.
+  # Store the generated censor indicator values in a vector called vCensoringIndicator
+
+  return( list( CensorInd = as.integer( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+## For `Study Objective = Multiple Arm Confirmatory`
 
 ```
 GenCensorInd <- function( NumSub, NumArm, ProbDrop, TreatmentID, UserParam = NULL )
@@ -51,9 +68,11 @@ GenCensorInd <- function( NumSub, NumArm, ProbDrop, TreatmentID, UserParam = NUL
 }
 ```
 
+A detailed template with step-by-step explanations is available here: [Dropout.BinaryAndContinuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.BinaryAndContinuous.R) 
+
 # Examples
 
 Explore the following examples for more context:
 
 1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
-    - This example focuses on a Two-Arm Confirmatory study objective but can still provide valuable insights.
+    - [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R)
