@@ -43,6 +43,10 @@
 
 AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
+  library( gsDesign )
+  library( CyneRgy )
+  library( survival )
+    
   nError 	        <- 0
   nDecision 	    <- 0
   dTestStatistic    <- 0
@@ -54,7 +58,7 @@ AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo
     nQtyOfLooks  <- LookInfo$NumLooks
     nLookIndex   <- LookInfo$CurrLookIndex
     vCumEvents   <- LookInfo$InfoFrac * DesignParam$MaxEvents
-    nQtyOfEvents <- vCumEvents[nLookIndex]
+    nQtyOfEvents <- vCumEvents[ nLookIndex ]
   }
   else
   {
@@ -63,6 +67,7 @@ AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo
     nQtyOfEvents <- DesignParam$MaxEvents 
   }
   
+  # Prepare event and censoring times from simulated data
   SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime    
   SimData              <- SimData[ order( SimData$TimeOfEvent ), ]
   dTimeOfAnalysis      <- SimData[ nQtyOfEvents, ]$TimeOfEvent
@@ -70,7 +75,7 @@ AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo
   SimData$Event        <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )
   SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
   
-  # Perform logrank test
+  # Perform Logrank test
   logrankTest <- survival::survdiff( survival::Surv( ObservedTime, Event ) ~ TreatmentID, data = SimData )
   dTestStatistic <- sqrt( logrankTest$chisq ) * sign( logrankTest$obs[ 2 ] - logrankTest$exp[ 2 ] )
   dPValue <- 1 - pchisq( logrankTest$chisq, df = 1 )
@@ -79,9 +84,9 @@ AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo
   dTargetHR            <- UserParam$TargetHazardRatio
   dFutilityThreshold   <- UserParam$FutilityThreshold
   
-  library( gsDesign )
-  library( CyneRgy )
   
+  
+  # Critical value for the efficacy boundary (one-sided significance level of 2.5%)
   dEffBdry < -qnorm( 0.025 )
   
   nDecision <- 0 # Set a default value 
@@ -89,7 +94,7 @@ AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo
   {
     if( UserParam$nComputationOption == 1 )
     {
-      # Option 1: Compute CP using UserParam$TargetHazardRatio
+      # Option 1: Compute CP using HR* = UserParam$TargetHazardRatio
       
       r <- DesignParam$AllocInfo / ( 1 + DesignParam$AllocInfo )
       dSEHR <- 1 / sqrt( LookInfo$CumCompleters[ 1 ] * r * ( 1-r ) )
@@ -101,9 +106,9 @@ AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo
     }
     else if( UserParam$nComputationOption == 2 )
     {
-      # Option 2: Compute CP using the observed HR
+      # Option 2: Compute CP using HR* = observed HR
       
-      r <- DesignParam$AllocInfo / (1 + DesignParam$AllocInfo )
+      r <- DesignParam$AllocInfo / ( 1 + DesignParam$AllocInfo )
       dSEHR <- 1 / sqrt( LookInfo$CumCompleters[ 1 ] * r * ( 1-r ) )
       dEstimatedHR <- exp( dTestStatistic * dSEHR )
       dConditionalPower <- pnorm(
@@ -118,12 +123,12 @@ AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo
       dWeightEstimated     <- UserParam$WeightEstimatedHR
       dWeightTarget        <- UserParam$WeightTargetHR
       
-      # Option 3: Weighted computation
+      # Option 3: Compute CP using HR* = weighted combination
       
-      r <- DesignParam$AllocInfo / (1 + DesignParam$AllocInfo )
-      dSEHR <- 1 / sqrt( LookInfo$CumCompleters[1] * r * (1-r) )
-      dEstimatedHR <- exp( dTestStatistic*dSEHR )
-      dWeightedHR <- (dWeightEstimated * dEstimatedHR) + (dWeightTarget * dTargetHR)
+      r <- DesignParam$AllocInfo / ( 1 + DesignParam$AllocInfo )
+      dSEHR <- 1 / sqrt( LookInfo$CumCompleters[ 1 ] * r * ( 1-r ) )
+      dEstimatedHR <- exp( dTestStatistic * dSEHR )
+      dWeightedHR <- ( dWeightEstimated * dEstimatedHR ) + ( dWeightTarget * dTargetHR )
       dConditionalPower <- pnorm(
                                   dEffBdry * sqrt( 1 + LookInfo$CumCompleters[ 1 ] / ( LookInfo$CumCompleters[ 2 ] - LookInfo$CumCompleters[ 1 ] ) ) -
                                   dTestStatistic * sqrt( LookInfo$CumCompleters[ 1 ] / ( LookInfo$CumCompleters[ 2 ] - LookInfo$CumCompleters[ 1 ] ) ) -
@@ -164,6 +169,7 @@ AnalzyeTTEWithConditinalPowerFutility <- function(SimData, DesignParam, LookInfo
     nDecision <- GetDecision( strDecision, DesignParam, LookInfo )
   }
   
+  # Return test statistic, hazard ratio, conditional power, and decision
   lRet <- list( TestStat = as.double( dTestStatistic ),
                 HR = as.double( dEstimatedHR ),
                 Decision  = as.integer( nDecision ), 
