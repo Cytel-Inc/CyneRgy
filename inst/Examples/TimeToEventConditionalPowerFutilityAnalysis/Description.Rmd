@@ -80,7 +80,7 @@ flowchart <- data.frame(
   ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
   ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
   label = c("Prepare event and censoring times \nfrom simulated data",
-            "Run log-rank test (treatment vs. control)",
+            "Run Logrank test (treatment vs. control)",
             "Compute conditional power using HR*",
             "Apply futility/efficacy boundaries \nbased on interim or final look",
             "Return test statistic, hazard ratio, \nconditional power, and decision"),
@@ -137,7 +137,7 @@ print(p)
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R" class="alert-link">AnalzyeTTEWithConditinalPowerFutility.R</a></p>
 </div>
 
-We begin by preparing the simulated trial data based on the design parameters and current look index,.
+We begin by preparing the simulated trial data based on the design parameters and current look index.
 
 We then perform the Logrank test, which compares survival between treatment and control arms. The test statistic ($Z$) is computed as:
 
@@ -217,7 +217,7 @@ To enable this option, set **nComputationOption = 1** and provide values for bot
 |**FutilityThreshold**|Futility Threshold|0.1|
 |**TargetHazardRatio**|Target Hazard Ratio|0.66|
 
-This option is equivalent to using East Horizon: Design's built-in functionality when specifying Futility information at the computation stage, by selecting *Conditional Power* under *Futility Boundary Family* and choosing *Design HR* for the *Compute CP Using* input field.
+This option is equivalent to using East Horizon: Design's built-in functionality when specifying Futility information at the computation stage, by selecting *Conditional Power* under *Futility Boundary Family* and choosing **Design HR** for the *Compute CP Using* input field.
 
 ### Option 2: Estimated Hazard Ratio
 
@@ -239,7 +239,7 @@ To enable this option, set **nComputationOption = 2** and provide a value for **
 |**nComputationOption**|Computation Option|Must be 2|
 |**FutilityThreshold**|Futility Threshold|0.1|
 
-This option is equivalent to using East Horizon: Design's built-in functionality when specifying Futility information at the computation stage, by selecting *Conditional Power* under *Futility Boundary Family* and choosing *Estimated HR* for the *Compute CP Using* input field.
+This option is equivalent to using East Horizon: Design's built-in functionality when specifying Futility information at the computation stage, by selecting *Conditional Power* under *Futility Boundary Family* and choosing **Estimated HR** for the *Compute CP Using* input field.
 
 ### Option 3: Weighted Hazard Ratio
 
@@ -265,7 +265,7 @@ To enable this option, set **nComputationOption = 3** and provide values for **F
 |**WeightEstimatedHR**|Weight assigned to the estimated hazard ratio|0.5|
 |**WeightTargetHR**|Weight assigned to the target hazard ratio|0.5|
 
-Unlike Options 1 and 2, this option cannot be implemented using East Horizon: Design’s built-in functionality. It is only available through R integration.
+Unlike Options 1 and 2, this option **cannot** be implemented using East Horizon: Design’s built-in functionality. It is only available through R integration.
 
 ## Results
 
