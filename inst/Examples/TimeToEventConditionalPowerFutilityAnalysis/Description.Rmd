@@ -14,18 +14,18 @@ output:
 
 # Introduction
 
-This example demonstrates how to perform a time-to-event (TTE) analysis with conditional power and futility boundaries by extending East Horizon: Design’s functionalities using a custom R script for the Analysis integration point. The analysis is based on the logrank test and allows users to compute conditional power, make futility decisions, and use a weighted hazard ratio.
+This example demonstrates how to perform a time-to-event (TTE) analysis with an evaluation of futility at an interim look by extending East Horizon: Design’s functionalities using a custom R script for the Analysis integration point. The analysis of patient data is based on the Logrank test and the interim analysis evaluates futility based on a Conditional Power threshold, which is computed using a weighted hazard ratio.
 
-In this example, we set up a **Two Arm Confirmatory** trial with a **single TTE endpoint** using the *Design task* and the *Logrank Test Given Accrual Duration and Study Duration (Parallel Design)* option. In East Horizon: Design, custom R scripts can only be applied during simulations. Therefore, an analytical design must first be created, after which simulations are run. During simulation, the futility information from the original design is replaced by the custom futility logic implemented in the R script.
+In this example, we set up a **Two Arm Confirmatory** trial with a **single TTE endpoint** using the *Design task* and the *Logrank Test Given Accrual Duration and Study Duration (Parallel Design)* option. In East Horizon: Design, custom R scripts can only be applied during simulations. Therefore, an analytical design must first be created, after which simulations can be run based on its computation. During the simulation, the futility evaluation from the original design is replaced by the custom futility logic implemented in the R script.
 
 ## Why do we need R Integration for this example?
 
-East Horizon: Design’s built-in analysis algorithms do not natively support computation of conditional power using a **weighted hazard ratio**. This requires integrating a custom R file for the Analysis step which will:
+East Horizon: Design’s built-in analysis algorithms do not natively support computation of a **weighted conditional power** using both the assumed hazard ratio and the observed hazard ratio at any interim analysis. This requires integrating a custom R file for the Analysis step which will:
 
-- Compute the logrank test statistic and p-value at interim analyses.
+- Compute the logrank test statistic and p-value at interim & final analyses.
 - Estimate the hazard ratio from interim data.
-- Compute conditional power using either the target hazard ratio, the estimated hazard ratio, or **a weighted combination of the two**.
-- Apply futility or efficacy decision rules based on conditional power and pre-specified boundaries.
+- Compute conditional power using either the target hazard ratio (i.e. original assumption), the estimated hazard ratio (i.e. observed at each analysis), or **a weighted combination of the two**.
+- Apply futility or efficacy decision rules based on pre-specified boundaries, specified as conditional power thresholds. 
 
 By integrating this R file, East Horizon users can perform adaptive interim analyses with custom decision rules that are not supported in the default framework, allowing more flexible and realistic trial simulations.
 
@@ -35,7 +35,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 - **[Analysis_WeightedCP.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/Analysis_WeightedCP.R)**
 
-   This R file contains a function that analyzes simulated time-to-event clinical trial data at interim or final analyses. It prepares the event and censoring information, runs a log-rank test to compare treatment groups, and then calculates conditional power based on either a target hazard ratio, the estimated hazard ratio, or a weighted mix of both. Using this conditional power, it applies futility rules at interim looks and efficacy/futility rules at the final look to decide whether the trial should stop early or continue. The function returns the test statistic, estimated hazard ratio, conditional power, and a decision code indicating the outcome.
+   This R file contains a function that analyzes simulated time-to-event clinical trial data at interim or final analyses. It prepares the event and censoring information, runs a log-rank test to compare treatment groups, and then calculates conditional power based on either a target hazard ratio, the estimated hazard ratio, or a weighted mix of both. It applies futility rules using this conditional power at interim looks to decide whether the trial should stop early or continue, and then uses the traditional Logrank test for the efficacy/futility decision at the final look. The function returns the test statistic, estimated hazard ratio, conditional power, and a decision code indicating the outcome.
    
    For more information on this function, see the [Technical Information and Example Values](#technical-information-and-example-values) section below.
 
