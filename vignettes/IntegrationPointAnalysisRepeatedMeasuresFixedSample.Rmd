@@ -45,15 +45,15 @@ The variables in SimData are generated during data generation, and depend on the
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**DesignParam\$Alpha**|Numeric|Type I Error (for one-sided tests).|
-|**DesignParam\$LowerAlpha**|Numeric|Lower Type I Error (for two-sided tests). Not available in East Horizon Explore.|
-|**DesignParam\$UpperAlpha**|Numeric|Upper Type I Error (for two-sided tests). Not available in East Horizon Explore.|
+|**DesignParam\$LowerAlpha**|Numeric|Lower Type I Error (for two-sided tests).|
+|**DesignParam\$UpperAlpha**|Numeric|Upper Type I Error (for two-sided tests).|
 |**DesignParam\$TrialType**|Integer|Trial Type:<br>– `0`: Superiority.<br>– `1`: Non-inferiority.<br>– `2`: Equivalence (not available in East Horizon Explore).<br>– `3`: Super-superiority.|
 |**DesignParam\$TestType**|Integer|Test Type:<br>– `0`: One-sided.<br>– `1`: Two-sided symmetric (not available in East Horizon Explore).<br>– `2`: Two-sided asymmetric (not available in East Horizon Explore).|
 |**DesignParam\$TailType**|Integer|Nature of critical region:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.|
 |**DesignParam\$AllocInfo**|Vector of Numeric| Vector of length equal to the number of treatment arms, containing the ratios of the treatment group sample sizes to control group sample size.|
 |**DesignParam\$CriticalPoint**|Numeric|Critical value (for one-sided tests).|
-|**DesignParam\$LowerCriticalPoint**|Numeric|Lower critical value (for two-sided tests). Not available in East Horizon Explore.|
-|**DesignParam\$UpperCriticalPoint**|Numeric|Upper critical value (for two-sided tests). Not available in East Horizon Explore.|
+|**DesignParam\$LowerCriticalPoint**|Numeric|Lower critical value (for two-sided tests).|
+|**DesignParam\$UpperCriticalPoint**|Numeric|Upper critical value (for two-sided tests).|
 |**DesignParam\$SampleSize**|Integer|Sample size of the trial.|
 |**DesignParam\$MaxCompleters**|Integer|Maximum number of completers.|
 |**DesignParam\$RespLag**|Numeric|Follow-up duration.|

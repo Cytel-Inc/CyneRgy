@@ -25,7 +25,7 @@ output: html_document
 The Analysis integration point allows you to customize the statistical test for the treatment effect using a custom R script. This flexibility enables you to implement methods that better align with your trial's specific needs, rather than relying on the built-in default statistical tests. For example:
 
 - **Continuous outcomes**: Instead of using the default difference of means, you could provide a script for alternative approaches such as the ratio of means or a test from the Wilcoxon-Mann-Whitney family.
-- **Binary outcomes**: Instead of the default difference of proportions, you could implement methods such as the ratio of proportions, odds ratio, risk ratio, or other suitable measures.
+- **Binary outcomes**: Instead of the default difference of proportions, you could implement methods such as the risk ratio or other suitable measures.
 - **Time-to-Event outcomes**: Instead of the default Logrank test, you could include scripts for alternative approaches like the Peto-Peto test, which emphasizes early events, or a restricted mean survival time (RMST)-based test, which describes the mean event-free survival time up to a pre-selected time point.
 
 # Availability
@@ -38,7 +38,7 @@ This integration point is available in East Horizon Explore for the following st
 |----------------|--|--|--|--|--|--|--|--|
 |Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
-|Dose Finding|-|-|❌|-|-|-|-|-|
+|Dose Finding|-|-|🔜|-|-|-|-|-|
 
 **Legend**
 
@@ -185,4 +185,6 @@ The input variables, expected output variables, examples, and templates for this
 <a href="IntegrationPointAnalysisRepeatedMeasures.html" class="btn btn-primary"><i class="fas fa-sync"></i> Continuous (Normal) Outcome with Repeated Measures</a>
 
 <a href="IntegrationPointAnalysisBinary.html" class="btn btn-primary"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
+
+<a href="IntegrationPointAnalysisDual.html" class="btn btn-primary"><i class="fas fa-project-diagram"></i> Dual Outcomes (TTE-TTE or TTE-Binary)</a>
 ::::

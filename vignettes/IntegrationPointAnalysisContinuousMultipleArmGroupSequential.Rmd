@@ -54,18 +54,18 @@ The variables in SimData are generated during data generation, and depend on the
 |**LookInfo\$CurrLookIndex**|Integer|Current index look, starting from 1.|
 |**LookInfo\$InfoFrac**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the information fraction for each look.|
 |**LookInfo\$CumAlpha**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent (for one-sided tests) for each look.|
-|**LookInfo\$CumAlphaLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower cumulative alpha spent (for two-sided tests) for each look. Not available in East Horizon Explore.|
-|**LookInfo\$CumAlphaUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper cumulative alpha spent (for two-sided tests) for each look. Not available in East Horizon Explore.|
+|**LookInfo\$CumAlphaLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower cumulative alpha spent (for two-sided tests) for each look.|
+|**LookInfo\$CumAlphaUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper cumulative alpha spent (for two-sided tests) for each look.|
 |**LookInfo\$CumCompleters**|Vector of Integer|Vector of length `LookInfo$NumLooks`, containing the cumulative number of completers for each look.|
 |**LookInfo\$RejType**|Integer|Rejection type:<br>– `0`: One-sided efficacy upper<br>– `1`: One-sided futility upper.<br>– `2`: One-sided efficacy lower.<br>– `3`: One-sided futility lower.<br>– `4`: One-sided efficacy upper, futility lower.<br>– `5`: One-sided efficacy lower, futility upper.<br>– `6`: Two-sided efficacy only (not available in East Horizon Explore).<br>– `7`: Two-sided futility only (not available in East Horizon Explore).<br>– `8`: Two-sided efficacy, futility (not available in East Horizon Explore).<br>– `9`: Equivalence (not available in East Horizon Explore).|
 |**LookInfo\$EffBdryScale**|Integer|Efficacy boundary scale:<br>– `0`: Z scale.<br>– `1`: Adjusted p-value scale (not available in East Horizon Explore).|
 |**LookInfo\$EffBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the efficacy boundary values (for one-sided tests) for each look.|
-|**LookInfo\$EffBdryLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower efficacy boundary values (for two-sided tests) for each look. Not available in East Horizon Explore.|
-|**LookInfo\$EffBdryUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper efficacy boundary values (for two-sided tests) for each look. Not available in East Horizon Explore.|
+|**LookInfo\$EffBdryLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower efficacy boundary values (for two-sided tests) for each look.|
+|**LookInfo\$EffBdryUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper efficacy boundary values (for two-sided tests) for each look.|
 |**LookInfo\$FutBdryScale**|Integer|Futility boundary scale:<br>– `0`: Z scale.<br>– `1`: p-value scale (not available in East Horizon Explore).<br>– `2`: Delta scale.<br>– `3`: Conditional power scale (not available in East Horizon Explore).|
 |**LookInfo\$FutBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the futility boundary values (for one-sided tests) for each look.|
-|**LookInfo\$FutBdryLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower futility boundary values (for two-sided tests) for each look. Not available in East Horizon Explore.|
-|**LookInfo\$FutBdryUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper futility boundary values (for two-sided tests) for each look. Not available in East Horizon Explore.|
+|**LookInfo\$FutBdryLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower futility boundary values (for two-sided tests) for each look.|
+|**LookInfo\$FutBdryUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper futility boundary values (for two-sided tests) for each look.|
 
 # Expected Output Variable
 

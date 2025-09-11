@@ -1,0 +1,71 @@
+---
+title: "Variables of DesignParam"
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+The variables in DesignParam define the trial design parameters. They can be used in custom scripts for the [Analysis Integration Point](IntegrationPointAnalysis.html) and the [Treatment Selection Integration Point](IntegrationPointTreatmentSelection.html). To access these parameters in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name.
+
+The tables below describe each variable and notes any conditions under which it can or cannot be used for East Horizon Explore and East Horizon Design. Availability notes are only specified when they differ from the default availability of the integration points (see the pages linked above for details).
+
+# For `Study Objective = Two Arm Confirmatory`
+
+|**Variable Name**|**Type**|**Description**|**Notes for Explore**|**Notes for Design**|
+|-|-|----|-----|-----|
+|**Alpha**|Numeric|Type I Error.|||
+|**LowerAlpha**|Numeric|Lower Type I Error. Same as Alpha if left-tailed one-sided test. Only makes sense to use for two-sided asymmetric tests.|Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use Alpha instead.|Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided asymmetric`.|
+|**UpperAlpha**|Numeric|Lower Type I Error. Same as Alpha if right-tailed one-sided test. Only makes sense to use for two-sided asymmetric tests.|Only available if `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use Alpha instead.|Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided asymmetric`.|
+|**TrialType**|Integer|Trial Type:<br>– `0`: Superiority.<br>– `1`: Non-inferiority.<br>– `2`: Equivalence.<br>– `3`: Super-superiority.|Type 2 (equivalence) does not exist.||
+|**TestType**|Integer|Test Type:<br>– `0`: One-sided.<br>– `1`: Two-sided symmetric.<br>– `2`: Two-sided asymmetric.|Types 1 and 2 (two-sided) do not exist.||
+|**TailType**|Integer|Nature of critical region:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.||Only available if `Test Type = One-sided`.|
+|**AllocInfo**|Vector of Numeric| Vector of length equal to the number of treatment arms (number of arms - 1), containing the ratios of the treatment group sample sizes to control group sample size.|||
+|**CriticalPoint**|Numeric|Critical value (for one-sided tests).|Only available if `Statistical Design = Fixed Sample`.|Only available if `Test Type = One-sided` and `Statistical Design = Fixed Sample`.|
+|**LowerCriticalPoint**|Numeric|Lower critical value. Same as CriticalPoint if left-tailed one-sided test. Only makes sense to use for two-sided asymmetric tests.|Only available if `Statistical Design = Fixed Sample` and `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use CriticalPoint instead.|Only available if `Statistical Design = Fixed Sample`. Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided symmetric/asymmetric`.|
+|**UpperCriticalPoint**|Numeric|Lower critical value. Same as CriticalPoint if right-tailed one-sided test. Only makes sense to use for two-sided asymmetric tests.|Only available if `Statistical Design = Fixed Sample` and `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CriticalPoint instead.|Only available if `Statistical Design = Fixed Sample`. Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided symmetric/asymmetric`.|
+|**SampleSize**|Integer|Sample size of the trial.|||
+|**MaxCompleters**|Integer|Maximum number of completers.|Not available for `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`).|Not available for `Time-to-Event` tests.|
+|**RespLag**|Numeric|Follow-up duration.|Not available for `Endpoint Type = Time-to-Event`.|Not available for `Time-to-Event` tests.|
+|**LookFixOption**|Integer|Look option:<br>-`0`: Event-based.<br>- `1`: Time-based.|Not available.|Only available for `Time-to-Event` tests.|
+|**MaxEvents**|Integer|Maximum events.|Only available for `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`).|Only available for `Time-to-Event` tests.|
+|**MaxStudyDur**|Integer|Maximum study duration.|Not available.|Only available for `Time-to-Event` tests with `Look Fix Option = 1 (Time-based)`.|
+|**FollowUpType**|Integer|Follow-up type:<br>– `0`: Until the end of the study.<br>– `1`: For a fixed period.|Only available for `Endpoint Type = Time-to-Event`.|Only available for `Time-to-Event` tests.|
+|**FollowUpDur**|Numeric|Follow-up duration.|Only available for `Endpoint Type = Time-to-Event`.|Only available for `Time-to-Event` tests.|
+|**TestStatType**|Integer|Test statistic type. For `Time-to-Event` tests:<br>- `0`: Logrank.<br>- `1`: Wilcoxon Gehan.<br>- `2`: Harrington Fleming.<br>For `Continuous` test:<br>- `3`: Z-test.<br>`4`: t-test.<br>For `Binary` test:<br>- `5`: Wald.<br>`6`: Score.|Not available.|Not available for `Test = Difference of Proportions or Odds Ratio of Proportions` (Binary).|
+|**HFParam1**|Numeric|First parameter of Harrington Fleming.|Not available.|Only available for `Time-to-Event` tests.|
+|**HFParam2**|Numeric|Second parameter of Harrington Fleming.|Not available.|Only available for `Time-to-Event` tests.|
+|**VarType**|Integer|Variance type. For `Continuous` test:<br>- `4`: Equal<br>- `5`: Unequal.<br>For `Difference of Proportions` (Binary) test:<br>- `0`: Pooled.<br>`1`: Unpooled.<br>For `Ratio of Proportions` (Binary):<br>- `2`: Null<br>`3`: Empirical.|Not available.|Not available for `Time-to-Event` tests or `Test = Odds Ratio of Proportions` (Binary).|
+|**TrtEffNull**|Numeric|Treatment effect under null on natural scale.|Not available for `Endpoint Type = Continuous with Repeated Measures`. Set to `0` for `Trial Type = Superiority`. Set to $Delta_0 = log(HR_0)$ for `Endpoint Type = Time-to-Event`. Set to $(1-\rho_0)$ for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`).|Set to `0` for `Trial Type = Superiority`. Set to $Delta_0 = log(HR_0)$ for `Time-to-Event` tests.|
+|**MuC**|Numeric|Design mean for the control arm.|Not available.||
+|**Sigma**|Numeric|Design standard deviation specified in simulations.|Not available.|Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3 (Z-test)`.|
+|**PiC**|Numeric|Design proportion for the control arm.|Not available.|Only available for `Binary` tests.|
+|**NumHzrdPrd**|Integer|Number of Hazard pieces.|Not available.|Only available for `Time-to-Event` tests.|
+|**PrdAt**|Numeric|Period starting value.|Not available.|Only available for `Time-to-Event` tests.|
+|**LambdaC**|Numeric|Control Hazard rate.|Not available.|Only available for `Time-to-Event` tests.|
+|**TestID**|Integer|Test selected by the user.|Not available for `Endpoint Type = Continuous with Repeated Measures`. Possible values:<br>- `102`: Difference of Means (Continuous).<br>- `303`: Difference of Proportions (Binary).<br>- `410`: Survival Given Accrual Rates (Time-to-Event).<br>- `308`: 1 - Ratio of Proportions (Binary, Vaccine Efficacy).|Possible values:<br>- `102`: Difference of Means (Continuous).<br>- `303`: Difference of Proportions (Binary).<br>- `304`: Ratio of Proportions (Binary).<br>- `306`: Odds Ratio of Proportions (Binary).<br>- `410`: Survival Given Accrual Rates (Time-to-Event).<br>- `401`: Survival Given Study Duration (Time-to-Event).| 
+|**NumVisit**|Integer|Number of visits.|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
+|**VisitTime**|Vector of Numeric|Vector of length `NumVisit`, indicating the time for each visit.|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
+|**VisitStatus**|Vector of Integer|Vector of length `NumVisit`, indicating the visit selection status for each visit:<br>– `0`: Visit has not been selected for analysis.<br>– `1`: Visit has been selected for analysis.|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
+|**PrimContrastCoeff**|Vector of Numeric|Vector of length `NumVisit`, indicating the primary contrast coefficient for each visit.|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
+|**SecContrastCoeff**|Vector of Numeric|Vector of length `NumVisit`, indicating the secondary contrast coefficient for each visit.|Only available for `Endpoint Type = Continuous with Repeated Measures`. Set to `NULL` for `Statistical Design = Fixed Sample`.|Not available.|
+|**DropImp**|Integer|Dropout imputation method:<br>– `0`: None.<br>– `1`: Last observation carried forward (LOCF).|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
+|**NumStratFactors**|Integer|Number of stratification factors.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` turned on.|Only available for `Time-to-Event` tests with `Stratification` turned on.|
+|**StratFactors**|Named List|Named list of length `NumStratFactors`, indicating stratification factors details. For example, `StratFactors[“Factor1”]` is an array of level names for Factor 1.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` turned on.|Only available for `Time-to-Event` tests with `Stratification` turned on.|
+|**TestStratFactors**|Array of Character|Array of factor names included in the analysis. Length is between 1 and `NumStratFactors`.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` turned on.|Not available.|
+|**NumSubPops**|Integer|Number of subpopulations.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+|**SubPops**|Array of Character|Array of subpopulation names.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+|**WindCond**|Integer|Winning condition:<br>- `1`: At least subpopulation 1.<br>- `2`: At least subpopulation 2.<br>- `3`: At least subpopulation 3.<br>- `4`: At least subpopulation 4.<br>- `5`: At least one subpopulation.<br>- `6`: At least two subpopulations.<br>- `7`: At least three subpopulations.<br>- `8`: At least four subpopulations.<br>- `9`: At least full population.<br>- `10`: All populations.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+|**PlanEndTrial**|Integer|Planned end of trial:<br>- `1`: Subpopulation 1.<br>- `2`: Subpopulation 2.<br>- `3`: Subpopulation 3.<br>- `4`: Subpopulation 4.<br>- `5`: Full population.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+|**TransitionMatrix**|Matrix of Numeric|Transition matrix between all populations, including full population and subpopulations. Dimension of `(NumSubPops + 1) x (NumSubPops + 1)`.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+|**PropAlpha**|Vector of Numeric|Vector of length `(NumSubPops + 1)`, indicating the proportion of alpha for all populations, including full population and subpopulations.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+
+# For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
+
+start with 2 arm, then look at multi arm and add Only available if `Study Objective = Two Arm Confirmatory` Only available for `Two Arm Confirmatory` tests.
+
+|**MultAdjMethod**|Integer|Multiple comparison procedure:<br>– `0`: Bonferroni.<br>– `1`: Sidak (not available in East Horizon Explore).<br>– `2`: Weighted Bonferroni.<br>– `3`: Holm's Step Down (not available in East Horizon Explore).<br>– `4`: Hochberg's Step Up.<br>– `5`: Hommel's Step Up (not available in East Horizon Explore).<br>– `6`: Fixed Sequence.<br>– `7`: Fallback.<br>– `8`: Dunnett's Single Step.<br>– `9`: Dunnett's Step Down (not available in East Horizon Explore).<br>– `10`: Dunnett's Step Up (not available in East Horizon Explore).|
+|**NumTreatments**|Integer|Number of treatment arms.|
+|**AlphaProp**|Vector of Numeric|Vector of length `DesignParam$NumTreatments`, containing the proportion of Alpha for each treatment arm.|
+|**TestSeq**|Vector of Integer|Vector of length `DesignParam$NumTreatments`, containing the test sequence for each comparison (each treatment arm).|
+
+|**InitialAllocInfo**|Vector of Numeric|Vector of length equal to the number of treatment arms (number of arms - 1), containing the ratios of the treatment group sample sizes to control group sample size.|Only available if `Study Objective = Multiple Arm Confirmatory or Dose Finding`.|Only available for `Multiple Arm Confirmatory` tests.|
