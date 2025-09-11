@@ -164,8 +164,8 @@ $$
 
 where:
 
-- $n$ is the number of completers at the first look.
-- $r = \frac{\text{AllocInfo}}{1+\text{AllocInfo}}$ where $\text{AllocInfo}$ is the ratio of the treatment group sample size to the control group sample size.
+- $n$ is the number of completers at the time of analysis.
+- $r = \frac{\text{AllocInfo}}{1+\text{AllocInfo}}$ where $\text{AllocInfo}$ is the ratio of the treatment arm's sample size to the control arm's sample size.
 
 
 The conditional power ($CP$) is calculated as:
@@ -181,18 +181,18 @@ $$
 where:
 
 - $\Phi(.)$ is the standard normal cumulative distribution function (CDF).
-- $z_\alpha = \Phi^{-1}(0.025)$ is the critical value we set for the efficacy boundary (one-sided significance level of 2.5%).
-- $n_1$ is the number of completers at the first look (interim).
+- $z_\alpha = \Phi^{-1}(0.025)$ is the critical value we set for the efficacy boundary on the Z-test statistic scale (in this case, using a one-sided significance level of 2.5%).
+- $n_1$ is the number of completers at the first look (interim analysis).
 - $n_2$ is the number of completers at the second look (final analysis).
 - $HR^*$ depends on the computation option (see below).
 
-The futility decision rule at interim is:
+The futility decision rule at the interim analysis is:
 
 $$
 \text{If } CP < \theta_{\text{futility}} \rightarrow \text{stop for futility.}
 $$
 
-The final analysis decision rule is:
+The decision rule at the final analysis is:
 
 $$
 \begin{cases}
@@ -215,7 +215,7 @@ To enable this option, set **nComputationOption = 1** and provide values for bot
 |**FutilityThreshold**|Futility Threshold|0.1|
 |**TargetHazardRatio**|Target Hazard Ratio|0.66|
 
-This option is equivalent to using East Horizon: Design's built-in functionality by selecting *Conditional Power* under *Futility Boundary Family* and choosing *Design HR* for *Compute CP Using*.
+This option is equivalent to using East Horizon: Design's built-in functionality when specifying Futility information at the computation stage, by selecting *Conditional Power* under *Futility Boundary Family* and choosing *Design HR* for the *Compute CP Using* input field.
 
 ### Option 2: Estimated Hazard Ratio
 
@@ -237,7 +237,7 @@ To enable this option, set **nComputationOption = 2** and provide a value for **
 |**nComputationOption**|Computation Option|Must be 2|
 |**FutilityThreshold**|Futility Threshold|0.1|
 
-This option is equivalent to using East Horizon: Design's built-in functionality by selecting *Conditional Power* under *Futility Boundary Family* and choosing *Estimated HR* for *Compute CP Using*.
+This option is equivalent to using East Horizon: Design's built-in functionality when specifying Futility information at the computation stage, by selecting *Conditional Power* under *Futility Boundary Family* and choosing *Estimated HR* for the *Compute CP Using* input field.
 
 ### Option 3: Weighted Hazard Ratio
 
@@ -273,7 +273,7 @@ We ran 10,000 simulation replicates for each configuration using the example val
 |-------|---|
 |Option 1 (built-in)|0.905|
 |Option 1 (with R)|0.898|
-|Option 2 (built-in)|?|
+|Option 2 (built-in)|0.901|
 |Option 2 (with R)|0.895|
 |Option 3 (with R, sim on Option 1)|0.900|
 |Option 3 (with R, sim on Option 2)|0.920|
@@ -282,13 +282,13 @@ We ran 10,000 simulation replicates for each configuration using the example val
 |-------|---|---|---|
 |Option 1 (built-in)|11|941|952|
 |Option 1 (with R)|12|1009|1021|
-|Option 2 (built-in)|?|?|?|
-|Option 2 (with R)|0.895|536|519|1055|
-|Option 3 (with R, sim on Option 1)|0.9|8|993|1001|
-|Option 3 (with R, sim on Option 2)|0.92|4|800|804|
+|Option 2 (built-in)|514|480|994|
+|Option 2 (with R)|536|519|1055|
+|Option 3 (with R, sim on Option 1)|8|993|1001|
+|Option 3 (with R, sim on Option 2)|4|800|804|
 
 For Options 1 and 2, the results obtained via the built-in East Horizon functionality are almost identical to those produced using the R integration, confirming the correctness of the custom implementation.
 
-For Option 3, results depend on which analytical design (Option 1 or Option 2) was used as the baseline for simulation. The weighted hazard ratio approach can be particularly valuable in situations where users want to balance evidence from observed interim data with prior expectations about the treatment effect.
+For Option 3, results depend on which analytical design (Option 1 or Option 2) was used as the baseline for simulation. As this method is not available using East Horizon: Design's built-in functionality, the sample size and number of events required to reach a target power using this method must be identified by running a range of simulations with varying sample size and number of events values. The weighted hazard ratio approach can be particularly valuable in situations where users want to balance evidence from observed interim data with prior expectations about the treatment effect.
 
 In conclusion, these results demonstrate that the R script successfully reproduces East Horizon's built-in functionality where available and extends its capabilities to new features such as weighted hazard ratios.
