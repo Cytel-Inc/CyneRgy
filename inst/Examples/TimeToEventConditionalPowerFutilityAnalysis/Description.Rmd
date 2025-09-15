@@ -166,7 +166,7 @@ $$
 
 where:
 
-- $n$ is the number of completers at the time of analysis.
+- $n$ is the number of events at the time of analysis.
 - $r = \frac{\text{AllocInfo}}{1+\text{AllocInfo}}$ where $\text{AllocInfo}$ is the ratio of the treatment arm sample size to the control arm sample size.
 
 
@@ -184,8 +184,8 @@ where:
 
 - $\Phi(.)$ is the standard normal cumulative distribution function (CDF).
 - $z_\alpha = \Phi^{-1}(0.025)$ is the critical value we set for the efficacy boundary on the Z-test statistic scale (in this case, using a one-sided significance level of 2.5%).
-- $n_1$ is the number of completers at the first look (interim analysis).
-- $n_2$ is the number of completers at the second look (final analysis).
+- $n_1$ is the number of events at the first look (interim analysis).
+- $n_2$ is the number of events at the second look (final analysis).
 - $HR^*$ depends on the computation option (see below).
 
 The futility decision rule at the interim analysis is:
