@@ -42,7 +42,7 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
     
     
     # —————————————————————————————————————————————————————————————
-    # Step 5: Fit the MMRM with default CS + varIdent
+    # Step 3: Fit the MMRM with default CS + varIdent
     # —————————————————————————————————————————————————————————————
     
     lmeCtrls <- lmeControl(
@@ -77,7 +77,7 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
     })
     
     # —————————————————————————————————————————————————————————————
-    # Step 5b: Extract the treatment×last‐visit effect
+    # Step 3b: Extract the treatment×last‐visit effect
     # —————————————————————————————————————————————————————————————
     
     if (!is.null(mmrm_model)) {
@@ -90,10 +90,6 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
             stdErr     <- ttab[trt_row, "Std.Error"]
             df         <- ttab[trt_row, "DF"]
             dpValue    <- max(ttab[trt_row, "p-value"], .Machine$double.eps)
-            # cat(sprintf(
-            #     "Treatment effect at Visit %s: Estimate=%.3f, SE=%.3f, DF=%.1f, p=%.2e\n",
-            #     lv[length(lv)], dPrimDelta, stdErr, df, dpValue
-            # ))
         } else {
             warning("Interaction term not found: ", term)
             dpValue <- 1.0
@@ -104,7 +100,7 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
     }
     
     # —————————————————————————————————————————————————————————————
-    # Step 6: Obtain group‐sequential alpha
+    # Step 4: Obtain group‐sequential alpha
     # —————————————————————————————————————————————————————————————
     if (!is.null(LookInfo)) {
         gs     <- rpact::getDesignGroupSequential(
@@ -119,7 +115,7 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
     }
     
     # —————————————————————————————————————————————————————————————
-    # Step 7: Decision rules
+    # Step 5: Decision rules
     # —————————————————————————————————————————————————————————————
     
     
@@ -166,4 +162,100 @@ MMRMAnalysis <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL
                   p.value   = as.double(dpValue),
                   ErrorCode = as.integer(nError) )
     return( lRet )
+}
+
+
+# —————————————————————————————————————————————————————————————
+# function to reshape data from wide to long
+# —————————————————————————————————————————————————————————————
+
+CreateAnalysisDataset <- function( SimData, LookInfo )
+{
+    
+    # —————————————————————————————————————————————————————————————
+    # Step 1: Setup looks
+    # —————————————————————————————————————————————————————————————
+    if (!is.null(LookInfo)) {
+        nQtyOfLooks          <- LookInfo$NumLooks
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfPatsForInterim <- LookInfo$CumCompleters[nLookIndex]
+        nAnalysisVisit       <- LookInfo$InterimVisit
+    } else {
+        nLookIndex           <- 1
+        nQtyOfLooks          <- 1
+        nQtyOfPatsForInterim <- nrow(SimData)
+    }
+    # —————————————————————————————————————————————————————————————
+    # Step 2: Reshape wide → long in one shot
+    # —————————————————————————————————————————————————————————————
+    dfLongData <- SimData %>%
+        mutate(id = row_number()) %>%
+        pivot_longer(
+            cols          = matches("^(Response|ArrTimeVisit)\\d+$"),
+            names_to      = c(".value", "Visit"),
+            names_pattern = "(Response|ArrTimeVisit)(\\d+)"
+        ) %>%
+        mutate(
+            Visit             = as.integer(Visit),
+            CalendarVisitTime = ArrivalTime + ArrTimeVisit
+        ) %>%
+        dplyr::select(id, TreatmentID, Visit, Response, CalendarVisitTime) %>%
+        arrange(Visit, CalendarVisitTime)
+    
+    # —————————————————————————————————————————————————————————————
+    # Step 3: Interim‐look filtering using dplyr
+    # —————————————————————————————————————————————————————————————
+    if (!is.null(LookInfo)) {
+        
+        # —————————————————————————————————————————————————————————————
+        # 3a) compute cutoff time
+        # —————————————————————————————————————————————————————————————
+        
+        dAnalysisTime <- dfLongData %>%
+            filter(Visit == nAnalysisVisit) %>%
+            slice(nQtyOfPatsForInterim) %>%
+            pull(CalendarVisitTime)
+        
+        # —————————————————————————————————————————————————————————————
+        # 3b) pick subjects
+        # —————————————————————————————————————————————————————————————
+        
+        
+        if (LookInfo$IncludePipeline == 0) {
+            vSubjectsForAnalysis <- dfLongData %>%
+                filter(
+                    Visit == nAnalysisVisit,
+                    CalendarVisitTime <= dAnalysisTime
+                ) %>%
+                distinct(id) %>%
+                pull(id)
+        } else {
+            vSubjectsForAnalysis <- dfLongData %>%
+                filter(CalendarVisitTime <= dAnalysisTime) %>%
+                distinct(id) %>%
+                pull(id)
+        }
+        
+        dfAnalysisData <- dfLongData %>%
+            filter(id %in% vSubjectsForAnalysis)
+    } else {
+        dfAnalysisData <- dfLongData
+    }
+    
+    # —————————————————————————————————————————————————————————————
+    # Step 4: Prepare for MMRM
+    # —————————————————————————————————————————————————————————————
+    dfAnalysisData <- dfAnalysisData %>%
+        mutate(
+            Visit       = factor(Visit),
+            TreatmentID = factor(TreatmentID),
+            id          = factor(id)
+        )
+    
+    # Create a dataset that removes the baseline visit (Visit == 1) from the long form and adds the baseline response as a new column
+    dfNoBaselineAnalysisData <- dplyr::filter( dfAnalysisData, Visit != 1)
+    dfBaselineAnalysisData   <- dplyr::filter( dfAnalysisData, Visit == 1) %>% select( id, Baseline = Response)
+    dfNoBaselineAnalysisData <- dplyr::left_join(dfNoBaselineAnalysisData,dfBaselineAnalysisData, by = "id" )
+    
+    return( dfNoBaselineAnalysisData )
 }
