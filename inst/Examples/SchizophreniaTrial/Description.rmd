@@ -27,19 +27,8 @@ This document summarizes the goals, background, methods, simulations, results, a
 
 > **Scope note.** This write‑up focuses on Mixed Models for Repeated Measures (MMRM) analyses for continuous outcomes over time in schizophrenia trials using PANSS as a primary endpoint, plus comparable simulations performed in East Horizon.
 
-# Internship Goals
-
-- Add an advanced simulation example to **CyneRgy** to test MMRM trials with normally distributed repeated measures.
-- Implement MMRM analysis in **R** (patient‑level simulation, tidy reshaping, model fit, and effect extraction).
-- Build a matching **East Horizon** project to mirror the R workflows and stress‑test design choices.
-- Apply the workflow to a schizophrenia study of **lumateperone tosylate**, using PANSS change as the primary endpoint.
-- Use an AI assistant to accelerate R coding and adopt professional practices.
 
 # Background
-
-## Clinical trials 101
-
-Randomized clinical trials assess the efficacy and safety of interventions (e.g., drugs, devices, or diets). Key needs include valid, reproducible data; careful control of sampling bias and blinding; and adherence to ethical and regulatory standards. Outcomes include treatment efficacy, safety signals, and dose–response insights.
 
 ## Schizophrenia and PANSS
 
