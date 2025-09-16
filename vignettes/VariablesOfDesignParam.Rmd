@@ -15,7 +15,7 @@ The tables below describe each variable and notes any conditions under which it 
 
 |**Variable Name**|**Type**|**Description**|**Notes for Explore**|**Notes for Design**|
 |-|-|----|-----|-----|
-|**Alpha**|Numeric|Type I Error.|||
+|**Alpha**|Numeric|Type I Error.||Only available if `Test Type = One-sided or Two-sided symmetric`.|
 |**LowerAlpha**|Numeric|Lower Type I Error. Same as Alpha if left-tailed one-sided test. Only makes sense to use for two-sided asymmetric tests.|Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use Alpha instead.|Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided asymmetric`.|
 |**UpperAlpha**|Numeric|Lower Type I Error. Same as Alpha if right-tailed one-sided test. Only makes sense to use for two-sided asymmetric tests.|Only available if `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use Alpha instead.|Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided asymmetric`.|
 |**TrialType**|Integer|Trial Type:<br>– `0`: Superiority.<br>– `1`: Non-inferiority.<br>– `2`: Equivalence.<br>– `3`: Super-superiority.|Type 2 (equivalence) does not exist.||
@@ -63,7 +63,7 @@ The tables below describe each variable and notes any conditions under which it 
 ## For `Endpoint Type = Dual (TTE-TTE or TTE-Binary)`
 
 |**Variable Name**|**Type**|**Description**|**Notes for Explore**|
-|-|-|----|-----|-----|
+|-|-|----|-----|
 |**EndpointType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the endpoint types:<br>– 0: Continuous.<br>– 1: Binary.<br>– 2: Time-to-Event.||
 |**EndpointName**|Vector of Character|Vector of length equal to the number of endpoints, indicating the endpoint names.||
 |**WinCond**|Integer|Winning condition:<br>- `1`: At least endpoint 1.<br>- `2`: At least endpoint 2.<br>- `3`: At least one endpoint.<br>- `4`: Both endpoints.||

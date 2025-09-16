@@ -1,17 +1,90 @@
 ---
-title: "Variables of SimData"
+title: "Variables of LookInfo"
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-# Variables of SimData
+The variables in LookInfo define the multiple looks design parameters. They can be used in custom scripts for the [Analysis Integration Point](IntegrationPointAnalysis.html) and the [Treatment Selection Integration Point](IntegrationPointTreatmentSelection.html). To access these parameters in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name.
 
-The variables in SimData are generated during data generation, and depend on the current simulation. Some common and useful variables are:
+The tables below describe each variable and notes any conditions under which it can or cannot be used in a project on East Horizon Explore and East Horizon Design. Availability notes are only specified when they differ from the default availability of the integration points (see the pages linked above for details).
 
-|**Variable**|**Type**|**Description**|**Availability (East Horizon Explore)**|**Availability (East Horizon Design)**|**Other availability conditions**|
-|------------|------------|------------------------------------------|
-|**SimData\$ArrivalTime**|Vector of Numeric| Vector of length equal to the number of subjects, containing the generated arrival times for all subjects.|
-|**SimData\$TreatmentID**|Vector of Integer| Vector of length equal to the number of subjects, containing the allocation indices for all subjects:<br>– `0`: Control arm.<br>– `1`: First experimental arm.<br>– etc.|
-|**SimData\$Response**  | Vector of Numeric  | Vector of length equal to the number of subjects, containing the generated responses for all subjects.|
-|**SimData\$CensorIndOrg**  | Vector of Integer  | Vector of length equal to the number of subjects, containing the generated censor indicator values for all subjects:<br>– `0`: Dropout.<br>– `1`: Completer.|
+LookInfo is only available for `Statistical Design = Group Sequential`.
+
+# For `Study Objective = Two Arm Confirmatory`
+
+## For `Endpoint Type = Continuous, Binary, Time-to-Event, Continuous with Repeated Measures`
+
+|**Variable**|**Type**|**Description**|**Notes for Explore**|**Notes for Design**|
+|-|-|----|-----|-----|
+|**NumLooks**|Integer|Number of looks.|||
+|**CurrLookIndex**|Integer|Current index look, starting from 1.|||
+|**InfoFrac**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the information fraction for each look.|||
+|**CumAlpha**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent (for one-sided tests) for each look.||Only available if `Test Type = One-sided`.|
+|**CumAlphaLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower cumulative alpha spent (for two-sided tests) for each look. Same as CumAlpha if left-tailed one-sided test. Only makes sense to use for two-sided asymmetric tests.|Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead.|Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided asymmetric or symmetric`.|
+|**CumAlphaUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper cumulative alpha spent (for two-sided tests) for each look. Same as CumAlpha if right-tailed one-sided test. Only makes sense to use for two-sided asymmetric tests.|Only available if `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead.|Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided asymmetric or symmetric`.|
+|**CumCompleters**|Vector of Integer|Vector of length `LookInfo$NumLooks`, containing the cumulative number of completers for each look.|Not available for `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`).|Not available for `Time-to-Event` tests.|
+|**CumEvents**|Integer|Cumulative events.|Only available for `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`).|Only available for `Time-to-Event` tests.|
+|**LookTime**|Numeric|Look time on calendar scale.||Only available for `Time-to-Event` tests if `Look Fix Option = Time-based`.|
+|**RejType**|Integer|Rejection type.|Possible values:<br>– `0`: One-sided efficacy upper.<br>– `1`: One-sided futility upper.<br>– `2`: One-sided efficacy lower.<br>– `3`: One-sided futility lower.<br>– `4`: One-sided efficacy upper, futility lower.<br>– `5`: One-sided efficacy lower, futility upper.|Possible values:<br>– `0`: One-sided efficacy upper.<br>– `1`: One-sided futility upper.<br>– `2`: One-sided efficacy lower.<br>– `3`: One-sided futility lower.<br>– `4`: One-sided efficacy upper, futility lower.<br>– `5`: One-sided efficacy lower, futility upper.<br>– `6`: Two-sided efficacy only.<br>– `7`: Two-sided futility only.<br>– `8`: Two-sided efficacy, futility.<br>– `9`: Equivalence.|
+|**EffBdryScale**|Integer|Efficacy boundary scale.|Possible values:<br>– `0`: Z scale.|Possible values:<br>– `0`: Z scale.<br>– `1`: p-value scale.|
+|**EffBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the efficacy boundary values (for one-sided tests) for each look.|Set to `NA` for `Endpoint Type = Continuous with Repeated Measures`.|Only available if `Test Type = One-sided`.|
+|**EffBdryLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower efficacy boundary values (for two-sided tests) for each look.|Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead.|Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided asymmetric or symmetric`.|
+|**EffBdryUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper efficacy boundary values (for two-sided tests) for each look.|Only available if `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead.|Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided asymmetric or symmetric`.|
+|**FutBdryScale**|Integer|Futility boundary scale.|Possible values:<br>– `0`: Z scale.<br>– `2`: Delta scale.|Possible values:<br>– `0`: Z scale.<br>– `1`: p-value scale.<br>– `2`: Delta scale.<br>– `3`: Conditional power scale.|
+|**CPDeltaOption**|Delta option for conditional power computation:<br>- `0`: Design Delta.<br>- `1`: Estimated Delta.|Not available.|Only available if `Futility Boundary Scale = Conditional Power`.|
+|**FutBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the futility boundary values (for one-sided tests) for each look.||Only available if `Test Type = One-sided`.|
+|**FutBdryLower**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the lower futility boundary values (for two-sided tests) for each look.|Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead.|Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided asymmetric or symmetric`.|
+|**FutBdryUpper**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the upper futility boundary values (for two-sided tests) for each look.|Only available if `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead.|Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided asymmetric or symmetric`.|
+|**BindingType**|Integer|Binding type:<br>- `0`: Non-binding.<br>- `1`: Binding.||
+|**InterimVisit**|Integer|Index of the visit which is driving the interims (starts at 1).|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
+|**FutContrast**|Integer|The contrast based on which futility boundaries are being computed:<br>– `0`: Primary contrast.<br>– `1`: Secondary contrast.|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
+|**IncludePipeline**|Integer|Indicates whether to include pipeline subjects in the interim:<br>– `0`: Do not include.<br>– `1`: Include.|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
+
+## For `Endpoint Type = Dual (TTE-TTE or TTE-Binary)`
+
+Named List of length equal to the number of endpoints, indicating the trial type for each endpoint. For example, `TrialType[“Endpoint 1”]` is the type for Endpoint 1.
+
+|**Variable**|**Type**|**Description**|**Notes for Explore**|
+|-|-|----|-----|
+|**NumEndpointLooks**|Named List of Integer|Named List of length equal to the number of endpoints, indicating the number of looks for each endpoint. For example, `NumEndpointLooks[“Endpoint 1”]` is the number of looks for Endpoint 1.||
+|**NumLooks**|Integer|Number of looks, defined as the maximum across all endpoints.||
+|**CurrLookIndex**|Integer|Current index look, starting from 1.||
+|**SyncInterim**|Integer|Interim synchronization option:<br>- `1`: Based on endpoint 1.<br>- `2`: Based on endpoint 2.||
+|**InputInfoFrac**|Named List of Vector of Numeric|Named List of length equal to the number of endpoints, containing the information fraction vector for each endpoint. For example, `InputInfoFrac[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the information fraction for each look for Endpoint 1.|For “Endpoint 1”, some initial entries will be `NA` if `SyncInterim = 2`. Some later entries will be `NA` if `SyncInterim = 1` and `NumEndpointLooks[“Endpoint 2”] > NumEndpointLooks[“Endpoint 1”]`.|
+|**CumCompleters**|Named List of Vector of Integer|Named List of length equal to the number of endpoints, containing the cumulative number of completers vector for each endpoint. For example, `CumCompleters[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the cumulative number of completers for each look for Endpoint 1.|Not available for `Dual Endpoint = TTE-TTE`. Set to `NA` for endpoints with `Endpoint Type = Time-to-Event`.|
+|**CumEvents**|Named List of Vector of Integer|Named List of length equal to the number of endpoints, containing the cumulative events vector for each endpoint. For example, `CumEvents[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the cumulative number of events for each look for Endpoint 1.|Set to `NA` for endpoints with `Endpoint Type = Binary`.|
+|**RejType**|Named List of Integer|Named List of length equal to the number of endpoints, containing the rejection type for each endpoint. For example, `RejType[“Endpoint 1”]` is the rejection type for Endpoint 1. Possible values:<br>– `0`: One-sided efficacy upper.<br>– `1`: One-sided futility upper.<br>– `2`: One-sided efficacy lower.<br>– `3`: One-sided futility lower.<br>– `4`: One-sided efficacy upper, futility lower.<br>– `5`: One-sided efficacy lower, futility upper.||
+|**EffBdryScale**|Named List of Integer|Named List of length equal to the number of endpoints, containing the efficacy boundary scale for each endpoint. For example, `EffBdryScale[“Endpoint 1”]` is the efficacy boundary scale for Endpoint 1. Possible values:<br>– `0`: Z scale.||
+|**EffBdry**|Named List of Vector of Numeric|Named List of length equal to the number of endpoints, containing the efficacy boundary values for each endpoint. For example, `EffBdry[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the efficacy boundary values for each look for Endpoint 1.|Set to `NA` if efficacy boundaries are skipped for some looks.|
+|**EffBdryLower**|Vector of Numeric|Named List of length equal to the number of endpoints, containing the lower efficacy boundary values for each endpoint. For example, `EffBdryLower[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the lower efficacy boundary values for each look for Endpoint 1.|Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. Set to `NA` if efficacy boundaries are skipped for some looks.|
+|**EffBdryUpper**|Vector of Numeric|Named List of length equal to the number of endpoints, containing the upper efficacy boundary values for each endpoint. For example, `EffBdryUpper[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the upper efficacy boundary values for each look for Endpoint 1.|Only available if `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. Set to `NA` if efficacy boundaries are skipped for some looks.|
+|**FutBdryScale**|Named List of Integer|Named List of length equal to the number of endpoints, containing the futility boundary scale for each endpoint. For example, `FutBdryScale[“Endpoint 1”]` is the futility boundary scale for Endpoint 1. Possible values:<br>– `0`: Z scale.<br>– `2`: Delta scale<br>- `6`: Hazard ratio scale.||
+|**FutBdry**|Named List of Vector of Numeric|Named List of length equal to the number of endpoints, containing the futility boundary values for each endpoint. For example, `FutBdry[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the futility boundary values for each look for Endpoint 1.|Set to `NA` if futility boundaries are skipped for some looks.|
+|**FutBdryLower**|Vector of Numeric|Named List of length equal to the number of endpoints, containing the lower futility boundary values for each endpoint. For example, `FutBdryLower[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the lower futility boundary values for each look for Endpoint 1.|Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. Set to `NA` if futility boundaries are skipped for some looks.|
+|**FutBdryUpper**|Vector of Numeric|Named List of length equal to the number of endpoints, containing the upper futility boundary values for each endpoint. For example, `FutBdryUpper[“Endpoint 1”]` is a vector of length `LookInfo$NumLooks` containing the upper futility boundary values for each look for Endpoint 1.|Only available if `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. Set to `NA` if futility boundaries are skipped for some looks.|
+|**BindingType**|Named List of Integer|Named List of length equal to the number of endpoints, containing the binding type for each endpoint. For example, `BindingType[“Endpoint 1”]` is the binding type for Endpoint 1. Possible values:<br>- `0`: Non-binding.<br>- `1`: Binding.||
+
+**Notes:** 
+
+- Dual endpoints are not available for East Horizon: Design.
+- "Endpoint 1" is used as a sample endpoint name. It will be the actual endpoint name as specified by the user.
+
+
+# For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
+
+|**Variable**|**Type**|**Description**|**Notes for Explore**|**Notes for Design**|
+|-|-|----|-----|-----|
+|**NumLooks**|Integer|Number of looks.|||
+|**CurrLookIndex**|Integer|Current index look, starting from 1.|||
+|**InfoFrac**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the information fraction for each look.|||
+|**CumAlpha**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent (for one-sided tests) for each look.||Only available if `Test Type = One-sided`.|
+|**CumCompleters**|Vector of Integer|Vector of length `LookInfo$NumLooks`, containing the cumulative number of completers for each look.|Not available for `Endpoint Type = Time-to-Event`.|Not available for `Time-to-Event` tests.|
+|**CumEvents**|Vector of Integer|Vector of length `LookInfo$NumLooks`,containing the cumulative event for each look.|Only available for `Endpoint Type = Time-to-Event`. Not available for `Study Objective = Dose Finding`.|Only available for `Time-to-Event` tests.|
+|**RejType**|Integer|Rejection type:<br>– `0`: One-sided efficacy upper.<br>– `1`: One-sided futility upper.<br>– `2`: One-sided efficacy lower.<br>– `3`: One-sided futility lower.<br>– `4`: One-sided efficacy upper, futility lower.<br>– `5`: One-sided efficacy lower, futility upper.|||
+|**EffBdryScale**|Integer|Efficacy boundary scale.|Not available for `Study Objective = Dose Finding`. Possible values:<br>– `0`: Z scale.|Possible values:<br> `1`: Adjusted p-value scale.|
+|**EffBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the efficacy boundary values for each look.|Not available for `Study Objective = Dose Finding`.||
+|**FutBdryScale**|Integer|Futility boundary scale.|Possible values:<br>– `2`: Delta scale.<br>– `6`: Hazard ratio scale.|Possible values:<br>– `1`: Adjusted p-value scale.<br>– `2`: Delta scale.<br>– `6`: Hazard ratio scale.|
+|**FutBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the futility boundary values for each look.|||
+|**PoCScale**|Integer|Proof of concept (PoC) scale:<br>- `0`: High dose vs. control.|Only available for `Study Objective = Dose Finding`.|Not available.|
+|**PoCThreshold**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the proof of concept (PoC) threshold.|Only available for `Study Objective = Dose Finding`.|Not available.|
