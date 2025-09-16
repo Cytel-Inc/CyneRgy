@@ -26,7 +26,7 @@ library( CyneRgy )
 This document summarizes the goals, background, methods, simulations, results, and takeaways from the CyneRgy MMRM R development work and companion East Horizon simulations completed. It distills the content of the project into a concise narrative.
 
 > **Scope note.** This write‑up focuses on Mixed Models for Repeated Measures (MMRM) analyses for continuous outcomes over time in schizophrenia trials using PANSS as a primary endpoint, plus comparable simulations performed in East Horizon.
-
+ 
 
 # Introduction
 
