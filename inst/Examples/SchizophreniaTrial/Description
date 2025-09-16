@@ -21,10 +21,219 @@ knitr::opts_chunk$set(echo = TRUE)
 library( CyneRgy )
 ```
 
-# Introduction
-#This code can generate and analyze patient data for a Mixed Model for Repeated Measures (MMRM).
-#It shows the ability of East Horizon using R integration.
-#MMRM is a statistical model used for longitudinal continuous outcomes in clinical trials.
-#This code is currently intended to work for 2-arm studies.
-#The example code uses a Schizophrenia study by:
-#Comparing the difference in PANSS (Positive and Negative Syndrome Scale) scores of control vs treatment groups of patients with Schizophrenia. Patients were treated for 7 weeks (1 week screening, 4 weeks of treatment, and a follow-up after 2 weeks).
+# Abstract
+
+This document summarizes the goals, background, methods, simulations, results, and takeaways from the CyneRgy MMRM R development work and companion East Horizon simulations completed during a Cytel summer internship. It distills the content of the project slide deck into a concise narrative and adds reproducible skeleton code chunks to illustrate the analysis flow (data generation, MMRM analysis, plotting, and operating characteristics).
+
+> **Scope note.** This write‑up focuses on Mixed Models for Repeated Measures (MMRM) analyses for continuous outcomes over time in schizophrenia trials using PANSS as a primary endpoint, plus comparable simulations performed in East Horizon.
+
+# Internship Goals
+
+- Add an advanced simulation example to **CyneRgy** to test MMRM trials with normally distributed repeated measures.
+- Implement MMRM analysis in **R** (patient‑level simulation, tidy reshaping, model fit, and effect extraction).
+- Build a matching **East Horizon** project to mirror the R workflows and stress‑test design choices.
+- Apply the workflow to a schizophrenia study of **lumateperone tosylate**, using PANSS change as the primary endpoint.
+- Use an AI assistant to accelerate R coding and adopt professional practices.
+
+# Background
+
+## Clinical trials 101
+
+Randomized clinical trials assess the efficacy and safety of interventions (e.g., drugs, devices, or diets). Key needs include valid, reproducible data; careful control of sampling bias and blinding; and adherence to ethical and regulatory standards. Outcomes include treatment efficacy, safety signals, and dose–response insights.
+
+## Schizophrenia and PANSS
+
+- **Schizophrenia** is characterized by positive symptoms (e.g., hallucinations, delusions), negative symptoms (e.g., alogia, avolition), and disorganized thinking/behavior.
+- The **Positive and Negative Syndrome Scale (PANSS)** evaluates 30 items on a 1–7 scale (total range 30–210) across positive, negative, and general psychopathology domains. The analysis of interest is change from baseline over multiple visits.
+
+> **Why PANSS isn’t directly implemented here.** While PANSS is the conceptual endpoint, this project focuses on a general MMRM framework applicable to PANSS‑like continuous outcomes. The provided code scaffolding abstracts PANSS specifics to keep the example broadly reusable.
+
+# Methods in R
+
+This section outlines the R development done in RStudio: data generation, analysis, and plotting. Function names follow PascalCase and end with explicit `return()` calls. Variable naming hints are shown via prefixes: `n` (integer), `d` (double), `b` (logical), `v` (vector), `m` (matrix), `df` (data frame), `l` (list), `str` (string).
+
+## Data generation (MMRM responses)
+
+```{r Generate-Data, eval=FALSE}
+# Packages
+library(MASS)      # for multivariate sampling
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+#' Generate subject-level repeated measures under an MMRM-like mean structure
+#' @param nN integer, total N
+#' @param vVisitTimes numeric vector of visit indices (e.g., 0, 1, 2, 3, 4)
+#' @param dTrtEffect numeric, treatment effect at final visit (illustrative)
+
+GenerateMMRM <- function(nN, vVisitTimes, dTrtEffect = -5) {
+  # Randomize 1:1
+  vTrt <- sample(c(0L, 1L), size = nN, replace = TRUE)
+  nV  <- length(vVisitTimes)
+
+  # Mean structure: baseline 0; incremental benefit by visit for treated
+  vMeanByVisit <- seq(0, dTrtEffect, length.out = nV)
+
+  # Simple AR(1) covariance for illustration
+  dRho <- 0.5
+  dSigma <- 15
+  mSigma <- outer(vVisitTimes, vVisitTimes, function(i, j) dSigma^2 * dRho^abs(i - j))
+
+  # Simulate per-subject multivariate normal responses
+  lSim <- lapply(seq_len(nN), function(i) {
+    dMu0 <- rep(0, nV)
+    dShift <- if (vTrt[i] == 1L) vMeanByVisit else rep(0, nV)
+    vY <- as.numeric(MASS::mvrnorm(1, mu = dMu0 + dShift, Sigma = mSigma))
+    return(data.frame(
+      nID = i, nTrt = vTrt[i], nVisit = vVisitTimes, dY = vY
+    ))
+  })
+
+  dfDat <- bind_rows(lSim)
+  return(dfDat)
+}
+```
+
+## Prepare for analysis
+
+```{r Prepare-Data, eval=FALSE}
+PrepareForAnalysis <- function(dfDat) {
+  dfDat <- dfDat %>%
+    mutate(
+      strTrt = factor(ifelse(nTrt == 1L, "Active", "Control")),
+      nVisitF = factor(nVisit)
+    ) %>%
+    group_by(nID) %>%
+    mutate(dBaseline = dY[nVisit == min(nVisit)]) %>%
+    ungroup()
+  return(dfDat)
+}
+```
+
+## Fit MMRM and extract treatment effect
+
+```{r Fit-MMRM, eval=FALSE}
+# You can use nlme::lme or gls; or mmrm package if available.
+# Here we show a simple lme skeleton for illustration.
+library(nlme)
+
+MMRMAnalysis <- function(dfDat) {
+  dfUse <- dfDat %>% filter(nVisit > min(nVisit))  # post-baseline
+  fit <- nlme::lme(
+    dY ~ strTrt * nVisitF + dBaseline,
+    random = ~ 1 | nID,
+    correlation = nlme::corAR1(form = ~ as.numeric(nVisit) | nID),
+    data = dfUse,
+    na.action = na.omit,
+    control = nlme::lmeControl(msMaxIter = 200)
+  )
+
+  # Example: treatment effect at final visit (interaction term)
+  strFinal <- paste0("strTrtActive:nVisitF", as.character(max(dfUse$nVisit)))
+  dEst <- summary(fit)$tTable[strFinal, "Value"]
+  dSE  <- summary(fit)$tTable[strFinal, "Std.Error"]
+  dP   <- summary(fit)$tTable[strFinal, "p-value"]
+
+  return(list(fit = fit, dEst = dEst, dSE = dSE, dP = dP))
+}
+```
+
+## Plotting
+
+```{r Plotting, eval=FALSE}
+PlotTrialSummary <- function(dfDat) {
+  dfSum <- dfDat %>%
+    group_by(strTrt, nVisit) %>%
+    summarise(dMean = mean(dY), dSD = sd(dY), nN = dplyr::n(), .groups = "drop") %>%
+    mutate(dSE = dSD / sqrt(nN), dLCI = dMean - 1.96 * dSE, dUCI = dMean + 1.96 * dSE)
+
+  p <- ggplot(dfSum, aes(x = nVisit, y = dMean, group = strTrt)) +
+    geom_line() +
+    geom_point() +
+    geom_ribbon(aes(ymin = dLCI, ymax = dUCI), alpha = 0.15) +
+    facet_wrap(~ strTrt)
+  return(p)
+}
+```
+
+## Single‑trial simulation driver
+
+```{r Single-Trial, eval=FALSE}
+RunSingleTrial <- function(nN = 200L, vVisitTimes = 0:4, dTrtEffect = -5) {
+  dfSim <- GenerateMMRM(nN, vVisitTimes, dTrtEffect)
+  dfUse <- PrepareForAnalysis(dfSim)
+  lRes  <- MMRMAnalysis(dfUse)
+  p     <- PlotTrialSummary(dfUse)
+  return(list(dfSim = dfSim, dfUse = dfUse, lRes = lRes, p = p))
+}
+```
+
+## Replicate simulations (operating characteristics)
+
+```{r Replicate-Sims, eval=FALSE}
+RunReplicates <- function(nQtyReps = 1000L, nN = 200L, vVisitTimes = 0:4, dTrtEffect = -5) {
+  set.seed(1L)
+  lOut <- replicate(nQtyReps, {
+    lOne <- RunSingleTrial(nN, vVisitTimes, dTrtEffect)
+    return(data.frame(dP = lOne$lRes$dP))
+  }, simplify = FALSE)
+  dfP <- bind_rows(lOut, .id = "nRep") %>% mutate(bSig = dP < 0.025)
+  dPower <- mean(dfP$bSig)
+  return(list(dfP = dfP, dPower = dPower))
+}
+```
+
+# East Horizon Simulation Setup
+
+To mirror the R workflow, the East Horizon project used design and response cards spanning 66 models, with 1000 repetitions each, common dropout assumptions, and an accrual rate of ~30 subjects/month over 10 months. Key variants included:
+- **Designs**: MMRM fixed‑sample (baseline N ~266), group‑sequential MMRM, and null fixed‑sample difference‑in‑means (all at Type I error 0.025).
+- **Responses**: PANSS change with SD = 15 (baseline), plus SD = 10 and SD = 20 variants; a **null** setting used control‑like outcomes for the treatment arm.
+- **Dropout & Enrollment**: Shared dropout card (from publication assumptions); total N grid from 200 to 360 in steps of 50 for MMRM.
+
+# Results (Selected Highlights)
+
+- **Target power**: ≈90% power achieved with ~190 completers at SD = 15 (implies larger randomized N depending on dropout).
+- **Sensitivity**: Power changed as SD and mean difference were varied (SD ↑ → power ↓; SD ↓ → power ↑).
+- **Null behavior (R MMRM)**: Type I error around 2.1–3.6%, close to nominal 2.5%.
+- **Group‑sequential caution (EH)**: Using native East Horizon group‑sequential analysis inflated the null rejection rate (e.g., ~17.6% vs. 2.5% expected). Prefer validated MMRM implementations or investigate analysis settings.
+
+# Discussion
+
+- **Model choice**: MMRM is well‑suited for longitudinal continuous outcomes with missing‑at‑random assumptions; it uses all available post‑baseline data without LOCF and models the mean profile over time.
+- **Practicalities**: Reshaping (wide→long), baseline adjustment, visit factorization, and correlation structure (e.g., AR(1)) are standard components.
+- **Visualization**: Trial‑level mean trajectories with 95% CIs and optional patient‑level plots help QC data generation.
+- **Platform differences**: Ensure parity in estimands, covariance structures, and decision rules between R and East Horizon; verify Type I error control under the null when using group‑sequential options.
+
+# Limitations & Future Work
+
+- Add explicit PANSS domain modeling and clinically interpretable effect sizes.
+- Incorporate **dropout** (MAR/MNAR) into the R generator to align with East Horizon assumptions.
+- Explore **mmrm** or **emmeans** pipelines for least‑squares mean contrasts at each visit.
+- Diagnose and resolve group‑sequential **Type I error inflation** in East Horizon; improve error messaging and null handling.
+
+# Feedback on East Horizon (from the project)
+
+- Discoverability of other users’ projects and favoriting could be smoother.
+- Editing scenarios without cloning would reduce friction.
+- Time estimates and error messages need refinement; some non‑fatal warnings triggered fatal errors (bug reported).
+- The built‑in AI assistant occasionally returned extraneous advice; separating code generation from chat text would help.
+
+# Acknowledgements
+
+Kyle Wathen; Jaydeep Bhattacharyya; Valeria Mazzanti; Gabriel Potvin.
+
+# Reproducibility
+
+```{r Session-Info, eval=FALSE}
+sessionInfo()
+```
+
+# Appendix: Example run (not executed by default)
+
+```{r Example-Run, eval=FALSE}
+lOne <- RunSingleTrial(nN = 200L, vVisitTimes = 0:5, dTrtEffect = -6)
+print(lOne$p)
+lMany <- RunReplicates(nQtyReps = 100L, nN = 200L, vVisitTimes = 0:4, dTrtEffect = -5)
+lMany$dPower
+```
+
