@@ -38,6 +38,8 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 | **SurvivalTime**   | Vector of Numeric  | Vector of length `NumSub`, containing the generated time to response values for each subject.                  |
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
+Note: Additional custom variables can be included as members of the output list. All outputs will automatically be available as input variables for analysis or treatment selection endpoints in the `SimData` variable as described here: [Variables of SimData](VariablesOfSimData.html).
+
 # Minimal Template
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
