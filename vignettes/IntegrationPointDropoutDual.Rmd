@@ -1,5 +1,5 @@
 ---
-title: "Integration Point: Dropout - Time-to-Event Outcome"
+title: "Integration Point: Dropout - Dual (TTE-TTE or TTE-Binary) Endpoints"
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
@@ -56,12 +56,3 @@ GenDropTimes <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTi
   return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nError ) ) )
 }
 ```
-
-A detailed template with step-by-step explanations is available here: [Dropout.Survival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R) 
-
-# Examples
-
-Explore the following examples for more context:
-
-1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
-    - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)
