@@ -31,10 +31,6 @@ When creating a custom R script, you can optionally use specific variables provi
 
 [Click here to explore the variables of LookInfo.](VariablesOfLookInfo.html)
 
-## Variables of AdaptInfo
-
-[Click here to explore the variables of AdaptInfo.](VariablesOfAdaptInfo.html)
-
 # Expected Output Variable
 
 East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:

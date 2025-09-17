@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-The variables in LookInfo define the multiple looks design parameters. They can be used in custom scripts for the [Analysis Integration Point](IntegrationPointAnalysis.html) and the [Treatment Selection Integration Point](IntegrationPointTreatmentSelection.html). To access these parameters in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name.
+The variables in LookInfo define the multiple looks design parameters. They can be used in custom scripts for the [Analysis Integration Point](IntegrationPointAnalysis.html) and the [Treatment Selection Integration Point](IntegrationPointTreatmentSelection.html). To access these parameters in your R code, use the syntax: `LookInfo$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name.
 
 The tables below describe each variable and notes any conditions under which it can or cannot be used in a project on East Horizon Explore and East Horizon Design. Availability notes are only specified when they differ from the default availability of the integration points (see the pages linked above for details).
 
