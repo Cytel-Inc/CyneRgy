@@ -445,3 +445,8 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 This work successfully built and validated an MMRM analysis framework in both R and East Horizon. The R pipeline enables transparent simulation, analysis, and visualization, while East Horizon supports large-scale scenario evaluation. Together, they provide trial designers with flexible tools to plan studies, anticipate power, and identify risks.  
 
 The findings confirm MMRM’s suitability for longitudinal endpoints and highlight areas for further improvement, particularly around sequential testing and dropout handling. By strengthening these tools, CyneRgy can better support clinical trial decision-making and design optimization.
+
+
+
+# 📖 **Reference**
+Correll CU, Davis RE, Weingart M, et al. Efficacy and Safety of Lumateperone for Treatment of Schizophrenia: A Randomized Clinical Trial. JAMA Psychiatry. 2020;77(4):349–358. [doi:10.1001/jamapsychiatry.2019.4379](https://jamanetwork.com/journals/jamapsychiatry/fullarticle/2758022)
