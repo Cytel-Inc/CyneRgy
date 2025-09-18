@@ -1,0 +1,11 @@
+---
+title: "Probability of Success for Binary Endpoint"
+author: "Gabriel Potvin, Valeria A. G. Mazzanti"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r child = '../inst/Examples/ProbabilitySuccessBinaryEndpoint/Description.Rmd'}
+```

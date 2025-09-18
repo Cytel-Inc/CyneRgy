@@ -51,9 +51,11 @@ Repeated measures involve collecting multiple data points for the same variable 
 ## Advanced Example
 These examples provide multiple R functions to achieve a more complex design option. 
 
+1. **[Probability of Success for Binary Endpoint](ProbabilitySuccessBinaryEndpoint.html)**: Simple example to demonstrate how to compute the probability of success of a trial.
+
 1. **[Bayesian Assurance of Consecutive Studies](AssuranceConsecutiveStudies.html)**: The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples. These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance. The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
 
-2. **[Probability of Success for Dual Endpoints (PFS & OS)](ProbabilitySuccessDualEndpointsPFSOS.html)**: This example demonstrates how to compute the probability of success of a trial and extend East Horizon's single-endpoint framework to handle dual endpoints (Progression-Free Survival and Overall Survival) using custom R scripts for the Analysis and Response integration points.
+1. **[Probability of Success for Dual Endpoints (PFS & OS)](ProbabilitySuccessDualEndpointsPFSOS.html)**: This example demonstrates how to compute the probability of success of a trial and extend East Horizon's single-endpoint framework to handle dual endpoints (Progression-Free Survival and Overall Survival) using custom R scripts for the Analysis and Response integration points.
 
 
 ## Other Integration Points

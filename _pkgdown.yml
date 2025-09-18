@@ -73,6 +73,8 @@ navbar:
                   href: articles/TreatmentSelectionDescription.html
                 - text: --------------------
                 - text: Advanced Examples
+                - text: Probability of Success for Binary Endpoint
+                  href: articles/ProbabilitySuccessBinaryEndpoint.html
                 - text: Bayesian Assurance of Consecutive Studies
                   href: articles/AssuranceConsecutiveStudies.html
                 - text: Probability of Success for Dual Endpoints (PFS & OS)
