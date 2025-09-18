@@ -1,5 +1,5 @@
 ---
-title: "Integration Point: Dropout - Dual (TTE-TTE or TTE-Binary) Endpoints"
+title: "Integration Point: Dropout - Dual Endpoints (TTE-TTE or TTE-Binary)"
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document

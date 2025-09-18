@@ -41,7 +41,7 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 | **Type**  | **Description**                                                                                  |
 |------------------|--------------------------------------------------------------------------------------------------|
-| List  | A named list containing `ErrorCode` and one or multiple of the following members: `Decision`, `TestStat`, `AdjPVal`, `RawPVal`, `Delta`, `CtrlCompleters`, `TrmtCompleters`, `CtrlPi`. See below for more information.|
+| List  | A named list containing `ErrorCode` and one or multiple of the following members: `Decision`, `AnalysisTime`, `TestStat`, `Delta`, `CtrlCompleters`, `TrmtCompleters`, `CtrlPi`, `StdError`. See below for more information.|
 
 The output list can take different forms.
 
@@ -52,6 +52,7 @@ The output list can take different forms.
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **Decision**   | Integer  | Boundary crossing decision:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `3`: Futility boundary crossed (only applicable when `Statistical Design = Group Sequential`).<br>– `4`: Equivalence boundary crossed (not available in East Horizon Explore).<br>You can use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See the template below for the correct usage.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Group Sequential`**: When there is no efficacy boundary to be crossed, the return code of `0` stands for futility in the final look. Similarly, when there is no futility boundary to be crossed, the return code of `0` stands for efficacy in the final look. Use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get decision values in a simple way.
@@ -61,10 +62,12 @@ The output list can take different forms.
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **TestStat**   | Numeric  | Value of appropriate test statistic on Wald ﴾Z﴿ scale.|
-|**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2 or 3` (futility boundary scale is Delta or conditional power). Only applicable when `Statistical Design = Group Sequential`.|
-|**CtrlCompleters**|Numeric|Number of completers for control arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power). Only applicable when `Statistical Design = Group Sequential`.|
-|**TrmtCompleters**|Numeric|Number of completers for treatment arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power). Only applicable when `Statistical Design = Group Sequential`.|
-|**CtrlPi**|Numeric|Proportion for control arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power). Only applicable when `Statistical Design = Group Sequential`.|
+|**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2 or 3` (futility boundary scale is Delta or conditional power) or `Promising Zone Scale = Conditional Power - Estimated`. Only applicable when `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`.|
+|**CtrlCompleters**|Numeric|Number of completers for control arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power) and `Conditional power Delta option = Estimated Delta / Estimated HR`. Only applicable when `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`.|
+|**TrmtCompleters**|Numeric|Number of completers for treatment arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power) and `Conditional power Delta option = Estimated Delta / Estimated HR`. Only applicable when `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`.|
+|**CtrlPi**|Numeric|Proportion for control arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power) and `Conditional power Delta option = Estimated Delta / Estimated HR`. Only applicable when `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`.|
+|**StdError**|Numeric|Standard error of estimate of Delta.|Required if `Promising Zone Scale = Conditional Power - Estimated`. Only applicable when `Statistical Design = Group Sequential with Sample Size Re-Estimation`.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
@@ -74,7 +77,11 @@ The output list can take different forms.
 - If the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
 - If `LookInfo$FutBdryScale = 0` (futility boundary scale is Z scale), `TestStat` will be used to check for both efficacy and futility. 
 - If `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta scale), `TestStat` will be used to check for efficacy and `Delta` will be used to check for futility. 
-- If `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power scale), `TestStat` will be used to check for efficacy and `Delta`, `CtrlCompleters`, `TrmtCompleters`, and `CtrlPi` will be used to check for futility. 
+- If `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power scale), `TestStat` will be used to check for efficacy and `Delta`, `CtrlCompleters`, `TrmtCompleters`, and `CtrlPi` will be used to check for futility.
+
+**Notes for `Statistical Design = Group Sequential with Sample Size Re-Estimation`**:
+
+See the notes for `Statistical Design = Group Sequential` above for futility and efficacy checks. Then, if `Promising Zone Scale = Conditional Power - Estimated`, `Delta` and `StdError` will be used for sample size re-estimation.
 
 
 ## For `Study Objective = Multiple Arm Confirmatory`
@@ -143,7 +150,7 @@ The output list can take different forms.
 
 # Minimal Templates
 
-Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [Analyze.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Binary.R).
+Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [Analyze.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R).
 
 ## For `Study Objective = Two Arm Confirmatory`
 
@@ -254,6 +261,34 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 	              CtrlCompleters = as.double( dCtrlCompleters ), # Include if futility boundary scale is conditional power
 	              TrmtCompleters = as.double( dTrmtCompleters ), # Include if futility boundary scale is conditional power
 	              CtrlPi = as.double( dCtrlPi ), # Include if futility boundary scale is conditional power
+	              ErrorCode = as.integer( nError ) ) )
+}
+```
+
+#### For `Statistical Design = Group Sequential with Sample Size Re-Estimation`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    dTestStatistic      <- 0
+    dDelta              <- 0 # Use if futility boundary scale is Delta or conditional power
+    dCtrlCompleters     <- 0 # Use if futility boundary scale is conditional power
+    dTrmtCompleters     <- 0 # Use if futility boundary scale is conditional power
+    dCtrlPi             <- 0 # Use if futility boundary scale is conditional power
+    dStdError           <- 0 # Use if Promising Zone Scale = Conditional Power - Estimated
+    
+    
+	# Write the actual code here.
+    # Store the computed test statistic in dTestStatistic.
+    # Compute dDelta, dCtrlCompleters, dTrmtCompleters, dCtrlPi if needed.
+    
+	return( list( TestStat = as.double( dTestStatistic ),
+	              Delta = as.double( dDelta ), # Include if futility boundary scale is Delta or conditional power
+	              CtrlCompleters = as.double( dCtrlCompleters ), # Include if futility boundary scale is conditional power
+	              TrmtCompleters = as.double( dTrmtCompleters ), # Include if futility boundary scale is conditional power
+	              CtrlPi = as.double( dCtrlPi ), # Include if futility boundary scale is conditional power
+	              StdError = as.double(dStdError ), # Include if Promising Zone Scale = Conditional Power - Estimated
 	              ErrorCode = as.integer( nError ) ) )
 }
 ```
