@@ -91,6 +91,7 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **Decision**   | Vector of Integer  | Vector of length `DesignParam$NumTreatments`, containing the boundary crossing decision for each treatment arm:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `3`: Futility boundary crossed (only applicable when `Statistical Design = Group Sequential`).<br>– `4`: Equivalence boundary crossed (not available in East Horizon Explore).<br>You can use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See the template below for the correct usage.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Notes for `Statistical Design = Group Sequential`**:
@@ -105,6 +106,7 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **TestStat**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the value of appropriate test statistic on Wald ﴾Z﴿ scale for each treatment arm.|
 |**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
@@ -121,6 +123,7 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **AdjPVal**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the p-values computed from test statistics and adjusted for multiple comparison procedures for each treatment arm.|
 |**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `AdjPVal` will be used to check for efficacy.
@@ -137,6 +140,7 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **RawPVal**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the p-values computed from test statistics for each treatment arm.|
 |**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `RawPVal` will be used to check for efficacy.
