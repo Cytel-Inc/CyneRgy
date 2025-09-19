@@ -371,7 +371,7 @@ There should be a total of 6 different response cards. The first card should use
 
 <span style="font-size:15pt">**Difference cards 4 and 8 respectively**:</span>
 ![](Schizophrenia_Files/MeanDiff4.png){width=90%}
-![](inst/Examples/SchizophreniaTrial/Schizophrenia_Files/Diff8Response.png){width=90%}
+![](Schizophrenia_Files/Diff8Response.png){width=90%}
 <br><br><br>
 
 <span style="font-size:15pt">**Standard deviation cards 10 and 20 respectively**:</span>
