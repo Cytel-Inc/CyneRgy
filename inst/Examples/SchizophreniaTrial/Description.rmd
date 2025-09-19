@@ -86,11 +86,11 @@ This example looks into primarily the analysis behind MMRM. It allows for dropou
  <br><br><br>
 <span style="font-size:15pt">**Figure 1**: An example plot of the trial data with a 95% CI</span>
 
-![](C:\Users\jacob.wathen\OneDrive -  Cytel\Pictures\Screenshots\Screenshot 2025-08-15 102051.png){width=90%}
+![](Schizophrenia_Files/TrialPlot.png){width=90%}
 
  <br><br><br>
 <span style="font-size:15pt">**Figure 2**: An example plot of individual patient trajectories</span>
-![](C:\Users\jacob.wathen\OneDrive -  Cytel\Pictures\Screenshots\Screenshot 2025-08-15 102253.png){width=90%}
+![](Schizophrenia_Files/PatientPlot.png){width=90%}
 
 # 🖼 **Flowchart of Clinical Trial Process**
 
@@ -344,11 +344,11 @@ MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample 
 <br>
 
 <span style="font-size:15pt">**MMRM Fixed Sample**:</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-17 180225.png){width=90%}
+![](Schizophrenia_Files/MMRMFixed.png){width=90%}
  <br><br><br>
  
 <span style="font-size:15pt">**MMRM Group Sequential**:</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-17 180607.png){width=90%}
+![](Schizophrenia_Files/MMRMGS.png){width=90%}
 <br><br><br>
 
 ## Responses: 
@@ -360,22 +360,22 @@ There should be a total of 6 different response cards. The first card should use
 
 
 <span style="font-size:15pt">**Response card using data from the publication**:</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-17 181914.png){width=90%}
+![](Schizophrenia_Files/PublicationResponse.png){width=90%}
 <br><br><br>
 
 <span style="font-size:15pt">**Null Case Card**:</span>
 
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-17 182112.png){width=90%}
+![](Schizophrenia_Files/NullResponse.png){width=90%}
 <br><br><br>
 
 <span style="font-size:15pt">**Difference cards 4 and 8 respectively**:</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-17 183125.png){width=90%}
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-17 182112.png){width=90%}
+![](Schizophrenia_Files/MeanDiff4.png){width=90%}
+![](inst/Examples/SchizophreniaTrial/Schizophrenia_Files/Diff8Response.png){width=90%}
 <br><br><br>
 
 <span style="font-size:15pt">**Standard deviation cards 10 and 20 respectively**:</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-18 092218.png){width=90%}
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-18 092341.png){width=90%}
+![](Schizophrenia_Files/StdDev10.png){width=90%}
+![](Schizophrenia_Files/StdDev20.png){width=90%}
 
 <br><br><br>
 
@@ -386,12 +386,12 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 <br><br>
 
 <span style="font-size:15pt">**Dropout Information**:</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-18 093739.png){width=90%}
+![](Schizophrenia_Files/DropoutRate.png){width=90%}
 <br><br><br>
 
 
 <span style="font-size:15pt">**Enrollment card**:</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Write up Screenshots\Screenshot 2025-09-18 094150.png){width=90%}
+![](Schizophrenia_Files/Enrollment.png){width=90%}
 <br><br><br>
 
 # 📊 **Results**
@@ -402,7 +402,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 <br><br><br>
 
 <span style="font-size:15pt">**Figure 3**: Publication Results</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Screenshot 2025-09-18 164409.png){width=100%}
+![](Schizophrenia_Files/PublicationResults.png){width=100%}
 <br><br><br>
 
 - **Sensitivity**: Power changed as standard deviation and mean difference were varied (Std. Dev ↑ → power ↓; Std. Dev ↓ → power ↑).The standard deviation 20 cards and the mean difference 4 cards resulted in significantly lower power ranging 36%-76%. As for the standard deviation 10 and mean difference 8 cards, the powers came out substantially higher where all designs ranged from 95%-100% power.
@@ -410,12 +410,12 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 <br><br><br>
 
 <span style="font-size:15pt">**Figure 4**: Difference of Means Results</span>
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Screenshot 2025-09-18 164130.png)
+![](Schizophrenia_Files/MeanDiff4_8Results.png)
 <br><br><br>
 
 <span style="font-size:15pt">**Figure 5**: Standard Deviation Results</span>
 
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Screenshot 2025-09-18 165520.png)
+![](Schizophrenia_Files/SD10_20Results.png)
 <br><br><br>
 
 - **Null behavior (MMRM)**: Type I error around 2.1–3.6%, close to nominal 2.5%.
@@ -424,7 +424,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 
 <span style="font-size:15pt">**Figure 6**: Null Case Results</span>
 
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Screenshot 2025-09-18 164607.png)
+![](Schizophrenia_Files/NullResult.png)
 
 
 
@@ -432,7 +432,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 # 💬 **Discussion**
 
 -  **Fixed Vs. selected Sample**:While the selected design does feature a lower power than the fixed sample, it does come with several benefits worth weight when simulating the study. The selected design boasts a 30% chance of stopping early, a shorter average study duration, and smaller average sample size. In return, it comes with a decrease in power by ~1.4%. These difference are significant as it can save money in a trial for even one of these other improved results.
-![](C:\Users\jacob.wathen\OneDrive - Cytel\Pictures\Screenshots\Screenshot 2025-09-18 165333.png)
+![](Schizophrenia_Files/SelectDesign.png)
 <br><br><br>
 
 -  **Sensitivity Analysis**: The reason for including the difference of means cards and the standard deviation cards was to illustrate how sensitive the power in this study is if the researchers' initial assumptions were off. When increasing standard deviation to 20 or decreasing the difference of means to 4 led to the power becoming under powered. This means we would have to increase the sample size to detect if there is a significant difference. As for the standard deviation 10 and difference of means 8 cards, the power dramatically increased to the mid-high 90's range. This would allow for the sample size of the study to be shrunk down and still maintain a 90% power.
@@ -450,3 +450,4 @@ The findings confirm MMRM’s suitability for longitudinal endpoints and highlig
 
 # 📖 **Reference**
 Correll CU, Davis RE, Weingart M, et al. Efficacy and Safety of Lumateperone for Treatment of Schizophrenia: A Randomized Clinical Trial. JAMA Psychiatry. 2020;77(4):349–358. [doi:10.1001/jamapsychiatry.2019.4379](https://jamanetwork.com/journals/jamapsychiatry/fullarticle/2758022)
+
