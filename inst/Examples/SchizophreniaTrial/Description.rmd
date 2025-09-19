@@ -36,7 +36,8 @@ The purpose of this work is to demonstrate how **CyneRgy** can support clinical 
 # 🎯 **Introduction**
 Clinical trials often involve repeated measures of a continuous endpoint across multiple visits. Accurately analyzing this type of data requires methods that handle within-patient correlation and missingness appropriately.  
 
-The **Mixed Model for Repeated Measures (MMRM)** is widely used because it:  
+The **Mixed Model for Repeated Measures (MMRM)** is widely used because it: 
+
 -  Adjusts for baseline and visit effects,  
 -  Accounts for correlation between repeated observations,  
 -  Avoids simplistic imputation approaches such as LOCF (Last Observation Carried Forward).  

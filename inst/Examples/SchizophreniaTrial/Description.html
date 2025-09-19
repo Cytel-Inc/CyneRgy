@@ -1524,11 +1524,15 @@ endpoint across multiple visits. Accurately analyzing this type of data
 requires methods that handle within-patient correlation and missingness
 appropriately.</p>
 <p>The <strong>Mixed Model for Repeated Measures (MMRM)</strong> is
-widely used because it:<br />
-- Adjusts for baseline and visit effects,<br />
-- Accounts for correlation between repeated observations,<br />
-- Avoids simplistic imputation approaches such as LOCF (Last Observation
-Carried Forward).</p>
+widely used because it:</p>
+<ul>
+<li>Adjusts for baseline and visit effects,<br />
+</li>
+<li>Accounts for correlation between repeated observations,<br />
+</li>
+<li>Avoids simplistic imputation approaches such as LOCF (Last
+Observation Carried Forward).</li>
+</ul>
 <p>This project had two parallel goals:<br />
 1. <strong>Develop an R implementation</strong> for simulating and
 analyzing <strong>MMRM</strong> trial data.<br />
