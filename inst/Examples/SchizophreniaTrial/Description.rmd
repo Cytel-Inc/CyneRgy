@@ -450,4 +450,3 @@ The findings confirm MMRM’s suitability for longitudinal endpoints and highlig
 
 # 📖 **Reference**
 Correll CU, Davis RE, Weingart M, et al. Efficacy and Safety of Lumateperone for Treatment of Schizophrenia: A Randomized Clinical Trial. JAMA Psychiatry. 2020;77(4):349–358. [doi:10.1001/jamapsychiatry.2019.4379](https://jamanetwork.com/journals/jamapsychiatry/fullarticle/2758022)
-
