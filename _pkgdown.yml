@@ -59,6 +59,8 @@ navbar:
                   href: articles/2ArmNormalRepeatedMeasuresResponseGeneration.html
                 - text: Childhood Anxiety Trial
                   href: articles/ChildhoodAnxiety.html
+                - text: Multiple Endpoints with Covariates (and Stratification)
+                  href: articles/MultipleEndpointsWithCovariates.html
                 - text: --------------------
                 - text: Analysis 
                 - text: 2-Arm, Normal Outcome 

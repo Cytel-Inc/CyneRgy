@@ -1,5 +1,5 @@
-pandoc: '3.2'
-pkgdown: 2.1.1
+pandoc: '3.4'
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   2ArmBinaryOutcomeAnalysisDescription: 2ArmBinaryOutcomeAnalysisDescription.html
@@ -55,7 +55,8 @@ articles:
   PatientRandomization: PatientRandomization.html
   ProbabilitySuccessDualEndpointsPFSOS: ProbabilitySuccessDualEndpointsPFSOS.html
   TreatmentSelectionDescription: TreatmentSelectionDescription.html
-last_built: 2025-08-07T15:52Z
+  MultipleEndpointsWithCovariates: MultipleEndpointsWithCovariates.html
+last_built: 2025-09-19T17:28Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles
