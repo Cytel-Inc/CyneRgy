@@ -59,7 +59,7 @@ navbar:
                   href: articles/2ArmNormalRepeatedMeasuresResponseGeneration.html
                 - text: Childhood Anxiety Trial
                   href: articles/ChildhoodAnxiety.html
-                - text: Multiple Endpoints with Covariates (and Stratification)
+                - text: Multiple Endpoints With Covariates and Stratified Randomisation
                   href: articles/MultipleEndpointsWithCovariates.html
                 - text: --------------------
                 - text: Analysis 

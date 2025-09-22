@@ -35,6 +35,8 @@ Repeated measures involve collecting multiple data points for the same variable 
 
 1. **[Childhood Anxiety Trial](ChildhoodAnxiety.html)**: This example covers the situation where the patient data simulation needs to be improved to match what is expected in a clinical trial in childhood anxiety.
 
+1. **[Multiple Endpoints With Covariates and Stratified Randomisation](MultipleEndpointsWithCovariates.html)**: These examples demonstrate how to integrate continuous patient outcome simulation and analysis functionality into East Horizon using custom R functions. All examples simulate multiple independent, continuous outcomes drawn from normal distributions. Examples 2 and 3 additionally incorporate binary covariates with user-defined probabilities and effect sizes. Example 3 further extends the simulation by implementing stratified randomization based on these covariates, showcasing how patient allocation can be customized beyond East Horizon’s native features.
+
 ## Analysis 
 
 1. **[2-Arm, Normal Outcome - Analysis](2ArmNormalOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for normal data into East using an R function. For all examples, we assume the trial design consists of a control and experimental treatments. There are 2 Interim Analysis (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
