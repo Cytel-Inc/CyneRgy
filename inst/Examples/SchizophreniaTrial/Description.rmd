@@ -92,6 +92,7 @@ This example looks into primarily the analysis behind MMRM. It allows for dropou
  <br><br><br>
 <span style="font-size:15pt">**Figure 2**: An example plot of individual patient trajectories</span>
 ![](Schizophrenia_Files/PatientPlot.png){width=90%}
+ <br><br><br>
 
 # 🖼 **Flowchart of Clinical Trial Process**
 
@@ -338,7 +339,7 @@ To recreate this example for yourself, create a new project in East Horizon usin
 
 
 
-MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample size box insert 200:360:20 (this will create samples from 200 to 360 in steps of 20) (both at Type I error 0.025 and an allocation ratio of 1). for the test box, insert the [AnalyzeMMRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/AnalyzeMMRM.R) In total, there should be 2 design cards.
+MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample size box insert 200:360:20 (this will create samples from 200 to 360 in steps of 20) (both at Type I error 0.025 and an allocation ratio of 1). For the test box, insert the [AnalyzeMMRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/AnalyzeMMRM.R) In total, there should be 2 design cards.
 
 **Below your design cards should look something like this**:
 
@@ -353,7 +354,7 @@ MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample 
 <br><br><br>
 
 ## Responses: 
-There should be a total of 6 different response cards. The first card should use the data use the data given from the publication on the mean differences between treatment and control arms (Mead Difference = 6 points) and the given standard deviation (Std. Dev = 15). There should be two cards called Difference 4, 8 these cards will change the mean difference between the arms to 4 and 8 respectively. Next, there should be two response cards that change the standard deviation from 15 to 10 and 20. Lastly, there should be a null card where the standard deviation is 15 but the mean difference between treatment and control are the same. All of these cards for their distribution should use the [GenerateMMRMResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/GenerateMMRMResponses.R).
+There should be a total of 6 different response cards. The first card should use the data use the data given from the publication on the mean differences between treatment and control arms (Mean Difference = 6 points) and the given standard deviation (Std. Dev = 15). There should be two cards called Difference 4, 8 these cards will change the mean difference between the arms to 4 and 8 respectively. Next, there should be two response cards that change the standard deviation from 15 to 10 and 20. Lastly, there should be a null card where the standard deviation is 15 but the mean difference between treatment and control are the same. All of these cards for their distribution should use the [GenerateMMRMResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/GenerateMMRMResponses.R).
 
 **Below are the response cards and how they should look**:
 
@@ -432,7 +433,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 
 # 💬 **Discussion**
 
--  **Fixed Vs. selected Sample**:While the selected design does feature a lower power than the fixed sample, it does come with several benefits worth weight when simulating the study. The selected design boasts a 30% chance of stopping early, a shorter average study duration, and smaller average sample size. In return, it comes with a decrease in power by ~1.4%. These difference are significant as it can save money in a trial for even one of these other improved results.
+-  **Fixed Vs. selected Sample**:While the selected design does feature a lower power than the fixed sample, it does come with several benefits worth weighing when simulating the study. The selected design boasts a 30% chance of stopping early, a shorter average study duration, and smaller average sample size. In return, it comes with a decrease in power by ~1.4%. These difference are significant as it can save money in a trial for even one of these other improved results.
 ![](Schizophrenia_Files/SelectDesign.png)
 <br><br><br>
 
@@ -450,5 +451,7 @@ The findings confirm MMRM’s suitability for longitudinal endpoints and highlig
 
 
 # 📖 **Reference**
-Correll CU, Davis RE, Weingart M, et al. Efficacy and Safety of Lumateperone for Treatment of Schizophrenia: A Randomized Clinical Trial. JAMA Psychiatry. 2020;77(4):349–358. [doi:10.1001/jamapsychiatry.2019.4379](https://jamanetwork.com/journals/jamapsychiatry/fullarticle/2758022)
+Correll CU, Davis RE, Weingart M, et al. Efficacy and Safety of Lumateperone for 
+    Treatment of Schizophrenia: A Randomized Clinical Trial. _JAMA Psychiatry_. 
+    2020;77(4):349–358. [doi:10.1001/jamapsychiatry.2019.4379](https://jamanetwork.com/journals/jamapsychiatry/fullarticle/2758022)
  
