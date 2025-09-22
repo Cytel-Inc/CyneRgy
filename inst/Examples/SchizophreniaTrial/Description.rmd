@@ -346,7 +346,7 @@ MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample 
 <br>
 
 <span style="font-size:15pt">**MMRM Fixed Sample**:</span>
-![](Schizophrenia_Files/MMRMFixed.png){width=90%}
+![](Schizophrenia_Files/MMRMFixedDesign.png){width=90%}
  <br><br><br>
  
 <span style="font-size:15pt">**MMRM Group Sequential**:</span>
