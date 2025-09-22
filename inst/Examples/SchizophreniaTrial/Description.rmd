@@ -77,7 +77,7 @@ This project has the required R code files needed to simulate, analyze, plot, an
 
 [RunSimulation.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/RunSimulation.R) -  This code allows for the code to be run locally, change variables around, and visualize data.
 
-This example looks primarily into the analysis behind MMRM. It allows for dropout information not to affect power as much as other analysis methods. It works well in East Horizon for providing a longitudinal analysis design.
+This example looks primarily into the analysis behind MMRM. It allows dropout information to have less impact on power compared to other analysis methods. It works well in East Horizon for providing a longitudinal analysis design.
 
 
 ## Example outputs 
@@ -96,7 +96,7 @@ This example looks primarily into the analysis behind MMRM. It allows for dropou
 
 # 🖼 **Flowchart of Clinical Trial Process**
 
-The flowchart below shows the points of R integration in Cytel products, and it outlines the steps performed by the R code.
+The flowchart below illustrates the points of R integration in Cytel products, outlining the steps performed by the R code.
 
 
 ```{r flowchart_response_box_wider, fig.width=10, fig.height=6, echo=FALSE, message=FALSE, warning=FALSE}
@@ -453,4 +453,3 @@ The findings confirm MMRM’s suitability for longitudinal endpoints and highlig
 # 📖 **Reference**
 Correll CU, Davis RE, Weingart M, et al. Efficacy and Safety of Lumateperone for 
     Treatment of Schizophrenia: A Randomized Clinical Trial. _JAMA Psychiatry_. 
-    2020;77(4):349–358. [doi:10.1001/jamapsychiatry.2019.4379](https://jamanetwork.com/journals/jamapsychiatry/fullarticle/2758022)
