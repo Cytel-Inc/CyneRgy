@@ -460,14 +460,14 @@ flowchart_arrows <- data.frame(
 # Define flowchart steps inside "Analysis"
 unitybox = 0.7
 spaceybox = 0.5
-ymaxfirstbox = 9.4
-yminfirstbox = ymaxfirstbox - unitybox*2
+ymaxfirstbox = 9.6
+yminfirstbox = ymaxfirstbox - unitybox*2.1
 ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox
+yminsecondbox = ymaxsecondbox - unitybox*1.3
 ymaxthirdbox = yminsecondbox - spaceybox
 yminthirdbox = ymaxthirdbox - unitybox*1.3
 ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox*1.5
+yminfourthbox = ymaxfourthbox - unitybox*1.6
 
 flowchart_2  <- data.frame(
     xmin = rep(8.8, 4),
