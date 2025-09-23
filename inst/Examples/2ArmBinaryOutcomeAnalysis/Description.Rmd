@@ -61,9 +61,9 @@ The objective is to demonstrate a straightforward way to modify both the analysi
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Analysis" = c(
             "Load responses from East Horizon", 
             "Calculate response rates and estimates", 
@@ -84,9 +84,9 @@ This example utilizes the base R `prop.test()` function to perform the interim a
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Analysis" = c(
             "Load responses from East Horizon", 
             "Run proportions test (treatment > control)", 
@@ -135,9 +135,9 @@ Refer to the table below for the definitions of the user-defined parameters used
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Analysis" = c(
             "Load responses from East Horizon",
             "Load MAV, TV, and confidence level",
@@ -204,9 +204,9 @@ Note that the above values can be user-specified. This example demonstrates how 
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Analysis" = c(
             "Load responses from East Horizon",
             "Load prior parameters and thresholds",

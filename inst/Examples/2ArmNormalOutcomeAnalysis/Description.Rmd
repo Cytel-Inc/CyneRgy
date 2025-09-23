@@ -71,9 +71,9 @@ The objective is to demonstrate a straightforward way to modify both the analysi
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Analysis" = c(
             "Load responses from East Horizon", 
             "Calculate pooled standard deviation", 
@@ -94,9 +94,9 @@ This example utilizes the base R `t.test()` function to perform the interim and 
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Analysis" = c(
             "Load responses from East Horizon", 
             "Run t-test (treatment > control)", 
@@ -144,9 +144,9 @@ In this example, the team has resources for 100 patients and is comparing two fi
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Analysis" = c(
             "Load responses from East Horizon",
             "Load MAV, TV, and confidence level",

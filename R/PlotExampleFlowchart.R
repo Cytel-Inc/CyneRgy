@@ -64,10 +64,21 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
     library(grid)
     library(stringr)
     
-    # Set max characters per line depending on number of used points
+    # Set max characters per line and title size depending on number of used points
     nUsed <- length(lIntPoints)
     nMaxCharsPerLine <- ifelse(nUsed == 1, 40, 30)
     nTitleSize <- ifelse(nUsed == 1, 3, 2)
+    
+    if (nUsed == 1) {
+        nMaxCharsPerLine <- 40
+        nTitleSize <- 3
+    } else if (nUsed == 2) {
+        nMaxCharsPerLine <- 30
+        nTitleSize <- 2.5
+    } else if (nUsed >= 3) {
+        nMaxCharsPerLine <- 25
+        nTitleSize <- 2
+    }
     
     # Integration points order
     vIntegrationPoints <- c("Initialization", "Enrollment", "Randomization",
@@ -92,9 +103,11 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
         if (strPoint %in% names(lIntPoints)) {
             nW <- nBigColWidth
             strFill <- "#cfe2ff"
+            strLabel <- strPoint
         } else {
             nW <- nColumnWidth
             strFill <- "lightgray"
+            strLabel <- gsub(" ", "\n", strPoint)
         }
         dfColumns <- rbind(dfColumns,
                            data.frame(
@@ -102,8 +115,8 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
                                xmax = nXStart + nW,
                                ymin = NA,
                                ymax = NA,
-                               id = strPoint,                     # keep original id
-                               label = gsub(" ", "\n", strPoint), # display with newlines
+                               id = strPoint,
+                               label = strLabel,
                                fill = strFill,
                                border = strFill,
                                textSize = nTitleSize,

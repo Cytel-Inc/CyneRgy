@@ -49,9 +49,9 @@ Refer to the table below for the definitions of the user-defined parameters used
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Response" = c(
             "Load probabilities of resistance (dProbOfTreatmentResistantCtrl and dProbOfTreatmentResistantExp)", 
             "Loop through patients", 
@@ -113,9 +113,9 @@ Refer to the table below for the definitions of the user-defined parameters used
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-CyneRgy::CreateExampleFlowchart(
-    lUsedPoints = list(
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
         "Response" = c(
             "Load Beta parameters (dCtrlBetaParam1, dCtrlBetaParam2, dExpBetaParam1, dExpBetaParam2)", 
             "Simulate the probabilities of treatment resistance using Beta distribution",
