@@ -399,7 +399,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 # 📊 **Results**
 
 
-- **Target power**: ≈90% power achieved with ~266 completers at Std. Dev = 15 and Mean Diff = 6. For reaching this power, there are 2 designs that effectively accomplish this. One should be the MMRM fixed design, and the other should be the MMRM Group-sequential with a sample size of 300. Either of these designs is viable and the trade-off will be discussed in the results discussion section.
+- **Target power**: ≈90% power achieved with ~266 completers at Std. Dev = 15 and Mean Diff = 6. For reaching this power, there are 2 designs that effectively accomplish this. One should be the MMRM fixed design, and the other should be the MMRM Group-sequential with a sample size of 300. Either of these designs is viable, and the trade-off will be discussed in the results discussion section.
 
 <br><br><br>
 
@@ -437,7 +437,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 ![](Schizophrenia_Files/SelectDesign.png)
 <br><br><br>
 
--  **Sensitivity Analysis**: The reason for including the difference of means cards and the standard deviation cards was to illustrate how sensitive the power in this study is if the researchers' initial assumptions were off. Increasing the standard deviation to 20 or decreasing the difference of means to 4 led to the power becoming underpowered. This means we would have to increase the sample size to detect if there is a significant difference. As for the standard deviation 10 and the difference of means of 8 cards, the power dramatically increased to the mid-high 90's range. This would allow for the sample size of the study to be shrunk down and still maintain a 90% power.
+-  **Sensitivity Analysis**: The reason for including the difference of means cards and the standard deviation cards was to illustrate how sensitive the power in this study is if the researchers' initial assumptions were off. Increasing the standard deviation to 20 or decreasing the difference of means to 4 led to the power becoming underpowered. This means we would have to increase the sample size to detect if there is a significant difference. As for the standard deviation of 10 and the difference of means of 8 cards, the power dramatically increased to the mid-high 90's range. This would allow for the sample size of the study to be shrunk down and still maintain a 90% power.
 -  **Null Cases**:The null cases all hovered around 2.1%-3.6%. These percentages fall within a tolerable range. This proves that the MMRM analysis code only detects a false positive of ~2.5% which is originally what the type 1 error was set to initially.
 
 
