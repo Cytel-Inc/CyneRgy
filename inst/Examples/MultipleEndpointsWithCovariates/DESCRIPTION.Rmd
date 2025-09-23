@@ -1,5 +1,5 @@
 ---
-title: 'Multiple Endpoints With Covariates and Stratified Randomisation'
+title: 'Multiple Endpoints With Covariates and Stratified Randomization'
 author: "Julija Saltane"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -32,25 +32,25 @@ CyneRgy::RunExample( "MultipleEndpointsWithCovariates" )
 
 This will open the corresponding RStudio project.
 
-**RStudio Project File**: [MultipleEndpointsWithCovariates.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/MultipleEndpointsWithCovariates.Rproj)
+**RStudio Project File**: [MultipleEndpointsWithCovariates.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/MultipleEndpointsWithCovariates.Rproj)
 
-In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R), you will find the following R files:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultipleEndpointsWithCovariates/R), you will find the following R files:
 
-1. [SimulateMultipleOutcomes.R](https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomes.R) 
+1. [SimulateMultipleOutcomes.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomes.R) 
 Provides an example R function to simulate three independent normally distributed outcomes for a given number of subject. Note that example can be extended to any number of endpoints.
 
-1. [SimulateMultipleOutcomesCovariates.R](https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariates.R)
+1. [SimulateMultipleOutcomesCovariates.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariates.R)
 This R function simulates three independent normally distributed outcomes with two binary covariates. This function is extensible to any number of endpoints and covariates.
 
-1. [SimulateMultipleOutcomesCovariatesStratRandomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R)
+1. [SimulateMultipleOutcomesCovariatesStratRandomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R)
 Similar to the previous function, this version explicitly incorporates stratified randomization based on two binary covariates.
 
-1. [AnalyzeMultipleOutcomes.R](https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomes.R)
+1. [AnalyzeMultipleOutcomes.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomes.R)
 This files provides an example R function to perform endpoint-wise one-sided t-tests on simulated patient data with three normally distributed outcomes.
 
-1. [AnalyzeMultipleOutcomesCovariates.R](https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariates.R) - This files provides and example R function to perform statistical analysis on simulated patient-level data with three continuous endpoints and binary covariates. For each endpoint, an ANCOVA model is fitted to assess the treatment effect while adjusting for covariates.
+1. [AnalyzeMultipleOutcomesCovariates.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariates.R) - This files provides and example R function to perform statistical analysis on simulated patient-level data with three continuous endpoints and binary covariates. For each endpoint, an ANCOVA model is fitted to assess the treatment effect while adjusting for covariates.
 
-1. [AnalyzeMultipleOutcomesCovariatesStratRandomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R)
+1. [AnalyzeMultipleOutcomesCovariatesStratRandomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R)
 Extends the previous analysis to include stratified randomization. Each endpoint is analyzed using ANCOVA, adjusting for covariates.
 
 ## Example 1 - Simulate and Analyze Multiple Endpoint Data 
@@ -58,9 +58,9 @@ Extends the previous analysis to include stratified randomization. Each endpoint
 <div class="alert alert-primary" role="alert">
     <p style="margin-bottom:0"> 
         This example is related to the following R files: 
-        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomes.R"         class="alert-link">SimulateMultipleOutcomes.R</a>
+        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomes.R"         class="alert-link">SimulateMultipleOutcomes.R</a>
         and 
-        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomes.R" class="alert-link">SimulateMultipleOutcomes.R</a>.  
+        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomes.R" class="alert-link">SimulateMultipleOutcomes.R</a>.  
     </p>
 </div>
 
@@ -201,9 +201,9 @@ print(p)
 <div class="alert alert-primary" role="alert">
     <p style="margin-bottom:0"> 
         This example is related to these R files: 
-        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariates.R"         class="alert-link">SimulateMultipleOutcomes.R</a>
+        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariates.R"         class="alert-link">SimulateMultipleOutcomes.R</a>
         and 
-        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariates.R" class="alert-link">SimulateMultipleOutcomes.R</a>.  
+        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariates.R" class="alert-link">SimulateMultipleOutcomes.R</a>.  
     </p>
 </div>
 
@@ -358,14 +358,14 @@ p <- ggplot() +
 print(p)
 ```
 
-## Example 3 - Simulate and Analyze Multiple Endpoint Data with Two Binary Covariates and Stratified Randomisation
+## Example 3 - Simulate and Analyze Multiple Endpoint Data with Two Binary Covariates and Stratified Randomization
 
 <div class="alert alert-primary" role="alert">
     <p style="margin-bottom:0"> 
         This example is related to these R files: 
-        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R"         class="alert-link">SimulateMultipleOutcomes.R</a>
+        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R"         class="alert-link">SimulateMultipleOutcomes.R</a>
         and 
-        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/311-create-page-on-website-for-multiple-endpoint-example-with-covariates/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariatesStratRandomization.R" class="alert-link">SimulateMultipleOutcomes.R</a>.  
+        <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariatesStratRandomization.R" class="alert-link">SimulateMultipleOutcomes.R</a>.  
     </p>
 </div>
 

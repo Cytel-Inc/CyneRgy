@@ -59,8 +59,6 @@ navbar:
                   href: articles/2ArmNormalRepeatedMeasuresResponseGeneration.html
                 - text: Childhood Anxiety Trial
                   href: articles/ChildhoodAnxiety.html
-                - text: Multiple Endpoints With Covariates and Stratified Randomisation
-                  href: articles/MultipleEndpointsWithCovariates.html
                 - text: --------------------
                 - text: Analysis 
                 - text: 2-Arm, Normal Outcome 
@@ -79,6 +77,8 @@ navbar:
                   href: articles/AssuranceConsecutiveStudies.html
                 - text: Probability of Success for Dual Endpoints (PFS & OS)
                   href: articles/ProbabilitySuccessDualEndpointsPFSOS.html
+                - text: Multiple Endpoints With Covariates and Stratified Randomization
+                  href: articles/MultipleEndpointsWithCovariates.html
                 - text: --------------------
                 - text: Other Integration Points
                 - text: Poisson Arrival Times
