@@ -1,10 +1,10 @@
 ####################################################################################################
-#   Program/Function Name: CreateExampleFlowchart
+#   Program/Function Name: PlotExampleFlowchart
 #   Author: Gabriel Potvin
-#   Last Modified Date: 2025/09/22
+#   Last Modified Date: 2025/09/23
 ####################################################################################################
 
-#' @name CreateExampleFlowchart
+#' @name PlotExampleFlowchart
 #' @title Generate a Flowchart for a CyneRgy Example
 #'
 #' @description This function creates a flowchart of the used integration points 
@@ -12,9 +12,9 @@
 #' Used integration points are highlighted with wider columns and custom step boxes, 
 #' while unused points remain gray placeholders. Steps are automatically wrapped to fit.
 #'
-#' @param lUsedPoints A named list where each name is an integration point (e.g., "Response") 
+#' @param lIntPoints A named list where each name is an integration point (e.g., "Response") 
 #'        and each element is a character vector of step labels for that integration point.
-#'        Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\verb{\\n}Selection", "Response", "Analysis"
+#'        Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment Selection", "Response", "Analysis"
 #' @param nBoxHeight Numeric. Base height of each step box. Default = 0.7.
 #' @param nBoxSpacing Numeric. Vertical spacing between boxes. Default = 0.3.
 #' @param nColumnWidth Numeric. Width of unused integration point columns. Default = 0.5.
@@ -26,8 +26,8 @@
 #' @examples
 #' \dontrun{
 #' # Example with one used integration point
-#' p1 <- CreateExampleFlowchart(
-#'   lUsedPoints = list(
+#' p1 <- PlotExampleFlowchart(
+#'   lIntPoints = list(
 #'     "Response" = c(
 #'       "Load MAV, TV, and confidence level",
 #'       "Run proportions test (treatment > control)",
@@ -39,8 +39,8 @@
 #' p1
 #'
 #' # Example with two integration points
-#' p2 <- CreateExampleFlowchart(
-#'   lUsedPoints = list(
+#' p2 <- PlotExampleFlowchart(
+#'   lIntPoints = list(
 #'     "Response" = c(
 #'       "Load MAV, TV, and confidence level",
 #'       "Run proportions test (treatment > control)"
@@ -55,28 +55,32 @@
 #' }
 ####################################################################################################
 
-CreateExampleFlowchart <- function(lUsedPoints = list(),
-                                   nBoxHeight = 0.7,
-                                   nBoxSpacing = 0.3,
-                                   nColumnWidth = 0.5,
-                                   nBigColWidth = 3) {
+PlotExampleFlowchart <- function(lIntPoints = list(),
+                                 nBoxHeight = 0.7,
+                                 nBoxSpacing = 0.3,
+                                 nColumnWidth = 0.5,
+                                 nBigColWidth = 3) {
+    library(ggplot2)
+    library(grid)
+    library(stringr)
     
     # Set max characters per line depending on number of used points
-    nUsed <- length(lUsedPoints)
+    nUsed <- length(lIntPoints)
     nMaxCharsPerLine <- ifelse(nUsed == 1, 40, 30)
     nTitleSize <- ifelse(nUsed == 1, 3, 2)
     
     # Integration points order
     vIntegrationPoints <- c("Initialization", "Enrollment", "Randomization",
-                            "Dropout", "Treatment\nSelection", "Response", "Analysis")
+                            "Dropout", "Treatment Selection", "Response", "Analysis")
     
-    # Step 1: Setup column positions
+    # Setup column positions
     nXStart <- 0
     dfColumns <- data.frame(
         xmin = numeric(),
         xmax = numeric(),
         ymin = numeric(),
         ymax = numeric(),
+        id = character(),
         label = character(),
         fill = character(),
         border = character(),
@@ -85,7 +89,7 @@ CreateExampleFlowchart <- function(lUsedPoints = list(),
     )
     
     for (strPoint in vIntegrationPoints) {
-        if (strPoint %in% names(lUsedPoints)) {
+        if (strPoint %in% names(lIntPoints)) {
             nW <- nBigColWidth
             strFill <- "#cfe2ff"
         } else {
@@ -98,7 +102,8 @@ CreateExampleFlowchart <- function(lUsedPoints = list(),
                                xmax = nXStart + nW,
                                ymin = NA,
                                ymax = NA,
-                               label = strPoint,
+                               id = strPoint,                     # keep original id
+                               label = gsub(" ", "\n", strPoint), # display with newlines
                                fill = strFill,
                                border = strFill,
                                textSize = nTitleSize,
@@ -107,11 +112,11 @@ CreateExampleFlowchart <- function(lUsedPoints = list(),
         nXStart <- nXStart + nW + 0.5
     }
     
-    # Step 2: Compute flowchart boxes
+    # Compute flowchart boxes
     lFlowcharts <- list()
     
-    for (strPoint in names(lUsedPoints)) {
-        vIdx <- which(dfColumns$label == strPoint)
+    for (strPoint in names(lIntPoints)) {
+        vIdx <- which(dfColumns$id == strPoint)
         if (length(vIdx) == 0) next
         
         # Enlarge column
@@ -121,7 +126,7 @@ CreateExampleFlowchart <- function(lUsedPoints = list(),
         dfColumns$textSize[vIdx] <- dfColumns$textSize[vIdx] + 1
         
         # Wrap text for boxes
-        vLabelsRaw <- lUsedPoints[[strPoint]]
+        vLabelsRaw <- lIntPoints[[strPoint]]
         vLabelsWrapped <- sapply(vLabelsRaw, function(x) stringr::str_wrap(x, width = nMaxCharsPerLine))
         
         n <- length(vLabelsWrapped)
@@ -159,7 +164,7 @@ CreateExampleFlowchart <- function(lUsedPoints = list(),
         lFlowcharts[[strPoint]] <- list(boxes = dfFlowchart, arrows = dfArrows)
     }
     
-    # Step 3: Adjust column vertical range
+    # Adjust column vertical range
     if (length(lFlowcharts) > 0) {
         dfAllBoxes <- do.call(rbind, lapply(lFlowcharts, `[[`, "boxes"))
         dfColumns$ymin <- min(dfAllBoxes$ymin) - 0.5
@@ -169,7 +174,7 @@ CreateExampleFlowchart <- function(lUsedPoints = list(),
         dfColumns$ymax <- 8.5
     }
     
-    # Step 4: Legend (bottom-right)
+    # Legend (bottom-right)
     nMaxX <- max(dfColumns$xmax)
     nMinY <- min(dfColumns$ymin)
     nLegendWidth <- 1
@@ -185,7 +190,7 @@ CreateExampleFlowchart <- function(lUsedPoints = list(),
         label = c("Not Used", "Used")
     )
     
-    # Step 5: Build ggplot
+    # Build ggplot
     p <- ggplot2::ggplot() +
         geom_rect(data = dfColumns,
                   aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
