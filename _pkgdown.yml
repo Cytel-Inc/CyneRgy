@@ -44,49 +44,7 @@ navbar:
                   href: articles/IntegrationPointTreatmentSelection.html
         examples:
             text: Examples
-            menu:
-                - text: Examples Outline
-                  href: articles/ExampleOutline.html
-                - text: --------------------
-                - text: Patient Simulation
-                - text: 2-Arm, Normal Outcome
-                  href: articles/2ArmNormalOutcomePatientSimulationDescription.html
-                - text: 2-Arm, Time-to-Event Outcome
-                  href: articles/2ArmTimeToEventOutcomePatientSimulationDescription.html
-                - text: 2-Arm, Binary Outcome
-                  href: articles/2ArmBinaryOutcomePatientSimulation.html
-                - text: 2-Arm, Repeated Measure
-                  href: articles/2ArmNormalRepeatedMeasuresResponseGeneration.html
-                - text: Childhood Anxiety Trial
-                  href: articles/ChildhoodAnxiety.html
-                - text: --------------------
-                - text: Analysis 
-                - text: 2-Arm, Normal Outcome 
-                  href: articles/2ArmNormalOutcomeAnalysisDescription.html
-                - text: 2-Arm, Time-To-Event Outcome 
-                  href: articles/2ArmTimeToEventOutcomeAnalysisDescription.html
-                - text: 2-Arm, Binary Outcome
-                  href: articles/2ArmBinaryOutcomeAnalysisDescription.html
-                - text: --------------------
-                - text: Treatment Selection
-                - text: Binary Outcome
-                  href: articles/TreatmentSelectionDescription.html
-                - text: --------------------
-                - text: Advanced Examples
-                - text: Probability of Success for Binary Endpoint
-                  href: articles/ProbabilitySuccessBinaryEndpoint.html
-                - text: Bayesian Assurance of Consecutive Studies
-                  href: articles/AssuranceConsecutiveStudies.html
-                - text: Probability of Success for Dual Endpoints (PFS & OS)
-                  href: articles/ProbabilitySuccessDualEndpointsPFSOS.html
-                - text: --------------------
-                - text: Other Integration Points
-                - text: Poisson Arrival Times
-                  href: articles/GeneratePoissonArrival.html
-                - text: Patient Dropout
-                  href: articles/PatientDropout.html
-                - text: Patient Randomization
-                  href: articles/PatientRandomization.html
+            href: articles/ExampleOutline.html
         references:
             text: References
             href: reference/index.html

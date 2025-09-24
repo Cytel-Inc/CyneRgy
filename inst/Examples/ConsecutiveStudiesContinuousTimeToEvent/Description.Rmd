@@ -1,0 +1,561 @@
+---
+title: "Consecutive Studies, Continuous & Time-to-Event Outcomes"
+author: "J. Kyle Wathen and Laurent Spiess"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+---
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
+</div>
+
+# Introduction
+
+The intent of the following examples is to demonstrate the computation of Bayesian assurance, or probability of success, and conditional assurance in consecutive studies through the integration of R with Cytel products. The examples feature a sequential design involving a Phase 2 trial with a normal endpoint followed by a Phase 3 trial with a time-to-event endpoint
+
+The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial. This **de-risking** is evaluated by comparing two scenarios: (1) the probability of a No-Go decision in Phase 3 if Phase 2 is skipped, and (2) the probability of a No-Go in Phase 3 if a preceding Phase 2 trial is conducted and yields a Go decision. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2.
+
+The scenarios covered are as follows:
+
+1. Two consecutive studies: phase 2 with a normal endpoint followed by phase 3, with a time-to-event endpoint.
+
+Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+```{r, eval=FALSE}
+CyneRgy::RunExample( "ConsecutiveStudiesContinuousTimeToEvent" )
+```
+
+Running the command above will load the RStudio project in RStudio. 
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R) you will find the R files used in the examples:
+
+1. [SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R) - Functions to simulate patient outcomes under a normal distribution informed by mixture priors.
+2. [AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using normal priors.
+3. [ReadInPrior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/ReadInPrior.R) - Functions to load the Phase 2 output and extract the true treatment differences.
+4. [SimulatePatientSurvivalAssuranceUsingPh2Prior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R) - This function simulates patient-level outcomes within a Bayesian assurance framework.
+5. [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using Cox proportional hazards model.
+
+**Note:** This example builds on the [Bayesian Assurance, Continuous Outcome](BayesianAssuranceContinuous.html) and the [Bayesian Assurance, Time-to-Event Outcome](BayesianAssuranceTimeToEvent.html) examples, and utilizes some of the same R code. Please refer to them for more information. The difference is that we now have two different studies: Phase 3 is conducted **only** if Phase 2 results in a Go decision.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+
+# Data for boxes
+boxes <- data.frame(
+  label = c("Phase 2", "Phase 3"),
+  x = c(0, 1.5),
+  y = c(0, 0)
+)
+
+# Data for arrows
+edges <- data.frame(
+  x = c(0.3),
+  y = c(0),
+  xend = c(1.2),
+  yend = c(0)
+)
+
+# Plot
+ggplot() +
+  # Draw boxes
+  geom_rect(data = boxes, aes(xmin = x - 0.3, xmax = x + 0.3, ymin = y - 0.2, ymax = y + 0.2), 
+            fill = "lightblue", color = "black") +
+  # Add text inside boxes
+  geom_text(data = boxes, aes(x = x, y = y, label = label), size = 5) +
+  # Draw arrow
+  geom_segment(data = edges, aes(x = x, y = y, xend = xend, yend = yend), 
+               arrow = arrow(length = unit(0.03, "npc")), size = 1) +
+  # Add conditional label above the arrow
+  annotate("text", x = 0.75, y = 0.3, label = "Only if Go", size = 4, fontface = "italic") +
+  coord_fixed(ratio = 1, xlim = c(-0.5, 2), ylim = c(-0.5, 0.7)) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA),  
+    panel.background = element_rect(fill = "white", color = NA), 
+    plot.margin = margin(0, 0, 0, 0),
+    panel.spacing = margin(0, 0, 0, 0) 
+  )
+```
+
+# Phase 2 Study
+
+This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm.
+
+## Response (Patient Simulation) Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
+</div>
+
+This function simulates patient-level outcomes within a **Bayesian assurance framework**, using a **two-component mixture prior** to reflect uncertainty about the true treatment effect. It allows for assessing the probability of trial success (assurance) under uncertainty about the true treatment effect. Information generated from this simulation will be used later for the [Analysis Integration Point](#analysis-integration-point).
+
+In this example, the true treatment effect ($\mu_E - \mu_S$) is sampled from a mixture of two normal priors:
+
+- 25% weight on $\mathcal{N}(0, 0.05^2)$.
+- 75% weight on $\mathcal{N}(0.7, 0.3^2)$.
+  
+The control mean is fixed, while the experimental mean is computed as $d\text{MeanCtrl} + \text{treatment effect}$. Each patient’s response is then simulated from a normal distribution corresponding to their assigned treatment group, with standard deviations defined separately for each arm.
+
+```{r echo=FALSE,  warning=FALSE}
+library(ggplot2)
+######################################################################################################################## .
+# Plot the assurance prior ####
+######################################################################################################################## .
+vMean1 <- rnorm(250000, mean = 0,   sd = 0.05)
+vMean2 <- rnorm(750000, mean = 0.7, sd = 0.3)
+
+vMean    <- c( vMean1, vMean2 )
+dfSample <- data.frame( SampleMean = vMean )
+
+# Assuming dfSample is your data frame
+# Adjusted ggplot code
+ggplot(dfSample, aes(SampleMean)) +
+    geom_density(fill = "skyblue", color = "black") +
+    labs(title = expression("Assurance Prior Distribution of True Treatment Effect (" * mu[E] - mu[S] * ")" ), 
+             x = expression( "True Treatment Effect " * mu[E] - mu[S]  ), y ="Density") +
+    theme_bw() +
+    theme(
+        plot.title = element_text(hjust = 0.5),  # Center the title
+        axis.text.x = element_text(size = 10),    # Adjust x-axis text size
+        axis.title.x = element_text(size = 12),   # Adjust x-axis title size
+        axis.title.y = element_text(size = 12),   # Adjust y-axis title size
+        plot.margin = margin(20, 20, 20, 20),      # Adjust plot margins
+        panel.border = element_blank(),            # Remove panel border
+        axis.line = element_line(color = "black")  # Add black axis line
+    ) +
+    xlim(-0.25, 1.75)  # Set x-axis range from 0 to 1
+```
+
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dWeight1**|Weight of prior component 1.|0.25|
+|**dWeight2**|Weight of prior component 2.|0.75|
+|**dMean1**|Mean of prior component 1.|0|
+|**dMean2**|Mean of prior component 2.|0.7|
+|**dSD1**|Standard deviation of prior component 1.|0.05|
+|**dSD2**|Standard deviation of prior component 2.|0.3|
+|**dMeanCtrl**|Mean of control arm (experimental arm will be sampled).|0|
+|**dSDCtrl**|Standard deviation for control arm.|1.9|
+|**dSDExp**|Standard deviation for experimental arm.|1.9|
+
+## Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
+</div> 
+
+This function evaluates the **posterior probability** that the experimental treatment arm is better than the control arm by more than a clinically meaningful threshold, and returns a Go/No-Go decision based on a cutoff ($P_U$). It uses information from the simulation that is generated by the [Response](#response-patient-simulation-integration-point) element of East Horizon's simulation, explained above.
+
+For patients receiving treatment $j \in \{\text{S}, \text{E}\}$ (S = standard/control, E = experimental), we assume the outcomes $Y \sim \mathcal{N}(\mu_j, \sigma^2)$, where $\mu_j$ is an unknown mean and $\sigma^2$ is a known, fixed variance.
+
+We assume *a priori* that:
+
+$$
+\mu_j \sim \mathcal{N}(\theta_j, \tau_j^2 = 1000^2), \quad j \in \{\text{S}, \text{E}\}
+$$
+
+After observing $n$ patients on treatment $j$, the posterior distribution of $\mu_j$ becomes:
+
+$$
+\mu_j \mid \bar{y} \sim \mathcal{N}(\theta_j^*, \tau_j^{2*})
+$$
+
+where:
+
+$$
+\theta_j^* = \frac{\frac{\theta_j}{\tau_j^2} + \frac{n \bar{y}}{\sigma^2}}{\frac{1}{\tau_j^2} + \frac{n}{\sigma^2}}, \quad \text{and} \quad
+\frac{1}{\tau_j^{2*}} = \frac{1}{\tau_j^2} + \frac{n}{\sigma^2}
+$$
+
+At the conclusion of the study, the posterior probability that the experimental arm exceeds the control arm by more than the minimum acceptable value (MAV) is calculated as:
+
+$$
+\rho = \Pr(\mu_E > \mu_S + \text{MAV} \mid \text{data})
+$$
+
+The decision rule is as follows:
+
+- If $\rho > P_U \rightarrow$ Go.
+- If $\rho \leq P_U \rightarrow$ No-Go.
+
+For this study, the *MAV* is set to 0.6 and $P_U$ to 0.8. Refer to the table below for all the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|---|------|--|
+|**dPriorMeanCtrl**|Prior mean for control arm.|0|
+|**dPriorStdDevCtrl**|Prior standard deviation for control arm.|1000|
+|**dPriorMeanExp**|Prior mean for experimental arm.|0|
+|**dPriorStdDevExp**|Prior standard deviation for experimental arm.|1000|
+|**dSigma**|Known sampling standard deviation.|1.9|
+|**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.6|
+|**dPU**|Go threshold (posterior probability cutoff).|0.8|
+
+# Phase 3 Study
+
+This study considers a two-arm fixed sample design with a time-to-event endpoint, with 300 patients per arm.
+
+The figure below illustrates where the integration points used in this study fit within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+library(ggplot2)
+bigcolxmin = 8.4
+bigcolxmax = bigcolxmin + 4.1
+bigcolxmin2 = 13
+bigcolxmax2 = bigcolxmin2 + 4
+bigcolxmin3 = 0
+bigcolxmax3 = 4
+
+# Define main columns
+columns <- data.frame(
+  xmin = c(bigcolxmin3, 4.5, 5.5, 6.5, 7.5, bigcolxmin, bigcolxmin2),
+  xmax = c(bigcolxmax3, 5, 6, 7, 8, bigcolxmax, bigcolxmax2),
+  ymin = rep(3, 7),
+  ymax = rep(10.75, 7),
+  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
+  fill = c("#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
+  border = c("#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
+)
+unitybox = 0.7
+spaceybox = 0.5
+ymaxfirstbox = 10.5
+yminfirstbox = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox = yminfirstbox - spaceybox
+yminsecondbox = ymaxsecondbox - unitybox*1.5
+ymaxthirdbox = yminsecondbox - spaceybox
+yminthirdbox = ymaxthirdbox - unitybox
+ymaxfourthbox = yminthirdbox - spaceybox
+yminfourthbox = ymaxfourthbox - unitybox*1.5
+ymaxfifthbox = yminfourthbox - spaceybox
+yminfifthbox = ymaxfifthbox - unitybox*1.5
+# Define flowchart steps 
+flowchart <- data.frame(
+  xmin = rep(bigcolxmin + 0.1, 5),
+  xmax = rep(bigcolxmax - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
+  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
+  label = c("Load prior distribution parameters,\nscaling bounds, and mean TTE", 
+            "Sample from prior distribution\nfor log hazard ratio",
+            "Compute true hazard rates",
+            "Simulate patient survival times\nbased on treatment assignment",
+            "Return simulated survival times\nand true hazard ratio"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows <- data.frame(
+  x = rep((bigcolxmin+bigcolxmax)/2, 4),
+  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
+  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
+  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
+)
+yminfirstbox2 = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox2 = yminfirstbox2 - spaceybox
+yminsecondbox2 = ymaxsecondbox2 - unitybox*1.5
+ymaxthirdbox2 = yminsecondbox2 - spaceybox
+yminthirdbox2 = ymaxthirdbox2 - unitybox*1.5
+ymaxfourthbox2 = yminthirdbox2 - spaceybox
+yminfourthbox2 = ymaxfourthbox2 - unitybox*1.5
+ymaxfifthbox2 = yminfourthbox2 - spaceybox
+yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
+# Define flowchart steps 
+flowchart2 <- data.frame(
+  xmin = rep(bigcolxmin2 + 0.1, 5),
+  xmax = rep(bigcolxmax2 - 0.1, 5),
+  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2),
+  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2),
+  label = c("Load survival data, mean TTE,\nand relationship parameters",
+            "Sample true treatment effect\nfrom prior distribution",
+            "Compute true log hazard ratio\nand hazard rates for each arm",
+            "Generate exponential survival\ntimes based on hazard rates",
+            "Return simulated survival times\nand true hazard ratio"),
+  fill = rep("#cfe2ff", 5)
+)
+# Define arrows for flowchart 
+flowchart_arrows2 <- data.frame(
+  x = rep((bigcolxmin2+bigcolxmax2)/2, 4),
+  xend = rep((bigcolxmin2+bigcolxmax2)/2, 4),
+  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4]),
+  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5])
+)
+
+yminfirstbox3 = ymaxfirstbox - unitybox*1.5
+ymaxsecondbox3 = yminfirstbox3 - spaceybox
+yminsecondbox3 = ymaxsecondbox3 - unitybox*1.5
+# Define flowchart steps 
+flowchart3 <- data.frame(
+  xmin = rep(bigcolxmin3 + 0.1, 2),
+  xmax = rep(bigcolxmax3 - 0.1, 2),
+  ymax = c(ymaxfirstbox, ymaxsecondbox3),
+  ymin = c(yminfirstbox3, yminsecondbox3),
+  label = c("Load true treatment differences\nfrom CSV or R file",
+            "Define prior and simulation\nindex global variables"),
+  fill = rep("#cfe2ff", 2)
+)
+# Define arrows for flowchart 
+flowchart_arrows3 <- data.frame(
+  x = rep((bigcolxmin3+bigcolxmax3)/2, 1),
+  xend = rep((bigcolxmin3+bigcolxmax3)/2, 1),
+  y = c(flowchart3$ymin[1]),
+  yend = c(flowchart3$ymax[2])
+)
+# Define the legend elements
+legend_data <- data.frame(
+  xmin = c(14.5, 16),
+  xmax = c(15.5, 17),
+  ymin = c(2.5, 2.5),
+  ymax = c(2.8, 2.8),
+  fill = c("lightgray", "#cfe2ff"),
+  label = c("Not Used", "Used")
+)
+# Create the plot
+p <- ggplot() +
+  # Add main column sections
+  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            color = columns$border) + 
+  scale_fill_identity() +
+  # Add labels for the columns
+  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 20, vjust = 1) +
+  # Add flowchart 
+  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Add flowchart 
+  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Add flowchart 
+  geom_rect(data = flowchart3, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = flowchart3, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
+  # Add arrows between flowchart boxes
+  geom_curve(data = flowchart_arrows3, aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
+  # Remove grid and axes
+  theme_void() + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
+  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
+  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
+print(p)
+```
+
+## Initialize Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/ReadInPrior.R" class="alert-link">ReadInPrior.R</a></p>
+</div>
+
+During the Phase 2 simulation, the **true treatment difference was sampled from the prior distribution** and we manually saved it to an [output CSV file](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/Outputs/Example1/Phase2.csv).
+
+Both conditional and unconditional Phase 3 simulations use an R initialization function to **load this output and extract the true treatment differences**. These values are then converted to the log of the true hazard ratio (HR) using the **linear link function** shown in the [Response section](#response-patient-simulation-integration-point-1). Note that while unconditional assurance could be calculated by sampling directly from the Phase 2 prior, reading the saved values ensures a consistent comparison between conditional and unconditional assurance. This approach provides a more accurate assessment of the benefit of conducting a Phase 2 trial before Phase 3.
+
+If used with East, the *ReadExample5Phase2Output* function is used to load the true treatment differences from a CSV file. You can update the R code to specify your correct file path. In East Horizon, which does not support file uploads, use the *ReadExample5Phase2OutputSolara* function instead. There, the treatment differences are pasted directly into an R vector.
+
+In the R code, note that the `<<-` operator is used to define two global variables:
+
+- `vPrior`: a vector containing the true treatment differences.
+- `nSimIndex`: an index tracking the current replication being executed during the Phase 3 simulation.
+
+Both variables are used in the [Response Integration Point](#response-patient-simulation-integration-point-1) R function. The `nSimIndex` value is updated with each simulation iteration.
+
+This function relies on the user-defined parameter `bConditionalOnGo`. When set to 1, only the true treatment differences that led to a Go decision in Phase 2 are used to calculate conditional assurance. Note that the number of Phase 3 replications used in simulating for conditional assurance must be no greater than the number of successful Phase 2 simulations. When `bConditionalOnGo` is set to 0, all sampled treatment differences from Phase 2 are used to compute unconditional assurance. Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|---|------|
+|**bConditionalOnGo**|If `True`, uses only Phase 2 results that led to a Go decision. Otherwise, uses all results.|
+
+## Response (Patient Simulation) Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R" class="alert-link">SimulatePatientSurvivalAssuranceUsingPh2Prior.R</a></p>
+</div>
+
+This function simulates patient-level outcomes within a **Bayesian assurance framework**. The relationship between the continuous endpoint in Phase 2 and the time-to-event endpoint in Phase 3 is modeled using a linear function:
+
+$$ 
+\log(\text{True HR})_{\text{Phase 3}} = 0.1 - 0.4 \times (\text{True Treatment Difference})_{\text{Phase 2}}
+$$
+
+Note that this relationship is defined in terms of the true treatment effects. Since Phase 2 informs the prior on the true treatment difference and a direct link is established between the true difference and the true hazard ratio, there is no need to specify a separate prior for the true HR as done in the [Bayesian Assurance, Time-to-Event Outcome](BayesianAssuranceTimeToEvent.html) example.
+
+Refer to the table below for the definitions and values of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|**Value**|
+|--|------|--|
+|**dMeanTTEControl**|Mean time-to-event for the control group.|12|
+|**dIntercept**|Intercept for the linear relationship between true treatment difference and log(HR).|0.1|
+|**dSlope**|Slope for the linear relationship between true treatment difference and log(HR).|-0.4|
+
+## Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R" class="alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a></p>
+</div>
+
+A single analysis is conducted once 50% of patients have experienced the event of interest. Using the function in the file, the analysis employs a **Cox proportional hazards model**, with a hazard ratio (HR) less than 1 indicating a benefit in favor of the experimental arm. It uses information from the simulation that is generated by the [Response](#response-patient-simulation-integration-point-1) element of East Horizon's simulation, explained above. A Go decision is made if the resulting p-value is less than or equal to 0.025.
+
+Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|---|------|
+|**bReturnLogTrueHazard**|If `True`, the function returns the natural logarithm of the true hazard ratio instead of its raw value.|
+|**bReturnNAForNoGoTrials**|If `True` and the trial does not meet the Go decision criterion, the function returns `NA` for the hazard ratio.|
+
+# Results
+
+```{r echo=FALSE,  warning=FALSE, include = FALSE}
+######################################################################################################################## .
+# Read in the output from East and compute the assurance and probability of a stop ####
+######################################################################################################################## .
+library(readr)
+
+dfEastResults <- read_csv("Outputs/Example1/Phase2.csv")
+
+# Compute the assurance - Probability of a Go - The BdryStopCode == 2
+dProbGo <- round(mean( ifelse( dfEastResults$BdryStopCode==2,1,0) ) * 100, 1) # want it as a percent
+
+# Probability of a stop, BdryStopCode = 3 is a No-Go
+dProbNoGo <- mean( ifelse( dfEastResults$BdryStopCode==3,1,0) )
+
+# Get trials that are successful so we can build posterior of true delta when a Go decision is made
+dfSuccess <- dfEastResults[ dfEastResults$BdryStopCode==2, ]
+dMeanTrueDetalGivenGo <- mean( dfSuccess$dTrueDelta )
+```
+
+For the phase 2 study independently, the probability of a Go is `r dProbGo`% and the probability of a No-Go is `r 100-dProbGo`%.  
+
+```{r echo = FALSE, warning = FALSE}
+ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) + 
+    geom_density( aes(y = ..scaled..), fill = "skyblue", color = "black" ) +
+    
+    labs(title = expression("Conditional Posterior of True Treatment Effect (" * mu[E] - mu[S] * ") Given A Go Decision"), 
+             x = expression( "True Treatment Effect " * mu[E] - mu[S]  ), y ="Density") +
+    xlim( 0,2) +
+    theme_bw() +
+    theme(
+        plot.title = element_text(hjust = 0.5),  # Center the title
+        axis.text.x = element_text(size = 10),    # Adjust x-axis text size
+        axis.title.x = element_text(size = 12),   # Adjust x-axis title size
+        axis.title.y = element_text(size = 12),   # Adjust y-axis title size
+        plot.margin = margin(20, 20, 20, 20),      # Adjust plot margins
+        panel.border = element_blank(),            # Remove panel border
+        axis.line = element_line(color = "black")  # Add black axis line
+    ) 
+```
+
+```{r  echo=FALSE,  warning=FALSE, include = FALSE}
+######################################################################################################################## .
+# Example 2 Post Process                                                                                               ####
+# This file provides functions and R Code example to post process the East output for useful graphs and numeric values ####
+# 
+######################################################################################################################## .
+library(readr)
+
+dfEastResultsEx5Ph3Uncond <- read_csv("Outputs/Example1/Phase3Unconditional.csv")
+
+dProbGoUncond   <- mean( dfEastResultsEx5Ph3Uncond$BdryStopCode )  # Pr( Go )
+
+vCredIntervalUncond <- log( quantile(dfEastResultsEx5Ph3Uncond$TrueHR, probs=c(0.025,0.975)) )
+```
+
+For the phase 3 study independently, the unconditional probability of a Go decision is `r round( dProbGoUncond*100, 0)`% and the unconditional probability of a No-Go Decision is `r 100 - round( dProbGoUncond*100, 0)`%. The 95% posterior credible for the Log( True HR ) is (-$\infty$, `r round( vCredIntervalUncond[2],2)` ). The posterior distribution of the true Log( HR ) given a Go decision is:
+
+```{r echo = FALSE, warning = FALSE}
+# Get trials that are successful so we can build posterior of true delta when a Go decision is made
+dfSuccess <- dfEastResultsEx5Ph3Uncond[ dfEastResultsEx5Ph3Uncond$BdryStopCode==1, ]
+dfDensity <- density( log( dfSuccess$TrueHR) )
+
+vY <- dfDensity$y/max( dfDensity$y )
+vX <- dfDensity$x 
+
+dfPostDensity <- data.frame( y = vY, x = vX)
+
+# Assuming dfPostDensity is your data frame
+# Adjusted ggplot code
+ggplot(dfPostDensity, aes(x = x, y = y)) +
+    geom_area( fill = "skyblue", color = "black") +
+    labs(title = expression("Assurance Posterior Distribution of True Log(HR)" ), 
+             x = expression( "True Log(HR) "  ), y ="Density") +
+    theme_bw() +
+    theme(
+        plot.title = element_text(hjust = 0.5),  # Center the title
+        axis.text.x = element_text(size = 10),    # Adjust x-axis text size
+        axis.title.x = element_text(size = 12),   # Adjust x-axis title size
+        axis.title.y = element_text(size = 12),   # Adjust y-axis title size
+        plot.margin = margin(20, 20, 20, 20),      # Adjust plot margins
+        #panel.grid.major = element_blank(),        # Remove major grid lines
+        #panel.grid.minor = element_blank(),        # Remove minor grid lines
+        panel.border = element_blank(),            # Remove panel border
+        axis.line = element_line(color = "black")  # Add black axis line
+    ) +
+    xlim(-0.6, 0.1)  # Set x-axis range from 0 to 1
+```
+
+```{r  echo=FALSE,  warning=FALSE, include = FALSE}
+######################################################################################################################## .
+# This is the case when the phase 2 was a Go decision followed by phase 3 ####
+# 
+######################################################################################################################## .
+
+dfEastResultsEx5Ph3Cond <- read_csv("Outputs/Example1/Phase3Conditional.csv")
+
+dProbGoCond    <- mean( dfEastResultsEx5Ph3Cond$BdryStopCode )  # Pr( Go )
+
+vCredIntervalCond <- log( quantile(dfEastResultsEx5Ph3Cond$TrueHR , probs=c(0.025,0.975)) )
+```
+
+If the two studies are run sequentially, conducting Phase 3 only if Phase 2 results in a Go decision, the probability of a Go decision is `r round( dProbGoCond*100, 0)`% and the unconditional probability of a No-Go Decision is `r 100 - round( dProbGoCond*100, 0)`%. The 95% posterior credible for the Log( True HR ) is (`r round( vCredIntervalCond[1],2)`, `r  round( vCredIntervalCond[2],2)`). The posterior distribution of the true Log( HR ) given a Phase 3 Go decision is:
+
+```{r echo = FALSE, warning = FALSE}
+
+# Get trials that are successful so we can build posterior of true delta when a Go decision is made
+dfSuccess <- dfEastResultsEx5Ph3Cond[ dfEastResultsEx5Ph3Cond$BdryStopCode==1, ]
+
+dfDensity <- density( log( dfSuccess$TrueHR) )
+
+
+#dfPostSample <- data.frame( SampleMean = dfSuccess$dTrueDelta )
+
+#dfDensity   <- density( dfDen$SampleMean)
+vY <- dfDensity$y/max( dfDensity$y )
+vX <- dfDensity$x 
+
+dfPostDensity <- data.frame( y = vY, x = vX)
+
+# Assuming dfPostDensity is your data frame
+# Adjusted ggplot code
+ggplot(dfPostDensity, aes(x = x, y = y)) +
+    geom_area( fill = "skyblue", color = "black") +
+    labs(title = expression("Conditional Posterior Distribution of True Log(HR) Given a Go Decision in Ph 2 & 3" ), 
+             x = expression( "True Log(HR) "  ), y ="Density") +
+    theme_bw() +
+    theme(
+        plot.title = element_text(hjust = 0.5),  # Center the title
+        axis.text.x = element_text(size = 10),    # Adjust x-axis text size
+        axis.title.x = element_text(size = 12),   # Adjust x-axis title size
+        axis.title.y = element_text(size = 12),   # Adjust y-axis title size
+        plot.margin = margin(20, 20, 20, 20),      # Adjust plot margins
+        #panel.grid.major = element_blank(),        # Remove major grid lines
+        #panel.grid.minor = element_blank(),        # Remove minor grid lines
+        panel.border = element_blank(),            # Remove panel border
+        axis.line = element_line(color = "black")  # Add black axis line
+    ) +
+    xlim(-0.6, 0.1)  # Set x-axis range from 0 to 1
+
+```
+
+Comparing the option of running only a Phase 3 versus a Phase 2 followed by a Phase 3 if Phase 2 is successful, the probability of Go in phase 3 increases from **`r round(100*dProbGoUncond,0)`%** to **`r round( 100*dProbGoCond,0)`%** and the probability of a No-Go in Phase 3 decreases from **`r 100-round(100*dProbGoUncond,0)`%** to **`r 100-round( 100*dProbGoCond,0)`%**.
+
+# See Also
+
+Other relevant examples include:
+
+- [Bayesian Assurance, Continuous Outcome](BayesianAssuranceContinuous.html)
+- [Bayesian Assurance, Time-to-Event Outcome](BayesianAssuranceTimeToEvent.html)
+- [Consecutive Studies, Continuous Outcome](ConsecutiveStudiesContinuous.html)
+- [Consecutive Studies, Binary Outcome](ConsecutiveStudiesBinary.html)
+- [Probability of Success, Dual Endpoints](ProbabilitySuccessDualEndpoints.html)

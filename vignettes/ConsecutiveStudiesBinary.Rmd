@@ -1,0 +1,11 @@
+---
+title: "Consecutive Studies, Binary Outcome"
+author: "Gabriel Potvin, Valeria A. G. Mazzanti"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r child = '../inst/Examples/ConsecutiveStudiesBinary/Description.Rmd'}
+```

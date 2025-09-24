@@ -1,6 +1,6 @@
 ---
 title: "Examples Outline"
-author: "J. Kyle Wathen"
+author: "J. Kyle Wathen, Gabriel Potvin"
 date:  "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   word_document: default
@@ -17,52 +17,52 @@ This document provides an overview of the R examples provided in [this directory
 - an RStudio project file, 
 - a Description file that describes the example, 
 - an R folder which contains the example R scripts,
-- a FillInTheBlankR folder which contains the worked examples with various code deleted so you can practice and fill in the blanks. 
+- optional: a FillInTheBlankR folder which contains the worked examples with various code deleted so you can practice and fill in the blanks. 
 
 The following examples are included:
 
 ## Patient Simulation 
 
-1. **[2-Arm, Normal Outcome - Patient Simulation Examples](2ArmNormalOutcomePatientSimulationDescription.html)**:
-The following examples demonstrate how to add new patient outcome simulation capabilities into East using an R function in the context of a two-arm trial with a normally distributed patient outcome. For all examples, we assume the trial design consists of standard of care and an experimental treatment and the trial design assumes patient outcomes are normally distributed.
+1. **[2-Arm, Normal Outcome - Patient Simulation](2ArmNormalOutcomePatientSimulationDescription.html)**: These examples demonstrate how to add new patient outcome simulation capabilities into East Horizon using an R function in the context of a two-arm trial with a normally distributed patient outcome.
 
-1. **[2-Arm, Time-To-Event Outcome - Patient Simulation](2ArmTimeToEventOutcomePatientSimulationDescription.html)**: This example demonstrates how to add new patient outcome simulation functionality into East using an R function. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are time-to-event. The intent of these examples is to demonstrate how to add new ways to simulate time-to-event data using R.  
+1. **[2-Arm, Time-To-Event Outcome - Patient Simulation](2ArmTimeToEventOutcomePatientSimulationDescription.html)**: This example demonstrates how to add new patient outcome simulation functionality into East Horizon using an R function in the context of a two-arm trial with a time-to-event patient outcome. The intent of these examples is to demonstrate how to add new ways to simulate time-to-event data using R.  
 
-1. **[2-Arm, Binary Outcome - Patient Simulation](2ArmBinaryOutcomePatientSimulation.html)**: These examples demonstrate how to add new patient outcome simulation functionality into East using an R function in the context of a two-arm trial with binary outcomes. For all examples, we assume the trial design consists of standard of care and an experimental treatment. The patient outcomes are binary. The intent of these examples is to demonstrate how to add new ways to simulate patient data using R in a variety of trial examples.
+1. **[2-Arm, Binary Outcome - Patient Simulation](2ArmBinaryOutcomePatientSimulation.html)**: These examples demonstrate how to add new patient outcome simulation functionality into East Horizon using an R function in the context of a two-arm trial with binary outcomes. The intent of these examples is to demonstrate how to add new ways to simulate patient data using R in a variety of trial examples.
 
-1. **[2-Arm, Normal Outcome, Repeated Measure - Patient Simulation](2ArmNormalRepeatedMeasuresResponseGeneration.html)**:
-Repeated measures involve collecting multiple data points for the same variable from the same subjects across multiple time periods. This method provides insights into the subjects' development and changes over time. In this context, a single subject can have multiple responses over time, and these responses can be correlated across different visits. For a Normal endpoint in repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits.
+1. **[2-Arm, Normal Outcome, Repeated Measures - Patient Simulation](2ArmNormalRepeatedMeasuresResponseGeneration.html)**: Repeated measures involve collecting multiple data points for the same variable from the same subjects across multiple time periods. This example illustrates how to integrate new patient outcome simulation capabilities into East Horizon using R functions in the context of a two-arm trial with repeated measures (continuous outcome).
 
-1. **[Childhood Anxiety Trial](ChildhoodAnxiety.html)**: This example covers the situation where the patient data simulation needs to be improved to match what is expected in a clinical trial in childhood anxiety.
+1. **[Childhood Anxiety Trial](ChildhoodAnxiety.html)**: This example covers a specific situation where the patient data simulation needs to be customized to match what is expected in a clinical trial in childhood anxiety.
 
 ## Analysis 
 
-1. **[2-Arm, Normal Outcome - Analysis](2ArmNormalOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for normal data into East using an R function. For all examples, we assume the trial design consists of a control and experimental treatments. There are 2 Interim Analysis (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
+1. **[2-Arm, Normal Outcome - Analysis](2ArmNormalOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for normal data into East Horizon using an R function.
 
-1. **[2-Arm, Time-To-Event Outcome - Analysis](2ArmTimeToEventOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality  for time-to-event data into Cytel products using an R function.  For all examples, we assume the trial design consists of control and an experimental treatments. There are 2 Interim Analyses (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
+1. **[2-Arm, Time-To-Event Outcome - Analysis](2ArmTimeToEventOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for time-to-event data into East Horizon using an R function.
 
-1. **[2-Arm, Binary Outcome - Analysis](2ArmBinaryOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for binary data into Cytel products using an R function.  For all examples, we assume the trial design consists of control and an experimental treatments. There are 2 Interim Analysis (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
-
-
-## Treatment Selection 
-
-1. **[Treatment Selection](TreatmentSelectionDescription.html)**: This example demonstrates a multi-arm trial with a treatment selection rule and binary outcome. The examples provide additional approaches to treatment selection. 
-
-## Advanced Example
-These examples provide multiple R functions to achieve a more complex design option. 
-
-1. **[Probability of Success for Binary Endpoint](ProbabilitySuccessBinaryEndpoint.html)**: Simple example to demonstrate how to compute the probability of success of a trial.
-
-1. **[Bayesian Assurance of Consecutive Studies](AssuranceConsecutiveStudies.html)**: The intent of this example is to demonstrate the computation of Bayesian assurance, or probability of success, through the integration of East and R using a series of examples. These examples begin with a 2-arm, normal outcome, fixed sample trial assuming a non-standard prior for computation of assurance. The examples progress to a more complex setting of computing assurance for a sequence of a phase 2 trial with normal outcomes followed by a phase 3 trial where the outcome is time-to-event.
-
-1. **[Probability of Success for Dual Endpoints (PFS & OS)](ProbabilitySuccessDualEndpointsPFSOS.html)**: This example demonstrates how to compute the probability of success of a trial and extend East Horizon's single-endpoint framework to handle dual endpoints (Progression-Free Survival and Overall Survival) using custom R scripts for the Analysis and Response integration points.
-
+1. **[2-Arm, Binary Outcome - Analysis](2ArmBinaryOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for binary data into East Horizon using an R function.
 
 ## Other Integration Points
+
 These examples provide examples for other integration points. 
 
-1. **[Poisson Arrival Times](GeneratePoissonArrival.html)**: This example demonstrates how to add the ability to generate patient arrival time according to a Poisson process with a ramp-up.  The examples included here are to provide different approaches for simulating arrival time according to a Poisson process. 
+1. **[Treatment Selection](TreatmentSelectionDescription.html)**: This example demonstrates a multi-arm trial with a treatment selection rule and binary outcome. Different examples provide additional approaches to treatment selection. 
 
-1. **[Patient Dropout](PatientDropout.html)**: For all examples, we assume the trial design consists of a control and an experimental treatment. Patients may dropout of a trial for a variety of reasons such as safety issues, treatment burden or other non-trial related issues. The dropout rate can reach as high as 30% in some trials if the drug has adverse side effects. The introduction of dropout probabilities or dropout hazard rate plays a significant role during data generation that can be further utilized during the analysis.
+1. **[Poisson Arrival Times](GeneratePoissonArrival.html)**: This example demonstrates how to add the ability to generate patient arrival time according to a Poisson process with a ramp-up. Different examples provide different approaches for simulating arrival time according to a Poisson process. 
 
-1. **[Patient Randomization](PatientRandomization.html)**: Examples of how to use R for randomization.
+1. **[Patient Dropout](PatientDropout.html)**: These examples illustrate how to customize the dropout distribution in East Horizon using R functions.
+
+1. **[Patient Randomization](PatientRandomization.html)**: These examples illustrate how to customize how subjects are assigned to designated arms in East Horizon using R functions.
+
+## Advanced Examples
+
+These examples use more than one R Integration points to achieve a more complex design option. 
+
+1. **[Bayesian Assurance, Continuous Outcome](BayesianAssuranceContinuous.html)**: This example demonstrates the computation of Bayesian assurance, or probability of success, using a mixture of normal distributions prior featuring a two-arm trial with normally distributed outcomes.
+
+1. **[Bayesian Assurance, Time-to-Event Outcome](BayesianAssuranceTimeToEvent.html)**: This example demonstrates the computation of Bayesian assurance, or probability of success, using a bi-modal distribution prior featuring a two-arm trial with time-to-event outcomes.
+
+1. **[Consecutive Studies, Continuous Outcome](ConsecutiveStudiesContinuous.html)**: This example demonstrates the computation of Bayesian assurance, or probability of success, in consecutive studies: a Phase 2 trial followed by a Phase 3 trial, both with normal outcomes. The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial.
+
+1. **[Consecutive Studies, Continuous & Time-to-Event Outcomes](ConsecutiveStudiesContinuousTimeToEvent.html)**: This example demonstrates the computation of Bayesian assurance, or probability of success, in consecutive studies: a Phase 2 trial with normal outcomes followed by a Phase 3 trial with time-to-event outcomes. The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial. This example also include a step to load the Phase 2 output and extract the true treatment differences.
+
+1. **[Probability of Success, Dual Endpoints](ProbabilitySuccessDualEndpoints.html)**: This example demonstrates how to compute the probability of success of a trial and extend East Horizon's single-endpoint framework to handle dual endpoints (Progression-Free Survival and Overall Survival) using custom R scripts for the Analysis and Response integration points.
