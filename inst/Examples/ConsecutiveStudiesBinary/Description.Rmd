@@ -13,7 +13,7 @@ output:
 
 # Introduction
 
-This example demonstrates the computation of conditional probability of success in consecutive studies through the integration of R with Cytel products by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. The examples feature a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with a binary endpoint. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2.
+This example demonstrates the computation of conditional probability of success in consecutive studies through the integration of R with Cytel products by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. The examples feature a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with a binary endpoint. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2. It illustrates how simulation results from Phase 2 can be saved, transferred, and reused to inform Phase 3.
 
 ## Why do we need R Integration for this example?
 
@@ -112,7 +112,7 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 ### Simulation Setup Page
 
-15. Specify the number of simulation runs as needed. You can choose any number you require.
+15. Specify the number of simulation runs as needed. You can choose any number you require. For the Phase 2 input set, it is recommended to run as many simulations as possible (e.g., 20,000). This is because Phase 3 will only use data from successful Phase 2 trials, so the more simulations you run, the larger the pool of usable trials for Phase 3.
 
 ![](ConsecutiveStudiesBinary_files/Step15.png){width=800px}
 
@@ -160,7 +160,7 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 ![](ConsecutiveStudiesBinary_files/Step23.png){width=800px}
 
-24. Open the downloaded file in Excel. Filter the Decision column (column F) to only show rows with “Efficacy”.
+24. Open the downloaded file in Excel. Filter the Decision column (column F) to only show rows with “Efficacy”. This will keep only one row per trial, removing the rows with no decision at interim.
 
 ![](ConsecutiveStudiesBinary_files/Step24.png){width=400px}
 
@@ -203,11 +203,13 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 ### Simulation Setup Page
 
-34. Simulate the input set the same way as described before. See Steps 15 to 18 for more information.
+34. Simulate the input set the same way as described before. See Steps 15 to 18 for more information. However, for Phase 3, we recommend choosing a lower number of simulations (e.g., 10,000). This is because the simulation will fail when specifying a number of simulation higher than the number of successful Phase 2 trials. In our case, it was about 13,000.
 
 ### Results Page
 
 35. Load the results as described before (see steps 19 to 21 for more information). In the Explore page of the results, hover over each cell in the heatmap to see a summary of the outputs. Because of our custom R scripts, the result “Power” is actually now equivalent to the “Conditional Probability of Success” of the Phase 3 study.
+
+** + more information on results, maybe another screenshot
 
 See the [Results](#results) section below for more information.
 
@@ -215,9 +217,9 @@ See the [Results](#results) section below for more information.
 
 # Technical Information and Example Values
 
-## Response (Patient Simulation) Integration Point
+## Phase 2 Study
 
-### Phase 2 Study
+### Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurance.R" class="alert-link">SimulatePatientOutcomeBinaryWithAssurance.R</a></p>
@@ -228,10 +230,11 @@ Using the file above, the Response element of the Phase 2 study is customized to
 For each arm, the true response probability is drawn from a Beta distribution:
 
 $$
-p_\text{ctrl} \sim \text{Beta}(\alpha_\text{ctrl}, \beta_\text{ctrl})
+\pi_\text{ctrl} \sim \text{Beta}(\alpha_\text{ctrl}, \beta_\text{ctrl})
 $$
+
 $$
-p_\text{exp} \sim \text{Beta}(\alpha_\text{exp}, \beta_\text{exp})
+\pi_\text{exp} \sim \text{Beta}(\alpha_\text{exp}, \beta_\text{exp})
 $$
 
 where $\alpha_\text{ctrl}$, $\beta_\text{ctrl}$, $\alpha_\text{exp}$, $\beta_\text{exp}$ are the parameters of the Beta distributions and can be user-defined. Refer to the table below for the values of the user-defined parameters and some example values.
@@ -243,33 +246,24 @@ where $\alpha_\text{ctrl}$, $\beta_\text{ctrl}$, $\alpha_\text{exp}$, $\beta_\te
 |**dParameter1Exp**|Parameter 1 of the Beta distribution for experimental arm ($\alpha_\text{exp}$)|40|
 |**dParameter2Exp**|Parameter 2 of the Beta distribution for experimental arm ($\beta_\text{exp}$)|60|
 
+These two true response probabilities are returned as outputs **TrueProbabilityControl** and **TrueProbabilityExperimental** at the end of the R function. This is important because this is why these variables will then be included in the *SimData* variable and picked up in the Phase 2 Analysis script, and finally appear in the Phase 2 results CSV file. They are later reused in Phase 3 by loading the saved values. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information on the loading process.
+
 Then, each patient's binary outcome is drawn from a Bernoulli distribution:
 
 $$
-Y_i \sim \text{Bernoulli}(p_j)
+Y_i \sim \text{Bernoulli}(\pi_j)
 $$
 
-where $Y_i \in \{0,1\}$ is the binary response, and $p_j$ is the true response probability ($p_\text{ctrl}$ or $p_\text{exp}$ depending whether the patient $i$ is in the control or experimental arm).
+where $Y_i \in \{0,1\}$ is the binary response, and $\pi_j$ is the true response probability ($\pi_\text{ctrl}$ or $\pi_\text{exp}$ depending whether the patient $i$ is in the control or experimental arm).
 
 
-### Phase 3 Study
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurancePh3.R" class="alert-link">SimulatePatientOutcomeBinaryWithAssurancePh3.R</a></p>
-</div>
-
-Using the file above, the Response element of the Phase 3 study is customized. Here, instead of sampling from a Beta distribution, we use the true response rates informed by the Phase 2 study. No user parameter is used for this file. 
-
-
-The *LoadData* function is used to load the results of the Phase 2 study. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information about how to load your own results.
-
-## Analysis Integration Point
+### Analysis Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
 </div>
 
-For both Phase 2 and Phase 3 studies of this example, the analysis is based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2). No user parameter is used for this integration point.
+The analysis is based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2). No user parameter is used for this integration point.
 
 **Test Statistic:**
 
@@ -281,6 +275,35 @@ Where:
 - $n_{tj}$ and $n_{cj}$ are the numbers of patients at the jth interim look in the treatment and control groups, respectively.
 - $\hat{\pi}_{j} = \frac{n_{tj} \cdot \hat{\pi}_{tj} + n_{cj} \cdot \hat{\pi}_{cj}}{n_{tj} + n_{cj}}$ is the pooled response rate estimate.
 
+In the R script, the **TrueProbabilityControl** and **TrueProbabilityExperimental** that were generated in the Response section are loaded from *SimData* outputs, and returned at the end function. This is important because these variables will appear in the Phase 2 results and will be saved to a CSV file. They will later be reused in Phase 3 by loading the saved values. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information on the loading process.
+
+## Phase 3 Study
+
+### Response (Patient Simulation) Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurancePh3.R" class="alert-link">SimulatePatientOutcomeBinaryWithAssurancePh3.R</a></p>
+</div>
+
+Using the file above, the Response element of the Phase 3 study is customized. Here, instead of sampling from a Beta distribution, we use the true response rates informed by the Phase 2 study. The *LoadData* function is used to load the results of the Phase 2 study. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information about how to load your own results.
+
+### Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
+</div>
+
+Similarly to Phase 2, the analysis is based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2). No user parameter is used for this integration point.
+
+**Test Statistic:**
+
+$$Z_j = \frac{\hat{\pi}_{tj} - \hat{\pi}_{cj}}{\sqrt{\hat{\pi}_j \cdot (1 - \hat{\pi}_j) \cdot ( \frac{1}{n_{tj}} + \frac{1}{n_{cj}} )}}$$
+
+Where:
+
+- $\hat{\pi}_{tj}$ and $\hat{\pi}_{cj}$ are the observed response rate at the jth interim look in the treatment and control groups, respectively.
+- $n_{tj}$ and $n_{cj}$ are the numbers of patients at the jth interim look in the treatment and control groups, respectively.
+- $\hat{\pi}_{j} = \frac{n_{tj} \cdot \hat{\pi}_{tj} + n_{cj} \cdot \hat{\pi}_{cj}}{n_{tj} + n_{cj}}$ is the pooled response rate estimate.
 
 # Results
 
