@@ -7,149 +7,282 @@ output:
   html_document: default
 ---
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
+</div>
+
+# Introduction
+
+This example demonstrates the computation of conditional probability of success in consecutive studies through the integration of R with Cytel products by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. The examples feature a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with a binary endpoint. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2.
+
+## Why do we need R Integration for this example?
+
+(...)
+
+By combining the R functions described below with the East Horizon native inputs, users are able to simulate and compute the probability of success of each simulated trial. Users will also continue to benefit from East Horizon’s output visualizations – with the caveat that the Conditional Probability of Success metric will be labeled as “Power” in the native outputs of East Horizon.
+
+## What do the R functions do?
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/ConsecutiveStudiesBinary/R) you will find the following R files:
+
+- **[AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R)**
+
+   This R file is used for the **Analysis** integration point of both Phase 2 and Phase 3 studies. It contains a function that performs the analysis based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2).
+
+   For more information on this function, see the [Analysis Integration Point](#analysis-integration-point) section below.
+
+- **[SimulatePatientOutcomeBinaryWithAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurance.R)**
+
+   This R file is used for the **Response (Patient Simulation)** integration point of the Phase 2 study only. It contains a function that...
+
+   For more information on this function, see the [Response (Patient Simulation) Integration Point](#response-patient-simulation-integration-point) section of the Phase 2 study below.
+   
+- **[SimulatePatientOutcomeBinaryWithAssurancePh3.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurancePh3.R)**
+
+   This R file is used for the **Response (Patient Simulation)** integration point of the Phase 3 study only. It contains a function that...
+
+   For more information on this function, see the [Response (Patient Simulation) Integration Point](#response-patient-simulation-integration-point-1) section of the Phase 3 study below.
+
+------
+
 # Step-by-Step Instructions
 
 Before starting, make sure you have the required tools and files.
 
 1. [East Horizon](https://platform.cytel.com)
-2. Download R Files from our public Github repo: [](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/) and [](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/).
+2. Download R Files from our public Github repo: [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/AnalyzeUsingEastManualFormula.R), [SimulatePatientOutcomeBinaryWithAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurance.R) and [SimulatePatientOutcomeBinaryWithAssurancePh3](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurancePh3).
 
 ## New Project Page
 
 1. On East Horizon, create a new project with a binary endpoint.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step1.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step1.png){width=300px}
 
-## New Input Set Page
+In this example, we will create two different input sets: one for the Phase 2 study and one for the Phase 3 study.
+
+## Phase 2 Study
+
+### New Input Set Page
 
 2. Navigate to the Inputs tab, and create a new input set using the Explore task. Add phase 2 details.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step2.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step2.png){width=300px}
 
-## Design Page
+### Design Page
 
 3. Click on the input set you just created, then select “User Specified – R” in the Test field.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step3.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step3.png){width=800px}
 
 4. Click the pencil icon to open the R Integration pop-up window.
 
 5. Click on “Select File” and then on “Continue”.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step5.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step5.png){width=800px}
 
-6. Select the file “AnalyzeUsingEastManualFormula.R”.
+6. Select the file **AnalyzeUsingEastManualFormula.R**.
 
 7. Check that the correct file has been imported and the correct Function Name has been specified by the system. Click on the “Save” button to exit the R Integration details window.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step7.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step7.png){width=300px}
 
-## Response Page
+### Response Page
 
-8. Navigate to the Response page and the relevant response card (add explanations for this), and then select “User Specified – R” in the Distribution field.
+8. Navigate to the Response page and the relevant response card, and then select “User Specified – R” in the Distribution field.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step8.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step8.png){width=800px}
 
 9. Click on the pencil icon to open the R Integration pop-up window.
 
 10.	Click on “Select File” and then on “Continue”.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step5.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step10.png){width=800px}
 
-11. Select the file “SimulatePatientOutcomeBinaryWithAssurance.R”.
+11. Select the file **SimulatePatientOutcomeBinaryWithAssurance.R**.
 
-12. Check that the correct file has been imported and the correct Function Name has been specified by the system.
+12. Check that the correct file has been imported and the correct Function Name has been specified by the system. Note that the User Parameter variables have been automatically pulled from the R function that was imported.
 
-13. Note that the User Parameter variables have been automatically pulled from the R function that was imported. Specify parameters to define the beta distribution that you are using. In this example, we used Beta priors but you could use any other distribution by changing the R code to sample from a different one on lines 29 and 30 of the file. 
+13. Fill the parameter values to define the Beta distribution that you are using. In our case, we use the example values below. See the [Response Integration Point](#response-integration-point) section below for more information about these variables.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step13.png){width=400px}
+Note that in this example, we used Beta priors but you could use any other distribution by changing the R code to sample from a different one on lines 37 and 38 of the file. 
 
-See the [Response (Patient Simulation) Integration Point](#example-using-prior-distributions) section below for more information on these variables and example values.
+![](ConsecutiveStudiesBinary_files/Step13.png){width=300px}
 
 14. Click on the “Save” button to exit the R Integration details window.
 
-## Simulation Setup Page
+### Simulation Setup Page
 
-15. Specify the number of simulation runs as needed.
+15. Specify the number of simulation runs as needed. You can choose any number you require.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step15.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step15.png){width=800px}
 
 16. Check the box to “Generate Data File for All Simulated Models”.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step16.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step16.png){width=800px}
 
 17. Click the "Save & Simulate" button.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step17.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step17.png){width=400px}
 
 18. Confirm by clicking on "Simulate" in the pop-up window, and wait for the simulation runs to finish.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step18.png){width=500px}
+![](ConsecutiveStudiesBinary_files/Step18.png){width=500px}
 
-## Results Page
+### Results Page
 
-19. Check whether the simulation failed or was completed by looking at the Status column.
+19. Navigate to the Results tab, then check whether the Phase 2 simulation failed or was completed by looking at the Status column.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step26.png){width=600px}
+![](ConsecutiveStudiesBinary_files/Step19.png){width=600px}
 
 20. If the simulation failed, open the Log window to see if there are any helpful error messages.
 
    a. Click on the “?” icon in the top right corner of your screen.
     
-![](ProbabilitySuccessBinaryEndpoint_files/Step27a.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step20a.png){width=800px}
     
    b. Click on “Log”.
     
-![](ProbabilitySuccessBinaryEndpoint_files/Step27b.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step20b.png){width=200px}
     
    c. Identify any errors that appear. For example:
     
-![](ProbabilitySuccessBinaryEndpoint_files/Step27c.png){width=400px}
+![](ConsecutiveStudiesBinary_files/Step20c.png){width=300px}
 
 21. If the simulation has completed, click on the Result name. If you have multiple scenarios in your simulation, you will be prompted to label at least one scenario from the list. Alternatively, you may also skip this step by selecting the “Skip” button in the bottom left corner.
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step28.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step21.png){width=500px}
 
-22. The Explore page of the results appears. You will notice a checkbox on the left side of each row in the table, below the heatmap. Click on the model that generated the data using your prior distribution, e.g.: 
+22. The Explore page of the results appears. You will notice a checkbox on the left side of each row in the table, below the heatmap. Click on the box of model that generated the data using your prior distribution, e.g.:
 
-23. Now click on Download dropdown menu, that is in the top right of the screen, and Summary Statistics option.
+![](ConsecutiveStudiesBinary_files/Step22.png){width=800px}
 
-24. Using Excel, filter this CSV – use the Decision column (column F), and filter to only show rows with “Efficacy”.
+23. Now click on Download dropdown menu, that is in the top right of the screen, and Summary Statistics option. Wait until the file is downloaded.
+
+![](ConsecutiveStudiesBinary_files/Step23.png){width=800px}
+
+24. Open the downloaded file in Excel. Filter the Decision column (column F) to only show rows with “Efficacy”.
+
+![](ConsecutiveStudiesBinary_files/Step24.png){width=400px}
 
 25. Save this subset of the data and copy paste the values of the True Prob Control and True Prob Experimental into the LoadData function in the SimulatePatientOutcomeBinaryWithAssurancePh3.R file – you will see mine at the bottom of the file, you can replace my values with yours.
 
-## New Input Set Page
 
-26. Navigate to the Inputs tab again, and create a new input set using the Explore task. Add phase 3 details.
+** complete this
 
-## Response Page
+## Phase 3 Study
 
-27. Navigate to the Response page and the relevant response card (add explanations for this), and then select “User Specified – R” in the Distribution field.
+### New Input Set Page
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step8.png){width=800px}
+26. Navigate to the Inputs tab again, and create a new input set using the Explore task. Add Phase 3 details.
 
-28. Click on the pencil icon to open the R Integration pop-up window.
+![](ConsecutiveStudiesBinary_files/Step2.png){width=300px}
 
-29.	Click on “Select File” and then on “Continue”.
+### Design Page
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step5.png){width=800px}
+27. Click on the input set you just created, then select “User Specified – R” in the Test field. Like for the Phase 2 study, select the file **AnalyzeUsingEastManualFormula.R**, and click on the “Save” button to exit the R Integration details window. See Steps 3 to 7 for more information.
 
-30. Select the file “SimulatePatientOutcomeBinaryWithAssurancePh3.R”.
+### Response Page
 
-31. Check that the correct file has been imported and the correct Function Name has been specified by the system.
+28. Navigate to the Response page and the relevant response card of the Phase 3 input set, and then select “User Specified – R” in the Distribution field.
 
-32. Note that the User Parameter variables have been automatically pulled from the R function that was imported. Specify parameters to define the beta distribution that you are using. In this example, we used Beta priors but you could use any other distribution by changing the R code to sample from a different one on lines 29 and 30 of the file. 
+![](ConsecutiveStudiesBinary_files/Step28.png){width=800px}
 
-![](ProbabilitySuccessBinaryEndpoint_files/Step13.png){width=400px}
+29. Click on the pencil icon to open the R Integration pop-up window.
 
-See the [Response (Patient Simulation) Integration Point](#example-using-prior-distributions) section below for more information on these variables and example values.
+30.	Click on “Select File” and then on “Continue”.
+
+![](ConsecutiveStudiesBinary_files/Step5.png){width=800px}
+
+31. Select the file **SimulatePatientOutcomeBinaryWithAssurancePh3.R** that we updated at Step 25.
+
+32. Check that the correct file has been imported and the correct Function Name has been specified by the system. Click on the “Save” button to exit the R Integration details window.
+
+![](ConsecutiveStudiesBinary_files/Step31.png){width=400px}
 
 33. Click on the “Save” button to exit the R Integration details window.
 
-## Simulation Setup Page
+### Simulation Setup Page
 
-34. Simulate the same way as described before.
+34. Simulate the input set the same way as described before. See Steps 15 to 18 for more information.
 
-## Results Page
+### Results Page
 
-35. Load the results as described before. The Explore page of the results appears. Hover over each cell in the heat map to see a summary of the outputs. Because of our custom R scripts, “Power” is actually now equivalent to “Probability of Success” of the ph3
+35. Load the results as described before (see steps 19 to 21 for more information). In the Explore page of the results, hover over each cell in the heatmap to see a summary of the outputs. Because of our custom R scripts, the result “Power” is actually now equivalent to the “Conditional Probability of Success” of the Phase 3 study.
+
+See the [Results](#results) section below for more information.
+
+------
+
+# Technical Information and Example Values
+
+## Response (Patient Simulation) Integration Point
+
+### Phase 2 Study
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurance.R" class="alert-link">SimulatePatientOutcomeBinaryWithAssurance.R</a></p>
+</div>
+
+Using the file above, the Response element of the Phase 2 study is customized to generate patient outcomes for a binary response trial while incorportaing uncertainty about the true response rates by sampling them from prior distributions. Here, we use a **Beta distribution** prior. However, you could use any other distribution by changing the R code to sample from a different one on lines 37 and 38 of the file. 
+
+For each arm, the true response probability is drawn from a Beta distribution:
+
+$$
+p_\text{ctrl} \sim \text{Beta}(\alpha_\text{ctrl}, \beta_\text{ctrl})
+$$
+$$
+p_\text{exp} \sim \text{Beta}(\alpha_\text{exp}, \beta_\text{exp})
+$$
+
+where $\alpha_\text{ctrl}$, $\beta_\text{ctrl}$, $\alpha_\text{exp}$, $\beta_\text{exp}$ are the parameters of the Beta distributions and can be user-defined. Refer to the table below for the values of the user-defined parameters and some example values.
+
+|**User parameter**|**Definition**|**Example Value**|
+|---|------|---|
+|**dParameter1Ctrl**|Parameter 1 of the Beta distribution for control arm ($\alpha_\text{ctrl}$)|25|
+|**dParameter2Ctrl**|Parameter 2 of the Beta distribution for control arm ($\beta_\text{ctrl}$)|75|
+|**dParameter1Exp**|Parameter 1 of the Beta distribution for experimental arm ($\alpha_\text{exp}$)|40|
+|**dParameter2Exp**|Parameter 2 of the Beta distribution for experimental arm ($\beta_\text{exp}$)|60|
+
+Then, each patient's binary outcome is drawn from a Bernoulli distribution:
+
+$$
+Y_i \sim \text{Bernoulli}(p_j)
+$$
+
+where $Y_i \in \{0,1\}$ is the binary response, and $p_j$ is the true response probability ($p_\text{ctrl}$ or $p_\text{exp}$ depending whether the patient $i$ is in the control or experimental arm).
+
+
+### Phase 3 Study
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurancePh3.R" class="alert-link">SimulatePatientOutcomeBinaryWithAssurancePh3.R</a></p>
+</div>
+
+Using the file above, the Response element of the Phase 3 study is customized. Here, instead of sampling from a Beta distribution, we use the true response rates informed by the Phase 2 study. No user parameter is used for this file. 
+
+
+The *LoadData* function is used to load the results of the Phase 2 study. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information about how to load your own results.
+
+## Analysis Integration Point
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
+</div>
+
+For both Phase 2 and Phase 3 studies of this example, the analysis is based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2). No user parameter is used for this integration point.
+
+**Test Statistic:**
+
+$$Z_j = \frac{\hat{\pi}_{tj} - \hat{\pi}_{cj}}{\sqrt{\hat{\pi}_j \cdot (1 - \hat{\pi}_j) \cdot ( \frac{1}{n_{tj}} + \frac{1}{n_{cj}} )}}$$
+
+Where:
+
+- $\hat{\pi}_{tj}$ and $\hat{\pi}_{cj}$ are the observed response rate at the jth interim look in the treatment and control groups, respectively.
+- $n_{tj}$ and $n_{cj}$ are the numbers of patients at the jth interim look in the treatment and control groups, respectively.
+- $\hat{\pi}_{j} = \frac{n_{tj} \cdot \hat{\pi}_{tj} + n_{cj} \cdot \hat{\pi}_{cj}}{n_{tj} + n_{cj}}$ is the pooled response rate estimate.
+
+
+# Results
+
+(...)
+

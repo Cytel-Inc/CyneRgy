@@ -13,7 +13,7 @@ output:
 
 # Introduction
 
-The intent of the following examples is to demonstrate the computation of Bayesian assurance, or probability of success, and conditional assurance in consecutive studies through the integration of R with Cytel products. The examples feature a sequential design involving a Phase 2 trial with a normal endpoint followed by a Phase 3 trial with a time-to-event endpoint
+The intent of the following examples is to demonstrate the computation of Bayesian assurance, or probability of success, and conditional assurance in consecutive studies through the integration of R with Cytel products. The examples feature a sequential design involving a Phase 2 trial with a normal endpoint followed by a Phase 3 trial with a time-to-event endpoint.
 
 The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial. This **de-risking** is evaluated by comparing two scenarios: (1) the probability of a No-Go decision in Phase 3 if Phase 2 is skipped, and (2) the probability of a No-Go in Phase 3 if a preceding Phase 2 trial is conducted and yields a Go decision. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2.
 
