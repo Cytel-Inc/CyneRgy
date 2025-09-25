@@ -13,7 +13,7 @@ output:
 
 # Introduction
 
-This example demonstrates the computation of conditional probability of success in consecutive studies through the integration of R with Cytel products by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. The examples feature a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with a binary endpoint. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2. It illustrates how simulation results from Phase 2 can be saved, transferred, and reused to inform Phase 3.
+This example demonstrates the computation of conditional probability of success in consecutive studies through the integration of R with Cytel products by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. The examples feature a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with a binary endpoint. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2. It illustrates how simulation results from Phase 2 can be saved, transferred, and reused to inform Phase 3. This type of simulation is particularly relevant in drug development, where Phase 3 trials are costly and resource-intensive.
 
 ## Why do we need R Integration for this example?
 
@@ -27,7 +27,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 - **[AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R)**
 
-   This R file is used for the **Analysis** integration point of both Phase 2 and Phase 3 studies. It contains a function that performs the analysis based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2).
+   This R file is used for the **Analysis** integration point of Phase 2 only. It contains a function that performs the analysis the same way as East Horizon, but also saves relevant outputs.
 
    For more information on this function, see the [Analysis Integration Point](#analysis-integration-point) section below.
 
@@ -179,7 +179,8 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 ### Design Page
 
-27. Click on the input set you just created, then select “User Specified – R” in the Test field. Like for the Phase 2 study, select the file **AnalyzeUsingEastManualFormula.R**, and click on the “Save” button to exit the R Integration details window. See Steps 3 to 7 for more information.
+27. Click on the input set you just created. For Phase 3, it is not needed to customize the Analysis element unless you want to use its simulation data for an additional phase.
+
 
 ### Response Page
 
@@ -207,7 +208,7 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 ### Results Page
 
-35. Load the results as described before (see steps 19 to 21 for more information). In the Explore page of the results, hover over each cell in the heatmap to see a summary of the outputs. Because of our custom R scripts, the result “Power” is actually now equivalent to the “Conditional Probability of Success” of the Phase 3 study.
+35. Load the results as described before (see steps 19 to 21 for more information). In the Explore page of the results, hover over each cell in the heatmap to see a summary of the outputs. Because of our custom R scripts, the result “Power” is actually now equivalent to the Conditional Probability of Success of the Phase 3 study, i.e., the probability that Phase 3 succeeds given that Phase 2 succeeded.
 
 ** + more information on results, maybe another screenshot
 
@@ -219,13 +220,15 @@ See the [Results](#results) section below for more information.
 
 ## Phase 2 Study
 
+For Phase 2, we customize both response and analysis integration points.
+
 ### Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurance.R" class="alert-link">SimulatePatientOutcomeBinaryWithAssurance.R</a></p>
 </div>
 
-Using the file above, the Response element of the Phase 2 study is customized to generate patient outcomes for a binary response trial while incorportaing uncertainty about the true response rates by sampling them from prior distributions. Here, we use a **Beta distribution** prior. However, you could use any other distribution by changing the R code to sample from a different one on lines 37 and 38 of the file. 
+Using the file above, the Response element of the Phase 2 study is customized to generate patient outcomes for a binary response trial while incorporating uncertainty about the true response rates by sampling them from prior distributions. Here, we use a **Beta distribution** prior. However, you could use any other distribution by changing the R code to sample from a different one on lines 37 and 38 of the file. 
 
 For each arm, the true response probability is drawn from a Beta distribution:
 
@@ -263,7 +266,7 @@ where $Y_i \in \{0,1\}$ is the binary response, and $\pi_j$ is the true response
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
 </div>
 
-The analysis is based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2). No user parameter is used for this integration point.
+The analysis is the same as East Horizon, based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2). No user parameter is used for this integration point.
 
 **Test Statistic:**
 
@@ -279,31 +282,17 @@ In the R script, the **TrueProbabilityControl** and **TrueProbabilityExperimenta
 
 ## Phase 3 Study
 
+For Phase 3, we only customize the response integration point.
+
 ### Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurancePh3.R" class="alert-link">SimulatePatientOutcomeBinaryWithAssurancePh3.R</a></p>
 </div>
 
-Using the file above, the Response element of the Phase 3 study is customized. Here, instead of sampling from a Beta distribution, we use the true response rates informed by the Phase 2 study. The *LoadData* function is used to load the results of the Phase 2 study. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information about how to load your own results.
+Using the file above, the Response element of the Phase 3 study is customized. Here, instead of sampling from a Beta distribution, we use the true response rates informed by the Phase 2 study to compute the conditional probability of success. This is the probability that Phase 3 succeeds given that Phase 2 succeeded. The *LoadData* function is used to load the results of the Phase 2 study. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information about how to load your own results.
 
-### Analysis Integration Point
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
-</div>
-
-Similarly to Phase 2, the analysis is based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2). No user parameter is used for this integration point.
-
-**Test Statistic:**
-
-$$Z_j = \frac{\hat{\pi}_{tj} - \hat{\pi}_{cj}}{\sqrt{\hat{\pi}_j \cdot (1 - \hat{\pi}_j) \cdot ( \frac{1}{n_{tj}} + \frac{1}{n_{cj}} )}}$$
-
-Where:
-
-- $\hat{\pi}_{tj}$ and $\hat{\pi}_{cj}$ are the observed response rate at the jth interim look in the treatment and control groups, respectively.
-- $n_{tj}$ and $n_{cj}$ are the numbers of patients at the jth interim look in the treatment and control groups, respectively.
-- $\hat{\pi}_{j} = \frac{n_{tj} \cdot \hat{\pi}_{tj} + n_{cj} \cdot \hat{\pi}_{cj}}{n_{tj} + n_{cj}}$ is the pooled response rate estimate.
+(...)
 
 # Results
 
