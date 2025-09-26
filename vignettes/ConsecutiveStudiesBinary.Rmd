@@ -1,6 +1,6 @@
 ---
 title: "Consecutive Studies, Binary Outcome"
-author: "Gabriel Potvin, Valeria A. G. Mazzanti"
+author: "Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   word_document: default
