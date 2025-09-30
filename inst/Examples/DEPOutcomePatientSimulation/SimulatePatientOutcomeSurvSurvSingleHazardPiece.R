@@ -6,25 +6,32 @@
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param EndpointType A vector of endpoint type for each endpoint, 0 (Continuous), 1 (Binary), 2 (TTE). length( EndpointType ) = number of endpoints.
 #' @param EndpointName A vector of endpoint names for each endpoint, length( EndpointType ) = number of endpoints.
-#' The parameters SurvMethod, NumPrd, PrdTime, SurvParam, and PropResp are lists containing two elements, each corresponding to the input for a specific endpoint.
-#' Below is the detail of elements within the respective parameters.
-#' @param SurvMethod Contains elements for input methods for TTE endpoints. An element has value 1 (Hazard Rates), 2 (Cumulative % Survivals), 3 (Median Survival Times), NA (non-TTE Endpoint).
-#' @param NumPrd Contains elements representing the number of time periods specified for TTE endpoints, and are set to NA for non-TTE endpoints.
+#' The parameters SurvMethod, NumPrd, PrdTime, SurvParam, and PropResp are lists containing two elements -- first corresponds to the first endpoint and second to second.
+#' Below are the details of elements within the respective parameters.
+#' @param SurvMethod A list containing the input methods for each endpoint. TTE endpoint has values 1 (Hazard Rates), 2 (Cumulative % Survivals), 3 (Median Survival Times). Non-TTE endpoints have value NA.
+#' @param NumPrd A list containing the number of time periods specified for each endpoint. For TTE endpoints, this represents the number of time intervals for which hazard rates or survival percentages are defined. For non-TTE endpoints, this value is set to NA.
 #' @param PrdTime \describe{ 
-#'      Contains elements where each is a vector of period times for TTE endpoints, depend on corresponding SurvMethod as mentioned below, and are set to NA for non-TTE endpoints.
-#'      \item{If input method is Hazard Rates}{element is a vector of starting times of hazard pieces.}
-#'      \item{If input method is Cumulative % Survivals}{element is a vector of times at which the cumulative % survivals are specified.}
-#'      \item{If input method is Median Survival Times}{element is 0 by default.}
+#'      A list where each element is a vector of period times for TTE endpoints, dependent on the corresponding SurvMethod value. For non-TTE endpoints, this value is set to NA.
+#'      \item{If SurvMethod is 1 (Hazard Rates)}{Element is a vector specifying the starting times of each hazard piece. The number of elements equals NumPrd.}
+#'      \item{If SurvMethod is 2 (Cumulative % Survivals)}{Element is a vector specifying the time points at which the cumulative survival percentages are defined. The number of elements equals NumPrd.}
+#'      \item{If SurvMethod is 3 (Median Survival Times)}{Element is 0 by default as no time periods need to be defined.}
 #'      }
-#' @param SurvParam \describe{Contains elements where each is a 2D array of parameters used to generate survival times. Each array has the following structure:
-#'    \item{If input method is Hazard Rates}{The element is an array (NumPrd rows, NumArm columns) that specifies arm by arm hazard rates (one rate per arm per piece). 
-#'    Thus [i, j] the element of the array specifies hazard rate in ith period for jth arm.
-#'    Arms are in columns with column 1 is control, column 2 is experimental
-#'    Time periods are in rows, row 1 is time period 1, row 2 is time period 2...}
-#'    \item{If input method is Cumulative % Survivals}{The element is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
-#'    \item{If input method is Median Survival Times}{The element is a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
+#' @param SurvParam \describe{
+#'    A list where each element is a 2D array of parameters used to generate survival times based on the corresponding SurvMethod value:
+#'    \item{If SurvMethod is 1 (Hazard Rates)}{The element is an array (NumPrd rows, NumArm columns) that specifies arm-specific hazard rates (one rate per arm per time period). 
+#'    Element [i, j] specifies the hazard rate in the i-th time period for the j-th arm.
+#'    Arms are arranged in columns: column 1 is control arm, column 2 is experimental arm.
+#'    Time periods are arranged in rows: row 1 is time period 1, row 2 is time period 2, etc.}
+#'    \item{If SurvMethod is 2 (Cumulative % Survivals)}{The element is an array (NumPrd rows, NumArm columns) that specifies arm-specific cumulative survival percentages. 
+#'    Element [i, j] specifies the cumulative survival percentage at the i-th time point for the j-th arm.}
+#'    \item{If SurvMethod is 3 (Median Survival Times)}{The element is a 1 x NumArm array specifying the median survival time for each arm. 
+#'    Column 1 is control arm, column 2 is experimental arm.}
 #'  }
-#' @param PropResp \describe{Contains elements where each is a vector of expected proportions of responders in each arm for binary endpoints, and are set to NA for non-binary endpoints.
+#' @param PropResp \describe{
+#'    A list where each element is a vector of expected proportions of responders in each arm for binary endpoints.
+#'    \item{For binary endpoints}{Element is a vector of length NumArm, where each value represents the expected response proportion for the corresponding arm.}
+#'    \item{For non-binary endpoints}{Element is set to NA as response proportions are not applicable.}
+#'    }
 #' @param Correlation \describe{Correlation between two endpoints as mentioned below,}
 #'    \item{0} {Uncorrelated}  
 #'    \item{1} {Very Weak Positive}  
@@ -37,18 +44,19 @@
 #'    \item{-3} {Moderate Negative}  
 #'    \item{-4} {Strong Negative} 
 #'    \item{-5} {Very Strong Negative}  
-#' @param  UserParam A list of user defined parameters in East.   You must have a default = NULL, as in this example.
-#' If UseParam are supplied in East or East Horizon, they will be an element in the list, eg UserParam$ParameterName.  
+#' @param  UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example.
+#' If UserParam are supplied in East Horizon, they will be an element in the list, eg UserParam$ParameterName.  
 #' @return The function must return a list in the return statement of the function. The information below lists 
 #'             elements of the list, if the element is required or optional and a description of the return values if needed. 
 #'             \describe{
-#'             \item{Response}{Required. A list which contains arrays of generated response values for each endpoint. It will contain survival times for TTE endpoints and appropriate response values for Binary and Continous endpoints.}
+#'             \item{Response}{Required. A list which contains vectors of generated response values for each endpoint. It will contain survival times for TTE endpoints and appropriate response values for Binary and Continous endpoints.}
 #'             \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
-#'                                     }
+#'                                     } 
+
 
 
 #' In this example, the response (Survival times) is generated for two correlated Time to Event Endpoints.
@@ -63,11 +71,6 @@ SimulatePatientOutcomeSurvSurv.DEP <- function( NumSub, NumArm, ArrivalTime=NULL
                                                SurvMethod, NumPrd, PrdTime, 
                                                SurvParam, PropResp=NULL, UserParam = NULL )
 {
-    # Note: It can be helpful to save to the parameters that East sent.
-    # The next two lines show how you could save the UserParam variable to an Rds file
-    # setwd(["ENTER THE DESIRED LOCATION TO SAVE THE FILE"])
-    # saveRDS( UserParam, "UserParam.Rds")
-
     Error               <- 0
     vPatientOutcomeEP1  <- rep( 0, NumSub )  
     vPatientOutcomeEP2  <- rep( 0, NumSub )  
@@ -129,20 +132,3 @@ GetCorrMatrix <- function(Correlation)
   # Return the 2x2 correlation matrix
   return( matrix( c(1, rho, rho, 1), nrow = 2) )
 }
-
-
-data <- readRDS("C:\\Users\\pradip.maske\\Downloads\\MedSurv_Corr_-Ve.Rds")
-SimulatePatientOutcomeSurvSurv.DEP( NumSub = data$NumSub, NumArm=data$NumArm, TreatmentID=data$TreatmentID, 
-                                                EndpointType=data$EndpointType, EndpointName=data$EndpointName, 
-                                                Correlation = data$Correlation, 
-                                                SurvMethod = data$SurvMethod, NumPrd=data$NumPrd, 
-                                                PrdTime = data$PrdTime, SurvParam=data$SurvParam)
-
-
-tempdata <- data
-tempdata$SurvMethod$`Overall Survival` <- tempdata$SurvMethod$`Progress Free Survival` <- 1
-data <- SimulatePatientOutcomeSurvSurv.DEP( NumSub = data$NumSub, NumArm=data$NumArm, TreatmentID=data$TreatmentID, 
-                                            EndpointType=data$EndpointType, EndpointName=data$EndpointName, 
-                                            Correlation = data$Correlation, 
-                                            SurvMethod = data$SurvMethod, NumPrd=data$NumPrd, 
-                                            PrdTime = data$PrdTime, SurvParam=data$SurvParam)

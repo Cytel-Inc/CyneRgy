@@ -14,17 +14,102 @@
 #'        this data frame. For analysis the most relevant variables are:
 #'          SimData$ArrivalTime :   A numeric value with the time the patient arrived in the trial
 #'          SimData$TreatmentID :   An integer value where 0 indicates control treatment and 1 experimental treatment.
-#'          SimData$ResponseX   :   Numeric value for the survival time or time-to-event for the patient on Endpoint X
+#'          SimData$ResponseX   :   Numeric value for the survival time or binary response for the patient on Endpoint X
 #' @param DesignParam Input Parameters which user may need to compute test statistic and perform test.
 #'                    User should access the variables using names, for example, DesignParam$Alpha, and not order.
-#'                    For details of this list please see below.
+#'                    The list includes the following parameters:
+#'                    \describe{
+#'                      \item{EndpointType}{Integer vector with number of endpoints elements. Indicates endpoint type for each endpoint: 
+#'                            0 - Continuous, 1 - Binary, 2 - TTE}
+#'                      \item{EndpointName}{Character vector with number of endpoints elements. Names for each endpoint as specified by the user}
+#'                      \item{WinCond}{Integer value indicating winning condition: 1 - At least Endpoint 1, 
+#'                            2 - At least Endpoint 2, 3 - At least one endpoint, 4 - Both endpoints}
+#'                      \item{TailType}{List with tail type for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., TailType[EndpointName[1]] or TailType[EndpointName[2]]. Values: 0 - Left Tailed, 1 - Right Tailed}
+#'                      \item{FollowUpType}{List with follow up type for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., FollowUpType[EndpointName[1]] or FollowUpType[EndpointName[2]].
+#'                            Values: 0 - Until End of the Study, 1 - For Fixed Period, NA - For Binary endpoint}
+#'                      \item{FollowUpDur}{List with follow-up duration for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., FollowUpDur[EndpointName[1]] or FollowUpDur[EndpointName[2]]}
+#'                      \item{TrialType}{List with trial type for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., TrialType[EndpointName[1]] or TrialType[EndpointName[2]].
+#'                            Values: 0 - Superiority, 1 - Non-Inferiority}
+#'                      \item{VarType}{Integer value indicating variance type in TTE-Binary designs: 0 - Pooled, 1 - Un-Pooled}
+#'                      \item{PlanEndTrial}{Integer value indicating planned end of trial: 1 - Full Info for both endpoints,
+#'                            2 - Full Info for Endpoint 1, 3 - Full Info for Endpoint 2}
+#'                      \item{AllocInfo}{Numeric vector with ratios of treatment group sample sizes to control group sample size}
+#'                      \item{Alpha}{Numeric value for Type I Error}
+#'                      \item{CriticalPoint}{List with critical value for each endpoint in fixed sample designs. 
+#'                            Access using the actual endpoint names specified by the user,
+#'                            e.g., CriticalPoint[EndpointName[1]] or CriticalPoint[EndpointName[2]]}
+#'                      \item{UpperCriticalPoint}{List with upper critical value for each endpoint in right-tailed fixed sample designs. 
+#'                            Access using the actual endpoint names specified by the user,
+#'                            e.g., UpperCriticalPoint[EndpointName[1]] or UpperCriticalPoint[EndpointName[2]]}
+#'                      \item{LowerCriticalPoint}{List with lower critical value for each endpoint in left-tailed fixed sample designs. 
+#'                            Access using the actual endpoint names specified by the user,
+#'                            e.g., LowerCriticalPoint[EndpointName[1]] or LowerCriticalPoint[EndpointName[2]]}
+#'                      \item{SampleSize}{Integer value for total sample size}
+#'                      \item{TestID}{Integer value for test ID. For dual endpoints, this is the same as single endpoint TTE test}
+#'                      \item{MultAdj}{Integer value for multiplicity adjustments: 0 - None, 1 - Fallback, 2 - Fixed Sequence,
+#'                            3 - Weighted Bonferroni, 4 - Weighted Bonferroni-Holms, 5 - Weighted Hochberg}
+#'                      \item{TestOrder}{Integer value for testing order in Fallback or Fixed Sequence: 1 - Start with Endpoint 1,
+#'                            2 - Start with Endpoint 2}
+#'                      \item{MaxEvents}{List with maximum events for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., MaxEvents[EndpointName[1]] or MaxEvents[EndpointName[2]]. Fixed to NA for any Binary endpoint}
+#'                      \item{MaxCompleters}{List with maximum number of completers for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., MaxCompleters[EndpointName[1]] or MaxCompleters[EndpointName[2]]. Fixed to NA for any TTE endpoint}
+#'                      \item{TrtEffNull}{List with treatment effect under null hypothesis for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., TrtEffNull[EndpointName[1]] or TrtEffNull[EndpointName[2]]. Specified in natural log scale for TTE endpoints}
+#'                      \item{AlphaAlloc}{List with Type-1 Error allocation percentage for each endpoint in certain multiplicity
+#'                            adjustment methods. Access using the actual endpoint names specified by the user,
+#'                            e.g., AlphaAlloc[EndpointName[1]] or AlphaAlloc[EndpointName[2]]}
+#'                      \item{TargetSSFA}{List with target sample size for final analysis for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., TargetSSFA[EndpointName[1]] or TargetSSFA[EndpointName[2]]. Fixed to NA for TTE endpoints or if not specified by user}
+#'                      \item{TestStat}{List with test statistic output for each endpoint. Access using the actual endpoint names specified by the user,
+#'                            e.g., TestStat[EndpointName[1]] or TestStat[EndpointName[2]]. Fixed to NA for endpoints whose analysis is pending}
+#'                    }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic
 #'                 and perform test. User should access the variables using names,
-#'                 for example LookInfo$NumLooks and not order. Other important variables in group sequential designs are:
-#'                   LookInfo$NumLooks      :   An integer value with the number of looks in the study
-#'                   LookInfo$CurrLookIndex :   An integer value with the current index look, starting from 1
-#'                   LookInfo$InfoFrac      :   A numeric vector containing information fraction
-#' @param UserParam User can pass custom scalar variables defined by users as a member of this list.
+#'                 for example LookInfo$NumLooks and not order. The list includes the following parameters for group sequential designs:
+#'                   \describe{
+#'                     \item{NumEndpointLooks}{Integer list with number of looks for each endpoint. Access using endpoint names,
+#'                           e.g., NumEndpointLooks["Endpoint 1"] or NumEndpointLooks["Endpoint 2"]}
+#'                     \item{NumLooks}{Integer value for total number of looks. Equal to Max(NumEndpointLooks["Endpoint 1"], NumEndpointLooks["Endpoint 2"])}
+#'                     \item{CurrLookIndex}{Integer value with the current index look (1-Based)}
+#'                     \item{SyncInterim}{Integer value indicating which endpoint to base interim looks on: 1 - Based on Endpoint 1, 2 - Based on Endpoint 2}
+#'                     \item{InputInfoFrac}{Numeric list with information fraction for each endpoint. Access using endpoint names,
+#'                           e.g., InputInfoFrac["Endpoint 1"] or InputInfoFrac["Endpoint 2"]. Same as [Analysis Spacing (%) / 100].
+#'                           Some entries may be NA depending on SyncInterim setting and number of looks for each endpoint}
+#'                     \item{CumCompleters}{Integer list with cumulative completers for each endpoint. Access using endpoint names,
+#'                           e.g., CumCompleters["Endpoint 1"] or CumCompleters["Endpoint 2"]. Fixed to NA for any TTE endpoint}
+#'                     \item{CumEvents}{Integer list with cumulative events for each endpoint. Access using endpoint names,
+#'                           e.g., CumEvents["Endpoint 1"] or CumEvents["Endpoint 2"]. Fixed to NA for any Binary endpoint}
+#'                     \item{RejType}{Integer list with rejection type for each endpoint. Access using endpoint names,
+#'                           e.g., RejType["Endpoint 1"] or RejType["Endpoint 2"]. Values: 0 - 1 Sided Efficacy Upper,
+#'                           1 - 1 Sided Futility Upper, 2 - 1 Sided Efficacy Lower, 3 - 1 Sided Futility Lower,
+#'                           4 - 1 Sided Efficacy Upper Futility Lower, 5 - 1 Sided Efficacy Lower Futility Upper}
+#'                     \item{EffBdryScale}{Integer list with efficacy boundary scale for each endpoint. Access using endpoint names,
+#'                           e.g., EffBdryScale["Endpoint 1"] or EffBdryScale["Endpoint 2"]. Values: 0 - Z Scale}
+#'                     \item{EffBdry}{Numeric list with efficacy boundary values for each endpoint. Access using endpoint names,
+#'                           e.g., EffBdry["Endpoint 1"] or EffBdry["Endpoint 2"]. Some entries may be NA if user has skipped
+#'                           efficacy boundaries for some looks}
+#'                     \item{EffBdryUpper}{Numeric list with upper efficacy boundary values for each endpoint (for right-tailed tests).
+#'                           Access using endpoint names, e.g., EffBdryUpper["Endpoint 1"] or EffBdryUpper["Endpoint 2"]}
+#'                     \item{EffBdryLower}{Numeric list with lower efficacy boundary values for each endpoint (for left-tailed tests).
+#'                           Access using endpoint names, e.g., EffBdryLower["Endpoint 1"] or EffBdryLower["Endpoint 2"]}
+#'                     \item{FutBdryScale}{Integer list with futility boundary scale for each endpoint. Access using endpoint names,
+#'                           e.g., FutBdryScale["Endpoint 1"] or FutBdryScale["Endpoint 2"]. Values: 0 - Z scale, 2 - Delta Scale, 6 - HR Scale}
+#'                     \item{FutBdry}{Numeric list with futility boundary values for each endpoint. Access using endpoint names,
+#'                           e.g., FutBdry["Endpoint 1"] or FutBdry["Endpoint 2"]. Dimension for each endpoint is Number of Looks - 1.
+#'                           Some entries may be NA if user has skipped futility boundaries for some looks}
+#'                     \item{FutBdryUpper}{Numeric list with upper futility boundary values for each endpoint (for left-tailed tests).
+#'                           Access using endpoint names, e.g., FutBdryUpper["Endpoint 1"] or FutBdryUpper["Endpoint 2"]}
+#'                     \item{FutBdryLower}{Numeric list with lower futility boundary values for each endpoint (for right-tailed tests).
+#'                           Access using endpoint names, e.g., FutBdryLower["Endpoint 1"] or FutBdryLower["Endpoint 2"]}
+#'                     \item{BindingType}{Integer list with binding type for each endpoint. Access using endpoint names,
+#'                           e.g., BindingType["Endpoint 1"] or BindingType["Endpoint 2"]. Values: 0 - Non Binding}
+#'                   }
+#' @param UserParam User can pass custom scalar variables defined by them as a member of this list.
 #'                  User should access the variables using names, for example UserParam$Var1 and not order.
 #'                  These variables can be of the following types: Integer, Numeric, or Character
 #' @return The function must return a list in the return statement of the function. The information below lists
@@ -36,8 +121,8 @@
 #'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }}
-#'                  \item{HR}{Required numeric value - Hazard Ratio,
-#'                            Only applicable for time-to-event data.}
+#'                  \item{HR}{Required numeric value - Estimate of Hazard Ratio for the corresponding Endpoint. Only applicable for time-to-event data.}
+#'                  \item{Delta}{Required numeric value - Estimate of Delta for the corresponding Endpoint. Only applicable for binary data.}
 #'             }
 #'
 #' @note Helpful Hints:
