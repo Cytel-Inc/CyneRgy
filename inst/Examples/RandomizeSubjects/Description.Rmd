@@ -56,91 +56,18 @@ Steps:
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
-library(ggplot2)
-
-bigcolxmin = 2
-bigcolxmax = bigcolxmin + 3
-
-# Define main columns
-columns <- data.frame(
-  xmin = c(0, 1, bigcolxmin, 5.5, 6.5, 7.5, 8.5),
-  xmax = c(0.5, 1.5, bigcolxmax, 6, 7, 8, 9),
-  ymin = rep(1.8, 7),
-  ymax = rep(10, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray"),
-  border = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray")
-)
-
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 9.4
-yminfirstbox = ymaxfirstbox - unitybox
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox*1.5
-ymaxsixthbox = yminfifthbox - spaceybox
-yminsixthbox = ymaxsixthbox - unitybox
-
-# Define flowchart steps 
-flowchart <- data.frame(
-  xmin = rep(bigcolxmin + 0.3, 6),
-  xmax = rep(bigcolxmax - 0.3, 6),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox, ymaxsixthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox, yminsixthbox),
-  label = c("Load allocation ratio", 
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Randomization" = c(
+            "Load allocation ratio", 
             "Convert allocation ratios to fractions",
             "Calculate sample size per arm",
             "Loop through patients",
-            "Assign subjects to arms using\nuniform distribution",
-            "Return allocation indices"),
-  fill = rep("#cfe2ff", 6)
+            "Assign subjects to arms using uniform distribution",
+            "Return allocation indices"
+        )
+    )
 )
-
-# Define arrows for flowchart 
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 5),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 5),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4], flowchart$ymin[5]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5], flowchart$ymax[6])
-)
-
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(6.8, 8),
-  xmax = c(7.8, 9),
-  ymin = c(1.2, 1.2),
-  ymax = c(1.5, 1.5),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart 
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-
-print(p)
 ```
 
 # Example 2 - Randomize Subjects Using Sample Function
@@ -167,91 +94,18 @@ Steps:
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
-library(ggplot2)
-
-bigcolxmin = 2
-bigcolxmax = bigcolxmin + 3
-
-# Define main columns
-columns <- data.frame(
-  xmin = c(0, 1, bigcolxmin, 5.5, 6.5, 7.5, 8.5),
-  xmax = c(0.5, 1.5, bigcolxmax, 6, 7, 8, 9),
-  ymin = rep(1.8, 7),
-  ymax = rep(10, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray"),
-  border = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray")
-)
-
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 9.4
-yminfirstbox = ymaxfirstbox - unitybox
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox*1.5
-ymaxsixthbox = yminfifthbox - spaceybox
-yminsixthbox = ymaxsixthbox - unitybox
-
-# Define flowchart steps 
-flowchart <- data.frame(
-  xmin = rep(bigcolxmin + 0.3, 6),
-  xmax = rep(bigcolxmax - 0.3, 6),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox, ymaxsixthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox, yminsixthbox),
-  label = c("Load allocation ratio", 
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Randomization" = c(
+            "Load allocation ratio", 
             "Convert allocation ratios to fractions",
             "Calculate sample size per arm",
             "Loop through patients",
-            "Assign subjects to arms using\nsample function",
-            "Return allocation indices"),
-  fill = rep("#cfe2ff", 6)
+            "Assign subjects to arms using sample function",
+            "Return allocation indices"
+        )
+    )
 )
-
-# Define arrows for flowchart 
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 5),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 5),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4], flowchart$ymin[5]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5], flowchart$ymax[6])
-)
-
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(6.8, 8),
-  xmax = c(7.8, 9),
-  ymin = c(1.2, 1.2),
-  ymax = c(1.5, 1.5),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart 
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-
-print(p)
 ```
 
 # Example 3 - Randomize Subjects Using randomizeR Package
@@ -283,88 +137,14 @@ This function also uses parameters specified in East Horizon. Refer to the table
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
-library(ggplot2)
-
-bigcolxmin = 2
-bigcolxmax = bigcolxmin + 3
-
-# Define main columns
-columns <- data.frame(
-  xmin = c(0, 1, bigcolxmin, 5.5, 6.5, 7.5, 8.5),
-  xmax = c(0.5, 1.5, bigcolxmax, 6, 7, 8, 9),
-  ymin = rep(4.2, 7),
-  ymax = rep(10, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray"),
-  border = c("lightgray", "lightgray", "#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray")
-)
-
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 9.4
-yminfirstbox = ymaxfirstbox - unitybox
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox*1.5
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox
-ymaxsixthbox = yminfifthbox - spaceybox
-yminsixthbox = ymaxsixthbox - unitybox
-
-# Define flowchart steps 
-flowchart <- data.frame(
-  xmin = rep(bigcolxmin + 0.3, 4),
-  xmax = rep(bigcolxmax - 0.3, 4),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox),
-  label = c("Load allocation ratio and block sizes", 
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Randomization" = c(
+            "Load allocation ratio and block sizes", 
             "Loop through patients",
-            "Assign subjects to arms using\nblock randomization",
-            "Return allocation indices"),
-  fill = rep("#cfe2ff", 4)
+            "Assign subjects to arms using block randomization",
+            "Return allocation indices"
+        )
+    )
 )
-
-# Define arrows for flowchart 
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 3),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 3),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4])
-)
-
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(6.8, 8),
-  xmax = c(7.8, 9),
-  ymin = c(3.7, 3.7),
-  ymax = c(4, 4),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart 
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-
-print(p)
 ```
-
