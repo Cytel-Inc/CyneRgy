@@ -54,131 +54,24 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
-library(ggplot2)
-
-bigcolxmin = 5
-bigcolxmax = bigcolxmin + 3
-
-bigcolxmin2 = 8.5
-bigcolxmax2 = bigcolxmin2 + 3
-
-# Define main columns
-columns <- data.frame(
-  xmin = c(0, 1, 2, 3, 4, bigcolxmin, bigcolxmin2),
-  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, bigcolxmax2),
-  ymin = rep(3, 7),
-  ymax = rep(10, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
-  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
-)
-
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 9.75
-yminfirstbox = ymaxfirstbox - unitybox
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox*1.5
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox*1.5
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox*1.5
-
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox
-
-# Define flowchart steps 
-flowchart <- data.frame(
-  xmin = rep(bigcolxmin + 0.1, 5),
-  xmax = rep(bigcolxmax - 0.1, 5),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
-  label = c("Load prior distribution parameters", 
-            "Sample median time to PFS \nand OS from Gamma distribution",
-            "Sample probability of death \nbefore PFS from Beta distribution",
-            "Simulate PFS and OS \nusing multi-state model", 
-            "Return survival times"),
-  fill = rep("#cfe2ff", 5)
-)
-
-# Define arrows for flowchart 
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 4),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
-)
-
-yminfirstbox2 = ymaxfirstbox - unitybox
-ymaxsecondbox2 = yminfirstbox2 - spaceybox
-yminsecondbox2 = ymaxsecondbox2 - unitybox
-ymaxthirdbox2 = yminsecondbox2 - spaceybox
-yminthirdbox2 = ymaxthirdbox2 - unitybox
-ymaxfourthbox2 = yminthirdbox2 - spaceybox
-yminfourthbox2 = ymaxfourthbox2 - unitybox*2
-
-ymaxfifthbox2 = yminfourthbox2 - spaceybox
-yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
-
-# Define flowchart steps 
-flowchart2 <- data.frame(
-  xmin = rep(bigcolxmin2 + 0.1, 5),
-  xmax = rep(bigcolxmax2 - 0.1, 5),
-  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2),
-  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2),
-  label = c("Load OS hazard ratio thresholds", 
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load prior distribution parameters", 
+            "Sample median time to PFS and OS from Gamma distribution",
+            "Sample probability of death before PFS from Beta distribution",
+            "Simulate PFS and OS using multi-state model", 
+            "Return survival times"
+        ),
+        "Analysis" = c(
+            "Load OS hazard ratio thresholds", 
             "Analyze PFS using Cox regression",
             "Analyze OS using Cox regression",
-            "Make interim or final analysis\ndecisions based on efficacy and\nfutility boundaries", 
-            "Return test statistics, hazard ratios,\nand decision outcomes"),
-  fill = rep("#cfe2ff", 5)
+            "Make interim or final analysis decisions based on efficacy and futility boundaries", 
+            "Return test statistics, hazard ratios, and decision outcomes"
+        )
+    )
 )
-
-# Define arrows for flowchart 
-flowchart_arrows2 <- data.frame(
-  x = rep((bigcolxmin2+bigcolxmax2)/2, 4),
-  xend = rep((bigcolxmin2+bigcolxmax2)/2, 4),
-  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4]),
-  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5])
-)
-
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(9, 10.5),
-  xmax = c(10, 11.5),
-  ymin = c(2.5, 2.5),
-  ymax = c(2.8, 2.8),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 20, vjust = 1) +
-  # Add flowchart 
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Add flowchart 
-  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-
-print(p)
 ```
 
 By combining the above R functions with the East Horizon native inputs, users are able to simulate and compute the probability of success of each simulated trial. Users will also continue to benefit from East Horizon’s output visualizations – with the caveat that the Probability of Success metric will be labeled as “Power” in the native outputs of East Horizon.
