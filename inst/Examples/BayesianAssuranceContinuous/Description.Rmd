@@ -43,117 +43,24 @@ Often, it is important to examine the posterior distributions of both the observ
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
-library(ggplot2)
-bigcolxmin = 5
-bigcolxmax = bigcolxmin + 3
-bigcolxmin2 = 8.5
-bigcolxmax2 = bigcolxmin2 + 3
-# Define main columns
-columns <- data.frame(
-  xmin = c(0, 1, 2, 3, 4, bigcolxmin, bigcolxmin2),
-  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, bigcolxmax2),
-  ymin = rep(3, 7),
-  ymax = rep(10.75, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
-  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
-)
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 10.5
-yminfirstbox = ymaxfirstbox - unitybox*1.5
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox*1.5
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox*1.5
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox*1.5
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox*1.5
-# Define flowchart steps 
-flowchart <- data.frame(
-  xmin = rep(bigcolxmin + 0.1, 5),
-  xmax = rep(bigcolxmax - 0.1, 5),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
-  label = c("Load prior distribution parameters,\nmean, and standard deviations", 
-            "Sample treatment effect from\nmixture of normal distributions",
-            "Compute treatment means\nincluding sampled effect",
-            "Simulate patient outcomes\nbased on treatment assignment",
-            "Return simulated outcomes\nand true treatment effect"),
-  fill = rep("#cfe2ff", 5)
-)
-# Define arrows for flowchart 
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 4),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
-)
-yminfirstbox2 = ymaxfirstbox - unitybox*1.5
-ymaxsecondbox2 = yminfirstbox2 - spaceybox
-yminsecondbox2 = ymaxsecondbox2 - unitybox
-ymaxthirdbox2 = yminsecondbox2 - spaceybox
-yminthirdbox2 = ymaxthirdbox2 - unitybox*1.5
-ymaxfourthbox2 = yminthirdbox2 - spaceybox
-yminfourthbox2 = ymaxfourthbox2 - unitybox*1.5
-ymaxfifthbox2 = yminfourthbox2 - spaceybox
-yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
-# Define flowchart steps 
-flowchart2 <- data.frame(
-  xmin = rep(bigcolxmin2 + 0.1, 5),
-  xmax = rep(bigcolxmax2 - 0.1, 5),
-  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2),
-  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2),
-  label = c("Load prior distribution parameters,\nSD, MAV and PU",
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load prior distribution parameters, mean, and standard deviations", 
+            "Sample treatment effect from mixture of normal distributions",
+            "Compute treatment means including sampled effect",
+            "Simulate patient outcomes based on treatment assignment",
+            "Return simulated outcomes and true treatment effect"
+        ),
+        "Analysis" = c(
+            "Load prior distribution parameters, SD, MAV and PU",
             "Compute posterior parameters",
-            "Sample posterior distributions\nof each arm",
-            "Make decision based on posterior\nprobability and user-defined cutoff",
-            "Return posterior parameters,\nprobabilities, and decision"),
-  fill = rep("#cfe2ff", 5)
+            "Sample posterior distributions of each arm",
+            "Make decision based on posterior probability and user-defined cutoff",
+            "Return posterior parameters, probabilities, and decision"
+        )
+    )
 )
-# Define arrows for flowchart 
-flowchart_arrows2 <- data.frame(
-  x = rep((bigcolxmin2+bigcolxmax2)/2, 4),
-  xend = rep((bigcolxmin2+bigcolxmax2)/2, 4),
-  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4]),
-  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5])
-)
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(9, 10.5),
-  xmax = c(10, 11.5),
-  ymin = c(2.5, 2.5),
-  ymax = c(2.8, 2.8),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 20, vjust = 1) +
-  # Add flowchart 
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Add flowchart 
-  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-print(p)
 ```
 
 ## Response (Patient Simulation) Integration Point
@@ -317,120 +224,25 @@ This example follows the same structure and uses the same code as Example 1. How
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
-library(ggplot2)
-bigcolxmin = 5
-bigcolxmax = bigcolxmin + 3
-bigcolxmin2 = 8.5
-bigcolxmax2 = bigcolxmin2 + 3
-# Define main columns
-columns <- data.frame(
-  xmin = c(0, 1, 2, 3, 4, bigcolxmin, bigcolxmin2),
-  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, bigcolxmax2),
-  ymin = rep(3, 7),
-  ymax = rep(12, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
-  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
-)
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 11.7
-yminfirstbox = ymaxfirstbox - unitybox*1.5
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox*1.5
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox*1.5
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox*1.5
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox*1.5
-# Define flowchart steps 
-flowchart <- data.frame(
-  xmin = rep(bigcolxmin + 0.1, 5),
-  xmax = rep(bigcolxmax - 0.1, 5),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
-  label = c("Load prior distribution parameters,\nmean, and standard deviations", 
-            "Sample treatment effect from\nmixture of normal distributions",
-            "Compute treatment means\nincluding sampled effect",
-            "Simulate patient outcomes\nbased on treatment assignment",
-            "Return simulated outcomes\nand true treatment effect"),
-  fill = rep("#cfe2ff", 5)
-)
-# Define arrows for flowchart 
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 4),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
-)
-yminfirstbox2 = ymaxfirstbox - unitybox*1.5
-ymaxsecondbox2 = yminfirstbox2 - spaceybox
-yminsecondbox2 = ymaxsecondbox2 - unitybox
-ymaxthirdbox2 = yminsecondbox2 - spaceybox
-yminthirdbox2 = ymaxthirdbox2 - unitybox*1.5
-ymaxfourthbox2 = yminthirdbox2 - spaceybox
-yminfourthbox2 = ymaxfourthbox2 - unitybox*1.5
-ymaxfifthbox2 = yminfourthbox2 - spaceybox
-yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
-ymaxsixthbox2 = yminfifthbox2 - spaceybox
-yminsixthbox2 = ymaxsixthbox2 - unitybox*1.5
-# Define flowchart steps 
-flowchart2 <- data.frame(
-  xmin = rep(bigcolxmin2 + 0.1, 6),
-  xmax = rep(bigcolxmax2 - 0.1, 6),
-  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2, ymaxsixthbox2),
-  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2, yminsixthbox2),
-  label = c("Load prior distribution parameters,\nSD, MAV, PU, and PUFutility",
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load prior distribution parameters, mean, and standard deviations", 
+            "Sample treatment effect from mixture of normal distributions",
+            "Compute treatment means including sampled effect",
+            "Simulate patient outcomes based on treatment assignment",
+            "Return simulated outcomes and true treatment effect"
+        ),
+        "Analysis" = c(
+            "Load prior distribution parameters,SD, MAV, PU, and PUFutility",
             "Compute posterior parameters",
-            "If IA: simulate future data and\nestimate predictive prob. of futility",
-            "If FA: sample posterior\ndistributions of each arm",
-            "Make decision based on posterior\nprobability and user-defined cutoff",
-            "Return posterior parameters,\nprobabilities, and decision"),
-  fill = rep("#cfe2ff", 6)
+            "If IA: simulate future data and estimate predictive prob. of futility",
+            "If FA: sample posterior distributions of each arm",
+            "Make decision based on posterior probability and user-defined cutoff",
+            "Return posterior parameters, probabilities, and decision"
+        )
+    )
 )
-# Define arrows for flowchart 
-flowchart_arrows2 <- data.frame(
-  x = rep((bigcolxmin2+bigcolxmax2)/2, 5),
-  xend = rep((bigcolxmin2+bigcolxmax2)/2, 5),
-  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4], flowchart2$ymin[5]),
-  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5], flowchart2$ymax[6])
-)
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(9, 10.5),
-  xmax = c(10, 11.5),
-  ymin = c(2.5, 2.5),
-  ymax = c(2.8, 2.8),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 1, label = label), size = 3, angle = 20, vjust = 1) +
-  # Add flowchart 
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Add flowchart 
-  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-print(p)
 ```
 
 ## Response (Patient Simulation) Integration Point

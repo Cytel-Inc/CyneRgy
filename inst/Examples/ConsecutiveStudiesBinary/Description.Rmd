@@ -229,7 +229,7 @@ See the [Results](#results) section below for more information.
 
 For the Phase 2 study, we customize both Response and Analysis integration points. The figure below illustrates where everything fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
-```#{r echo=FALSE,  warning=FALSE, fig.retina=3}
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
 CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
         "Response" = c(
@@ -311,7 +311,7 @@ In the R script, the **TrueProbabilityControl** and **TrueProbabilityExperimenta
 
 For Phase 3, we customize the Response integration point only. The figure below illustrates where everything fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
-```#{r echo=FALSE,  warning=FALSE, fig.retina=3}
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
 CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
         "Response" = c(

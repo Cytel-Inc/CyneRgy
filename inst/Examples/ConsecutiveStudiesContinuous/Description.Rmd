@@ -79,6 +79,29 @@ ggplot() +
 
 This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm.
 
+The figure below illustrates where this phase fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load prior distribution parameters, mean, and standard deviations", 
+            "Sample treatment effect from mixture of normal distributions",
+            "Compute treatment means including sampled effect",
+            "Simulate patient outcomes based on treatment assignment",
+            "Return simulated outcomes and true treatment effect"
+        ),
+        "Analysis" = c(
+            "Load prior distribution parameters, SD, MAV and PU",
+            "Compute posterior parameters",
+            "Sample posterior distributions of each arm",
+            "Make decision based on posterior probability and user-defined cutoff",
+            "Return posterior parameters, probabilities, and decision"
+        )
+    )
+)
+```
+
 ## Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
@@ -193,6 +216,29 @@ For this study, the *MAV* is set to 0.6 and $P_U$ to 0.8. Refer to the table bel
 # Phase 3 Study
 
 This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 200 patients per treatment arm.
+
+The figure below illustrates where this phase fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load prior distribution parameters, mean, and standard deviations", 
+            "Sample treatment effect from mixture of normal distributions",
+            "Compute treatment means including sampled effect",
+            "Simulate patient outcomes based on treatment assignment",
+            "Return simulated outcomes and true treatment effect"
+        ),
+        "Analysis" = c(
+            "Load prior distribution parameters, SD, MAV and PU",
+            "Compute posterior parameters",
+            "Sample posterior distributions of each arm",
+            "Make decision based on posterior probability and user-defined cutoff",
+            "Return posterior parameters, probabilities, and decision"
+        )
+    )
+)
+```
 
 ## Response (Patient Simulation) Integration Point
 
