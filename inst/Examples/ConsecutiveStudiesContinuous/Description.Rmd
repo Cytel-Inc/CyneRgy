@@ -7,6 +7,10 @@ output:
   word_document: default
 ---
 
+<div class="alert alert-danger" role="alert">
+  <p style="margin-bottom:0">The process of loading Phase 2 data into a Phase 3 study is not clearly explained here. For a more detailed explanation, please refer to the [Consecutive Studies, Binary Outcome](ConsecutiveStudiesBinary.html) example.</p>
+</div>
+
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
 </div>
