@@ -49,90 +49,18 @@ Refer to the table below for the definitions of the user-defined parameters used
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-library(ggplot2)
-
-bigcolxmin = 5
-bigcolxmax = 8
-
-# Define main columns
-columns <- data.frame(
-  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
-  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
-  ymin = rep(2, 7),
-  ymax = rep(10, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
-  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
-)
-
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 9.4
-yminfirstbox = ymaxfirstbox - unitybox*2
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox*1.5
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox*1.5
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox
-
-# Define flowchart steps inside "Response"
-flowchart <- data.frame(
-  xmin = rep(5.3, 5),
-  xmax = rep(7.7, 5),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
-  label = c("Load probabilities of resistance \n (dProbOfTreatmentResistantCtrl and \n dProbOfTreatmentResistantExp)", 
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load probabilities of resistance (dProbOfTreatmentResistantCtrl and dProbOfTreatmentResistantExp)", 
             "Loop through patients", 
-            "Simulate whether patient is treatment- \n resistant using binomial distribution", 
-            "If not resistant, simulate response \n using binomial distribution", 
-            "Return responses"),
-  fill = rep("#cfe2ff", 5)
+            "Simulate whether patient is treatment-resistant using binomial distribution", 
+            "If not resistant, simulate response using binomial distribution", 
+            "Return responses"
+        )
+    )
 )
-
-# Define arrows for flowchart inside "Response"
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 4),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
-)
-
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(6.8, 8),
-  xmax = c(7.8, 9),
-  ymin = c(1.5, 1.5),
-  ymax = c(1.8, 1.8),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart inside "Response"
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-
-
-print(p)
 ```
 
 ### Example 1.1 - All Patients Respond
@@ -185,93 +113,19 @@ Refer to the table below for the definitions of the user-defined parameters used
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-```{r echo=FALSE,  warning=FALSE}
-library(ggplot2)
-
-bigcolxmin = 5
-bigcolxmax = 8
-
-# Define main columns
-columns <- data.frame(
-  xmin = c(0, 1, 2, 3, 4, bigcolxmin, 8.5),
-  xmax = c(0.5, 1.5, 2.5, 3.5, 4.5, bigcolxmax, 9),
-  ymin = rep(0.5, 7),
-  ymax = rep(10, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray"),
-  border = c("lightgray", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "lightgray")
-)
-
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 9.4
-yminfirstbox = ymaxfirstbox - unitybox*2
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox*1.5
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox*1.5
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox*1.5
-ymaxsixthbox = yminfifthbox - spaceybox
-yminsixthbox = ymaxsixthbox - unitybox
-
-# Define flowchart steps inside "Response"
-flowchart <- data.frame(
-  xmin = rep(5.3, 6),
-  xmax = rep(7.7, 6),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox, ymaxsixthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox, yminsixthbox),
-  label = c("Load Beta parameters \n (dCtrlBetaParam1, dCtrlBetaParam2, \n dExpBetaParam1, dExpBetaParam2)", 
-            "Simulate the probabilities of treatment \n resistance using Beta distribution",
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load Beta parameters (dCtrlBetaParam1, dCtrlBetaParam2, dExpBetaParam1, dExpBetaParam2)", 
+            "Simulate the probabilities of treatment resistance using Beta distribution",
             "Loop through patients", 
-            "Simulate whether patient is treatment- \n resistant using binomial distribution", 
-            "If not resistant, simulate response \n using binomial distribution", 
-            "Return responses"),
-  fill = rep("#cfe2ff", 6)
+            "Simulate whether patient is treatment-resistant using binomial distribution", 
+            "If not resistant, simulate response using binomial distribution", 
+            "Return responses"
+        )
+    )
 )
-
-# Define arrows for flowchart inside "Response"
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 5),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 5),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4], flowchart$ymin[5]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5], flowchart$ymax[6])
-)
-
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(6.8, 8),
-  xmax = c(7.8, 9),
-  ymin = c(-0.1, -0.1),
-  ymax = c(0.2, 0.2),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.8, label = label), size = 3, angle = 0, vjust = 1) +
-  # Add flowchart inside "Response"
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-
-
-print(p)
 ```
 
 
