@@ -1,217 +1,253 @@
-#------------------------------
-# SortTrialsByRCode
-# - Groups trials by R script hash
-# - Produces one .R + one .rds per group
-# - Creates NoRScript bucket if trials have no R code
-#------------------------------
-SortTrialsByRCode <- function(
-        input_root,                 
-        output_root = file.path(input_root, "grouped_trials"),
-        recursive_trials = FALSE,   
-        choose_name = c("script", "hash"),
-        dry_run = FALSE,
-        purge_output_root = TRUE
+#' Sort trial folders by primary R script hash
+#'
+#' Scans trial directories under a root, identifies a primary R script per trial (via
+#' \code{FindPrimaryRScript}), computes a code hash (via \code{CodeHash}), groups trials with
+#' identical hashes, and for each group writes a representative script and a combined RDS produced
+#' by \code{CombineRDSObjects}. Trials with no identifiable R script are optionally collected into
+#' a \code{NoRScript} bucket. The function can optionally purge and rebuild the output root.
+#'
+#' @param strInputRoot Character path to the root folder containing trial subdirectories.
+#' @param strOutputRoot Character path to the output root. Defaults to \code{file.path( strInputRoot, "grouped_trials" )}.
+#' @param bRecursiveTrials Logical; if \code{TRUE}, search for trial directories recursively under \code{strInputRoot}.
+#' @param vChooseName Character scalar; one of \code{"script"} or \code{"hash"}. Controls how group
+#'   folders are named: use the dominant script name in the group (\code{"script"}) or a short hash prefix (\code{"hash"}).
+#' @param bDryRun Logical; if \code{TRUE}, do not create, modify, or delete files — only compute and return the manifest.
+#' @param bPurgeOutputRoot Logical; if \code{TRUE} and not a dry run, delete existing contents of \code{strOutputRoot} before writing.
+#'
+#' @return An invisible \code{data.frame} manifest with one row per created group (plus an optional \code{NoRScript}
+#'   row), including: \code{group_folder}, \code{code_hash_md5}, \code{script_name}, \code{combined_rds}, \code{kept_script_path},
+#'   and \code{n_source_rds}.
+#'
+#' @details This function relies on several helper functions expected to exist in the calling package or environment:
+#' \itemize{
+#'   \item \code{EnsureDir( path )}: create a directory if it does not exist.
+#'   \item \code{PurgeDirContents( path )}: remove all contents of a directory (but keep the directory).
+#'   \item \code{FindPrimaryRScript( dir )}: return the path to the primary R script for a trial, or \code{NA_character_}.
+#'   \item \code{CodeHash( path )}: compute a stable MD5 (or similar) hash of a script file's contents.
+#'   \item \code{MakeSafeName( x )}: sanitize a string for safe use as a directory/file name.
+#'   \item \code{SafeReadRDS( path )}: read an RDS file safely, returning a list with fields \code{ok} (logical) and \code{value}.
+#'   \item \code{CombineRDSObjects( lVals, vSrcs )}: combine multiple deserialized R objects into one summary object.
+#' }
+#'
+#' @section Side Effects:
+#' When \code{bDryRun == FALSE}, this function creates a folder per code group under \code{strOutputRoot}, each containing only
+#' the representative script (\code{<rep_script>.R}) and the combined RDS (\code{<rep_script>.rds}). It also writes
+#' a CSV manifest at \code{file.path( strOutputRoot, "group_manifest.csv" )}.
+#'
+#' @examples
+#' \dontrun{
+#'   manifest <- SortTrialsByRCode( strInputRoot = "./trials" )
+#'   print( manifest )
+#' }
+#'
+#' @seealso \code{FindPrimaryRScript}, \code{CodeHash}, \code{CombineRDSObjects}
+#'
+#' @export
+SortTrialsByRCode <- function( 
+        strInputRoot,
+        strOutputRoot = file.path( strInputRoot, "grouped_trials" ),
+        bRecursiveTrials = FALSE,
+        vChooseName = c( "script", "hash" ),
+        bDryRun = FALSE,
+        bPurgeOutputRoot = TRUE
 ) {
-    choose_name <- match.arg(choose_name)
+    vChooseName <- match.arg( vChooseName )
     
-    if (!dir.exists(input_root)) stop("input_root does not exist: ", input_root)
+    if ( !dir.exists( strInputRoot ) ) stop( "strInputRoot does not exist: ", strInputRoot )
     
-    #------------------------------
-    # Prepare output root
-    #------------------------------
-    if (!dry_run && purge_output_root && dir.exists(output_root)) {
-        unlink(output_root, recursive = TRUE, force = TRUE)
+    # ------------------------------
+    # Prepare output root (no writes on dry run)
+    # ------------------------------
+    if ( !bDryRun ) {
+        if ( bPurgeOutputRoot && dir.exists( strOutputRoot ) ) {
+            unlink( strOutputRoot, recursive = TRUE, force = TRUE )
+        }
+        EnsureDir( strOutputRoot )
     }
-    EnsureDir(output_root)
     
-    #------------------------------
+    # ------------------------------
     # Step 1: Collect trial directories
-    #------------------------------
-    if (recursive_trials) {
-        all_dirs <- list.dirs(input_root, recursive = TRUE, full.names = TRUE)
-        trial_dirs <- Filter(function(d) {
-            if (identical(normalizePath(d, winslash = "/", mustWork = FALSE),
-                          normalizePath(output_root, winslash = "/", mustWork = FALSE))) return(FALSE)
-            files_here <- list.files(d, recursive = FALSE)
-            any(grepl("\\.[Rr]$", files_here)) || any(grepl("\\.rds$", files_here, ignore.case = TRUE))
-        }, all_dirs)
+    # ------------------------------
+    if ( bRecursiveTrials ) {
+        vAllDirs <- list.dirs( strInputRoot, recursive = TRUE, full.names = TRUE )
+        vTrialDirs <- Filter( function( strD ) {
+            if ( identical( normalizePath( strD, winslash = "/", mustWork = FALSE ),
+                            normalizePath( strOutputRoot, winslash = "/", mustWork = FALSE ) ) ) return( FALSE )
+            vFilesHere <- list.files( strD, recursive = FALSE )
+            return( any( grepl( "\\.[Rr]$", vFilesHere ) ) || any( grepl( "\\.rds$", vFilesHere, ignore.case = TRUE ) ) )
+        }, vAllDirs )
     } else {
-        trial_dirs <- list.dirs(input_root, full.names = TRUE, recursive = FALSE)
-        trial_dirs <- setdiff(trial_dirs, input_root)
+        vTrialDirs <- list.dirs( strInputRoot, full.names = TRUE, recursive = FALSE )
+        vTrialDirs <- setdiff( vTrialDirs, strInputRoot )
     }
     
-    if (!length(trial_dirs)) {
-        message("No trial folders found under: ", input_root)
-        return(invisible(data.frame()))
+    if ( !length( vTrialDirs ) ) {
+        message( "No trial folders found under: ", strInputRoot )
+        return( invisible( data.frame() ) )
     }
     
-    #------------------------------
+    # ------------------------------
     # Step 2: Compute per-trial primary script + hash
-    #------------------------------
-    recs <- lapply(trial_dirs, function(d) {
-        rfile <- FindPrimaryRScript(d)
-        if (is.na(rfile)) {
-            list(trial_dir = d, primary_script = NA_character_, script_name = NA_character_, code_hash = NA_character_)
+    # ------------------------------
+    lRecs <- lapply( vTrialDirs, function( strD ) {
+        strRFile <- FindPrimaryRScript( strD )
+        if ( is.na( strRFile ) ) {
+            return( list( trial_dir = strD, primary_script = NA_character_, script_name = NA_character_, code_hash = NA_character_ ) )
         } else {
-            h <- CodeHash(rfile)
-            list(trial_dir = d, primary_script = rfile,
-                 script_name = tools::file_path_sans_ext(basename(rfile)),
-                 code_hash = h)
+            strHash <- CodeHash( strRFile )
+            return( list( trial_dir = strD, primary_script = strRFile,
+                          script_name = tools::file_path_sans_ext( basename( strRFile ) ),
+                          code_hash = strHash ) )
         }
-    })
-    df <- do.call(rbind.data.frame, lapply(recs, as.data.frame, stringsAsFactors = FALSE))
-    names(df) <- c("trial_dir", "primary_script", "script_name", "code_hash")
+    } )
+    dfTrials <- do.call( rbind.data.frame, lapply( lRecs, as.data.frame, stringsAsFactors = FALSE ) )
+    names( dfTrials ) <- c( "trial_dir", "primary_script", "script_name", "code_hash" )
     
-    #------------------------------
+    # ------------------------------
     # Step 3: Group by hash
-    #------------------------------
-    df$group_key <- df$code_hash
-    df_code  <- df[!is.na(df$group_key) & nzchar(df$group_key), , drop = FALSE]
-    df_empty <- df[is.na(df$group_key) | !nzchar(df$group_key), , drop = FALSE]
+    # ------------------------------
+    dfTrials$group_key <- dfTrials$code_hash
+    dfCode  <- dfTrials[ !is.na( dfTrials$group_key ) & nzchar( dfTrials$group_key ), , drop = FALSE ]
+    dfEmpty <- dfTrials[ is.na( dfTrials$group_key ) | !nzchar( dfTrials$group_key ), , drop = FALSE ]
     
-    groups <- split(df_code, df_code$group_key)
-    out_map <- list()
-    for (k in names(groups)) {
-        g <- groups[[k]]
-        script_names <- g$script_name[!is.na(g$script_name) & nzchar(g$script_name)]
-        if (!length(script_names)) script_names <- paste0("code_", substr(k, 1, 6))
-        best_script <- names(sort(table(script_names), decreasing = TRUE))[1]
-        base_name <- if (choose_name == "script") best_script else paste0("code_", substr(k, 1, 6))
-        folder_name <- MakeSafeName(base_name)
-        if (!is.null(out_map[[folder_name]])) {
-            folder_name <- MakeSafeName(paste0(base_name, "__", substr(k, 1, 6)))
+    lGroups <- split( dfCode, dfCode$group_key )
+    lOutMap <- list()
+    for ( strK in names( lGroups ) ) {
+        dfG <- lGroups[[ strK ]]
+        vScriptNames <- dfG$script_name[ !is.na( dfG$script_name ) & nzchar( dfG$script_name ) ]
+        if ( !length( vScriptNames ) ) vScriptNames <- paste0( "code_", substr( strK, 1, 6 ) )
+        strBestScript <- names( sort( table( vScriptNames ), decreasing = TRUE ) )[ 1 ]
+        strBaseName <- if ( vChooseName == "script" ) strBestScript else paste0( "code_", substr( strK, 1, 6 ) )
+        strFolderName <- MakeSafeName( strBaseName )
+        if ( !is.null( lOutMap[[ strFolderName ]] ) ) {
+            strFolderName <- MakeSafeName( paste0( strBaseName, "__", substr( strK, 1, 6 ) ) )
         }
-        out_map[[folder_name]] <- list(
-            hash = k,
-            trials = g$trial_dir,
-            rep_script = best_script
+        lOutMap[[ strFolderName ]] <- list( 
+            hash = strK,
+            trials = dfG$trial_dir,
+            rep_script = strBestScript
         )
     }
     
-    #------------------------------
-    # Step 4: Process groups
-    #------------------------------
-    manifest <- data.frame(
-        group_folder     = character(0),
-        code_hash_md5    = character(0),
-        script_name      = character(0),
-        combined_rds     = character(0),
-        kept_script_path = character(0),
-        n_source_rds     = integer(0),
+    # ------------------------------
+    # Step 4: Process groups (single write after purge; no writes on dry run)
+    # ------------------------------
+    dfManifest <- data.frame( 
+        group_folder     = character( 0 ),
+        code_hash_md5    = character( 0 ),
+        script_name      = character( 0 ),
+        combined_rds     = character( 0 ),
+        kept_script_path = character( 0 ),
+        n_source_rds     = integer( 0 ),
         stringsAsFactors = FALSE
     )
     
-    for (folder_name in names(out_map)) {
-        g <- out_map[[folder_name]]
-        group_dir <- file.path(output_root, folder_name)
+    for ( strFolderName in names( lOutMap ) ) {
+        lG <- lOutMap[[ strFolderName ]]
+        strGroupDir <- file.path( strOutputRoot, strFolderName )
         
-        if (!dry_run) {
-            if (dir.exists(group_dir)) PurgeDirContents(group_dir) else EnsureDir(group_dir)
-        }
-        
-        # Representative script
-        primary_scripts <- df$primary_script[df$trial_dir %in% g$trials]
-        primary_scripts <- primary_scripts[!is.na(primary_scripts)]
-        if (length(primary_scripts)) {
-            sizes <- suppressWarnings(file.info(primary_scripts)$size)
-            sizes[is.na(sizes)] <- -Inf
-            rep_script_src <- primary_scripts[which.max(sizes)]
-            target_rep <- file.path(group_dir, paste0(g$rep_script, ".R"))
-            if (!dry_run) file.copy(rep_script_src, target_rep, overwrite = TRUE)
+        # Representative script selection (do not copy yet)
+        vPrimaryScripts <- dfTrials$primary_script[ dfTrials$trial_dir %in% lG$trials ]
+        vPrimaryScripts <- vPrimaryScripts[ !is.na( vPrimaryScripts ) ]
+        if ( length( vPrimaryScripts ) ) {
+            vSizes <- suppressWarnings( file.info( vPrimaryScripts )$size )
+            vSizes[ is.na( vSizes ) ] <- -Inf
+            strRepScriptSrc <- vPrimaryScripts[ which.max( vSizes ) ]
+            strTargetRep <- file.path( strGroupDir, paste0( lG$rep_script, ".R" ) )
         } else {
-            target_rep <- NA_character_
+            strRepScriptSrc <- NULL
+            strTargetRep <- NA_character_
         }
         
-        # Combine RDS from all trials
-        rds_files <- unlist(lapply(
-            g$trials,
-            function(td) list.files(td, pattern = "\\.rds$", full.names = TRUE, recursive = TRUE, ignore.case = TRUE)
-        ), use.names = FALSE)
+        # Combine RDS (compute only; write later)
+        vRdsFiles <- unlist( lapply( 
+            lG$trials,
+            function( strTd ) list.files( strTd, pattern = "\\.rds$", full.names = TRUE, recursive = TRUE, ignore.case = TRUE )
+        ), use.names = FALSE )
         
-        if (length(rds_files)) {
-            reads <- lapply(rds_files, SafeReadRDS)
-            ok_idx <- which(vapply(reads, `[[`, logical(1), "ok"))
-            if (length(ok_idx)) {
-                vals <- lapply(reads[ok_idx], `[[`, "value")
-                srcs <- rds_files[ok_idx]
-                combined <- CombineRDSObjects(vals, srcs)
-                out_rds <- file.path(group_dir, paste0(g$rep_script, ".rds"))
-                if (!dry_run) saveRDS(combined, out_rds)
-                n_src <- length(srcs)
+        if ( length( vRdsFiles ) ) {
+            lReads <- lapply( vRdsFiles, SafeReadRDS )
+            vOkIdx <- which( vapply( lReads, `[[`, logical( 1 ), "ok" ) )
+            if ( length( vOkIdx ) ) {
+                lVals <- lapply( lReads[ vOkIdx ], `[[`, "value" )
+                vSrcs <- vRdsFiles[ vOkIdx ]
+                oCombined <- CombineRDSObjects( lVals, vSrcs )
+                strOutRds <- file.path( strGroupDir, paste0( lG$rep_script, ".rds" ) )
+                nSrc <- length( vSrcs )
             } else {
-                out_rds <- NA_character_
-                n_src <- 0L
-                warning("No readable RDS files in group: ", group_dir)
+                strOutRds <- NA_character_
+                nSrc <- 0L
+                warning( "No readable RDS files in group: ", strGroupDir )
             }
         } else {
-            out_rds <- NA_character_
-            n_src <- 0L
+            strOutRds <- NA_character_
+            nSrc <- 0L
         }
         
-        manifest[nrow(manifest) + 1L, ] <- list(folder_name, out_map[[folder_name]]$hash,
-                                                g$rep_script, out_rds, target_rep, n_src)
+        dfManifest[ nrow( dfManifest ) + 1L, ] <- list( strFolderName, lOutMap[[ strFolderName ]]$hash,
+                                                        lG$rep_script, strOutRds, strTargetRep, nSrc )
         
-        # Minimal output: only keep the two files
-        if (!dry_run) {
-            PurgeDirContents(group_dir)
-            EnsureDir(group_dir)
-            if (!is.na(target_rep) && exists("rep_script_src") && file.exists(rep_script_src)) {
-                file.copy(rep_script_src, file.path(group_dir, paste0(g$rep_script, ".R")), overwrite = TRUE)
+        # Minimal output: only keep the two files (guarded by dry run)
+        if ( !bDryRun ) {
+            if ( dir.exists( strGroupDir ) ) PurgeDirContents( strGroupDir ) else EnsureDir( strGroupDir )
+            if ( !is.na( strTargetRep ) && !is.null( strRepScriptSrc ) && file.exists( strRepScriptSrc ) ) {
+                file.copy( strRepScriptSrc, file.path( strGroupDir, paste0( lG$rep_script, ".R" ) ), overwrite = TRUE )
             }
-            if (!is.na(out_rds) && exists("combined")) {
-                saveRDS(combined, file.path(group_dir, paste0(g$rep_script, ".rds")))
+            if ( !is.na( strOutRds ) && exists( "oCombined" ) ) {
+                saveRDS( oCombined, file.path( strGroupDir, paste0( lG$rep_script, ".rds" ) ) )
             }
         }
     }
     
-    #------------------------------
-    # Step 5: NoRScript bucket
-    #------------------------------
-    if (nrow(df_empty)) {
-        no_code_dir <- file.path(output_root, "NoRScript")
-        if (!dry_run) {
-            if (dir.exists(no_code_dir)) PurgeDirContents(no_code_dir) else EnsureDir(no_code_dir)
-        }
-        rds_nc <- unlist(lapply(
-            df_empty$trial_dir,
-            function(td) list.files(td, pattern = "\\.rds$", full.names = TRUE, recursive = TRUE, ignore.case = TRUE)
-        ), use.names = FALSE)
+    # ------------------------------
+    # Step 5: NoRScript bucket (same single-write pattern; guarded by dry run)
+    # ------------------------------
+    if ( nrow( dfEmpty ) ) {
+        strNoCodeDir <- file.path( strOutputRoot, "NoRScript" )
         
-        if (length(rds_nc)) {
-            reads <- lapply(rds_nc, SafeReadRDS)
-            ok_idx <- which(vapply(reads, `[[`, logical(1), "ok"))
-            if (length(ok_idx)) {
-                vals <- lapply(reads[ok_idx], `[[`, "value")
-                srcs <- rds_nc[ok_idx]
-                combined_nc <- CombineRDSObjects(vals, srcs)
-                out_nc <- file.path(no_code_dir, "NoRScript.rds")
-                if (!dry_run) saveRDS(combined_nc, out_nc)
+        vRdsNC <- unlist( lapply( 
+            dfEmpty$trial_dir,
+            function( strTd ) list.files( strTd, pattern = "\\.rds$", full.names = TRUE, recursive = TRUE, ignore.case = TRUE )
+        ), use.names = FALSE )
+        
+        if ( length( vRdsNC ) ) {
+            lReadsNC <- lapply( vRdsNC, SafeReadRDS )
+            vOkNC <- which( vapply( lReadsNC, `[[`, logical( 1 ), "ok" ) )
+            if ( length( vOkNC ) ) {
+                lValsNC <- lapply( lReadsNC[ vOkNC ], `[[`, "value" )
+                vSrcsNC <- vRdsNC[ vOkNC ]
+                oCombinedNC <- CombineRDSObjects( lValsNC, vSrcsNC )
+                strOutNC <- file.path( strNoCodeDir, "NoRScript.rds" )
                 
-                manifest[nrow(manifest) + 1L, ] <- list("NoRScript", NA_character_, "NoRScript",
-                                                        out_nc, NA_character_, length(srcs))
+                dfManifest[ nrow( dfManifest ) + 1L, ] <- list( "NoRScript", NA_character_, "NoRScript",
+                                                                strOutNC, NA_character_, length( vSrcsNC ) )
                 
-                if (!dry_run) {
-                    PurgeDirContents(no_code_dir)
-                    EnsureDir(no_code_dir)
-                    saveRDS(combined_nc, out_nc)
+                if ( !bDryRun ) {
+                    if ( dir.exists( strNoCodeDir ) ) PurgeDirContents( strNoCodeDir ) else EnsureDir( strNoCodeDir )
+                    saveRDS( oCombinedNC, strOutNC )
                 }
-            } else if (!dry_run) {
-                unlink(no_code_dir, recursive = TRUE, force = TRUE)
+            } else if ( !bDryRun ) {
+                if ( dir.exists( strNoCodeDir ) ) unlink( strNoCodeDir, recursive = TRUE, force = TRUE )
             }
-        } else if (!dry_run) {
-            unlink(no_code_dir, recursive = TRUE, force = TRUE)
+        } else if ( !bDryRun ) {
+            if ( dir.exists( strNoCodeDir ) ) unlink( strNoCodeDir, recursive = TRUE, force = TRUE )
         }
     }
     
-    #------------------------------
-    # Step 6: Write manifest
-    #------------------------------
-    utils::write.csv(manifest, file.path(output_root, "group_manifest.csv"), row.names = FALSE)
-    message("Grouped ", length(out_map), " code bucket(s). NoRScript bucket ",
-            if (nrow(df_empty)) "processed." else "not needed.",
-            " Manifest: ",
-            normalizePath(file.path(output_root, "group_manifest.csv"), mustWork = FALSE))
+    # ------------------------------
+    # Step 6: Write manifest (guarded by dry run)
+    # ------------------------------
+    if ( !bDryRun ) {
+        utils::write.csv( dfManifest, file.path( strOutputRoot, "group_manifest.csv" ), row.names = FALSE )
+        message( "Grouped ", length( lOutMap ), " code bucket(s). NoRScript bucket ",
+                 if ( nrow( dfEmpty ) ) "processed." else "not needed.",
+                 " Manifest: ",
+                 normalizePath( file.path( strOutputRoot, "group_manifest.csv" ), mustWork = FALSE ) )
+    } else {
+        message( "Dry run: computed manifest only. No files were written." )
+    }
     
-    return(invisible(manifest))
+    return( invisible( dfManifest ) )
 }
+
 
