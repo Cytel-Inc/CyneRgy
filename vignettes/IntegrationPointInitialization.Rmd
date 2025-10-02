@@ -139,7 +139,7 @@ Init <- function( Seed = NULL, UserParam = NULL )
 }
 ```
 
-A detailed template with step-by-step explanations is available here: [Initialize.R](https://github.com/Cytel-Inc/CyneRgy/blob/220-create-getting-started-page-with-subpages-GP/inst/Templates/Initialize.R) 
+A detailed template with step-by-step explanations is available here: [Initialize.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Initialize.R) 
 
 # Examples
 
