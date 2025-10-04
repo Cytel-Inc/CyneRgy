@@ -8,8 +8,8 @@ source ( "R/BugCheck.R" )
 # Before running the following code below complete the following steps:
 #  1. Create an output folder
 #  2. Extract the failed test results
-#  3. Copy the path of the extracted folder into the input_root variable
-#  4. Repeat this for our output folder into output_root
+#  3. Copy the path of the extracted folder into the strInputRoot variable
+#  4. Repeat this for your output folder into strOutputRoot
 #  5. Replace all "\" with "/"
 #  6. Once these steps are completed, the code is ready to run
 #----------------------------------------------------------------------------- -
