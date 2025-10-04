@@ -1,9 +1,8 @@
 
 
 source( "R/SortTrialsByCode.R" )
-source( "R/RunBugCheck.R" )
 source( "R/InternalFunction.R" )
-source( "R/PrepareInputs.R" )
+source ( "R/BugCheck.R" )
 
 #----------------------------------------------------------------------------- -
 # Before running the following code below complete the following steps:
@@ -49,7 +48,8 @@ SortTrialsByRCode(
 strRds   <- "C:/Jacob/Cytel/RDS testing/SortedRDS/SimulatePatientOutcome_25-SEP-2025/SimulatePatientOutcome_25-SEP-2025.rds"
 strRFile <- "C:/Jacob/Cytel/RDS testing/SortedRDS/SimulatePatientOutcome_25-SEP-2025/SimulatePatientOutcome_25-SEP-2025.R"
 
-lErrorMessage <- RunAutoFromFilesSafe( strRds, strRFile )
+
+lErrorMessage <- ErrorCheck( strRds, strRFile )
 # lErrorMessage$call_string  # the exact call to the function used
 # lErrorMessage$error        # error text if the bug trips
 # lErrorMessage$value        # value if it succeeded
