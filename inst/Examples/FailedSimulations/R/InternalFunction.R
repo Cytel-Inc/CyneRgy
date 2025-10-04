@@ -558,164 +558,494 @@ ParseFunctionsOnly <- function( strRFile, envir = new.env( parent = baseenv() ) 
     return( lOut )
 }
 
+# ====================================================================== =
+# BugCheck code
+# ====================================================================== =
+
+# ====================================================================== =
+# bugcheck/auto_select.R — Readable + stepwise comments (no export tags)
+# ====================================================================== =
+
+#' Null-coalescing operator
+#'
+#' Returns the left-hand side if it is not \code{NULL}, otherwise returns the right-hand side.
+#'
+#' @usage a \%||\% b
+`%||%` <- function( a, b ) {
+    #----------------------------------------------------------------------------- -
+    # Return left if non-NULL; else right
+    #----------------------------------------------------------------------------- -
+    if ( !is.null( a ) ) a else b
+}
+
 #' Get non-dots formal argument names of a function
 #'
 #' @param fn A function object.
-#' @return Character vector of formal argument names excluding \code{"..."}.
+#' @return Character vector of formal names excluding "...".
 GetFormalNames <- function( fn ) {
-    #---------------------------------------------------------------------- -
-    # Step 1: Extract names of formals and drop "..."
-    #---------------------------------------------------------------------- -
+    #----------------------------------------------------------------------------- -
+    # Step 1: Extract names; handle NULL
+    #----------------------------------------------------------------------------- -
     v <- names( formals( fn ) )
     if ( is.null( v ) ) v <- character( 0 )
-    v <- setdiff( v, "..." )
-    return( v )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 2: Drop variadic token
+    #----------------------------------------------------------------------------- -
+    setdiff( v, "..." )
 }
 
-#' Collect candidate argument lists nested within an object
+#' Traverse a nested object to collect candidate argument lists (NA-safe names)
 #'
-#' Traverses nested lists to collect candidate lists (those that are not "all-lists" at a given level).
+#' Adds entries for list nodes that contain at least one non-list element (i.e., "mixed" nodes).
 #'
-#' @param x Any R object; typically a nested list loaded from an RDS.
-#' @param path Internal recursive path accumulator (do not supply).
-#' @param out Internal recursive output accumulator (do not supply).
-#' @return A list of candidates, each as \code{list( path = <character>, value = <list> )}.
+#' @param x Any R object (typically a nested list from an RDS).
+#' @param path Internal path accumulator (do not supply).
+#' @param out Internal output accumulator (do not supply).
+#' @return A list of candidates: each item is list( path = <character>, value = <list> ).
 CollectCandidates <- function( x, path = list(), out = list() ) {
-    #---------------------------------------------------------------------- -
-    # Step 1: Recurse into lists; collect mixed (non-all-list) nodes
-    #---------------------------------------------------------------------- -
+    #----------------------------------------------------------------------------- -
+    # Step 1: Recurse only into non-empty lists
+    #----------------------------------------------------------------------------- -
     if ( is.list( x ) && length( x ) > 0L ) {
-        bAllLists <- all( vapply( x, is.list, logical( 1L ) ) )
-        if ( !bAllLists ) out[[ length( out ) + 1L ]] <- list( path = path, value = x )
+        #------------------------------------------------------------------------- -
+        # Step 1a: Candidate if not all children are lists
+        #------------------------------------------------------------------------- -
+        all_lists <- all( vapply( x, is.list, logical( 1L ) ) )
+        if ( !all_lists ) out[[ length( out ) + 1L ]] <- list( path = path, value = x )
         
+        #------------------------------------------------------------------------- -
+        # Step 1b: Recurse into children with NA-safe keys
+        #------------------------------------------------------------------------- -
         vN <- names( x )
         for ( i in seq_along( x ) ) {
-            key <- if ( is.null( vN ) || !nzchar( vN[ i ] ) ) i else vN[ i ]
+            nm  <- if ( is.null( vN ) ) "" else vN[ i ]
+            key <- if ( !is.null( nm ) && !is.na( nm ) && nzchar( nm ) ) nm else i
             out <- CollectCandidates( x[[ i ]], c( path, key ), out )
         }
     }
-    return( out )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 2: Return accumulator
+    #----------------------------------------------------------------------------- -
+    out
 }
 
-#' Build a reproducible call string and a runnable closure
+#' Parse ONLY function definitions from an .R file (avoid top-level execution)
 #'
-#' Uses a provided function name (string) alongside the function object and an argument list to build
-#' a readable call string and a \code{run()} closure for execution.
+#' Captures direct function definitions and simple aliases, skipping arbitrary code.
 #'
-#' @param fn A function object.
-#' @param lInputData A list of arguments to bind.
-#' @param fn_name Character function name to display in the call string.
-#' @param strDataVar Name to use for the argument list in the call string. Default: \code{"lInputData"}.
-#' @return A list with elements \code{fn}, \code{args}, \code{call_string}, and \code{run}.
-BindFunctionCall <- function( fn, lInputData, fn_name, strDataVar = "lInputData" ) {
-    #---------------------------------------------------------------------- -
-    # Step 1: Prepare safe references for each argument
-    #---------------------------------------------------------------------- -
-    vArgNames <- names( lInputData )
-    if ( is.null( vArgNames ) ) vArgNames <- rep( "", length( lInputData ) )
+#' @param strRFile Path to .R file.
+#' @param envir Environment to assign into (defaults to a new env with base parent).
+#' @return list( env = <environment>, fun_names = <character> )
+ParseFunctionsOnly <- function( strRFile, envir = new.env( parent = baseenv() ) ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: Parse file into expressions (no eval)
+    #----------------------------------------------------------------------------- -
+    exprs <- parse( strRFile, keep.source = FALSE )
+    fun_names <- character( 0 )
+    aliases   <- list()
     
-    FnPiece <- function( i ) {
-        strNm <- vArgNames[ i ]
-        if ( nzchar( strNm ) ) {
-            if ( strNm == make.names( strNm ) ) return( paste0( strDataVar, "$", strNm ) )
-            return( paste0( strDataVar, '[[ "', strNm, '" ]]' ) )
+    #----------------------------------------------------------------------------- -
+    # Step 2: Walk expressions; assign function defs; record aliases
+    #----------------------------------------------------------------------------- -
+    for ( e in exprs ) {
+        if ( is.call( e ) && as.character( e[[ 1L ]] ) %in% c( "<-", "=" ) ) {
+            lhs <- e[[ 2L ]]; rhs <- e[[ 3L ]]
+            if ( is.symbol( lhs ) ) {
+                nm <- as.character( lhs )
+                if ( is.call( rhs ) && identical( rhs[[ 1L ]], as.name( "function" ) ) ) {
+                    assign( nm, eval( rhs, envir = envir, enclos = baseenv() ), envir = envir )
+                    fun_names <- c( fun_names, nm )
+                } else if ( is.symbol( rhs ) ) {
+                    aliases[[ nm ]] <- as.character( rhs )  # alias: nm <- OtherName
+                }
+            }
         }
-        return( paste0( strDataVar, "[[ ", i, " ]]" ) )
     }
     
-    #---------------------------------------------------------------------- -
-    # Step 2: Build human-readable call + runnable closure
-    #---------------------------------------------------------------------- -
-    strCall <- paste0( fn_name, "( ", paste( vapply( seq_along( lInputData ), FnPiece, "" ), collapse = ", " ), " )" )
-    lOut <- list( fn = fn, args = lInputData, call_string = strCall, run = function() do.call( fn, lInputData ) )
-    return( lOut )
+    #----------------------------------------------------------------------------- -
+    # Step 3: Resolve aliases that point to defined functions
+    #----------------------------------------------------------------------------- -
+    if ( length( aliases ) ) {
+        for ( nm in names( aliases ) ) {
+            tgt <- aliases[[ nm ]]
+            if ( exists( tgt, envir = envir, mode = "function", inherits = FALSE ) ) {
+                assign( nm, get( tgt, envir = envir, mode = "function" ), envir = envir )
+                fun_names <- c( fun_names, nm )
+            }
+        }
+    }
+    
+    #----------------------------------------------------------------------------- -
+    # Step 4: Return environment + unique names
+    #----------------------------------------------------------------------------- -
+    list( env = envir, fun_names = unique( fun_names ) )
 }
 
-#' Safely call a function and capture the result
+#' Build a call string from FORMALS (defensive; no eval of defaults)
 #'
-#' @param fn A function object.
-#' @param lArgs A named list of arguments.
-#' @return A list with fields \code{ok}, \code{value}, \code{error_message}, and \code{args_passed}.
+#' Produces a readable call signature (optionally including simple defaults) and a runnable closure.
+#'
+#' @param fn Function object.
+#' @param lInputData Named list of arguments to pass when running.
+#' @param strFnName Optional display name for the function.
+#' @param strDataVar Label used for argument references in the call string (unused here, kept for API-compat).
+#' @return list( fn, args, call_string, run )
+BindFunctionCall <- function( fn, lInputData, strFnName = NULL, strDataVar = "lInputData" ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: Resolve a printable function name (no deparse/eval risk)
+    #----------------------------------------------------------------------------- -
+    if ( is.null( strFnName ) || !nzchar( strFnName ) ) {
+        strFnName <- tryCatch({
+            if ( is.character( fn ) && length( fn ) == 1L ) return( fn )
+            nm <- deparse( substitute( fn ) )
+            if ( length( nm ) && nzchar( nm[ 1L ] ) ) nm[ 1L ] else "<function>"
+        }, error = function( e ) "<function>" )
+    }
+    
+    #----------------------------------------------------------------------------- -
+    # Step 2: Helper to format safe default labels
+    #----------------------------------------------------------------------------- -
+    .safe_label <- function( expr ) {
+        if ( identical( expr, quote( expr = ) ) ) return( NULL )   # missing default
+        if ( is.symbol( expr ) ) {
+            sx <- as.character( expr )
+            if ( sx %in% c( "NULL", "TRUE", "FALSE" ) ) return( sx )
+            return( "…" )
+        }
+        if ( is.null( expr ) )                      return( "NULL" )
+        if ( identical( expr, TRUE ) )              return( "TRUE" )
+        if ( identical( expr, FALSE ) )             return( "FALSE" )
+        if ( is.numeric( expr ) && length( expr ) == 1L )   return( as.character( expr ) )
+        if ( is.character( expr ) && length( expr ) == 1L ) return( paste0( '"', expr, '"' ) )
+        "…"
+    }
+    
+    #----------------------------------------------------------------------------- -
+    # Step 3: Build call string from formals; fall back to names-only
+    #----------------------------------------------------------------------------- -
+    call_str <- tryCatch({
+        fmls <- formals( fn )
+        if ( is.null( fmls ) || !length( fmls ) ) return( paste0( strFnName, "()" ) )
+        nms <- names( fmls ); if ( is.null( nms ) ) nms <- character( 0 )
+        pieces <- character( 0 )
+        for ( nm in nms ) {
+            if ( identical( nm, "..." ) ) next
+            lab <- .safe_label( fmls[[ nm ]] )
+            pieces <- c( pieces, if ( is.null( lab ) ) nm else paste0( nm, " = ", lab ) )
+        }
+        if ( !length( pieces ) ) paste0( strFnName, "()" ) else paste0( strFnName, "( ", paste( pieces, collapse = ", " ), " )" )
+    }, error = function( e ) {
+        fnames <- tryCatch({
+            v <- names( formals( fn ) ); if ( is.null( v ) ) character( 0 ) else setdiff( v, "..." )
+        }, error = function( e2 ) character( 0 ) )
+        if ( length( fnames ) ) paste0( strFnName, "( ", paste( fnames, collapse = ", " ), " )" ) else paste0( strFnName, "()" )
+    })
+    
+    #----------------------------------------------------------------------------- -
+    # Step 4: Return runnable bundle
+    #----------------------------------------------------------------------------- -
+    list(
+        fn          = fn,
+        args        = lInputData,
+        call_string = call_str,
+        run         = function() do.call( fn, lInputData )
+    )
+}
+
+#' Safely call a function (capture error and args)
+#'
+#' @param fn Function to call.
+#' @param lArgs Named list of arguments.
+#' @return list( ok, value, error_message, args_passed )
 SafeCall <- function( fn, lArgs ) {
-    #---------------------------------------------------------------------- -
-    # Step 1: Try-call and capture any error
-    #---------------------------------------------------------------------- -
+    #----------------------------------------------------------------------------- -
+    # Step 1: Try to call; capture failures without throwing
+    #----------------------------------------------------------------------------- -
     strErr <- NULL
-    oVal <- tryCatch( do.call( fn, lArgs ), error = function( e ) { strErr <<- conditionMessage( e ); NULL } )
+    val <- tryCatch( do.call( fn, lArgs ), error = function( e ) { strErr <<- conditionMessage( e ); NULL } )
     
-    #---------------------------------------------------------------------- -
-    # Step 2: Return status bundle
-    #---------------------------------------------------------------------- -
-    lRes <- list( ok = is.null( strErr ), value = if ( is.null( strErr ) ) oVal else NULL, error_message = strErr, args_passed = lArgs )
-    return( lRes )
+    #----------------------------------------------------------------------------- -
+    # Step 2: Return structured status
+    #----------------------------------------------------------------------------- -
+    list( ok = is.null( strErr ), value = if ( is.null( strErr ) ) val else NULL, error_message = strErr, args_passed = lArgs )
 }
 
-#' Auto-select best-matching (function, args) by name overlap (parse-only loader)
+#' Create a binder wrapper to simulate matching without evaluating body
 #'
-#' Parses only function definitions from the .R file, scans nested lists in \code{lAll} for candidate
-#' argument lists, scores each candidate by overlap with formal names for each function, and selects
-#' the best match. Fills missing argument names where possible.
-#'
-#' @param lAll A nested list (e.g., from an RDS) potentially containing argument lists.
-#' @param strRFile Character path to the .R file to parse.
-#' @return A list with elements \code{fn} (function), \code{fn_name} (character), and \code{args} (list).
-AutoSelectFunctionAndArgs <- function( lAll, strRFile ) {
-    #---------------------------------------------------------------------- -
-    # Step 1: Parse functions only (no top-level execution)
-    #---------------------------------------------------------------------- -
-    p <- ParseFunctionsOnly( strRFile )
-    envTmp <- p$env
-    vFns <- p$fun_names
-    if ( !length( vFns ) ) stop( "No functions found in: ", strRFile )
+#' @param fn Function to mirror.
+#' @return A function with the same formals whose body calls match.call().
+.MakeBinder <- function( fn ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: Mirror formals into a wrapper
+    #----------------------------------------------------------------------------- -
+    fml  <- formals( fn )
+    wrap <- function() {}
+    formals( wrap ) <- fml
     
-    #---------------------------------------------------------------------- -
-    # Step 2: Prefer BuggedFunction if present
-    #---------------------------------------------------------------------- -
+    #----------------------------------------------------------------------------- -
+    # Step 2: Replace body with match.call and set environment
+    #----------------------------------------------------------------------------- -
+    body( wrap ) <- quote( match.call() )
+    environment( wrap ) <- environment( fn ) %||% baseenv()
+    wrap
+}
+
+#' Try binding a candidate argument list to a function's formals
+#'
+#' @param fn Function object.
+#' @param args Candidate argument list.
+#' @return Numeric score (>=0) or -Inf when binding fails.
+.TryBindScore <- function( fn, args ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: Validate and normalize arg names
+    #----------------------------------------------------------------------------- -
+    if ( !is.list( args ) ) return( -Inf )
+    argn <- names( args ); if ( is.null( argn ) ) argn <- rep( "", length( args ) ); argn[ is.na( argn ) ] <- ""
+    
+    #----------------------------------------------------------------------------- -
+    # Step 2: Align unnamed args to leading formals; keep named intersection
+    #----------------------------------------------------------------------------- -
+    fml <- GetFormalNames( fn )
+    A <- args
+    if ( any( nzchar( argn ) ) ) {
+        keep <- intersect( names( A ), fml )
+        A <- A[ keep ]
+        A <- A[ match( intersect( fml, names( A ) ), names( A ) ) ]
+    } else {
+        n <- min( length( args ), length( fml ) )
+        if ( !n ) return( -Inf )
+        names( A )[ seq_len( n ) ] <- fml[ seq_len( n ) ]
+        A <- A[ seq_len( n ) ]
+    }
+    
+    #----------------------------------------------------------------------------- -
+    # Step 3: Use binder to test match without executing real body
+    #----------------------------------------------------------------------------- -
+    binder <- .MakeBinder( fn )
+    ok <- TRUE
+    tryCatch( do.call( binder, A ), error = function( e ) { ok <<- FALSE; NULL } )
+    if ( !ok ) return( -Inf )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 4: Score by number of matched names
+    #----------------------------------------------------------------------------- -
+    length( intersect( names( A ), fml ) )
+}
+
+#' Lightweight predicate for "non-atomic-like" structures
+.IsNonAtomicLike <- function( z ) {
+    #----------------------------------------------------------------------------- -
+    # Treat lists, data.frames, or any recursive object as structural
+    #----------------------------------------------------------------------------- -
+    is.list( z ) || is.data.frame( z ) || is.recursive( z )
+}
+
+#' Score how well a named list matches expected formal names
+#'
+#' @param lst Candidate list.
+#' @param expected Character vector of expected names.
+#' @return Large positive score for better matches; -Inf for non-matches.
+.NamedListMatchScore <- function( lst, expected ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: Validate and extract names (NA-safe)
+    #----------------------------------------------------------------------------- -
+    if ( !is.list( lst ) || !length( lst ) ) return( -Inf )
+    nms <- names( lst ); if ( is.null( nms ) ) nms <- rep( "", length( lst ) ); nms[ is.na( nms ) ] <- ""
+    
+    #----------------------------------------------------------------------------- -
+    # Step 2: Count matching names and structural bonus
+    #----------------------------------------------------------------------------- -
+    match_names <- intersect( nms[ nzchar( nms ) ], expected )
+    if ( !length( match_names ) ) return( -Inf )
+    struct_bonus <- sum( vapply( match_names, function( k ) .IsNonAtomicLike( lst[[ k ]] ), logical( 1L ) ) )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 3: Combine into a weighted score
+    #----------------------------------------------------------------------------- -
+    100L * length( match_names ) + struct_bonus
+}
+
+#' Find lists under x that match expected names, scoring each
+#'
+#' @param x Nested object to search.
+#' @param expected Expected formal names.
+#' @param path Internal path accumulator.
+#' @param out Internal output accumulator.
+#' @return List of hits: each has path, value, score.
+.FindNamedLists <- function( x, expected, path = list(), out = list() ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: If x is a list, score it and then recurse into children
+    #----------------------------------------------------------------------------- -
+    if ( is.list( x ) ) {
+        sc <- .NamedListMatchScore( x, expected )
+        if ( is.finite( sc ) && sc > -Inf ) out[[ length( out ) + 1L ]] <- list( path = path, value = x, score = sc )
+        
+        nms <- names( x )
+        for ( i in seq_along( x ) ) {
+            key <- if ( !is.null( nms ) && !is.na( nms[ i ] ) && nzchar( nms[ i ] ) ) nms[ i ] else i
+            out <- .FindNamedLists( x[[ i ]], expected, c( path, key ), out )
+        }
+    }
+    
+    #----------------------------------------------------------------------------- -
+    # Step 2: Return accumulator
+    #----------------------------------------------------------------------------- -
+    out
+}
+
+#' Promote an argument list to a better-aligned named/structured list from lAll
+#'
+#' @param lAll Root object (e.g., loaded RDS).
+#' @param fn Function for which formals are expected.
+#' @param args Current argument list.
+#' @return Either original args or a promoted/realigned list.
+.PromoteByExpectedNames <- function( lAll, fn, args ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: Get expected names; short-circuit if none
+    #----------------------------------------------------------------------------- -
+    expected <- GetFormalNames( fn )
+    if ( !length( expected ) ) return( args )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 2: Search for best-matching named lists under lAll
+    #----------------------------------------------------------------------------- -
+    hits <- .FindNamedLists( lAll, expected )
+    if ( !length( hits ) ) return( args )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 3: Take highest score; align names to expected, keep extras
+    #----------------------------------------------------------------------------- -
+    scores <- vapply( hits, function( h ) h$score, numeric( 1 ) )
+    best   <- hits[[ which.max( scores ) ]]
+    cand   <- best$value
+    keep   <- intersect( names( cand ), expected )
+    aligned <- cand[ keep ]
+    extra   <- cand[ setdiff( names( cand ), keep ) ]
+    c( aligned, extra )
+}
+
+#' Structure-aware auto-select best (function, args) pair
+#'
+#' Scores (candidate list, function) pairs by name overlap, bindability, and structure; promotes
+#' args to better-aligned named lists when available.
+#'
+#' @param lAll Root object from RDS.
+#' @param strRFile Path to .R file to parse functions from (no top-level eval).
+#' @return list( fn, fn_name, args )
+.AutoSelectBestPair <- function( lAll, strRFile ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: Parse functions only; prefer BuggedFunction name
+    #----------------------------------------------------------------------------- -
+    p      <- ParseFunctionsOnly( strRFile )
+    envTmp <- p$env
+    vFns   <- p$fun_names
+    if ( !length( vFns ) ) stop( "No functions found in: ", strRFile )
     if ( "BuggedFunction" %in% vFns ) vFns <- c( "BuggedFunction", setdiff( vFns, "BuggedFunction" ) )
     
-    #---------------------------------------------------------------------- -
-    # Step 3: Gather candidate argument lists from nested structures
-    #---------------------------------------------------------------------- -
-    lCands <- CollectCandidates( lAll )
-    if ( !length( lCands ) ) stop( "No argument-list candidates found in RDS." )
+    #----------------------------------------------------------------------------- -
+    # Step 2: Collect candidate lists from lAll
+    #----------------------------------------------------------------------------- -
+    cands <- CollectCandidates( lAll )
+    if ( !length( cands ) ) stop( "No argument-list candidates in RDS." )
     
-    #---------------------------------------------------------------------- -
-    # Step 4: Score candidates by name overlap with each function's formals
-    #---------------------------------------------------------------------- -
-    dfScores <- data.frame( cand = integer( 0 ), fn = character( 0 ), overlap = integer( 0 ), stringsAsFactors = FALSE )
-    for ( i in seq_along( lCands ) ) {
-        vCandNames <- names( lCands[[ i ]]$value )
-        if ( is.null( vCandNames ) ) vCandNames <- character( 0 )
-        for ( strFn in vFns ) {
-            fnObj <- get( strFn, envir = envTmp, mode = "function" )
-            nOverlap <- length( intersect( vCandNames, GetFormalNames( fnObj ) ) )
-            dfScores[ nrow( dfScores ) + 1L, ] <- list( i, strFn, nOverlap )
+    #----------------------------------------------------------------------------- -
+    # Step 3: Define structural score (counts complex children)
+    #----------------------------------------------------------------------------- -
+    struct_score <- function( a ) {
+        if ( !is.list( a ) || !length( a ) ) return( 0L )
+        sum( vapply( a, function( z ) .IsNonAtomicLike( z ), logical( 1L ) ) )
+    }
+    
+    #----------------------------------------------------------------------------- -
+    # Step 4: Score each (candidate, function) pair: overlap + bindability + structure
+    #----------------------------------------------------------------------------- -
+    S <- data.frame( cand = integer( 0 ), fn = character( 0 ), score = numeric( 0 ) )
+    for ( i in seq_along( cands ) ) {
+        ai <- cands[[ i ]]$value
+        cn <- names( ai ); if ( is.null( cn ) ) cn <- rep( "", length( ai ) ); cn[ is.na( cn ) ] <- ""
+        for ( fnm in vFns ) {
+            f  <- get( fnm, envir = envTmp, mode = "function" )
+            ov <- length( intersect( cn[ nzchar( cn ) ], GetFormalNames( f ) ) )
+            bs <- .TryBindScore( f, ai )
+            sc <- 100L * ov + 10L * if ( is.finite( bs ) ) bs else 0L + struct_score( ai )
+            S[ nrow( S ) + 1L, ] <- list( i, fnm, sc )
         }
     }
-    if ( !nrow( dfScores ) || max( dfScores$overlap ) == 0L ) {
-        stop( "Could not match any candidate list to function formals in: ", strRFile )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 5: Select best pair and optionally promote arguments
+    #----------------------------------------------------------------------------- -
+    best    <- S[ which.max( S$score ), ]
+    fn      <- get( best$fn, envir = envTmp, mode = "function" )
+    fn_name <- best$fn
+    args    <- cands[[ best$cand ]]$value
+    args    <- .PromoteByExpectedNames( lAll, fn, args )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 6: Return bundle
+    #----------------------------------------------------------------------------- -
+    list( fn = fn, fn_name = fn_name, args = args )
+}
+
+#' Public: Run with TWO inputs only (RDS + R)
+#'
+#' @param strRds Path to .rds containing candidate parameter lists.
+#' @param strRFile Path to .R containing candidate functions.
+#' @param bPrintCall Logical; print reproducible call string when TRUE.
+#' @return Structured result list with fields ok, value, error, call_string, fn, fn_name, args.
+RunWithTwoInputs <- function( strRds, strRFile, bPrintCall = TRUE ) {
+    #----------------------------------------------------------------------------- -
+    # Step 1: Load candidate parameter lists from .rds
+    #----------------------------------------------------------------------------- -
+    lAll  <- readRDS( strRds )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 2: Auto-select the best (function, args) pair from .R file
+    #----------------------------------------------------------------------------- -
+    pick  <- .AutoSelectBestPair( lAll, strRFile )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 3: Bind into a reproducible call structure (includes function name)
+    #----------------------------------------------------------------------------- -
+    bound <- BindFunctionCall( pick$fn, pick$args, strFnName = pick$fn_name )
+    
+    #----------------------------------------------------------------------------- -
+    # Step 4: Optionally print reproducible call string
+    #----------------------------------------------------------------------------- -
+    if ( isTRUE( bPrintCall ) ) {
+        cat( "Reproducible call:\n", bound$call_string, "\n\n", sep = "" )
     }
     
-    #---------------------------------------------------------------------- -
-    # Step 5: Select best-scoring pair and extract
-    #---------------------------------------------------------------------- -
-    dfBest <- dfScores[ which.max( dfScores$overlap ), ]
-    fn <- get( dfBest$fn, envir = envTmp, mode = "function" )
-    lArgs <- lCands[[ dfBest$cand ]]$value
-    
-    #---------------------------------------------------------------------- -
-    # Step 6: Best-effort: fill missing names from formals
-    #---------------------------------------------------------------------- -
-    if ( !is.list( lArgs ) ) stop( "Chosen candidate is not a list." )
-    vFormals <- GetFormalNames( fn )
-    if ( is.null( names( lArgs ) ) || any( !nzchar( names( lArgs ) ) ) ) {
-        n <- min( length( lArgs ), length( vFormals ) )
-        if ( n > 0L ) names( lArgs )[ seq_len( n ) ] <- vFormals[ seq_len( n ) ]
+    #----------------------------------------------------------------------------- -
+    # Step 5: Run function safely, prefer RunBugCheck if available
+    #----------------------------------------------------------------------------- -
+    res <- if ( exists( "RunBugCheck", mode = "function" ) ) {
+        RunBugCheck( bound$fn, pick$args )
+    } else {
+        SafeCall( bound$fn, pick$args )
     }
     
-    #---------------------------------------------------------------------- -
-    # Step 7: Return function, its name, and the chosen args
-    #---------------------------------------------------------------------- -
-    lOut <- list( fn = fn, fn_name = dfBest$fn, args = lArgs )
-    return( lOut )
+    #----------------------------------------------------------------------------- -
+    # Step 6: Print outcome summary
+    #----------------------------------------------------------------------------- -
+    if ( isTRUE( res$ok ) ) {
+        cat( "OK: function executed without error.\n" )
+    } else {
+        cat( "ERROR: ", res$error_message %||% "", "\n", sep = "" )
+    }
+    
+    #----------------------------------------------------------------------------- -
+    # Step 7: Return structured result bundle
+    #----------------------------------------------------------------------------- -
+    list(
+        ok          = res$ok,
+        value       = res$value,
+        error       = res$error_message,
+        call_string = bound$call_string,
+        fn          = pick$fn,
+        fn_name     = pick$fn_name,
+        args        = pick$args
+    )
 }
