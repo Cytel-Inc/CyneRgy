@@ -575,7 +575,10 @@ ParseFunctionsOnly <- function( strRFile, envir = new.env( parent = baseenv() ) 
     #----------------------------------------------------------------------------- -
     # Return left if non-NULL; else right
     #----------------------------------------------------------------------------- -
-    if ( !is.null( a ) ) a else b
+    if ( !is.null( a ) ) {
+        return( a )
+    }
+    return( b )
 }
 
 #' Get non-dots formal argument names of a function

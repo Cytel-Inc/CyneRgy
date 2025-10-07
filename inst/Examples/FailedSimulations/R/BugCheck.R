@@ -24,7 +24,8 @@ ErrorCheck <- function( strRds, strRFile, bPrintCall = TRUE ) {
     
     #----------------------------------------------------------------------------- -
     # Step 2: Auto-select the best (function, args) pair from .R file
-    #----------------------------------------------------------------------------- -    pick <- .AutoSelectBestPair( lAll, strRFile )
+    #----------------------------------------------------------------------------- -
+    pick <- .AutoSelectBestPair( lAll, strRFile )
     
     #----------------------------------------------------------------------------- -
     # Step 3: Bind into a reproducible call structure (includes function name)
@@ -70,5 +71,4 @@ ErrorCheck <- function( strRds, strRFile, bPrintCall = TRUE ) {
     )
     return( lOut )
 }
-
 
