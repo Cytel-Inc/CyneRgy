@@ -60,7 +60,7 @@ This project has the required R code files needed to simulate, analyze, plot, an
 
 [PlotTrialdata.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/PlotTrialData.R) -  This code takes the overall data generated and creates a plot of the difference of means with a 95% CI.
 
-[RunSimulation.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/RunSimulation.R) -  This code allows for the code to be run locally, change variables around, and visualize data.
+[RunSimulation.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/RunSimulation.R) -  This code allows for the code to be run locally, change variables around, and visualize data.  It can helpful to run the R code locally before uploading to EH to make sure no bugs are present if changes are made to the code. 
 
 This example looks into an analysis using MMRM. It allows for dropout information to not impact power as much has other analysis methods. It works well in East Horizon (EH) for providing a longitudinal analysis design.  While not all of the R files listed above are required, they can be used to help simulate patient data and run analysis locally in R Studio.  This can be very helpful to allow users a good starting point in case they need to adjust the details in the analysis.  The various plot functions can be very helpful for visualizing the simulated patient data to make sure it looks realistic. 
 
@@ -368,7 +368,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 ![](Schizophrenia_Files/Enrollment.png){width=90%}
 <br><br><br>
 
-# 📊 **Results**
+#  **Results**
 
 
 - **Target power**: ≈90% power achieved with ~266 completers at Std. Dev = 15 and Mean Diff = 6. For reaching this power there are 2 designs that effectively accomplish this. One should be the MMRM fixed design and the other being MMRM Group-sequential with a sample size of 300. Either of these designs are viable and the trade off will be discussed in the results discussion section.
