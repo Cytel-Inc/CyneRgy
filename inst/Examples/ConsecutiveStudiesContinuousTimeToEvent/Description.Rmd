@@ -7,6 +7,10 @@ output:
   word_document: default
 ---
 
+<div class="alert alert-danger" role="alert">
+  <p style="margin-bottom:0">The process of loading Phase 2 data into a Phase 3 study is not clearly explained here. For a more detailed explanation, please refer to the [Consecutive Studies, Binary Outcome](ConsecutiveStudiesBinary.html) example.</p>
+</div>
+
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
 </div>
@@ -81,6 +85,29 @@ ggplot() +
 # Phase 2 Study
 
 This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm.
+
+The figure below illustrates where this phase fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load prior distribution parameters, mean, and standard deviations", 
+            "Sample treatment effect from mixture of normal distributions",
+            "Compute treatment means including sampled effect",
+            "Simulate patient outcomes based on treatment assignment",
+            "Return simulated outcomes and true treatment effect"
+        ),
+        "Analysis" = c(
+            "Load prior distribution parameters, SD, MAV and PU",
+            "Compute posterior parameters",
+            "Sample posterior distributions of each arm",
+            "Make decision based on posterior probability and user-defined cutoff",
+            "Return posterior parameters, probabilities, and decision"
+        )
+    )
+)
+```
 
 ## Response (Patient Simulation) Integration Point
 
@@ -200,147 +227,28 @@ This study considers a two-arm fixed sample design with a time-to-event endpoint
 The figure below illustrates where the integration points used in this study fit within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
-library(ggplot2)
-bigcolxmin = 8.4
-bigcolxmax = bigcolxmin + 4.1
-bigcolxmin2 = 13
-bigcolxmax2 = bigcolxmin2 + 4
-bigcolxmin3 = 0
-bigcolxmax3 = 4
-
-# Define main columns
-columns <- data.frame(
-  xmin = c(bigcolxmin3, 4.5, 5.5, 6.5, 7.5, bigcolxmin, bigcolxmin2),
-  xmax = c(bigcolxmax3, 5, 6, 7, 8, bigcolxmax, bigcolxmax2),
-  ymin = rep(3, 7),
-  ymax = rep(10.75, 7),
-  label = c("Initialization", "Enrollment", "Randomization", "Dropout", "Treatment\nSelection", "Response", "Analysis"),
-  fill = c("#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff"),
-  border = c("#cfe2ff", "lightgray", "lightgray", "lightgray", "lightgray", "#cfe2ff", "#cfe2ff")
-)
-unitybox = 0.7
-spaceybox = 0.5
-ymaxfirstbox = 10.5
-yminfirstbox = ymaxfirstbox - unitybox*1.5
-ymaxsecondbox = yminfirstbox - spaceybox
-yminsecondbox = ymaxsecondbox - unitybox*1.5
-ymaxthirdbox = yminsecondbox - spaceybox
-yminthirdbox = ymaxthirdbox - unitybox
-ymaxfourthbox = yminthirdbox - spaceybox
-yminfourthbox = ymaxfourthbox - unitybox*1.5
-ymaxfifthbox = yminfourthbox - spaceybox
-yminfifthbox = ymaxfifthbox - unitybox*1.5
-# Define flowchart steps 
-flowchart <- data.frame(
-  xmin = rep(bigcolxmin + 0.1, 5),
-  xmax = rep(bigcolxmax - 0.1, 5),
-  ymax = c(ymaxfirstbox, ymaxsecondbox, ymaxthirdbox, ymaxfourthbox, ymaxfifthbox),
-  ymin = c(yminfirstbox, yminsecondbox, yminthirdbox, yminfourthbox, yminfifthbox),
-  label = c("Load prior distribution parameters,\nscaling bounds, and mean TTE", 
-            "Sample from prior distribution\nfor log hazard ratio",
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Initialization" = c(
+            "Load true treatment differences from CSV or R file",
+            "Define prior and simulation index global variables"
+        ),
+        "Response" = c(
+            "Load prior distribution parameters, scaling bounds, and mean TTE", 
+            "Sample from prior distribution for log hazard ratio",
             "Compute true hazard rates",
-            "Simulate patient survival times\nbased on treatment assignment",
-            "Return simulated survival times\nand true hazard ratio"),
-  fill = rep("#cfe2ff", 5)
+            "Simulate patient survival times based on treatment assignment",
+            "Return simulated survival times and true hazard ratio"
+        ),
+        "Analysis" = c(
+            "Load survival data, mean TTE, and relationship parameters",
+            "Sample true treatment effect from prior distribution",
+            "Compute true log hazard ratio and hazard rates for each arm",
+            "Generate exponential survival times based on hazard rates",
+            "Return simulated survival times and true hazard ratio"
+        )
+    )
 )
-# Define arrows for flowchart 
-flowchart_arrows <- data.frame(
-  x = rep((bigcolxmin+bigcolxmax)/2, 4),
-  xend = rep((bigcolxmin+bigcolxmax)/2, 4),
-  y = c(flowchart$ymin[1], flowchart$ymin[2], flowchart$ymin[3], flowchart$ymin[4]),
-  yend = c(flowchart$ymax[2], flowchart$ymax[3], flowchart$ymax[4], flowchart$ymax[5])
-)
-yminfirstbox2 = ymaxfirstbox - unitybox*1.5
-ymaxsecondbox2 = yminfirstbox2 - spaceybox
-yminsecondbox2 = ymaxsecondbox2 - unitybox*1.5
-ymaxthirdbox2 = yminsecondbox2 - spaceybox
-yminthirdbox2 = ymaxthirdbox2 - unitybox*1.5
-ymaxfourthbox2 = yminthirdbox2 - spaceybox
-yminfourthbox2 = ymaxfourthbox2 - unitybox*1.5
-ymaxfifthbox2 = yminfourthbox2 - spaceybox
-yminfifthbox2 = ymaxfifthbox2 - unitybox*1.5
-# Define flowchart steps 
-flowchart2 <- data.frame(
-  xmin = rep(bigcolxmin2 + 0.1, 5),
-  xmax = rep(bigcolxmax2 - 0.1, 5),
-  ymax = c(ymaxfirstbox, ymaxsecondbox2, ymaxthirdbox2, ymaxfourthbox2, ymaxfifthbox2),
-  ymin = c(yminfirstbox2, yminsecondbox2, yminthirdbox2, yminfourthbox2, yminfifthbox2),
-  label = c("Load survival data, mean TTE,\nand relationship parameters",
-            "Sample true treatment effect\nfrom prior distribution",
-            "Compute true log hazard ratio\nand hazard rates for each arm",
-            "Generate exponential survival\ntimes based on hazard rates",
-            "Return simulated survival times\nand true hazard ratio"),
-  fill = rep("#cfe2ff", 5)
-)
-# Define arrows for flowchart 
-flowchart_arrows2 <- data.frame(
-  x = rep((bigcolxmin2+bigcolxmax2)/2, 4),
-  xend = rep((bigcolxmin2+bigcolxmax2)/2, 4),
-  y = c(flowchart2$ymin[1], flowchart2$ymin[2], flowchart2$ymin[3], flowchart2$ymin[4]),
-  yend = c(flowchart2$ymax[2], flowchart2$ymax[3], flowchart2$ymax[4], flowchart2$ymax[5])
-)
-
-yminfirstbox3 = ymaxfirstbox - unitybox*1.5
-ymaxsecondbox3 = yminfirstbox3 - spaceybox
-yminsecondbox3 = ymaxsecondbox3 - unitybox*1.5
-# Define flowchart steps 
-flowchart3 <- data.frame(
-  xmin = rep(bigcolxmin3 + 0.1, 2),
-  xmax = rep(bigcolxmax3 - 0.1, 2),
-  ymax = c(ymaxfirstbox, ymaxsecondbox3),
-  ymin = c(yminfirstbox3, yminsecondbox3),
-  label = c("Load true treatment differences\nfrom CSV or R file",
-            "Define prior and simulation\nindex global variables"),
-  fill = rep("#cfe2ff", 2)
-)
-# Define arrows for flowchart 
-flowchart_arrows3 <- data.frame(
-  x = rep((bigcolxmin3+bigcolxmax3)/2, 1),
-  xend = rep((bigcolxmin3+bigcolxmax3)/2, 1),
-  y = c(flowchart3$ymin[1]),
-  yend = c(flowchart3$ymax[2])
-)
-# Define the legend elements
-legend_data <- data.frame(
-  xmin = c(14.5, 16),
-  xmax = c(15.5, 17),
-  ymin = c(2.5, 2.5),
-  ymax = c(2.8, 2.8),
-  fill = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-# Create the plot
-p <- ggplot() +
-  # Add main column sections
-  geom_rect(data = columns, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-            color = columns$border) + 
-  scale_fill_identity() +
-  # Add labels for the columns
-  geom_text(data = columns, aes(x = (xmin + xmax) / 2, y = ymax + 0.7, label = label), size = 3, angle = 20, vjust = 1) +
-  # Add flowchart 
-  geom_rect(data = flowchart, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Add flowchart 
-  geom_rect(data = flowchart2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart2, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows2, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Add flowchart 
-  geom_rect(data = flowchart3, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = flowchart3, aes(x = (xmin + xmax) / 2, y = (ymin + ymax) / 2, label = label), size = 2.5) +
-  # Add arrows between flowchart boxes
-  geom_curve(data = flowchart_arrows3, aes(x = x, y = y, xend = xend, yend = yend),
-             curvature = 0, arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  # Remove grid and axes
-  theme_void() + 
-  theme(panel.background = element_rect(fill = 'white', colour = 'white')) +
-  geom_rect(data = legend_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill), color = "black") +
-  geom_text(data = legend_data, aes(x = (xmin + xmax) / 2, y = ymin - 0.1, label = label), size = 2.5, vjust = 1) 
-print(p)
 ```
 
 ## Initialize Integration Point

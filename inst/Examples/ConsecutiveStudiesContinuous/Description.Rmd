@@ -7,6 +7,10 @@ output:
   word_document: default
 ---
 
+<div class="alert alert-danger" role="alert">
+  <p style="margin-bottom:0">The process of loading Phase 2 data into a Phase 3 study is not clearly explained here. For a more detailed explanation, please refer to the [Consecutive Studies, Binary Outcome](ConsecutiveStudiesBinary.html) example.</p>
+</div>
+
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
 </div>
@@ -78,6 +82,29 @@ ggplot() +
 # Phase 2 Study
 
 This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm.
+
+The figure below illustrates where this phase fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load prior distribution parameters, mean, and standard deviations", 
+            "Sample treatment effect from mixture of normal distributions",
+            "Compute treatment means including sampled effect",
+            "Simulate patient outcomes based on treatment assignment",
+            "Return simulated outcomes and true treatment effect"
+        ),
+        "Analysis" = c(
+            "Load prior distribution parameters, SD, MAV and PU",
+            "Compute posterior parameters",
+            "Sample posterior distributions of each arm",
+            "Make decision based on posterior probability and user-defined cutoff",
+            "Return posterior parameters, probabilities, and decision"
+        )
+    )
+)
+```
 
 ## Response (Patient Simulation) Integration Point
 
@@ -193,6 +220,29 @@ For this study, the *MAV* is set to 0.6 and $P_U$ to 0.8. Refer to the table bel
 # Phase 3 Study
 
 This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 200 patients per treatment arm.
+
+The figure below illustrates where this phase fits within the R integration points of Cytel products, accompanied by flowcharts outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load prior distribution parameters, mean, and standard deviations", 
+            "Sample treatment effect from mixture of normal distributions",
+            "Compute treatment means including sampled effect",
+            "Simulate patient outcomes based on treatment assignment",
+            "Return simulated outcomes and true treatment effect"
+        ),
+        "Analysis" = c(
+            "Load prior distribution parameters, SD, MAV and PU",
+            "Compute posterior parameters",
+            "Sample posterior distributions of each arm",
+            "Make decision based on posterior probability and user-defined cutoff",
+            "Return posterior parameters, probabilities, and decision"
+        )
+    )
+)
+```
 
 ## Response (Patient Simulation) Integration Point
 
