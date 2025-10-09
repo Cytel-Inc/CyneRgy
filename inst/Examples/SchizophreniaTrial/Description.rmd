@@ -50,17 +50,17 @@ Running this code above will load the RStudio project.
 
 This project has the required R code files needed to simulate, analyze, plot, and run patient data. Below in the R code folder, there should be the following files:
 
-[AnalyzeMMRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/AnalyzeMMRM.R) -  This code takes simulated patient data and run analysis.
+[AnalyzeMMRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/AnalyzeMMRM.R) -  This code takes simulated patient data and run analysis.
 
-[AnalyzeMMRM_GLS.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/AnalyzeMMRM_GLS.R) -  This code is a slower version of the original analysis, but it has slightly increased power and an alternative form of analysis.
+[AnalyzeMMRM_GLS.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/AnalyzeMMRM_GLS.R) -  This code is a slower version of the original analysis, but it has slightly increased power and an alternative form of analysis.
 
-[GenerateMMRMResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/GenerateMMRMResponses.R) -  This code generates the responses for patients across treatment visits.
+[GenerateMMRMResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/GenerateMMRMResponses.R) -  This code generates the responses for patients across treatment visits.
 
-[PlotPatientData.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/PlotPatientData.R) -  This code takes the generated patient data and can plot individual patient trajectories.
+[PlotPatientData.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/PlotPatientData.R) -  This code takes the generated patient data and can plot individual patient trajectories.
 
-[PlotTrialdata.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/PlotTrialData.R) -  This code takes the overall data generated and creates a plot of the difference of means with a 95% CI.
+[PlotTrialdata.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/PlotTrialData.R) -  This code takes the overall data generated and creates a plot of the difference of means with a 95% CI.
 
-[RunSimulation.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/RunSimulation.R) -  This code allows for the code to be run locally, change variables around, and visualize data.  It can helpful to run the R code locally before uploading to East Horizon (EH) to make sure no bugs are present if changes are made to the code. 
+[RunSimulation.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/RunSimulation.R) -  This code allows for the code to be run locally, change variables around, and visualize data.  It can helpful to run the R code locally before uploading to East Horizon (EH) to make sure no bugs are present if changes are made to the code. 
 
 This example looks into an analysis using MMRM. It allows for dropout information to not impact power as much as other analysis methods. It works well in East Horizon (EH) for providing a longitudinal analysis design.  While not all of the R files listed above are required, they can be used to help simulate patient data and run analysis locally in R Studio.  This can be very helpful to allow users a good starting point in case they need to adjust the details in the analysis.  The various plot functions can be very helpful for visualizing the simulated patient data to make sure it looks realistic. 
 
@@ -322,7 +322,7 @@ Once you "Create Project", you then need to create an input set using the explor
 
 ## Designs: 
 
-MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample size box insert 200:360:20 (this will create sample sizes ranging from 200 to 360 in steps of 20) (both at Type I error 0.025 and an allocation ratio of 1). For the Test type, select User Defined R, then upload the  [AnalyzeMMRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/AnalyzeMMRM.R).  
+MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample size box insert 200:360:20 (this will create sample sizes ranging from 200 to 360 in steps of 20) (both at Type I error 0.025 and an allocation ratio of 1). For the Test type, select User Defined R, then upload the  [AnalyzeMMRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/AnalyzeMMRM.R).  
 
 **Below your design card for the fixed design should look something like this**:
 
@@ -340,7 +340,7 @@ MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample 
 ## Responses: 
 For this example, we create a total of 6 different response cards. The first card use the result data from  Correll *et. al. * for the mean differences between treatment and control arms (Mead Difference = 6 points) and the given standard deviation (Std. Dev = 15). There should be two cards called Difference 4, 8 these cards will change the mean difference between the arms to 4 and 8 respectively. Next, there should be two response cards that change the standard deviation from 15 to 10 and 20.  The different standard deviations and mean different are included to understand the impact on power.  Lastly, there should be a null card where the standard deviation is 15 but the mean difference between treatment and control are the same. The null case is used to understand the false-positive of each analysis method. 
 
-All cards use the R integration and the [GenerateMMRMResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/RCode/GenerateMMRMResponses.R) file can be uploaded..
+All cards use the R integration and the [GenerateMMRMResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/GenerateMMRMResponses.R) file can be uploaded..
 
 **Below are the response cards and how they should look**:
 
