@@ -67,6 +67,8 @@ navbar:
                   href: articles/2ArmTimeToEventOutcomeAnalysisDescription.html
                 - text: 2-Arm, Binary Outcome
                   href: articles/2ArmBinaryOutcomeAnalysisDescription.html
+                - text: Time-To-Event Weighted Conditional Power Futility
+                  href: articles/TimeToEventConditionalPowerFutilityAnalysis.html
                 - text: --------------------
                 - text: Treatment Selection
                 - text: Binary Outcome
@@ -77,6 +79,8 @@ navbar:
                   href: articles/AssuranceConsecutiveStudies.html
                 - text: Probability of Success for Dual Endpoints (PFS & OS)
                   href: articles/ProbabilitySuccessDualEndpointsPFSOS.html
+                - text: Multiple Endpoints With Covariates and Stratified Randomization
+                  href: articles/MultipleEndpointsWithCovariates.html
                 - text: --------------------
                 - text: Other Integration Points
                 - text: Poisson Arrival Times
