@@ -22,7 +22,8 @@ library( CyneRgy )
 ```
 
 
-# **Introduction**
+# Introduction
+
 Many clinical trials often involve repeated measures of a continuous endpoint across multiple visits. Due to the burden on the trial subjects, data can be missing for a variety of reasons such as missed visits or patient dropout.  Efficiently, analyzing this type of data requires methods that handle within-patient correlation and missing data appropriately. 
 
 The **Mixed Model for Repeated Measures (MMRM)** is widely used because it provides opportunity to:  
@@ -36,7 +37,7 @@ This example has two goals:
 
 Together, this example provides a foundation for trial designers to estimate power, evaluate operating characteristics, and explore design choices in schizophrenia studies using an additional analysis that are not native to East Horizon.
 
-# **Required Files**
+# Required Files
 
 Before running anything in East Horizon, load the Schizophrenia example by installing CyneRgy and running this command into RStudio:
 
@@ -80,7 +81,7 @@ Below are some graphs as example outputs from the code from the GenerateMMRRespo
 <span style="font-size:15pt">**Figure 2**: An example plot of individual patient trajectories</span>
 ![](Schizophrenia_Files/PatientPlot.png){width=90%}
 
-# **Flowchart of Clinical Trial Process**
+# Flowchart of Clinical Trial Process
 
 The flowchart below shows the points of R integration in Cytel products, and it outlines the steps performed by the R code.
 
@@ -102,7 +103,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-# **East Horizon Simulation Setup**
+# East Horizon Simulation Setup
 
 To recreate this example in EH, begin by creating a new project in EH using a Study Objective of "Two Arm Confirmatory." On the Plan page, select the Continuous endpoint type. After selecting the continuous endpoint, choose the "Repeated Measure" option and click "Add Visit" so that the project will have a total of 5 visits: 4 interim visits and 1 final visit. 
 
@@ -120,7 +121,7 @@ For Better Response, select "Small Value," since a patient's outcome is improved
 
 Once you "Create Project", you then need to create an input set using the explore option.  When setting up the project details, make sure to select the option to have repeated measurements and specify the times of the visits. 
 
-## Designs: 
+## Designs
 
 MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample size box insert 200:360:20 (this will create sample sizes ranging from 200 to 360 in steps of 20) (both at Type I error 0.025 and an allocation ratio of 1). For the Test type, select User Defined R, then upload the  [AnalyzeMMRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/AnalyzeMMRM.R).  
 
@@ -137,7 +138,8 @@ MMRM fixed‑sample (baseline N ~266) and group‑sequential MMRM in the sample 
 ![](Schizophrenia_Files/MMRMGS.png){width=90%}
 <br><br><br>
 
-## Responses: 
+## Responses
+
 For this example, we create a total of 6 different response cards. The first card use the result data from  Correll *et. al. * for the mean differences between treatment and control arms (Mead Difference = 6 points) and the given standard deviation (Std. Dev = 15). There should be two cards called Difference 4, 8 these cards will change the mean difference between the arms to 4 and 8 respectively. Next, there should be two response cards that change the standard deviation from 15 to 10 and 20.  The different standard deviations and mean different are included to understand the impact on power.  Lastly, there should be a null card where the standard deviation is 15 but the mean difference between treatment and control are the same. The null case is used to understand the false-positive of each analysis method. 
 
 All cards use the R integration and the [GenerateMMRMResponses.R](https://github.com/Cytel-Inc/CyneRgy/blob/304-create-mmrm-analysis-example-for-clinical-trial/inst/Examples/SchizophreniaTrial/R/GenerateMMRMResponses.R) file can be uploaded..
@@ -167,7 +169,8 @@ All cards use the R integration and the [GenerateMMRMResponses.R](https://github
 
 <br><br><br>
 
-## Dropout & Enrollment:
+## Dropout & Enrollment
+
 All dropout cards share the same dropout rates as the publication (0.26 control and 0.15 experimental). Next, there should be one enrollment card with a rate of 30 subjects per month. Once all of these are set up, go to simulation setup and select 1000 repetitions.
 
 **Here are what the dropout and enrollment cards should look like**:
@@ -182,8 +185,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 ![](Schizophrenia_Files/Enrollment.png){width=90%}
 <br><br><br>
 
-#  **Results**
-
+# Results
 
 - **Target power**: Approximately 90% power is achieved with about 266 completers when the standard deviation is 15 and the mean difference is 6. For reaching this power there are 2 designs that effectively accomplish this. One should be the MMRM fixed design and the other being MMRM Group-sequential with a sample size of 300. Either of these designs are viable and the trade off will be discussed in the results discussion section.
 
@@ -216,8 +218,7 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 
 
 
-
-#  **Discussion**
+# Discussion
 
 -  **Fixed Vs. selected Sample**: While the selected design (i.e., the group-sequential design that allows for interim analyses and potential early stopping) does feature a lower power than the fixed sample, it does come with several benefits worth weight when simulating the study. The selected design boasts a 30% chance of stopping early, a shorter average study duration, and smaller average sample size. In return, it comes with a decrease in power by ~1.4%. These difference are significant as it can save money in a trial for even one of these other improved results.
 ![](Schizophrenia_Files/SelectDesign.png)
@@ -229,13 +230,15 @@ All dropout cards share the same dropout rates as the publication (0.26 control 
 
 
 
-# **Conclusion**
+# Conclusion
+
 This work successfully built and validated an MMRM analysis framework in both R and East Horizon. The R pipeline enables transparent simulation, analysis, and visualization, while East Horizon supports large-scale scenario evaluation. Together, they provide trial designers with flexible tools to plan studies, anticipate power, and identify risks.  
 
 The findings confirm MMRM’s suitability for longitudinal endpoints and highlight areas for further improvement, particularly around sequential testing and dropout handling. Through the R integration for analysis we have added an MMRM analysis that can better support clinical trial decision-making and design optimization than the native analysis option in EH for this particular trial example.
 
 
 
-# **Reference**
+# Reference
+
 Correll CU, Davis RE, Weingart M, et al. Efficacy and Safety of Lumateperone for Treatment of Schizophrenia: A Randomized Clinical Trial. JAMA Psychiatry. 2020;77(4):349–358. [doi:10.1001/jamapsychiatry.2019.4379](https://jamanetwork.com/journals/jamapsychiatry/fullarticle/2758022)
  
