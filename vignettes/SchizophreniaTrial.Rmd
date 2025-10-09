@@ -1,0 +1,11 @@
+---
+title: "Schizophrenia Trial (MMRM Analysis)"
+author: "Jacob Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r child = '../inst/Examples/SchizophreniaTrial/Description.Rmd'}
+```

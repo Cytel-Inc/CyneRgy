@@ -60,6 +60,8 @@ These examples provide multiple R functions to achieve a more complex design opt
 
 1. **[Multiple Endpoints With Covariates and Stratified Randomization](MultipleEndpointsWithCovariates.html)**: These examples demonstrate how to integrate continuous patient outcome simulation and analysis functionality into East Horizon using custom R functions. All examples simulate multiple independent, continuous outcomes drawn from normal distributions. Examples 2 and 3 additionally incorporate binary covariates with user-defined probabilities and effect sizes. Example 3 further extends the simulation by implementing stratified randomization based on these covariates, showcasing how patient allocation can be customized beyond East Horizon’s native features.
 
+1. **[Schizophrenia Trial (MMRM Analysis)](SchizophreniaTrial.html)**: This example demonstrates how to simulate and analyze data using a Mixed Model for Repeated Measures (MMRM) approach in the context of a schizophrenia trial.
+
 ## Other Integration Points
 These examples provide examples for other integration points. 
 
