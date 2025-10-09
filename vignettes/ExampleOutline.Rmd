@@ -35,6 +35,8 @@ Repeated measures involve collecting multiple data points for the same variable 
 
 1. **[Childhood Anxiety Trial](ChildhoodAnxiety.html)**: This example covers the situation where the patient data simulation needs to be improved to match what is expected in a clinical trial in childhood anxiety.
 
+1. **[PK/PD Modeling](PKPDResponseGeneration.html)**: This example demonstrates the capabilities of PK/PD modeling in East Horizon using R integration by simulating plasma drug concentrations using a one-compartment model with first-order absorption and elimination, then transforming concentration to effect via an Emax model to generate continuous outcomes.
+
 ## Analysis 
 
 1. **[2-Arm, Normal Outcome - Analysis](2ArmNormalOutcomeAnalysisDescription.html)**: This example demonstrates how to add new analysis functionality for normal data into East using an R function. For all examples, we assume the trial design consists of a control and experimental treatments. There are 2 Interim Analysis (IA) and a Final Analysis (FA). At the IA, the analysis is performed and depending on the example may determine early efficacy or early futility depending on the design.
