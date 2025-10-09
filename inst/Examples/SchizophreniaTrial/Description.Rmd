@@ -1,5 +1,5 @@
 ---
-title: '**MMRM Analysis**'
+title: "Schizophrenia Trial (MMRM Analysis)"
 author: "Jacob Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -85,221 +85,21 @@ Below are some graphs as example outputs from the code from the GenerateMMRRespo
 The flowchart below shows the points of R integration in Cytel products, and it outlines the steps performed by the R code.
 
 
-```{r flowchart_response_box_wider, fig.width=10, fig.height=6, echo=FALSE, message=FALSE, warning=FALSE}
-library(ggplot2)
-library(grid)
-
-# ----------------------------
-# Layout controls
-# ----------------------------
-ymin_band  <-  2
-ymax_band  <-  10
-wrap_width <-  32
-wrap_resp  <-  34   # allow wider wrapping for Response
-gutter_w   <-  0.08
-
-# ----------------------------
-# Columns
-# ----------------------------
-columns <-  data.frame(
-  xmin   = c(0, 1, 2, 3, 4, 5, 6),
-  xmax   = c(1, 2, 3, 4, 5, 6.75, 8.5),  # Response widened (5→6.75)
-  ymin   = ymin_band,
-  ymax   = ymax_band,
-  label  = c("Initialization","Enrollment","Randomization","Dropout",
-             "Treatment\nSelection","Response","Analysis"),
-  used   = c(FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE)
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Generates the responses of each patient at each time point (visit), depending on the patient’s treatment",
+            "Return responses"
+        ),
+        "Analysis" = c(
+            "Takes the generated data and runs analysis",
+            "Extracts treatment effect",
+            "Uses the rpact package to find the alpha so it can be used for decision rules",
+            "Returns the decision, p-value, error code, and prime delta"
+        )
+    )
 )
-columns$fill   <-  ifelse(columns$used, "#cfe2ff", "lightgray")
-columns$border <-  columns$fill
-
-# Gutters (keep uniform spacing)
-gutters_x <-  c(1, 2, 3, 4, 5, 6.75, 8.5)
-gutters <-  data.frame(
-  xmin = gutters_x -  gutter_w/2,
-  xmax = gutters_x + gutter_w/2,
-  ymin = ymin_band,
-  ymax = ymax_band
-)
-
-# ----------------------------
-# Response box (wider)
-# ----------------------------
-resp_xmin <-  5.1
-resp_xmax <-  6.65   # widened width
-resp_ymin <-  6.0
-resp_ymax <-  8.5
-
-wrap_text <-  function(s, width) paste(strwrap(s, width = width), collapse = "\n")
-resp_label <-  wrap_text(
-  "Generates the responses of each patient at each time point (visit), depending on the patient’s treatment",
-  width = wrap_resp
-)
-
-resp_steps <-  data.frame(
-  xmin  = resp_xmin,
-  xmax  = resp_xmax,
-  ymin  = resp_ymin,
-  ymax  = resp_ymax,
-  label = resp_label
-)
-
-# ----------------------------
-# Analysis boxes (4 boxes)
-# ----------------------------
-a_xmin <-  6.9
-a_xmax <-  8.35
-
-labels_raw <-  c(
-  "Takes the generated data and runs analysis",
-  "Extracts treatment effect",
-  "Uses the rpact package to find the alpha so it can be used for decision rules",
-  "Returns the decision, p-value, error code, and prime delta"
-)
-labels_wrapped <- vapply(labels_raw, wrap_text, character(1), width = wrap_width)
-
-n_boxes <-  4
-top_y   <-  9.5
-bot_y   <-  2.5
-gap     <-  0.22
-box_h   <-  (top_y -  bot_y - gap*(n_boxes-1)) / n_boxes
-
-steps <- data.frame(
-  xmin  = a_xmin,
-  xmax  = a_xmax,
-  ymin  = seq(from = top_y - box_h, by = -(box_h + gap), length.out = n_boxes),
-  ymax  = seq(from = top_y,         by = -(box_h + gap), length.out = n_boxes),
-  label = labels_wrapped
-)
-
-# Outside arrows (Analysis)
-mid_y_vec <- (steps$ymin + steps$ymax) / 2
-x_out <- a_xmax + 0.08
-
-right_connect <- data.frame(
-  x    = rep(a_xmax, n_boxes - 1),
-  y    = mid_y_vec[1:(n_boxes-1)],
-  xend = rep(x_out,  n_boxes - 1),
-  yend = mid_y_vec[1:(n_boxes-1)]
-)
-vertical_arrows <- data.frame(
-  x    = rep(x_out, n_boxes - 1),
-  y    = mid_y_vec[1:(n_boxes-1)] - 0.05,
-  xend = rep(x_out, n_boxes - 1),
-  yend = mid_y_vec[2:n_boxes] + 0.05
-)
-left_connect <- data.frame(
-  x    = rep(x_out,  n_boxes - 1),
-  y    = mid_y_vec[2:n_boxes],
-  xend = rep(a_xmax, n_boxes - 1),
-  yend = mid_y_vec[2:n_boxes]
-)
-
-# ----------------------------
-# Arrow: Response -> top Analysis box
-# ----------------------------
-resp_to_analysis <- data.frame(
-  x    = resp_xmax + 0.02,
-  y    = (resp_ymin + resp_ymax)/2,
-  xend = a_xmin - 0.02,
-  yend = (steps$ymin[1] + steps$ymax[1]) / 2
-)
-
-# ----------------------------
-# Legend
-# ----------------------------
-legend_data <- data.frame(
-  xmin  = c(3.1, 4.4),
-  xmax  = c(4.7, 6.0),
-  ymin  = c(0.95, 0.95),
-  ymax  = c(1.35, 1.35),
-  fill  = c("lightgray", "#cfe2ff"),
-  label = c("Not Used", "Used")
-)
-
-# ----------------------------
-# Draw
-# ----------------------------
-p <- ggplot() +
-  # Columns
-  geom_rect(
-    data = columns,
-    aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
-        fill = fill, color = border)
-  ) +
-  scale_fill_identity() + scale_color_identity() +
-  # Column labels
-  geom_text(
-    data = columns,
-    aes(x = (xmin + xmax)/2, y = ymax + 0.7, label = label),
-    size = 3, vjust = 1
-  ) +
-  # Gutters
-  geom_rect(
-    data = gutters,
-    aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-    fill = "white", color = NA
-  ) +
-  # Response box
-  geom_rect(
-    data = resp_steps,
-    aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-    fill = "white", color = "black"
-  ) +
-  geom_text(
-    data = resp_steps,
-    aes(x = (xmin + xmax)/2, y = (ymin + ymax)/2, label = label),
-    size = 2.6, lineheight = 1.05
-  ) +
-  # Analysis boxes
-  geom_rect(
-    data = steps,
-    aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-    fill = "white", color = "black"
-  ) +
-  geom_text(
-    data = steps,
-    aes(x = (xmin + xmax)/2, y = (ymin + ymax)/2, label = label),
-    size = 2.7, lineheight = 1.08
-  ) +
-  # Outside arrows
-  geom_segment(data = right_connect, aes(x = x, y = y, xend = xend, yend = yend),
-               linewidth = 0.5, color = "black") +
-  geom_segment(data = vertical_arrows, aes(x = x, y = y, xend = xend, yend = yend),
-               arrow = arrow(length = unit(6, "pt"), type = "closed"),
-               linewidth = 0.5, color = "black") +
-  geom_segment(data = left_connect, aes(x = x, y = y, xend = xend, yend = yend),
-               linewidth = 0.5, color = "black") +
-  # Arrow Response -> Analysis
-  geom_curve(
-    data = resp_to_analysis,
-    aes(x = x, y = y, xend = xend, yend = yend),
-    curvature = 0.1,
-    arrow = arrow(length = unit(6, "pt"), type = "closed"),
-    linewidth = 0.6
-  ) +
-  # Legend
-  geom_rect(
-    data = legend_data,
-    aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
-    color = "black"
-  ) +
-  geom_text(
-    data = legend_data,
-    aes(x = (xmin + xmax)/2, y = ymin - .15, label = label),
-    size = 3.1, vjust = 1
-  ) +
-  coord_cartesian(xlim = c(0, 9.0), ylim = c(0.6, 10.9), expand = FALSE) +
-  theme_void() +
-  theme(
-    panel.background = element_rect(fill = "white", colour = "white"),
-    plot.margin = margin(10, 20, 36, 20)
-  )
-
-p
-
-
-
 ```
 
 # **East Horizon Simulation Setup**
