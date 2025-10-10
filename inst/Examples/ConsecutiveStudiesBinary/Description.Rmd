@@ -15,6 +15,8 @@ output:
 
 This example demonstrates the computation of conditional probability of success in consecutive studies by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points of East Horizon. It features a sequential trial program involving a Phase 2 trial followed by a Phase 3 trial, both with the same binary endpoint. We show how Phase 2 results are simulated, saved, and then used as the prior data for Phase 3, allowing the Phase 3 patient outcomes to be generated only conditional on the Phase 2 trial's success. This approach illustrates how simulations can mimic using an earlier trial's data to directly inform subsequent trials, which is particularly valuable in drug development where Phase 3 studies are expensive and resource-intensive.
 
+*Note: The conditional probability of success of the Phase 3 trial can be computed and used for comparisons directly within East Horizon's native output visualizations. However, users must process the data externally in a post-processing manner to compute the probability of success of the program, which may also be of interest when evaluating whether to run the combination of Phase 2 and Phase 3 trials.*
+
 ## Why do we need R Integration for this example?
 
 The decision to move forward with certain trials is relying more and more on the computation of the trial's probability of success and the optimization of parameters that will boost it. To identify a realistic probability of success, though, can be difficult without having sufficient prior knowledge of the treatment in question. Data from previous historical studies is not always readily accessible to many clinicians that are tasked with this type of decision-making. 
@@ -22,6 +24,8 @@ The decision to move forward with certain trials is relying more and more on the
 Simulations and creating this prior data through the combination of R functions with the East Horizon product can help alleviate this gap in knowledge and help clinical teams decide to invest in an entire program of trials (e.g. a Phase 2 followed by a Phase 3) rather than just one confirmatory trial (e.g. only move forward with a Phase 3). 
 
 By combining the R functions described below with the East Horizon native inputs, users are able to simulate data taking into account uncertainty around their scenario's assumptions, pass generated data from the first trial in a program to the inputs of the second trial's simulation, and then compute the probability of success of each simulated trial as well as the program's probability of success overall. Users will also continue to benefit from East Horizon’s output visualizations for each trial – with the caveat that the Probability of Success & Conditional Probability of Success metrics will be labeled as “Power” in the native outputs of East Horizon.
+
+R Integration is required for this type of trial design because East Horizon does not natively support transferring results from one trial's simulations to another. The R functions created for this example enable users to leverage simulated data from one simulation into a following simulation's inputs. 
 
 ## What do the R functions do?
 
@@ -57,9 +61,9 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 Before starting, make sure you have the required tools and files.
 
-1. [East Horizon](https://platform.cytel.com)
-2. Download R Files from our public Github repo: [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/AnalyzeUsingEastManualFormula.R), [SimulatePatientOutcomeBinaryWithAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurance.R), [SimulatePatientOutcomeBinaryWithAssurancePh3](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurancePh3), and [PostProcess.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/PostProcess.R).
-3. RStudio with CyneRgy installed: `remotes::install_github( "Cytel-Inc/CyneRgy@main" )`.
+* [East Horizon](https://platform.cytel.com)
+* Download R Files from our public Github repo: [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/AnalyzeUsingEastManualFormula.R), [SimulatePatientOutcomeBinaryWithAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurance.R), [SimulatePatientOutcomeBinaryWithAssurancePh3](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurancePh3), and [PostProcess.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/PostProcess.R).
+* RStudio with CyneRgy installed: `remotes::install_github( "Cytel-Inc/CyneRgy@main" )`.
 
 ## New Project Page
 
@@ -219,7 +223,7 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 35. Load the results as described before (see steps 19 to 21 for more information). In the Explore page of the results, hover over each cell in the heatmap to see a summary of the outputs. Because of our custom R scripts, the result printed as “Power” is actually now equivalent to the Conditional Probability of Success of the Phase 3 study, i.e., the probability that Phase 3 succeeds given that Phase 2 succeeded.
 
-** + more information on results, maybe another screenshot
+![](ConsecutiveStudiesBinary_files/Step35.png){width=350px}
 
 See the [Results](#results) section below for more information.
 
@@ -278,7 +282,7 @@ where $\alpha_\text{ctrl}$, $\beta_\text{ctrl}$, $\alpha_\text{exp}$, $\beta_\te
 |**dParameter1Exp**|Parameter 1 of the Beta distribution for experimental arm ($\alpha_\text{exp}$)|40|
 |**dParameter2Exp**|Parameter 2 of the Beta distribution for experimental arm ($\beta_\text{exp}$)|60|
 
-These two true response probabilities are returned as outputs **TrueProbabilityControl** and **TrueProbabilityExperimental** at the end of the R function. This is important because this is why these variables will then be included in the *SimData* variable and picked up in the Phase 2 Analysis script, and finally appear in the Phase 2 results CSV file, which is downloadable from East Horizon. They are later reused in Phase 3 by loading the saved values. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information on the loading process.
+These two true response probabilities are returned as outputs **TrueProbabilityControl** and **TrueProbabilityExperimental** at the end of the R function. This is important because this is why these variables will then be included in the *SimData* list of variables and picked up in the Phase 2 Analysis script, and finally appear in the Phase 2 results CSV file, which is downloadable from East Horizon. They are later reused in Phase 3 by loading the saved values. See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information on the loading process.
 
 Then, each patient's binary outcome is drawn from a Bernoulli distribution:
 
