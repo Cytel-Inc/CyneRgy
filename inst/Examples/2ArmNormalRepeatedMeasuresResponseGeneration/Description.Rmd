@@ -8,8 +8,7 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response - Continuous Outcome with Repeated Measures</strong>.
-  <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">Click here for more information about this integration point.</a></p>
+  <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link"><strong>Integration Point: Response - Continuous Outcome with Repeated Measures</strong></a>. Click on the link for more information about this integration point.</p>
 </div>
 
 ## Introduction
@@ -55,3 +54,9 @@ CyneRgy::PlotExampleFlowchart(
     )
 )
 ```
+
+#### Accessing Responses in Analysis
+
+The data generation function returns a list object that includes multiple repeated response variables, each corresponding to a specified visit. These responses are stored as numeric vectors and are labeled sequentially as `Response1`, `Response2` and so on, depending on the number of visits specified.
+For the analysis, all the data is combined into a `SimData` object, therefore each response can be accessed directly using the $ operator, for example: `SimData$Response1`, `SimData$Response2`, etc. This structure facilitates the handling of multiple outcomes in repeated measures analyses.
+For further details on how to incorporate these multiple responses into your analysis, refer to [Integration Point: Analysis - Continuous Outcome with Repeated Measures](IntegrationPointAnalysisRepeatedMeasures.html).
