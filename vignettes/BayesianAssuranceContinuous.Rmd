@@ -1,0 +1,11 @@
+---
+title: "Bayesian Assurance, Continuous Outcome"
+author: "J. Kyle Wathen and Laurent Spiess"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r child = '../inst/Examples/BayesianAssuranceContinuous/Description.Rmd'}
+```
