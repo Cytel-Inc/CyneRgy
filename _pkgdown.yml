@@ -55,7 +55,7 @@ navbar:
                   href: articles/2ArmTimeToEventOutcomePatientSimulationDescription.html
                 - text: 2-Arm, Binary Outcome
                   href: articles/2ArmBinaryOutcomePatientSimulation.html
-                - text: 2-Arm, Repeated Measure
+                - text: 2-Arm, Repeated Measures
                   href: articles/2ArmNormalRepeatedMeasuresResponseGeneration.html
                 - text: Childhood Anxiety Trial
                   href: articles/ChildhoodAnxiety.html

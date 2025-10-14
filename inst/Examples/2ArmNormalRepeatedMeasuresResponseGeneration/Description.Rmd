@@ -8,11 +8,10 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response - Continuous Outcome with Repeated Measures</strong>.
-  <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">Click here for more information about this integration point.</a></p>
+  <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link"><strong>Integration Point: Response - Continuous Outcome with Repeated Measures</strong></a>. Click on the link for more information about this integration point.</p>
 </div>
 
-## Introduction
+# Introduction
 
 Repeated measures involve collecting multiple data points for the same variable from the same subjects across multiple time periods. This method provides insights into the subjects' development and changes over time. In this context, a single subject can have multiple responses over time, and these responses can be correlated across different visits.
 
@@ -33,7 +32,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R) - This file is used to load the library `MASS` to run the `mvrnorm` function. 
 
-## Example 1 - Normal Endpoint
+# Example 1 - Normal Endpoint
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R" class="alert-link">GenerateResponseDiffOfMeansRepeatedMeasures.R</a></p>
@@ -55,3 +54,9 @@ CyneRgy::PlotExampleFlowchart(
     )
 )
 ```
+
+# Accessing Responses in Analysis
+
+The data generation function returns a list object that includes multiple repeated response variables, each corresponding to a specified visit. These responses are stored as numeric vectors and are labeled sequentially as `Response1`, `Response2` and so on, depending on the number of visits specified.
+These Response variables serve as both outputs of the data generation step and inputs for subsequent analyses. For the analysis, all the data is combined into a `SimData` object (list of variables), therefore each response can be accessed directly using the $ operator, for example: `SimData$Response1`, `SimData$Response2`, etc. This structure facilitates the handling of multiple outcomes in repeated measures analyses.
+For further details on how to incorporate these multiple responses into your analysis, refer to [Integration Point: Analysis - Continuous Outcome with Repeated Measures](IntegrationPointAnalysisRepeatedMeasures.html).
