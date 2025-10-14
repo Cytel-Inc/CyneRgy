@@ -7,11 +7,502 @@ output: html_document
 
 [$\leftarrow$ Go back to the *Integration Point: Analysis* page](IntegrationPointAnalysis.html)
 
-# Study Objectives
+# Input Variables
 
-The input variables, expected output variables, examples, and templates for this integration point depend on the study objective (number of arms) you are using. Refer to the relevant pages below:
+When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point, outcome, and study objective.
 
-1. [**Two Arm Confirmatory**](IntegrationPointAnalysisContinuousTwoArm.html)
-1. [**Multiple Arm Confirmatory**](IntegrationPointAnalysisContinuousMultipleArm.html)
+| **Variable**   | **Type** | **Description**                                                                 |
+|----------------|-----------------|---------------------------------------------------------------------------------|
+|**SimData**|Data Frame|Subject data generated in current simulation, one row per subject. To access these variables in your R code, use the syntax: `SimData$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. See below for more information.|
+|**DesignParam**|List|Input parameters which may be needed to compute test statistics and perform tests. To access these variables in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. See below for more information.|
+|**LookInfo**|List|Input parameters related to multiple looks. Empty when `Statistical Design = Fixed Sample`, but still mandatory in the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision`. See below for more information.|
+|**AdaptInfo**|List|Input parameters related to sample size re-estimation. See below for more information. Only applicable when `Statistical Design = Group Sequential with Sample Size Re-Estimation`.|
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointAnalysis.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
-Please note that R integration with the Multiple Arm Confirmatory study objective is not currently available in East Horizon Explore, but it is expected to be added in a future update.
+## Variables of SimData
+
+[Click here to explore the variables of SimData.](VariablesOfSimData.html)
+
+## Variables of DesignParam
+
+[Click here to explore the variables of DesignParam.](VariablesOfDesignParam.html)
+
+## Variables of LookInfo
+
+[Click here to explore the variables of LookInfo.](VariablesOfLookInfo.html)
+
+## Variables of AdaptInfo
+
+[Click here to explore the variables of AdaptInfo.](VariablesOfAdaptInfo.html)
+
+# Expected Output Variable
+
+East Horizon expects an output of a specific type. Refer to the table below for the expected output for this integration point:
+
+| **Type**  | **Description**                                                                                  |
+|------------------|--------------------------------------------------------------------------------------------------|
+| List  | A named list containing `ErrorCode` and one or multiple of the following members: `Decision`, `AnalysisTime`, `TestStat`, `Delta`, `CtrlCompleters`, `TrmtCompleters`, `CtrlPi`, `StdError`. See below for more information.|
+
+The output list can take different forms.
+
+## For `Study Objective = Two Arm Confirmatory`
+
+### Option 1 (Decision): Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **Decision**   | Integer  | Boundary crossing decision:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `3`: Futility boundary crossed (only applicable when `Statistical Design = Group Sequential`).<br>– `4`: Equivalence boundary crossed (not available in East Horizon Explore).<br>You can use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See the template below for the correct usage.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+**Note for `Statistical Design = Group Sequential`**: When there is no efficacy boundary to be crossed, the return code of `0` stands for futility in the final look. Similarly, when there is no futility boundary to be crossed, the return code of `0` stands for efficacy in the final look. Use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get decision values in a simple way.
+
+### Option 2 (TestStat): Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **TestStat**   | Numeric  | Value of appropriate test statistic on Wald ﴾Z﴿ scale.|
+|**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2 or 3` (futility boundary scale is Delta or conditional power) or `Promising Zone Scale = Conditional Power - Estimated`. Only applicable when `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`.|
+|**CtrlCompleters**|Numeric|Number of completers for control arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power) and `Conditional power Delta option = Estimated Delta / Estimated HR`. Only applicable when `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`.|
+|**TrmtCompleters**|Numeric|Number of completers for treatment arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power) and `Conditional power Delta option = Estimated Delta / Estimated HR`. Only applicable when `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`.|
+|**CtrlPi**|Numeric|Proportion for control arm. Required if `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power) and `Conditional power Delta option = Estimated Delta / Estimated HR`. Only applicable when `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`.|
+|**StdError**|Numeric|Standard error of estimate of Delta.|Required if `Promising Zone Scale = Conditional Power - Estimated`. Only applicable when `Statistical Design = Group Sequential with Sample Size Re-Estimation`.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+**Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
+
+**Notes for `Statistical Design = Group Sequential`**:
+
+- If the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
+- If `LookInfo$FutBdryScale = 0` (futility boundary scale is Z scale), `TestStat` will be used to check for both efficacy and futility. 
+- If `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta scale), `TestStat` will be used to check for efficacy and `Delta` will be used to check for futility. 
+- If `LookInfo$FutBdryScale = 3` (futility boundary scale is conditional power scale), `TestStat` will be used to check for efficacy and `Delta`, `CtrlCompleters`, `TrmtCompleters`, and `CtrlPi` will be used to check for futility.
+
+**Notes for `Statistical Design = Group Sequential with Sample Size Re-Estimation`**:
+
+See the notes for `Statistical Design = Group Sequential` above for futility and efficacy checks. Then, if `Promising Zone Scale = Conditional Power - Estimated`, `Delta` and `StdError` will be used for sample size re-estimation.
+
+
+## For `Study Objective = Multiple Arm Confirmatory`
+
+### Option 1 (Decision): Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **Decision**   | Vector of Integer  | Vector of length `DesignParam$NumTreatments`, containing the boundary crossing decision for each treatment arm:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `3`: Futility boundary crossed (only applicable when `Statistical Design = Group Sequential`).<br>– `4`: Equivalence boundary crossed (not available in East Horizon Explore).<br>You can use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See the template below for the correct usage.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+**Notes for `Statistical Design = Group Sequential`**:
+
+- Decision should take care of multiple comparison procedures adjustment appropriately.
+- When there is no efficacy boundary to be crossed, the return code of `0` stands for futility in the final look. Similarly, when there is no futility boundary to be crossed, the return code of `0` stands for efficacy in the final look. Use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get decision values in a simple way.
+
+
+### Option 2 (TestStat): Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **TestStat**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the value of appropriate test statistic on Wald ﴾Z﴿ scale for each treatment arm.|
+|**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+**Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
+
+**Notes for `Statistical Design = Group Sequential`**:
+
+- If the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
+- If `LookInfo$FutBdryScale = 1` (futility boundary scale is adjusted p-value scale), `TestStat` will be used to check for both efficacy and futility. 
+- If `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta scale), `TestStat` will be used to check for efficacy and `Delta` will be used to check for futility. 
+
+### Option 3 (AdjPVal): Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **AdjPVal**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the p-values computed from test statistics and adjusted for multiple comparison procedures for each treatment arm.|
+|**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+**Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `AdjPVal` will be used to check for efficacy.
+
+**Notes for `Statistical Design = Group Sequential`**:
+
+- If the design does not have any futility boundary, `AdjPVal` will be used to check for efficacy.
+- If `LookInfo$FutBdryScale = 1` (futility boundary scale is adjusted p-value scale), `AdjPVal` will be used to check for both efficacy and futility. 
+- If `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta scale), `AdjPVal` will be used to check for efficacy and `Delta` will be used to check for futility. 
+
+### Option 4 (RawPVal): Expected Members of the Output List
+
+| **Members**     | **Type**  | **Description**                                                                                  |
+|----------------|--------------|---------------------------------------------------------------------------------|
+| **RawPVal**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the p-values computed from test statistics for each treatment arm.|
+|**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
+|**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+| **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
+
+**Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `RawPVal` will be used to check for efficacy.
+
+**Notes for `Statistical Design = Group Sequential`**:
+
+- If the design does not have any futility boundary, `RawPVal` will be used to check for efficacy.
+- If `LookInfo$FutBdryScale = 1` (futility boundary scale is adjusted p-value scale), this option cannot be used.
+- If `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta scale), `RawPVal` will be used to check for efficacy and `Delta` will be used to check for futility.
+
+
+# Minimal Templates
+
+Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [Analyze.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R).
+
+## For `Study Objective = Two Arm Confirmatory`
+
+### Minimal Template for Option 1 (Decision)
+
+#### For `Statistical Design = Fixed Sample`
+
+```
+PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    library( CyneRgy )
+    nError        	    <- 0 # Error handling (no error)
+    
+    # This is an example using GetDecisionString and GetDecision.
+    
+    # Write the actual code here.
+    # It is a fixed sample design, so no interim look nor futility check.
+    bFAEfficacyCheck <- TRUE # If TRUE, declares efficacy.
+    # Usually, bFAEfficacyCheck would be a conditional statement such as 'dTValue > dBoundary'.
+    
+    # These variables are set because it is a fixed sample design.
+    nQtyOfLooks          <- 1
+    nLookIndex           <- 1 
+    nQtyOfEvents         <- DesignParam$MaxCompleters
+    nQtyOfPatsInAnalysis <- nrow( SimData )
+    nTailType            <- DesignParam$TailType
+    
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bFAEfficacyCondition = bFAEfficacyCheck)
+
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+	
+	return( list( Decision = as.integer( nDecision ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+#### For `Statistical Design = Group Sequential`
+
+```
+PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    library( CyneRgy )
+    nError        	    <- 0 # Error handling (no error)
+    
+    # This is an example using GetDecisionString and GetDecision.
+    
+    # Write the actual code here.
+    # It is a group sequential design, so interim looks and futility check are possible.
+    bIAEfficacyCheck <- TRUE # If TRUE, declares efficacy at the interim look.
+    bIAFutilityCheck <- FALSE # If TRUE, declares futility at the interim look.
+    bFAEfficacyCheck <- TRUE # If TRUE, declares efficacy at the final look.
+    # Usually, the Check variables would be conditional statements such as 'dTValue > dBoundary'.
+    
+    # These variables are from LookInfo because it is a group sequential design.
+    nQtyOfLooks          <- LookInfo$NumLooks
+    nLookIndex           <- LookInfo$CurrLookIndex
+    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    RejType              <- LookInfo$RejType
+    TailType             <- DesignParam$TailType
+    
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bIAEfficacyCondition = bIAEfficacyCheck,
+                                               bIAFutilityCondition = bIAFutilityCheck,
+                                               bFAEfficacyCondition = bFAEfficacyCheck )
+
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+	
+	return( list ( Decision = as.integer( nDecision ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+### Minimal Template for Option 2 (TestStat)
+
+#### For `Statistical Design = Fixed Sample`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    dTestStatistic      <- 0
+    
+	# Write the actual code here.
+    # Store the computed test statistic in dTestStatistic.
+    
+	return( list( TestStat = as.double( dTestStatistic ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+#### For `Statistical Design = Group Sequential`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    dTestStatistic      <- 0
+    dDelta              <- 0 # Use if futility boundary scale is Delta or conditional power
+    dCtrlCompleters     <- 0 # Use if futility boundary scale is conditional power
+    dTrmtCompleters     <- 0 # Use if futility boundary scale is conditional power
+    dCtrlPi             <- 0 # Use if futility boundary scale is conditional power
+    
+    
+	# Write the actual code here.
+    # Store the computed test statistic in dTestStatistic.
+    # Compute dDelta, dCtrlCompleters, dTrmtCompleters, dCtrlPi if needed.
+    
+	return( list( TestStat = as.double( dTestStatistic ),
+	              Delta = as.double( dDelta ), # Include if futility boundary scale is Delta or conditional power
+	              CtrlCompleters = as.double( dCtrlCompleters ), # Include if futility boundary scale is conditional power
+	              TrmtCompleters = as.double( dTrmtCompleters ), # Include if futility boundary scale is conditional power
+	              CtrlPi = as.double( dCtrlPi ), # Include if futility boundary scale is conditional power
+	              ErrorCode = as.integer( nError ) ) )
+}
+```
+
+#### For `Statistical Design = Group Sequential with Sample Size Re-Estimation`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    dTestStatistic      <- 0
+    dDelta              <- 0 # Use if futility boundary scale is Delta or conditional power
+    dCtrlCompleters     <- 0 # Use if futility boundary scale is conditional power
+    dTrmtCompleters     <- 0 # Use if futility boundary scale is conditional power
+    dCtrlPi             <- 0 # Use if futility boundary scale is conditional power
+    dStdError           <- 0 # Use if Promising Zone Scale = Conditional Power - Estimated
+    
+    
+	# Write the actual code here.
+    # Store the computed test statistic in dTestStatistic.
+    # Compute dDelta, dCtrlCompleters, dTrmtCompleters, dCtrlPi if needed.
+    
+	return( list( TestStat = as.double( dTestStatistic ),
+	              Delta = as.double( dDelta ), # Include if futility boundary scale is Delta or conditional power
+	              CtrlCompleters = as.double( dCtrlCompleters ), # Include if futility boundary scale is conditional power
+	              TrmtCompleters = as.double( dTrmtCompleters ), # Include if futility boundary scale is conditional power
+	              CtrlPi = as.double( dCtrlPi ), # Include if futility boundary scale is conditional power
+	              StdError = as.double(dStdError ), # Include if Promising Zone Scale = Conditional Power - Estimated
+	              ErrorCode = as.integer( nError ) ) )
+}
+```
+
+
+## For `Study Objective = Multiple Arm Confirmatory`
+
+### Minimal Template for Option 1 (Decision)
+
+#### For `Statistical Design = Fixed Sample`
+
+```
+PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    library( CyneRgy )
+    nError        	    <- 0 # Error handling (no error)
+    NumTreatments       <- DesignParam$NumTreatments
+    vDecision           <- rep( 0, NumTreatments )  # Initializing decision vector to 0
+    
+    # This is an example using GetDecisionString and GetDecision.
+    # Write the actual code here.
+    
+    # These variables are set because it is a fixed sample design.
+    nQtyOfLooks          <- 1
+    nLookIndex           <- 1 
+    nQtyOfEvents         <- DesignParam$MaxCompleters
+    nQtyOfPatsInAnalysis <- nrow( SimData )
+    nTailType            <- DesignParam$TailType
+    
+    for( i in 1:NumTreatments )
+    {
+        # It is a fixed sample design, so no interim look nor futility check.
+        bFAEfficacyCheck <- TRUE # If TRUE, declares efficacy.
+        # Usually, bFAEfficacyCheck would be a conditional statement such as 'dTValue > dBoundary'.
+        # This would be different for each treatment arm.
+    
+        strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bFAEfficacyCondition = bFAEfficacyCheck)
+
+        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+        vDecision[ i ] = nDecision
+    }
+    
+	
+	return( list( Decision = as.integer( vDecision ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+#### For `Statistical Design = Group Sequential`
+
+```
+PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    library( CyneRgy )
+    nError        	    <- 0 # Error handling (no error)
+    NumTreatments       <- DesignParam$NumTreatments
+    vDecision           <- rep( 0, NumTreatments )  # Initializing decision vector to 0
+    
+    # This is an example using GetDecisionString and GetDecision.
+    # Decision should take care of multiple comparison procedures adjustment appropriately.
+    # Write the actual code here.
+    
+    # These variables are from LookInfo because it is a group sequential design.
+    nQtyOfLooks          <- LookInfo$NumLooks
+    nLookIndex           <- LookInfo$CurrLookIndex
+    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    RejType              <- LookInfo$RejType
+    TailType             <- DesignParam$TailType
+    
+    for( i in 1:NumTreatments )
+    {
+        # Write the actual code here.
+        # It is a group sequential design, so interim looks and futility check are possible.
+        bIAEfficacyCheck <- TRUE # If TRUE, declares efficacy at the interim look.
+        bIAFutilityCheck <- FALSE # If TRUE, declares futility at the interim look.
+        bFAEfficacyCheck <- TRUE # If TRUE, declares efficacy at the final look.
+        # Usually, the Check variables would be conditional statements such as 'dTValue > dBoundary'.
+        # This would be different for each treatment arm.
+    
+        strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bIAEfficacyCondition = bIAEfficacyCheck,
+                                               bIAFutilityCondition = bIAFutilityCheck,
+                                               bFAEfficacyCondition = bFAEfficacyCheck )
+
+        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+        vDecision[ i ] = nDecision
+    }
+    
+	
+	return( list( Decision = as.integer( vDecision ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+### Minimal Template for Option 2 (TestStat)
+
+#### For `Statistical Design = Fixed Sample`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    NumTreatments       <- DesignParam$NumTreatments
+    vTestStatistic      <- rep( 0, NumTreatments )  # Initializing test statistic vector to 0	
+    
+	# Write the actual code here.
+    # Store the computed test statistic for each treatment arm in vTestStatistic.
+    
+	return( list( TestStat = as.double( vTestStatistic ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+#### For `Statistical Design = Group Sequential`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    NumTreatments       <- DesignParam$NumTreatments
+    vTestStatistic      <- rep( 0, NumTreatments )  # Initializing test statistic vector to 0	
+    dDelta              <- 0 # Use if futility boundary scale is Delta
+    
+	# Write the actual code here.
+    # Store the computed test statistic for each treatment arm in vTestStatistic.
+    
+	return( list( TestStat = as.double( vTestStatistic ),
+	              Delta = as.double( dDelta ), # Include if futility boundary scale is Delta
+	              ErrorCode = as.integer( nError ) ) )
+}
+```
+
+### Minimal Template for Option 3 (AdjPVal)
+
+#### For `Statistical Design = Fixed Sample`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    NumTreatments       <- DesignParam$NumTreatments
+    vAdjPVal            <- rep( 0, NumTreatments )  # Initializing p-value vector to 0	
+    
+	# Write the actual code here.
+    # Store the computed adjusted p-value for each treatment arm in vAdjPVal.
+    
+	return( list( AdjPVal = as.double( vTestStatistic ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+#### For `Statistical Design = Group Sequential`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    NumTreatments       <- DesignParam$NumTreatments
+    vAdjPVal            <- rep( 0, NumTreatments )  # Initializing p-value vector to 0	
+    dDelta              <- 0 # Use if futility boundary scale is Delta
+    
+	# Write the actual code here.
+    # Store the computed adjusted p-value for each treatment arm in vAdjPVal.
+    
+	return( list( AdjPVal = as.double( vTestStatistic ),
+	              Delta = as.double( dDelta ), # Include if futility boundary scale is Delta
+	              ErrorCode = as.integer( nError ) ) )
+}
+```
+
+### Minimal Template for Option 4 (RawPVal)
+
+#### For `Statistical Design = Fixed Sample`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    NumTreatments       <- DesignParam$NumTreatments
+    vRawPVal            <- rep( 0, NumTreatments )  # Initializing p-value vector to 0	
+    
+	# Write the actual code here.
+    # Store the computed p-value for each treatment arm in vRawPVal.
+    
+	return( list( RawPVal = as.double( vTestStatistic ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+#### For `Statistical Design = Group Sequential`
+
+```
+ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    nError        	    <- 0 # Error handling (no error)
+    NumTreatments       <- DesignParam$NumTreatments
+    vRawPVal            <- rep( 0, NumTreatments )  # Initializing p-value vector to 0
+    dDelta              <- 0 # Use if futility boundary scale is Delta
+    
+	# Write the actual code here.
+    # Store the computed p-value for each treatment arm in vRawPVal.
+    
+	return( list( RawPVal = as.double( vTestStatistic ),
+	              Delta = as.double( dDelta ), # Include if futility boundary scale is Delta
+	              ErrorCode = as.integer( nError ) ) )
+}
+```
+
+# Examples
+
+Explore the following examples for more context:
+
+1. [**2-Arm, Normal Outcome - Analysis**](2ArmNormalOutcomeAnalysisDescription.html)
+    - [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R)
+    - [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R)
+    - [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R)
+

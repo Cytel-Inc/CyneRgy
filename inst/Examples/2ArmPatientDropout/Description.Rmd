@@ -111,7 +111,7 @@ This function does not use any user-defined parameters, but uses parameters spec
 |**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
 |-----|-----|---|
 |Probability of Dropout: Control|Response Card, Dropout Rate tab|$DropParamControl$|
-|Probability of Dropout: Treatment|Response Card, Dropout Rate tab|$DropParamtrt$|
+|Probability of Dropout: Treatment|Response Card, Dropout Rate tab|$DropParamTrt$|
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
