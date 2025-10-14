@@ -12,6 +12,7 @@
 #'    \item{UserParam$dSigma}{The known sampling variance.  Note, make sure this is the same as the sampling varaince in East.}
 #'    \item{UserParam$dMAV}{Minimum Acceptable Value (MAV)}
 #'    \item{UserParam$dPU}{A value in [0, 1] that specifies the upper cuttoff for efficacy.  If posterior probability is greater than PU a Go decision is made.}
+#'    \item{UserParam$dPUFutility}{A value in [0, 1] that specifies the threshold probability of futility stopping. If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early for futility.}
 #'    }
 #' @export
 AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)

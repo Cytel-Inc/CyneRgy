@@ -1,23 +1,19 @@
 ---
 title: "Consecutive Studies, Continuous & Time-to-Event Outcomes"
-author: "J. Kyle Wathen and Laurent Spiess"
+author: "J. Kyle Wathen, Laurent Spiess and Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default
   word_document: default
 ---
 
-<div class="alert alert-danger" role="alert">
-  <p style="margin-bottom:0">The process of loading Phase 2 data into a Phase 3 study is not clearly explained here. For a more detailed explanation, please refer to the [Consecutive Studies, Binary Outcome](ConsecutiveStudiesBinary.html) example.</p>
-</div>
-
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
+  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a> and the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>. Click on the links for more information about these integration points.</p>
 </div>
 
 # Introduction
 
-The intent of the following examples is to demonstrate the computation of Bayesian assurance, or probability of success, and conditional assurance in consecutive studies through the integration of R with Cytel products. The examples feature a sequential design involving a Phase 2 trial with a normal endpoint followed by a Phase 3 trial with a time-to-event endpoint.
+The intent of the following example is to demonstrate the computation of Bayesian assurance, or probability of success, and conditional assurance in consecutive studies by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points of East Horizon. It features a sequential design involving a Phase 2 trial with a normal endpoint followed by a Phase 3 trial with a time-to-event endpoint.
 
 The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial. This **de-risking** is evaluated by comparing two scenarios: (1) the probability of a No-Go decision in Phase 3 if Phase 2 is skipped, and (2) the probability of a No-Go in Phase 3 if a preceding Phase 2 trial is conducted and yields a Go decision. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2.
 
@@ -36,9 +32,8 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 1. [SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R) - Functions to simulate patient outcomes under a normal distribution informed by mixture priors.
 2. [AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using normal priors.
-3. [ReadInPrior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/ReadInPrior.R) - Functions to load the Phase 2 output and extract the true treatment differences.
-4. [SimulatePatientSurvivalAssuranceUsingPh2Prior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R) - This function simulates patient-level outcomes within a Bayesian assurance framework.
-5. [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using Cox proportional hazards model.
+3. [SimulatePatientSurvivalAssuranceUsingPh2Prior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R) - This function simulates patient-level outcomes within a Bayesian assurance framework.
+4. [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using Cox proportional hazards model.
 
 **Note:** This example builds on the [Bayesian Assurance, Continuous Outcome](BayesianAssuranceContinuous.html) and the [Bayesian Assurance, Time-to-Event Outcome](BayesianAssuranceTimeToEvent.html) examples, and utilizes some of the same R code. Please refer to them for more information. The difference is that we now have two different studies: Phase 3 is conducted **only** if Phase 2 results in a Go decision.
 
@@ -82,7 +77,207 @@ ggplot() +
   )
 ```
 
-# Phase 2 Study
+------
+
+# Step-by-Step Instructions
+
+Before starting, make sure you have the required tools and files.
+
+- [East Horizon](https://platform.cytel.com)
+- Download R Files from our public Github repo: [SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R), [AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R), [SimulatePatientSurvivalAssuranceUsingPh2Prior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R), and [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R).
+
+In this example, we will create two different projects: one for the Phase 2 study and one for the Phase 3 study.
+
+## Phase 2 Study
+
+### New Project Page
+
+1. On East Horizon, create a new project with a continuous endpoint.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step1.png){width=800px}
+
+### New Input Set Page
+
+2. Navigate to the Inputs tab, and create a new input set using the Explore task.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step2.png){width=800px}
+
+### Design Page
+
+3. Within the input set you just created, navigate to the Design page, then select “User Specified – R” in the Test field.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step3.png){width=800px}
+
+4. Click the "+" icon next to "User Specified - R" to open the R Integration pop-up window.
+
+5. Click on “Select File” and then on “Continue”.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step5.png){width=800px}
+
+6. Upload and select the file **AnalyzeUsingBayesianNormals.R**.
+
+7. Check that the correct file has been imported and the correct Function Name has been specified by the system. Note that the User Parameter variables have been automatically pulled from the R function that was imported. If the variables **dPriorMeanCtrl**, **dPriorStdDevCtrl**, **dPriorMeanExp**, and **dPriorStdDevExp** are missing, add them to the list using the button "+ Add Variable".
+
+8. Fill the parameter values. In our case, we use the example values below. See the [Analysis Integration Point](#analysis-integration-point) section of the phase 2 study below for more information about these variables.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step8.png){width=800px}
+
+9. Click on the “Save” button to exit the R Integration details window. 
+
+### Response Page
+
+9. Navigate to the Response page and the relevant response card, and then select “User Specified – R” in the Distribution field.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step9.png){width=800px}
+
+10. Click on the "+" icon next to "User Specified - R" to open the R Integration pop-up window.
+
+11.	Click on “Select File” and then on “Continue”.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step11.png){width=800px}
+
+12. Upload and select the file **SimulatePatientOutcomeNormalAssurance.R**.
+
+13. Check that the correct file has been imported and the correct Function Name has been specified by the system. Note that the User Parameter variables have been automatically pulled from the R function that was imported.
+
+14. Fill the parameter values. In our case, we use the example values below. See the [Response Integration Point](#response-integration-point) section of the phase 2 study below for more information about these variables.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step14.png){width=800px}
+
+15. Click on the “Save” button to exit the R Integration details window.
+
+### Simulation Setup Page
+
+16. Specify the number of simulation runs as needed. You can choose any number you require. For the Phase 2 input set, it is recommended to run as many simulations as possible (e.g., 20,000). This is because Phase 3 will only use data from successful Phase 2 trials, so the more simulations you run, the larger the pool of usable trials for Phase 3.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step16.png){width=800px}
+
+17. Check the box to “Generate Data File for All Simulated Models”.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step17.png){width=800px}
+
+18. Click the "Save & Simulate" button.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step18.png){width=800px}
+
+19. Confirm by clicking on "Simulate" in the pop-up window, and wait for the simulation runs to finish.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step19.png){width=500px}
+
+### Results Page
+
+20. Navigate to the Results tab, then check whether the Phase 2 simulation failed or was completed by looking at the Status column.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step20.png){width=800px}
+
+21. If the simulation failed, open the Log window to see if there are any helpful error messages.
+
+   a. Click on the “?” icon in the top right corner of your screen.
+    
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step21a.png){width=800px}
+    
+   b. Click on “Log”.
+    
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step21b.png){width=400px}
+    
+   c. Identify any errors that appear. For example:
+    
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step21c.png){width=600px}
+
+22. If the simulation has completed, click on the Result name. If you have multiple scenarios in your simulation, you will be prompted to label at least one scenario from the list. Alternatively, you may also skip this step by selecting the “Skip” button in the bottom left corner.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step22.png){width=800px}
+
+23. The Explore page of the results appears. You will notice a checkbox on the left side of each row in the table, below the heatmap. Click on the box of model that generated the data using your prior distribution, e.g.:
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step23.png){width=800px}
+
+24. Now click on Download dropdown menu, that is in the top right of the screen, and Summary Statistics option. Wait until the file is downloaded and rename it to **Ph2_results.csv**.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step24.png){width=800px}
+
+## Phase 3 Study
+
+### New Project Page
+
+25. On East Horizon, create a new project with a time-to-event endpoint.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step25.png){width=800px}
+### Files Page
+
+26. Navigate to the Files page and click on the Inputs folder.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step26.png){width=800px}
+
+27. Click on "Upload" and select the file you just downloaded from East Horizon. Alternatively, you can use the example file provided in the `Outputs` directory of this example if you want to test the workflow with our example data. Make sure the file is renamed to "Ph2_results.csv" and placed in the Inputs folder if you intend to use the R script as provided. If you prefer a different file name, you can update the script accordingly.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step27.png){width=800px}
+
+### New Input Set Page
+
+28. Navigate to the Inputs page and and create a new input set using the Explore task.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step2.png){width=800px}
+
+### Design Page
+
+29. Within the input set you just created, navigate to the Design page, then select “User Specified – R” in the Test Statistic field.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step29.png){width=800px}
+
+30. Click the "+" icon next to "User Specified - R" to open the R Integration pop-up window.
+
+31. Click on “Select File” and then on “Continue”.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step5.png){width=800px}
+
+32. Upload and select the file **AnalyzeSurvivalDataUsingCoxPH.R**.
+
+33. Check that the correct file has been imported and the correct Function Name has been specified by the system. Note that the User Parameter variables have been automatically pulled from the R function that was imported.
+
+34. Fill the parameter values. In our case, we use the example values below. See the [Analysis Integration Point](#analysis-integration-point-1) section of the phase 3 study below for more information about these variables.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step34.png){width=800px}
+
+35. Click on the “Save” button to exit the R Integration details window. 
+
+### Response Page
+
+36. Navigate to the Response page and the relevant response card of the Phase 3 input set, and then select “User Specified – R” in the Distribution field.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step36.png){width=800px}
+
+37. Click on the "+" icon next to "User Specified - R" to open the R Integration pop-up window.
+
+38.	Click on “Select File” and then on “Continue”.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step5.png){width=800px}
+
+39. Upload and select the file **SimulatePatientSurvivalAssuranceUsingPh2Prior.R**.
+
+40. Check that the correct file has been imported and the correct Function Name has been specified by the system. Note that the User Parameter variables have been automatically pulled from the R function that was imported.
+
+41. Fill the parameter values. In our case, we use the example values below. See the [Response Integration Point](#response-integration-point-1) section of the phase 3 study below for more information about these variables.
+
+![](ConsecutiveStudiesContinuousTimeToEvent_files/Step41.png){width=800px}
+
+42. Click on the “Save” button to exit the R Integration details window.
+
+### Simulation Setup Page
+
+43. Simulate the input set the same way as described before. See Steps 16 to 19 for more information. However, for Phase 3, we recommend choosing a lower number of simulations (e.g., 5,000). This is because the simulation will fail when specifying a number of simulation higher than the number of successful Phase 2 trials.
+
+### Results Page
+
+44. Load the results as described before (see steps 20 to 22 for more information). In the Explore page of the results, hover over each cell in the heatmap to see a summary of the outputs. Because of our custom R scripts, the result “Power” is actually now equivalent to the Conditional Probability of Success of the Phase 3 study, i.e., the probability that Phase 3 succeeds given that Phase 2 succeeded.
+
+See the [Results](#results) section below for more information.
+
+------
+
+# Technical Information and Example Values
+
+## Phase 2 Study
 
 This study considers a two-arm fixed sample design with normally distributed outcomes $Y$, with 80 patients per treatment arm.
 
@@ -109,7 +304,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Response (Patient Simulation) Integration Point
+### Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R" class="alert-link">SimulatePatientOutcomeNormalAssurance.R</a></p>
@@ -168,7 +363,7 @@ Refer to the table below for the definitions and values of the user-defined para
 |**dSDCtrl**|Standard deviation for control arm.|1.9|
 |**dSDExp**|Standard deviation for experimental arm.|1.9|
 
-## Analysis Integration Point
+### Analysis Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R" class="alert-link">AnalyzeUsingBayesianNormals.R</a></p>
@@ -219,8 +414,9 @@ For this study, the *MAV* is set to 0.6 and $P_U$ to 0.8. Refer to the table bel
 |**dSigma**|Known sampling standard deviation.|1.9|
 |**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.6|
 |**dPU**|Go threshold (posterior probability cutoff).|0.8|
+|**dPUFutility**|Threshold probability of futility stopping. If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early for futility.|0.8|
 
-# Phase 3 Study
+## Phase 3 Study
 
 This study considers a two-arm fixed sample design with a time-to-event endpoint, with 300 patients per arm.
 
@@ -229,10 +425,6 @@ The figure below illustrates where the integration points used in this study fit
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
 CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
-        "Initialization" = c(
-            "Load true treatment differences from CSV or R file",
-            "Define prior and simulation index global variables"
-        ),
         "Response" = c(
             "Load prior distribution parameters, scaling bounds, and mean TTE", 
             "Sample from prior distribution for log hazard ratio",
@@ -242,7 +434,7 @@ CyneRgy::PlotExampleFlowchart(
         ),
         "Analysis" = c(
             "Load survival data, mean TTE, and relationship parameters",
-            "Sample true treatment effect from prior distribution",
+            "Sample true treatment effect from prior distribution (from CSV file)",
             "Compute true log hazard ratio and hazard rates for each arm",
             "Generate exponential survival times based on hazard rates",
             "Return simulated survival times and true hazard ratio"
@@ -251,32 +443,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Initialize Integration Point
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/ReadInPrior.R" class="alert-link">ReadInPrior.R</a></p>
-</div>
-
-During the Phase 2 simulation, the **true treatment difference was sampled from the prior distribution** and we manually saved it to an [output CSV file](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/Outputs/Example1/Phase2.csv).
-
-Both conditional and unconditional Phase 3 simulations use an R initialization function to **load this output and extract the true treatment differences**. These values are then converted to the log of the true hazard ratio (HR) using the **linear link function** shown in the [Response section](#response-patient-simulation-integration-point-1). Note that while unconditional assurance could be calculated by sampling directly from the Phase 2 prior, reading the saved values ensures a consistent comparison between conditional and unconditional assurance. This approach provides a more accurate assessment of the benefit of conducting a Phase 2 trial before Phase 3.
-
-If used with East, the *ReadExample5Phase2Output* function is used to load the true treatment differences from a CSV file. You can update the R code to specify your correct file path. In East Horizon, which does not support file uploads, use the *ReadExample5Phase2OutputSolara* function instead. There, the treatment differences are pasted directly into an R vector.
-
-In the R code, note that the `<<-` operator is used to define two global variables:
-
-- `vPrior`: a vector containing the true treatment differences.
-- `nSimIndex`: an index tracking the current replication being executed during the Phase 3 simulation.
-
-Both variables are used in the [Response Integration Point](#response-patient-simulation-integration-point-1) R function. The `nSimIndex` value is updated with each simulation iteration.
-
-This function relies on the user-defined parameter `bConditionalOnGo`. When set to 1, only the true treatment differences that led to a Go decision in Phase 2 are used to calculate conditional assurance. Note that the number of Phase 3 replications used in simulating for conditional assurance must be no greater than the number of successful Phase 2 simulations. When `bConditionalOnGo` is set to 0, all sampled treatment differences from Phase 2 are used to compute unconditional assurance. Refer to the table below for the definitions of the user-defined parameters used in this example.
-
-|**User parameter**|**Definition**|
-|---|------|
-|**bConditionalOnGo**|If `True`, uses only Phase 2 results that led to a Go decision. Otherwise, uses all results.|
-
-## Response (Patient Simulation) Integration Point
+### Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R" class="alert-link">SimulatePatientSurvivalAssuranceUsingPh2Prior.R</a></p>
@@ -290,15 +457,22 @@ $$
 
 Note that this relationship is defined in terms of the true treatment effects. Since Phase 2 informs the prior on the true treatment difference and a direct link is established between the true difference and the true hazard ratio, there is no need to specify a separate prior for the true HR as done in the [Bayesian Assurance, Time-to-Event Outcome](BayesianAssuranceTimeToEvent.html) example.
 
+Both conditional and unconditional Phase 3 simulations use an R initialization function to **load Phase 2 output and extract the true treatment differences**. These values are then converted to the log of the true hazard ratio (HR) using the **linear link function**. Note that while unconditional assurance could be calculated by sampling directly from the Phase 2 prior, reading the saved values ensures a consistent comparison between conditional and unconditional assurance. This approach provides a more accurate assessment of the benefit of conducting a Phase 2 trial before Phase 3.
+
+In the R code, note that the `<<-` operator is used to define two global variables:
+
+- `vPrior`: a vector containing the true treatment differences.
+- `nSimIndex`: an index tracking the current replication being executed during the Phase 3 simulation. This value is updated with each simulation iteration.
+
 Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 
 |**User parameter**|**Definition**|**Value**|
 |--|------|--|
-|**dMeanTTEControl**|Mean time-to-event for the control group.|12|
+|**dMeanTTECtrl**|Mean time-to-event for the control group.|12|
 |**dIntercept**|Intercept for the linear relationship between true treatment difference and log(HR).|0.1|
 |**dSlope**|Slope for the linear relationship between true treatment difference and log(HR).|-0.4|
 
-## Analysis Integration Point
+### Analysis Integration Point
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R" class="alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a></p>
@@ -313,7 +487,7 @@ Refer to the table below for the definitions of the user-defined parameters used
 |**bReturnLogTrueHazard**|If `True`, the function returns the natural logarithm of the true hazard ratio instead of its raw value.|
 |**bReturnNAForNoGoTrials**|If `True` and the trial does not meet the Go decision criterion, the function returns `NA` for the hazard ratio.|
 
-# Results
+## Results
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 ######################################################################################################################## .

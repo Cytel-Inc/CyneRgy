@@ -173,6 +173,7 @@ Refer to the table below for the definitions and values of the user-defined para
 |**dSigma**|Known sampling standard deviation.|1.9|
 |**dMAV**|Minimum Acceptable Value (clinically meaningful difference).|0.8|
 |**dPU**|Go threshold (posterior probability cutoff).|0.8|
+|**dPUFutility**|Threshold probability of futility stopping. If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early for futility.|0.8|
 
 ## Results
 

@@ -8,14 +8,14 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
+  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a> and the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>. Click on the links for more information about these integration points.</p>
 </div>
 
 # Introduction
 
-This example demonstrates the computation of conditional probability of success in consecutive studies by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points of East Horizon. It features a sequential trial program involving a Phase 2 trial followed by a Phase 3 trial, both with the same binary endpoint. We show how Phase 2 results are simulated, saved, and then used as the prior data for Phase 3, allowing the Phase 3 patient outcomes to be generated only conditional on the Phase 2 trial's success. This approach illustrates how simulations can mimic using an earlier trial's data to directly inform subsequent trials, which is particularly valuable in drug development where Phase 3 studies are expensive and resource-intensive.
+This example demonstrates the computation of conditional probability of success in consecutive studies by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points of East Horizon. It features a sequential trial program involving a Phase 2 trial followed by a Phase 3 trial, both with the same binary endpoint.
 
-*Note: The conditional probability of success of the Phase 3 trial can be computed and used for comparisons directly within East Horizon's native output visualizations. However, users must process the data externally in a post-processing manner to compute the probability of success of the program, which may also be of interest when evaluating whether to run the combination of Phase 2 and Phase 3 trials.*
+We show how Phase 2 results are simulated, saved, and then used as the prior data for Phase 3, allowing the Phase 3 patient outcomes to be generated only conditional on the Phase 2 trial's success. This approach illustrates how simulations can mimic using an earlier trial's data to directly inform subsequent trials, which is particularly valuable in drug development where Phase 3 studies are expensive and resource-intensive.
 
 ## Why do we need R Integration for this example?
 
@@ -48,12 +48,6 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
    This R file is used for the **Response (Patient Simulation)** integration point of the Phase 3 study. It contains a function that generates patient outcomes for a binary response trial. This time, we sample the true response rates from the posterior distribution obtained from the Phase 2 simulations.
 
    For more information on this function, see the [Response (Patient Simulation) Integration Point](#response-patient-simulation-integration-point-1) section of the Phase 3 study below.
-   
-- **[PostProcess.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/PostProcess.R)**
-
-   This R file is run directly in RStudio to load the Phase 2 results and to insert them into the SimulatePatientOutcomeBinaryWithAssurancePh3.R file so they can be used for the Phase 3 study.
-
-   For more information on how to load your own results, see Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section below.
 
 ------
 
@@ -62,14 +56,13 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 Before starting, make sure you have the required tools and files.
 
 * [East Horizon](https://platform.cytel.com)
-* Download R Files from our public Github repo: [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/AnalyzeUsingEastManualFormula.R), [SimulatePatientOutcomeBinaryWithAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurance.R), [SimulatePatientOutcomeBinaryWithAssurancePh3](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurancePh3), and [PostProcess.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/PostProcess.R).
-* RStudio with CyneRgy installed: `remotes::install_github( "Cytel-Inc/CyneRgy@main" )`.
+* Download R Files from our public Github repo: [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/AnalyzeUsingEastManualFormula.R), [SimulatePatientOutcomeBinaryWithAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurance.R), and [SimulatePatientOutcomeBinaryWithAssurancePh3](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/SimulatePatientOutcomeBinaryWithAssurancePh3).
 
 ## New Project Page
 
 1. On East Horizon, create a new project with a binary endpoint.
 
-![](ConsecutiveStudiesBinary_files/Step1.png){width=300px}
+![](ConsecutiveStudiesBinary_files/Step1.png){width=800px}
 
 In this example, we will create two different input sets: one for the Phase 2 study and one for the Phase 3 study.
 
@@ -79,39 +72,39 @@ In this example, we will create two different input sets: one for the Phase 2 st
 
 2. Navigate to the Inputs tab, and create a new input set using the Explore task. Rename the input set as "Phase 2".
 
-![](ConsecutiveStudiesBinary_files/Step2.png){width=300px}
+![](ConsecutiveStudiesBinary_files/Step2.png){width=800px}
 
 ### Design Page
 
-3. Within the input set you just created, create an input card, and enter the Phase 2 details, e.g. sample size. Then select the “User Specified – R” option in the Test field.
+3. Within the input set you just created, navigate to the Design page and enter the Phase 2 details, e.g. sample size. Then select the “User Specified – R” option in the Test field.
 
 ![](ConsecutiveStudiesBinary_files/Step3.png){width=800px}
 
-4. Click the pencil icon to open the R Integration pop-up window.
+4. Click the "+" icon next to "User Specified - R" to open the R Integration pop-up window.
 
 5. Click on “Select File” and then on “Continue”.
 
 ![](ConsecutiveStudiesBinary_files/Step5.png){width=800px}
 
-6. Select the file **AnalyzeUsingEastManualFormula.R**.
+6. Upload and then select the file **AnalyzeUsingEastManualFormula.R**.
 
 7. Check that the correct file has been imported and the correct Function Name has been specified by the system. Click on the “Save” button to exit the R Integration details window.
 
-![](ConsecutiveStudiesBinary_files/Step7.png){width=300px}
+![](ConsecutiveStudiesBinary_files/Step7.png){width=800px}
 
 ### Response Page
 
-8. Navigate to the Response page, create an input card, and then select “User Specified – R” in the Distribution field.
+8. Navigate to the Response page and then select “User Specified – R” in the Distribution field.
 
 ![](ConsecutiveStudiesBinary_files/Step8.png){width=800px}
 
-9. Click on the pencil icon to open the R Integration pop-up window.
+9. Click on the "+" icon next to "User Specified - R" to open the R Integration pop-up window.
 
 10.	Click on “Select File” and then on “Continue”.
 
 ![](ConsecutiveStudiesBinary_files/Step10.png){width=800px}
 
-11. Select the file **SimulatePatientOutcomeBinaryWithAssurance.R**.
+11. Upload and then select the file **SimulatePatientOutcomeBinaryWithAssurance.R**.
 
 12. Check that the correct file has been imported and the correct Function Name has been specified by the system. Note that the User Parameter variables have been automatically pulled from the R function that was imported.
 
@@ -119,7 +112,7 @@ In this example, we will create two different input sets: one for the Phase 2 st
 
 Note that in this example, we used Beta priors but you could use any other distribution by changing the R code to sample from a different one on lines 29 and 30 of the file. 
 
-![](ConsecutiveStudiesBinary_files/Step13.png){width=300px}
+![](ConsecutiveStudiesBinary_files/Step13.png){width=800px}
 
 14. Click on the “Save” button to exit the R Integration details window.
 
@@ -135,7 +128,7 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 17. Click the "Save & Simulate" button.
 
-![](ConsecutiveStudiesBinary_files/Step17.png){width=400px}
+![](ConsecutiveStudiesBinary_files/Step17.png){width=800px}
 
 18. Confirm by clicking on "Simulate" in the pop-up window, and wait for the simulation runs to finish.
 
@@ -145,7 +138,7 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 19. Navigate to the Results tab, then check whether the Phase 2 simulation failed or was completed by looking at the Status column.
 
-![](ConsecutiveStudiesBinary_files/Step19.png){width=600px}
+![](ConsecutiveStudiesBinary_files/Step19.png){width=800px}
 
 20. If the simulation failed, open the Log window to see if there are any helpful error messages.
 
@@ -155,15 +148,15 @@ Note that in this example, we used Beta priors but you could use any other distr
     
    b. Click on “Log”.
     
-![](ConsecutiveStudiesBinary_files/Step20b.png){width=200px}
+![](ConsecutiveStudiesBinary_files/Step20b.png){width=400px}
     
    c. Identify any errors that appear. For example:
     
-![](ConsecutiveStudiesBinary_files/Step20c.png){width=200px}
+![](ConsecutiveStudiesBinary_files/Step20c.png){width=600px}
 
 21. If the simulation has completed, click on the Result Set's name to open the outputs within East Horizon. If you have multiple scenarios in your simulation, you will be prompted to label at least one scenario from the list by clicking the ribbon icon in the Favorites column and assigning it a name and color. Alternatively, you may also skip this step by selecting the “Skip” button in the bottom left corner.
 
-![](ConsecutiveStudiesBinary_files/Step21.png){width=400px}
+![](ConsecutiveStudiesBinary_files/Step21.png){width=800px}
 
 22. The Explore page of the results appears. You will notice a checkbox on the left side of each row in the table, below the heatmap. Click on the checkbox of the model you'd like to use as your first trial in your program. In our example, we chose the model that generated the data using our beta prior distributions, e.g.:
 
@@ -173,15 +166,15 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 ![](ConsecutiveStudiesBinary_files/Step23.png){width=800px}
 
-24. Open the file **PostProcess.R** in RStudio. Locate the "TO DO" comments: verify that both file paths are correct and accessible from RStudio. If either path is incorrect or inaccessible, update it to enable RStudio to read the files correctly.
+### Files Page
 
-**Ph2_results.csv** should be the file you just downloaded from East Horizon. Alternatively, you can use the example file provided in the `R/Outputs` directory of this example if you want to test the workflow with our example data.
+24. Navigate to the Files page and click on the Inputs folder.
 
-![](ConsecutiveStudiesBinary_files/Step24.png){width=500px}
+![](ConsecutiveStudiesBinary_files/Step24.png){width=800px}
 
-25. Run the script. It should load the Phase 2 results, process them (including filtering on only the successful simulated trials), and then insert the true probabilities of each arm into **SimulatePatientOutcomeBinaryWithAssurancePh3.R**. After running, confirm that the script executed without errors and that the simulation file has been updated (by checking the last modified timestamp of the file).
+25. Click on "Upload" and select the file you just downloaded from East Horizon. Alternatively, you can use the example file provided in the `Outputs` directory of this example if you want to test the workflow with our example data. Make sure the file is renamed to "Ph2_results.csv" and placed in the Inputs folder if you intend to use the R script as provided. If you prefer a different file name, you can update the script accordingly.
 
-![](ConsecutiveStudiesBinary_files/Step25.png){width=500px}
+![](ConsecutiveStudiesBinary_files/Step25.png){width=800px}
 
 ## Phase 3 Study
 
@@ -189,7 +182,7 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 26. In East Horizon, navigate to the Inputs tab again, and create a new input set using the Explore task. Rename the input set as "Phase 3".
 
-![](ConsecutiveStudiesBinary_files/Step2.png){width=300px}
+![](ConsecutiveStudiesBinary_files/Step26.png){width=800px}
 
 ### Design Page
 
@@ -199,19 +192,19 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 28. Navigate to the Response page, create an input card, and then select “User Specified – R” in the Distribution field.
 
-![](ConsecutiveStudiesBinary_files/Step28.png){width=800px}
+![](ConsecutiveStudiesBinary_files/Step8.png){width=800px}
 
-29. Click on the pencil icon to open the R Integration pop-up window.
+29. Click on the "+" icon next to "User Specified - R" to open the R Integration pop-up window.
 
 30.	Click on “Select File” and then on “Continue”.
 
 ![](ConsecutiveStudiesBinary_files/Step5.png){width=800px}
 
-31. Select the file **SimulatePatientOutcomeBinaryWithAssurancePh3.R** that you updated using RStudio in Steps 24-25.
+31. Select the file **SimulatePatientOutcomeBinaryWithAssurancePh3.R**.
 
 32. Check that the correct file has been imported and the correct Function Name has been specified by the system.
 
-![](ConsecutiveStudiesBinary_files/Step32.png){width=400px}
+![](ConsecutiveStudiesBinary_files/Step32.png){width=800px}
 
 33. Click on the “Save” button to exit the R Integration details window.
 
@@ -261,7 +254,7 @@ CyneRgy::PlotExampleFlowchart(
 
 Using the file above, the Response element of the Phase 2 study is customized to generate patient outcomes for a binary response trial while incorporating uncertainty about the true response rates by sampling them from prior distributions. Here, we use a **Beta distribution** prior. However, you could use any other distribution by changing the R code to sample from a different one on lines 29 and 30 of the file.
 
-![](ConsecutiveStudiesBinary_files/Beta.png){width=500px}
+![](ConsecutiveStudiesBinary_files/Beta.png){width=800px}
 
 For each arm, the true response probability is drawn from a Beta distribution:
 
@@ -336,13 +329,13 @@ CyneRgy::PlotExampleFlowchart(
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurancePh3.R" class="alert-link">SimulatePatientOutcomeBinaryWithAssurancePh3.R</a></p>
 </div>
 
-Using the file above, the Response element of the Phase 3 study is customized to generate patient outcomes for a binary response trial while incorporating uncertainty about the true response rates by **sampling them from the posterior distribution obtained from the successful Phase 2 simulated trials**. In this case, the posterior values are inserted directly into the *LoadData* function as pairs of true response probabilities for control and experimental arms. Each simulated trial samples one pair and uses it to generate patient-level outcomes with rbinom().
+Using the file above, the Response element of the Phase 3 study is customized to generate patient outcomes for a binary response trial while incorporating uncertainty about the true response rates by **sampling them from the posterior distribution obtained from the successful Phase 2 simulated trials**. In this case, the *LoadData* function reads the Phase 2 results CSV file and extracts pairs of true control and experimental response probabilities from trials that achieved efficacy. Each simulated Phase 3 trial then samples one pair and uses these probabilities to generate patient-level outcomes with `rbinom()`.
 
 See Steps 24 and 25 of the [Step-by-Step Instructions](#step-by-step-instructions) section for more information about how to load your own results.
 
 This part of the program simulation could also be replaced by including actual data from a previous Phase 2 trial to inform the Phase 3 simulation. This is, in practice, what one would do when deciding whether to move forward with the Phase 3 trial once the Phase 2 completes and the data has been collected and analysed. 
 
-# Results
+## Results
 
 By simulating the entire program, this example helps decision-makers that are investigating whether it will be worth investing in the program, as a whole, including a smaller Phase 2 trial to precede a larger Phase 3 trial. This program could be compared to running simply the Phase 3 trial with a vague prior distribution, like perhaps the one used in our example for the Phase 2 simulation, or running the Phase 3 trial without prior knowledge and only an assumed value for the response rates of the control and treatment arm. 
 

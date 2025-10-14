@@ -1,23 +1,23 @@
 ---
 title: "Consecutive Studies, Continuous Outcome"
-author: "J. Kyle Wathen and Laurent Spiess"
+author: "J. Kyle Wathen, Laurent Spiess and Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default
   word_document: default
 ---
 
-<div class="alert alert-danger" role="alert">
-  <p style="margin-bottom:0">The process of loading Phase 2 data into a Phase 3 study is not clearly explained here. For a more detailed explanation, please refer to the [Consecutive Studies, Binary Outcome](ConsecutiveStudiesBinary.html) example.</p>
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a> and the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>. Click on the links for more information about these integration points.</p>
 </div>
 
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>, the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>, and the <a href="IntegrationPointInitialization.html" class="alert-link"><strong>Integration Point: Initialization</strong></a>. Click on the links for more information about these integration points.</p>
+<div class="alert alert-danger" role="alert">
+  <p style="margin-bottom:0">The following example does not show how to load Phase 2 data into a Phase 3 trial. Please see the <a href="ConsecutiveStudiesBinary.html" class="alert-link"><strong>Consecutive Studies, Binary Outcome</strong></a> example for more information and step-by-step instructions.</p>
 </div>
 
 # Introduction
 
-The intent of the following examples is to demonstrate the computation of Bayesian assurance, or probability of success, and conditional assurance in consecutive studies through the integration of R with Cytel products. The examples feature a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with normal outcomes.
+The intent of the following example is to demonstrate the computation of Bayesian assurance, or probability of success, and conditional assurance in consecutive studies by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points of East Horizon. It features a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with continuous outcomes.
 
 The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial. This **de-risking** is evaluated by comparing two scenarios: (1) the probability of a No-Go decision in Phase 3 if Phase 2 is skipped, and (2) the probability of a No-Go in Phase 3 if a preceding Phase 2 trial is conducted and yields a Go decision. Specifically, we compute the conditional assurance of Phase 3 given success in Phase 2.
 

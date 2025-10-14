@@ -139,21 +139,21 @@ This example demonstrates the computation of Bayesian assurance, or probability 
 </details>
 
 <details>
+<summary>**Consecutive Studies, Binary Outcome**</summary>
+This example demonstrates the computation of conditional probability of success in consecutive studies. It features a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with a binary outcome Phase 2 results are saved and then used as the prior for Phase 3, allowing Phase 3 patient outcomes to be generated conditional on Phase 2 success.  
+[Click here to view the full example.](ConsecutiveStudiesBinary.html)
+</details>
+
+<details>
 <summary>**Consecutive Studies, Continuous Outcome**</summary>
-This example demonstrates the computation of Bayesian assurance, or probability of success, in consecutive studies: a Phase 2 trial followed by a Phase 3 trial, both with normal outcome. The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial.  
+This example demonstrates the computation of Bayesian assurance, or probability of success, in consecutive studies: a Phase 2 trial followed by a Phase 3 trial, both with continuous outcome. The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial.  
 [Click here to view the full example.](ConsecutiveStudiesContinuous.html)
 </details>
 
 <details>
 <summary>**Consecutive Studies, Continuous & Time-to-Event Outcomes**</summary>
-This example demonstrates the computation of Bayesian assurance, or probability of success, in consecutive studies: a Phase 2 trial with normal outcome followed by a Phase 3 trial with time-to-event outcome. The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial. This example also includes a step to load the Phase 2 output and extract the true treatment differences.  
+This example demonstrates the computation of Bayesian assurance, or probability of success, in consecutive studies: a Phase 2 trial with continuous outcome followed by a Phase 3 trial with time-to-event outcome. The objective is to understand how conducting a Phase 2 study can reduce the risk associated with the Phase 3 trial. This example also includes a step to load the Phase 2 output and extract the true treatment differences.  
 [Click here to view the full example.](ConsecutiveStudiesContinuousTimeToEvent.html)
-</details>
-
-<details>
-<summary>**Consecutive Studies, Binary Outcome**</summary>
-This example demonstrates the computation of conditional probability of success in consecutive studies. It features a sequential design involving a Phase 2 trial followed by a Phase 3 trial, both with a binary outcome Phase 2 results are saved and then used as the prior for Phase 3, allowing Phase 3 patient outcomes to be generated conditional on Phase 2 success.  
-[Click here to view the full example.](ConsecutiveStudiesBinary.html)
 </details>
 
 <details>
