@@ -1,0 +1,11 @@
+---
+title: "Probability of Success, Dual Endpoints"
+author: "Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r child = '../inst/Examples/ProbabilitySuccessDualEndpoints/Description.Rmd'}
+```
