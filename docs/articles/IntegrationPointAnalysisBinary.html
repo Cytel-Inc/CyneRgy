@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,44 +48,15 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointInitialization.html">Initialization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis (Test Statistic)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment (Arrival Times)</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization (Assignment of Subjects)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
   </ul>
 </li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Examples Outline</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm, Time-to-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomePatientSimulation.html">2-Arm, Binary Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalRepeatedMeasuresResponseGeneration.html">2-Arm, Repeated Measure</a></li>
-    <li><a class="dropdown-item" href="../articles/ChildhoodAnxiety.html">Childhood Anxiety Trial</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Analysis</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm, Time-To-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6></li>
-    <li><a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/AssuranceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a></li>
-    <li><a class="dropdown-item" href="../articles/ProbabilitySuccessDualEndpointsPFSOS.html">Probability of Success for Dual Endpoints (PFS &amp; OS)</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6></li>
-    <li><a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientDropout.html">Patient Dropout</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientRandomization.html">Patient Randomization</a></li>
-  </ul>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">References</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/ContibutingToCyneRgy.html">Contribute</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ContributingToCyneRgy.html">Contribute</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -116,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">September 09, 2025</h4>
+            <h4 data-toc-skip class="date">October 14, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysisBinary.Rmd</code></div>
@@ -127,16 +98,922 @@ Potvin</h4>
 <p><a href="IntegrationPointAnalysis.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
 Go back to the <em>Integration Point: Analysis</em> page</a></p>
 <div class="section level2">
-<h2 id="study-objectives">Study Objectives<a class="anchor" aria-label="anchor" href="#study-objectives"></a>
+<h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
-<p>The input variables, expected output variables, examples, and
-templates for this integration point depend on the study objective
-(number of arms) you are using. Refer to the relevant pages below:</p>
+<p>When creating a custom R script, you can optionally use specific
+variables provided by East Horizon’s engine itself. These variables are
+automatically available and do not need to be set by the user, except
+for the <code>UserParam</code> variable. Refer to the table below for
+the variables that are available for this integration point, outcome,
+and study objective.</p>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="14%">
+<col width="71%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Variable</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>SimData</strong></td>
+<td>Data Frame</td>
+<td>Subject data generated in current simulation, one row per subject.
+To access these variables in your R code, use the syntax:
+<code>SimData$NameOfTheVariable</code>, replacing
+<code>NameOfTheVariable</code> with the appropriate variable name. See
+below for more information.</td>
+</tr>
+<tr class="even">
+<td><strong>DesignParam</strong></td>
+<td>List</td>
+<td>Input parameters which may be needed to compute test statistics and
+perform tests. To access these variables in your R code, use the syntax:
+<code>DesignParam$NameOfTheVariable</code>, replacing
+<code>NameOfTheVariable</code> with the appropriate variable name. See
+below for more information.</td>
+</tr>
+<tr class="odd">
+<td><strong>LookInfo</strong></td>
+<td>List</td>
+<td>Input parameters related to multiple looks. Empty when
+<code>Statistical Design = Fixed Sample</code>, but still mandatory in
+the functions <code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
+<code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code>. See below for more information.</td>
+</tr>
+<tr class="even">
+<td><strong>AdaptInfo</strong></td>
+<td>List</td>
+<td>Input parameters related to sample size re-estimation. See below for
+more information. Only applicable when
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>UserParam</strong></td>
+<td>List</td>
+<td>Contains all user-defined parameters specified in the East Horizon
+interface (refer to the <a href="IntegrationPointAnalysis.html#instructions">Instructions</a>
+section). To access these parameters in your R code, use the syntax:
+<code>UserParam$NameOfTheVariable</code>, replacing
+<code>NameOfTheVariable</code> with the appropriate parameter name.</td>
+</tr>
+</tbody>
+</table>
+<div class="section level3">
+<h3 id="variables-of-simdata">Variables of SimData<a class="anchor" aria-label="anchor" href="#variables-of-simdata"></a>
+</h3>
+<p><a href="VariablesOfSimData.html">Click here to explore the variables
+of SimData.</a></p>
+</div>
+<div class="section level3">
+<h3 id="variables-of-designparam">Variables of DesignParam<a class="anchor" aria-label="anchor" href="#variables-of-designparam"></a>
+</h3>
+<p><a href="VariablesOfDesignParam.html">Click here to explore the
+variables of DesignParam.</a></p>
+</div>
+<div class="section level3">
+<h3 id="variables-of-lookinfo">Variables of LookInfo<a class="anchor" aria-label="anchor" href="#variables-of-lookinfo"></a>
+</h3>
+<p><a href="VariablesOfLookInfo.html">Click here to explore the
+variables of LookInfo.</a></p>
+</div>
+<div class="section level3">
+<h3 id="variables-of-adaptinfo">Variables of AdaptInfo<a class="anchor" aria-label="anchor" href="#variables-of-adaptinfo"></a>
+</h3>
+<p><a href="VariablesOfAdaptInfo.html">Click here to explore the
+variables of AdaptInfo.</a></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="expected-output-variable">Expected Output Variable<a class="anchor" aria-label="anchor" href="#expected-output-variable"></a>
+</h2>
+<p>East Horizon expects an output of a specific type. Refer to the table
+below for the expected output for this integration point:</p>
+<table class="table">
+<colgroup>
+<col width="15%">
+<col width="84%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody><tr class="odd">
+<td>List</td>
+<td>A named list containing <code>ErrorCode</code> and one or multiple
+of the following members: <code>Decision</code>,
+<code>AnalysisTime</code>, <code>TestStat</code>, <code>Delta</code>,
+<code>CtrlCompleters</code>, <code>TrmtCompleters</code>,
+<code>CtrlPi</code>, <code>StdError</code>. See below for more
+information.</td>
+</tr></tbody>
+</table>
+<p>The output list can take different forms.</p>
+<div class="section level3">
+<h3 id="for-study-objective-two-arm-confirmatory">For <code>Study Objective = Two Arm Confirmatory</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory"></a>
+</h3>
+<div class="section level4">
+<h4 id="option-1-decision-expected-members-of-the-output-list">Option 1 (Decision): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-1-decision-expected-members-of-the-output-list"></a>
+</h4>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="12%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Members</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Decision</strong></td>
+<td>Integer</td>
+<td>Boundary crossing decision:<br>– <code>0</code>: No boundary
+crossed.<br>– <code>1</code>: Lower efficacy boundary crossed.<br>–
+<code>2</code>: Upper efficacy boundary crossed.<br>– <code>3</code>:
+Futility boundary crossed (only applicable when
+<code>Statistical Design = Group Sequential</code>).<br>–
+<code>4</code>: Equivalence boundary crossed (not available in East
+Horizon Explore).<br>You can use the functions
+<code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
+<code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get the decision value. See the
+template below for the correct usage.</td>
+</tr>
+<tr class="even">
+<td><strong>AnalysisTime</strong></td>
+<td>Numeric</td>
+<td>Optional. Estimate of analysis time. For interim analyses,
+equivalent to look time; for final analysis, equivalent to study
+duration.</td>
+</tr>
+<tr class="odd">
+<td><strong>ErrorCode</strong></td>
+<td>Integer</td>
+<td>Optional. Can be used to handle errors in your script:<br>–
+<code>0</code>: No error.<br> – <code>Positive Integer</code>: Nonfatal
+error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal error, no
+further simulations will be attempted.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note for
+<code>Statistical Design = Group Sequential</code></strong>: When there
+is no efficacy boundary to be crossed, the return code of <code>0</code>
+stands for futility in the final look. Similarly, when there is no
+futility boundary to be crossed, the return code of <code>0</code>
+stands for efficacy in the final look. Use the functions
+<code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
+<code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get decision values in a simple
+way.</p>
+</div>
+<div class="section level4">
+<h4 id="option-2-teststat-expected-members-of-the-output-list">Option 2 (TestStat): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-2-teststat-expected-members-of-the-output-list"></a>
+</h4>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="12%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Members</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>TestStat</strong></td>
+<td>Numeric</td>
+<td>Value of appropriate test statistic on Wald ﴾Z﴿ scale.</td>
+</tr>
+<tr class="even">
+<td><strong>Delta</strong></td>
+<td>Numeric</td>
+<td>Estimate of Delta. Required if
+<code>LookInfo$FutBdryScale = 2 or 3</code> (futility boundary scale is
+Delta or conditional power) or
+<code>Promising Zone Scale = Conditional Power - Estimated</code>. Only
+applicable when
+<code>Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>CtrlCompleters</strong></td>
+<td>Numeric</td>
+<td>Number of completers for control arm. Required if
+<code>LookInfo$FutBdryScale = 3</code> (futility boundary scale is
+conditional power) and
+<code>Conditional power Delta option = Estimated Delta / Estimated HR</code>.
+Only applicable when
+<code>Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>TrmtCompleters</strong></td>
+<td>Numeric</td>
+<td>Number of completers for treatment arm. Required if
+<code>LookInfo$FutBdryScale = 3</code> (futility boundary scale is
+conditional power) and
+<code>Conditional power Delta option = Estimated Delta / Estimated HR</code>.
+Only applicable when
+<code>Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>CtrlPi</strong></td>
+<td>Numeric</td>
+<td>Proportion for control arm. Required if
+<code>LookInfo$FutBdryScale = 3</code> (futility boundary scale is
+conditional power) and
+<code>Conditional power Delta option = Estimated Delta / Estimated HR</code>.
+Only applicable when
+<code>Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>StdError</strong></td>
+<td>Numeric</td>
+<td>Standard error of estimate of Delta.</td>
+</tr>
+<tr class="odd">
+<td><strong>AnalysisTime</strong></td>
+<td>Numeric</td>
+<td>Optional. Estimate of analysis time. For interim analyses,
+equivalent to look time; for final analysis, equivalent to study
+duration.</td>
+</tr>
+<tr class="even">
+<td><strong>ErrorCode</strong></td>
+<td>Integer</td>
+<td>Optional. Can be used to handle errors in your script:<br>–
+<code>0</code>: No error.<br> – <code>Positive Integer</code>: Nonfatal
+error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal error, no
+further simulations will be attempted.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note for
+<code>Statistical Design = Fixed Sample</code></strong>: As the design
+does not have any futility boundary, <code>TestStat</code> will be used
+to check for efficacy.</p>
+<p><strong>Notes for
+<code>Statistical Design = Group Sequential</code></strong>:</p>
+<ul>
+<li>If the design does not have any futility boundary,
+<code>TestStat</code> will be used to check for efficacy.</li>
+<li>If <code>LookInfo$FutBdryScale = 0</code> (futility boundary scale
+is Z scale), <code>TestStat</code> will be used to check for both
+efficacy and futility.</li>
+<li>If <code>LookInfo$FutBdryScale = 2</code> (futility boundary scale
+is Delta scale), <code>TestStat</code> will be used to check for
+efficacy and <code>Delta</code> will be used to check for futility.</li>
+<li>If <code>LookInfo$FutBdryScale = 3</code> (futility boundary scale
+is conditional power scale), <code>TestStat</code> will be used to check
+for efficacy and <code>Delta</code>, <code>CtrlCompleters</code>,
+<code>TrmtCompleters</code>, and <code>CtrlPi</code> will be used to
+check for futility.</li>
+</ul>
+<p><strong>Notes for
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code></strong>:</p>
+<p>See the notes for <code>Statistical Design = Group Sequential</code>
+above for futility and efficacy checks. Then, if
+<code>Promising Zone Scale = Conditional Power - Estimated</code>,
+<code>Delta</code> and <code>StdError</code> will be used for sample
+size re-estimation.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="for-study-objective-multiple-arm-confirmatory">For <code>Study Objective = Multiple Arm Confirmatory</code><a class="anchor" aria-label="anchor" href="#for-study-objective-multiple-arm-confirmatory"></a>
+</h3>
+<div class="section level4">
+<h4 id="option-1-decision-expected-members-of-the-output-list-1">Option 1 (Decision): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-1-decision-expected-members-of-the-output-list-1"></a>
+</h4>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="12%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Members</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Decision</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length <code>DesignParam$NumTreatments</code>, containing
+the boundary crossing decision for each treatment arm:<br>–
+<code>0</code>: No boundary crossed.<br>– <code>1</code>: Lower efficacy
+boundary crossed.<br>– <code>2</code>: Upper efficacy boundary
+crossed.<br>– <code>3</code>: Futility boundary crossed (only applicable
+when <code>Statistical Design = Group Sequential</code>).<br>–
+<code>4</code>: Equivalence boundary crossed (not available in East
+Horizon Explore).<br>You can use the functions
+<code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
+<code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get the decision value. See the
+template below for the correct usage.</td>
+</tr>
+<tr class="even">
+<td><strong>AnalysisTime</strong></td>
+<td>Numeric</td>
+<td>Optional. Estimate of analysis time. For interim analyses,
+equivalent to look time; for final analysis, equivalent to study
+duration.</td>
+</tr>
+<tr class="odd">
+<td><strong>ErrorCode</strong></td>
+<td>Integer</td>
+<td>Optional. Can be used to handle errors in your script:<br>–
+<code>0</code>: No error.<br> – <code>Positive Integer</code>: Nonfatal
+error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal error, no
+further simulations will be attempted.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notes for
+<code>Statistical Design = Group Sequential</code></strong>:</p>
+<ul>
+<li>Decision should take care of multiple comparison procedures
+adjustment appropriately.</li>
+<li>When there is no efficacy boundary to be crossed, the return code of
+<code>0</code> stands for futility in the final look. Similarly, when
+there is no futility boundary to be crossed, the return code of
+<code>0</code> stands for efficacy in the final look. Use the functions
+<code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
+<code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get decision values in a simple
+way.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="option-2-teststat-expected-members-of-the-output-list-1">Option 2 (TestStat): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-2-teststat-expected-members-of-the-output-list-1"></a>
+</h4>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="12%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Members</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>TestStat</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length <code>DesignParam$NumTreatments</code>, containing
+the value of appropriate test statistic on Wald ﴾Z﴿ scale for each
+treatment arm.</td>
+</tr>
+<tr class="even">
+<td><strong>Delta</strong></td>
+<td>Numeric</td>
+<td>Estimate of Delta. Required if
+<code>LookInfo$FutBdryScale = 2</code> (futility boundary scale is
+Delta). Only applicable when
+<code>Statistical Design = Group Sequential</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>AnalysisTime</strong></td>
+<td>Numeric</td>
+<td>Optional. Estimate of analysis time. For interim analyses,
+equivalent to look time; for final analysis, equivalent to study
+duration.</td>
+</tr>
+<tr class="even">
+<td><strong>ErrorCode</strong></td>
+<td>Integer</td>
+<td>Optional. Can be used to handle errors in your script:<br>–
+<code>0</code>: No error.<br> – <code>Positive Integer</code>: Nonfatal
+error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal error, no
+further simulations will be attempted.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note for
+<code>Statistical Design = Fixed Sample</code></strong>: As the design
+does not have any futility boundary, <code>TestStat</code> will be used
+to check for efficacy.</p>
+<p><strong>Notes for
+<code>Statistical Design = Group Sequential</code></strong>:</p>
+<ul>
+<li>If the design does not have any futility boundary,
+<code>TestStat</code> will be used to check for efficacy.</li>
+<li>If <code>LookInfo$FutBdryScale = 1</code> (futility boundary scale
+is adjusted p-value scale), <code>TestStat</code> will be used to check
+for both efficacy and futility.</li>
+<li>If <code>LookInfo$FutBdryScale = 2</code> (futility boundary scale
+is Delta scale), <code>TestStat</code> will be used to check for
+efficacy and <code>Delta</code> will be used to check for futility.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="option-3-adjpval-expected-members-of-the-output-list">Option 3 (AdjPVal): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-3-adjpval-expected-members-of-the-output-list"></a>
+</h4>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="12%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Members</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>AdjPVal</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length <code>DesignParam$NumTreatments</code>, containing
+the p-values computed from test statistics and adjusted for multiple
+comparison procedures for each treatment arm.</td>
+</tr>
+<tr class="even">
+<td><strong>Delta</strong></td>
+<td>Numeric</td>
+<td>Estimate of Delta. Required if
+<code>LookInfo$FutBdryScale = 2</code> (futility boundary scale is
+Delta). Only applicable when
+<code>Statistical Design = Group Sequential</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>AnalysisTime</strong></td>
+<td>Numeric</td>
+<td>Optional. Estimate of analysis time. For interim analyses,
+equivalent to look time; for final analysis, equivalent to study
+duration.</td>
+</tr>
+<tr class="even">
+<td><strong>ErrorCode</strong></td>
+<td>Integer</td>
+<td>Optional. Can be used to handle errors in your script:<br>–
+<code>0</code>: No error.<br> – <code>Positive Integer</code>: Nonfatal
+error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal error, no
+further simulations will be attempted.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note for
+<code>Statistical Design = Fixed Sample</code></strong>: As the design
+does not have any futility boundary, <code>AdjPVal</code> will be used
+to check for efficacy.</p>
+<p><strong>Notes for
+<code>Statistical Design = Group Sequential</code></strong>:</p>
+<ul>
+<li>If the design does not have any futility boundary,
+<code>AdjPVal</code> will be used to check for efficacy.</li>
+<li>If <code>LookInfo$FutBdryScale = 1</code> (futility boundary scale
+is adjusted p-value scale), <code>AdjPVal</code> will be used to check
+for both efficacy and futility.</li>
+<li>If <code>LookInfo$FutBdryScale = 2</code> (futility boundary scale
+is Delta scale), <code>AdjPVal</code> will be used to check for efficacy
+and <code>Delta</code> will be used to check for futility.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="option-4-rawpval-expected-members-of-the-output-list">Option 4 (RawPVal): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-4-rawpval-expected-members-of-the-output-list"></a>
+</h4>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="12%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Members</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>RawPVal</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length <code>DesignParam$NumTreatments</code>, containing
+the p-values computed from test statistics for each treatment arm.</td>
+</tr>
+<tr class="even">
+<td><strong>Delta</strong></td>
+<td>Numeric</td>
+<td>Estimate of Delta. Required if
+<code>LookInfo$FutBdryScale = 2</code> (futility boundary scale is
+Delta). Only applicable when
+<code>Statistical Design = Group Sequential</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>AnalysisTime</strong></td>
+<td>Numeric</td>
+<td>Optional. Estimate of analysis time. For interim analyses,
+equivalent to look time; for final analysis, equivalent to study
+duration.</td>
+</tr>
+<tr class="even">
+<td><strong>ErrorCode</strong></td>
+<td>Integer</td>
+<td>Optional. Can be used to handle errors in your script:<br>–
+<code>0</code>: No error.<br> – <code>Positive Integer</code>: Nonfatal
+error, the current simulation will be aborted, but the next simulation
+will proceed.<br>– <code>Negative Integer</code>: Fatal error, no
+further simulations will be attempted.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note for
+<code>Statistical Design = Fixed Sample</code></strong>: As the design
+does not have any futility boundary, <code>RawPVal</code> will be used
+to check for efficacy.</p>
+<p><strong>Notes for
+<code>Statistical Design = Group Sequential</code></strong>:</p>
+<ul>
+<li>If the design does not have any futility boundary,
+<code>RawPVal</code> will be used to check for efficacy.</li>
+<li>If <code>LookInfo$FutBdryScale = 1</code> (futility boundary scale
+is adjusted p-value scale), this option cannot be used.</li>
+<li>If <code>LookInfo$FutBdryScale = 2</code> (futility boundary scale
+is Delta scale), <code>RawPVal</code> will be used to check for efficacy
+and <code>Delta</code> will be used to check for futility.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="minimal-templates">Minimal Templates<a class="anchor" aria-label="anchor" href="#minimal-templates"></a>
+</h2>
+<p>Your R script could contain a function such as these ones, with a
+name of your choice. All input variables must be declared, even if they
+are not used in the script. We recommend always declaring
+<code>UserParam</code> as a default <code>NULL</code> value in the
+function arguments, as this will ensure that the same function will work
+regardless of whether the user has specified any custom parameters in
+East Horizon. A detailed template with step-by-step explanations is
+available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Binary.R" class="external-link">Analyze.Binary.R</a>.</p>
+<div class="section level3">
+<h3 id="for-study-objective-two-arm-confirmatory-1">For <code>Study Objective = Two Arm Confirmatory</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory-1"></a>
+</h3>
+<div class="section level4">
+<h4 id="minimal-template-for-option-1-decision">Minimal Template for Option 1 (Decision)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-1-decision"></a>
+</h4>
+<div class="section level5">
+<h5 id="for-statistical-design-fixed-sample">For <code>Statistical Design = Fixed Sample</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-fixed-sample"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span> <span class="va"><a href="https://Cytel-Inc.github.io/CyneRgy">CyneRgy</a></span> <span class="op">)</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    </span>
+<span>    <span class="co"># This is an example using GetDecisionString and GetDecision.</span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># It is a fixed sample design, so no interim look nor futility check.</span></span>
+<span>    <span class="va">bFAEfficacyCheck</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># If TRUE, declares efficacy.</span></span>
+<span>    <span class="co"># Usually, bFAEfficacyCheck would be a conditional statement such as 'dTValue &gt; dBoundary'.</span></span>
+<span>    </span>
+<span>    <span class="co"># These variables are set because it is a fixed sample design.</span></span>
+<span>    <span class="va">nQtyOfLooks</span>          <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span>    <span class="va">nLookIndex</span>           <span class="op">&lt;-</span> <span class="fl">1</span> </span>
+<span>    <span class="va">nQtyOfPatsInAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span> <span class="va">SimData</span> <span class="op">)</span></span>
+<span>    <span class="va">nTailType</span>            <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">TailType</span></span>
+<span>    </span>
+<span>    <span class="va">strDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecisionString.html">GetDecisionString</a></span><span class="op">(</span> <span class="va">LookInfo</span>, <span class="va">nLookIndex</span>, <span class="va">nQtyOfLooks</span>,</span>
+<span>                                               bFAEfficacyCondition <span class="op">=</span> <span class="va">bFAEfficacyCheck</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">nDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecision.html">GetDecision</a></span><span class="op">(</span> <span class="va">strDecision</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential">For <code>Statistical Design = Group Sequential</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span> <span class="va"><a href="https://Cytel-Inc.github.io/CyneRgy">CyneRgy</a></span> <span class="op">)</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    </span>
+<span>    <span class="co"># This is an example using GetDecisionString and GetDecision.</span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># It is a group sequential design, so interim looks and futility check are possible.</span></span>
+<span>    <span class="va">bIAEfficacyCheck</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># If TRUE, declares efficacy at the interim look.</span></span>
+<span>    <span class="va">bIAFutilityCheck</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span> <span class="co"># If TRUE, declares futility at the interim look.</span></span>
+<span>    <span class="va">bFAEfficacyCheck</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># If TRUE, declares efficacy at the final look.</span></span>
+<span>    <span class="co"># Usually, the Check variables would be conditional statements such as 'dTValue &gt; dBoundary'.</span></span>
+<span>    </span>
+<span>    <span class="co"># These variables are from LookInfo because it is a group sequential design.</span></span>
+<span>    <span class="va">nQtyOfLooks</span>          <span class="op">&lt;-</span> <span class="va">LookInfo</span><span class="op">$</span><span class="va">NumLooks</span></span>
+<span>    <span class="va">nLookIndex</span>           <span class="op">&lt;-</span> <span class="va">LookInfo</span><span class="op">$</span><span class="va">CurrLookIndex</span></span>
+<span>    <span class="va">nQtyOfPatsInAnalysis</span> <span class="op">&lt;-</span> <span class="va">LookInfo</span><span class="op">$</span><span class="va">CumCompleters</span><span class="op">[</span> <span class="va">nLookIndex</span> <span class="op">]</span></span>
+<span>    <span class="va">RejType</span>              <span class="op">&lt;-</span> <span class="va">LookInfo</span><span class="op">$</span><span class="va">RejType</span></span>
+<span>    <span class="va">TailType</span>             <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">TailType</span></span>
+<span>    </span>
+<span>    <span class="va">strDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecisionString.html">GetDecisionString</a></span><span class="op">(</span> <span class="va">LookInfo</span>, <span class="va">nLookIndex</span>, <span class="va">nQtyOfLooks</span>,</span>
+<span>                                               bIAEfficacyCondition <span class="op">=</span> <span class="va">bIAEfficacyCheck</span>,</span>
+<span>                                               bIAFutilityCondition <span class="op">=</span> <span class="va">bIAFutilityCheck</span>,</span>
+<span>                                               bFAEfficacyCondition <span class="op">=</span> <span class="va">bFAEfficacyCheck</span> <span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">nDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecision.html">GetDecision</a></span><span class="op">(</span> <span class="va">strDecision</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+</div>
+<div class="section level4">
+<h4 id="minimal-template-for-option-2-teststat">Minimal Template for Option 2 (TestStat)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-2-teststat"></a>
+</h4>
+<div class="section level5">
+<h5 id="for-statistical-design-fixed-sample-1">For <code>Statistical Design = Fixed Sample</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-fixed-sample-1"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">dTestStatistic</span>      <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed test statistic in dTestStatistic.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> TestStat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dTestStatistic</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential-1">For <code>Statistical Design = Group Sequential</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-1"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">dTestStatistic</span>      <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>    <span class="va">dDelta</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is Delta or conditional power</span></span>
+<span>    <span class="va">dCtrlCompleters</span>     <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is conditional power</span></span>
+<span>    <span class="va">dTrmtCompleters</span>     <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is conditional power</span></span>
+<span>    <span class="va">dCtrlPi</span>             <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is conditional power</span></span>
+<span>    </span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed test statistic in dTestStatistic.</span></span>
+<span>    <span class="co"># Compute dDelta, dCtrlCompleters, dTrmtCompleters, dCtrlPi if needed.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> TestStat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dTestStatistic</span> <span class="op">)</span>,</span>
+<span>                  Delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dDelta</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is Delta or conditional power</span></span>
+<span>                  CtrlCompleters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dCtrlCompleters</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is conditional power</span></span>
+<span>                  TrmtCompleters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dTrmtCompleters</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is conditional power</span></span>
+<span>                  CtrlPi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dCtrlPi</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is conditional power</span></span>
+<span>                  ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential-with-sample-size-re-estimation">For
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-with-sample-size-re-estimation"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">dTestStatistic</span>      <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>    <span class="va">dDelta</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is Delta or conditional power</span></span>
+<span>    <span class="va">dCtrlCompleters</span>     <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is conditional power</span></span>
+<span>    <span class="va">dTrmtCompleters</span>     <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is conditional power</span></span>
+<span>    <span class="va">dCtrlPi</span>             <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is conditional power</span></span>
+<span>    <span class="va">dStdError</span>           <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if Promising Zone Scale = Conditional Power - Estimated</span></span>
+<span>    </span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed test statistic in dTestStatistic.</span></span>
+<span>    <span class="co"># Compute dDelta, dCtrlCompleters, dTrmtCompleters, dCtrlPi if needed.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> TestStat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dTestStatistic</span> <span class="op">)</span>,</span>
+<span>                  Delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dDelta</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is Delta or conditional power</span></span>
+<span>                  CtrlCompleters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dCtrlCompleters</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is conditional power</span></span>
+<span>                  TrmtCompleters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dTrmtCompleters</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is conditional power</span></span>
+<span>                  CtrlPi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dCtrlPi</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is conditional power</span></span>
+<span>                  StdError <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">dStdError</span> <span class="op">)</span>, <span class="co"># Include if Promising Zone Scale = Conditional Power - Estimated</span></span>
+<span>                  ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="for-study-objective-multiple-arm-confirmatory-1">For <code>Study Objective = Multiple Arm Confirmatory</code><a class="anchor" aria-label="anchor" href="#for-study-objective-multiple-arm-confirmatory-1"></a>
+</h3>
+<div class="section level4">
+<h4 id="minimal-template-for-option-1-decision-1">Minimal Template for Option 1 (Decision)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-1-decision-1"></a>
+</h4>
+<div class="section level5">
+<h5 id="for-statistical-design-fixed-sample-2">For <code>Statistical Design = Fixed Sample</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-fixed-sample-2"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span> <span class="va"><a href="https://Cytel-Inc.github.io/CyneRgy">CyneRgy</a></span> <span class="op">)</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
+<span>    <span class="va">vDecision</span>           <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing decision vector to 0</span></span>
+<span>    </span>
+<span>    <span class="co"># This is an example using GetDecisionString and GetDecision.</span></span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    </span>
+<span>    <span class="co"># These variables are set because it is a fixed sample design.</span></span>
+<span>    <span class="va">nQtyOfLooks</span>          <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span>    <span class="va">nLookIndex</span>           <span class="op">&lt;-</span> <span class="fl">1</span> </span>
+<span>    <span class="va">nQtyOfPatsInAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span> <span class="va">SimData</span> <span class="op">)</span></span>
+<span>    <span class="va">nTailType</span>            <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">TailType</span></span>
+<span>    </span>
+<span>    <span class="kw">for</span><span class="op">(</span> <span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">NumTreatments</span> <span class="op">)</span></span>
+<span>    <span class="op">{</span></span>
+<span>        <span class="co"># It is a fixed sample design, so no interim look nor futility check.</span></span>
+<span>        <span class="va">bFAEfficacyCheck</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># If TRUE, declares efficacy.</span></span>
+<span>        <span class="co"># Usually, bFAEfficacyCheck would be a conditional statement such as 'dTValue &gt; dBoundary'.</span></span>
+<span>        <span class="co"># This would be different for each treatment arm.</span></span>
+<span>    </span>
+<span>        <span class="va">strDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecisionString.html">GetDecisionString</a></span><span class="op">(</span> <span class="va">LookInfo</span>, <span class="va">nLookIndex</span>, <span class="va">nQtyOfLooks</span>,</span>
+<span>                                                   bFAEfficacyCondition <span class="op">=</span> <span class="va">bFAEfficacyCheck</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="va">nDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecision.html">GetDecision</a></span><span class="op">(</span> <span class="va">strDecision</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">)</span></span>
+<span>        <span class="va">vDecision</span><span class="op">[</span> <span class="va">i</span> <span class="op">]</span> <span class="op">=</span> <span class="va">nDecision</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">vDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential-2">For <code>Statistical Design = Group Sequential</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-2"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span> <span class="va"><a href="https://Cytel-Inc.github.io/CyneRgy">CyneRgy</a></span> <span class="op">)</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
+<span>    <span class="va">vDecision</span>           <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing decision vector to 0</span></span>
+<span>    </span>
+<span>    <span class="co"># This is an example using GetDecisionString and GetDecision.</span></span>
+<span>    <span class="co"># Decision should take care of multiple comparison procedures adjustment appropriately.</span></span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    </span>
+<span>    <span class="co"># These variables are from LookInfo because it is a group sequential design.</span></span>
+<span>    <span class="va">nQtyOfLooks</span>          <span class="op">&lt;-</span> <span class="va">LookInfo</span><span class="op">$</span><span class="va">NumLooks</span></span>
+<span>    <span class="va">nLookIndex</span>           <span class="op">&lt;-</span> <span class="va">LookInfo</span><span class="op">$</span><span class="va">CurrLookIndex</span></span>
+<span>    <span class="va">nQtyOfPatsInAnalysis</span> <span class="op">&lt;-</span> <span class="va">LookInfo</span><span class="op">$</span><span class="va">CumCompleters</span><span class="op">[</span> <span class="va">nLookIndex</span> <span class="op">]</span></span>
+<span>    <span class="va">RejType</span>              <span class="op">&lt;-</span> <span class="va">LookInfo</span><span class="op">$</span><span class="va">RejType</span></span>
+<span>    <span class="va">TailType</span>             <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">TailType</span></span>
+<span>    </span>
+<span>    <span class="kw">for</span><span class="op">(</span> <span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">NumTreatments</span> <span class="op">)</span></span>
+<span>    <span class="op">{</span></span>
+<span>        <span class="co"># Write the actual code here.</span></span>
+<span>        <span class="co"># It is a group sequential design, so interim looks and futility check are possible.</span></span>
+<span>        <span class="va">bIAEfficacyCheck</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># If TRUE, declares efficacy at the interim look.</span></span>
+<span>        <span class="va">bIAFutilityCheck</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span> <span class="co"># If TRUE, declares futility at the interim look.</span></span>
+<span>        <span class="va">bFAEfficacyCheck</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># If TRUE, declares efficacy at the final look.</span></span>
+<span>        <span class="co"># Usually, the Check variables would be conditional statements such as 'dTValue &gt; dBoundary'.</span></span>
+<span>        <span class="co"># This would be different for each treatment arm.</span></span>
+<span>    </span>
+<span>        <span class="va">strDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecisionString.html">GetDecisionString</a></span><span class="op">(</span> <span class="va">LookInfo</span>, <span class="va">nLookIndex</span>, <span class="va">nQtyOfLooks</span>,</span>
+<span>                                                   bIAEfficacyCondition <span class="op">=</span> <span class="va">bIAEfficacyCheck</span>,</span>
+<span>                                                   bIAFutilityCondition <span class="op">=</span> <span class="va">bIAFutilityCheck</span>,</span>
+<span>                                                   bFAEfficacyCondition <span class="op">=</span> <span class="va">bFAEfficacyCheck</span> <span class="op">)</span></span>
+<span></span>
+<span>        <span class="va">nDecision</span> <span class="op">&lt;-</span> <span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/GetDecision.html">GetDecision</a></span><span class="op">(</span> <span class="va">strDecision</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">)</span></span>
+<span>        <span class="va">vDecision</span><span class="op">[</span> <span class="va">i</span> <span class="op">]</span> <span class="op">=</span> <span class="va">nDecision</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">vDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+</div>
+<div class="section level4">
+<h4 id="minimal-template-for-option-2-teststat-1">Minimal Template for Option 2 (TestStat)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-2-teststat-1"></a>
+</h4>
+<div class="section level5">
+<h5 id="for-statistical-design-fixed-sample-3">For <code>Statistical Design = Fixed Sample</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-fixed-sample-3"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
+<span>    <span class="va">vTestStatistic</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing test statistic vector to 0   </span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed test statistic for each treatment arm in vTestStatistic.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> TestStat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vTestStatistic</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential-3">For <code>Statistical Design = Group Sequential</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-3"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
+<span>    <span class="va">vTestStatistic</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing test statistic vector to 0   </span></span>
+<span>    <span class="va">dDelta</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is Delta</span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed test statistic for each treatment arm in vTestStatistic.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> TestStat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vTestStatistic</span> <span class="op">)</span>,</span>
+<span>                  Delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dDelta</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is Delta</span></span>
+<span>                  ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+</div>
+<div class="section level4">
+<h4 id="minimal-template-for-option-3-adjpval">Minimal Template for Option 3 (AdjPVal)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-3-adjpval"></a>
+</h4>
+<div class="section level5">
+<h5 id="for-statistical-design-fixed-sample-4">For <code>Statistical Design = Fixed Sample</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-fixed-sample-4"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
+<span>    <span class="va">vAdjPVal</span>            <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing p-value vector to 0  </span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed adjusted p-value for each treatment arm in vAdjPVal.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> AdjPVal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vTestStatistic</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential-4">For <code>Statistical Design = Group Sequential</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-4"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
+<span>    <span class="va">vAdjPVal</span>            <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing p-value vector to 0  </span></span>
+<span>    <span class="va">dDelta</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is Delta</span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed adjusted p-value for each treatment arm in vAdjPVal.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> AdjPVal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vTestStatistic</span> <span class="op">)</span>,</span>
+<span>                  Delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dDelta</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is Delta</span></span>
+<span>                  ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+</div>
+<div class="section level4">
+<h4 id="minimal-template-for-option-4-rawpval">Minimal Template for Option 4 (RawPVal)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-4-rawpval"></a>
+</h4>
+<div class="section level5">
+<h5 id="for-statistical-design-fixed-sample-5">For <code>Statistical Design = Fixed Sample</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-fixed-sample-5"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
+<span>    <span class="va">vRawPVal</span>            <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing p-value vector to 0  </span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed p-value for each treatment arm in vRawPVal.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> RawPVal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vTestStatistic</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential-5">For <code>Statistical Design = Group Sequential</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-5"></a>
+</h5>
+<pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    <span class="va">NumTreatments</span>       <span class="op">&lt;-</span> <span class="va">DesignParam</span><span class="op">$</span><span class="va">NumTreatments</span></span>
+<span>    <span class="va">vRawPVal</span>            <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumTreatments</span> <span class="op">)</span>  <span class="co"># Initializing p-value vector to 0</span></span>
+<span>    <span class="va">dDelta</span>              <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Use if futility boundary scale is Delta</span></span>
+<span>    </span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    <span class="co"># Store the computed p-value for each treatment arm in vRawPVal.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> RawPVal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vTestStatistic</span> <span class="op">)</span>,</span>
+<span>                  Delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dDelta</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is Delta</span></span>
+<span>                  ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>Explore the following examples for more context:</p>
 <ol style="list-style-type: decimal">
-<li><a href="IntegrationPointAnalysisBinaryTwoArm.html"><strong>Two Arm
-Confirmatory</strong></a></li>
-<li><a href="IntegrationPointAnalysisBinaryMultipleArm.html"><strong>Multiple
-Arm Confirmatory</strong></a></li>
+<li>
+<a href="2ArmBinaryOutcomeAnalysisDescription.html"><strong>2-Arm,
+Binary Outcome - Analysis</strong></a>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R" class="external-link">AnalyzeUsingEastManualFormulaNormal.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R" class="external-link">AnalyzeUsingBetaBinomial.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R" class="external-link">AnalyzeUsingPropLimitsOfCI.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R" class="external-link">AnalyzeUsingPropTest.R</a></li>
+</ul>
+</li>
 </ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

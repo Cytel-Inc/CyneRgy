@@ -1,5 +1,5 @@
 pandoc: '3.2'
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   2ArmBinaryOutcomeAnalysisDescription: 2ArmBinaryOutcomeAnalysisDescription.html
@@ -9,36 +9,25 @@ articles:
   2ArmNormalRepeatedMeasuresResponseGeneration: 2ArmNormalRepeatedMeasuresResponseGeneration.html
   2ArmTimeToEventOutcomeAnalysisDescription: 2ArmTimeToEventOutcomeAnalysisDescription.html
   2ArmTimeToEventOutcomePatientSimulationDescription: 2ArmTimeToEventOutcomePatientSimulationDescription.html
-  AssuranceConsecutiveStudies: AssuranceConsecutiveStudies.html
+  BayesianAssuranceContinuous: BayesianAssuranceContinuous.html
+  BayesianAssuranceTimeToEvent: BayesianAssuranceTimeToEvent.html
   ChildhoodAnxiety: ChildhoodAnxiety.html
-  ContibutingToCyneRgy: ContibutingToCyneRgy.html
+  ConsecutiveStudiesBinary: ConsecutiveStudiesBinary.html
+  ConsecutiveStudiesContinuous: ConsecutiveStudiesContinuous.html
+  ConsecutiveStudiesContinuousTimeToEvent: ConsecutiveStudiesContinuousTimeToEvent.html
+  ContributingToCyneRgy: ContributingToCyneRgy.html
   ExampleOutline: ExampleOutline.html
   GeneratePoissonArrival: GeneratePoissonArrival.html
   IntegrationPointAnalysis: IntegrationPointAnalysis.html
   IntegrationPointAnalysisBinary: IntegrationPointAnalysisBinary.html
-  IntegrationPointAnalysisBinaryMultipleArm: IntegrationPointAnalysisBinaryMultipleArm.html
-  IntegrationPointAnalysisBinaryMultipleArmFixedSample: IntegrationPointAnalysisBinaryMultipleArmFixedSample.html
-  IntegrationPointAnalysisBinaryMultipleArmGroupSequential: IntegrationPointAnalysisBinaryMultipleArmGroupSequential.html
-  IntegrationPointAnalysisBinaryTwoArm: IntegrationPointAnalysisBinaryTwoArm.html
-  IntegrationPointAnalysisBinaryTwoArmFixedSample: IntegrationPointAnalysisBinaryTwoArmFixedSample.html
-  IntegrationPointAnalysisBinaryTwoArmGroupSequential: IntegrationPointAnalysisBinaryTwoArmGroupSequential.html
   IntegrationPointAnalysisContinuous: IntegrationPointAnalysisContinuous.html
-  IntegrationPointAnalysisContinuousMultipleArm: IntegrationPointAnalysisContinuousMultipleArm.html
-  IntegrationPointAnalysisContinuousMultipleArmFixedSample: IntegrationPointAnalysisContinuousMultipleArmFixedSample.html
-  IntegrationPointAnalysisContinuousMultipleArmGroupSequential: IntegrationPointAnalysisContinuousMultipleArmGroupSequential.html
-  IntegrationPointAnalysisContinuousTwoArm: IntegrationPointAnalysisContinuousTwoArm.html
-  IntegrationPointAnalysisContinuousTwoArmFixedSample: IntegrationPointAnalysisContinuousTwoArmFixedSample.html
-  IntegrationPointAnalysisContinuousTwoArmGroupSequential: IntegrationPointAnalysisContinuousTwoArmGroupSequential.html
+  IntegrationPointAnalysisDual: IntegrationPointAnalysisDual.html
   IntegrationPointAnalysisRepeatedMeasures: IntegrationPointAnalysisRepeatedMeasures.html
-  IntegrationPointAnalysisRepeatedMeasuresFixedSample: IntegrationPointAnalysisRepeatedMeasuresFixedSample.html
-  IntegrationPointAnalysisRepeatedMeasuresGroupSequential: IntegrationPointAnalysisRepeatedMeasuresGroupSequential.html
   IntegrationPointAnalysisTimeToEvent: IntegrationPointAnalysisTimeToEvent.html
-  IntegrationPointAnalysisTimeToEventFixedSample: IntegrationPointAnalysisTimeToEventFixedSample.html
-  IntegrationPointAnalysisTimeToEventGroupSequential: IntegrationPointAnalysisTimeToEventGroupSequential.html
   IntegrationPointDropout: IntegrationPointDropout.html
-  IntegrationPointDropoutContinuousOrBinary: IntegrationPointDropoutContinuousOrBinary.html
-  IntegrationPointDropoutContinuousOrBinaryMultipleArm: IntegrationPointDropoutContinuousOrBinaryMultipleArm.html
-  IntegrationPointDropoutContinuousOrBinaryTwoArm: IntegrationPointDropoutContinuousOrBinaryTwoArm.html
+  IntegrationPointDropoutBinary: IntegrationPointDropoutBinary.html
+  IntegrationPointDropoutContinuous: IntegrationPointDropoutContinuous.html
+  IntegrationPointDropoutDual: IntegrationPointDropoutDual.html
   IntegrationPointDropoutRepeatedMeasures: IntegrationPointDropoutRepeatedMeasures.html
   IntegrationPointDropoutTimeToEvent: IntegrationPointDropoutTimeToEvent.html
   IntegrationPointEnrollment: IntegrationPointEnrollment.html
@@ -47,15 +36,22 @@ articles:
   IntegrationPointResponse: IntegrationPointResponse.html
   IntegrationPointResponseBinary: IntegrationPointResponseBinary.html
   IntegrationPointResponseContinuous: IntegrationPointResponseContinuous.html
+  IntegrationPointResponseDual: IntegrationPointResponseDual.html
   IntegrationPointResponseRepeatedMeasures: IntegrationPointResponseRepeatedMeasures.html
   IntegrationPointResponseTimeToEvent: IntegrationPointResponseTimeToEvent.html
   IntegrationPointTreatmentSelection: IntegrationPointTreatmentSelection.html
+  MultipleEndpointsWithCovariates: MultipleEndpointsWithCovariates.html
   Overview: Overview.html
   PatientDropout: PatientDropout.html
   PatientRandomization: PatientRandomization.html
-  ProbabilitySuccessDualEndpointsPFSOS: ProbabilitySuccessDualEndpointsPFSOS.html
+  ProbabilitySuccessDualEndpoints: ProbabilitySuccessDualEndpoints.html
+  TimeToEventConditionalPowerFutilityAnalysis: TimeToEventConditionalPowerFutilityAnalysis.html
   TreatmentSelectionDescription: TreatmentSelectionDescription.html
-last_built: 2025-08-07T15:52Z
+  VariablesOfAdaptInfo: VariablesOfAdaptInfo.html
+  VariablesOfDesignParam: VariablesOfDesignParam.html
+  VariablesOfLookInfo: VariablesOfLookInfo.html
+  VariablesOfSimData: VariablesOfSimData.html
+last_built: 2025-10-14T21:44Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles

@@ -6,12 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Integration Point: Response • CyneRgy</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.9/font.css" rel="stylesheet">
@@ -30,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,44 +48,15 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointInitialization.html">Initialization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis (Test Statistic)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment (Arrival Times)</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization (Assignment of Subjects)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
   </ul>
 </li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Examples Outline</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm, Time-to-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomePatientSimulation.html">2-Arm, Binary Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalRepeatedMeasuresResponseGeneration.html">2-Arm, Repeated Measure</a></li>
-    <li><a class="dropdown-item" href="../articles/ChildhoodAnxiety.html">Childhood Anxiety Trial</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Analysis</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm, Time-To-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6></li>
-    <li><a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/AssuranceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a></li>
-    <li><a class="dropdown-item" href="../articles/ProbabilitySuccessDualEndpointsPFSOS.html">Probability of Success for Dual Endpoints (PFS &amp; OS)</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6></li>
-    <li><a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientDropout.html">Patient Dropout</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientRandomization.html">Patient Randomization</a></li>
-  </ul>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">References</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/ContibutingToCyneRgy.html">Contribute</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ContributingToCyneRgy.html">Contribute</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -117,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">August 07, 2025</h4>
+            <h4 data-toc-skip class="date">October 14, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponse.Rmd</code></div>
@@ -168,28 +138,290 @@ supported by East Horizon, such as:
 </h3>
 <p>This integration point is available in East Horizon Explore for the
 following study objectives and endpoint types:</p>
-<ul>
-<li>
-<strong>Two Arm Confirmatory</strong>: continuous, continuous with
-repeated measures, binary, and time-to-event outcomes.</li>
-<li>
-<em><strong>Two Arm Confirmatory</strong>: dual
-time-to-event/time-to-event, dual time-to-event/binary outcomes.</em>
-<span class="badge text-bg-secondary">Coming soon</span>
-</li>
-<li>
-<em><strong>Multiple Arm Confirmatory</strong>: continuous and
-binary outcomes.</em> <span class="badge text-bg-secondary">Coming
-soon</span>
-</li>
-</ul>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th></th>
+<th>Time to Event</th>
+<th>Binary</th>
+<th>Continuous</th>
+<th>Continuous with repeated measures</th>
+<th>Count</th>
+<th>Composite</th>
+<th>Dual TTE-TTE</th>
+<th>Dual TTE-Binary</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Two Arm Confirmatory</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>🔜</td>
+<td>🔜</td>
+</tr>
+<tr class="even">
+<td>Multiple Arm Confirmatory</td>
+<td>🔜</td>
+<td>✅</td>
+<td>✅</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Dose Finding</td>
+<td>-</td>
+<td>-</td>
+<td>❌</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Legend</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th>Icon</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>✅</td>
+<td>Available</td>
+</tr>
+<tr class="even">
+<td>❌</td>
+<td>Not available</td>
+</tr>
+<tr class="odd">
+<td>🔜</td>
+<td>Coming soon</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="east-horizon-design-coming-soon">East Horizon Design <span class="badge text-bg-secondary">Coming
-soon</span><a class="anchor" aria-label="anchor" href="#east-horizon-design-coming-soon"></a>
+<h3 id="east-horizon-design">East Horizon Design<a class="anchor" aria-label="anchor" href="#east-horizon-design"></a>
 </h3>
-<p><em>This integration point will be available in East Horizon Design
-in the future.</em></p>
+<details><summary>
+This integration point is available in East Horizon Design for the
+following tests (click to expand/collapse):
+</summary><table style="width:100%;" class="table">
+<colgroup>
+<col width="36%">
+<col width="26%">
+<col width="26%">
+<col width="10%">
+</colgroup>
+<thead><tr class="header">
+<th>Test</th>
+<th>Study Objective</th>
+<th>Endpoint</th>
+<th>Availability</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Single Mean (One Arm Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Mean of Paired Differences (Paired Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Mean of paired Ratios (Paired Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Single Proportion (One Arm Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Binary</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Simon’s Two Stage (One Arm Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Binary</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Logrank Weibull Distribution (One Arm Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Time to Event</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Parametric Weibull Distribution (One Arm Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Time to Event</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Logrank Exponential Distribution (One Arm Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Time to Event</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Single Poisson Rate (One Arm Design)</td>
+<td>One Arm Exploratory/Confirmatory</td>
+<td>Count</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Difference of Means (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Continuous</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Ratio of Means (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Difference of Means (Crossover Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Ratio of Means (Crossover Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Difference of Proportions (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Binary</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Ratio of Proportions (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Binary</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Odds Ratio of Proportions (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Binary</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Fisher’s Exact (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Binary</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Logrank Test Given Accrual Duration and Accrual Rates (Parallel
+Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Time to Event</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Logrank Test Given Accrual Duration and Study Duration (Parallel
+Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Time to Event</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Logrank Test Given Accrual Duration and Accrual Rates (Population
+Enrichment)</td>
+<td>Two Arm Confirmatory</td>
+<td>Time to Event</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Ratio of Poisson Rates (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Count</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Ratio of Negative Binomial Rates (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Count</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Win Ratio (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Composite</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>MAMS Difference of Means (Pairwise Comparisons to Control)</td>
+<td>Multiple Arm Confirmatory</td>
+<td>Continuous</td>
+<td>🔜</td>
+</tr>
+<tr class="odd">
+<td>MAMS Difference of Means: Combining P-Values (Pairwise Comparisons
+to Control)</td>
+<td>Multiple Arm Confirmatory</td>
+<td>Continuous</td>
+<td>🔜</td>
+</tr>
+<tr class="even">
+<td>MAMS Difference of Proportions (Pairwise Comparisons to
+Control)</td>
+<td>Multiple Arm Confirmatory</td>
+<td>Binary</td>
+<td>🔜</td>
+</tr>
+<tr class="odd">
+<td>MAMS Difference of Proportions: Combining P-Values (Pairwise
+Comparisons to Control)</td>
+<td>Multiple Arm Confirmatory</td>
+<td>Binary</td>
+<td>🔜</td>
+</tr>
+<tr class="even">
+<td>MAMS Logrank (Pairwise Comparisons to Control)</td>
+<td>Multiple Arm Confirmatory</td>
+<td>Time to Event</td>
+<td>🔜</td>
+</tr>
+<tr class="odd">
+<td>MAMS Logrank: Combining P-Values (Pairwise Comparisons to
+Control)</td>
+<td>Multiple Arm Confirmatory</td>
+<td>Time to Event</td>
+<td>🔜</td>
+</tr>
+</tbody>
+</table></details>
 </div>
 <div class="section level3">
 <h3 id="east">East<a class="anchor" aria-label="anchor" href="#east"></a>
@@ -197,43 +429,95 @@ in the future.</em></p>
 <details><summary>
 This integration point is available in East for the following tests
 (click to expand/collapse):
-</summary><ul>
-<li>Design, Continuous Endpoint
-<ul>
-<li>Two-Sample Test, Parallel Design, Difference of Means
-(MN-2S-DI)</li>
-</ul>
-</li>
-<li>Design, Discrete Endpoint
-<ul>
-<li>Two-Sample Test, Parallel Design
-<ul>
-<li>Difference of Proportions (PN-2S-DI)</li>
-<li>Ratio of Proportions (PN-2S-RA)</li>
-<li>Odds Ratio of Proportions (PN-2S-OR)</li>
-</ul>
-</li>
-<li>Many-Sample Test
-<ul>
-<li>Single Arm Design, Chi-Square for Specified Proportions in C
-Categories (PN-ns-CH1C)</li>
-<li>Parallel Design, Two Group Chi-Square for Specified Proportions in C
-Categories (PN-ns-CH2C)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Design, Survival Endpoint
-<ul>
-<li>Two-Sample Test, Parallel Design
-<ul>
-<li>Logrank Given Accrual Duration and Accrual Rates (SU-2S-LRAR)</li>
-<li>Logrank Given Accrual Duration and Study Duration (SU-2S-LRSD)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul></details>
+</summary><table style="width:100%;" class="table">
+<colgroup>
+<col width="36%">
+<col width="26%">
+<col width="26%">
+<col width="10%">
+</colgroup>
+<thead><tr class="header">
+<th>Test</th>
+<th>Number of Samples</th>
+<th>Endpoint</th>
+<th>Availability</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Difference of Means (Parallel Design)</td>
+<td>Two Samples</td>
+<td>Continuous</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Difference of Proportions (Parallel Design)</td>
+<td>Two Samples</td>
+<td>Discrete</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Ratio of Proportions (Parallel Design)</td>
+<td>Two Samples</td>
+<td>Discrete</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Odds Ratio of Proportions (Parallel Design)</td>
+<td>Two Samples</td>
+<td>Discrete</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Logrank Test Given Accrual Duration and Accrual Rates (Parallel
+Design)</td>
+<td>Two Samples</td>
+<td>Survival</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Logrank Test Given Accrual Duration and Study Duration (Parallel
+Design)</td>
+<td>Two Samples</td>
+<td>Survival</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Chi-Square for Specified Proportions in C Categories (Single Arm
+Design)</td>
+<td>Many Samples</td>
+<td>Discrete</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Two Group Chi-Square for Proportions in C Categories (Parallel
+Design)</td>
+<td>Many Samples</td>
+<td>Discrete</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Multiple Looks - Combining P-Values (Pairwise Comparisons to Control
+- Difference of Means)</td>
+<td>Many Samples</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Multiple Looks - Combining P-Values (Multiple Pairwise Comparisons
+to Control - Difference of Proportions)</td>
+<td>Many Samples</td>
+<td>Discrete</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Multiple Looks - Combining P-Values (Pairwise Comparisons to Control
+- Logrank Test)</td>
+<td>Many Samples</td>
+<td>Survival</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table></details>
 </div>
 </div>
 <div class="section level2">
@@ -242,7 +526,7 @@ Categories (PN-ns-CH2C)</li>
 <div class="section level3">
 <h3 id="in-east-horizon-explore">In East Horizon Explore<a class="anchor" aria-label="anchor" href="#in-east-horizon-explore"></a>
 </h3>
-<p>You can set up a response function in East Horizon Explore under
+<p>You can set up a response function under
 <strong>Distribution</strong> in a <strong>Response Card</strong> while
 creating or editing an <strong>Input Set</strong>.</p>
 <details><summary>
@@ -264,15 +548,45 @@ function using <strong>+ Add Variables</strong>.</li>
 </ol>
 <p>For a visual guide of where to find the option, refer to the
 screenshot below:</p>
-<div class="float">
-<img src="response.png" alt="Screenshot of East Horizon"><div class="figcaption">Screenshot of East Horizon</div>
+<img src="GettingStarted_files/response.png"></details>
 </div>
-</details>
+<div class="section level3">
+<h3 id="in-east-horizon-design">In East Horizon Design<a class="anchor" aria-label="anchor" href="#in-east-horizon-design"></a>
+</h3>
+<p>You can set up a response function under
+<strong>Distribution</strong> in the <strong>Response</strong> section
+of an <strong>Input Set</strong> created by simulation.</p>
+<details><summary>
+Follow these steps (click to expand/collapse):
+</summary><ol style="list-style-type: decimal">
+<li>Create and compute a first <strong>analytical design input
+set</strong>.</li>
+<li>Navigate to the Results section and <strong>simulate</strong> the
+analytical design.</li>
+<li>Navigate to the new <strong>simulation input set</strong> that was
+created.</li>
+<li>Select <strong>User Specified-R</strong> from the dropdown in the
+<strong>Distribution</strong> field in the <strong>Response</strong>
+tab.</li>
+<li>Browse and select the appropriate R file (<code>filename.r</code>)
+from your computer, or use the built-in <strong>R Code
+Assistant</strong> to create one. This file should contain function(s)
+written to perform various tasks to be used throughout your
+Project.</li>
+<li>Choose the appropriate function name. If the expected function is
+not displaying, then check your R code for errors.</li>
+<li>Set any required user parameters (variables) as needed for your
+function using <strong>+ Add Variables</strong>.</li>
+<li>Continue creating your project.</li>
+</ol>
+<p>For a visual guide of where to find the option, refer to the
+screenshot below:</p>
+<img src="GettingStarted_files/responseDesign.png"></details>
 </div>
 <div class="section level3">
 <h3 id="in-east">In East<a class="anchor" aria-label="anchor" href="#in-east"></a>
 </h3>
-<p>You can set up an enrollment function in East by navigating to the
+<p>You can set up a response function by navigating to the
 <strong>Generate Response</strong> task of the <strong>User Defined R
 Function</strong> tab of a <strong>Simulation Input</strong> window,
 after including the option.</p>
@@ -306,7 +620,7 @@ function using the button <strong>Add/Edit Variables</strong>.</li>
 </ol>
 <p>For a visual guide of where to find the option, refer to the
 screenshot below:</p>
-<img src="responseEast.png"></details>
+<img src="GettingStarted_files/responseEast.png"></details>
 </div>
 </div>
 <div class="section level2">
@@ -324,6 +638,8 @@ Time-to-Event (Survival) Outcome</a></p>
 Continuous (Normal) Outcome with Repeated Measures</a></p>
 <p><a href="IntegrationPointResponseBinary.html" class="btn btn-primary"><i class="fas fa-toggle-on"></i>
 Binary Outcome</a></p>
+<p><a href="IntegrationPointResponseDual.html" class="btn btn-primary"><i class="fas fa-project-diagram"></i>
+Dual Outcomes (TTE-TTE or TTE-Binary)</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -337,7 +653,7 @@ Binary Outcome</a></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

@@ -1,5 +1,5 @@
 ---
-title: '2-Arm, Normal Outcome, Repeated Measures - Patient Simulation'
+title: '2-Arm, Continuous Outcome, Repeated Measures - Patient Simulation'
 author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:

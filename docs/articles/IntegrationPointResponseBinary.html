@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,44 +48,15 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointInitialization.html">Initialization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis (Test Statistic)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment (Arrival Times)</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization (Assignment of Subjects)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
   </ul>
 </li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Examples Outline</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm, Time-to-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomePatientSimulation.html">2-Arm, Binary Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalRepeatedMeasuresResponseGeneration.html">2-Arm, Repeated Measure</a></li>
-    <li><a class="dropdown-item" href="../articles/ChildhoodAnxiety.html">Childhood Anxiety Trial</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Analysis</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm, Time-To-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6></li>
-    <li><a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/AssuranceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a></li>
-    <li><a class="dropdown-item" href="../articles/ProbabilitySuccessDualEndpointsPFSOS.html">Probability of Success for Dual Endpoints (PFS &amp; OS)</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6></li>
-    <li><a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientDropout.html">Patient Dropout</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientRandomization.html">Patient Randomization</a></li>
-  </ul>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">References</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/ContibutingToCyneRgy.html">Contribute</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ContributingToCyneRgy.html">Contribute</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -116,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">September 09, 2025</h4>
+            <h4 data-toc-skip class="date">October 14, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseBinary.Rmd</code></div>
@@ -159,12 +130,6 @@ outcome.</p>
 experimental﴿.</td>
 </tr>
 <tr class="odd">
-<td><strong>ArrivalTime</strong></td>
-<td>Vector of Numeric</td>
-<td>Vector of length <code>NumSub</code>, indicating the arrival time
-for each subject.</td>
-</tr>
-<tr class="even">
 <td><strong>TreatmentID</strong></td>
 <td>Vector of Integer</td>
 <td>Vector of length <code>NumSub</code>, indicating the allocation of
@@ -172,7 +137,7 @@ subjects to arms. Index <code>0</code> represents placebo/control. For
 example, <code>[0, 0, 1]</code> indicates three subjects: two in the
 control group and one experimental.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>PropResp</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>NumArm</code>, indicating the expected
@@ -180,7 +145,7 @@ proportions (probabilities) of responders for each arm. The first
 element corresponds to the control group, followed by the probabilities
 for each experimental arm in sequence.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>FollowUpDur</strong></td>
 <td>Numeric</td>
 <td>Follow-up duration, acts as By Time for response proportions. Only
@@ -188,14 +153,14 @@ applicable for Vaccine Efficacy
 (<code>Better Response = Smaller Value</code>,
 <code>Test = 1 - Ratio of Proportions</code>).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>OneMinusROP</strong></td>
 <td>Numeric</td>
 <td>Value of 1 - Ratio of Proportions. Only applicable for Vaccine
 Efficacy (<code>Better Response = Smaller Value</code>,
 <code>Test = 1 - Ratio of Proportions</code>).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
@@ -259,6 +224,10 @@ further simulations will be attempted.</td>
 </tr>
 </tbody>
 </table>
+<p>Note: Additional custom variables can be included as members of the
+output list. All outputs will automatically be available as input
+variables for analysis or treatment selection endpoints in the
+<code>SimData</code> variable as described here: <a href="VariablesOfSimData.html">Variables of SimData</a>.</p>
 </div>
 </div>
 <div class="section level2">
@@ -274,10 +243,12 @@ ensure that the same function will work regardless of whether the user
 has specified any custom parameters in East Horizon. For Vaccine
 Efficacy, <code>OneMinusROP</code> must be declared with default value
 <code>NULL</code>.</p>
-<p><strong>For standard binary outcome
+<div class="section level3">
+<h3 id="for-standard-binary-outcome-better-response-larger-value-test-difference-of-proportions-or-custom">For standard binary outcome
 (<code>Better Response = Larger Value</code>,
-<code>Test = Difference of Proportions or Custom</code>)</strong></p>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">PropResp</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<code>Test = Difference of Proportions or Custom</code>)<a class="anchor" aria-label="anchor" href="#for-standard-binary-outcome-better-response-larger-value-test-difference-of-proportions-or-custom"></a>
+</h3>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">PropResp</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">vPatientOutcome</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0  </span></span>
@@ -287,10 +258,12 @@ Efficacy, <code>OneMinusROP</code> must be declared with default value
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientOutcome</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p><strong>For Vaccine Efficacy
-(<code>Better Response = Smaller Value</code>,
-<code>Test = 1 - Ratio of Proportions</code>)</strong></p>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">FollowUpDur</span>, <span class="va">PropResp</span>, <span class="va">OneMinusROP</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+</div>
+<div class="section level3">
+<h3 id="for-vaccine-efficacy-better-response-smaller-value-test-1---ratio-of-proportions">For Vaccine Efficacy (<code>Better Response = Smaller Value</code>,
+<code>Test = 1 - Ratio of Proportions</code>)<a class="anchor" aria-label="anchor" href="#for-vaccine-efficacy-better-response-smaller-value-test-1---ratio-of-proportions"></a>
+</h3>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">FollowUpDur</span>, <span class="va">PropResp</span>, <span class="va">OneMinusROP</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">vPatientOutcome</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0  </span></span>
@@ -302,6 +275,7 @@ Efficacy, <code>OneMinusROP</code> must be declared with default value
 <span><span class="op">}</span></span></code></pre>
 <p>A detailed template with step-by-step explanations is available here:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R" class="external-link">SimulatePatientOutcome.Binary.R</a></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>

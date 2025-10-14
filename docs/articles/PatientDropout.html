@@ -6,12 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>2-Arm, Single Endpoint - Simulate Patient Dropout • CyneRgy</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.9/font.css" rel="stylesheet">
@@ -30,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,44 +48,15 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointInitialization.html">Initialization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis (Test Statistic)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment (Arrival Times)</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization (Assignment of Subjects)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
   </ul>
 </li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Examples Outline</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm, Time-to-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomePatientSimulation.html">2-Arm, Binary Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalRepeatedMeasuresResponseGeneration.html">2-Arm, Repeated Measure</a></li>
-    <li><a class="dropdown-item" href="../articles/ChildhoodAnxiety.html">Childhood Anxiety Trial</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Analysis</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm, Time-To-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6></li>
-    <li><a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/AssuranceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a></li>
-    <li><a class="dropdown-item" href="../articles/ProbabilitySuccessDualEndpointsPFSOS.html">Probability of Success for Dual Endpoints (PFS &amp; OS)</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6></li>
-    <li><a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientDropout.html">Patient Dropout</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientRandomization.html">Patient Randomization</a></li>
-  </ul>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">References</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/ContibutingToCyneRgy.html">Contribute</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ContributingToCyneRgy.html">Contribute</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -117,7 +87,7 @@
                         <h4 data-toc-skip class="author">Shubham
 Lahoti</h4>
             
-            <h4 data-toc-skip class="date">August 07, 2025</h4>
+            <h4 data-toc-skip class="date">October 14, 2025</h4>
       
 
       <div class="d-none name"><code>PatientDropout.Rmd</code></div>
@@ -322,7 +292,7 @@ information.</p>
 <tr class="even">
 <td>Probability of Dropout: Treatment</td>
 <td>Response Card, Dropout Rate tab</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>t</mi><mi>r</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">DropParamtrt</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>P</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>T</mi><mi>r</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">DropParamTrt</annotation></semantics></math></td>
 </tr>
 </tbody>
 </table>
@@ -342,7 +312,7 @@ outlining the general steps performed by the R code.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

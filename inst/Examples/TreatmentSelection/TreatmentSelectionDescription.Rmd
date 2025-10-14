@@ -7,6 +7,11 @@ output:
   word_document: default
 ---
 
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">This example is related to the <strong>Integration Point: Treatment Selection</strong>.
+  <a href="IntegrationPointTreatmentSelection.html" class="alert-link">Click here for more information about this integration point.</a></p>
+</div>
+
 ## Introduction
 
 The following examples illustrate how to integrate new treatment selection capabilities into East Horizon or East using R functions in the context of a multi-arm trial. In each example, the trial design includes a standard-of-care control arm and three experimental treatment arms. The design includes one interim analysis (IA) and one final analysis (FA).

@@ -51,7 +51,7 @@ This example illustrates how to customize the dropout distribution in East Horiz
 ## Response (Patient Simulation)
 
 <details>
-<summary>**2-Arm, Normal Outcome – Patient Simulation**</summary>
+<summary>**2-Arm, Continuous Outcome – Patient Simulation**</summary>
 This example demonstrates two ways to customize the patient outcome simulation in East Horizon for a two-arm trial with a continuous outcome: using a mixture distribution, with or without the mixture proportion sampled from a Beta distribution.  
 [Click here to view the full example.](2ArmNormalOutcomePatientSimulationDescription.html)
 </details>
@@ -69,7 +69,7 @@ This example demonstrates two ways to customize the patient outcome simulation i
 </details>
 
 <details>
-<summary>**2-Arm, Normal Outcome, Repeated Measures – Patient Simulation**</summary>
+<summary>**2-Arm, Continuous Outcome, Repeated Measures – Patient Simulation**</summary>
 This example demonstrates how to customize the patient outcome simulation in East Horizon for a two-arm trial with a continuous outcome with repeated measures using the `MASS::mvrnorm()` function.
 [Click here to view the full example.](2ArmNormalRepeatedMeasuresResponseGeneration.html)
 </details>
@@ -85,7 +85,7 @@ This example covers a specific situation where the patient data simulation needs
 ## Analysis (Test Statistic)
 
 <details>
-<summary>**2-Arm, Normal Outcome – Analysis**</summary>
+<summary>**2-Arm, Continuous Outcome – Analysis**</summary>
 This example demonstrates three ways to customize the statistical test in East Horizon for a two-arm trial with a continuous outcome: using a formula from the East manual, using the `t.test()` function, and using confidence interval limits for Go/No-Go decision-making. 
 [Click here to view the full example.](2ArmNormalOutcomeAnalysisDescription.html)
 </details>

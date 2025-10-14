@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Integration Point: Response - Dual Outcomes (TTE-TTE or TTE-Binary) • CyneRgy</title>
+<title>Integration Point: Response - Dual Endpoints (TTE-TTE or TTE-Binary) • CyneRgy</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Response - Dual Outcomes (TTE-TTE or TTE-Binary)">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Integration Point: Response - Dual Endpoints (TTE-TTE or TTE-Binary)">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 </head>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,44 +48,15 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointInitialization.html">Initialization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointAnalysis.html">Analysis (Test Statistic)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointEnrollment.html">Enrollment (Arrival Times)</a></li>
-    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization (Assignment of Subjects)</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointRandomization.html">Randomization</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
   </ul>
 </li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/ExampleOutline.html">Examples Outline</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Patient Simulation</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomePatientSimulationDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomePatientSimulationDescription.html">2-Arm, Time-to-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomePatientSimulation.html">2-Arm, Binary Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalRepeatedMeasuresResponseGeneration.html">2-Arm, Repeated Measure</a></li>
-    <li><a class="dropdown-item" href="../articles/ChildhoodAnxiety.html">Childhood Anxiety Trial</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Analysis</h6></li>
-    <li><a class="dropdown-item" href="../articles/2ArmNormalOutcomeAnalysisDescription.html">2-Arm, Normal Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmTimeToEventOutcomeAnalysisDescription.html">2-Arm, Time-To-Event Outcome</a></li>
-    <li><a class="dropdown-item" href="../articles/2ArmBinaryOutcomeAnalysisDescription.html">2-Arm, Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Treatment Selection</h6></li>
-    <li><a class="dropdown-item" href="../articles/TreatmentSelectionDescription.html">Binary Outcome</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Advanced Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/AssuranceConsecutiveStudies.html">Bayesian Assurance of Consecutive Studies</a></li>
-    <li><a class="dropdown-item" href="../articles/ProbabilitySuccessDualEndpointsPFSOS.html">Probability of Success for Dual Endpoints (PFS &amp; OS)</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Other Integration Points</h6></li>
-    <li><a class="dropdown-item" href="../articles/GeneratePoissonArrival.html">Poisson Arrival Times</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientDropout.html">Patient Dropout</a></li>
-    <li><a class="dropdown-item" href="../articles/PatientRandomization.html">Patient Randomization</a></li>
-  </ul>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">References</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/ContibutingToCyneRgy.html">Contribute</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ContributingToCyneRgy.html">Contribute</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -112,11 +83,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Response - Dual Outcomes (TTE-TTE or TTE-Binary)</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Integration Point: Response - Dual Endpoints (TTE-TTE or TTE-Binary)</h1>
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">September 09, 2025</h4>
+            <h4 data-toc-skip class="date">October 14, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseDual.Rmd</code></div>
@@ -134,7 +105,7 @@ variables provided by East Horizon’s engine itself. These variables are
 automatically available and do not need to be set by the user, except
 for the <code>UserParam</code> variable. Refer to the table below for
 the variables that are available for this integration point and
-outcome.</p>
+endpoint.</p>
 <table class="table">
 <colgroup>
 <col width="14%">
@@ -159,12 +130,6 @@ outcome.</p>
 experimental﴿.</td>
 </tr>
 <tr class="odd">
-<td><strong>ArrivalTime</strong></td>
-<td>Vector of Numeric</td>
-<td>Vector of length <code>NumSub</code>, indicating the arrival time
-for each subject.</td>
-</tr>
-<tr class="even">
 <td><strong>TreatmentID</strong></td>
 <td>Vector of Integer</td>
 <td>Vector of length <code>NumSub</code>, indicating the allocation of
@@ -172,44 +137,44 @@ subjects to arms. Index <code>0</code> represents placebo/control. For
 example, <code>[0, 0, 1]</code> indicates three subjects: two in the
 control group and one experimental.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>EndpointType</strong></td>
 <td>Vector of Integer</td>
-<td>Vector of length equal to the number of outcomes, indicating the
-outcome types:<br>– 0: Continuous.<br>– 1: Binary.<br>– 2:
-Time-to-Event.</td>
-</tr>
-<tr class="even">
-<td><strong>EndpointName</strong></td>
-<td>Vector of Character</td>
-<td>Vector of length equal to the number of outcomes, indicating the
-outcome names.</td>
+<td>Vector of length equal to the number of endpoints, indicating the
+endpoint types:<br>– <code>0</code>: Continuous.<br>– <code>1</code>:
+Binary.<br>– <code>2</code>: Time-to-Event.</td>
 </tr>
 <tr class="odd">
+<td><strong>EndpointName</strong></td>
+<td>Vector of Character</td>
+<td>Vector of length equal to the number of endpoints, indicating the
+endpoint names.</td>
+</tr>
+<tr class="even">
 <td><strong>SurvMethod</strong></td>
 <td>Named List of Integer</td>
-<td>Named List of length equal to the number of outcomes, indicating the
-selected input method for survival analysis for survival endpoints. For
-example, <code>SurvMethod[“Endpoint 1”]</code> is the input method for
-Endpoint 1. Possible values:<br>– <code>1</code>: Hazard rate.<br>–
+<td>Named List of length equal to the number of endpoints, indicating
+the selected input method for survival analysis for survival endpoints.
+For example, <code>SurvMethod[“Endpoint 1”]</code> is the input method
+for Endpoint 1. Possible values:<br>– <code>1</code>: Hazard rate.<br>–
 <code>2</code>: Cumulative % survival rates.<br>– <code>3</code>: Median
 survival times.<br>– <code>NA</code>: Endpoint is not Time-to-Event
 (e.g., Binary).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>NumPrd</strong></td>
 <td>Named List of Integer</td>
-<td>Named List of length equal to the number of outcomes, indicating the
-number of periods in the trial for survival endpoints. For example,
+<td>Named List of length equal to the number of endpoints, indicating
+the number of periods in the trial for survival endpoints. For example,
 <code>NumPrd[[“Endpoint 1”]]</code> is the number of periods for
 Endpoint 1. Fixed to <code>NA</code> if the endpoint is not
 Time-to-Event (e.g., Binary).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>PrdTime</strong></td>
 <td>Named List of Array of Numeric</td>
-<td>Named List of length equal to the number of outcomes, indicating the
-times used to specify survival parameters. For example,
+<td>Named List of length equal to the number of endpoints, indicating
+the times used to specify survival parameters. For example,
 <code>PrdTime[“Endpoint 1”]</code> is the array of period times for
 Endpoint 1. The length of each array is the number of periods. Depends
 on <code>SurvMethod</code>:<br>– If <code>SurvMethod = 1</code>:
@@ -218,11 +183,11 @@ Times at which the cumulative % survivals are specified.<br>– If
 <code>SurvMethod = 3</code>: Defaults to 0.<br>– If the endpoint is not
 Time-to-Event (e.g., Binary): Defaults to <code>NA</code>.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>SurvParam</strong></td>
 <td>Named List of Matrix</td>
-<td>Named List of length equal to the number of outcomes, indicating the
-matric of survival parameters used to generate time of events. For
+<td>Named List of length equal to the number of endpoints, indicating
+the matric of survival parameters used to generate time of events. For
 example, <code>SurvParam[“Endpoint 1”]</code> is the 2D matrix of
 survival parameters for Endpoint 1. The dimension of each matrix is
 <code>NumPrd x NumArm</code>. Depends on <code>SurvMethod</code>:<br>–
@@ -242,27 +207,30 @@ median survival times for each arm. Size: 1 row
 If the endpoint is not Time-to-Event (e.g., Binary): Defaults to
 <code>NA</code>.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>PropResp</strong></td>
 <td>Named List of Vector of Numeric</td>
-<td>Named List of length equal to the number of outcomes, indicating the
-expected proportion of responders on each arm for binary endpoints. For
-example, <code>PropResp[“Endpoint 1”]</code> is the vector of expected
-proportions of responders on each arm for Endpoint 1. The length of each
-vector is <code>NumArm</code>. Fixed to <code>NA</code> if the endpoint
-is not Binary (e.g., Time-to-Event). Only applicable when
-<code>Dual Endpoint = TTE-Binary</code>.</td>
-</tr>
-<tr class="even">
-<td><strong>Correlation</strong></td>
-<td>Integer</td>
-<td>Correlation between the endpoints:<br>– 5: Very strong
-positive.<br>– 4: Strong positive.<br>– 3: Moderate positive.<br>– 2:
-Weak positive.<br>– 1: Very weak positive.<br>– 0: Uncorrelated.<br>–
--1: Very weak negative.<br>– -2: Weak negative.<br>– -3: Moderate
-negative.<br>– -4: Strong negative.<br>– -5: Very strong negative.</td>
+<td>Named List of length equal to the number of endpoints, indicating
+the expected proportion of responders on each arm for binary endpoints.
+For example, <code>PropResp[“Endpoint 1”]</code> is the vector of
+expected proportions of responders on each arm for Endpoint 1. The
+length of each vector is <code>NumArm</code>. Fixed to <code>NA</code>
+if the endpoint is not Binary (e.g., Time-to-Event). Only applicable
+when <code>Dual Endpoint = TTE-Binary</code>.</td>
 </tr>
 <tr class="odd">
+<td><strong>Correlation</strong></td>
+<td>Integer</td>
+<td>Correlation between the endpoints:<br>– <code>5</code>: Very strong
+positive.<br>– <code>4</code>: Strong positive.<br>– <code>3</code>:
+Moderate positive.<br>– <code>2</code>: Weak positive.<br>–
+<code>1</code>: Very weak positive.<br>– <code>0</code>:
+Uncorrelated.<br>– <code>-1</code>: Very weak negative.<br>–
+<code>-2</code>: Weak negative.<br>– <code>-3</code>: Moderate
+negative.<br>– <code>-4</code>: Strong negative.<br>– <code>-5</code>:
+Very strong negative.</td>
+</tr>
+<tr class="even">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
@@ -314,8 +282,8 @@ below for the expected output for this integration point:</p>
 <tr class="odd">
 <td><strong>Response</strong></td>
 <td>Named List of Vector of Numeric</td>
-<td>Named List of length equal to the number of outcomes, containing the
-survival time outputs for each endpoint. For example,
+<td>Named List of length equal to the number of endpoints, containing
+the survival time outputs for each endpoint. For example,
 <code>Response[“Endpoint 1”]</code> is the vector of generated response
 values for each subject for Endpoint 1. The length of each vector is
 <code>NumSub</code>.</td>
@@ -331,6 +299,10 @@ further simulations will be attempted.</td>
 </tr>
 </tbody>
 </table>
+<p>Note: Additional custom variables can be included as members of the
+output list. All outputs will automatically be available as input
+variables for analysis or treatment selection endpoints in the
+<code>SimData</code> variable as described here: <a href="VariablesOfSimData.html">Variables of SimData</a>.</p>
 </div>
 </div>
 <div class="section level2">
@@ -344,8 +316,10 @@ always declaring <code>UserParam</code> as a default <code>NULL</code>
 value in the function arguments, as this will ensure that the same
 function will work regardless of whether the user has specified any
 custom parameters in East Horizon.</p>
-<p><strong>For <code>Dual Endpoint = TTE-TTE</code>:</strong></p>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">EndpointType</span>, <span class="va">EndpointName</span>,</span>
+<div class="section level3">
+<h3 id="for-dual-endpoint-tte-tte">For <code>Dual Endpoint = TTE-TTE</code><a class="anchor" aria-label="anchor" href="#for-dual-endpoint-tte-tte"></a>
+</h3>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">EndpointType</span>, <span class="va">EndpointName</span>,</span>
 <span>                              <span class="va">SurvMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">SurvParam</span>, <span class="va">Correlation</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
@@ -359,8 +333,11 @@ custom parameters in East Horizon.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="va">vResponse</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p><strong>For <code>Dual Endpoint = TTE-Binary</code>:</strong></p>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">EndpointType</span>, <span class="va">EndpointName</span>,</span>
+</div>
+<div class="section level3">
+<h3 id="for-dual-endpoint-tte-binary">For <code>Dual Endpoint = TTE-Binary</code><a class="anchor" aria-label="anchor" href="#for-dual-endpoint-tte-binary"></a>
+</h3>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">EndpointType</span>, <span class="va">EndpointName</span>,</span>
 <span>                              <span class="va">SurvMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">SurvParam</span>, <span class="va">PropResp</span>, <span class="va">Correlation</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
@@ -374,6 +351,7 @@ custom parameters in East Horizon.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="va">vResponse</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

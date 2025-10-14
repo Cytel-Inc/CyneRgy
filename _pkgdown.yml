@@ -34,7 +34,7 @@ navbar:
                   href: articles/IntegrationPointAnalysis.html
                 - text: Enrollment (Arrival Times)
                   href: articles/IntegrationPointEnrollment.html
-                - text: Randomization (Assignment of Subjects)
+                - text: Randomization
                   href: articles/IntegrationPointRandomization.html
                 - text: Response (Patient Simulation)
                   href: articles/IntegrationPointResponse.html
@@ -50,7 +50,7 @@ navbar:
             href: reference/index.html
         contribute: 
             text: Contribute
-            href: articles/ContibutingToCyneRgy.html
+            href: articles/ContributingToCyneRgy.html
         
         github:
               icon: fa-github fa-lg
