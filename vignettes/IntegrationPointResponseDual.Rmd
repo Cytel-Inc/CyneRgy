@@ -15,7 +15,6 @@ When creating a custom R script, you can optionally use specific variables provi
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
 |**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
-|**ArrivalTime**|Vector of Numeric|Vector of length `NumSub`, indicating the arrival time for each subject.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**EndpointType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the endpoint types:<br>– `0`: Continuous.<br>– `1`: Binary.<br>– `2`: Time-to-Event.|
 |**EndpointName**|Vector of Character|Vector of length equal to the number of endpoints, indicating the endpoint names.|
@@ -53,7 +52,7 @@ Your R script could contain a function such as this one, with a name of your cho
 ## For `Dual Endpoint = TTE-TTE`
 
 ```
-GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, EndpointType, EndpointName,
+GenerateResponse <- function( NumSub, NumArm, TreatmentID, EndpointType, EndpointName,
                               SurvMethod, NumPrd, PrdTime, SurvParam, Correlation, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
@@ -72,7 +71,7 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, Endpoint
 ## For `Dual Endpoint = TTE-Binary`
 
 ```
-GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, EndpointType, EndpointName,
+GenerateResponse <- function( NumSub, NumArm, TreatmentID, EndpointType, EndpointName,
                               SurvMethod, NumPrd, PrdTime, SurvParam, PropResp, Correlation, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
