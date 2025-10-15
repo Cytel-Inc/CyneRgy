@@ -1,6 +1,6 @@
 #' @name SimulatePatientOutcomeSurvSurv.DEP
 #' @author Pradip Maske
-#' @title Simulate patient outcomes for Survival-Survival Dual Endpoint design. 
+#' @title Simulate patient outcomes for Survival-Survival Dual Endpoint design using single piece hazard rates as inputs. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
@@ -60,7 +60,7 @@
 
 
 #' In this example, the response (Survival times) is generated for two correlated Time to Event Endpoints.
-#' The hazard inputs are supposed to be single piece, and the generated times will be exponentially distributed. 
+#' The hazard inputs are single piece hazard rates in this example.
 #' The steps to simulating patient data in this example follows a two-step procedure.  
 #'  Step 1: Generate two standard normal samples, each of size NumSub. 
 #'  Step 2: Transform the sample to be correlated (on normal scale) as per the specified input. 
