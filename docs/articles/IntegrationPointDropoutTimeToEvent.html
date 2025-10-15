@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 14, 2025</h4>
+            <h4 data-toc-skip class="date">October 15, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointDropoutTimeToEvent.Rmd</code></div>
@@ -253,6 +253,8 @@ not used in the script. We recommend always declaring
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 East Horizon.</p>
+<p>A detailed template with step-by-step explanations is available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R" class="external-link">Dropout.Survival.R</a></p>
 <pre><code><span><span class="va">GenDropTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">DropMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">DropParam</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
@@ -263,8 +265,6 @@ East Horizon.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> DropOutTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vDropoutTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p>A detailed template with step-by-step explanations is available here:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R" class="external-link">Dropout.Survival.R</a></p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -276,6 +276,13 @@ East Horizon.</p>
 Simulate Patient Dropout</strong></a>
 <ul>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="external-link">GenerateDropoutTimeForSurvival.R</a></li>
+</ul>
+</li>
+<li>
+<strong>Multiple Arm, Time-to-Event Outcome - Simulate Patient
+Dropout</strong>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="external-link">GenerateDropoutTimeForSurvival.R</a></li>
 </ul>
 </li>
 </ol>

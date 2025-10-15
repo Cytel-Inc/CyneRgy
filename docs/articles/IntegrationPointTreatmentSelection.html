@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 14, 2025</h4>
+            <h4 data-toc-skip class="date">October 15, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointTreatmentSelection.Rmd</code></div>
@@ -718,6 +718,8 @@ not used in the script. We recommend always declaring
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 the interface.</p>
+<p>A detailed template with step-by-step explanations is available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/TreatmentSelection.R" class="external-link">TreatmentSelection.R</a></p>
 <pre><code><span><span class="va">SelectTreatment</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>                <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
@@ -734,8 +736,6 @@ the interface.</p>
 <span>                AllocRatio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vAllocationRatio</span> <span class="op">)</span>,</span>
 <span>                ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p>A detailed template with step-by-step explanations is available here:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/TreatmentSelection.R" class="external-link">TreatmentSelection.R</a></p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -743,7 +743,7 @@ the interface.</p>
 <p>Explore the following examples for more context:</p>
 <ol style="list-style-type: decimal">
 <li>
-<a href="TreatmentSelectionDescription.html"><strong>Multiarm,
+<a href="TreatmentSelectionDescription.html"><strong>Multiple Arm,
 Binary Outcome - Treatment Selection</strong></a>
 <ul>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpThatAreBetterThanCtrl.R" class="external-link">SelectExpThatAreBetterThanCtrl.R</a></li>

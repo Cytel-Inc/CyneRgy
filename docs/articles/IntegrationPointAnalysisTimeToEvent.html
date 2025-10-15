@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 14, 2025</h4>
+            <h4 data-toc-skip class="date">October 15, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysisTimeToEvent.Rmd</code></div>
@@ -718,8 +718,11 @@ are not used in the script. We recommend always declaring
 <code>UserParam</code> as a default <code>NULL</code> value in the
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
-East Horizon. A detailed template with step-by-step explanations is
-available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.R" class="external-link">Analyze.TimeToEvent.R</a>.</p>
+East Horizon.</p>
+<p>Detailed templates with step-by-step explanations are available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.R" class="external-link">Analyze.TimeToEvent.R</a>
+for 2-Arm and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.MAMS.R" class="external-link">Analyze.TimeToEvent.MAMS.R</a>
+for Multiple Arm.</p>
 <div class="section level3">
 <h3 id="for-study-objective-two-arm-confirmatory-1">For <code>Study Objective = Two Arm Confirmatory</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory-1"></a>
 </h3>
@@ -1102,6 +1105,12 @@ available here: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Tem
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
+<details><summary><strong>Time-To-Event Weighted Conditional Power Futility
+Analysis</strong>
+</summary><p>This example demonstrates how to customize the statistical test in
+East Horizon for a two-arm trial with a time-to-event outcome using
+conditional power and futility boundaries based on the Logrank test. <a href="TimeToEventConditionalPowerFutilityAnalysis.html">Click here to
+view the full example.</a></p>
 <p>Explore the following examples for more context:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -1113,7 +1122,20 @@ Time-To-Event Outcome - Analysis</strong></a>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R" class="external-link">AnalyzeUsingSurvivalPackage.R</a></li>
 </ul>
 </li>
-</ol>
+<li>
+<a href="TimeToEventConditionalPowerFutilityAnalysis.html"><strong>Time-To-Event
+Weighted Conditional Power Futility Analysis</strong></a>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R" class="external-link">AnalzyeTTEWithConditinalPowerFutility.R</a></li>
+</ul>
+</li>
+<li>
+<strong>Multiple Arm, Time-To-Event Outcome - Analysis</strong>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/TimeToEvent/R/AnalyzeUsingLogrankTestBonferroni.R" class="external-link">AnalyzeUsingLogrankTestBonferroni.R</a></li>
+</ul>
+</li>
+</ol></details>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

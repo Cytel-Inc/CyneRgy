@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 14, 2025</h4>
+            <h4 data-toc-skip class="date">October 15, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysisDual.Rmd</code></div>
@@ -354,6 +354,8 @@ are not used in the script. We recommend always declaring
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 East Horizon.</p>
+<p>A detailed template with step-by-step explanations is available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.DEP.R" class="external-link">Analyze.DEP.R</a>.</p>
 <div class="section level3">
 <h3 id="minimal-template-for-lookinfofutbdryscale-2-delta-scale">Minimal Template for
 <code>LookInfo$FutBdryScale = 2 (Delta scale)</code><a class="anchor" aria-label="anchor" href="#minimal-template-for-lookinfofutbdryscale-2-delta-scale"></a>
@@ -398,6 +400,20 @@ futility boundary)<a class="anchor" aria-label="anchor" href="#minimal-template-
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> TestStat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dTestStat</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>Explore the following examples for more context:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>2-Arm, Dual Endpoints - Analysis</strong>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/AnalyzeDEPUsingFisherExact.R" class="external-link">AnalyzeDEPUsingFisherExact.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/AnalyzeDEPUsingModWtLogRank.R" class="external-link">AnalyzeDEPUsingModWtLogRank.R</a></li>
+</ul>
+</li>
+</ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

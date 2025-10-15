@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 14, 2025</h4>
+            <h4 data-toc-skip class="date">October 15, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointDropoutBinary.Rmd</code></div>
@@ -256,6 +256,10 @@ declaring <code>UserParam</code> as a default <code>NULL</code> value in
 the function arguments, as this will ensure that the same function will
 work regardless of whether the user has specified any custom parameters
 in East Horizon.</p>
+<p>Detailed templates with step-by-step explanations are available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.BinaryAndContinuous.R" class="external-link">Dropout.BinaryAndContinuous.R</a>
+for 2-Arm and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.BinaryAndContinuous.MAMS.R" class="external-link">Dropout.BinaryAndContinuous.MAMS.R</a>
+for Multiple Arm.</p>
 <div class="section level3">
 <h3 id="for-standard-binary-outcome-better-response-larger-value-test-difference-of-proportions-or-custom">For standard binary outcome
 (<code>Better Response = Larger Value</code>,
@@ -304,8 +308,6 @@ in East Horizon.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> DropOutTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vDropoutTimes</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p>A detailed template with step-by-step explanations is available here:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.BinaryAndContinuous.R" class="external-link">Dropout.BinaryAndContinuous.R</a></p>
 </div>
 </div>
 <div class="section level2">
@@ -318,6 +320,13 @@ in East Horizon.</p>
 Simulate Patient Dropout</strong></a>
 <ul>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="external-link">GenerateCensoringUsingBinomialProportion.R</a></li>
+</ul>
+</li>
+<li>
+<strong>Multiple Arm, Continuous or Binary Outcome - Simulate
+Patient Dropout</strong>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="external-link">GenerateCensoringUsingBinomialProportion.R</a></li>
 </ul>
 </li>
 </ol>

@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 14, 2025</h4>
+            <h4 data-toc-skip class="date">October 15, 2025</h4>
       
 
       <div class="d-none name"><code>IntegrationPointRandomization.Rmd</code></div>
@@ -725,6 +725,8 @@ not used in the script. We recommend always declaring
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 the interface.</p>
+<p>A detailed template with step-by-step explanations is available here:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Randomization.R" class="external-link">Randomization.R</a></p>
 <pre><code><span><span class="va">Randomize</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArms</span>, <span class="va">AllocRatio</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>                <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
@@ -735,8 +737,6 @@ the interface.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> TreatmentID <span class="op">=</span> <span class="fu">as.Integer</span><span class="op">(</span> <span class="va">vTreatmentArmIndex</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p>A detailed template with step-by-step explanations is available here:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Randomization.R" class="external-link">Randomization.R</a></p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -750,6 +750,12 @@ Subjects</strong></a>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R" class="external-link">RandomizationSubjectsUsingUniformDistribution.R</a></li>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R" class="external-link">RandomizationSubjectsUsingSampleFunctionInR.R</a></li>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R" class="external-link">BlockRandomizationSubjectsUsingRPackage.R</a></li>
+</ul>
+</li>
+<li>
+<strong>Multiple Arm - Randomization of Subjects</strong>
+<ul>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizeSubjectsAcrossMultipleArms.R" class="external-link">RandomizeSubjectsAcrossMultipleArms.R</a></li>
 </ul>
 </li>
 </ol>
