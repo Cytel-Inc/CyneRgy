@@ -165,6 +165,8 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in the interface.
 
+A detailed template with step-by-step explanations is available here: [Initialize.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Initialize.R) 
+
 ```
 Init <- function( Seed = NULL, UserParam = NULL )
 {
@@ -178,8 +180,6 @@ Init <- function( Seed = NULL, UserParam = NULL )
   return( as.integer( nError ) )
 }
 ```
-
-A detailed template with step-by-step explanations is available here: [Initialize.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Initialize.R) 
 
 # Examples
 

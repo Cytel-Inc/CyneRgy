@@ -69,7 +69,9 @@ Note: Additional custom variables can be included as members of the output list.
 
 # Minimal Templates
 
-Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R) 
+Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+A detailed template with step-by-step explanations is available here: [Dropout.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.RepeatedMeasures.R) 
 
 ## Minimal Template for Option 1
 

@@ -41,6 +41,8 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on the study objective) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
+Detailed templates with step-by-step explanations are available here: [SimulatePatientOutcome.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Continuous.R) for 2-Arm and [SimulatePatientOutcome.Continuous.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Continuous.MAMS.R) for Multiple Arm.
+
 ## For `Study Objective = Two Arm Confirmatory`
 
 ```
@@ -71,15 +73,15 @@ GenerateResponse <- function( NumSub, NumArms, TreatmentID, Mean, StdDev, UserPa
 }
 ```
 
-A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Continuous.R) 
-
 # Examples
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Normal Outcome - Patient Simulation**](2ArmNormalOutcomePatientSimulationDescription.html)
+1. [**2-Arm, Continuous Outcome - Patient Simulation**](2ArmNormalOutcomePatientSimulationDescription.html)
     - [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.R)
     - [SimulatePatientOutcomePercentAtZeroBetaDist.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.R)
-1. [**Childhood Anxiety Trial**](ChildhoodAnxiety.html)
+2. [**Childhood Anxiety Trial**](ChildhoodAnxiety.html)
     - [SimulatePatientOutcomeCHU9.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R)
     - [SimulatePatientOutcomeCHU9V2.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9V2.R)
+3. **Multiple Arm, Continuous Outcome - Patient Simulation**
+    - [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/Normal/R/SimulatePatientOutcomePercentAtZero.R)

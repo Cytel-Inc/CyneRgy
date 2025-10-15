@@ -46,6 +46,8 @@ This example illustrates how to customize the dropout distribution in East Horiz
 [Click here to view the full example.](PatientDropout.html)
 </details>
 
+Descriptions for the Multiple Arm examples are not available yet, but the examples can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/).
+
 ---
 
 ## Response (Patient Simulation)
@@ -80,6 +82,8 @@ This example covers a specific situation where the patient data simulation needs
 [Click here to view the full example.](ChildhoodAnxiety.html)
 </details>
 
+Descriptions for the Multiple Arm examples are not available yet, but the examples can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/). Similarly, examples for Dual Endpoints can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/).
+
 ---
 
 ## Analysis (Test Statistic)
@@ -108,14 +112,14 @@ This example demonstrates how to customize the statistical test in East Horizon 
 [Click here to view the full example.](TimeToEventConditionalPowerFutilityAnalysis.html)
 </details>
 
+Descriptions for the Multiple Arm examples are not available yet, but the examples can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/). Similarly, examples for Dual Endpoints can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/).
+
 ---
 
 ## Treatment Selection
 
 <details>
-<summary>**Multiarm, Binary Outcome - Treatment Selection**</summary>
-This example demonstrates a multi-arm trial with a treatment selection rule and binary outcome. Different examples provide additional approaches to treatment selection.
-
+<summary>**Multiple Arm, Binary Outcome - Treatment Selection**</summary>
 This example demonstrates four ways to customize the treatment selection in East Horizon for a multiple arm trial: based on response rates, based on p-value, based on number of responses, and based on Bayesian posterior probabilities.
 [Click here to view the full example.](TreatmentSelectionDescription.html)
 </details>

@@ -49,6 +49,8 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on TTE-TTE vs. TTE-Binary) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
+A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.DEP.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.DEP.R).
+
 ## For `Dual Endpoint = TTE-TTE`
 
 ```
@@ -86,3 +88,11 @@ GenerateResponse <- function( NumSub, NumArm, TreatmentID, EndpointType, Endpoin
   return( list( Response = as.list( vResponse ), ErrorCode = as.integer( nError ) ) )
 }
 ```
+
+# Examples
+
+Explore the following examples for more context:
+
+1. **2-Arm, Dual Endpoints - Patient Simulation**
+    - [SimulatePatientOutcomeSurvSurvSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/SimulatePatientOutcomeSurvSurvSingleHazardPiece.R)
+    

@@ -154,7 +154,9 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 
 # Minimal Templates
 
-Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [Analyze.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Binary.R).
+Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+Detailed templates with step-by-step explanations are available here: [Analyze.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Binary.R) for 2-Arm and [Analyze.Binary.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Binary.MAMS.R) for Multiple Arm.
 
 ## For `Study Objective = Two Arm Confirmatory`
 
@@ -504,3 +506,5 @@ Explore the following examples for more context:
     - [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R)
     - [AnalyzeUsingPropLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R)
     - [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R)
+2. **Multiple Arm, Binary Outcome - Analysis**
+    - [AnalyzeUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/Binary/R/AnalyzeUsingPropTestBonferroni.R)

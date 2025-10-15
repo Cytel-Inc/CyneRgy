@@ -78,6 +78,8 @@ The output list can take different forms.
 
 Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
+A detailed template with step-by-step explanations is available here: [Analyze.DEP.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.DEP.R).
+
 ## Minimal Template for `LookInfo$FutBdryScale = 2 (Delta scale)`
 
 ```
@@ -121,3 +123,11 @@ PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 	return( list( TestStat = as.double( dTestStat ), ErrorCode = as.integer( nError ) ) )
 }
 ```
+
+# Examples
+
+Explore the following examples for more context:
+
+1. **2-Arm, Dual Endpoints - Analysis**
+    - [AnalyzeDEPUsingFisherExact.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/AnalyzeDEPUsingFisherExact.R)
+    - [AnalyzeDEPUsingModWtLogRank.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/AnalyzeDEPUsingModWtLogRank.R)

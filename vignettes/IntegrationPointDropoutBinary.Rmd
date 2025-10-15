@@ -42,6 +42,8 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on the study objective, and on standard binary outcome vs. Vaccine Efficacy) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
+Detailed templates with step-by-step explanations are available here: [Dropout.BinaryAndContinuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.BinaryAndContinuous.R) for 2-Arm and [Dropout.BinaryAndContinuous.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.BinaryAndContinuous.MAMS.R) for Multiple Arm.
+
 ## For standard binary outcome (`Better Response = Larger Value`, `Test = Difference of Proportions or Custom`)
 
 ### For `Study Objective = Two Arm Confirmatory`
@@ -89,11 +91,12 @@ GenDropout <- function( NumSub, NumArm, TreatmentID, FollowUpDur, ProbDrop, User
 }
 ```
 
-A detailed template with step-by-step explanations is available here: [Dropout.BinaryAndContinuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.BinaryAndContinuous.R) 
-
 # Examples
 
 Explore the following examples for more context:
 
 1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
     - [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R)
+2. **Multiple Arm, Continuous or Binary Outcome - Simulate Patient Dropout**
+    - [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R)
+    

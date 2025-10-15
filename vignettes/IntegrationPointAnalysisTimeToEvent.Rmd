@@ -164,7 +164,9 @@ In addition, if `MultAdjMethod = Dunnett’s Single Step, Dunnett’s Step Down,
 
 # Minimal Templates
 
-Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [Analyze.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.R).
+Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+Detailed templates with step-by-step explanations are available here: [Analyze.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.R) for 2-Arm and [Analyze.TimeToEvent.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.MAMS.R) for Multiple Arm.
 
 ## For `Study Objective = Two Arm Confirmatory`
 
@@ -541,8 +543,12 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 }
 ```
 
-
 # Examples
+
+<details>
+<summary>**Time-To-Event Weighted Conditional Power Futility Analysis**</summary>
+This example demonstrates how to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome using conditional power and futility boundaries based on the Logrank test.
+[Click here to view the full example.](TimeToEventConditionalPowerFutilityAnalysis.html)
 
 Explore the following examples for more context:
 
@@ -550,3 +556,7 @@ Explore the following examples for more context:
     - [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R)
     - [AnalyzeUsingHazardRatioLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R)
     - [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R)
+2. [**Time-To-Event Weighted Conditional Power Futility Analysis**](TimeToEventConditionalPowerFutilityAnalysis.html)
+    - [AnalzyeTTEWithConditinalPowerFutility.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R)
+3. **Multiple Arm, Time-To-Event Outcome - Analysis**
+    - [AnalyzeUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/TimeToEvent/R/AnalyzeUsingLogrankTestBonferroni.R)

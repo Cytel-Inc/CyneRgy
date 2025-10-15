@@ -154,7 +154,9 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 
 # Minimal Templates
 
-Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. A detailed template with step-by-step explanations is available here: [Analyze.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R).
+Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+Detailed templates with step-by-step explanations are available here: [Analyze.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R) for 2-Arm and [Analyze.Continuous.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.MAMS.R) for Multiple Arm.
 
 ## For `Study Objective = Two Arm Confirmatory`
 
@@ -501,8 +503,9 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Normal Outcome - Analysis**](2ArmNormalOutcomeAnalysisDescription.html)
+1. [**2-Arm, Continuous Outcome - Analysis**](2ArmNormalOutcomeAnalysisDescription.html)
     - [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R)
     - [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R)
     - [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R)
-
+2. **Multiple Arm, Continuous Outcome - Analysis**
+    - [AnalyzeUsingTTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/Normal/R/AnalyzeUsingTTestBonferroni.R)

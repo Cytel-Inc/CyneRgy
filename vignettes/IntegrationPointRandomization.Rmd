@@ -184,6 +184,8 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in the interface.
 
+A detailed template with step-by-step explanations is available here: [Randomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Randomization.R) 
+
 ```
 Randomize <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
 {
@@ -197,8 +199,6 @@ Randomize <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
 }
 ```
 
-A detailed template with step-by-step explanations is available here: [Randomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Randomization.R) 
-
 # Examples
 
 Explore the following examples for more context:
@@ -207,5 +207,5 @@ Explore the following examples for more context:
     - [RandomizationSubjectsUsingUniformDistribution.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R)
     - [RandomizationSubjectsUsingSampleFunctionInR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R)
     - [BlockRandomizationSubjectsUsingRPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R)
-
-
+2. **Multiple Arm - Randomization of Subjects**
+    - [RandomizeSubjectsAcrossMultipleArms.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizeSubjectsAcrossMultipleArms.R)
