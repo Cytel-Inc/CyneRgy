@@ -7,8 +7,6 @@ output: html_document
 
 [$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
 
-This integration point and outcome is currently available for the **Two Arm Confirmatory** and **Multiple Arm Confirmatory** Study Objectives.
-
 # Input Variables
 
 When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
@@ -19,6 +17,8 @@ When creating a custom R script, you can optionally use specific variables provi
 |**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**PropResp**|Vector of Numeric|Vector of length `NumArm`, indicating the expected proportions (probabilities) of responders for each arm. The first element corresponds to the control group, followed by the probabilities for each experimental arm in sequence.|
+|**FollowUpDur**|Numeric|Follow-up duration, acts as By Time for response proportions. Only applicable for Vaccine Efficacy (`Better Response = Smaller Value`, `Test = 1 - Ratio of Proportions`).|
+|**OneMinusROP**|Numeric|Value of 1 - Ratio of Proportions. Only applicable for Vaccine Efficacy (`Better Response = Smaller Value`, `Test = 1 - Ratio of Proportions`).|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -36,9 +36,15 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 | **Response**   | Vector of Double  | Vector of length `NumSub`, containing the generated binary responses for all subjects (0 or 1).|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
+Note: Additional custom variables can be included as members of the output list. All outputs will automatically be available as input variables for analysis or treatment selection endpoints in the `SimData` variable as described here: [Variables of SimData](VariablesOfSimData.html).
+
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on standard binary outcome vs. Vaccine Efficacy) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. For Vaccine Efficacy, `OneMinusROP` must be declared with default value `NULL`.
+
+A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R) 
+
+## For standard binary outcome (`Better Response = Larger Value`, `Test = Difference of Proportions or Custom`)
 
 ```
 GenerateResponse <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
@@ -53,7 +59,20 @@ GenerateResponse <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam =
 }
 ```
 
-A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R) 
+## For Vaccine Efficacy (`Better Response = Smaller Value`, `Test = 1 - Ratio of Proportions`)
+
+```
+GenerateResponse <- function( NumSub, NumArm, TreatmentID, FollowUpDur, PropResp, OneMinusROP = NULL, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
+  
+  # Write the actual code here.
+  # Store the generated binary response values in a vector called vPatientOutcome.
+
+  return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+}
+```
 
 # Examples
 
@@ -62,3 +81,5 @@ Explore the following examples for more context:
 1. [**2-Arm, Binary Outcome - Patient Simulation**](2ArmBinaryOutcomePatientSimulation.html)
     - [SimulatePatientOutcomePercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.Binary.R)
     - [SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R)
+2. **Multiple Arm, Binary Outcome - Patient Simulation**
+    - [SimulatePatientOutcomePercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/Binary/R/SimulatePatientOutcomePercentAtZero.Binary.R)
