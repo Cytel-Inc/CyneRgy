@@ -45,13 +45,14 @@ articles:
   PatientDropout: PatientDropout.html
   PatientRandomization: PatientRandomization.html
   ProbabilitySuccessDualEndpoints: ProbabilitySuccessDualEndpoints.html
+  SchizophreniaTrial: SchizophreniaTrial.html
   TimeToEventConditionalPowerFutilityAnalysis: TimeToEventConditionalPowerFutilityAnalysis.html
   TreatmentSelectionDescription: TreatmentSelectionDescription.html
   VariablesOfAdaptInfo: VariablesOfAdaptInfo.html
   VariablesOfDesignParam: VariablesOfDesignParam.html
   VariablesOfLookInfo: VariablesOfLookInfo.html
   VariablesOfSimData: VariablesOfSimData.html
-last_built: 2025-10-15T21:18Z
+last_built: 2025-10-16T23:30Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles

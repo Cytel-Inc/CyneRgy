@@ -1,3 +1,51 @@
+######################################################################################################################## .
+#' @name ComputeDEPAnalysisTime
+#' @title Compute Analysis Time for Dual Endpoint (DEP) Designs
+#'
+#' @description Computes the calendar analysis time for trials with one or two endpoints, supporting both
+#' Fixed Sample Designs and Group Sequential Designs. The function determines when the planned
+#' number of events or completers has been reached based on simulated trial data and design parameters.
+#'
+#' For Group Sequential Designs, the analysis time is determined according to the current interim look and
+#' synchronization endpoint. For Fixed Sample Designs, the analysis time corresponds to the final look when
+#' all required events or completers are observed.
+#'
+#' @param SimData A data frame containing the simulated subject-level data with the following required columns:
+#' \describe{
+#'   \item{ClndrRespTime}{Response times for Endpoint 1.}
+#'   \item{CensorIndOrg}{Censoring indicators for Endpoint 1.}
+#'   \item{ClndrRespTime2}{Response times for Endpoint 2.}
+#'   \item{CensorIndOrg2}{Censoring indicators for Endpoint 2.}
+#' }
+#' @param DesignParam A list of design parameters containing:
+#' \describe{
+#'   \item{EndpointType}{Numeric vector specifying endpoint types (1 = completer, 2 = event).}
+#'   \item{EndpointName}{Character vector of endpoint names.}
+#'   \item{PlanEndTrial}{Integer specifying which endpoint(s) define the trial end:
+#'                      \describe{
+#'                        \item{1}{Both endpoints.}
+#'                        \item{2}{Endpoint 1 only.}
+#'                        \item{3}{Endpoint 2 only.}
+#'                      }}
+#'   \item{MaxCompleters}{List of target numbers of completers for each endpoint.}
+#'   \item{MaxEvents}{List of target numbers of events for each endpoint.}
+#'   \item{SampleSize}{Total sample size.}
+#' }
+#' @param LookInfo Optional list specifying Group Sequential Design information (default = \code{NULL}).
+#' When provided, indicates that a GSD is used and must include:
+#' \describe{
+#'   \item{SyncInterim}{Endpoint ID used for interim look positioning.}
+#'   \item{NumLooks}{Total number of looks planned.}
+#'   \item{CurrLookIndex}{Current look index.}
+#'   \item{NumEndpointLooks}{Numeric vector giving the number of looks per endpoint.}
+#'   \item{CumEvents}{List of cumulative event targets per endpoint.}
+#'   \item{CumCompleters}{List of cumulative completer targets per endpoint.}
+#' }
+#' @return A numeric value representing the calendar analysis time (in the same units as \code{ClndrRespTime}).
+#' @export
+######################################################################################################################## .
+
+
 ComputeDEPAnalysisTime <- function(SimData, DesignParam, LookInfo = NULL) 
 {
     

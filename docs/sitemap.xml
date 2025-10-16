@@ -64,6 +64,7 @@
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/PatientDropout.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/PatientRandomization.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/ProbabilitySuccessDualEndpoints.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/SchizophreniaTrial.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/TimeToEventConditionalPowerFutilityAnalysis.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/TreatmentSelectionDescription.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/VariablesOfAdaptInfo.html</loc></url>
@@ -92,6 +93,7 @@
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingTTestNormal.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/ComputeBayesianPredictiveProbabilityWithBayesianAnalysis.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/ComputeDEPAnalysisTime.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/ComputeHazardWeibull.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/ComputeScaleGivenShapeMedian.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.html</loc></url>
