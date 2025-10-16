@@ -1,0 +1,165 @@
+---
+title: 'Multiple Endpoints With Covariates and Stratified Randomization'
+author: "Julija Saltane"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0">The following scripts are related to both the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a> and the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>. Click on the links for more information about these integration points.</p>
+</div>
+
+# Introduction
+
+The following examples illustrate how to incorporate new patient outcome simulation (*response*) and analysis (*design*) capabilities into East Horizon using R functions in the context of a two-arm trial. Each example features a trial design consisting of a standard-of-care control arm and an experimental treatment arm, with three independent patient outcomes modeled as continuous data.
+
+Two of the examples include two binary covariates, and one of these also applies stratified randomization based on the covariates. All designs include a single final analysis. In the example without covariates, the response data is analyzed using a t-test. In contrast, the other two examples employ Analysis of covariance (ANCOVA) to account for covariate effects.
+
+Once CyneRgy is installed, you can load this example in RStudio with the following command:
+
+```{r, eval=FALSE}
+CyneRgy::RunExample( "MultipleEndpointsWithCovariates" )
+```
+
+This will open the corresponding RStudio project.
+
+**RStudio Project File**: [MultipleEndpointsWithCovariates.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/MultipleEndpointsWithCovariates.Rproj)
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultipleEndpointsWithCovariates/R), you will find the following R files:
+
+1. [SimulateMultipleOutcomes.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomes.R) - Provides an example R function to simulate three independent normally distributed outcomes for a given number of subject. Note that this example can be extended to any number of endpoints.
+
+1. [SimulateMultipleOutcomesCovariates.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariates.R) - This R function simulates three independent normally distributed outcomes with two binary covariates. This function is extensible to any number of endpoints and covariates.
+
+1. [SimulateMultipleOutcomesCovariatesStratRandomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R) - Similar to the previous function, this version explicitly incorporates stratified randomization based on two binary covariates.
+
+1. [AnalyzeMultipleOutcomes.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomes.R) - This files provides an example R function to perform endpoint-wise one-sided t-tests on simulated patient data with three normally distributed outcomes.
+
+1. [AnalyzeMultipleOutcomesCovariates.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariates.R) - This files provides and example R function to perform statistical analysis on simulated patient-level data with three continuous endpoints and binary covariates. For each endpoint, an ANCOVA model is fitted to assess the treatment effect while adjusting for covariates.
+
+1. [AnalyzeMultipleOutcomesCovariatesStratRandomization.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R) - Extends the previous analysis to include stratified randomization. Each endpoint is analyzed using ANCOVA, adjusting for covariates.
+
+## Example 1 - Simulate and Analyze Multiple Endpoint Data 
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to the following R files: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomes.R" class="alert-link">SimulateMultipleOutcomes.R</a> and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomes.R" class="alert-link">AnalyzeMultipleOutcomes.R</a>.</p>
+</div>
+
+In this example, patient outcomes are modeled as independent, continuous variables generated from a normal distribution. Each outcome has a treatment-specific mean, while the standard deviation is assumed to be the same across all outcomes.
+
+The table below defines the user-specified parameters used to simulate patient data:
+
+|**User parameter**|**Definition**|
+|----|------|
+|**MeanOutcome`X`Ctrl**|Mean of outcome X for the control arm, where X = 1, 2 or 3.|
+|**MeanOutcome`X`Trt**|Mean of outcome X for the experimental arm, where X = 1, 2 or 3.|
+
+The simulated data is analyzed using a one-sided t-test to compare the treatment and control groups, assuming equal variances. No additional user-defined parameters are required for the analysis in this example.
+
+The figure below illustrates where this example fits within the R integration points of East Horizon, along with a flowchart outlining the key steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load means of outcomes for control and experimental arm",
+            "Loop through patients", 
+            "Simulate each outcome using normal distribution", 
+            "Return responses as PatientOutcome1, PatientOutcome2, PatientOutcome3"
+        ),
+        "Analysis" = c(
+            "Load responses from East Horizon including: PatientOutcome1, PatientOutcome2, PatientOutcome3", 
+             "Run t-test (treatment > control)", 
+             "Extract p-value", 
+             "Return decision and p-value for each outcome per arm"
+        )
+    )
+)
+```
+
+## Example 2 - Simulate and Analyze Multiple Endpoint Data with Two Binary Covariates
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to the following R files: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariates.R" class="alert-link">SimulateMultipleOutcomesCovariates.R</a> and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariates.R" class="alert-link">AnalyzeMultipleOutcomesCovariates.R</a>.</p>
+</div>
+
+Just like in Example 1, patient outcomes are modeled as independent, continuous variables generated from a normal distribution. Additionally, two binary covariates are included, each with user-specified probabilities and effect sizes.
+
+The table below outlines the user-specified parameters used to simulate patient data:
+
+|**User parameter**|**Definition**|
+|----|------|
+|**MeanOutcome`X`Ctrl**|Mean of outcome X for the control arm, where X = 1, 2 or 3.|
+|**MeanOutcome`X`Trt**|Mean of outcome X for the experimental arm, where X = 1, 2 or 3.|
+|**Beta`Y`**|Effect size of binary covariate Y, where Y = 1 or 2.|
+|**Cov`Y`Prob**|Probability that covariate Y takes value 1, where Y = 1 or 2.|
+
+The simulated data is analyzed ANCOVA model to estimate the treatment effect while adjusting for covariates. No additional user-defined parameters are required for the analysis in this example.
+
+The figure below shows how this example integrates with the R components of East Horizon, along with a flowchart summarizing the key steps executed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load means of outcomes for control and experimental arm and parameters for covariates", 
+            "Simulate effect of covariates using binomial distribution", 
+            "Loop through patients",
+            "Simulate each outcome using normal distribution", 
+            "Return responses as PatientOutcome1, PatientOutcome2, PatientOutcome3, Covariate1, Covariate2"
+        ),
+        "Analysis" = c(
+            "Load responses from East Horizon including: PatientOutcome1, PatientOutcome2, PatientOutcome3, Covariate1, Covariate2 ", 
+            "Run ANCOVA", 
+            "Extract p-values", 
+            "Return decision and p-value for each outcome per arm and covariate"
+        )
+    )
+)
+```
+
+## Example 3 - Simulate and Analyze Multiple Endpoint Data with Two Binary Covariates and Stratified Randomization
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This endpoint is related to the following R files: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R" class="alert-link">SimulateMultipleOutcomesCovariatesStratRandomization.R</a> and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariatesStratRandomization.R" class="alert-link">AnalyzeMultipleOutcomesCovariatesStratRandomization.R</a>.</p>
+</div>
+
+Example 3 introduces stratified randomization, replacing East Horizon’s native patient allocation feature. As in Examples 1 and 2, patient outcomes are modeled as independent, continuous variables from a normal distribution. Two binary covariates are again included, with their probabilities and effect sizes specified as in Example 2. Stratified randomization is performed based on these covariates.
+
+The table below defines the user-specified parameters used to simulate patient data:
+
+|**User parameter**|**Definition**|
+|----|------|
+|**MeanOutcome`X`Ctrl**|Mean of outcome X for the control arm, where X = 1, 2 or 3.|
+|**MeanOutcome`X`Trt**|Mean of outcome X for the experimental arm, where X = 1, 2 or 3.|
+|**Beta`Y`**|Effect size of binary covariate Y, where Y = 1 or 2.|
+|**Cov`Y`Prob**|Probability that covariate Y takes the value 1, where Y = 1 or 2.|
+|**AllocRatio**|Ratio of treatment to control allocation.|
+
+As before, the simulated data is analyzed using an ANCOVA model to assess the treatment effect while adjusting for covariates. In this example, the treatment assignments generated during the response simulation are directly used in the analysis. No additional user-defined parameters are needed for the analysis.
+
+The figure below illustrates how this example fits into the R integration points of East Horizon, accompanied by a flowchart detailing the main steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load means of outcomes for control and experimental arm and parameters for covariates", 
+              "Simulate effect of covariates using binomial distribution", 
+              "Create strata & randomize patients within each stratum",
+              "Loop through patients", 
+              "Simulate each outcome using normal distribution", 
+              "Return responses as PatientOutcome1, PatientOutcome2, PatientOutcome3, Covariate1, Covariate2, PatientTreatmentID"
+        ),
+        "Analysis" = c(
+            "Load responses from East Horizon including: PatientOutcome1, PatientOutcome2, PatientOutcome3, Covariate1, Covariate2, PatientTreatmentID ", 
+              "Run ANCOVA", 
+              "Extract p-values", 
+              "Return decision and p-value for each outcome per arm and covariate"
+        )
+    )
+)
+```

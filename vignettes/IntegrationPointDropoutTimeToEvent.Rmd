@@ -38,9 +38,13 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 | **DropOutTime**   | Vector of Numeric  | Vector of length `NumSub`, containing the generated dropout times for each subject. A value of `Inf` indicates that the subject does not drop out. |
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
+Note: Additional custom variables can be included as members of the output list. All outputs will automatically be available as input variables for analysis or treatment selection endpoints in the `SimData` variable as described here: [Variables of SimData](VariablesOfSimData.html).
+
 # Minimal Template
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+
+A detailed template with step-by-step explanations is available here: [Dropout.Survival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R) 
 
 ```
 GenDropTimes <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
@@ -55,11 +59,11 @@ GenDropTimes <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTi
 }
 ```
 
-A detailed template with step-by-step explanations is available here: [Dropout.Survival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R) 
-
 # Examples
 
 Explore the following examples for more context:
 
 1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
     - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)
+2. **Multiple Arm, Time-to-Event Outcome - Simulate Patient Dropout**
+    - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)
