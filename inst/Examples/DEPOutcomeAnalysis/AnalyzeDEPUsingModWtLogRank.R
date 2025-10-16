@@ -203,7 +203,7 @@ AnalyzeDEPUsingModWtLogRank <- function(SimData, DesignParam, LookInfo = NULL, U
             
             # Weight for modestly weighted log-rank test
             weight <- ifelse(SimDataForAnlys$ObservedTime[nSubject] <= UserParam[[DesignParam$EndpointName[[anlysEPID]]]]$delay,
-                             weight * (1 - nEvents/nSubjectsAtRisk), weight)  
+                             weight * 1/(1 - nEvents/nSubjectsAtRisk), weight) 
             
 
             dNum <- dNum + weight * (nEventsOnTreatment - nSubjectsAtRiskTreatment * nEvents / nSubjectsAtRisk)
