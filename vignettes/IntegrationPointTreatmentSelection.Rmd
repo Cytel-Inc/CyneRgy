@@ -13,33 +13,104 @@ The Treatment Selection integration point allows you to customize the selection 
 
 # Availability
 
-## East Horizon Explore <span class="badge text-bg-secondary">Coming soon</span>
+## East Horizon Explore
 
-*This integration point will be available in East Horizon Explore in the future.*
+This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
 
-This integration point will be available in East Horizon Explore for the following study objectives and endpoint types:
+||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
+|----------------|--|--|--|--|--|--|--|--|
+|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|❌|❌|
+|Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
+|Dose Finding|-|-|🔜|-|-|-|-|-|
 
-- **Multiple Arm Confirmatory**: continuous and binary outcomes, with **Group Sequential with Treatment Selection** statistical design.
+**Legend**
 
-## East Horizon Design <span class="badge text-bg-secondary">Coming soon</span>
+|Icon|Meaning|
+|--|----------|
+|✅|Available|
+|❌|Not available|
+|🔜|Coming soon|
 
-*This integration point will be available in East Horizon Design in the future.*
+
+## East Horizon Design
+
+<details>
+<summary>This integration point is available in East Horizon Design for the following tests (click to expand/collapse):</summary>
+
+|Test|Study Objective|Endpoint|Availability|
+|-------|-----|-----|--|
+|Single Mean (One Arm Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
+|Mean of Paired Differences (Paired Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
+|Mean of paired Ratios (Paired Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
+|Single Proportion (One Arm Design)|One Arm Exploratory/Confirmatory|Binary|❌|
+|Simon's Two Stage (One Arm Design)|One Arm Exploratory/Confirmatory|Binary|❌|
+|Logrank Weibull Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
+|Parametric Weibull Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
+|Logrank Exponential Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
+|Single Poisson Rate (One Arm Design)|One Arm Exploratory/Confirmatory|Count|❌|
+|Difference of Means (Parallel Design)|Two Arm Confirmatory|Continuous|❌|
+|Ratio of Means (Parallel Design)|Two Arm Confirmatory|Continuous|❌|
+|Difference of Means (Crossover Design)|Two Arm Confirmatory|Continuous|❌|
+|Ratio of Means (Crossover Design)|Two Arm Confirmatory|Continuous|❌|
+|Difference of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|❌|
+|Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|❌|
+|Odds Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|❌|
+|Fisher's Exact (Parallel Design)|Two Arm Confirmatory|Binary|❌|
+|Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design)|Two Arm Confirmatory|Time to Event|❌|
+|Logrank Test Given Accrual Duration and Study Duration (Parallel Design)|Two Arm Confirmatory|Time to Event|❌|
+|Logrank Test Given Accrual Duration and Accrual Rates (Population Enrichment)|Two Arm Confirmatory|Time to Event|❌|
+|Ratio of Poisson Rates (Parallel Design)|Two Arm Confirmatory|Count|❌|
+|Ratio of Negative Binomial Rates (Parallel Design)|Two Arm Confirmatory|Count|❌|
+|Win Ratio (Parallel Design)|Two Arm Confirmatory|Composite|❌|
+|MAMS Difference of Means (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Continuous|❌|
+|MAMS Difference of Means: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Continuous|🔜|
+|MAMS Difference of Proportions (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Binary|❌|
+|MAMS Difference of Proportions: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Binary|🔜|
+|MAMS Logrank (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Time to Event|❌|
+|MAMS Logrank: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Time to Event|🔜|
+</details>
 
 ## East
 
 <details>
 <summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
 
-- Design, Continuous Endpoint
-    - Many-Sample Test, Pairwise Comparisons to Control - Difference of Means, Multiple Looks - Combining P-Values (MN-MAMS-PC)
-- Design, Discrete Endpoint
-    - Many-Sample Test, Multiple Pairwise Comparisons to Control - Difference of Proportions, Multiple Looks - Combining P-Values (PN-MAMS-PC)
-- Design, Survival Endpoint
-    - Many-Sample Test, Pairwise Comparisons to Control - Logrank Test, Multiple Looks - Combining P-Values (SU-MAMS-PC)
-
+|Test|Number of Samples|Endpoint|Availability|
+|-------|-----|-----|--|
+|Difference of Means (Parallel Design)|Two Samples|Continuous|❌|
+|Difference of Proportions (Parallel Design)|Two Samples|Discrete|❌|
+|Ratio of Proportions (Parallel Design)|Two Samples|Discrete|❌|
+|Odds Ratio of Proportions (Parallel Design)|Two Samples|Discrete|❌|
+|Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design)|Two Samples|Survival|❌|
+|Logrank Test Given Accrual Duration and Study Duration (Parallel Design)|Two Samples|Survival|❌|
+|Chi-Square for Specified Proportions in C Categories (Single Arm Design)|Many Samples|Discrete|❌|
+|Two Group Chi-Square for Proportions in C Categories (Parallel Design)|Many Samples|Discrete|❌|
+|Multiple Looks - Combining P-Values (Pairwise Comparisons to  Control - Difference of Means)|Many Samples|Continuous|✅|
+|Multiple Looks - Combining P-Values (Multiple Pairwise Comparisons to Control - Difference of Proportions)|Many Samples|Discrete|✅|
+|Multiple Looks - Combining P-Values (Pairwise Comparisons to Control - Logrank Test)|Many Samples|Survival|✅|
 </details>
 
 # Instructions
+
+## In East Horizon Explore
+
+You can set up a treatment selection function under **Based On** in the **Treatment Selection** tab of a **Design Card** while creating or editing an **Input Set**. The statistical design must be **Group Sequential with Treatment Selection**.
+
+<details>
+<summary>Follow these steps (click to expand/collapse):</summary>
+
+1. In the **Design Card**, select **Group Sequential with Treatment Selection** under **Statistical Design**.
+1. Navigate to the **Treatment Selection** tab.
+1. Select **User Specified-R** from the dropdown in the **Based On** field.
+1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
+1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
+1. Continue creating your project.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![](GettingStarted_files/treatmentselection.png)
+</details>
 
 ## In East
 
@@ -58,7 +129,7 @@ You can set up a treatment selection function in East by navigating to the **Use
 
 For a visual guide of where to find the option, refer to the screenshot below:
 
-![](treatmentselectionEast.png)
+![](GettingStarted_files/treatmentselectionEast.png)
 
 </details>
 
@@ -75,46 +146,15 @@ When creating a custom R script, you can optionally use specific variables provi
 
 ## Variables of SimData
 
-The variables in SimData are generated during data generation, and depend on the current simulation. Some common and useful variables are:
-
-| **Variable**   | **Type** | **Description**                                                                 |
-|----------------|--------------|---------------------------------------------------------------------------------|
-|**SimData\$ArrivalTime**|Vector of Numeric| Vector of length equal to the number of subjects, containing the generated arrival times for all subjects.|
-|**SimData\$TreatmentID**|Vector of Integer| Vector of length equal to the number of subjects, containing the allocation indices for all subjects:<br>– `0`: Control arm.<br>– `1`: First experimental arm.<br>– etc.|
-| **SimData\$Response**  | Vector of Numeric  | Vector of length equal to the number of subjects, containing the generated responses for all subjects.|
-| **SimData\$CensorIndOrg**  | Vector of Integer  | Vector of length equal to the number of subjects, containing the generated censor indicator values for all subjects:<br>– `0`: Dropout.<br>– `1`: Completer.|
+[Click here to explore the variables of SimData.](VariablesOfSimData.html)
 
 ## Variables of DesignParam
 
-| **Variable**   | **Type** | **Description**                                                                 |
-|----------------|--------------|---------------------------------------------------------------------------------|
-|**DesignParam\$Alpha**|Numeric|Type I Error (for one-sided tests).||
-|**DesignParam\$TrialType**|Integer|Trial Type:<br>– `0`: Superiority.|
-|**DesignParam\$TestType**|Integer|Test Type:<br>– `0`: One-sided.|
-|**DesignParam\$TailType**|Integer|Nature of critical region:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.|
-|**DesignParam\$InitialAllocInfo**|Vector of Numeric| Vector of length equal to the number of treatment arms, containing the ratios of the treatment group sample sizes to control group sample size.|
-|**DesignParam\$SampleSize**|Integer|Sample size of the trial.|
-|**DesignParam\$MaxCompleters**|Integer|Maximum number of completers.|
-|**DesignParam\$RespLag**|Numeric|Follow-up duration.|
-|**DesignParam\$MultAdjMethod**|Integer|Multiple comparison procedure:<br>– `0`: Bonferroni.<br>– `1`: Sidak (not available in East Horizon Explore).<br>– `2`: Weighted Bonferroni (for East Horizon Explore) or Simes (for East Horizon Design).<br>– `3`: Dunnett's Single Step (not available in East Horizon Explore).<br>– `4`: Hochberg's Step Up.<br>– `6`: Fixed Sequence.<br>– `7`: Fallback.<br>– `8`: Dunnett's Single Step.|
-|**DesignParam\$NumTreatments**|Integer|Number of treatment arms.|
-|**DesignParam\$AlphaProp**|Vector of Numeric|Vector of length `DesignParam$NumTreatments`, containing the proportion of Alpha for each treatment arm. Only available with `MultAdjMethod = Weighted Bonferroni or Fallback`.|
-|**DesignParam\$TestSeq**|Vector of Integer|Vector of length `DesignParam$NumTreatments`, containing the test sequence for each comparison (each treatment arm). Only available with `MultAdjMethod = Fixed Sequence or Fallback`.|
+[Click here to explore the variables of DesignParam.](VariablesOfDesignParam.html)
 
 ## Variables of LookInfo
 
-| **Variable**   | **Type** | **Description**                                                                 |
-|----------------|--------------|---------------------------------------------------------------------------------|
-|**LookInfo\$NumLooks**|Integer|Number of looks.|
-|**LookInfo\$CurrLookIndex**|Integer|Current index look, starting from 1.|
-|**LookInfo\$InfoFrac**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the information fraction for each look.|
-|**LookInfo\$CumAlpha**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent (for one-sided tests) for each look.|
-|**LookInfo\$CumCompleters**|Vector of Integer|Vector of length `LookInfo$NumLooks`, containing the cumulative number of completers for each look.|
-|**LookInfo\$RejType**|Integer|Rejection type:<br>– `0`: One-sided efficacy upper<br>– `1`: One-sided futility upper.<br>– `2`: One-sided efficacy lower.<br>– `3`: One-sided futility lower.<br>– `4`: One-sided efficacy upper, futility lower.<br>– `5`: One-sided efficacy lower, futility upper.|
-|**LookInfo\$EffBdryScale**|Integer|Efficacy boundary scale:<br>– `0`: Z scale.<br>– `1`: Adjusted p-value scale (not available in East Horizon Explore).|
-|**LookInfo\$EffBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the efficacy boundary 
-|**LookInfo\$FutBdryScale**|Integer|Futility boundary scale:<br>– `1`: p-value scale (not available in East Horizon Explore).<br>– `2`: Delta scale.<br>– `3`: Conditional power scale (not available in East Horizon Explore).|
-|**LookInfo\$FutBdry**|Vector of Numeric|Vector of length `LookInfo$NumLooks`, containing the futility boundary values (for one-sided tests) for each look.|
+[Click here to explore the variables of LookInfo.](VariablesOfLookInfo.html)
 
 # Expected Output Variable
 
@@ -136,6 +176,8 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in the interface.
 
+A detailed template with step-by-step explanations is available here: [TreatmentSelection.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/TreatmentSelection.R) 
+
 ```
 SelectTreatment <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
@@ -155,13 +197,11 @@ SelectTreatment <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 }
 ```
 
-A detailed template with step-by-step explanations is available here: [TreatmentSelection.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/TreatmentSelection.R) 
-
 # Examples
 
 Explore the following examples for more context:
 
-1. [**Multiarm, Binary Outcome - Treatment Selection**](TreatmentSelectionDescription.html)
+1. [**Multiple Arm, Binary Outcome - Treatment Selection**](TreatmentSelectionDescription.html)
     - [SelectExpThatAreBetterThanCtrl.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpThatAreBetterThanCtrl.R)
     - [SelectExpUsingBayesianRule.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpUsingBayesianRule.R)
     - [SelectExpWithPValueLessThanSpecified.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpWithPValueLessThanSpecified.R)

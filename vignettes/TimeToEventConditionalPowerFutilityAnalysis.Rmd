@@ -1,0 +1,14 @@
+---
+title: "Time-To-Event Weighted Conditional Power Futility Analysis"
+author: "Gabriel Potvin, Valeria A. G. Mazzanti, Sheetal Solanki"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r child = '../inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/Description.Rmd'}
+```
+
+
+

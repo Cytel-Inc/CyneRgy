@@ -1,0 +1,11 @@
+---
+title: "Consecutive Studies, Continuous & Time-to-Event Outcomes"
+author: "J. Kyle Wathen and Laurent Spiess"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r child = '../inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/Description.Rmd'}
+```
