@@ -8,7 +8,7 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a> and the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>. Click on the links for more information about these integration points.</p>
+  <p style="margin-bottom:0">The following scripts are related to both the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a> and the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>. Click on the links for more information about these integration points.</p>
 </div>
 
 <div class="alert alert-danger" role="alert">
