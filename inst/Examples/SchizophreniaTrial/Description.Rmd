@@ -58,11 +58,11 @@ For East Horizon, you will need **AnalyzeUsingMMRM.R** and/or **AnalyzeUsingMMRM
 
 Below are some graphs as example outputs from the code from the **GenerateMMRMResponses** function. It is always good to review example data sets to verify that the data is realistic. 
 
-![**Figure 1**: An example plot of the trial data with a 95% CI](SchizophreniaTrialFiles/TrialPlot.png){width=90%}
+![**Figure 1**: An example plot of the trial data with a 95% CI](SchizophreniaTrial_files/TrialPlot.png){width=90%}
 
 <br>
 
-![**Figure 2**: An example plot of individual patient trajectories](SchizophreniaTrialFiles/PatientPlot.png){width=90%}
+![**Figure 2**: An example plot of individual patient trajectories](SchizophreniaTrial_files/PatientPlot.png){width=90%}
 
 
 ## Clinical Trial Simulation Process
@@ -101,9 +101,7 @@ The visit times should be set as follows:
 
 The project setup should look like the following.
 
-![**Project Setup**](SchizophreniaTrialFiles/ProjectSetup.png){width=90%}
-
-Important: Make sure to toggle **Initialize R Simulations** to the ON position. You must also include an initialization R file as part of your project setup to ensure proper simulation execution.
+![**Project Setup**](SchizophreniaTrial_files/ProjectSetup.png){width=90%}
 
 <br>Once you create Project, you then need to create an input set using the **Explore** option.
 
@@ -116,11 +114,11 @@ In the MMRM fixed-sample card, the sample size should be 266. The group sequenti
 
 Your design card for the fixed design should look something like this:
 
-![**MMRM Fixed Sample**](SchizophreniaTrialFiles/MMRMFixed.png){width=90%}
+![**MMRM Fixed Sample**](SchizophreniaTrial_files/MMRMFixed.png){width=90%}
 
 <br>To add a group sequential option, you can duplicate the card so that the sample sizes are retained. Switch the Statistical Design to **Group Sequential**. The card should look like:
  
-![**MMRM Group Sequential**](SchizophreniaTrialFiles/MMRMGS.png){width=90%}
+![**MMRM Group Sequential**](SchizophreniaTrial_files/MMRMGS.png){width=90%}
 
 ## Response Page
 
@@ -130,27 +128,27 @@ All cards use the R integration and the [GenerateMMRMResponses.R](https://github
 
 Below are the response cards and how they should look:
 
-![**Response Card using data from the publication**](SchizophreniaTrialFiles/PublicationResponse.png){width=90%}
+![**Response Card using data from the publication**](SchizophreniaTrial_files/PublicationResponse.png){width=90%}
 
 <br>
 
-![**Null Case Card**](SchizophreniaTrialFiles/NullResponse.png){width=90%}
+![**Null Case Card**](SchizophreniaTrial_files/NullResponse.png){width=90%}
 
 <br>
 
-![**Card with mean difference 4**](SchizophreniaTrialFiles/MeanDiff4.png){width=90%}
+![**Card with mean difference 4**](SchizophreniaTrial_files/MeanDiff4.png){width=90%}
 
 <br>
 
-![**Card with mean difference 8**](SchizophreniaTrialFiles/Diff8Response.png){width=90%}
+![**Card with mean difference 8**](SchizophreniaTrial_files/Diff8Response.png){width=90%}
 
 <br>
 
-![**Card with SD 10**](SchizophreniaTrialFiles/StdDev10.png){width=90%}
+![**Card with SD 10**](SchizophreniaTrial_files/StdDev10.png){width=90%}
 
 <br>
 
-![**Card with SD 20**](SchizophreniaTrialFiles/StdDev20.png){width=90%}
+![**Card with SD 20**](SchizophreniaTrial_files/StdDev20.png){width=90%}
 
 ## Dropout Page
 
@@ -158,7 +156,7 @@ All dropout cards share the same dropout rates as the publication (0.26 for cont
 
 Here is what the dropout card should look like:
 
-![**Dropout Information**](SchizophreniaTrialFiles/DropoutRate.png){width=90%}
+![**Dropout Information**](SchizophreniaTrial_files/DropoutRate.png){width=90%}
 
 ## Enrollment Page
 
@@ -166,7 +164,7 @@ There should be one enrollment card with an accrual rate of 30 subjects per mont
 
 Here is what the Enrollment card should look like:
 
-![**Enrollment Card**](SchizophreniaTrialFiles/Enrollment.png){width=90%}
+![**Enrollment Card**](SchizophreniaTrial_files/Enrollment.png){width=90%}
 
 ## Simulation Page
 
@@ -174,36 +172,36 @@ For the simulation setup, there should be a total of 1000 repetitions and random
 
 Here is what the Simulation Setup card should look like:
 
-![**Simulation Setup**](SchizophreniaTrialFiles/SimulationSetup.png){width=90%}
+![**Simulation Setup**](SchizophreniaTrial_files/SimulationSetup.png){width=90%}
 
 # Results
 
 - **Target power**: Approximately 90% power is achieved with about 266 completers when the standard deviation is 15 and the mean difference is 6 (using the MMRM Fixed Design). For reaching this power there are 2 designs that effectively accomplish this. One should be the MMRM fixed design (named “Fixed”) and the other being MMRM Group-sequential with a sample size of 300 (named “Selected Design GS300”). Either of these designs are viable and the trade off will be discussed in the results discussion section.
 
-![**Figure 3**: Simulation for Publication Results](SchizophreniaTrialFiles/PublicationResults.png){width=100%}
+![**Figure 3**: Simulation for Publication Results](SchizophreniaTrial_files/PublicationResults.png){width=100%}
 
 <br>
 
 - **Sensitivity**: Power changed as standard deviation and mean difference were varied (Std. Dev ↑ → power ↓; Std. Dev ↓ → power ↑). The cards with standard deviation of 20 (named “SD20”) and the cards with mean difference of 4 (named “Diff 4”) resulted in significantly lower power ranging from 36% to 76%. In contrast, the cards with a standard deviation of 10 (named “SD10”) and a mean difference of 8 (named “Diff 8”) showed substantially higher power, with all designs achieving between 95% and 100%.
 
-![**Figure 4**: Difference of Means Results](SchizophreniaTrialFiles/MeanDiff4_8Results.png)
+![**Figure 4**: Difference of Means Results](SchizophreniaTrial_files/MeanDiff4_8Results.png)
 
 <br>
 
-![**Figure 5**: Standard Deviation Results](SchizophreniaTrialFiles/SD10_20Results.png)
+![**Figure 5**: Standard Deviation Results](SchizophreniaTrial_files/SD10_20Results.png)
 
 <br>
 
 - **Null behavior (MMRM)**: Type I error was observed between 2.1 and 3.6%, close to nominal 2.5%.
 
-![**Figure 6**: Null Case Results](SchizophreniaTrialFiles/NullResult.png)
+![**Figure 6**: Null Case Results](SchizophreniaTrial_files/NullResult.png)
 
 
 # Discussion
 
 -  **Fixed Vs. Selected Sample GS300**: While the Selected Sample GS300 design (i.e., the group sequential design that allows for interim analyses and potential early stopping) does feature a lower power than the Fixed design, it does come with several benefits worth weight when simulating the study. Selected Sample GS300 design boasts a 30% chance of stopping early, a shorter average study duration, and smaller average sample size. In return, it comes with a decrease in power by ~1.4%. These difference are significant as it can save money in a trial for even one of these other improved results. These designs were considered over larger sample sizes due to meeting the required 90% power with the smallest sample sizes.
 
-![](SchizophreniaTrialFiles/SelectDesign.png)
+![](SchizophreniaTrial_files/SelectDesign.png)
 
 <br>
 
