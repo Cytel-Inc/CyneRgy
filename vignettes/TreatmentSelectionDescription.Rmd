@@ -6,6 +6,6 @@ output:
   word_document: default
   html_document: default
 ---
-```{r child = '../inst/Examples/TreatmentSelection/TreatmentSelectionDescription.rmd'}
+```{r child = '../inst/Examples/TreatmentSelection/Description.rmd'}
 ```
  

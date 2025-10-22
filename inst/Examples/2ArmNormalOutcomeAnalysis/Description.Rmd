@@ -8,8 +8,7 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Analysis - Continuous Outcome</strong>.
-  <a href="IntegrationPointAnalysisContinuous.html" class="alert-link">Click here for more information about this integration point.</a></p>
+  <p style="margin-bottom:0">These examples are related to the <a href="IntegrationPointAnalysisContinuous.html" class="alert-link"><strong>Integration Point: Analysis - Continuous Outcome</strong></a>. Click on the link for more information about this integration point.</p>
 </div>
 
 ## Introduction
