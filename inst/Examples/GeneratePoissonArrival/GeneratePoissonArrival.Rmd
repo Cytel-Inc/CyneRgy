@@ -5,9 +5,10 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Enrollment</strong>.
-  <a href="IntegrationPointEnrollment.html" class="alert-link">Click here for more information about this integration point.</a></p>
-</div>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointEnrollment.html" class="alert-link">**Integration Point: Enrollment**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon with any configuration that supports the Enrollment Integration Point. For more details, refer to the link in the box above.</div>
 
 # Introduction
 
@@ -26,7 +27,7 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/R) you will find the following R file:
 
-1. [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R) - This file provides the code used for the two examples below.à
+1. [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R) - This file provides the code used for the two examples below.
 
 # Example 1 - Ramp-Up In Accrual Using UserParam
 

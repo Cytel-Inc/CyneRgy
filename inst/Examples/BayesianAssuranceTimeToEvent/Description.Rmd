@@ -8,7 +8,20 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">The following scripts are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a> and the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a>. Click on the links for more information about these integration points.</p>
+<p style="margin-bottom:0">This example is related to both the <a href="IntegrationPointResponseTimeToEvent.html" class="alert-link">**Integration Point: Response - Time-to-Event Outcome**</a> and the <a href="IntegrationPointAnalysisTimeToEvent.html" class="alert-link">**Integration Point: Analysis - Time-to-Event Outcome**</a>. Click the links for setup instructions, variable details, and additional information about the integration points.</p>
+</div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Time-to-Event Outcome</li>
+<li>**Task:** Explore</li>
+</ul></div>
+
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">**Note:** This example is compatible with both Fixed Sample and Group Sequential statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly.</p>
 </div>
 
 # Introduction
@@ -28,8 +41,8 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/BayesianAssuranceContinuous/R) you will find the R files used in the examples:
 
-1. [SimulatePatientSurvivalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceContinuous/R/SimulatePatientOutcomeNormalAssurance.R) - Functions to simulate patient outcomes under a time-to-event distribution informed by a bi-modal prior.
-2. [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceContinuous/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using Cox proportional hazards model.
+1. [SimulatePatientSurvivalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R) - Functions to simulate patient outcomes under a time-to-event distribution informed by a bi-modal prior.
+2. [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using Cox proportional hazards model.
 
 # Example 1 - Fixed Sample Design
 
@@ -61,7 +74,7 @@ CyneRgy::PlotExampleFlowchart(
 ## Response (Patient Simulation) Integration Point
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceContinuous/R/SimulatePatientSurvivalAssurance.R" class="alert-link">SimulatePatientSurvivalAssurance.R</a></p>
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/SimulatePatientSurvivalAssurance.R" class="alert-link">SimulatePatientSurvivalAssurance.R</a></p>
 </div>
 
 This function simulates patient-level outcomes within a **Bayesian assurance framework**. Information generated from this simulation will be used later for the [Analysis Integration Point](#analysis-integration-point). In this example, a **bi-modal prior** on the $\log(HR)$ is used. The components of the prior are:
@@ -125,7 +138,7 @@ Refer to the table below for the definitions and values of the user-defined para
 ## Analysis Integration Point
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceContinuous/R/AnalyzeSurvivalDataUsingCoxPH.R" class="alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a></p>
+  <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R" class="alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a></p>
 </div>
 
 A single analysis is conducted once 50% of patients have experienced the event of interest. Using the function in the file, the analysis employs a **Cox proportional hazards model**, with a hazard ratio (HR) less than 1 indicating a benefit in favor of the experimental arm. It uses information from the simulation that is generated by the [Response](#response-patient-simulation-integration-point) element of East Horizon's simulation, explained above. A Go decision is made if the resulting p-value is less than or equal to 0.025. Refer to the table below for the definitions of the user-defined parameters used in this example.

@@ -8,8 +8,16 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link"><strong>Integration Point: Response - Continuous Outcome with Repeated Measures</strong></a>. Click on the link for more information about this integration point.</p>
-</div>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">**Integration Point: Response -  Continuous Outcome with Repeated Measures**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Continuous Outcome with Repeated Measures</li>
+<li>**Task:** Any</li>
+</ul></div>
 
 # Introduction
 

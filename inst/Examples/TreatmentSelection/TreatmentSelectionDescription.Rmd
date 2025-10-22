@@ -8,11 +8,19 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">This example is related to the <strong>Integration Point: Treatment Selection</strong>.
-  <a href="IntegrationPointTreatmentSelection.html" class="alert-link">Click here for more information about this integration point.</a></p>
-</div>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointTreatmentSelection.html" class="alert-link">**Integration Point: Treatment Selection**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
-## Introduction
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Multiple Arm Confirmatory, 4-Arm</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Binary Outcome</li>
+<li>**Task:** Explore</li>
+<li>**Statistical Design**: Group Sequential, 1 IA</li>
+</ul></div>
+
+# Introduction
 
 The following examples illustrate how to integrate new treatment selection capabilities into East Horizon or East using R functions in the context of a multi-arm trial. In each example, the trial design includes a standard-of-care control arm and three experimental treatment arms. The design includes one interim analysis (IA) and one final analysis (FA).
 
@@ -41,7 +49,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 In addition, if you would like to experiment with these examples and would like code to help you get started we have provided fill-in-the-blank type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TreatmentSelection/FillInTheBlankR).  
 
-## Example 1 - Selection Based on Response Rates Above Control
+# Example 1 - Selection Based on Response Rates Above Control
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpThatAreBetterThanCtrl.R" class="alert-link">SelectExpThatAreBetterThanCtrl.R</a></p>
@@ -69,7 +77,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 2 - Selection Based on P-Value Less Than Specified
+# Example 2 - Selection Based on P-Value Less Than Specified
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpWithPValueLessThanSpecified.R" class="alert-link">SelectExpWithPValueLessThanSpecified.R</a></p>
@@ -104,7 +112,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 3 - Select Treatments With Highest Number of Responses
+# Example 3 - Select Treatments With Highest Number of Responses
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectSpecifiedNumberOfExpWithHighestResponses.R" class="alert-link">SelectSpecifiedNumberOfExpWithHighestResponses.R</a></p>
@@ -145,7 +153,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 4 - Selection Based on Bayesian Posterior Probabilities
+# Example 4 - Selection Based on Bayesian Posterior Probabilities
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpUsingBayesianRule.R" class="alert-link">SelectExpUsingBayesianRule.R</a></p>
