@@ -33,12 +33,10 @@ This example demonstrates how to add the ability to generate patient arrival tim
 
 <details>
 <summary>**Randomization of Subjects**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
-This example illustrates three ways to customize how subjects are assigned to treatment arms in East Horizon: using a uniform distribution, using the `sample()` function, and using the `randomizeR` package.
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Any # of Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
+This example illustrates four ways to customize how subjects are assigned to treatment arms in East Horizon: using a uniform distribution, using the `sample()` function, using the `randomizeR` package, and in the context of a multi-arm trial.
 [Click here to view the full example.](PatientRandomization.html)
 </details>
-
-The description for the Multiple Arm example is not available yet, but the example can be found [here](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizeSubjectsAcrossMultipleArms.R).
 
 ---
 
