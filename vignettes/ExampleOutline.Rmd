@@ -90,6 +90,12 @@ This example covers a specific situation where the patient data simulation needs
 [Click here to view the full example.](ChildhoodAnxiety.html)
 </details>
 
+<details>
+<summary>**PK/PD Modeling for Patient Simulation**</summary>
+This example illustrates three approaches to customizing patient outcome simulations in East Horizon using PK/PD modeling: simulating plasma drug concentrations via a one-compartment model with first-order absorption and elimination, translating concentrations into effects through an Emax model to produce continuous outcomes, and integrating externally sourced PK/PD data from a CSV file.
+[Click here to view the full example.](PKPDResponseGeneration.html)
+</details>
+
 Descriptions for the Multiple Arm examples are not available yet, but the examples can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/). Similarly, examples for Dual Endpoints can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/).
 
 ---
