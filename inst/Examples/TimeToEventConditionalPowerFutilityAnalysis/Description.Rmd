@@ -9,8 +9,18 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>. Click on the link for more information about this integration point.</p>
-</div>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointAnalysisTimeToEvent.html" class="alert-link">**Integration Point: Analysis - Time-to-Event Outcome**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Time-to-Event Outcome</li>
+<li>**Task:** Design</li>
+<li>**Test:** Logrank Test Given Accrual Duration and Study Duration (Parallel Design)</li>
+<li>**Statistical Design**: Group Sequential, 1 IA</li>
+</ul></div>
 
 # Introduction
 

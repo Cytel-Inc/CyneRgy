@@ -5,14 +5,28 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <a href="IntegrationPointDropout.html" class="alert-link"><strong>Integration Point: Dropout</strong></a>. Click on the link for more information about this integration point.</p>
-</div>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointDropout.html" class="alert-link">**Integration Point: Dropout**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
-## Introduction
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:**
+<ul style="margin-bottom:0">
+<li>Continuous or Binary Outcome for Example 1</li>
+<li>Time-to-Event Outcome for Example 2</li>
+<li>Continuous Outcome with Repeated Measures for Example 3</li>
+</ul></li>
+<li>**Task:** Any</li>
+</ul></div>
+
+# Introduction
 
 The following examples illustrate how to customize the dropout distribution in East Horizon or East using R functions. Patients may drop out of a trial for various reasons, including safety concerns, treatment burden, or non-trial-related factors. In some cases, dropout rates can reach 30%, particularly if the drug has adverse side effects. Incorporating dropout probabilities or hazard rates is crucial during data generation and can significantly impact subsequent analysis. In all examples, we assume a trial design consisting of a control group and an experimental treatment.
 
-Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+Once CyneRgy is installed, you can load this example in RStudio with the following command:
+
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "2ArmPatientDropout" )
 ```
@@ -29,10 +43,10 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 3. [GenerateDropoutTimeForRM](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM) - Contains a function named *GenerateDropoutTimeForRM* to demonstrate the R code necessary for Example 3 as described below.
 
-# Example 1 - Dropout Using Binomial Proportion
+# Example 1 - Dropout Using Binomial Proportion (Continuous or Binary Outcome)
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="alert-link">GenerateCensoringUsingBinomialProportion.R.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R" class="alert-link">GenerateCensoringUsingBinomialProportion.R</a></p>
 </div>
 
 The R function *GenerateCensoringUsingBinomialProportion* generates the censoring indicator using the dropout probability specified in East Horizon (*ProbDrop* in the script, *Probability of Dropout* in East Horizon) for continuous or binary outcome. This function applies the binomial distribution using the `rbinom()` function in R to determine dropout status. In this case, the dropout probability is the same across both treatment groups, but this can be customized using user-defined parameters. 
@@ -66,13 +80,13 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-# Example 2 - Dropout Time For Survival
+# Example 2 - Dropout Time For Time-to-Event Outcome
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="alert-link">GenerateDropoutTimeForSurvival.R</a></p>
 </div>
 
-The function *GenerateDropoutTimeForSurvival* generates dropout times for a two-arm survival design. In this case, dropout information can be specified separately for each arm (in East Horizon, *Control* and *Treatment* in the *Dropout Rate* tab), and dropout times are drawn from an exponential distribution accordingly. The number of periods is fixed at 1.
+The function *GenerateDropoutTimeForSurvival* generates dropout times for a two-arm time-to-event design. In this case, dropout information can be specified separately for each arm (in East Horizon, *Control* and *Treatment* in the *Dropout Rate* tab), and dropout times are drawn from an exponential distribution accordingly. The number of periods is fixed at 1.
 
 This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
 
