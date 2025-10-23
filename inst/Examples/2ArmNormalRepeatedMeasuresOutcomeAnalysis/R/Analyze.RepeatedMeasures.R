@@ -135,7 +135,7 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
   }
   
   dfLongData <- reshape(dfWideData, varying = c(vResponseColumns, vVisitTimesColumns),
-                      direction = "long", sep = "", idvar = "id", timevar = "Visit")
+                        direction = "long", sep = "", idvar = "id", timevar = "Visit")
   dfLongData <- dfLongData[order(dfLongData$Visit, dfLongData$CalendarVisitTime),]
   
   if(  !is.null( LookInfo )  )
@@ -157,16 +157,16 @@ Analyze.RepeatedMeasures <- function(SimData, DesignParam, LookInfo = NULL, User
   }
   
   
-  mmrm <- gls(Response ~ TreatmentID,
-              na.action = na.omit, data = dfAnalysisData,
-              correlation = nlme::corSymm(form = ~ Visit | id),
-              weights = nlme::varIdent(form = ~ 1|Visit))
+  mmrm <- nlme::gls(Response ~ TreatmentID,
+                    na.action = na.omit, data = dfAnalysisData,
+                    correlation = nlme::corSymm(form = ~ Visit | id),
+                    weights = nlme::varIdent(form = ~ 1|Visit))
   
   dpValue <- summary(mmrm)$tTable["TreatmentID", "p-value"]
   
   # Get group sequential boundaries
   if( !is.null( LookInfo ) ){
-      vGroupSequentialBoundaries <- getDesignGroupSequential(kMax = nQtyOfLooks, alpha = DesignParam$Alpha, sided = 1, typeOfDesign = "OF")
+      vGroupSequentialBoundaries <- rpact::getDesignGroupSequential(kMax = nQtyOfLooks, alpha = DesignParam$Alpha, sided = 1, typeOfDesign = "OF")
       dAlpha <- vGroupSequentialBoundaries$alphaSpent[nLookIndex]
   } else
   {

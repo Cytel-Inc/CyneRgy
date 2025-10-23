@@ -118,13 +118,19 @@ This example demonstrates four ways to customize the statistical test in East Ho
 </details>
 
 <details>
+<summary>**Repeated Measures – Analysis**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
+This example demonstrates how to customize the statistical test in East Horizon for a two-arm trial with a continuous outcome with repeated measures using the `nlme::gls()` function.
+[Click here to view the full example.](2ArmNormalRepeatedMeasuresOutcomeAnalysis.html)
+</details>
+
+<details>
 <summary>**Weighted Conditional Power Analysis**
 <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-secondary ms-1">Design</span></summary>
 This example demonstrates how to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome using conditional power and futility boundaries based on the Logrank test.
 [Click here to view the full example.](TimeToEventConditionalPowerFutilityAnalysis.html)
 </details>
 
-Descriptions for the Multiple Arm examples are not available yet, but the examples can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/). Similarly, examples for Dual Endpoints can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/) and an example for 2-Arm Repeated Measures can be found [here](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalRepeatedMeasuresOutcomeAnalysis/R).
+Descriptions for the Multiple Arm examples are not available yet, but the examples can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/). Similarly, examples for Dual Endpoints can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/).
 
 ---
 

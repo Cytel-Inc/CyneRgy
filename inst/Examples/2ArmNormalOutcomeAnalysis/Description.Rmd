@@ -40,11 +40,11 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomeAnalysis/R) you will find the following R files:
 
-1.  [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R) - Contains a function named *AnalyzeUsingEastManualFormulaNormal* to demonstrate the R code necessary for Example 1 as described below.
+1. [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R) - Contains a function named *AnalyzeUsingEastManualFormulaNormal* to demonstrate the R code necessary for Example 1 as described below.
 
-2.  [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R) - Contains a function named *AnalyzeUsingTTestNormal* to demonstrate the R code necessary for Example 2 as described below.
+2. [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R) - Contains a function named *AnalyzeUsingTTestNormal* to demonstrate the R code necessary for Example 2 as described below.
 
-3.  [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R) - Contains a function named *AnalyzeUsingMeanLimitsOfCI* to demonstrate the R code necessary for Example 3 as described below.
+3. [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R) - Contains a function named *AnalyzeUsingMeanLimitsOfCI* to demonstrate the R code necessary for Example 3 as described below.
 
 # Example 1 - Using Formulas Q.3.3 from the East manual
 
