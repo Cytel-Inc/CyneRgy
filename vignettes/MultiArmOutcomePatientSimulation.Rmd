@@ -1,0 +1,8 @@
+---
+title: "Multiple Arm, Patient Simulation"
+author: "Gabriel Potvin and Anoop Singh Rawat"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+```{r child = '../inst/Examples/MultiArmOutcomePatientSimulation/Description.Rmd'}
+```
