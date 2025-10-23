@@ -112,7 +112,7 @@ If we were to proceed with the original sample size of 234 under realistic condi
 
 In summary, while a sample size of 234 yields a power of 90% under normal data distribution, the power decreases to around 85% when we implement a more realistic patient simulation. This highlights the importance of considering realistic conditions when determining the sample size for a study, to ensure adequate power to detect true treatment effects.
 
-# Initial R Code Developement
+# Initial R Code Development
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R" class="alert-link">SimulatePatientOutcomeCHU9.R</a></p>

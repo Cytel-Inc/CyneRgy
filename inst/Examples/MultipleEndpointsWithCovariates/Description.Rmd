@@ -28,7 +28,7 @@ To try this example, create a new project in East Horizon using the following co
 
 # Introduction
 
-The following examples illustrate how to incorporate new patient outcome simulation (*response*) and analysis (*design*) capabilities into East Horizon using R functions in the context of a two-arm trial. Each example features a trial design consisting of a standard-of-care control arm and an experimental treatment arm, with three independent patient outcomes modeled as continuous data.
+The following examples illustrate how to incorporate new patient outcome simulation (*Response*) and analysis (*Design*) capabilities into East Horizon using R functions in the context of a two-arm trial. Each example features a trial design consisting of a standard-of-care control arm and an experimental treatment arm, with three independent patient outcomes modeled as continuous data.
 
 Two of the examples include two binary covariates, and one of these also applies stratified randomization based on the covariates. All designs include a single final analysis. In the example without covariates, the response data is analyzed using a t-test. In contrast, the other two examples employ Analysis of covariance (ANCOVA) to account for covariate effects.
 
