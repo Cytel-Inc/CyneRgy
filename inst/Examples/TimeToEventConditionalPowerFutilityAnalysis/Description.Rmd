@@ -9,7 +9,7 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">The following scripts are related to the <strong>Integration Point: Analysis</strong>. <a href="IntegrationPointAnalysis.html" class="alert-link">Click here for more information about this integration point.</a></p>
+  <p style="margin-bottom:0">These examples are related to the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>. Click on the link for more information about this integration point.</p>
 </div>
 
 # Introduction

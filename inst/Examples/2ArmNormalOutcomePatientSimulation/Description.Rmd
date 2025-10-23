@@ -5,8 +5,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response - Continuous Outcome</strong>.
-  <a href="IntegrationPointResponseContinuous.html" class="alert-link">Click here for more information about this integration point.</a></p>
+  <p style="margin-bottom:0">These examples are related to the <a href="IntegrationPointResponseContinuous.html" class="alert-link"><strong>Integration Point: Response - Continuous Outcome</strong></a>. Click on the link for more information about this integration point.</p>
 </div>
 
 ## Introduction
