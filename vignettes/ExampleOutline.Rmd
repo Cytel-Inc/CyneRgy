@@ -45,13 +45,18 @@ The description for the Multiple Arm example is not available yet, but the examp
 ## Dropout
 
 <details>
-<summary>**Simulate Patient Dropout**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Any # of Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
+<summary>**2-Arm, Patient Dropout**
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
 This example illustrates how to customize the dropout distribution in East Horizon for continuous and binary outcomes, time-to-event outcome, and continuous outcome with repeated measures.
 [Click here to view the full example.](PatientDropout.html)
 </details>
 
-Descriptions for the Multiple Arm examples are not available yet, but the examples can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/).
+<details>
+<summary>**Multiple Arm, Patient Dropout**
+<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
+This example illustrates how to customize the dropout distribution in East Horizon for multi-arm trials, including for continuous and binary outcomes, and time-to-event outcome.
+[Click here to view the full example.](MultiArmPatientDropout.html)
+</details>
 
 ---
 

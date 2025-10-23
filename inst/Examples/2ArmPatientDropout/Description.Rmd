@@ -1,5 +1,5 @@
 ---
-title: "2-Arm, Single Endpoint - Simulate Patient Dropout"
+title: "2-Arm, Single Endpoint - Patient Dropout"
 author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
