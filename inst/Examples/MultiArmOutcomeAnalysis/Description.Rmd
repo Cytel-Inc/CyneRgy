@@ -27,7 +27,7 @@ To try this example, create a new project in East Horizon using the following co
 
 # Introduction
 
-The following examples illustrate how to integrate new **analysis** capabilities into East Horizon using R functions in the context of a multi-arm clinical trials. Each example demonstrates a different type of statistical endpoint (continuous, time-to-event, and binary), using standard R functions and a Bonferroni adjustment to handle multiple comparisons.
+The following examples illustrate how to integrate new **analysis** capabilities into East Horizon using R functions in the context of multi-arm clinical trials. Each example demonstrates a different type of statistical endpoint (continuous, time-to-event, and binary), using standard R functions and a Bonferroni adjustment to handle multiple comparisons.
 
 In the [directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmOutcomeAnalysis) you will find the following R files:
 

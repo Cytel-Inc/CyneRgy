@@ -93,13 +93,17 @@ This example demonstrates how to customize the patient outcome simulation in Eas
 </details>
 
 <details>
+<summary>**Dual Endpoints – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-secondary ms-1">Explore</span></summary>
+This example demonstrates how to customize the patient outcome simulation in East Horizon for two-arm trials with dual endpoints (TTE-TTE).
+[Click here to view the full example.](DEPOutcomePatientSimulation.html)
+</details>
+
+<details>
 <summary>**Childhood Anxiety Trial**
 <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-secondary ms-1">Explore</span></summary>
 This example covers a specific situation where the patient data simulation needs to be customized to match what is expected in a clinical trial in childhood anxiety.  
 [Click here to view the full example.](ChildhoodAnxiety.html)
 </details>
-
-Descriptions for Dual Endpoints can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/).
 
 ---
 
@@ -139,13 +143,17 @@ This example demonstrates how to customize the statistical test in East Horizon 
 </details>
 
 <details>
+<summary>**Dual Endpoints – Analysis**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-warning ms-1">TTE-Binary</span><span class="badge text-bg-secondary ms-1">Explore</span></summary>
+This example demonstrates how to customize the statistical test in East Horizon for two-arm trials with dual endpoints.
+[Click here to view the full example.](DEPOutcomeAnalysis.html)
+</details>
+
+<details>
 <summary>**Weighted Conditional Power Analysis**
 <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-secondary ms-1">Design</span></summary>
 This example demonstrates how to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome using conditional power and futility boundaries based on the Logrank test.
 [Click here to view the full example.](TimeToEventConditionalPowerFutilityAnalysis.html)
 </details>
-
-Descriptions for the Multiple Arm examples are not available yet, but the examples can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/). Similarly, examples for Dual Endpoints can be found in [this folder](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/).
 
 ---
 

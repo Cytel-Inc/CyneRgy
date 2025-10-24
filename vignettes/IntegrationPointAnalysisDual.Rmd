@@ -5,8 +5,6 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-to do (now it's tte copy paste)
-
 [$\leftarrow$ Go back to the *Integration Point: Analysis* page](IntegrationPointAnalysis.html)
 
 # Input Variables
