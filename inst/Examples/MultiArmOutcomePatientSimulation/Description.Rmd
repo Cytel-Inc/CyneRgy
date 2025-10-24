@@ -15,7 +15,7 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Endpoint type:**</li>
 <ul style="margin-bottom:0">
 <li>Continuous Outcome for Example 1</li>
-<li>Time-to-Even Outcome for Example 2</li>
+<li>Time-to-Event Outcome for Example 2</li>
 <li>Binary Outcome for Example 3</li>
 </ul>
 <li>**Task:** Any</li>
@@ -23,7 +23,7 @@ To try this example, create a new project in East Horizon using the following co
 
 # Introduction
 
-The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon using R functions in the context of a multi-arm clinical trials.
+The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon using R functions in the context of a multi-arm clinical trials. Each example demonstrates a different type of statistical endpoint (continuous, time-to-event, and binary).
 
 In the [directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmOutcomePatientSimulation) you will find the following R files:
 

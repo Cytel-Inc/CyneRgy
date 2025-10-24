@@ -133,6 +133,12 @@ This example demonstrates how to customize the statistical test in East Horizon 
 </details>
 
 <details>
+<summary>**Multiple Arm – Analysis**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-warning ms-1">Binary</span></summary>
+This example demonstrates how to customize the statistical test in East Horizon for multi-arm trials, covering continuous, binary, and time-to-event outcomes.
+[Click here to view the full example.](MultiArmOutcomeAnalysis.html)
+</details>
+
+<details>
 <summary>**Weighted Conditional Power Analysis**
 <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-secondary ms-1">Design</span></summary>
 This example demonstrates how to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome using conditional power and futility boundaries based on the Logrank test.
