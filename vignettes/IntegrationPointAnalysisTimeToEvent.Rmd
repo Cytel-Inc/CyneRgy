@@ -545,11 +545,6 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 # Examples
 
-<details>
-<summary>**Time-To-Event Weighted Conditional Power Futility Analysis**</summary>
-This example demonstrates how to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome using conditional power and futility boundaries based on the Logrank test.
-[Click here to view the full example.](TimeToEventConditionalPowerFutilityAnalysis.html)
-
 Explore the following examples for more context:
 
 1. [**2-Arm, Time-To-Event Outcome - Analysis**](2ArmTimeToEventOutcomeAnalysisDescription.html)
@@ -558,5 +553,5 @@ Explore the following examples for more context:
     - [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R)
 2. [**Time-To-Event Weighted Conditional Power Futility Analysis**](TimeToEventConditionalPowerFutilityAnalysis.html)
     - [AnalzyeTTEWithConditinalPowerFutility.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R)
-3. **Multiple Arm, Time-To-Event Outcome - Analysis**
+3. [**Multiple Arm, Analysis**](MultiArmOutcomeAnalysis.html)
     - [AnalyzeUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/TimeToEvent/R/AnalyzeUsingLogrankTestBonferroni.R)

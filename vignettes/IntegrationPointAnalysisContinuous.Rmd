@@ -507,5 +507,5 @@ Explore the following examples for more context:
     - [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R)
     - [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R)
     - [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R)
-2. **Multiple Arm, Continuous Outcome - Analysis**
+2. [**Multiple Arm, Analysis**](MultiArmOutcomeAnalysis.html)
     - [AnalyzeUsingTTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/Normal/R/AnalyzeUsingTTestBonferroni.R)

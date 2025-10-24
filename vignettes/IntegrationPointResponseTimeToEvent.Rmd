@@ -65,5 +65,5 @@ Explore the following examples for more context:
 1. [**2 Arm, Time-To-Event Outcome - Patient Simulation**](2ArmTimeToEventOutcomePatientSimulationDescription.html)
     - [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R)
     - [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R)
-2. **Multiple Arm, Time-To-Event Outcome - Patient Simulation**
+2. [**Multiple Arm, Patient Simulation**](MultiArmOutcomePatientSimulation.html)
     - [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/TimeToEvent/R/SimulatePatientSurvivalWeibull.R)

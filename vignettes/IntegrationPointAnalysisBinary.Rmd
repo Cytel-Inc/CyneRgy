@@ -506,5 +506,5 @@ Explore the following examples for more context:
     - [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R)
     - [AnalyzeUsingPropLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R)
     - [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R)
-2. **Multiple Arm, Binary Outcome - Analysis**
+2. [**Multiple Arm, Analysis**](MultiArmOutcomeAnalysis.html)
     - [AnalyzeUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/Binary/R/AnalyzeUsingPropTestBonferroni.R)

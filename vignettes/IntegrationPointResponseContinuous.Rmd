@@ -83,5 +83,5 @@ Explore the following examples for more context:
 2. [**Childhood Anxiety Trial**](ChildhoodAnxiety.html)
     - [SimulatePatientOutcomeCHU9.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R)
     - [SimulatePatientOutcomeCHU9V2.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9V2.R)
-3. **Multiple Arm, Continuous Outcome - Patient Simulation**
+3. [**Multiple Arm, Patient Simulation**](MultiArmOutcomePatientSimulation.html)
     - [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/Normal/R/SimulatePatientOutcomePercentAtZero.R)
