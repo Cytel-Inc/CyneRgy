@@ -1,0 +1,9 @@
+---
+title: 'Integration Point: Multiplicity Adjustment'
+author: "Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+[$\leftarrow$ Go back to the *Getting Started: Overview* page](Overview.html)
+

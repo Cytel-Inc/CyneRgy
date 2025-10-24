@@ -168,6 +168,16 @@ This example demonstrates four ways to customize the treatment selection in East
 
 ---
 
+## Multiplicity Adjustment
+
+<details>
+<summary>**Dual Endpoints - Multiplicity Adjustment**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-warning ms-1">TTE-Binary</span><span class="badge text-bg-secondary ms-1">Explore</span></summary>
+This example demonstrates how to compute decisions for a dual-endpoint fixed sample clinical trial using the Bonferroni adjustment for multiple testing.
+[Click here to view the full example.](DEPDecisionsUsingMCP.html)
+</details>
+
+---
+
 ## Advanced Examples
 
 These examples use more than one integration point in the same project to achieve a more complex design option.
