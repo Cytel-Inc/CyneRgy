@@ -14,7 +14,7 @@
 #'
 #' @param lIntPoints A named list where each name is an integration point (e.g., "Response") 
 #'        and each element is a character vector of step labels for that integration point.
-#'        Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment Selection", "Response", "Analysis"
+#'        Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment Selection", "Response", "Analysis", "Multiplicity Adjustment"
 #' @param nBoxHeight Numeric. Base height of each step box. Default = 0.7.
 #' @param nBoxSpacing Numeric. Vertical spacing between boxes. Default = 0.3.
 #' @param nColumnWidth Numeric. Width of unused integration point columns. Default = 0.5.
@@ -82,7 +82,8 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
     
     # Integration points order
     vIntegrationPoints <- c("Initialization", "Enrollment", "Randomization",
-                            "Dropout", "Treatment Selection", "Response", "Analysis")
+                            "Dropout", "Treatment Selection", "Response",
+                            "Analysis", "Multiplicity Adjustment")
     
     # Setup column positions
     nXStart <- 0
