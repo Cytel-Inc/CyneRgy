@@ -38,7 +38,7 @@ This integration point is available in East Horizon Explore for the following st
 
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
+|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
 
@@ -117,7 +117,7 @@ You can set up a response function under **Distribution** in a **Response Card**
 <details>
 <summary>Follow these steps (click to expand/collapse):</summary>
 
-1. Select **User Specified-R** from the dropdown in the **Distribution** field in the **Response Card**.
+1. Select **User Specified-R** from the dropdown in the **Distribution** field in the **Response Card**. For Dual Endpoints, it will be under **Response Generation Method**.
 1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
 1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
 1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.

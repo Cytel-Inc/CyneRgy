@@ -26,7 +26,7 @@ This integration point is available in East Horizon Explore for the following st
 
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
+|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
 
@@ -188,7 +188,7 @@ Used to load libraries in the following examples:
 1.  [**2-Arm, Normal Outcome, Repeated Measures - Patient Simulation**](2ArmNormalRepeatedMeasuresResponseGeneration.html)
     - [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R)
     - [LibraryNIme.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryNIme.R)
-1. **2-Arm, Normal Outcome, Repeated Measures - Analysis**
+1. [2-Arm, Normal Outcome, Repeated Measures - Analysis](2ArmNormalRepeatedMeasuresOutcomeAnalysis.html)
     - [LibraryRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresOutcomeAnalysis/R/LibraryRM.R)
 1. [**2-Arm, Time-To-Event Outcome - Analysis**](2ArmTimeToEventOutcomeAnalysisDescription.html)
     - [Librarysurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/Librarysurvival.R)
