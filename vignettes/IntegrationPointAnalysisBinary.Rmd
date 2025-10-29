@@ -501,10 +501,10 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Binary Outcome - Analysis**](2ArmBinaryOutcomeAnalysisDescription.html)
+1. [**2-Arm, Binary Outcome - Analysis**](2ArmBinaryOutcomeAnalysis.html)
     - [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R)
     - [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R)
     - [AnalyzeUsingPropLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R)
     - [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R)
-2. [**Multiple Arm, Analysis**](MultiArmOutcomeAnalysis.html)
-    - [AnalyzeUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/Binary/R/AnalyzeUsingPropTestBonferroni.R)
+2. [**Multiple Arm, Analysis**](MultiArmAnalysis.html)
+    - [AnalyzeMultiArmUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R)

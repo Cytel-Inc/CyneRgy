@@ -1,0 +1,100 @@
+---
+title: "Dual Endpoints - Analysis"
+author: "Gabriel Potvin, Anoop Singh Rawat, Pradip Maske"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+---
+
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointAnalysisDual.html" class="alert-link">**Integration Point: Analysis - Dual Endpoints**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Dual Endpoints</li>
+<li>**Endpoint type:**</li>
+<ul style="margin-bottom:0">
+<li>*Time-to-Event - Time-to-Event* for Example 1</li>
+<li>*Time-to-Event - Binary* for Example 2</li>
+</ul>
+<li>**Task:** Explore</li>
+</ul></div>
+
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">**Note:** This example is compatible with both Fixed Sample and Group Sequential statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly.</p>
+</div>
+
+# Introduction
+
+The following examples illustrate how to integrate new *analysis* capabilities into East Horizon using R functions in the context of 2-arm clinical trials with dual endpoints. These functions can be customized to support complex evaluation rules, correlated outcomes, and flexible statistical designs.
+
+The first example illustrates how to perform a modestly weighted log-rank test on dual **time-to-event (TTE)** endpoints, while the second example shows how to combine a **TTE endpoint with a binary endpoint** using a Fisher's Exact Test. Together, these examples highlight how to extend East Horizon's analytical framework to support hybrid designs that evaluate multiple correlated clinical outcomes.
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DEPOutcomeAnalysis/R) you will find the following R files:
+
+1. [AnalyzeDEPUsingModWtLogRank.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/R/AnalyzeDEPUsingModWtLogRank.R) - Performs the analysis for dual time-to-event endpoints using a modestly weighted log-rank test.
+
+2. [AnalyzeDEPUsingFisherExact.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/R/AnalyzeDEPUsingFisherExact.R) - Performs the analysis for dual endpoints (TTE + binary) using a Fisher's Exact Test.
+
+# Example 1 - Analysis for Dual TTE-TTE Endpoints
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/R/AnalyzeDEPUsingModWtLogRank.R" class="alert-link">AnalyzeDEPUsingModWtLogRank.R</a></p>
+</div>
+
+The function *AnalyzeDEPUsingModWtLogRank* demonstrates how to compute a **modestly weighted log-rank test statistic** for two correlated time-to-event endpoints.  
+
+The function reads subject-level simulated data, filters observations up to the current analysis time, and computes observed times and event indicators based on censoring and response times. A Cox proportional hazards model is used to estimate the hazard ratio between treatment and control arms, which provides an interpretable measure of treatment effect.
+
+The modestly weighted log-rank test gives higher weights to early events and reduces sensitivity to late ones, making it particularly useful when treatment effects are expected to manifest early. The weighting scheme adjusts dynamically depending on user-defined parameters such as delay periods and information fractions for interim looks.  
+
+This approach is flexible and handle both fixed sample and group sequential designs with multiple interim analyses.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Analysis" = c(
+            "Load simulated survival data from East Horizon",
+            "Compute event times for both TTE endpoints",
+            "Estimate hazard ratios using Cox proportional hazards models",
+            "Compute modestly weighted log-rank test statistics for both endpoints",
+            "Convert test statistics to Z-scale",
+            "Return Z-scores and hazard ratios"
+        )
+    ),
+    bShowMultiplicityAdjustment = TRUE
+)
+```
+
+# Example 2 - Analysis for Dual TTE-Binary Endpoints
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/R/AnalyzeDEPUsingFisherExact.R" class="alert-link">AnalyzeDEPUsingFisherExact.R</a></p>
+</div>
+
+The *AnalyzeDEPUsingFisherExact* function shows how to analyze trials with one time-to-event and one binary endpoint. In this case, the binary endpoint is analyzed using a **Fisher’s Exact Test**, which compares the proportion of responders between treatment arms without relying on asymptotic assumptions. This is particularly useful for smaller studies or endpoints with low event rates.  
+
+The function extracts the relevant response and treatment information from simulated patient data, constructs a 2×2 contingency table, and computes both the test statistic and the associated *p-value*. The results are then expressed on the Z-scale for integration into East Horizon’s simulation engine.  
+
+When combined with the TTE endpoint analysis, this dual-endpoint framework enables evaluation of composite success criteria, such as "success if at least one endpoint is significant" or "success only if both endpoints are significant". This flexibility allows modeling of real-world confirmatory trial designs involving co-primary or hierarchical hypotheses.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Analysis" = c(
+            "Load simulated subject-level data from East Horizon",
+            "For the TTE endpoint: compute event times, censoring, and log-rank test statistic",
+            "For the binary endpoint: create 2x2 contingency table and run Fisher’s Exact Test",
+            "Convert both test results to Z-scale",
+            "Return Z-scores"
+        )
+    )
+)
+```

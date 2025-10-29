@@ -203,7 +203,7 @@ Randomize <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
 
 Explore the following examples for more context:
 
-1. [**Randomization of Subjects**](PatientRandomization.html)
+1. [**Randomization of Subjects**](RandomizeSubjects.html)
     - [RandomizationSubjectsUsingUniformDistribution.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R)
     - [RandomizationSubjectsUsingSampleFunctionInR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R)
     - [BlockRandomizationSubjectsUsingRPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R)

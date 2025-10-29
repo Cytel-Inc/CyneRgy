@@ -77,11 +77,11 @@ GenerateResponse <- function( NumSub, NumArms, TreatmentID, Mean, StdDev, UserPa
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Continuous Outcome - Patient Simulation**](2ArmNormalOutcomePatientSimulationDescription.html)
+1. [**2-Arm, Continuous Outcome - Patient Simulation**](2ArmNormalOutcomePatientSimulation.html)
     - [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.R)
     - [SimulatePatientOutcomePercentAtZeroBetaDist.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.R)
 2. [**Childhood Anxiety Trial**](ChildhoodAnxiety.html)
     - [SimulatePatientOutcomeCHU9.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R)
     - [SimulatePatientOutcomeCHU9V2.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9V2.R)
-3. [**Multiple Arm, Patient Simulation**](MultiArmOutcomePatientSimulation.html)
-    - [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/Normal/R/SimulatePatientOutcomePercentAtZero.R)
+3. [**Multiple Arm, Patient Simulation**](MultiArmPatientSimulation.html)
+    - [SimulatePatientOutcomeMultiArmPercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.R)

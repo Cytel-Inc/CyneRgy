@@ -24,11 +24,15 @@ To try this example, create a new project in East Horizon using the following co
 
 The following examples illustrate how to integrate new *multiplicity adjustment* capabilities into East Horizon using R functions in the context of 2-arm clinical trials with dual endpoints.
 
-In the [directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DEPDecisionsUsingMCP) you will find the following R file:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DEPDecisionsUsingMCP/R) you will find the following R file:
 
-1. [GetDEPDecisions.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPDecisionsUsingMCP/GetDEPDecisions.R) - Performs multiplicity-adjusted decision-making for dual endpoints using Z-scale test statistics.
+1. [GetDEPDecisionsFSD.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPDecisionsUsingMCP/R/GetDEPDecisionsFSD.R) - Performs multiplicity-adjusted decision-making for dual endpoints using Z-scale test statistics.
 
 # Example 1 - Fixed Sample Dual Endpoints Multiplicity Adjustment
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPDecisionsUsingMCP/R/GetDEPDecisionsFSD.R" class="alert-link">GetDEPDecisionsFSD.R</a></p>
+</div>
 
 The *GetDEPDecisionsFSD* function computes decisions for a dual-endpoint fixed sample clinical trial using the Bonferroni adjustment for multiple testing.
 

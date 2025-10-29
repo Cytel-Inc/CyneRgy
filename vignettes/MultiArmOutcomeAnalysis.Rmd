@@ -1,8 +1,0 @@
----
-title: "Multiple Arm, Analysis"
-author: "Gabriel Potvin and Anoop Singh Rawat"
-date: "`r format(Sys.time(), '%B %d, %Y')`"
----
-
-```{r child = '../inst/Examples/MultiArmOutcomeAnalysis/Description.Rmd'}
-```

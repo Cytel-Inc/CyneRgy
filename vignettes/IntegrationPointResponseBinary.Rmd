@@ -81,5 +81,5 @@ Explore the following examples for more context:
 1. [**2-Arm, Binary Outcome - Patient Simulation**](2ArmBinaryOutcomePatientSimulation.html)
     - [SimulatePatientOutcomePercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.Binary.R)
     - [SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R)
-2. [**Multiple Arm, Patient Simulation**](MultiArmOutcomePatientSimulation.html)
-    - [SimulatePatientOutcomePercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/Binary/R/SimulatePatientOutcomePercentAtZero.Binary.R)
+2. [**Multiple Arm, Patient Simulation**](MultiArmPatientSimulation.html)
+    - [SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R)

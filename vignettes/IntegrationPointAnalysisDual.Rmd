@@ -126,6 +126,6 @@ PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 Explore the following examples for more context:
 
-1. [**Dual Endpoints - Analysis**](DEPOutcomeAnalysis.html)
-    - [AnalyzeDEPUsingFisherExact.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/AnalyzeDEPUsingFisherExact.R)
-    - [AnalyzeDEPUsingModWtLogRank.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/AnalyzeDEPUsingModWtLogRank.R)
+1. [**Dual Endpoints - Analysis**](DEPAnalysis.html)
+    - [AnalyzeDEPUsingFisherExact.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPAnalysis/R/AnalyzeDEPUsingFisherExact.R)
+    - [AnalyzeDEPUsingModWtLogRank.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPAnalysis/R/AnalyzeDEPUsingModWtLogRank.R)

@@ -547,11 +547,11 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Time-To-Event Outcome - Analysis**](2ArmTimeToEventOutcomeAnalysisDescription.html)
+1. [**2-Arm, Time-To-Event Outcome - Analysis**](2ArmTimeToEventOutcomeAnalysis.html)
     - [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R)
     - [AnalyzeUsingHazardRatioLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R)
     - [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R)
 2. [**Time-To-Event Weighted Conditional Power Futility Analysis**](TimeToEventConditionalPowerFutilityAnalysis.html)
     - [AnalzyeTTEWithConditinalPowerFutility.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R)
-3. [**Multiple Arm, Analysis**](MultiArmOutcomeAnalysis.html)
-    - [AnalyzeUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomeAnalysis/TimeToEvent/R/AnalyzeUsingLogrankTestBonferroni.R)
+3. [**Multiple Arm, Analysis**](MultiArmAnalysis.html)
+    - [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R)

@@ -93,6 +93,7 @@ GenerateResponse <- function( NumSub, NumArm, TreatmentID, EndpointType, Endpoin
 
 Explore the following examples for more context:
 
-1. [**Dual Endpoints - Patient Simulation**](DEPOutcomePatientSimulation.html)
-    - [SimulatePatientOutcomeSurvSurvSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/SimulatePatientOutcomeSurvSurvSingleHazardPiece.R)
+1. [**Dual Endpoints - Patient Simulation**](DEPPatientSimulation.html)
+    - [SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R)
+    - [SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R)
     
