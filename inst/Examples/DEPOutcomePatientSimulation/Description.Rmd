@@ -51,6 +51,7 @@ CyneRgy::PlotExampleFlowchart(
             "Assemble endpoint responses for each subject",
             "Return Response list"
         )
-    )
+    ),
+    bShowMultiplicityAdjustment = TRUE
 )
 ```

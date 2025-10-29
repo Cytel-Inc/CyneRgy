@@ -67,7 +67,8 @@ CyneRgy::PlotExampleFlowchart(
             "Convert test statistics to Z-scale",
             "Return Z-scores and hazard ratios"
         )
-    )
+    ),
+    bShowMultiplicityAdjustment = TRUE
 )
 ```
 
