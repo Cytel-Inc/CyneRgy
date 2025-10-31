@@ -13,7 +13,7 @@ while unused points remain gray placeholders. Steps are automatically wrapped to
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,9 @@ while unused points remain gray placeholders. Steps are automatically wrapped to
 <span>  nBoxHeight <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  nBoxSpacing <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  nColumnWidth <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  nBigColWidth <span class="op">=</span> <span class="fl">3</span></span>
+<span>  nBigColWidth <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  bShowTreatmentSelection <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  bShowMultiplicityAdjustment <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,7 +86,8 @@ while unused points remain gray placeholders. Steps are automatically wrapped to
 <dl><dt id="arg-lintpoints">lIntPoints<a class="anchor" aria-label="anchor" href="#arg-lintpoints"></a></dt>
 <dd><p>A named list where each name is an integration point (e.g., "Response")
 and each element is a character vector of step labels for that integration point.
-Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment Selection", "Response", "Analysis"</p></dd>
+Options: "Initialization", "Enrollment", "Randomization", "Dropout",
+"Treatment Selection", "Response", "Analysis", "Multiplicity Adjustment"</p></dd>
 
 
 <dt id="arg-nboxheight">nBoxHeight<a class="anchor" aria-label="anchor" href="#arg-nboxheight"></a></dt>
@@ -101,6 +104,14 @@ Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment 
 
 <dt id="arg-nbigcolwidth">nBigColWidth<a class="anchor" aria-label="anchor" href="#arg-nbigcolwidth"></a></dt>
 <dd><p>Numeric. Width of used integration point columns. Default = 3.</p></dd>
+
+
+<dt id="arg-bshowtreatmentselection">bShowTreatmentSelection<a class="anchor" aria-label="anchor" href="#arg-bshowtreatmentselection"></a></dt>
+<dd><p>Logical. Whether to include the "Treatment Selection" column. Default = FALSE.</p></dd>
+
+
+<dt id="arg-bshowmultiplicityadjustment">bShowMultiplicityAdjustment<a class="anchor" aria-label="anchor" href="#arg-bshowmultiplicityadjustment"></a></dt>
+<dd><p>Logical. Whether to include the "Multiplicity Adjustment" column. Default = FALSE.</p></dd>
 
 </dl></div>
     <div class="section level2">
