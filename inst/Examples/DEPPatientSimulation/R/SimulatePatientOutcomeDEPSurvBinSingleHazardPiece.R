@@ -1,6 +1,15 @@
 #' @name SimulatePatientOutcomeDEPSurvBinSingleHazardPiece
 #' @author Pradip Maske, Anoop Singh Rawat
 #' @title Simulate patient outcomes for Survival-Survival Dual Endpoint design using single piece hazard rates as inputs. 
+#' 
+#' @description
+#' In this example, the response (Survival times) is generated for two correlated Time to Event Endpoints.
+#' The hazard inputs are single piece hazard rates in this example.
+#' The steps to simulating patient data in this example follows a two-step procedure.  
+#' Step 1: Generate two standard normal samples, each of size NumSub. 
+#' Step 2: Transform the sample to be correlated (on normal scale) as per the specified input. 
+#' Step 3: Convert the normal responses to the TTE (exponential) responses by using corresponding endpoints hazard input.
+#' 
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
@@ -56,83 +65,75 @@
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     } 
-
-
-
-#' In this example, the response (Survival times) is generated for two correlated Time to Event Endpoints.
-#' The hazard inputs are single piece hazard rates in this example.
-#' The steps to simulating patient data in this example follows a two-step procedure.  
-#'  Step 1: Generate two standard normal samples, each of size NumSub. 
-#'  Step 2: Transform the sample to be correlated (on normal scale) as per the specified input. 
-#'  Step 3: Convert the normal responses to the TTE (exponential) responses by using corresponding endpoints hazard input.
  
-SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime=NULL, TreatmentID, 
+SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime = NULL, TreatmentID, 
                                                                EndpointType, EndpointName, Correlation, 
                                                                SurvMethod, NumPrd, PrdTime, 
-                                                               SurvParam, PropResp=NULL, UserParam = NULL )
+                                                               SurvParam, PropResp = NULL, UserParam = NULL )
 {
-    Error               <- 0
-    vPatientOutcomeEP1  <- rep( 0, NumSub )  
-    vPatientOutcomeEP2  <- rep( 0, NumSub )  
-    Response            <- list()
+    nError               <- 0
+    vPatientOutcomeEP1   <- rep( 0, NumSub )  
+    vPatientOutcomeEP2   <- rep( 0, NumSub )  
+    lResponse            <- list()
     
-    if( !is.null( UserParam ) )
+    if( !is.null( UserParam ))
     {
       # Customized logic for data generation using UserParam will go here.
-    } else 
+    }
+    else 
     {
       # Get correlation matrix given qualitative correlation input
-      mCor <- GetCorrMatrix(Correlation)
+      mCor <- GetCorrMatrix( Correlation )
         
       # Cholesky decomposition of correlation matrix
-      mChol <- chol(mCor)
+      mChol <- chol( mCor )
       
       # Generating (NumSub * 2) standard normal responses 
-      mZ <- matrix( rnorm( NumSub*2, 0, 1 ), ncol = 2)
+      mZ <- matrix( rnorm( NumSub*2, 0, 1 ), ncol = 2 )
       
       # Intermediate matrix
       mNormResp <- mZ %*% mChol
  
       # Thresholds for binary EP
-      threshold <- qnorm(PropResp[[2]])
+      threshold <- qnorm( PropResp[[ 2 ]])
       
-      for(nSubjID in 1:NumSub) 
+      for( nSubjID in 1:NumSub ) 
       {
         # EP1: Survival time
-        vPatientOutcomeEP1[nSubjID] <- (- log(pnorm(mNormResp[nSubjID, 1]))/ SurvParam[[1]][1, TreatmentID[nSubjID]+1])
+        vPatientOutcomeEP1[ nSubjID ] <- (- log( pnorm( mNormResp[ nSubjID, 1 ])) / SurvParam[[ 1 ]][ 1, TreatmentID[ nSubjID ] + 1 ])
         
         # EP2: Binary outcome using inverse probability transform
-        vPatientOutcomeEP2[nSubjID] <- as.numeric(mNormResp[nSubjID, 2] < threshold[TreatmentID[nSubjID]+1])
+        vPatientOutcomeEP2[ nSubjID ] <- as.numeric( mNormResp[ nSubjID, 2 ] < threshold[ TreatmentID[ nSubjID ] + 1 ])
       }
-      if(length(vPatientOutcomeEP1) !=NumSub || any(is.na(vPatientOutcomeEP1)==TRUE) ||
-         length(vPatientOutcomeEP2) !=NumSub || any(is.na(vPatientOutcomeEP2)==TRUE))
+      if( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
+          length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ))
       {
-        Error <- -100
+        nError <- -100
       }
     } 
     
-    Response[[EndpointName[[1]]]] <- vPatientOutcomeEP1
-    Response[[EndpointName[[2]]]] <- vPatientOutcomeEP2
+    lResponse[[ EndpointName[[ 1 ]]]] <- vPatientOutcomeEP1
+    lResponse[[ EndpointName[[ 2 ]]]] <- vPatientOutcomeEP2
     
-  return( list( Response = as.list( Response ), ErrorCode = as.integer( Error ) ) )
+  return( list( Response = as.list( lResponse ), ErrorCode = as.integer( nError )))
 }
 
 
 # Helper function to create correlation matrix given qualitative correlation
 GetCorrMatrix <- function(Correlation) 
 {
-  rho <- ifelse( Correlation == 0, 0, 
-                 ifelse( Correlation == 1, 0.15,
-                 ifelse( Correlation == 2, 0.3,
-                 ifelse( Correlation == 3, 0.5,
-                 ifelse( Correlation == 4, 0.7,
-                 ifelse( Correlation == 5, 0.85,
-                 ifelse( Correlation == -1, -0.15,
-                 ifelse( Correlation == -2, -0.3,
-                 ifelse( Correlation == -3, -0.5,
-                 ifelse( Correlation == -4, -0.7,
-                 ifelse( Correlation == -5, -0.85 ) ) ) ) ) ) ) ) ) ) )
+  rho <- ifelse( Correlation == 0,  0,
+         ifelse( Correlation == 1,  0.15,
+         ifelse( Correlation == 2,  0.3,
+         ifelse( Correlation == 3,  0.5,
+         ifelse( Correlation == 4,  0.7,
+         ifelse( Correlation == 5,  0.85,
+         ifelse( Correlation == -1, -0.15,
+         ifelse( Correlation == -2, -0.3,
+         ifelse( Correlation == -3, -0.5,
+         ifelse( Correlation == -4, -0.7,
+         ifelse( Correlation == -5, -0.85 )))))))))))
   
   # Return the 2x2 correlation matrix
-  return( matrix( c(1, rho, rho, 1), nrow = 2) )
+  return( matrix( c( 1, rho, rho, 1 ), nrow = 2 ))
 }

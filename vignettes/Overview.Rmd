@@ -43,8 +43,6 @@ For comprehensive details about each integration point, please refer to the foll
 
 <a href="IntegrationPointMultiplicityAdjustment.html" class="btn btn-primary"><i class="fas fa-calculator"></i>Multiplicity Adjustment</a>
 
-[//]: # (Comment: Possibly to add - Survival Assurance?, Re-Estimate Events?, Adapt Test Statistics?)
-
 ::::
 
 ## Additional Resources

@@ -45,17 +45,16 @@
 #'  The required function signature for integration with East Horizon includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 #'  and only the parameters in UserParam are utilized.  
 #'  @export
-SimulatePatientSurvivalMultiArmWeibull<- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
-{
-   
 
+SimulatePatientSurvivalMultiArmWeibull <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
+{
     # Step 1 - Initialize the return variables or other variables needed ####    
     vSurvTime    <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
-    vTreatmentID <- TreatmentID +1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
-    ErrorCode    <- as.integer( 0 )
+    vTreatmentID <- TreatmentID + 1    # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
+    nErrorCode   <- as.integer( 0 )
     
     # Step 2 - Validate custom variable input and set defaults ####
-    if( is.null( UserParam ) )
+    if( is.null( UserParam ))
     {
         
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
@@ -74,12 +73,12 @@ SimulatePatientSurvivalMultiArmWeibull<- function(NumSub, NumArm, TreatmentID, S
     # Simulate the patient survival times based on the treatment
     # For the Hazard Rate input with 1 piece, this is just simulating from an exponential distribution as an example and results will match
     # East if you used the build hazard option.
-    for( nPatIndx in 1:NumSub)
+    for( nPatIndx in 1:NumSub )
     {
         nPatientTreatment     <- vTreatmentID[ nPatIndx ]
-        vSurvTime[ nPatIndx ] <- rweibull( 1, vShapes[ nPatientTreatment ], vScales[ nPatientTreatment ] )
+        vSurvTime[ nPatIndx ] <- rweibull( 1, vShapes[ nPatientTreatment ], vScales[ nPatientTreatment ])
         
     }
     
-    return( list(SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode) )
+    return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = nErrorCode ))
 }

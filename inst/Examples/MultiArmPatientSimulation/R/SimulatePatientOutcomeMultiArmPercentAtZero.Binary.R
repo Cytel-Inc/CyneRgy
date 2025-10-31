@@ -32,22 +32,22 @@
 #'  UserParam$dProbOfTreatmentResistantExp1 or UserParam$dProbOfTreatmentResistantExp2
 #' Step 2: If the patient is determined to be treatment resistant in Step 1, their outcome is set to 0. Otherwise, their outcome is simulated from
 #' a binomial distribution using the response probabilities provided in PropResp. 
-SimulatePatientOutcomeMultiArmPercentAtZero.Binary <- function(NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL)
+SimulatePatientOutcomeMultiArmPercentAtZero.Binary <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
 {
 
     # If the user did not specify the user parameters, but still called this function then the probability
     # of treatment resistant is 0 for both treatments
-    if( is.null( UserParam ) )
+    if( is.null( UserParam ))
     {
         UserParam <- list( dProbOfTreatmentResistantCtrl = 0,
                            dProbOfTreatmentResistantExp1 = 0,
-                           dProbOfTreatmentResistantExp2 = 0)
+                           dProbOfTreatmentResistantExp2 = 0 )
     }
     
     #Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
     vProbabilityOfTreatmentResistant <- c( UserParam$dProbOfTreatmentResistantCtrl,
                                            UserParam$dProbOfTreatmentResistantExp1,
-                                           UserParam$dProbOfTreatmentResistantExp2)    # By default, 0% of patients are treatment resistant
+                                           UserParam$dProbOfTreatmentResistantExp2 )    # By default, 0% of patients are treatment resistant
     
     nError           <- 0 # East code for no errors occurred 
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
@@ -60,22 +60,31 @@ SimulatePatientOutcomeMultiArmPercentAtZero.Binary <- function(NumSub, NumArm, T
         probResist                  <- vProbabilityOfTreatmentResistant[ nTreatmentID ]
         
         # Determine if patient is treatment resistant
-        if (probResist > 0 & probResist < 1) {
-            nTreatmentResistant <- rbinom(1, 1, probResist)
-        } else if (probResist <= 0) {
+        if( probResist > 0 & probResist < 1 )
+        {
+            nTreatmentResistant <- rbinom( 1, 1, probResist )
+        }
+        else if( probResist <= 0 )
+        {
             nTreatmentResistant <- 0
-        } else {
+        }
+        else
+        {
             nTreatmentResistant <- 1
         }
         
         # If nTreatmentResistant == 1, the patient outcome is a 0 and we don't need to simulate it. 
         
-        if( nTreatmentResistant == 0  )  # The patient is not resistant, so we need to simulate their outcome from a binary distribution 
+        if( nTreatmentResistant == 0 )  # The patient is not resistant, so we need to simulate their outcome from a binary distribution 
+        {
             vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
+        }
     }
     
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if( any( is.na( vPatientOutcome ) == TRUE ))
+    {
         nError <- -100
+    }
    
-    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError )))
 }

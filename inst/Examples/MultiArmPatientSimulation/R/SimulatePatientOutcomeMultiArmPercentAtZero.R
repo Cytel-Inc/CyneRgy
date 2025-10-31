@@ -27,11 +27,12 @@
 #' In this example, the continuous outcome is a patient's change from baseline. For this function, 20% of patients are believed to have no change due to treatment.  
 #' As such, this function simulates patient outcome where, on average, 20% will have a value of 0 for the outcome and 80%, on average, will have their value
 #' simulated from a normal distribution with the mean and standard deviation as sent from East Horizon. 
-SimulatePatientOutcomeMultiArmPercentAtZero <- function(NumSub, NumArms, TreatmentID, Mean, StdDev, UserParam = NULL)
+
+SimulatePatientOutcomeMultiArmPercentAtZero <- function( NumSub, NumArms, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     # If the user did not specify the user parameters, but still called this function then the probability
     # of a 0 outcome is 0 for both treatments
-    if( is.null( UserParam ) )
+    if( is.null( UserParam ))
     {
         UserParam <- list( dProbOfZeroOutcomeCtrl = 0,
                            dProbOfZeroOutcomeExp1 = 0,
@@ -66,8 +67,10 @@ SimulatePatientOutcomeMultiArmPercentAtZero <- function(NumSub, NumArms, Treatme
             vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ])
     }
     
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if( any( is.na( vPatientOutcome ) == TRUE ))
+    {
         nError <- -100
+    }
     
-    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError )))
 }

@@ -17,6 +17,7 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Number of endpoints:** Dual Endpoints</li>
 <li>**Endpoint type:** *Time-to-Event - Time-to-Event*</li>
 <li>**Task:** Explore</li>
+<li>**Response Input Method:** Hazard Rate</li>
 </ul></div>
 
 # Introduction

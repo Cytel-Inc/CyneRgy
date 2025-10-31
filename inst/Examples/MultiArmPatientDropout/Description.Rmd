@@ -18,9 +18,9 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Endpoint type:**
 <ul style="margin-bottom:0">
 <li>Continuous or Binary Outcome for Example 1</li>
-<li>Time-to-Event Outcome for Example 2</li>
+<!-- <li>Time-to-Event Outcome for Example 2</li> -->
 </ul></li>
-<li>**Task:** Any</li>
+<li>**Task:** Explore</li>
 </ul></div>
 
 # Introduction
@@ -30,13 +30,13 @@ In multi-arm studies, dropout rates often differ across treatment groups due to 
 In the following examples, we demonstrate how to integrate a **custom dropout distribution** into East Horizon through R integration. We focus on two common approaches to modeling dropout:
 
 1. Armwise continuous/binary dropout using dropout probabilities to identify completers and non-completers.
-2. Armwise survival dropout using time-to-dropout models based on hazard rates or probabilities.
+<!-- 2. Armwise survival dropout using time-to-dropout models based on hazard rates or probabilities. -->
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R) you will find the following R files:
 
 1. [GenerateCensoringMultiArmUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R/GenerateCensoringMultiArmUsingBinomialProportion.R) - The R function named *GenerateCensoringMultiArmUsingBinomialProportion* in the file is used to perform multiple arm dropout with continuous or binary outcome as described in Example 1 below.
 
-2. [GenerateDropoutTimeMultiArmForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R) - The R function named *GenerateDropoutTimeMultiArmForSurvival.R* in the file is used to perform multiple arm dropout with time-to-event outcome as described in Example 2 below.
+<!-- 2. [GenerateDropoutTimeMultiArmForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R) - The R function named *GenerateDropoutTimeMultiArmForSurvival.R* in the file is used to perform multiple arm dropout with time-to-event outcome as described in Example 2 below. -->
 
 # Example 1 - Dropout Using Binomial Proportion (Continuous or Binary Outcome)
 
@@ -81,7 +81,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-# Example 2 - Dropout Time For Time-to-Event Outcome
+<!-- # Example 2 - Dropout Time For Time-to-Event Outcome
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R" class="alert-link">GenerateDropoutTimeMultiArmForSurvival.R</a></p>
@@ -120,3 +120,4 @@ CyneRgy::PlotExampleFlowchart(
     )
 )
 ```
+-->

@@ -15,10 +15,10 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Endpoint type:**</li>
 <ul style="margin-bottom:0">
 <li>Continuous Outcome for Example 1</li>
-<li>Time-to-Event Outcome for Example 2</li>
-<li>Binary Outcome for Example 3</li>
+<li>Binary Outcome for Example 2</li>
+<!-- <li>Time-to-Event Outcome for Example 3</li> -->
 </ul>
-<li>**Task:** Any</li>
+<li>**Task:** Explore</li>
 </ul></div>
 
 <div class="alert alert-warning" role="alert">
@@ -33,10 +33,9 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 1. [AnalyzeMultiArmUsingTTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingTTestBonferroni.R) - Performs pairwise t-tests for continuous endpoints with Bonferroni adjustment.
 
-2. [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) - Performs log-rank tests for time-to-event endpoints with Bonferroni adjustment.
+2. [AnalyzeMultiArmUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R) - Performs proportion tests for binary endpoints with Bonferroni adjustment.
 
-3. [AnalyzeMultiArmUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R) - Performs proportion tests for binary endpoints with Bonferroni adjustment.
-
+<!-- 3. [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) - Performs log-rank tests for time-to-event endpoints with Bonferroni adjustment. -->
 
 # Example 1 - Using the `t.test()` Function with Bonferroni Adjustment (Continuous Outcome)
 
@@ -64,33 +63,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-# Example 2 - Using the `survival::survdiff()` Function with Bonferroni Adjustment (Time-to-Event Outcome)
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R" class="alert-link">AnalyzeMultiArmUsingLogrankTestBonferroni.R</a></p>
-</div>
-
-For time-to-event outcomes, this example uses the `survival::survdiff()` function to perform a log-rank test between each treatment arm and the control arm. The chi-square statistic from each comparison is converted to a p-value, adjusted using Bonferroni correction, and evaluated against the efficacy boundary to determine if any treatment demonstrates a statistically significant improvement in survival.
-
-This example can handle interim looks and automatically incorporates information fraction and efficacy boundary adjustments provided by `LookInfo`.
-
-The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
-
-```{r echo=FALSE,  warning=FALSE, fig.retina=3}
-CyneRgy::PlotExampleFlowchart(
-    lIntPoints = list(
-        "Analysis" = c(
-            "Load survival times from East Horizon",
-            "Perform log-rank test (survdiff) for each treatment vs. control",
-            "Adjust p-values using Bonferroni correction",
-            "Compare adjusted p-values to efficacy boundaries",
-            "Return arm-level decisions"
-        )
-    )
-)
-```
-
-# Example 3 - Using the `prop.test()` Function with Bonferroni Adjustment (Binary Outcome)
+# Example 2 - Using the `prop.test()` Function with Bonferroni Adjustment (Binary Outcome)
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R" class="alert-link">AnalyzeMultiArmUsingPropTestBonferroni.R</a></p>
@@ -115,3 +88,30 @@ CyneRgy::PlotExampleFlowchart(
     )
 )
 ```
+
+<!-- # Example 3 - Using the `survival::survdiff()` Function with Bonferroni Adjustment (Time-to-Event Outcome)
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R" class="alert-link">AnalyzeMultiArmUsingLogrankTestBonferroni.R</a></p>
+</div>
+
+For time-to-event outcomes, this example uses the `survival::survdiff()` function to perform a log-rank test between each treatment arm and the control arm. The log-rank statistic from each comparison is converted to a p-value, adjusted using Bonferroni correction, and evaluated against the efficacy boundary to determine if any treatment demonstrates a statistically significant improvement in survival.
+
+This example can handle interim looks and automatically incorporates information fraction and efficacy boundary adjustments provided by `LookInfo`.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Analysis" = c(
+            "Load survival times from East Horizon",
+            "Perform log-rank test (survdiff) for each treatment vs. control",
+            "Adjust p-values using Bonferroni correction",
+            "Compare adjusted p-values to efficacy boundaries",
+            "Return arm-level decisions"
+        )
+    )
+)
+```
+-->

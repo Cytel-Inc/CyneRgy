@@ -16,7 +16,7 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Study objective:** Two Arm Confirmatory</li>
 <li>**Number of endpoints:** Single Endpoint</li>
 <li>**Endpoint type:** Continuous Outcome with Repeated Measures</li>
-<li>**Task:** Any</li>
+<li>**Task:** Explore</li>
 </ul></div>
 
 # Introduction

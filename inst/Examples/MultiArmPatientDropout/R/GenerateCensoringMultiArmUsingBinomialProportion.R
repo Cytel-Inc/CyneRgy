@@ -29,20 +29,19 @@
 GenerateCensoringMultiArmUsingBinomialProportion <- function( NumSub, ProbDrop, NumArm, TreatmentID, UserParam = NULL ) 
 {   
 
-    Error 	            <- 0
+    nError 	            <- 0
     
-    vCensoringIndicator <- numeric(NumSub)
-    for (i in 1:NumSub) {
+    vCensoringIndicator <- numeric( NumSub )
+    
+    for (i in 1:NumSub)
+    {
         # Get the arm index since TreatmentID uses 0 for control, 1, 2, ... for other arms
-        nArmIndex <- TreatmentID[i] + 1
+        nArmIndex <- TreatmentID[ i ] + 1
         
         # Generate dropout indicator based on the arm-specific probability
         # 1 - ProbDrop[armIndex] gives the probability of completion (not dropping out)
-        vCensoringIndicator[i] <- rbinom(n = 1, size = 1, prob = 1 - ProbDrop[nArmIndex])
+        vCensoringIndicator[ i ] <- rbinom( n = 1, size = 1, prob = 1 - ProbDrop[ nArmIndex ])
     }
     
-    return( list( CensorInd = as.integer( vCensoringIndicator ), ErrorCode = as.integer( Error ) ) )
+    return( list( CensorInd = as.integer( vCensoringIndicator ), ErrorCode = as.integer( nError )))
 }
-
-
-

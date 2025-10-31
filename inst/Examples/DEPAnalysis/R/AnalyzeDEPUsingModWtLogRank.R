@@ -129,91 +129,92 @@
 #' @note The current code assumes there are no dropouts. Modify the code accordingly for dropout case.
 ########################################################################################################################
 
-AnalyzeDEPUsingModWtLogRank <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL) 
+AnalyzeDEPUsingModWtLogRank <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) 
 {
-    require(survival)
+    library( survival )
     
     # The endpoint ID and name of the endpoint to be analysed.
     # This needs to be manually specified as of now
     anlysEPID       <- 1
-    anlysEPName     <- DesignParam$EndpointName[anlysEPID]
+    anlysEPName     <- DesignParam$EndpointName[ anlysEPID ]
     
     # Set delay parameter as 0 if not specified by the user
-    if(is.null(UserParam[[anlysEPName]]$delay)) UserParam[[anlysEPName]]$delay <- 0
+    if( is.null( UserParam[[ anlysEPName ]]$delay ))
+    {
+        UserParam[[ anlysEPName ]]$delay <- 0
+    }
     
-    AnalysisTime    <- ComputeDEPAnalysisTime(SimData, DesignParam, LookInfo)     
-    SimDataForAnlys <- SimData[SimData$ArrivalTime <= AnalysisTime, ]             #Slicing the data to be used for analysis
+    AnalysisTime    <- ComputeDEPAnalysisTime( SimData, DesignParam, LookInfo )     
+    SimDataForAnlys <- SimData[ SimData$ArrivalTime <= AnalysisTime, ]             #Slicing the data to be used for analysis
     
     # Compute the Observed Time variable for the analysis
-    if(anlysEPID == 1)
+    if( anlysEPID == 1 )
     {
-      SimDataForAnlys$Event        <-  SimDataForAnlys$CensorIndOrg * (SimDataForAnlys$ClndrRespTime < AnalysisTime)
-      SimDataForAnlys$ObservedTime <-  pmin(AnalysisTime - SimDataForAnlys$ArrivalTime, 
-                                    SimDataForAnlys$ClndrRespTime - SimDataForAnlys$ArrivalTime)
-      
+      SimDataForAnlys$Event        <-  SimDataForAnlys$CensorIndOrg * ( SimDataForAnlys$ClndrRespTime < AnalysisTime )
+      SimDataForAnlys$ObservedTime <-  pmin( AnalysisTime - SimDataForAnlys$ArrivalTime, 
+                                             SimDataForAnlys$ClndrRespTime - SimDataForAnlys$ArrivalTime )
     }
     else 
     {
-      SimDataForAnlys$Event        <-  SimDataForAnlys$CensorIndOrg2 * (SimDataForAnlys$ClndrRespTime2 < AnalysisTime)
-      SimDataForAnlys$ObservedTime <-  pmin(AnalysisTime - SimDataForAnlys$ArrivalTime, 
-                                    SimDataForAnlys$ClndrRespTime2 - SimDataForAnlys$ArrivalTime)
+      SimDataForAnlys$Event        <-  SimDataForAnlys$CensorIndOrg2 * ( SimDataForAnlys$ClndrRespTime2 < AnalysisTime )
+      SimDataForAnlys$ObservedTime <-  pmin( AnalysisTime - SimDataForAnlys$ArrivalTime, 
+                                             SimDataForAnlys$ClndrRespTime2 - SimDataForAnlys$ArrivalTime )
     }
       
     # Order the data by observed time
-    SimDataForAnlys <- SimDataForAnlys[order(SimDataForAnlys$ObservedTime), ]
+    SimDataForAnlys <- SimDataForAnlys[ order( SimDataForAnlys$ObservedTime ), ]
     
     # Compute Observed HR
-    coxModel                  <- coxph(Surv(ObservedTime, Event) ~ TreatmentID, data=SimDataForAnlys)
-    dTrueHR                   <- exp(coxModel$coefficients)
+    coxModel                  <- coxph( Surv( ObservedTime, Event ) ~ TreatmentID, data=SimDataForAnlys )
+    dTrueHR                   <- exp( coxModel$coefficients )
     
-    SimDataForAnlys$EventOnTreatment  <- ifelse(SimDataForAnlys$TreatmentID == 1, SimDataForAnlys$Event, 0)
-    SimDataForAnlys$EventOnControl    <- ifelse(SimDataForAnlys$TreatmentID == 0, SimDataForAnlys$Event, 0)
+    SimDataForAnlys$EventOnTreatment  <- ifelse( SimDataForAnlys$TreatmentID == 1, SimDataForAnlys$Event, 0 )
+    SimDataForAnlys$EventOnControl    <- ifelse( SimDataForAnlys$TreatmentID == 0, SimDataForAnlys$Event, 0 )
     
     # Subjects at risk at baseline
-    nSubjectsAtRiskTreatment  <- nrow(SimDataForAnlys[SimDataForAnlys$TreatmentID == 1, ])
-    nSubjectsAtRiskControl    <- nrow(SimDataForAnlys[SimDataForAnlys$TreatmentID == 0, ])
+    nSubjectsAtRiskTreatment  <- nrow( SimDataForAnlys[SimDataForAnlys$TreatmentID == 1, ])
+    nSubjectsAtRiskControl    <- nrow( SimDataForAnlys[SimDataForAnlys$TreatmentID == 0, ])
     
     # Initialize numerator and denominator
-    dNum <- 0
-    dDen <- 0
+    dNum   <- 0
+    dDen   <- 0
     weight <- 1
     # Iterate over subjects
-    for (nSubject in 1:nrow(SimDataForAnlys)) 
+    for ( nSubject in 1:nrow( SimDataForAnlys )) 
     {
         # Non-event: update risk set
-        if (SimDataForAnlys$Event[nSubject] == 0) 
+        if ( SimDataForAnlys$Event[ nSubject ] == 0 ) 
         {
-            if (SimDataForAnlys$TreatmentID[nSubject] == 1) 
+            if ( SimDataForAnlys$TreatmentID[nSubject] == 1 ) 
             {
                 nSubjectsAtRiskTreatment <- nSubjectsAtRiskTreatment - 1
             }
-            if (SimDataForAnlys$TreatmentID[nSubject] == 0) 
+            if ( SimDataForAnlys$TreatmentID[nSubject] == 0 ) 
             {
                 nSubjectsAtRiskControl <- nSubjectsAtRiskControl - 1
             }
         }
         
         # Event: update dNum and dDen
-        if (SimDataForAnlys$Event[nSubject] == 1) 
+        if ( SimDataForAnlys$Event[ nSubject ] == 1 ) 
         {
-            nEventsOnTreatment <- SimDataForAnlys$EventOnTreatment[nSubject]
-            nEventsOnControl   <- SimDataForAnlys$EventOnControl[nSubject]
+            nEventsOnTreatment <- SimDataForAnlys$EventOnTreatment[ nSubject ]
+            nEventsOnControl   <- SimDataForAnlys$EventOnControl[ nSubject ]
             nEvents            <- nEventsOnTreatment + nEventsOnControl
             nSubjectsAtRisk    <- nSubjectsAtRiskTreatment + nSubjectsAtRiskControl
             
             # Weight for modestly weighted log-rank test
-            weight <- ifelse(SimDataForAnlys$ObservedTime[nSubject] <= UserParam[[DesignParam$EndpointName[[anlysEPID]]]]$delay,
-                             weight * 1/(1 - nEvents/nSubjectsAtRisk), weight) 
+            weight <- ifelse( SimDataForAnlys$ObservedTime[ nSubject ] <= UserParam[[ DesignParam$EndpointName[[ anlysEPID ]]]]$delay,
+                              weight * 1 / ( 1 - nEvents/nSubjectsAtRisk ), weight ) 
             
-
-            dNum <- dNum + weight * (nEventsOnTreatment - nSubjectsAtRiskTreatment * nEvents / nSubjectsAtRisk)
+            dNum <- dNum + weight * (nEventsOnTreatment - nSubjectsAtRiskTreatment * nEvents / nSubjectsAtRisk )
             
-            if (nSubjectsAtRisk != 1) 
+            if ( nSubjectsAtRisk != 1 ) 
             {
                 dDen <- dDen + weight^2 * (
                     nSubjectsAtRiskTreatment * nSubjectsAtRiskControl *
-                        (nSubjectsAtRisk - nEvents) * nEvents /
-                        ((nSubjectsAtRisk - 1) * nSubjectsAtRisk^2)
+                        ( nSubjectsAtRisk - nEvents) * nEvents /
+                        (( nSubjectsAtRisk - 1 ) * nSubjectsAtRisk^2 )
                 )
             }
             
@@ -224,76 +225,76 @@ AnalyzeDEPUsingModWtLogRank <- function(SimData, DesignParam, LookInfo = NULL, U
     }
     
     # Compute test statistic
-    dTS   <- dNum / sqrt(dDen)
-    Error <- 0
+    dTS   <- dNum / sqrt( dDen )
+    nError <- 0
     
-    return(list(
-        TestStat  = as.double(dTS),
-        HR        = as.double(dTrueHR),
-        ErrorCode = as.integer(Error)
+    return( list(
+        TestStat  = as.double( dTS ),
+        HR        = as.double( dTrueHR ),
+        ErrorCode = as.integer( nError )
     ))
 }
 
 
 #ComputeDEPAnalysisTime() : Function to compute the analysis time for DEP. 
-ComputeDEPAnalysisTime <- function(SimData, DesignParam, LookInfo = NULL) 
+ComputeDEPAnalysisTime <- function( SimData, DesignParam, LookInfo = NULL ) 
 {
   
-  bGSD <- ifelse(is.null(LookInfo), FALSE, TRUE)                                # Is the trial using Group sequential Design?
+  bGSD <- ifelse( is.null( LookInfo ), FALSE, TRUE )                                # Is the trial using Group sequential Design?
   
-  if(bGSD)               # Group Sequential Design   
+  if( bGSD )               # Group Sequential Design   
   {
-    syncEPID <- LookInfo$SyncInterim                                            # Endpoint ID for the endpoint to be used for look positioning
-    syncEPType <- DesignParam$EndpointType[[syncEPID]]                          # Endpoint type of the endpoint used for look positioning
-    nonsyncEPID <- ifelse(LookInfo$SyncInterim == 1, 2, 1)                      # Endpoint ID for endpoint not being used for look positioning
-    nonsyncEPType <- DesignParam$EndpointType[[nonsyncEPID]]                    # Endpoint type of the endpoint not being used for look positioning
+    syncEPID      <- LookInfo$SyncInterim                                       # Endpoint ID for the endpoint to be used for look positioning
+    syncEPType    <- DesignParam$EndpointType[[ syncEPID ]]                     # Endpoint type of the endpoint used for look positioning
+    nonsyncEPID   <- ifelse( LookInfo$SyncInterim == 1, 2, 1 )                  # Endpoint ID for endpoint not being used for look positioning
+    nonsyncEPType <- DesignParam$EndpointType[[ nonsyncEPID ]]                  # Endpoint type of the endpoint not being used for look positioning
     
     # Look info was provided so use it
     nQtyOfLooks         <- LookInfo$NumLooks
     nLookIndex          <- LookInfo$CurrLookIndex
     
     # CumTargets will be planned cumulative events/completers for the Endpoint used for the current look positioning.
-    if(nLookIndex <= LookInfo$NumEndpointLooks[syncEPID]) 
+    if( nLookIndex <= LookInfo$NumEndpointLooks[ syncEPID ]) 
     {
-      if(syncEPType == 2 )
+      if( syncEPType == 2 )
       {
-        CumTargets    <- LookInfo$CumEvents[[DesignParam$EndpointName[syncEPID]]]
+        CumTargets    <- LookInfo$CumEvents[[ DesignParam$EndpointName[ syncEPID ]]]
       }
       else
       {
-        CumTargets    <- LookInfo$CumCompleters[[DesignParam$EndpointName[syncEPID]]]
+        CumTargets    <- LookInfo$CumCompleters[[ DesignParam$EndpointName[ syncEPID ]]]
       }
     } 
     else
     {
-      if(nonsyncEPType == 2 )
+      if( nonsyncEPType == 2 )
       {
-        CumTargets    <- LookInfo$CumEvents[[DesignParam$EndpointName[nonsyncEPID]]]
+        CumTargets    <- LookInfo$CumEvents[[ DesignParam$EndpointName[ nonsyncEPID ]]]
       }
       else
       {
-        CumTargets    <- LookInfo$CumCompleters[[DesignParam$EndpointName[nonsyncEPID]]]
+        CumTargets    <- LookInfo$CumCompleters[[ DesignParam$EndpointName[ nonsyncEPID ]]]
       }
     }
     
-    nQtyOfTargets <- CumTargets[nLookIndex]
+    nQtyOfTargets      <- CumTargets[ nLookIndex ]
     
-    EPIDforSlicingData <- ifelse(nLookIndex <= LookInfo$NumEndpointLooks[syncEPID] , syncEPID, nonsyncEPID) 
-    if(EPIDforSlicingData == 1) 
+    EPIDforSlicingData <- ifelse( nLookIndex <= LookInfo$NumEndpointLooks[ syncEPID ] , syncEPID, nonsyncEPID ) 
+    if( EPIDforSlicingData == 1 ) 
     {
-      SimDataAnlys <- SimData[order(SimData$ClndrRespTime, SimData$CensorIndOrg), ]
-      idxAnlys <- which(cumsum(SimDataAnlys$CensorIndOrg) >= nQtyOfTargets)
-      AnalysisTime <- ifelse(length(idxAnlys) > 0, 
-                             SimDataAnlys$ClndrRespTime[min(idxAnlys)], 
-                             SimDataAnlys$ClndrRespTime[DesignParam$SampleSize])
+      SimDataAnlys <- SimData[ order( SimData$ClndrRespTime, SimData$CensorIndOrg ), ]
+      idxAnlys     <- which( cumsum( SimDataAnlys$CensorIndOrg ) >= nQtyOfTargets )
+      AnalysisTime <- ifelse( length(idxAnlys) > 0, 
+                              SimDataAnlys$ClndrRespTime[ min( idxAnlys )], 
+                              SimDataAnlys$ClndrRespTime[ DesignParam$SampleSize ])
     }
     else 
     {
-      SimDataAnlys <- SimData[order(SimData$ClndrRespTime2, SimData$CensorIndOrg2), ]
-      idxAnlys <- which(cumsum(SimDataAnlys$CensorIndOrg2) >= nQtyOfTargets)
-      AnalysisTime <- ifelse(length(idxAnlys) > 0, 
-                             SimDataAnlys$ClndrRespTime2[min(idxAnlys)], 
-                             SimDataAnlys$ClndrRespTime2[DesignParam$SampleSize]) 
+      SimDataAnlys <- SimData[ order( SimData$ClndrRespTime2, SimData$CensorIndOrg2 ), ]
+      idxAnlys     <- which( cumsum( SimDataAnlys$CensorIndOrg2 ) >= nQtyOfTargets )
+      AnalysisTime <- ifelse( length( idxAnlys) > 0, 
+                              SimDataAnlys$ClndrRespTime2[ min( idxAnlys )], 
+                              SimDataAnlys$ClndrRespTime2[ DesignParam$SampleSize ]) 
     }
   }
   
@@ -304,33 +305,33 @@ ComputeDEPAnalysisTime <- function(SimData, DesignParam, LookInfo = NULL)
     
     
     # nQtyOfTargets will be planned events/completers for the Endpoint on which end of the trial is defined.
-    if(DesignParam$PlanEndTrial == 2 || DesignParam$PlanEndTrial == 1)  #Full info on Endpoint 1 or Both Endpoints
+    if( DesignParam$PlanEndTrial == 2 || DesignParam$PlanEndTrial == 1 )  #Full info on Endpoint 1 or Both Endpoints
     {
-      nQtyOfTargets <- ifelse( DesignParam$EndpointType[1] == 1,  
-                               DesignParam$MaxCompleters[[DesignParam$EndpointName[1]]],
-                               DesignParam$MaxEvents[[DesignParam$EndpointName[1]]] )
-      SimDataEP1 <- SimData[order(SimData$ClndrRespTime, SimData$CensorIndOrg), ]
-      idxEP1 <- which(cumsum(SimDataEP1$CensorIndOrg) >= nQtyOfTargets)
-      AnalysisTimeEP1 <- ifelse(length(idxEP1) > 0, 
-                                SimDataEP1$ClndrRespTime[min(idxEP1)], 
-                                SimDataEP1$ClndrRespTime[DesignParam$SampleSize])
+      nQtyOfTargets   <- ifelse( DesignParam$EndpointType[ 1 ] == 1,  
+                                 DesignParam$MaxCompleters[[ DesignParam$EndpointName[ 1 ]]],
+                                 DesignParam$MaxEvents[[ DesignParam$EndpointName[ 1 ]]])
+      SimDataEP1      <- SimData[ order( SimData$ClndrRespTime, SimData$CensorIndOrg ), ]
+      idxEP1          <- which( cumsum( SimDataEP1$CensorIndOrg ) >= nQtyOfTargets )
+      AnalysisTimeEP1 <- ifelse( length( idxEP1 ) > 0, 
+                                 SimDataEP1$ClndrRespTime[ min( idxEP1 )], 
+                                 SimDataEP1$ClndrRespTime[ DesignParam$SampleSize ])
       
     }
-    if(DesignParam$PlanEndTrial == 3 || DesignParam$PlanEndTrial == 1)  #Full info on Endpoint 2 or Both Endpoints
+    if( DesignParam$PlanEndTrial == 3 || DesignParam$PlanEndTrial == 1 )  #Full info on Endpoint 2 or Both Endpoints
     {
-      nQtyOfTargets <- ifelse( DesignParam$EndpointType[2] == 1,  
-                               DesignParam$MaxCompleters[[DesignParam$EndpointName[2]]],
-                               DesignParam$MaxEvents[[DesignParam$EndpointName[2]]] )
-      SimDataEP2 <- SimData[order(SimData$ClndrRespTime2, SimData$CensorIndOrg2), ]
-      idxEP2 <- which(cumsum(SimDataEP2$CensorIndOrg2) >= nQtyOfTargets)
-      AnalysisTimeEP2 <- ifelse(length(idxEP2) > 0, 
-                                SimDataEP2$ClndrRespTime2[min(idxEP2)], 
-                                SimDataEP2$ClndrRespTime2[DesignParam$SampleSize])
+      nQtyOfTargets   <- ifelse( DesignParam$EndpointType[ 2 ] == 1,  
+                                 DesignParam$MaxCompleters[[ DesignParam$EndpointName[ 2 ]]],
+                                 DesignParam$MaxEvents[[ DesignParam$EndpointName[ 2 ]]])
+      SimDataEP2      <- SimData[ order( SimData$ClndrRespTime2, SimData$CensorIndOrg2 ), ]
+      idxEP2          <- which( cumsum( SimDataEP2$CensorIndOrg2) >= nQtyOfTargets )
+      AnalysisTimeEP2 <- ifelse( length( idxEP2 ) > 0, 
+                                 SimDataEP2$ClndrRespTime2[ min( idxEP2 )], 
+                                 SimDataEP2$ClndrRespTime2[ DesignParam$SampleSize ])
       
     }    
     
-    AnalysisTime <- ifelse( DesignParam$PlanEndTrial == 1, max(AnalysisTimeEP1, AnalysisTimeEP2), 
-                            ifelse(DesignParam$PlanEndTrial == 2, AnalysisTimeEP1, AnalysisTimeEP2) )
+    AnalysisTime <- ifelse( DesignParam$PlanEndTrial == 1, max( AnalysisTimeEP1, AnalysisTimeEP2 ), 
+                            ifelse( DesignParam$PlanEndTrial == 2, AnalysisTimeEP1, AnalysisTimeEP2 ))
   }
-  return(AnalysisTime)
+  return( AnalysisTime )
 }

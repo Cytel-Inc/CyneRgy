@@ -41,33 +41,33 @@
 ######################################################################################################################## .
 
 # Function Template for performing Multiplicity Adjustment for One Look Tests
-GetDEPDecisionsFSD <- function(SimData, DesignParam, LookInfo = NULL, TestStat, OutList = NULL, UserParam = NULL)
+GetDEPDecisionsFSD <- function( SimData, DesignParam, LookInfo = NULL, TestStat, OutList = NULL, UserParam = NULL )
 {
-    Decision      <- list()
-    EndpointName  <- DesignParam$EndpointName
+    lDecision      <- list()
+    vEndpointName  <- DesignParam$vEndpointName
     
-    if(DesignParam$TailType[[1]] == 0)
+    if( DesignParam$TailType[[ 1 ]] == 0 )
     {
-        Decision[EndpointName[[1]]] <- ifelse(pnorm(TestStat[[1]]) < DesignParam$Alpha/2, 1, 0)            
+        lDecision[ vEndpointName[[ 1 ]]] <- ifelse( pnorm( TestStat[[ 1 ]]) < DesignParam$Alpha / 2, 1, 0 )            
     }
     else 
     {
-        Decision[EndpointName[[1]]] <- ifelse(pnorm(TestStat[[1]], lower.tail = FALSE) < DesignParam$Alpha/2, 1, 0)            
+        lDecision[ vEndpointName[[ 1 ]]] <- ifelse( pnorm( TestStat[[ 1 ]], lower.tail = FALSE) < DesignParam$Alpha / 2, 1, 0 )            
     }
     
-    if(DesignParam$TailType[[2]] == 0)
+    if( DesignParam$TailType[[ 2 ]] == 0 )
     {
-        Decision[EndpointName[[2]]] <- ifelse(pnorm(TestStat[[2]]) < DesignParam$Alpha/2, 1, 0)            
+        lDecision[ vEndpointName[[ 2 ]]] <- ifelse( pnorm( TestStat[[ 2 ]]) < DesignParam$Alpha / 2, 1, 0 )            
     }
     else 
     {
-        Decision[EndpointName[[2]]] <- ifelse(pnorm(TestStat[[2]], lower.tail = FALSE) < DesignParam$Alpha/2, 1, 0)            
+        lDecision[ vEndpointName[[ 2 ]]] <- ifelse( pnorm( TestStat[[ 2 ]], lower.tail = FALSE) < DesignParam$Alpha / 2, 1, 0 )            
     }
     
-    Error           <- 0
-    Retval          <- 0
-    OutList         <- list()
-    OutList$OutVal  <- Retval
+    nError          <- 0
+    nRetval         <- 0
+    lOutList        <- list()
+    lOutList$OutVal <- nRetval
     
-    return(list(Decision = as.list(Decision), OutList = as.list(OutList), ErrorCode = as.integer(Error)))
+    return( list( Decision = as.list( lDecision ), OutList = as.list( lOutList ), ErrorCode = as.integer( nError )))
 }

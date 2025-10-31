@@ -86,15 +86,15 @@
 AnalyzeMultiArmUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Step 1: Retrieve necessary information from the objects East sent ####
-    if(  !is.null( LookInfo )  )
+    if( !is.null( LookInfo ))
     {
         nQtyOfLooks              <- LookInfo$NumLooks
         nLookIndex               <- LookInfo$CurrLookIndex
         nQtyOfPatsInAnalysis     <- LookInfo$CumCompleters[ nLookIndex ]
         vInfoFrac                <- LookInfo$InfoFrac
-        vEfficacyBoundary        <- gsDesign::gsDesign(k = nQtyOfLooks, test.type = 1, alpha = DesignParam$Alpha, 
-                                                       sfu = gsDesign::sfLDOF, timing = vInfoFrac)
-        vEfficacyBoundaryPScale  <- 1 - pnorm(vEfficacyBoundary$upper$bound)
+        vEfficacyBoundary        <- gsDesign::gsDesign( k = nQtyOfLooks, test.type = 1, alpha = DesignParam$Alpha, 
+                                                        sfu = gsDesign::sfLDOF, timing = vInfoFrac )
+        vEfficacyBoundaryPScale  <- 1 - pnorm( vEfficacyBoundary$upper$bound )
     }
     else
     {
@@ -115,13 +115,16 @@ AnalyzeMultiArmUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo 
     
     # Calculate p-value for each hypothesis. Return NA if arm not present in the current analysis
     vPValues <- rep( NA, DesignParam$NumTreatments )
-    for( nTrtID in 1:DesignParam$NumTreatments ){
-        if (vIsTrtPresent[ nTrtID ] == 1){
+    for( nTrtID in 1:DesignParam$NumTreatments )
+    {
+        if ( vIsTrtPresent[ nTrtID ] == 1 )
+        {
             vOutcomesE           <- vPatientOutcome[ vPatientTreatment == nTrtID ]
             lAnalysisResult      <- t.test( vOutcomesE, vOutcomesS, alternative = "greater",
-                                             var.equal = TRUE)
+                                            var.equal = TRUE )
             dPValue              <- lAnalysisResult$p.value    # extract p value for the t test
-        } else
+        }
+        else
         {
             dPValue              <- NA
         }
@@ -134,12 +137,13 @@ AnalyzeMultiArmUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo 
     # Perform the desired analysis. NA should be returned for arms that are not available at this look
     # vDecision                    <- ifelse( vAdjPValues < vEfficacyBoundaryPScale[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
     vDecision <- c()
-    for ( i in 1:length(vAdjPValues) ){
+    for ( i in 1:length(vAdjPValues) )
+    {
         strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                                   bIAEfficacyCondition = vAdjPValues[i] < vEfficacyBoundaryPScale[ nLookIndex ], 
-                                                   bFAEfficacyCondition = vAdjPValues[i] < vEfficacyBoundaryPScale[ nLookIndex ])
-        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-        vDecision <- c(vDecision, nDecision)
+                                                   bIAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ], 
+                                                   bFAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ])
+        nDecision   <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+        vDecision   <- c( vDecision, nDecision )
     }
     # for( i in 1:length(vDecision) ){
     #     if( vDecision[i] == 0 )
@@ -155,8 +159,6 @@ AnalyzeMultiArmUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo 
     
     nError 	                     <- 0
     
-    return( list(Decision  = as.integer(vDecision), 
-                 ErrorCode = as.integer(nError)) )
-    
+    return( list( Decision  = as.integer( vDecision ), 
+                  ErrorCode = as.integer( nError )))
 }
-

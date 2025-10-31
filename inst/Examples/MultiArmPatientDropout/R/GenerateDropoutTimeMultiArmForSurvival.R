@@ -19,25 +19,26 @@
 
 GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
 {
-  Error 	      <- 0
+  nError 	      <- 0
   
   # Initializing Censor Dropout Times to Inf
   # This effectively means that all the patients have dropped out at an infinite time, 
   # i.e., effectively they haven't dropped out at all, meaning that they all are completers 
   
-  vDropoutTime 	             <- rep( Inf, NumSub )
+  vDropoutTime <- rep( Inf, NumSub )
   
   if( DropMethod == 1 )    # Dropout Hazard Rates
   {
       # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are the dropout times.
-      for( nArmIndex in seq( 0, NumArm - 1 )){
+      for( nArmIndex in seq( 0, NumArm - 1 ))
+      {
           if( DropParam[ nArmIndex + 1 ] > 0 )  # generate dropout time only in case of Non - zero dropout probability
           {
               # Identify the patients from various arms
               vIndexArm                     <- which( TreatmentID = nArmIndex )
               nQtyOfPatientonArm            <- length( vIndexArm )
               # Generate dropout time based on arm wise dropout parameters
-              vDropoutTime[ vIndexArm ]     <- rexp( nQtyOfPatientonArm, rate = DropParam[ nArmIndex + 1 ] )
+              vDropoutTime[ vIndexArm ]     <- rexp( nQtyOfPatientonArm, rate = DropParam[ nArmIndex + 1 ])
           }
       }
   }
@@ -45,20 +46,21 @@ GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID,
   if( DropMethod == 2 )   # Probability of Dropout
   {
       # Conversion of dropout probabilities into Hazard rates
-      dExpDropoutRate                <- -log( 1 - DropParam ) / PrdTime
+      dExpDropoutRate <- -log( 1 - DropParam ) / PrdTime
       
       # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are the dropout times.
-      for( nArmIndex in seq( 0, NumArm - 1 )){
+      for( nArmIndex in seq( 0, NumArm - 1 ))
+      {
           if( DropParam[ nArmIndex + 1 ] > 0 )            # generate dropout time only in case of Non - zero dropout probability
           {
               # Identify the patients from various arms
               vIndexArm                     <- which( TreatmentID == nArmIndex )
               nQtyOfPatientonArm            <- length( vIndexArm )
               # Generate dropout time based on arm wise dropout parameters
-              vDropoutTime[ vIndexArm ]     <- rexp( nQtyOfPatientonArm, rate = dExpDropoutRate[ nArmIndex + 1 ] )
+              vDropoutTime[ vIndexArm ]     <- rexp( nQtyOfPatientonArm, rate = dExpDropoutRate[ nArmIndex + 1 ])
           }
       }
   }
   
-  return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( Error ) ) );
+  return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nError )));
 }

@@ -85,9 +85,9 @@
 #'                      }
 AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    library(survival)
+    library( survival )
     # Retrieve necessary information from the objects East Horizon sent
-    if( !is.null( LookInfo ) )
+    if( !is.null( LookInfo ))
     {
         # Look info was provided so use it
         nQtyOfLooks              <- LookInfo$NumLooks
@@ -96,8 +96,8 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
         nQtyOfEvents             <- CumEvents[ nLookIndex ]
         vInfoFrac                <- LookInfo$InfoFrac
         vEfficacyBoundary        <- gsDesign::gsDesign( k = nQtyOfLooks, test.type = 1, alpha = DesignParam$Alpha, 
-                                                       sfu = gsDesign::sfLDOF, timing = vInfoFrac )
-        vEfficacyBoundaryPScale  <- 1 - pnorm(vEfficacyBoundary$upper$bound)
+                                                        sfu = gsDesign::sfLDOF, timing = vInfoFrac )
+        vEfficacyBoundaryPScale  <- 1 - pnorm( vEfficacyBoundary$upper$bound )
     }
     else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
@@ -126,19 +126,22 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
     
     vPValues                     <- rep( NA, DesignParam$NumTreatments )
     vHRRatio                     <- rep( NA, DesignParam$NumTreatments )
-    for (nTrtID in 1:DesignParam$NumTreatments){
-        if (vIsTrtPresent[ nTrtID ] == 1){
+    for (nTrtID in 1:DesignParam$NumTreatments)
+    {
+        if (vIsTrtPresent[ nTrtID ] == 1)
+        {
             SimDataTrt           <- SimData[ SimData$TreatmentID %in% c(0, nTrtID), ]
             # Compute Observed HR
-            coxModel             <- coxph( Surv( ObservedTime, Event ) ~ TreatmentID, data = SimDataTrt)
+            coxModel             <- coxph( Surv( ObservedTime, Event ) ~ TreatmentID, data = SimDataTrt )
             dTrueHR              <- exp( coxModel$coefficients )
             
             # Compute the test statistic using survival package
-            logrankTest          <- survdiff( Surv( ObservedTime, Event ) ~ TreatmentID, SimDataTrt)
+            logrankTest          <- survdiff( Surv( ObservedTime, Event ) ~ TreatmentID, SimDataTrt )
             
             # Compute the logrank test statistic
             dPValue              <- logrankTest$pvalue
-        } else
+        }
+        else
         {
             dTrueHR              <- NA
             dPValue              <- NA
@@ -154,12 +157,13 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
     # Perform the desired analysis. NA should be returned for arms that are not available at this look
     # vDecision                    <- ifelse( vAdjPValues < vEfficacyBoundaryPScale[ nLookIndex ], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
     vDecision <- c()
-    for ( i in 1:length(vAdjPValues) ){
+    for ( i in 1:length( vAdjPValues ))
+    {
         strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                                   bIAEfficacyCondition = vAdjPValues[i] < vEfficacyBoundaryPScale[ nLookIndex ], 
-                                                   bFAEfficacyCondition = vAdjPValues[i] < vEfficacyBoundaryPScale[ nLookIndex ])
+                                                   bIAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ], 
+                                                   bFAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ])
         nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-        vDecision <- c(vDecision, nDecision)
+        vDecision <- c( vDecision, nDecision )
     }
     # for( i in 1:length( vDecision ) ){
     #     if( vDecision[i] == 0 )
@@ -175,8 +179,7 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
     
     nError 	                     <- 0
     
-    return( list(Decision  = as.integer( vDecision ), 
-                 ErrorCode = as.integer( nError ),
-                 HazardRatio = as.numeric( vHRRatio )) )
+    return( list( Decision    = as.integer( vDecision ), 
+                  ErrorCode   = as.integer( nError ),
+                  HazardRatio = as.numeric( vHRRatio )))
 }
-
