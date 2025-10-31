@@ -41,7 +41,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 2. [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R) - Contains a function named *GenerateDropoutTimeForSurvival* to demonstrate the R code necessary for Example 2 as described below.
 
-3. [GenerateDropoutTimeForRM](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM) - Contains a function named *GenerateDropoutTimeForRM* to demonstrate the R code necessary for Example 3 as described below.
+3. [GenerateDropoutTimeForRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM.R) - Contains a function named *GenerateDropoutTimeForRM* to demonstrate the R code necessary for Example 3 as described below.
 
 # Example 1 - Dropout Using Binomial Proportion (Continuous or Binary Outcome)
 

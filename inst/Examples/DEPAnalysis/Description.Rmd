@@ -37,14 +37,14 @@ The first example illustrates how to perform a **modestly weighted log-rank test
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DEPOutcomeAnalysis/R) you will find the following R files:
 
-1. [AnalyzeDEPUsingModWtLogRank.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/R/AnalyzeDEPUsingModWtLogRank.R) - Performs a modestly weighted log-rank test on a time-to-event endpoint.
+1. [AnalyzeDEPUsingModWtLogRank.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPAnalysis/R/AnalyzeDEPUsingModWtLogRank.R) - Performs a modestly weighted log-rank test on a time-to-event endpoint.
 
-2. [AnalyzeDEPUsingFisherExact.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/R/AnalyzeDEPUsingFisherExact.R) - Performs a Fisher's Exact Test on a binary endpoint.
+2. [AnalyzeDEPUsingFisherExact.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPAnalysis/R/AnalyzeDEPUsingFisherExact.R) - Performs a Fisher's Exact Test on a binary endpoint.
 
 # Example 1 - Modestly Weighted Log-Rank Test for TTE Endpoint
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/R/AnalyzeDEPUsingModWtLogRank.R" class="alert-link">AnalyzeDEPUsingModWtLogRank.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPAnalysis/R/AnalyzeDEPUsingModWtLogRank.R" class="alert-link">AnalyzeDEPUsingModWtLogRank.R</a></p>
 </div>
 
 The function *AnalyzeDEPUsingModWtLogRank* demonstrates how to compute a **modestly weighted log-rank test statistic** for a time-to-event endpoint within a DEP design.  
@@ -76,7 +76,7 @@ CyneRgy::PlotExampleFlowchart(
 # Example 2 - Fisher's Exact Test for Binary Endpoint
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomeAnalysis/R/AnalyzeDEPUsingFisherExact.R" class="alert-link">AnalyzeDEPUsingFisherExact.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPAnalysis/R/AnalyzeDEPUsingFisherExact.R" class="alert-link">AnalyzeDEPUsingFisherExact.R</a></p>
 </div>
 
 The *AnalyzeDEPUsingFisherExact* function performs analysis for a binary endpoint within a DEP design using a Fisher's Exact Test, which compares the proportion of responders between treatment arms without relying on asymptotic assumptions. This is especially useful for smaller studies or endpoints with low event rates.

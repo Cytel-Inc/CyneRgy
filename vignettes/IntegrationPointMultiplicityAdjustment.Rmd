@@ -174,4 +174,4 @@ PerformMultAdj <- function( SimData, DesignParam, LookInfo, TestStat, OutList = 
 Explore the following examples for more context:
     
 1.  [**Dual Endpoints - Multiplicity Adjustment**](DEPDecisionsUsingMCP.html)
-    - [GetDEPDecisions.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPDecisionsUsingMCP/R/GetDEPDecisions.R)
+    - [GetDEPDecisions.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPDecisionsUsingMCP/R/GetDEPDecisionsFSD.R)

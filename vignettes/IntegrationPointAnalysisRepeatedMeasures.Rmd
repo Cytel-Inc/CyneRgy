@@ -188,5 +188,5 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 Explore the following example for more context:
 
-1. [**2-Arm, Continuous Outcome, Repeated Measures - Analysis**](2ArmNormalRepeatedMeasuresOutcomeAnalysis.html)
-    - [Analyze.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresOutcomeAnalysis/R/Analyze.RepeatedMeasures.R)
+1. [**2-Arm, Continuous Outcome, Repeated Measures - Analysis**](2ArmNormalRepeatedMeasuresAnalysis.html)
+    - [Analyze.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresAnalysis/R/Analyze.RepeatedMeasures.R)
