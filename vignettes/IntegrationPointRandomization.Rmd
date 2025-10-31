@@ -19,7 +19,7 @@ This integration point is available in East Horizon Explore for the following st
 
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
+|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
 
@@ -203,9 +203,8 @@ Randomize <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
 
 Explore the following examples for more context:
 
-1. [**2-Arm - Randomization of Subjects**](PatientRandomization.html)
+1. [**Randomization of Subjects**](RandomizeSubjects.html)
     - [RandomizationSubjectsUsingUniformDistribution.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R)
     - [RandomizationSubjectsUsingSampleFunctionInR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R)
     - [BlockRandomizationSubjectsUsingRPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R)
-2. **Multiple Arm - Randomization of Subjects**
     - [RandomizeSubjectsAcrossMultipleArms.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/RandomizeSubjectsAcrossMultipleArms.R)

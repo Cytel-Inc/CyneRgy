@@ -41,7 +41,7 @@ LookInfo is only available for `Statistical Design = Group Sequential`.
 |**FutContrast**|Integer|The contrast based on which futility boundaries are being computed:<br>– `0`: Primary contrast.<br>– `1`: Secondary contrast.|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
 |**IncludePipeline**|Integer|Indicates whether to include pipeline subjects in the interim:<br>– `0`: Do not include.<br>– `1`: Include.|Only available for `Endpoint Type = Continuous with Repeated Measures`.|Not available.|
 
-## For `Endpoint Type = Dual (TTE-TTE or TTE-Binary)`
+## For `Endpoint Type = Dual (TTE-TTE or TTE-Binary)` (including for Multiplicity Adjustment)
 
 Named List of length equal to the number of endpoints, indicating the trial type for each endpoint. For example, `TrialType[“Endpoint 1”]` is the type for Endpoint 1.
 

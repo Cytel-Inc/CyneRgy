@@ -60,7 +60,7 @@ The tables below describe each variable and notes any conditions under which it 
 |**TransitionMatrix**|Matrix of Numeric|Transition matrix between all populations, including full population and subpopulations. Dimension of `(NumSubPops + 1) x (NumSubPops + 1)`.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
 |**PropAlpha**|Vector of Numeric|Vector of length `(NumSubPops + 1)`, indicating the proportion of alpha for all populations, including full population and subpopulations.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
 
-## For `Endpoint Type = Dual (TTE-TTE or TTE-Binary)`
+## For `Endpoint Type = Dual (TTE-TTE or TTE-Binary)` (including for Multiplicity Adjustment)
 
 |**Variable Name**|**Type**|**Description**|**Notes for Explore**|
 |-|-|----|-----|

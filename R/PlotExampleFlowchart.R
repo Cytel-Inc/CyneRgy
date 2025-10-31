@@ -1,7 +1,7 @@
 ####################################################################################################
 #   Program/Function Name: PlotExampleFlowchart
 #   Author: Gabriel Potvin
-#   Last Modified Date: 2025/09/23
+#   Last Modified Date: 2025/10/29
 ####################################################################################################
 
 #' @name PlotExampleFlowchart
@@ -14,11 +14,14 @@
 #'
 #' @param lIntPoints A named list where each name is an integration point (e.g., "Response") 
 #'        and each element is a character vector of step labels for that integration point.
-#'        Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment Selection", "Response", "Analysis"
+#'        Options: "Initialization", "Enrollment", "Randomization", "Dropout", 
+#'        "Treatment Selection", "Response", "Analysis", "Multiplicity Adjustment"
 #' @param nBoxHeight Numeric. Base height of each step box. Default = 0.7.
 #' @param nBoxSpacing Numeric. Vertical spacing between boxes. Default = 0.3.
 #' @param nColumnWidth Numeric. Width of unused integration point columns. Default = 0.5.
 #' @param nBigColWidth Numeric. Width of used integration point columns. Default = 3.
+#' @param bShowTreatmentSelection Logical. Whether to include the "Treatment Selection" column. Default = FALSE.
+#' @param bShowMultiplicityAdjustment Logical. Whether to include the "Multiplicity Adjustment" column. Default = FALSE.
 #'
 #' @return A ggplot object containing the flowchart visualization.
 #' @export
@@ -59,7 +62,9 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
                                  nBoxHeight = 0.7,
                                  nBoxSpacing = 0.3,
                                  nColumnWidth = 0.5,
-                                 nBigColWidth = 3) {
+                                 nBigColWidth = 3,
+                                 bShowTreatmentSelection = FALSE,
+                                 bShowMultiplicityAdjustment = FALSE) {
     library(ggplot2)
     library(grid)
     library(stringr)
@@ -71,7 +76,7 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
     
     if (nUsed == 1) {
         nMaxCharsPerLine <- 40
-        nTitleSize <- 3
+        nTitleSize <- 2.5
     } else if (nUsed == 2) {
         nMaxCharsPerLine <- 30
         nTitleSize <- 2.5
@@ -80,9 +85,27 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
         nTitleSize <- 2
     }
     
-    # Integration points order
+    # Automatically enable flags if user provided those integration points
+    if ("Treatment Selection" %in% names(lIntPoints)) {
+        bShowTreatmentSelection <- TRUE
+    }
+    if ("Multiplicity Adjustment" %in% names(lIntPoints)) {
+        bShowMultiplicityAdjustment <- TRUE
+    }
+    
+    # Integration points order (base list)
     vIntegrationPoints <- c("Initialization", "Enrollment", "Randomization",
-                            "Dropout", "Treatment Selection", "Response", "Analysis")
+                            "Dropout", "Treatment Selection", "Response",
+                            "Analysis", "Multiplicity Adjustment")
+    
+    # Filter out hidden points
+    if (!bShowTreatmentSelection)
+        vIntegrationPoints <- vIntegrationPoints[vIntegrationPoints != "Treatment Selection"]
+    if (!bShowMultiplicityAdjustment)
+        vIntegrationPoints <- vIntegrationPoints[vIntegrationPoints != "Multiplicity Adjustment"]
+    
+    # Remove any hidden point from lIntPoints if present
+    lIntPoints <- lIntPoints[intersect(names(lIntPoints), vIntegrationPoints)]
     
     # Setup column positions
     nXStart <- 0
@@ -127,7 +150,6 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
     
     # Compute flowchart boxes
     lFlowcharts <- list()
-    
     for (strPoint in names(lIntPoints)) {
         vIdx <- which(dfColumns$id == strPoint)
         if (length(vIdx) == 0) next

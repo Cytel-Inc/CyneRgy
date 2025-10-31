@@ -201,7 +201,7 @@ SelectTreatment <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 Explore the following examples for more context:
 
-1. [**Multiple Arm, Binary Outcome - Treatment Selection**](TreatmentSelectionDescription.html)
+1. [**Multiple Arm, Binary Outcome - Treatment Selection**](TreatmentSelection.html)
     - [SelectExpThatAreBetterThanCtrl.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpThatAreBetterThanCtrl.R)
     - [SelectExpUsingBayesianRule.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpUsingBayesianRule.R)
     - [SelectExpWithPValueLessThanSpecified.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpWithPValueLessThanSpecified.R)

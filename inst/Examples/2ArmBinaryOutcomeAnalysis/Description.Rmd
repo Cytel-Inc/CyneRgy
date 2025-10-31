@@ -108,7 +108,6 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-
 # Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision-Making
 
 <div class="alert alert-primary" role="alert">

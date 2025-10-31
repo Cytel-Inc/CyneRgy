@@ -26,7 +26,7 @@ This integration point is available in East Horizon Explore for the following st
 
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
+|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
 
@@ -188,13 +188,11 @@ Used to load libraries in the following examples:
 1.  [**2-Arm, Normal Outcome, Repeated Measures - Patient Simulation**](2ArmNormalRepeatedMeasuresResponseGeneration.html)
     - [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R)
     - [LibraryNIme.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryNIme.R)
-1. **2-Arm, Normal Outcome, Repeated Measures - Analysis**
-    - [LibraryRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresOutcomeAnalysis/R/LibraryRM.R)
-1. [**2-Arm, Time-To-Event Outcome - Analysis**](2ArmTimeToEventOutcomeAnalysisDescription.html)
+1. [2-Arm, Normal Outcome, Repeated Measures - Analysis](2ArmNormalRepeatedMeasuresAnalysis.html)
+    - [LibraryRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresAnalysis/R/LibraryRM.R)
+1. [**2-Arm, Time-To-Event Outcome - Analysis**](2ArmTimeToEventOutcomeAnalysis.html)
     - [Librarysurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/Librarysurvival.R)
-1. [**Bayesian Assurance of Consecutive Studies**](AssuranceConsecutiveStudies.html)
-    - [InitializeSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/AssuranceConsecutiveStudies/R/InitializeSurvival.R)
 1. [**Generate Patient Arrival Times with Poisson Process**](GeneratePoissonArrival.html)
     - [Initialize.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/Initialize.R)
-1. [**2-Arm - Randomization of Subjects**](PatientRandomization.html)
+1. [**2-Arm - Randomization of Subjects**](RandomizeSubjects.html)
     - [LoadRandomizeR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/R/LoadRandomizeR.R)

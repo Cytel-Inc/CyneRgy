@@ -8,7 +8,7 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">**Integration Point: Response -  Continuous Outcome with Repeated Measures**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">**Integration Point: Response - Continuous Outcome with Repeated Measures**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
 <div class="alert alert-danger" role="alert">
 To try this example, create a new project in East Horizon using the following configuration:
@@ -16,7 +16,7 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Study objective:** Two Arm Confirmatory</li>
 <li>**Number of endpoints:** Single Endpoint</li>
 <li>**Endpoint type:** Continuous Outcome with Repeated Measures</li>
-<li>**Task:** Any</li>
+<li>**Task:** Explore</li>
 </ul></div>
 
 # Introduction
@@ -40,13 +40,13 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 2. [LibraryMASS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/LibraryMASS.R) - This file is used to load the library `MASS` to run the `mvrnorm` function. 
 
-# Example 1 - Normal Endpoint
+# Example 1 - Continuous Endpoint
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R" class="alert-link">GenerateResponseDiffOfMeansRepeatedMeasures.R</a></p>
 </div>
 
-For a normal endpoint with repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits. This examples uses built-in input variables coming from East Horizon or East to simulate repeated measures data. It uses the `MASS::mvrnorm` function. This example does not use any user-defined parameters.
+For a continuous endpoint with repeated measures, the generation of responses primarily depends on the mean and standard deviation across all visits, as well as the correlation between these visits. This examples uses built-in input variables coming from East Horizon or East to simulate repeated measures data. It uses the `MASS::mvrnorm` function. This example does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
