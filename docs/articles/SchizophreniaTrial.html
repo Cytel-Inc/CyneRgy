@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Jacob
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">October 16, 2025</h4>
+            <h4 data-toc-skip class="date">October 31, 2025</h4>
       
 
       <div class="d-none name"><code>SchizophreniaTrial.Rmd</code></div>
@@ -97,12 +97,44 @@ Wathen</h4>
     
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
-The following scripts are related to both the
-<a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration
-Point: Response</strong></a> and the
-<a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration
-Point: Analysis</strong></a>. Click on the links for more information
-about these integration points.
+This example is related to both the
+<a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link"><strong>Integration
+Point: Response - Continuous Outcome with Repeated Measures</strong></a>
+and the
+<a href="IntegrationPointAnalysisRepeatedMeasures.html" class="alert-link"><strong>Integration
+Point: Analysis - Continuous Outcome with Repeated
+Measures</strong></a>. Click the links for setup instructions, variable
+details, and additional information about the integration points.
+</p>
+</div>
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the
+following configuration:
+<ul style="margin-bottom:0">
+<li>
+<strong>Study objective:</strong> Two Arm Confirmatory
+</li>
+<li>
+<strong>Number of endpoints:</strong> Single Endpoint
+</li>
+<li>
+<strong>Endpoint type:</strong> Continuous Outcome with Repeated
+Measures
+</li>
+<li>
+<strong>Better Response:</strong> Smaller Value
+</li>
+<li>
+<strong>Task:</strong> Explore
+</li>
+</ul>
+</div>
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">
+<strong>Note:</strong> This example is compatible with both Fixed Sample
+and Group Sequential statistical designs. The R code automatically
+detects whether interim look information (<em>LookInfo</em>) is
+available and adjusts the analysis parameters accordingly.
 </p>
 </div>
 <div class="section level2">
@@ -157,10 +189,10 @@ on the simulated data, and plot data from the overall trial or indivdual
 patient trajectories.</p>
 <ul>
 <li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/AnalyzeMMRM.R" class="external-link">AnalyzeMMRM.R</a>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/AnalyzeUsingMMRM.R" class="external-link">AnalyzeUsingMMRM.R</a>
 - This code takes simulated patient data and runs MMRM analysis.</li>
 <li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/AnalyzeMMRM_GLS.R" class="external-link">AnalyzeMMRM_GLS.R</a>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/AnalyzeUsingMMRMWithGLS.R" class="external-link">AnalyzeUsingMMRMWithGLS.R</a>
 - This code is a slower version of the original analysis, but it has
 slightly increased power and an alternative form of analysis using the
 function for generalized least squares in the R package nlme.</li>
@@ -169,11 +201,11 @@ function for generalized least squares in the R package nlme.</li>
 - This code generates the responses for patients across treatment
 visits.</li>
 <li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/PlotPatientData.R" class="external-link">PlotPatientData.R</a>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/PlotSelectedPatients.R" class="external-link">PlotSelectedPatients.R</a>
 - This code takes the generated patient data and creates plots of
 individual patient trajectories.</li>
 <li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/PlotTrialData.R" class="external-link">PlotTrialData.R</a>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/PlotTreatmentControlCI.R" class="external-link">PlotTreatmentControlCI.R</a>
 - This code takes the overall data generated and creates a plot of the
 difference of means with a 95% CI.</li>
 <li>
@@ -187,25 +219,25 @@ changes are made to the code.</li>
 information to not impact power as much as other analysis methods. It
 works well in East Horizon for providing a longitudinal analysis design.
 While not all of the R files listed above are required, they can be used
-to help simulate patient data and run analysis locally in R Studio. This
+to help simulate patient data and run analysis locally in RStudio. This
 can be very helpful to allow users a good starting point in case they
 need to adjust the details in the analysis. The various plot functions
 can be very helpful for visualizing the simulated patient data to make
 sure it looks realistic.</p>
-<p>For East Horizon, you will need <strong>AnalyzeMMRM.R</strong> and/or
-<strong>AnalyzeMMRM_GLS.R</strong> for the MMRM analysis. Both files
-provide MMRM analysis but use different R packages and the
-<strong>AnalyzeMMRM.R file</strong> has the most efficient approach.
-Additionally, the <strong>GenerateMMRMResponses.R</strong> file provides
-a R function for patient generation that can be used in East Horizon,
-but it is not required as the native approach to data generation could
-be used.</p>
+<p>For East Horizon, you will need <strong>AnalyzeUsingMMRM.R</strong>
+and/or <strong>AnalyzeUsingMMRMWithGLS.R</strong> for the MMRM analysis.
+Both files provide MMRM analysis but use different R packages and the
+<strong>AnalyzeUsingMMRM.R file</strong> has the most efficient
+approach. Additionally, the <strong>GenerateMMRMResponses.R</strong>
+file provides a R function for patient generation that can be used in
+East Horizon, but it is not required as the native approach to data
+generation could be used.</p>
 </div>
 <div class="section level3">
 <h3 id="example-outputs">Example outputs<a class="anchor" aria-label="anchor" href="#example-outputs"></a>
 </h3>
 <p>Below are some graphs as example outputs from the code from the
-<strong>GenerateMMRMResponse</strong> function. It is always good to
+<strong>GenerateMMRMResponses</strong> function. It is always good to
 review example data sets to verify that the data is realistic.</p>
 <div class="float">
 <img src="SchizophreniaTrial_files/TrialPlot.png" style="width:90.0%" alt="Figure 1: An example plot of the trial data with a 95% CI"><div class="figcaption">
@@ -230,15 +262,15 @@ products, and it outlines the steps performed by the R code.</p>
 <div class="section level2">
 <h2 id="project-setup">Project Setup<a class="anchor" aria-label="anchor" href="#project-setup"></a>
 </h2>
-<div class="section level3">
-<h3 id="input-setup">Input Setup<a class="anchor" aria-label="anchor" href="#input-setup"></a>
-</h3>
-<p>To recreate this example in East Horizon, begin by creating a new
-project in East Horizon using a <strong>Study Objective</strong> of “Two
-Arm Confirmatory.” On the Plan page, select the Continuous endpoint type
-and choose the “Repeated Measure” option. Lastly, click the “Add Visit”
-so that the project will have a total of 5 visits: 4 interim visits and
-1 final visit.</p>
+<p>To recreate this example in East Horizon, start by creating a new
+project in East Horizon with the <strong>Two Arm Confirmatory</strong>
+study objective. On the Plan page, select the
+<strong>Continuous</strong> as the endpoint type and choose the
+<strong>Repeated Measure</strong> option. For <em>Better Response</em>,
+select <strong>Smaller Value</strong> since a patient’s outcome is
+improved with a smaller score. Lastly, click <strong>Add Visit</strong>
+so that the project has a total of 5 visits: 4 interim visits and 1
+final visit.</p>
 <p>The visit times should be set as follows:</p>
 <ul>
 <li>Visit 1: 0</li>
@@ -247,23 +279,25 @@ so that the project will have a total of 5 visits: 4 interim visits and
 <li>Visit 4: 0.75</li>
 <li>Final Visit: 1</li>
 </ul>
-<p>For Better Response, select “Smaller Value,” since a patient’s
-outcome is improved with a smaller score. The project setup should look
-like the following.</p>
+<p>The project setup should look like the following.</p>
 <div class="float">
 <img src="SchizophreniaTrial_files/ProjectSetup.png" style="width:90.0%" alt="Project Setup"><div class="figcaption"><strong>Project Setup</strong></div>
 </div>
-<p><br>Once you “Create Project”, you then need to create an input set
-using the explore option.</p>
+<p><br>Once you create Project, you then need to create an input set
+using the <strong>Explore</strong> option.</p>
 </div>
+<div class="section level2">
+<h2 id="input-setup">Input Setup<a class="anchor" aria-label="anchor" href="#input-setup"></a>
+</h2>
 <div class="section level3">
 <h3 id="design-page">Design Page<a class="anchor" aria-label="anchor" href="#design-page"></a>
 </h3>
 <p>In the MMRM fixed-sample card, the sample size should be 266. The
 group sequential MMRM card should have the input “200:360:20.” This will
 create samples ranging from 200-360 patients counting up in steps of 20.
-Both cards use a Type I error 0f 0.025 and an allocation ration of 1.
-For the Test type, select User Defined R, the upload the <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/AnalyzeMMRM.R" class="external-link">AnalyzeMMRM.R</a>.</p>
+Both cards use a Type I error of 0.025 and an allocation ration of 1.
+For the Test type, select <strong>User Specified-R</strong>, then upload
+the file <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/AnalyzeUsingMMRM.R" class="external-link">AnalyzeUsingMMRM.R</a>.</p>
 <p>Your design card for the fixed design should look something like
 this:</p>
 <div class="float">
@@ -271,7 +305,7 @@ this:</p>
 </div>
 <p><br>To add a group sequential option, you can duplicate the card so
 that the sample sizes are retained. Switch the Statistical Design to
-“Group Sequential”. The card should look like:</p>
+<strong>Group Sequential</strong>. The card should look like:</p>
 <div class="float">
 <img src="SchizophreniaTrial_files/MMRMGS.png" style="width:90.0%" alt="MMRM Group Sequential"><div class="figcaption"><strong>MMRM Group Sequential</strong></div>
 </div>
@@ -283,15 +317,15 @@ that the sample sizes are retained. Switch the Statistical Design to
 The first card uses the result data from Correll <em>et. al. </em> for
 the mean differences between treatment and control arms (Mean Difference
 = 6 points) and the given standard deviation (Std. Dev = 15). There
-should be two cards called “Diff 4” and “Diff 8”. These cards will
-change the mean difference between the arms to 4 and 8, respectively.
-Next, there should be two response cards that change the standard
-deviation from 15 to 10 and 20. The different standard deviations and
-mean different are included to understand the impact on power. Lastly,
-there should be a null card where the standard deviation is 15 but the
-mean difference between treatment and control is 0. The null case is
-used to understand the false-positive of each analysis method. (Note: No
-UserParam is needed)</p>
+should be two cards called “Diff 4” and “Diff 8”. These cards change the
+mean difference between the arms to 4 and 8, respectively. Next, there
+should be two response cards that change the standard deviation from 15
+to 10 and 20. The different standard deviations and mean differences are
+included to understand the impact on power. Lastly, there should be a
+null card where the standard deviation is 15 but the mean difference
+between treatment and control is 0. The null case is used to understand
+the false-positive of each analysis method. (Note: No UserParam is
+needed)</p>
 <p>All cards use the R integration and the <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/R/GenerateMMRMResponses.R" class="external-link">GenerateMMRMResponses.R</a>
 file can be uploaded.</p>
 <p>Below are the response cards and how they should look:</p>
@@ -326,7 +360,7 @@ publication</strong></div>
 <h3 id="dropout-page">Dropout Page<a class="anchor" aria-label="anchor" href="#dropout-page"></a>
 </h3>
 <p>All dropout cards share the same dropout rates as the publication
-(0.26 control and 0.15 experimental).</p>
+(0.26 for control and 0.15 for experimental arm).</p>
 <p>Here is what the dropout card should look like:</p>
 <div class="float">
 <img src="SchizophreniaTrial_files/DropoutRate.png" style="width:90.0%" alt="Dropout Information"><div class="figcaption"><strong>Dropout Information</strong></div>
@@ -377,7 +411,7 @@ Publication Results</div>
 <li>
 <strong>Sensitivity</strong>: Power changed as standard deviation
 and mean difference were varied (Std. Dev ↑ → power ↓; Std. Dev ↓ →
-power ↑).The cards with standard deviation of 20 (named “SD20”) and the
+power ↑). The cards with standard deviation of 20 (named “SD20”) and the
 cards with mean difference of 4 (named “Diff 4”) resulted in
 significantly lower power ranging from 36% to 76%. In contrast, the
 cards with a standard deviation of 10 (named “SD10”) and a mean
@@ -399,7 +433,7 @@ Results</div>
 <ul>
 <li>
 <strong>Null behavior (MMRM)</strong>: Type I error was observed
-between 2.1–3.6%, close to nominal 2.5%.</li>
+between 2.1 and 3.6%, close to nominal 2.5%.</li>
 </ul>
 <div class="float">
 <img src="SchizophreniaTrial_files/NullResult.png" alt="Figure 6: Null Case Results"><div class="figcaption">
@@ -412,17 +446,17 @@ Results</div>
 </h2>
 <ul>
 <li>
-<strong>Fixed Vs. selected Sample GS300</strong>: While the Selected
-Sample GS300 (i.e., the group sequential design that allows for interim
-analyses and potential early stopping) does feature a lower power than
-the fixed sample, it does come with several benefits worth weight when
-simulating the study. Selected Sample GS300 boasts a 30% chance of
-stopping early, a shorter average study duration, and smaller average
-sample size. In return, it comes with a decrease in power by ~1.4%.
-These difference are significant as it can save money in a trial for
-even one of these other improved results. These designs were considered
-over larger sample sizes due to meeting the required 90% power with the
-smallest sample sizes.</li>
+<strong>Fixed Vs. Selected Sample GS300</strong>: While the Selected
+Sample GS300 design (i.e., the group sequential design that allows for
+interim analyses and potential early stopping) does feature a lower
+power than the Fixed design, it does come with several benefits worth
+weight when simulating the study. Selected Sample GS300 design boasts a
+30% chance of stopping early, a shorter average study duration, and
+smaller average sample size. In return, it comes with a decrease in
+power by ~1.4%. These difference are significant as it can save money in
+a trial for even one of these other improved results. These designs were
+considered over larger sample sizes due to meeting the required 90%
+power with the smallest sample sizes.</li>
 </ul>
 <p><img src="SchizophreniaTrial_files/SelectDesign.png"></p>
 <p><br></p>
@@ -432,11 +466,11 @@ the difference of means cards and the standard deviation cards was to
 illustrate how sensitive the power in this study is if the researchers’
 initial assumptions were off. When increasing standard deviation to 20
 or decreasing the difference of means to 4 led to the power becoming
-under powered. This means we would have to increase the sample size to
-detect if there is a significant difference. When the standard deviation
-was set to 10 and the difference between means was 8, the power
-increased, reaching the mid-to-high 90% range. This would allow for a
-reduction in the study’s sample size while still maintaining 90%
+under powered. This suggests we would have to increase the sample size
+to detect if there is a significant difference. When the standard
+deviation was set to 10 and the difference between means was 8, the
+power increased, reaching the mid-to-high 90% range. This would allow
+for a reduction in the study’s sample size while still maintaining 90%
 power.</p></li>
 <li><p><strong>Null Cases</strong>: Across all null cases, the observed
 rates consistently ranged from 2.1% to 3.6%. These percentages fall

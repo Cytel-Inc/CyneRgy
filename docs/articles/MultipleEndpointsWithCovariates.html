@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Multiple Endpoints With Covariates and Stratified Randomisation • CyneRgy</title>
+<title>Multiple Endpoints With Covariates and Stratified Randomization • CyneRgy</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Multiple Endpoints With Covariates and Stratified Randomisation">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Multiple Endpoints With Covariates and Stratified Randomization">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 </head>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,11 +83,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Multiple Endpoints With Covariates and Stratified Randomisation</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Multiple Endpoints With Covariates and Stratified Randomization</h1>
                         <h4 data-toc-skip class="author">Julija
 Saltane</h4>
             
-            <h4 data-toc-skip class="date">October 16, 2025</h4>
+            <h4 data-toc-skip class="date">October 31, 2025</h4>
       
 
       <div class="d-none name"><code>MultipleEndpointsWithCovariates.Rmd</code></div>
@@ -97,19 +97,48 @@ Saltane</h4>
     
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
-The following scripts are related to both the
-<a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration
-Point: Response</strong></a> and the
-<a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration
-Point: Analysis</strong></a>. Click on the links for more information
-about these integration points.
+This example is related to both the
+<a href="IntegrationPointResponseContinuous.html" class="alert-link"><strong>Integration
+Point: Response - Continuous Outcome</strong></a> and the
+<a href="IntegrationPointAnalysisContinuous.html" class="alert-link"><strong>Integration
+Point: Analysis - Continuous Outcome</strong></a>. Click the links for
+setup instructions, variable details, and additional information about
+the integration points.
+</p>
+</div>
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the
+following configuration:
+<ul style="margin-bottom:0">
+<li>
+<strong>Study objective:</strong> Two Arm Confirmatory
+</li>
+<li>
+<strong>Number of endpoints:</strong> Single Endpoint
+</li>
+<li>
+<strong>Endpoint type:</strong> Continuous Outcome (other outcomes also
+compatible)
+</li>
+<li>
+<strong>Task:</strong> Explore
+</li>
+<li>
+<strong>Statistical Design:</strong> Fixed Sample
+</li>
+</ul>
+</div>
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">
+<strong>Important note:</strong> This example does not use East
+Horizon’s built-in multiple endpoint framework.
 </p>
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>The following examples illustrate how to incorporate new patient
-outcome simulation (<em>response</em>) and analysis (<em>design</em>)
+outcome simulation (<em>Response</em>) and analysis (<em>Design</em>)
 capabilities into East Horizon using R functions in the context of a
 two-arm trial. Each example features a trial design consisting of a
 standard-of-care control arm and an experimental treatment arm, with

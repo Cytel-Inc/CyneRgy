@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">J. Kyle Wathen
 and Laurent Spiess</h4>
             
-            <h4 data-toc-skip class="date">October 16, 2025</h4>
+            <h4 data-toc-skip class="date">October 31, 2025</h4>
       
 
       <div class="d-none name"><code>BayesianAssuranceTimeToEvent.Rmd</code></div>
@@ -97,12 +97,39 @@ and Laurent Spiess</h4>
     
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
-The following scripts are related to the
-<a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration
-Point: Analysis</strong></a> and the
-<a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration
-Point: Response</strong></a>. Click on the links for more information
-about these integration points.
+This example is related to both the
+<a href="IntegrationPointResponseTimeToEvent.html" class="alert-link"><strong>Integration
+Point: Response - Time-to-Event Outcome</strong></a> and the
+<a href="IntegrationPointAnalysisTimeToEvent.html" class="alert-link"><strong>Integration
+Point: Analysis - Time-to-Event Outcome</strong></a>. Click the links
+for setup instructions, variable details, and additional information
+about the integration points.
+</p>
+</div>
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the
+following configuration:
+<ul style="margin-bottom:0">
+<li>
+<strong>Study objective:</strong> Two Arm Confirmatory
+</li>
+<li>
+<strong>Number of endpoints:</strong> Single Endpoint
+</li>
+<li>
+<strong>Endpoint type:</strong> Time-to-Event Outcome
+</li>
+<li>
+<strong>Task:</strong> Explore
+</li>
+</ul>
+</div>
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">
+<strong>Note:</strong> This example is compatible with both Fixed Sample
+and Group Sequential statistical designs. The R code automatically
+detects whether interim look information (<em>LookInfo</em>) is
+available and adjusts the analysis parameters accordingly.
 </p>
 </div>
 <div class="section level2">
@@ -129,11 +156,11 @@ directory of this example</a> you will find the R files used in the
 examples:</p>
 <ol style="list-style-type: decimal">
 <li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceContinuous/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link">SimulatePatientSurvivalAssurance.R</a>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R" class="external-link">SimulatePatientSurvivalAssurance.R</a>
 - Functions to simulate patient outcomes under a time-to-event
 distribution informed by a bi-modal prior.</li>
 <li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceContinuous/R/AnalyzeUsingBayesianNormals.R" class="external-link">AnalyzeSurvivalDataUsingCoxPH.R</a>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/AnalyzeUsingBayesianNormals.R" class="external-link">AnalyzeSurvivalDataUsingCoxPH.R</a>
 - Implements Bayesian analysis of simulated outcomes using Cox
 proportional hazards model.</li>
 </ol>
@@ -158,7 +185,7 @@ outlining the general steps performed by the R code.</p>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
 This endpoint is related to this R file:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceContinuous/R/SimulatePatientSurvivalAssurance.R" class="external-link alert-link">SimulatePatientSurvivalAssurance.R</a>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/SimulatePatientSurvivalAssurance.R" class="external-link alert-link">SimulatePatientSurvivalAssurance.R</a>
 </p>
 </div>
 <p>This function simulates patient-level outcomes within a
@@ -233,7 +260,7 @@ user-defined parameters used in this example.</p>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
 This endpoint is related to this R file:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceContinuous/R/AnalyzeSurvivalDataUsingCoxPH.R" class="external-link alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R" class="external-link alert-link">AnalyzeSurvivalDataUsingCoxPH.R</a>
 </p>
 </div>
 <p>A single analysis is conducted once 50% of patients have experienced

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,10 +84,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Consecutive Studies, Continuous &amp; Time-to-Event Outcomes</h1>
-                        <h4 data-toc-skip class="author">J. Kyle Wathen
-and Laurent Spiess</h4>
+                        <h4 data-toc-skip class="author">J. Kyle Wathen,
+Laurent Spiess, Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 16, 2025</h4>
+            <h4 data-toc-skip class="date">October 31, 2025</h4>
       
 
       <div class="d-none name"><code>ConsecutiveStudiesContinuousTimeToEvent.Rmd</code></div>
@@ -97,12 +97,44 @@ and Laurent Spiess</h4>
     
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
-The following scripts are related to the
-<a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration
-Point: Analysis</strong></a> and the
-<a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration
-Point: Response</strong></a>. Click on the links for more information
-about these integration points.
+This example is related to the
+<a href="IntegrationPointResponseContinuous.html" class="alert-link"><strong>Integration
+Point: Response - Continuous Outcome</strong></a>, the
+<a href="IntegrationPointAnalysisContinuous.html" class="alert-link"><strong>Integration
+Point: Analysis - Continuous Outcome</strong></a>, the
+<a href="IntegrationPointResponseTimeToEvent.html" class="alert-link"><strong>Integration
+Point: Response - Time-to-Event Outcome</strong></a>, and the
+<a href="IntegrationPointAnalysisTimeToEvent.html" class="alert-link"><strong>Integration
+Point: Analysis - Time-to-Event Outcome</strong></a>. Click the links
+for setup instructions, variable details, and additional information
+about the integration points.
+</p>
+</div>
+<div class="alert alert-danger" role="alert">
+To try this example, create two new projects in East Horizon using the
+following configuration:
+<ul style="margin-bottom:0">
+<li>
+<strong>Study objective:</strong> Two Arm Confirmatory
+</li>
+<li>
+<strong>Number of endpoints:</strong> Single Endpoint
+</li>
+<li>
+<strong>Endpoint type:</strong> Continuous Outcome (project 1) and
+Time-to-Event Outcome (project 2)
+</li>
+<li>
+<strong>Task:</strong> Explore
+</li>
+</ul>
+</div>
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">
+<strong>Note:</strong> This example is compatible with both Fixed Sample
+and Group Sequential statistical designs. The R code automatically
+detects whether interim look information (<em>LookInfo</em>) is
+available and adjusts the analysis parameters accordingly.
 </p>
 </div>
 <div class="section level2">

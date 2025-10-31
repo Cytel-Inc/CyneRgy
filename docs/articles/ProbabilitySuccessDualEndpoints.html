@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin,
 Valeria A. G. Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">October 16, 2025</h4>
+            <h4 data-toc-skip class="date">October 31, 2025</h4>
       
 
       <div class="d-none name"><code>ProbabilitySuccessDualEndpoints.Rmd</code></div>
@@ -97,20 +97,56 @@ Valeria A. G. Mazzanti, J. Kyle Wathen</h4>
     
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
-The following scripts are related to both the
+This example is related to both the
 <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration
 Point: Response</strong></a> and the
 <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration
-Point: Analysis</strong></a>. Click on the links for more information
-about these integration points.
+Point: Analysis</strong></a>. Click the links for setup instructions,
+variable details, and additional information about the integration
+points.
+</p>
+</div>
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the
+following configuration:
+<ul style="margin-bottom:0">
+<li>
+<strong>Study objective:</strong> Two Arm Confirmatory
+</li>
+<li>
+<strong>Number of endpoints:</strong> Single Endpoint
+</li>
+<li>
+<strong>Endpoint type:</strong> Time-to-Event Outcome
+</li>
+<li>
+<strong>Task:</strong> Explore
+</li>
+</ul>
+</div>
+<div class="alert alert-secondary" role="alert">
+<p style="margin-bottom:0">
+<strong>Note:</strong> This example is compatible with both Fixed Sample
+and Group Sequential statistical designs. The R code automatically
+detects whether interim look information (<em>LookInfo</em>) is
+available and adjusts the analysis parameters accordingly. When using
+Group Sequential, the user parameter <em>HazardRatioCutoffIA</em> is
+mandatory.
+</p>
+</div>
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">
+<strong>Important note:</strong> This example does not use East
+Horizon’s built-in dual-endpoint framework, as it was developed before
+that functionality existed.
 </p>
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This example demonstrates how to compute the probability of success
-of a clinical trial by extending East Horizon’s single-endpoint
-framework to handle dual endpoints using custom R scripts for the
+for a clinical trial by extending East Horizon’s single-endpoint
+framework to handle dual endpoints through custom R scripts for the
 <strong>Response (Patient Simulation)</strong> and the
 <strong>Analysis</strong> integration points. This example uses
 <strong>Progression Free Survival (PFS)</strong> and <strong>Overall

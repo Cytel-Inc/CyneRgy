@@ -2,13 +2,15 @@ pandoc: '3.2'
 pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
-  2ArmBinaryOutcomeAnalysisDescription: 2ArmBinaryOutcomeAnalysisDescription.html
+  2ArmBinaryOutcomeAnalysis: 2ArmBinaryOutcomeAnalysis.html
   2ArmBinaryOutcomePatientSimulation: 2ArmBinaryOutcomePatientSimulation.html
-  2ArmNormalOutcomeAnalysisDescription: 2ArmNormalOutcomeAnalysisDescription.html
-  2ArmNormalOutcomePatientSimulationDescription: 2ArmNormalOutcomePatientSimulationDescription.html
+  2ArmNormalOutcomeAnalysis: 2ArmNormalOutcomeAnalysis.html
+  2ArmNormalOutcomePatientSimulation: 2ArmNormalOutcomePatientSimulation.html
+  2ArmNormalRepeatedMeasuresAnalysis: 2ArmNormalRepeatedMeasuresAnalysis.html
   2ArmNormalRepeatedMeasuresResponseGeneration: 2ArmNormalRepeatedMeasuresResponseGeneration.html
-  2ArmTimeToEventOutcomeAnalysisDescription: 2ArmTimeToEventOutcomeAnalysisDescription.html
-  2ArmTimeToEventOutcomePatientSimulationDescription: 2ArmTimeToEventOutcomePatientSimulationDescription.html
+  2ArmPatientDropout: 2ArmPatientDropout.html
+  2ArmTimeToEventOutcomeAnalysis: 2ArmTimeToEventOutcomeAnalysis.html
+  2ArmTimeToEventOutcomePatientSimulation: 2ArmTimeToEventOutcomePatientSimulation.html
   BayesianAssuranceContinuous: BayesianAssuranceContinuous.html
   BayesianAssuranceTimeToEvent: BayesianAssuranceTimeToEvent.html
   ChildhoodAnxiety: ChildhoodAnxiety.html
@@ -16,6 +18,9 @@ articles:
   ConsecutiveStudiesContinuous: ConsecutiveStudiesContinuous.html
   ConsecutiveStudiesContinuousTimeToEvent: ConsecutiveStudiesContinuousTimeToEvent.html
   ContributingToCyneRgy: ContributingToCyneRgy.html
+  DEPAnalysis: DEPAnalysis.html
+  DEPDecisionsUsingMCP: DEPDecisionsUsingMCP.html
+  DEPPatientSimulation: DEPPatientSimulation.html
   ExampleOutline: ExampleOutline.html
   GeneratePoissonArrival: GeneratePoissonArrival.html
   IntegrationPointAnalysis: IntegrationPointAnalysis.html
@@ -32,6 +37,7 @@ articles:
   IntegrationPointDropoutTimeToEvent: IntegrationPointDropoutTimeToEvent.html
   IntegrationPointEnrollment: IntegrationPointEnrollment.html
   IntegrationPointInitialization: IntegrationPointInitialization.html
+  IntegrationPointMultiplicityAdjustment: IntegrationPointMultiplicityAdjustment.html
   IntegrationPointRandomization: IntegrationPointRandomization.html
   IntegrationPointResponse: IntegrationPointResponse.html
   IntegrationPointResponseBinary: IntegrationPointResponseBinary.html
@@ -40,19 +46,21 @@ articles:
   IntegrationPointResponseRepeatedMeasures: IntegrationPointResponseRepeatedMeasures.html
   IntegrationPointResponseTimeToEvent: IntegrationPointResponseTimeToEvent.html
   IntegrationPointTreatmentSelection: IntegrationPointTreatmentSelection.html
+  MultiArmAnalysis: MultiArmAnalysis.html
+  MultiArmPatientDropout: MultiArmPatientDropout.html
+  MultiArmPatientSimulation: MultiArmPatientSimulation.html
   MultipleEndpointsWithCovariates: MultipleEndpointsWithCovariates.html
   Overview: Overview.html
-  PatientDropout: PatientDropout.html
-  PatientRandomization: PatientRandomization.html
   ProbabilitySuccessDualEndpoints: ProbabilitySuccessDualEndpoints.html
+  RandomizeSubjects: RandomizeSubjects.html
   SchizophreniaTrial: SchizophreniaTrial.html
   TimeToEventConditionalPowerFutilityAnalysis: TimeToEventConditionalPowerFutilityAnalysis.html
-  TreatmentSelectionDescription: TreatmentSelectionDescription.html
+  TreatmentSelection: TreatmentSelection.html
   VariablesOfAdaptInfo: VariablesOfAdaptInfo.html
   VariablesOfDesignParam: VariablesOfDesignParam.html
   VariablesOfLookInfo: VariablesOfLookInfo.html
   VariablesOfSimData: VariablesOfSimData.html
-last_built: 2025-10-16T23:30Z
+last_built: 2025-10-31T20:00Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles
