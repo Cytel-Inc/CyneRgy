@@ -84,4 +84,4 @@ Explore the following examples for more context:
     - [SimulatePatientOutcomeCHU9.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R)
     - [SimulatePatientOutcomeCHU9V2.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9V2.R)
 3. [**Multiple Arm, Patient Simulation**](MultiArmPatientSimulation.html)
-    - [SimulatePatientOutcomeMultiArmPercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.R)
+    - [SimulatePatientOutcomeMultiArmPercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.R)

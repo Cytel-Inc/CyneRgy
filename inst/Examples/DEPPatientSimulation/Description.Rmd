@@ -26,14 +26,14 @@ The following examples illustrate how to integrate new patient outcome simulatio
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DEPOutcomePatientSimulation/R) you will find the following R files:
 
-1. [SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/R/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R) - Contains the implementation for simulating correlated TTE outcomes under a single-piece hazard assumption for both endpoints.
+1. [SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R) - Contains the implementation for simulating correlated TTE outcomes under a single-piece hazard assumption for both endpoints.
 
-1. [SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/R/SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R) - Contains the implementation for simulating correlated TTE and binary outcomes under a single-piece hazard assumption for both endpoints.
+1. [SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R) - Contains the implementation for simulating correlated TTE and binary outcomes under a single-piece hazard assumption for both endpoints.
 
 # Example 1 - Simulate Correlated TTE-TTE Dual Endpoints
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/R/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R" class="alert-link">SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R" class="alert-link">SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R</a></p>
 </div>
 
 The function *SimulatePatientOutcomeSurvSurv.DEP* simulates patient-level outcomes for a dual-endpoint design where both endpoints are time-to-event variables. Each endpoint is modeled using an exponential survival distribution, with arm-specific hazard rates supplied through the East Horizon interface.
@@ -62,7 +62,7 @@ CyneRgy::PlotExampleFlowchart(
 # Example 2
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPOutcomePatientSimulation/R/SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R" class="alert-link">SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R" class="alert-link">SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R</a></p>
 </div>
 
 The function *SimulatePatientOutcomeDEPSurvBinSingleHazardPiece* simulates patient-level outcomes in studies that involve two correlated endpoints where the first endpoint is time-to-event and the second is binary. This configuration is commonly encountered in oncology or chronic disease trials in which survival time is evaluated alongside a binary endpoint like response or remission status.
