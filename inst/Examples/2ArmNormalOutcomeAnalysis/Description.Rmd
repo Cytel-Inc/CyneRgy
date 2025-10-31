@@ -8,11 +8,22 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Analysis - Continuous Outcome</strong>.
-  <a href="IntegrationPointAnalysisContinuous.html" class="alert-link">Click here for more information about this integration point.</a></p>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointAnalysisContinuous.html" class="alert-link">**Integration Point: Analysis - Continuous Outcome**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Continuous Outcome</li>
+<li>**Task:** Any</li>
+</ul></div>
+
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">**Note:** This example is compatible with both Fixed Sample and Group Sequential statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly.</p>
 </div>
 
-## Introduction
+# Introduction
 
 The following examples illustrate how to integrate new analysis capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes assumed to follow a normal distribution. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
 
@@ -29,13 +40,13 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomeAnalysis/R) you will find the following R files:
 
-1.  [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R) - Contains a function named *AnalyzeUsingEastManualFormulaNormal* to demonstrate the R code necessary for Example 1 as described below.
+1. [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R) - Contains a function named *AnalyzeUsingEastManualFormulaNormal* to demonstrate the R code necessary for Example 1 as described below.
 
-2.  [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R) - Contains a function named *AnalyzeUsingTTestNormal* to demonstrate the R code necessary for Example 2 as described below.
+2. [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R) - Contains a function named *AnalyzeUsingTTestNormal* to demonstrate the R code necessary for Example 2 as described below.
 
-3.  [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R) - Contains a function named *AnalyzeUsingMeanLimitsOfCI* to demonstrate the R code necessary for Example 3 as described below.
+3. [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R) - Contains a function named *AnalyzeUsingMeanLimitsOfCI* to demonstrate the R code necessary for Example 3 as described below.
 
-## Example 1 - Using Formulas Q.3.3 from the East manual
+# Example 1 - Using Formulas Q.3.3 from the East manual
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R" class="alert-link">AnalyzeUsingEastManualFormulaNormal.R</a></p>
@@ -84,7 +95,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 2 - Using the `t.test()` Function in R
+# Example 2 - Using the `t.test()` Function in R
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R" class="alert-link">AnalyzeUsingTTestNormal.R</a></p>
@@ -107,7 +118,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision-Making
+# Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision-Making
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R" class="alert-link">AnalyzeUsingMeanLimitsOfCI.R</a></p>
@@ -158,7 +169,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-### Option 1 - Fixed Design (80% CI)
+## Option 1 - Fixed Design (80% CI)
 
 The decisions are made as follows:
 
@@ -175,7 +186,7 @@ Refer to the table below for the values of the user-defined parameters used in t
 |**dTV**|0.3|
 |**dConfLevel**|0.8|
 
-### Option 2 - Fixed Design (70% CI)
+## Option 2 - Fixed Design (70% CI)
 
 The decisions are made as follows:
 
@@ -192,7 +203,7 @@ Refer to the table below for the values of the user-defined parameters used in t
 |**dTV**|0.3|
 |**dConfLevel**|0.7|
 
-### Option 3 - Group Sequential Design
+## Option 3 - Group Sequential Design
 
 In this option, an interim analysis at 50 patients is included with an option to stop for early Go or No-Go decision. 
 

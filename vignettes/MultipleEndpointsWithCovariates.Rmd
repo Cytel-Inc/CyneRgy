@@ -1,5 +1,5 @@
 ---
-title: "Multiple Endpoints With Covariates and Stratified Randomisation"
+title: "Multiple Endpoints With Covariates and Stratified Randomization"
 author: "Julija Saltane"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:

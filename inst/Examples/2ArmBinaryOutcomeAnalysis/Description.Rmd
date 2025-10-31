@@ -8,11 +8,22 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Analysis - Binary Outcome</strong>.
-  <a href="IntegrationPointAnalysisBinary.html" class="alert-link">Click here for more information about this integration point.</a></p>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointAnalysisBinary.html" class="alert-link">**Integration Point: Analysis - Binary Outcome**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Binary Outcome</li>
+<li>**Task:** Any</li>
+</ul></div>
+
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">**Note:** This example is compatible with both Fixed Sample and Group Sequential statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly.</p>
 </div>
 
-## Introduction
+# Introduction
 
 The following examples illustrate how to integrate new analysis capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes modeled as binary data. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
 
@@ -39,7 +50,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
 
-## Example 1 - Using Formula 24.2 from the East manual
+# Example 1 - Using Formula 24.2 from the East manual
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
@@ -74,7 +85,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 2 - Using the `prop.test()` Function in R
+# Example 2 - Using the `prop.test()` Function in R
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R" class="alert-link">AnalyzeUsingPropTest.R</a></p>
@@ -97,8 +108,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-
-## Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision-Making
+# Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision-Making
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R" class="alert-link">AnalyzeUsingPropLimitsOfCI.R</a></p>
@@ -149,7 +159,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 4 - Bayesian Analysis
+# Example 4 - Bayesian Analysis
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R" class="alert-link">AnalyzeUsingBetaBinomial.R</a></p>

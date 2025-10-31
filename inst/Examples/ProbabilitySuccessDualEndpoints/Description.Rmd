@@ -9,12 +9,30 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">The following scripts are related to both the <a href="IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a> and the <a href="IntegrationPointAnalysis.html" class="alert-link"><strong>Integration Point: Analysis</strong></a>. Click on the links for more information about these integration points.</p>
+<p style="margin-bottom:0">This example is related to both the <a href="IntegrationPointResponse.html" class="alert-link">**Integration Point: Response**</a> and the <a href="IntegrationPointAnalysis.html" class="alert-link">**Integration Point: Analysis**</a>. Click the links for setup instructions, variable details, and additional information about the integration points.</p>
+</div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Time-to-Event Outcome</li>
+<li>**Task:** Explore</li>
+</ul></div>
+
+
+<div class="alert alert-secondary" role="alert">
+<p style="margin-bottom:0">**Note:** This example is compatible with both Fixed Sample and Group Sequential statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly. When using Group Sequential, the user parameter *HazardRatioCutoffIA* is mandatory.</p>
+</div>
+
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">**Important note:** This example does not use East Horizon's built-in dual-endpoint framework, as it was developed before that functionality existed.</p>
 </div>
 
 # Introduction
 
-This example demonstrates how to compute the probability of success of a clinical trial by extending East Horizon’s single-endpoint framework to handle dual endpoints using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. This example uses **Progression Free Survival (PFS)** and **Overall Survival (OS)** as endpoints, however, this could be extended to other types of endpoints by modifying the R code. 
+This example demonstrates how to compute the probability of success for a clinical trial by extending East Horizon’s single-endpoint framework to handle dual endpoints through custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. This example uses **Progression Free Survival (PFS)** and **Overall Survival (OS)** as endpoints, however, this could be extended to other types of endpoints by modifying the R code.
 
 ## Why do we need R Integration for this example?
 

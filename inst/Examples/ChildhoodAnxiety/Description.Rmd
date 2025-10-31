@@ -8,9 +8,16 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response - Continuous Outcome</strong>.
-  <a href="IntegrationPointResponseContinuous.html" class="alert-link">Click here for more information about this integration point.</a></p>
-</div>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseContinuous.html" class="alert-link">**Integration Point: Response - Continuous Outcome**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Continuous Outcome</li>
+<li>**Task:** Explore</li>
+</ul></div>
 
 # Introduction
 
@@ -105,7 +112,7 @@ If we were to proceed with the original sample size of 234 under realistic condi
 
 In summary, while a sample size of 234 yields a power of 90% under normal data distribution, the power decreases to around 85% when we implement a more realistic patient simulation. This highlights the importance of considering realistic conditions when determining the sample size for a study, to ensure adequate power to detect true treatment effects.
 
-# Initial R Code Developement
+# Initial R Code Development
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R" class="alert-link">SimulatePatientOutcomeCHU9.R</a></p>

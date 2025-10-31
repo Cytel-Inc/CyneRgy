@@ -8,11 +8,22 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Analysis - Time-to-Event Outcome</strong>.
-  <a href="IntegrationPointAnalysisTimeToEvent.html" class="alert-link">Click here for more information about this integration point.</a></p>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointAnalysisTimeToEvent.html" class="alert-link">**Integration Point: Analysis - Time-to-Event Outcome**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Time-to-Event Outcome</li>
+<li>**Task:** Any</li>
+</ul></div>
+
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">**Note:** This example is compatible with both Fixed Sample and Group Sequential statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly.</p>
 </div>
 
-## Introduction
+# Introduction
 
 The following examples illustrate how to integrate new analysis capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes modeled as time-to-event data. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
 
@@ -32,7 +43,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 3. [AnalyzeUsingHazardRatioLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R) - Contains a function named *AnalyzeUsingHazardRatioLimitsOfCI* to demonstrate the R code necessary for Example 3 as described below.
 
 
-## Example 1 - Using Formulas Q.242 and Q.243 from the East manual
+# Example 1 - Using Formulas Q.242 and Q.243 from the East manual
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R" class="alert-link">AnalyzeUsingEastLogrankFormula.R</a></p>
@@ -81,7 +92,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 2 - Using the `survival::survdiff()` Function
+# Example 2 - Using the `survival::survdiff()` Function
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R" class="alert-link">AnalyzeUsingSurvivalPackage.R</a></p>
@@ -105,7 +116,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision-Making
+# Example 3 - Utilization of Confidence Interval Limits for Go/No-Go Decision-Making
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R)" class="alert-link">AnalyzeUsingHazardRatioLimitsOfCI.R</a></p>
