@@ -51,7 +51,7 @@ The function *AnalyzeDEPUsingModWtLogRank* demonstrates how to compute a **modes
 
 The function reads subject-level simulated data, filters observations up to the current analysis time, and computes observed times and event indicators based on censoring and response times. A Cox proportional hazards model is used to estimate the hazard ratio between treatment and control arms, which provides an interpretable measure of treatment effect.
 
-The modestly weighted log-rank test gives higher weights to early events and reduces sensitivity to late ones, making it particularly useful when treatment effects are expected to manifest early. The weighting scheme adjusts dynamically depending on user-defined parameters such as delay periods and information fractions for interim looks.  
+The modestly weighted log-rank test (Magirr, 2019) gives lower weights to early events and increases sensitivity to late ones, making it particularly useful when delayed manifestation of treatment effects is expected. The weighting scheme is based on the delay periods defined in East Horizon, which represent the expected onset times of the treatment effect.
 
 This approach is flexible and handle both fixed sample and group sequential designs with multiple interim analyses.
 
