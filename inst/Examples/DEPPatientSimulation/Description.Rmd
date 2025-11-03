@@ -59,7 +59,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-# Example 2
+# Example 2 - Simulate Correlated TTE-Binary Dual Endpoints
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R" class="alert-link">SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R</a></p>

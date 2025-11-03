@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin,
 Anoop Singh Rawat, Pradip Maske</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">November 03, 2025</h4>
       
 
       <div class="d-none name"><code>DEPAnalysis.Rmd</code></div>
@@ -185,12 +185,12 @@ indicators based on censoring and response times. A Cox proportional
 hazards model is used to estimate the hazard ratio between treatment and
 control arms, which provides an interpretable measure of treatment
 effect.</p>
-<p>The modestly weighted log-rank test gives higher weights to early
-events and reduces sensitivity to late ones, making it particularly
-useful when treatment effects are expected to manifest early. The
-weighting scheme adjusts dynamically depending on user-defined
-parameters such as delay periods and information fractions for interim
-looks.</p>
+<p>The modestly weighted log-rank test (Magirr, 2019) gives lower
+weights to early events and increases sensitivity to late ones, making
+it particularly useful when delayed manifestation of treatment effects
+is expected. The weighting scheme is based on the delay periods defined
+in East Horizon, which represent the expected onset times of the
+treatment effect.</p>
 <p>This approach is flexible and handle both fixed sample and group
 sequential designs with multiple interim analyses.</p>
 <p>The figure below illustrates where this example fits within the R
