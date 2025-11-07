@@ -17,6 +17,8 @@ PerformBayesianAnalysis(SimData, DesignParam, LookInfo, UserParam)
 SimData <- data.frame(Response = c( rbinom(150,1,0.2), rbinom(150,2,0.4)), TreatmentID = c(rep(0,150), rep(1,150)) )
 SimData <- SimData[ sample( 1:150), ]
 
+
+
 source( "R/RunAnalysis.BetaBinom.R")
 source( "R/RunAnalysis.HBayes.R")
 SimData <- TestFailed1$SimData
