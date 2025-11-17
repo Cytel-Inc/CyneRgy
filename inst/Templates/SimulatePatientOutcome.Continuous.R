@@ -2,6 +2,7 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Template for simulating patient data in R. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
@@ -22,7 +23,7 @@
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
 #' However, you may choose to ignore the parameters  Mean, StdDev if the patient simulator
 #' you are creating only requires use of parameters the user will add to UserParam
-{{FUNCTION_NAME}} <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
+{{FUNCTION_NAME}} <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
   
     # Step 1 - Validate custom variable input and set defaults ####

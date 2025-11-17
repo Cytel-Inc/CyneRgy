@@ -3,6 +3,7 @@
 #' @title Simulate patient outcomes from a binary distribution with a percent of patients having an outcome of 0 where the probability of a 0 is drawn from a Beta distribution.
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = Treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
 #' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
@@ -17,7 +18,7 @@
 #' The probability of 0 outcome on the control treatment is sampled from a Beta( UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 ) distribution.
 #' The probability of 0 outcome on the experimental treatment is sampled from a Beta( UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution.
 #' The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.  
-SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function(NumSub, NumArm, TreatmentID, PropResp,UserParam = NULL)
+SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function(NumSub, NumArm, ArrivalTime, TreatmentID, PropResp,UserParam = NULL)
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file
