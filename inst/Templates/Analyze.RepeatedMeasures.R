@@ -75,6 +75,7 @@
 #'                                    \item{Decision = 4}{when the Equivalence Boundary Crossed}
 #'                                    } 
 #'                                    }
+#'                  \item{AnalysisTime} {Optional Numeric value to be computed and returned by the user. }
 #'                  \item{ErrorCode}{ Optional value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
@@ -99,10 +100,11 @@
 #'                      
 {{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    nError        <- 0
-    nDecision     <- 0
-    dPrimDeltaEst <- 0
-    dSecDeltaEst  <- 0
+    nError          <- 0
+    nDecision       <- 0
+    dPrimDeltaEst   <- 0
+    dSecDeltaEst    <- 0
+    EstAnalysisTime <- 0
     
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
     nLookIndex           <- 1 
@@ -118,5 +120,9 @@
         nQtyOfPatsInAnalysis <- nrow( SimData )
     }
     
-    return(list(Decision = as.integer(nDecision), PrimDelta = as.double(dPrimDeltaEst), SecDelta = as.double(dSecDeltaEst), ErrorCode = as.integer(nError)))
+    return(list(Decision = as.integer(nDecision), 
+                PrimDelta = as.double(dPrimDeltaEst), 
+                SecDelta = as.double(dSecDeltaEst), 
+                AnalysisTime = as.double(EstAnalysisTime), 
+                ErrorCode = as.integer(nError)))
 }
