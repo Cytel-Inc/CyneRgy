@@ -90,8 +90,7 @@
     nError 	        <- 0
     nDecision 	    <- 0
     dTestStatistic  <- 0
-    EstAnalysisTime <- 0
-    
+
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
     nLookIndex           <- 1 
     if(  !is.null( LookInfo )  )
@@ -110,7 +109,6 @@
     
     lRet <- list(TestStat = as.double(dTestStatistic),
                  Decision  = as.integer(nDecision), 
-                 AnalysisTime = as.double(EstAnalysisTime),
                  ErrorCode = as.integer(nError))
     return( lRet )
 }

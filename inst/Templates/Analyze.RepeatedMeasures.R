@@ -104,8 +104,7 @@
     nDecision       <- 0
     dPrimDeltaEst   <- 0
     dSecDeltaEst    <- 0
-    EstAnalysisTime <- 0
-    
+
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
     nLookIndex           <- 1 
     if(  !is.null( LookInfo )  )
@@ -123,6 +122,5 @@
     return(list(Decision = as.integer(nDecision), 
                 PrimDelta = as.double(dPrimDeltaEst), 
                 SecDelta = as.double(dSecDeltaEst), 
-                AnalysisTime = as.double(EstAnalysisTime), 
                 ErrorCode = as.integer(nError)))
 }

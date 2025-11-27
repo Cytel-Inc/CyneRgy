@@ -85,8 +85,7 @@
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     nError 	          <- 0
-    EstAnalysisTime   <- 0
-    
+
     # If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxCompleters
     # Retrieve necessary information from the R objects. You may not need all the variables
     if(  !is.null( LookInfo )  )
@@ -151,7 +150,6 @@
     # Setup test statistic calculation logic
     return( list(TestStat = vTestStat,
                  Delta = vDelta,
-                 AnalysisTime = as.double(EstAnalysisTime),
                  ErrorCode = as.integer(nError)))
     
 }
