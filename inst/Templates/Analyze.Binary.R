@@ -72,6 +72,7 @@
 #'                  \item{CtrlCompleters}{Integer value. Required if Decision is not returned and Futility Boundary scale is CP. }
 #'                  \item{TrmtCompleters }{Integer value. Required if Decision is not returned and Futility Boundary scale is CP. }
 #'                  \item{CtrlPi}{Numeric value. Required if Decision is not returned and Futility Boundary scale is CP. }
+#'                  \item{AnalysisTime} {Optional Numeric value to be computed and returned by the user. }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
@@ -84,7 +85,7 @@
     nError 	        <- 0
     nDecision 	    <- 0
     dTestStatistic  <- 0
-    
+
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
     nLookIndex           <- 1 
     if(  !is.null( LookInfo )  )
@@ -102,7 +103,7 @@
     
     
     lRet <- list(TestStat = as.double(dTestStatistic),
-                 Decision  = as.integer(nDecision), 
+                 Decision  = as.integer(nDecision),
                  ErrorCode = as.integer(nError))
     return( lRet )
 }
