@@ -41,6 +41,10 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 3. [PlotEmax.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/PlotEmax.R) - This file plots a visual that shows the mean response for each treatment group as a function of time.
 
+4. [GeneratePatientFromCSVSpecific.R]() - This file is able to read in and use simulated patient data from CSV files with a specific formatting style to allow for faster run times.
+
+5. [GeneratePatientFromCSVGeneral.R]() - This file is able to work in the same way as the specific code, but it has a more general formatting style that leads to slower run times.
+
 
 # Example 1 - Simulate Drug Concentration Response from a One-Compartment Model with First-order Absorption
 
@@ -131,3 +135,29 @@ CyneRgy::PlotExampleFlowchart(
 The plot shows simulated responses over five visits for control and treatment groups. Control responses remain around the baseline (~10), while treatment responses start high (~40) and gradually decline, reflecting the Emax effect of the drug as its concentration decreases over time.
 
 # Example 3 - Integrating externally sourced PK/PD data from a CSV file
+
+Formatting the CSV File Using:
+
+**GeneratePatientFromCSVGeneral.R**:
+The column names for the each row have several options listed below that are accepted all of which are not case sensitive.
+Visit Columns: "Visit X", "Visit.X", "VisitX"
+Treatment Column: "Treatment"
+Treatment IDs: "1", "t", "trt", "treatment", "active"
+Control IDs: "0", "c", "ctl", "control", "placebo", "cntl"
+N/A Values: "", "NA", "NaN", "na", "null", "N/A"
+
+**GeneratePatientFromCSVSpecific.R**:
+Visit Columns: "Visit X"
+Treatment Column: "Treatment"
+Treatment IDs: "1"
+Control IDs: "0"
+N/A values: "", "NA", "NaN", "na", "null", "N/A"
+
+**Uploading and using in East Horizon**:
+1. In East Horizon's Response card select "User Specified - R", as your distribution. 
+2. Navigate to the "Inputs" folder.
+3. Upload the code you want to use to read in CSV files.
+4. Upload the CSV file.
+5. Select the desired R code and set the variable name "InputFileName" to the name of the CSV file with the ".CSV" file extension included.
+6. Setup the rest of the design card as desired.
+7. Run the simulation.
