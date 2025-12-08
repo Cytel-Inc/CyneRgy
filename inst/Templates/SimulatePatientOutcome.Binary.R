@@ -2,6 +2,7 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Template for simulating patient data in R. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param NumArm  The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
 #' @param TreatmentID A vector of treatment ids, 0 is control treatment and  1 experimental treatment. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of length NumArm with the response probabilities for each arm
@@ -23,7 +24,7 @@
 #' The function signature must remain the same.  
 #' However, you may choose to ignore the parameters  PropResp if the patient simulator
 #' you are creating only requires use of parameters the user will add to UserParam
-{{FUNCTION_NAME}}  <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+{{FUNCTION_NAME}}  <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
 
     # Step 1 - Initialize the return variables or other variables needed ####
