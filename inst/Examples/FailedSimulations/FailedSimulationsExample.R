@@ -17,8 +17,8 @@ source ( "R/BugCheck.R" )
 
 # ----------------------------- RDS Sorter -----------------------------
 SortTrialsByRCode( 
-        strInputRoot      = "C:/Jacob/Cytel/RDS testing/Continuous Schizophrenia 2-Arm Study Dupe_Result - MMRM Updated Sorting_RDS_25-SEP-2025",                 
-        strOutputRoot     = "C:/Jacob/Cytel/RDS testing/SortedRDS",
+        strInputRoot      = "FailedRDSResults",                 
+        strOutputRoot     = "SortedRDS",
         bRecursiveTrials = TRUE,   
         vChooseName = c( "script" ),
         bDryRun = FALSE,
@@ -45,8 +45,8 @@ SortTrialsByRCode(
 
 
 # ----------------------------- Bug Check -----------------------------
-strRds   <- "C:/Jacob/Cytel/RDS testing/SortedRDS/SimulatePatientOutcome_25-SEP-2025/SimulatePatientOutcome_25-SEP-2025.rds"
-strRFile <- "C:/Jacob/Cytel/RDS testing/SortedRDS/SimulatePatientOutcome_25-SEP-2025/SimulatePatientOutcome_25-SEP-2025.R"
+strRds   <- "SortedRDS/SimulatePatientOutcome_25-SEP-2025/SimulatePatientOutcome_25-SEP-2025.rds"
+strRFile <- "SortedRDS/SimulatePatientOutcome_25-SEP-2025/SimulatePatientOutcome_25-SEP-2025.R"
 
 
 lErrorMessage <- ErrorCheck( strRds, strRFile )
