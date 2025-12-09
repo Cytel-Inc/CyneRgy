@@ -1,5 +1,5 @@
-#source("R/InsertPatientCSV.R")
-source( "GeneratePatientFromCSV.R")
+source( "R/GeneratePatientFromCSVSpecific.R")
+source( "R/GeneratePatientFromCSVGeneral.R")
 
 NumSub<- 200
 NumVisit <- 5 
@@ -14,11 +14,20 @@ StdDevControl <- NAStdDevTrt <- NA
 CorrMat <- NA
 UserParam <- list( InputFileName = "SimPatientDataAlt.csv")
 
+
+
 rm( "gdfPatients")
-lPat <- GeneratePatientFromCSV(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime,
+
+  
+lPatGeneral <- GeneratePatientFromCSVGeneral(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime,
                  MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat,
                  UserParam )
+
+lPatSpecific <- GeneratePatientFromCSVSpecific(NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime,
+                                      MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat,
+                                      UserParam )
 
 mean( lPat$Response5[ TreatmentID == 0 ])
 
 mean( lPat$Response5[ TreatmentID == 1 ])
+
