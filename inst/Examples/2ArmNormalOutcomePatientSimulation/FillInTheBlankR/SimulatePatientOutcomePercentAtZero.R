@@ -1,6 +1,7 @@
 #' @param SimulatePatientOutcomePercentAtZero
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
@@ -12,7 +13,7 @@
 #' In this example, the continuous outcome is a patient's change from baseline.   For this function, 20% of patients are believed to have no change due to treatment.  
 #' As such, this function simulations patient outcome where, on average, 20% will have a value of 0 for the outcome and 80%, on average, will have their value
 #' simulated from a normal distribution with the mean and standard deviation as sent from East. 
-SimulatePatientOutcomePercentAtZero <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
+SimulatePatientOutcomePercentAtZero <- function(NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL)
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file

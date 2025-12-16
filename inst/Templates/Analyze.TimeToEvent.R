@@ -65,6 +65,7 @@
 #'                                    } 
 #'                                    }
 #'                  \item{TestStat}{Numeric value. Required if Decision is not returned}
+#'                  \item{AnalysisTime} {Optional Numeric value to be computed and returned by the user. }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}

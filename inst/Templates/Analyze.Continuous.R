@@ -77,6 +77,7 @@
 #'                  \item{CtrlCompleters}{Integer value. Required if Decision is not returned and Futility Boundary scale is CP.}
 #'                  \item{TrmtCompleters }{Integer value. Required if Decision is not returned and Futility Boundary scale is CP.}
 #'                  \item{CtrlPi}{Numeric value. Required if Decision is not returned and Futility Boundary scale is CP.}
+#'                  \item{AnalysisTime} {Optional Numeric value to be computed and returned by the user. }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
@@ -94,7 +95,7 @@
     bIAEfficayCheck  <- TRUE
     bIAFutilityCheck <- FALSE
     bFAEfficacyCheck <- TRUE
-    
+
     # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents ####
     # Retrieve necessary information from the objects East sent. You may not need all the variables ####
     if(  !is.null( LookInfo )  )
