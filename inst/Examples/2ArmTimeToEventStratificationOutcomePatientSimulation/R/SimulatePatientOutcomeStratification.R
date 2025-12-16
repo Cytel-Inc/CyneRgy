@@ -65,8 +65,17 @@
 #' Exponential distribution:
 #' \deqn{ T \sim \text{Exponential}(\lambda) }
 #'
-#' The function returns a vector of survival times ordered by subjects, and an error code indicating
-#' whether any invalid inputs were encountered.
+#' @return The function must return a list in the return statement of the function. The information below lists 
+#'             elements of the list, if the element is required or optional and a description of the return values if needed. 
+#'             \describe{
+#'             \item{Response}{Required numeric value. Contains a vector of generated Survival Time for all subjects across the strata}
+#'             \item{ErrorCode}{Optional integer value \describe{ 
+#'                                     \item{ErrorCode = 0}{No Error}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
+#'                                     }
+#'                                     }
+
 #'
 #' @export
 SimulatePatientOutcomeStratification <- function(NumSub, NumArm, ArrivalTime, TreatmentID, 
