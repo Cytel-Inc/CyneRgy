@@ -15,6 +15,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
 |**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
+|**ArrivalTime**|Vector of Numeric|Optional. Vector of length `NumSub`, indicating the arrival time for each subject.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**SurvMethod**|Integer|Selected input method for survival analysis from the East Horizon dropdown list:<br>– `1`: Hazard rate.<br>– `2`: Cumulative % survival rates.<br>– `3`: Median survival times.|
 |**NumPrd**|Integer|Number of periods in the trial. Fixed to 1 for `Study Objective = Multiple Arm Confirmatory`.|
@@ -41,12 +42,12 @@ Note: Additional custom variables can be included as members of the output list.
 
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. Optional parameters such as `ArrivalTime` may be omitted. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
 A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) 
 
 ```
-GenerateResponse <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
+GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
   vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	

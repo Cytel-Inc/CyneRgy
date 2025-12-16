@@ -14,6 +14,7 @@ When creating a custom R script, you can optionally use specific variables provi
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
+|**ArrivalTime**|Vector of Numeric|Optional. Vector of length `NumSub`, indicating the arrival time for each subject.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental.|
 |**NumArms**|Integer|Number of arms in the trials (includes the control arm). Only applicable when `Study Objective = Multiple Arm Confirmatory`.|
 |**Mean**|Vector of Numeric|Vector of length equal to the number of arms, indicating the mean of the treatments.|
@@ -39,14 +40,14 @@ Note: Additional custom variables can be included as members of the output list.
 
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on the study objective) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on the study objective) must not be declared. Optional parameters such as `ArrivalTime` may be omitted. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
 Detailed templates with step-by-step explanations are available here: [SimulatePatientOutcome.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Continuous.R) for 2-Arm and [SimulatePatientOutcome.Continuous.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Continuous.MAMS.R) for Multiple Arm.
 
 ## For `Study Objective = Two Arm Confirmatory`
 
 ```
-GenerateResponse <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
+GenerateResponse <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
   vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
@@ -61,7 +62,7 @@ GenerateResponse <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NUL
 ## For `Study Objective = Multiple Arm Confirmatory`
 
 ```
-GenerateResponse <- function( NumSub, NumArms, TreatmentID, Mean, StdDev, UserParam = NULL )
+GenerateResponse <- function( NumSub, NumArms, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
   vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
