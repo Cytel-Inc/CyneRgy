@@ -2,7 +2,7 @@
 #'
 #' @param SimData 
 #' A data frame containing the simulated patient-level data for the current simulation iteration.  
-#' Must include at least the following variables:
+#' Includes at least the following variables:
 #' \itemize{
 #'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
 #'   \item{Response}{— The observed endpoint for binary outcome}
@@ -10,8 +10,7 @@
 #' }
 #'
 #' @param DesignParam 
-#' A list containing the design and simulation parameters required for analysis.  
-#' Must include:
+#' A list containing the design and simulation parameters required for analysis. Includes:
 #' \itemize{
 #'   \item{MaxCompleters}{— Maximum number of completers for the study}
 #'   \item{RespLag}{— Response lag from arrival time to measurement}
@@ -19,9 +18,8 @@
 #' }
 #'
 #' @param LookInfo 
-#' A list containing group sequential design information for multi-look trials.  
-#' This list is optional (default = NULL).  
-#' If provided, it must include:
+#' A list containing group sequential design information for multi-look trials. 
+#' For group sequential designs, it includes
 #' \itemize{
 #'   \item{NumLooks}{— Total number of interim analyses}
 #'   \item{CurrLookIndex}{— Current look index}
@@ -39,8 +37,7 @@
 #' }
 #'
 #' @param UserParam 
-#' A list of user-defined parameters in East or East Horizon.  
-#' Default = NULL.
+#' A list of user-defined parameters in East Horizon. Default = NULL.
 #'
 #' @description
 #' Implements binary-outcome analysis with conditional power–based sample size re-estimation (SSR).  
@@ -53,51 +50,31 @@
 #'   \item Generates a decision at the current look (efficacy, continue, or futility at final look)
 #' }
 #'
-#'
-#' @return Decision  
-#' **Required.** Integer value indicating the outcome of the analysis.  
-#' \itemize{ 
-#'   \item{0}{— Continue (no boundary crossed)}
-#'   \item{2}{— Efficacy boundary crossed}
-#'   \item{3}{— Futility at the final look (if no efficacy signal)}
+#' @return The function must return a list in the return statement of the function. The information below lists 
+#'             elements of the list, if the element is required or optional and a description of the return values if needed.
+#' \describe{
+#'   \item{Decision}{**Required.** Integer value indicating the outcome of the analysis.
+#'     \itemize{
+#'       \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
+#'       \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
+#'       \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
+#'       \item{Decision = 3}{when the Futility Boundary Crossed}
+#'       \item{Decision = 4}{when the Equivalence Boundary Crossed}
+#'     }}
+#'   \item{TestStat}{**Optional.** A numeric (double) value representing the teststatistic}
+#'   \item{ReEstCompleters}{**Required.** Integer value of the **re-estimated total completers** based on the Sample Size Re-estimation (SSR) rule.}
+#'   \item{Delta}{**Optional.** Numeric value representing the observed **proportion difference**:
+#'     \deqn{\Delta = p_{\text{Exp}} - p_{\text{Ctrl}}}
+#'     where \(p_{\text{Exp}}\) is the observed proportion of responders in the experimental group,
+#'     and \(p_{\text{Ctrl}}\) is the observed proportion of responders in the control group.}
+#'   \item{AnalysisTime}{**Optional.** A double value representing the calendar time at which the analysis was conducted.}
+#'   \item{ErrorCode}{**Optional.** Integer code representing execution status:
+#'     \itemize{
+#'       \item{0}{— No error}
+#'       \item{>0}{— Non-fatal error (current iteration aborted)}
+#'       \item{<0}{— Fatal error (simulation terminated)}
+#'     }}
 #' }
-#'
-#' @return TestStat  
-#' **Optional.** A numeric (double) value representing the teststatistic
-#'
-#' @return ReEstCompleters  
-#' **Required.** Integer value of the **re-estimated total completers**   
-#' based on the Sample Size Re-estimation (SSR) rule.
-#'
-#' @return Delta  
-#' **Optional.** Numeric value representing the observed **proportion difference**:  
-#' \deqn{\Delta = p_{\text{Exp}} - p_{\text{Ctrl}}}  
-#' where \(p_{\text{Exp}}\) is the observed proportion of responders in the experimental group,  
-#' and \(p_{\text{Ctrl}}\) is the observed proportion of responders in the control group.
-#'
-#' @return AnalysisTime  
-#' **Optional.** A double value representing the calendar time at which the analysis was conducted.
-#'
-#' @return ErrorCode  
-#' **Optional.** Integer code representing execution status:
-#' \itemize{
-#'   \item{0}{— No error}
-#'   \item{>0}{— Non-fatal error (current iteration aborted)}
-#'   \item{<0}{— Fatal error (simulation terminated)}
-#' }
-#'
-#' @note
-#' Helpful Hints:   
-#' It is often very useful to save the input objects to inspect them manually:
-#'
-#' \preformatted{
-#' saveRDS(SimData,     "SimData.Rds")
-#' saveRDS(DesignParam, "DesignParam.Rds")
-#' saveRDS(LookInfo,    "LookInfo.Rds")
-#' saveRDS(AdaptInfo,   "AdaptInfo.Rds")
-#' }
-#'
-#' These can then be loaded into an R session for detailed debugging.
 #'
 #' @export
 

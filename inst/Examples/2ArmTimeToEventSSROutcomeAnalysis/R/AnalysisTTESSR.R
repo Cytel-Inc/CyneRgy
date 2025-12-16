@@ -2,7 +2,7 @@
 #'
 #' @param SimData 
 #' A data frame containing the simulated patient-level data for the current simulation iteration.  
-#' Must include at least the following variables:
+#' Includes the following variables:
 #' \itemize{
 #'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
 #'   \item{SurvivalTime}{— The simulated survival time for each subject}
@@ -10,17 +10,15 @@
 #' }
 #'
 #' @param DesignParam 
-#' A list containing the design and simulation parameters required for analysis.  
-#' Must include:
+#' A list containing the design and simulation parameters required for analysis. Includes:
 #' \itemize{
 #'   \item{MaxEvents}{— Maximum number of events for the study}
 #'   \item{CriticalPoint}{— Single-look efficacy boundary (if LookInfo = NULL)}
 #' }
 #'
 #' @param LookInfo 
-#' A list containing group sequential design information for multi-look trials.  
-#' This list is optional (default = NULL).  
-#' If provided, it must include:
+#' A list containing group sequential design information for multi-look trials.
+#' For group sequential designs, it contains:
 #' \itemize{
 #'   \item{NumLooks}{— Total number of interim analyses}
 #'   \item{CurrLookIndex}{— Current look index}
@@ -38,8 +36,7 @@
 #' }
 #'
 #' @param UserParam 
-#' A list of user-defined parameters in East or East Horizon.  
-#' Default = NULL.
+#' A list of user-defined parameters in East Horizon. Default = NULL.
 #'
 #' @description
 #' Implements time-to-event (TTE) analysis with conditional power–based event re-estimation (SSR).  
@@ -54,49 +51,30 @@
 #'
 #' This function assumes proportional hazards and uses the Cox model for hazard ratio estimation.
 #'
-#' @return Decision  
-#' **Required.** Integer value indicating the outcome of the analysis.  
-#' \itemize{ 
-#'   \item{0}{— Continue (no boundary crossed)}
-#'   \item{2}{— Efficacy boundary crossed}
-#'   \item{3}{— Futility at the final look (if no efficacy signal)}
+#' @return The function must return a list in the return statement of the function. The information below lists 
+#'             elements of the list, if the element is required or optional and a description of the return values if needed.
+#' \describe{
+#'   \item{Decision}{**Required.** Integer value indicating the outcome of the analysis.
+#'     \itemize{
+#'       \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
+#'       \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
+#'       \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
+#'       \item{Decision = 3}{when the Futility Boundary Crossed}
+#'       \item{Decision = 4}{when the Equivalence Boundary Crossed}
+#'     }}
+#'   \item{TestStat}{**Optional.** A numeric (double) value representing the teststatistic}
+#'   \item{ReEstEvents}{**Required.** Integer value of the **re-estimated events** based on the Sample Size Re-estimation (SSR) rule.}
+#'   \item{HR}{**Optional.** Numeric value representing the observed **hazard ratio**:
+#'     \deqn{HR = \frac{\text{hazard(Treatment)}}{\text{hazard(Control)}}}
+#'     Estimated using a Cox proportional hazards model for time-to-event data.}
+#'   \item{AnalysisTime}{**Optional.** A double value representing the calendar time at which the analysis was conducted.}
+#'   \item{ErrorCode}{**Optional.** Integer code representing execution status:
+#'     \itemize{
+#'       \item{0}{— No error}
+#'       \item{>0}{— Non-fatal error (current iteration aborted)}
+#'       \item{<0}{— Fatal error (simulation terminated)}
+#'     }}
 #' }
-#'
-#' @return TestStat  
-#' **Optional.** A numeric (double) value representing the teststatistic
-#'
-#' @return ReEstEvents  
-#' **Required.** Integer value of the **re-estimated events**   
-#' based on the Sample Size Re-estimation (SSR) rule.
-#'
-#' @return HR  
-#' **Optional.** Numeric value representing the observed **hazard ratio**:  
-#' \deqn{HR = \frac{\text{hazard(Treatment)}}{\text{hazard(Control)}}}  
-#' Estimated using a Cox proportional hazards model for time-to-event data.
-#'
-#' @return AnalysisTime  
-#' **Optional.** A double value representing the calendar time at which the analysis was conducted.
-#'
-#' @return ErrorCode  
-#' **Optional.** Integer code representing execution status:
-#' \itemize{
-#'   \item{0}{— No error}
-#'   \item{>0}{— Non-fatal error (current iteration aborted)}
-#'   \item{<0}{— Fatal error (simulation terminated)}
-#' }
-#'
-#' @note
-#' Helpful Hints:  
-#' It is often very useful to save the input objects to inspect them manually:
-#'
-#' \preformatted{
-#' saveRDS(SimData,     "SimData.Rds")
-#' saveRDS(DesignParam, "DesignParam.Rds")
-#' saveRDS(LookInfo,    "LookInfo.Rds")
-#' saveRDS(AdaptInfo,   "AdaptInfo.Rds")
-#' }
-#'
-#' These can then be loaded into an R session for detailed debugging.
 #'
 #' @export
 

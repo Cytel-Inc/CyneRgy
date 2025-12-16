@@ -5,7 +5,7 @@
 #'
 #' @param SimData 
 #' A data frame containing the simulated patient-level data for the current simulation iteration.  
-#' Must include at least the following variables:
+#' Includes at least the following variables:
 #' \itemize{
 #'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
 #'   \item{Response}{— The observed endpoint for continuous outcome}
@@ -13,8 +13,7 @@
 #' }
 #'
 #' @param DesignParam 
-#' A list containing the design and simulation parameters required for analysis.  
-#' Must include:
+#' A list containing the design and simulation parameters required for analysis. Includes:
 #' \itemize{
 #'   \item{MaxCompleters}{— Maximum number of completers for the study}
 #'   \item{RespLag}{— Response lag from arrival time to measurement}
@@ -65,8 +64,7 @@
 #' 
 #' @param LookInfo 
 #' A list containing group sequential design information for multi-look trials.  
-#' This list is optional (default = NULL).  
-#' If provided, it must include:
+#' For group sequential designs, it includes:
 #' \itemize{
 #'   \item{NumLooks}{— Total number of interim analyses}
 #'   \item{CurrLookIndex}{— Current look index}
@@ -75,8 +73,7 @@
 #' }
 #'
 #' @param UserParam 
-#' A list of user-defined parameters in East or East Horizon.  
-#' Default = NULL.
+#' A list of user-defined parameters in East Horizon.  Default = NULL.
 #'
 #' @description
 #' Computes teststat, hazard ratio, analysis time and decision   
@@ -136,46 +133,28 @@
 #'   \item Returns the overall analysis time at which the interim or final
 #'         evaluation was conducted, along with an error flag.
 #' }
-
-
 #'
-#'
-#' @return Decision  
-#' An integer value indicating the outcome of the analysis:
-#' \itemize{
-#'   \item{0}{— Continue (no boundary crossed)}
-#'   \item{2}{— Efficacy boundary crossed}
-#'   \item{3}{— Futility at the final look (if no efficacy signal)}
+#' @return The function must return a list in the return statement of the function. The information below lists 
+#'             elements of the list, if the element is required or optional and a description of the return values if needed.
+#' \describe{
+#'   \item{Decision}{An integer value indicating the outcome of the analysis:
+#'     \itemize{
+#'       \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
+#'       \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
+#'       \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
+#'       \item{Decision = 3}{when the Futility Boundary Crossed}
+#'       \item{Decision = 4}{when the Equivalence Boundary Crossed}
+#'     }}
+#'   \item{TestStat}{**Optional.** A double value containing the computed Test Stat.}
+#'   \item{HR}{**Optional.** A double value containing the computed HR.}
+#'   \item{AnalysisTime}{**Optional.** A double value representing the calendar time at which the analysis was conducted.}
+#'   \item{ErrorCode}{**Optional.** An integer value:
+#'     \itemize{
+#'       \item{0}{— No error}
+#'       \item{>0}{— Non-fatal error (current iteration aborted)}
+#'       \item{<0}{— Fatal error (simulation terminated)}
+#'     }}
 #' }
-#'
-#' @return TestStat  
-#' **Optional.**A double value containing the computed Test Stat.
-#' @return HR  
-#' **Optional.**A double value containing the computed HR.
-#'
-#' @return AnalysisTime  
-#' **Optional.**A double value representing the calendar time at which the analysis was conducted.
-#
-#' @return ErrorCode  
-#' **Optional.** An integer value:
-#' \itemize{
-#'   \item{0}{— No error}
-#'   \item{>0}{— Non-fatal error (current iteration aborted)}
-#'   \item{<0}{— Fatal error (simulation terminated)}
-#' }
-#'
-#' @note
-#' Helpful Hints:   
-#' It is often very useful to save the input objects to inspect them manually:
-#'
-#' \preformatted{
-#' saveRDS(SimData,     "SimData.Rds")
-#' saveRDS(DesignParam, "DesignParam.Rds")
-#' saveRDS(LookInfo,    "LookInfo.Rds")
-#' }
-#'
-#' These can then be loaded into an R session for detailed debugging.
-#'
 #' @export
 
 library(survival)
