@@ -111,22 +111,22 @@ This example covers a specific situation where the patient data simulation needs
 
 <details>
 <summary>**Continuous Outcome – Analysis**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span></summary>
-This example demonstrates three ways to customize the statistical test in East Horizon for a two-arm trial with a continuous outcome: using a formula from the East manual, using the `t.test()` function, and using confidence interval limits for Go/No-Go decision-making. 
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-success ms-1">SSR</span></summary>
+This example demonstrates three ways to customize the statistical test in East Horizon for a two-arm trial with a continuous outcome: using a formula from the East manual, using the `t.test()` function, and using confidence interval limits for Go/No-Go decision-making. It also presents an additional example using Sample Size Re-estimation. 
 [Click here to view the full example.](2ArmNormalOutcomeAnalysis.html)
 </details>
 
 <details>
 <summary>**Time-To-Event Outcome – Analysis**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
-This example demonstrates three ways to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome: using formulas from the East manual, using the `survival::survdiff()` function, and using confidence interval limits for Go/No-Go decision-making. 
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-success ms-1">SSR</span></summary>
+This example demonstrates three ways to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome: using formulas from the East manual, using the `survival::survdiff()` function, and using confidence interval limits for Go/No-Go decision-making. It also presents an additional example using Sample Size Re-estimation. 
 [Click here to view the full example.](2ArmTimeToEventOutcomeAnalysis.html)
 </details>
 
 <details>
 <summary>**Binary Outcome – Analysis**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span></summary>
-This example demonstrates four ways to customize the statistical test in East Horizon for a two-arm trial with a binary outcome: using a formula from the East manual, using the `prop.test()` function, using confidence interval limits for Go/No-Go decision-making, and using a Bayesian Beta-Binomial model.
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-success ms-1">SSR</span></summary>
+This example demonstrates four ways to customize the statistical test in East Horizon for a two-arm trial with a binary outcome: using a formula from the East manual, using the `prop.test()` function, using confidence interval limits for Go/No-Go decision-making, and using a Bayesian Beta-Binomial model. It also presents an additional example using Sample Size Re-estimation. 
 [Click here to view the full example.](2ArmBinaryOutcomeAnalysis.html)
 </details>
 

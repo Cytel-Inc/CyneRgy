@@ -1,6 +1,6 @@
 ---
 title: '2-Arm, Time-To-Event Outcome - Analysis'
-author: "Anoop Singh Rawat and Shubham Lahoti"
+author: "Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default
@@ -17,10 +17,15 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Number of endpoints:** Single Endpoint</li>
 <li>**Endpoint type:** Time-to-Event Outcome</li>
 <li>**Task:** Any</li>
+<li>**Statistical Design:**</li>
+<ul style="margin-bottom:0">
+<li>*Fixed Sample* or *Group Sequential* for Examples 1, 2, 3</li>
+<li>*Group Sequential with Sample Size Re-Estimation* for Example 4</li>
+</ul>
 </ul></div>
 
 <div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">**Note:** This example is compatible with both Fixed Sample and Group Sequential statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly.</p>
+<p style="margin-bottom:0">**Note:** Examples 1, 2, and 3 are compatible with both *Fixed Sample* and *Group Sequential* statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly.</p>
 </div>
 
 # Introduction
@@ -38,9 +43,13 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R) you will find the following R files:
 
-1. [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R) - Contains a function named *AnalyzeUsingEastLogrankFormula* to demonstrate the R code necessary for Example 1 as described below.
-2. [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R) - Contains a function named *AnalyzeUsingSurvivalPackage* to demonstrate the R code necessary for Example 2 as described below.
-3. [AnalyzeUsingHazardRatioLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R) - Contains a function named *AnalyzeUsingHazardRatioLimitsOfCI* to demonstrate the R code necessary for Example 3 as described below.
+1. [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R) - Contains a function named *AnalyzeUsingEastLogrankFormula.R* that computes the test statistic for a TTE endpoint using Formulas of Appendix Q.8 from the East manual.
+
+2. [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R) - Contains a function named *AnalyzeUsingSurvivalPackage* that performs the analysis the R package `survival`.
+
+3. [AnalyzeUsingHazardRatioLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R) - Contains a function named *AnalyzeUsingHazardRatioLimitsOfCI* that bases interim and final decisions on confidence interval limits rather than East Horizon-provided boundaries. The function uses user-defined parameters (MAV, TV, and confidence level) to implement a Go / No-Go decision framework.
+
+4. [AnalyzeTTESSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R) - Contains a function named *AnalyzeTTESSR* that extends the standard TTE analysis to support conditional power–based sample size re-estimation (SSR) in a group sequential design.
 
 
 # Example 1 - Using Formulas Q.242 and Q.243 from the East manual
@@ -164,6 +173,57 @@ CyneRgy::PlotExampleFlowchart(
             "Fit Cox model to estimate log hazard ratio", 
             "Calculate CI lower and upper limits for log HR", 
             "Return decision using CI thresholds"
+        )
+    )
+)
+```
+
+# Example 4 - Analysis With Sample Size Re-Estimation
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R" class="alert-link">AnalyzeNormalSSR.R</a></p>
+</div>
+
+This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total sample size based on interim results. This is achieved using a conditional power–based SSR approach, which allows the trial to increase its planned sample size when interim results fall within a "promising zone".
+
+**Test Statistic:**
+
+At each interim look, the analysis time is determined based on the target cumulative number of events implied by the current information fraction. Survival data are censored at this analysis time, and a log-rank–style standardized Z-statistic is computed based on the observed and expected number of events in the treatment arm:
+
+$$Z = \frac{O_T - E_T}{\sqrt{ \text{Var}(O_T) }}$$
+
+where $O_T$ is the observed number of events in the treatment arm, $E_T$ is the expected number of events under the null hypothesis, and $\text{Var}(O_T)$ is the corresponding variance. Under the proportional hazards assumption, this statistic is asymptotically standard normal.
+
+In addition, a Cox proportional hazards model is fit to the observed data to estimate the hazard ratio (HR) between treatment and control arms.
+
+**Conditional Power:**
+
+Using the observed Z-statistic, the information fraction at the current look, and the efficacy boundary provided by East Horizon, the conditional power is computed. This represents the probability of eventually crossing the final efficacy boundary, given the interim data and assuming the observed treatment effect continues for the remainder of the trial.
+
+**Sample Size Re-Estimation (SSR):**
+
+Based on the computed conditional power, the total number of events is re-estimated using one of two SSR rules:
+
+|Condition|Rule|
+|----|----|
+|The SSR function scale for promising zone selected in East Horizon is "Continuous" (`AdaptInfo$SSRFuncScale == 0`)|If the conditional power falls between the lower and upper promising-zone thresholds, the maximum number of events is multiplied by the maximum sample size multiplier input specified in East Horizon.|
+|The SSR function scale for promising zone selected in East Horizon is "Step" (`AdaptInfo$SSRFuncScale == 1`)|The conditional power is mapped to intervals, each associated with a specific sample size multiplier specified in East Horizon.|
+
+If the conditional power falls outside the promising zone, the original planned number of events is retained.
+
+Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. Both the decision and the re-estimated total sample size are returned to East Horizon.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Analysis" = c(
+            "Load survival data and arrival times from EH",
+            "Determine analysis time from target event count",
+            "Compute log-rank Z-statistic and hazard ratio",
+            "Compute conditional power using efficacy boundary",
+            "Return decision and re-estimated number of events"
         )
     )
 )
