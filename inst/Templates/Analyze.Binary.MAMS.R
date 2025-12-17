@@ -75,7 +75,7 @@
 #'                  \item{RawPVal}{p-Value computed from test statistics. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if RawPVal is returned and if there is no Futility Boundary.}
 #'                  \item{TestStat}{Value of appropriate Test Statistic on Wald ﴾Z﴿ scale regardless of the Efficacy or Futility Boundary Scale for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if TestStat is returned and if there is no Futility Boundary.}
 #'                  \item{Delta}{Estimate of Delta (Difference from Control) for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. Required if Decision is not returned AND Futility Boundary scale is Delta.}
-#'                  \item{AnalysisTime} {Optional Numeric value to be computed and returned by the user. }
+#'                  \item{AnalysisTime} {Optional Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user. }
 #'                  \item{ErrorCode}{Integer. Optional value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}

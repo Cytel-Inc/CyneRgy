@@ -1,4 +1,4 @@
-#' @name AnalyseStratification
+#' @name AnalyzeStratification
 #'
 #' @param SimData 
 #' A data frame containing the simulated patient-level data for the current simulation iteration.  
@@ -65,7 +65,7 @@
 #'     }}
 #'   \item{TestStat}{**Optional.** A numeric (double) value representing the teststatistic}
 #'   \item{HR}{**Optional.** A double value containing the computed HR.}
-#'   \item{AnalysisTime}{**Optional.** A double value representing the calendar time at which the analysis was conducted.}
+#'   \item{AnalysisTime}{**Optional.** Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.}
 #'   \item{ErrorCode}{**Optional.** An integer value:
 #'     \itemize{
 #'       \item{0}{— No error}
@@ -76,8 +76,8 @@
 #' @export
 library(survival)
 
-## AnalyseStratification() : Returning Test Stat, HR and Analysis Time and Decision
-AnalyseStratification<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+## AnalyzeStratification() : Returning Test Stat, HR and Analysis Time and Decision
+AnalyzeStratification<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
 
     nError <- 0

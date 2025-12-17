@@ -14,7 +14,7 @@
 #'                                    Decision = 2 --> Upper Efficacy Boundary Crossed
 #'                                    Decision = 3 --> Futility Boundary Crossed
 #'                                    Decision = 4 --> Equivalence Boundary Crossed
-#' @return AnalysisTime Optional Numeric value to be computed and returned by the user
+#' @return AnalysisTime Optional Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted

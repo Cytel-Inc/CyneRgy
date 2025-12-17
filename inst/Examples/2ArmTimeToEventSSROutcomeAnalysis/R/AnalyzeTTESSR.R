@@ -1,4 +1,4 @@
-#' @name AnalysisTTESSR
+#' @name AnalyzeTTESSR
 #'
 #' @param SimData 
 #' A data frame containing the simulated patient-level data for the current simulation iteration.  
@@ -67,7 +67,7 @@
 #'   \item{HR}{**Optional.** Numeric value representing the observed **hazard ratio**:
 #'     \deqn{HR = \frac{\text{hazard(Treatment)}}{\text{hazard(Control)}}}
 #'     Estimated using a Cox proportional hazards model for time-to-event data.}
-#'   \item{AnalysisTime}{**Optional.** A double value representing the calendar time at which the analysis was conducted.}
+#'   \item{AnalysisTime}{**Optional.** Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.}
 #'   \item{ErrorCode}{**Optional.** Integer code representing execution status:
 #'     \itemize{
 #'       \item{0}{— No error}
@@ -81,7 +81,7 @@
 
 library(survival)
 
-AnalysisTTESSR <- function(SimData, DesignParam, LookInfo = NULL, AdaptInfo = NULL, UserParam = NULL )
+AnalyzeTTESSR <- function(SimData, DesignParam, LookInfo = NULL, AdaptInfo = NULL, UserParam = NULL )
 {
     nError         <- 0
     nDecision      <- 0

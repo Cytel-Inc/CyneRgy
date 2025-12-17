@@ -1,4 +1,4 @@
-#' @name AnalyseSubpopulation
+#' @name AnalyzeSubpopulation
 #' 
 #' ASSUMPTION
 #' The look positioning is based on target events on Full Population
@@ -147,7 +147,7 @@
 #'     }}
 #'   \item{TestStat}{**Optional.** A double value containing the computed Test Stat.}
 #'   \item{HR}{**Optional.** A double value containing the computed HR.}
-#'   \item{AnalysisTime}{**Optional.** A double value representing the calendar time at which the analysis was conducted.}
+#'   \item{AnalysisTime}{**Optional.** Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.}
 #'   \item{ErrorCode}{**Optional.** An integer value:
 #'     \itemize{
 #'       \item{0}{— No error}
@@ -158,7 +158,7 @@
 #' @export
 
 library(survival)
-AnalyseSubpopulation <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL) 
+AnalyzeSubpopulation <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL) 
 {
   nError <- 0
   dTimeOfAnalysis <- 0

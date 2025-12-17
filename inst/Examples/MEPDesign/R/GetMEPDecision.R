@@ -1,6 +1,6 @@
 #' User Design Function for Trial Analysis
 #'
-#' @name GenerateDecision
+#' @name GetMEPDecision
 #' @description
 #' This function allows users to implement custom decision-making logic for the MEP engine.
 #' It is called at each analysis look to make decisions about endpoint efficacy, futility
@@ -68,7 +68,7 @@
 #'   }
 #' @examples
 #' # Example implementation for a trial with 5 endpoints. Check for Futility only where Efficacy is checked
-GenerateDecision <- function(SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam) {
+GetMEPDecision <- function(SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam) {
   # Initialize Decision with last look's decisions
   Decision <- LookInfo$LastLookDecision
 
