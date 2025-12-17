@@ -89,7 +89,7 @@
 #'                  \item{CtrlCompleters}{Integer value. Required if Decision is not returned and Futility Boundary scale is CP.}
 #'                  \item{TrmtCompleters }{Integer value. Required if Decision is not returned and Futility Boundary scale is CP.}
 #'                  \item{CtrlPi}{Numeric value. Required if Decision is not returned and Futility Boundary scale is CP.}
-#'                  \item{AnalysisTime} {Optional Numeric value to be computed and returned by the user. }
+#'                  \item{AnalysisTime} {Optional Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user. }
 #'                  \item{ErrorCode}{Optional integer value \describe{ 
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
