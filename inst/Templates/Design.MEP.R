@@ -8,8 +8,19 @@
 #' It is called at each analysis look to make decisions about endpoint efficacy, futility
 #' and trial continuation based on user-defined criteria.
 #'
-#' @param SimData Data frame containing the full simulation data for all patients
-#' @param AnalysisData Data frame containing the subset of patient data available at the current analysis look
+#' @param SimData Data frame containing the full simulation data for all patients with the following columns:
+#'   \itemize{
+#'     \item SimID: Integer. Simulation ID
+#'     \item PatId: Integer. Patient ID identifying a unique patient in a given simulation
+#'     \item ArrivalTime: Numeric. Patient arrival time in the study
+#'     \item TreatmentID: Integer. ID for the treatment assigned to the patient. 0 - Control; 1 - Treatment
+#'     \item TResponse.EPNAME: Numeric. Response on this endpoint. EPNAME is the user specified endpoint name
+#'     \item CensorID.EPNAME: Integer. Whether the patient is censored or not. 0 - censored; 1 - not censored. EPNAME is the user specified endpoint name
+#'     \item Response.EPNAME: Numeric. Response on this endpoint after adjusting for endpoint and dropout rules. EPNAME is the user specified endpoint name
+#'     \item CalRespT.EPNAME: Numeric. Response time on calendar scale for this endpoint. Same as 'Response + ArrivalTime'. EPNAME is the user specified endpoint name
+#'     \item DropoutID.EPNAME: Integer. Whether the patient dropped out before responding to the endpoint. 1 - dropout; 0 - no dropout. EPNAME is the user specified endpoint name
+#'   }
+#' @param AnalysisData Data frame containing the subset of patient data (SimData) available at the current analysis look. 
 #' @param DataSummary List containing summary statistics for each endpoint, including:
 #'   \itemize{
 #'     \item AvgFollowupTime: Mean follow-up time
