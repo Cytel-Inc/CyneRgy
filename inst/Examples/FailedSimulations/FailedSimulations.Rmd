@@ -1,6 +1,6 @@
 ---
 title: 'FailedSimulations'
-author: "Your name goes here"
+author: "Jacob Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document:
@@ -22,4 +22,23 @@ library( CyneRgy )
 ```
 
 # Introduction
-Please describe your example and put details of that.
+When using R integration in East Horizon, it is common for buggy code to fail. This will lead to East Horizon giving something like what is found below in the logs. The RDS files provided can often be confusing and tricky for users to understand. This example aims to provide a solution to this issue by creating a piece of code that is easy for users to understand and follow. It will allow them to run and debug their code locally by sorting the RDs files from the code used and allow users to run said code for debugging.
+
+**An Example of a Failed Simulation in East Horizon:**
+
+![](FailedSimulationImages/FailedSimulationExample.png)
+<br>
+**Example of a Failed Simulation in East Horizon**
+
+**Required Files**
+1. [FailedSimulations.RProj](https://github.com/Cytel-Inc/CyneRgy/blob/316-error-in-simulations-JCW/inst/Examples/FailedSimulations/FailedSimulations.Rproj) - This is the project file that allows all the code to be kept in one concise place.
+
+2. [FailedSimulationsExample.R](https://github.com/Cytel-Inc/CyneRgy/blob/316-error-in-simulations-JCW/inst/Examples/FailedSimulations/R/FailedSimulationsExample.R) - This code is runs all the functions in one spot that is easy for the user to change the names of functions and folders used in their failed simulation.
+
+3. [sortTrialsByCode.R](https://github.com/Cytel-Inc/CyneRgy/blob/316-error-in-simulations-JCW/inst/Examples/FailedSimulations/R/SortTrialsByCode.R) - This code takes the input file of RDS and returns them in an output folder. The output folder sorts all RDS files based on the code used to run them. It will in each file return an R script containing the code that failed that set of simulations, and it will contain an RDS file that has all of the failed simulations using that code.
+
+4. [BugCheck.R](https://github.com/Cytel-Inc/CyneRgy/blob/316-error-in-simulations-JCW/inst/Examples/FailedSimulations/R/BugCheck.R) - This code contains the function used to check for bugs used in a given piece of code. It will be given an input of a failed simulation from the RDS folder and the bugged R code. Then it will run the bugged code using data from the RDS file to store the data used, the call to the function, arguments, the code, and error message into a variable. This will allow user to see where the R code went wrong and bug test locally.
+
+5. [InternalFunction.R](https://github.com/Cytel-Inc/CyneRgy/blob/316-error-in-simulations-JCW/inst/Examples/FailedSimulations/R/InternalFunction.R) - This code contains all the behind the scenes function used to help make the main functions **BugCheck.R** and **SortTrialsByCode.R** to function smoothly.
+
+**An example of running the code:**
