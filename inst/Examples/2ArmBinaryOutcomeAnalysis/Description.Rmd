@@ -241,7 +241,7 @@ CyneRgy::PlotExampleFlowchart(
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeBinarySSR.R" class="alert-link">AnalyzeBinarySSR.R</a></p>
 </div>
 
-This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total sample size based on interim results. This is achieved using a conditional power–based SSR approach, which allows the trial to increase its planned sample size when interim results fall within a "promising zone".
+This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total number of completers based on interim results. This is achieved using a conditional power–based SSR approach, which allows the trial to increase its planned number of completers when interim results fall within a "promising zone".
 
 **Test Statistic:**
 
@@ -264,9 +264,9 @@ Based on the computed conditional power, the total number of completers is re-es
 |The SSR function scale for promising zone selected in East Horizon is "Continuous" (`AdaptInfo$SSRFuncScale == 0`)|If the conditional power falls between the lower and upper promising-zone thresholds, the maximum number of completers is multiplied by the maximum sample size multiplier input specified in East Horizon.|
 |The SSR function scale for promising zone selected in East Horizon is "Step" (`AdaptInfo$SSRFuncScale == 1`)|The conditional power is mapped to intervals, each associated with a specific sample size multiplier specified in East Horizon.|
 
-If the conditional power falls outside the promising zone, the original planned sample size is retained.
+If the conditional power falls outside the promising zone, the original planned number of completers is retained.
 
-Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. Both the decision and the re-estimated total sample size are returned to East Horizon.
+Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. Both the decision and the re-estimated total number of completers are returned to East Horizon.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -278,7 +278,7 @@ CyneRgy::PlotExampleFlowchart(
             "Compute Z-statistic and observed treatment effect",
             "Compute conditional power using efficacy boundary",
             "Re-estimate total completers",
-            "Return decision and re-estimated sample size"
+            "Return decision and re-estimated number of completers"
         )
     )
 )
