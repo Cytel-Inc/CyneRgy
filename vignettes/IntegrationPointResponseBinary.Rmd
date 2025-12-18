@@ -7,6 +7,10 @@ output: html_document
 
 [$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
 
+<div class="alert alert-danger" role="alert"><p style="margin-bottom:0">
+Important: **ArrivalTime** is a new required parameter. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used.
+</p></div>
+
 # Input Variables
 
 When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
@@ -15,7 +19,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
 |**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
-|**ArrivalTime**|Vector of Numeric|Optional. Vector of length `NumSub`, indicating the arrival time for each subject.|
+|**ArrivalTime**|Vector of Numeric|Vector of length `NumSub`, indicating the arrival time for each subject.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**PropResp**|Vector of Numeric|Vector of length `NumArm`, indicating the expected proportions (probabilities) of responders for each arm. The first element corresponds to the control group, followed by the probabilities for each experimental arm in sequence.|
 |**FollowUpDur**|Numeric|Follow-up duration, acts as By Time for response proportions. Only applicable for Vaccine Efficacy (`Better Response = Smaller Value`, `Test = 1 - Ratio of Proportions`).|
@@ -41,7 +45,7 @@ Note: Additional custom variables can be included as members of the output list.
 
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on standard binary outcome vs. Vaccine Efficacy) must not be declared. Optional parameters such as `ArrivalTime` may be omitted. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. For Vaccine Efficacy, `OneMinusROP` must be declared with default value `NULL`.
+Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on standard binary outcome vs. Vaccine Efficacy) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon. For Vaccine Efficacy, `OneMinusROP` must be declared with default value `NULL`.
 
 A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R) 
 
