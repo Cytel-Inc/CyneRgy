@@ -33,7 +33,7 @@ The tables below describe each variable and notes any conditions under which it 
 |**MaxStudyDur**|Integer|Maximum study duration.|Not available.|Only available for `Time-to-Event` tests with `Look Fix Option = 1 (Time-based)`.|
 |**FollowUpType**|Integer|Follow-up type:<br>– `0`: Until the end of the study.<br>– `1`: For a fixed period.|Only available for `Endpoint Type = Time-to-Event`.|Only available for `Time-to-Event` tests.|
 |**FollowUpDur**|Numeric|Follow-up duration.|Only available for `Endpoint Type = Time-to-Event`.|Only available for `Time-to-Event` tests.|
-|**TestStatType**|Integer|Test statistic type. For `Time-to-Event` tests:<br>- `0`: Logrank.<br>- `1`: Wilcoxon Gehan.<br>- `2`: Harrington Fleming.<br>For `Continuous` test:<br>- `3`: Z-test.<br>- `4`: t-test.<br>For `Binary` test:<br>- `5`: Wald.<br>- `6`: Score.|Not available.|Not available for `Test = Difference of Proportions or Odds Ratio of Proportions` (Binary).|
+|**TestStatType**|Integer|Test statistic type. For `Time-to-Event` tests:<br>- `0`: Logrank.<br>- `1`: Wilcoxon Gehan.<br>- `2`: Harrington Fleming.<br>- `3`: Stratified Logrank.<br>- `4`: Stratified Wilcoxon Gehan.<br>- `5`: Stratified Harrington Fleming.<br>For `Continuous` test:<br>- `3`: Z-test.<br>- `4`: t-test.<br>For `Binary` test:<br>- `5`: Wald.<br>- `6`: Score.|Not available.|Not available for `Test = Difference of Proportions or Odds Ratio of Proportions` (Binary).|
 |**HFParam1**|Numeric|First parameter of Harrington Fleming.|Not available.|Only available for `Time-to-Event` tests.|
 |**HFParam2**|Numeric|Second parameter of Harrington Fleming.|Not available.|Only available for `Time-to-Event` tests.|
 |**VarType**|Integer|Variance type. For `Continuous` test:<br>- `4`: Equal<br>- `5`: Unequal.<br>For `Difference of Proportions` (Binary) test:<br>- `0`: Pooled.<br>- `1`: Unpooled.<br>For `Ratio of Proportions` (Binary):<br>- `2`: Null<br>- `3`: Empirical.|Not available.|Not available for `Time-to-Event` tests or `Test = Odds Ratio of Proportions` (Binary).|
@@ -54,11 +54,16 @@ The tables below describe each variable and notes any conditions under which it 
 |**StratFactors**|Named List|Named list of length `NumStratFactors`, indicating stratification factors details. For example, `StratFactors[“Factor1”]` is an array of level names for Factor 1.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` turned on.|Only available for `Time-to-Event` tests with `Stratification` turned on.|
 |**TestStratFactors**|Array of Character|Array of factor names included in the analysis. Length is between 1 and `NumStratFactors`.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` turned on.|Not available.|
 |**NumSubPops**|Integer|Number of subpopulations.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
-|**SubPops**|Array of Character|Array of subpopulation names.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+|**SubPops**|Named List|Named list of length equal to the number of subpopulations, indicating factor details. For example, `SubPops[“Factor1”]` is an array of level names for Factor 1.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+|**SubpopName**|Array of Character|Array of length equal to the number of subpopulations, indicating the subpopulation names.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
 |**WindCond**|Integer|Winning condition:<br>- `1`: At least subpopulation 1.<br>- `2`: At least subpopulation 2.<br>- `3`: At least subpopulation 3.<br>- `4`: At least subpopulation 4.<br>- `5`: At least one subpopulation.<br>- `6`: At least two subpopulations.<br>- `7`: At least three subpopulations.<br>- `8`: At least four subpopulations.<br>- `9`: At least full population.<br>- `10`: All populations.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
 |**PlanEndTrial**|Integer|Planned end of trial:<br>- `1`: Subpopulation 1.<br>- `2`: Subpopulation 2.<br>- `3`: Subpopulation 3.<br>- `4`: Subpopulation 4.<br>- `5`: Full population.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
 |**TransitionMatrix**|Matrix of Numeric|Transition matrix between all populations, including full population and subpopulations. Dimension of `(NumSubPops + 1) x (NumSubPops + 1)`.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
 |**PropAlpha**|Vector of Numeric|Vector of length `(NumSubPops + 1)`, indicating the proportion of alpha for all populations, including full population and subpopulations.|Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.|Not available.|
+
+**Notes:** 
+
+- "Factor 1" is used as a sample factor name (stratification). It will be the actual factor name as specified by the user.
 
 ## For `Endpoint Type = Dual (TTE-TTE or TTE-Binary)` (including for Multiplicity Adjustment)
 
