@@ -20,8 +20,11 @@ This integration point is available in East Horizon Explore for the following st
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
 |Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|✅|✅|
+|Two Arm Confirmatory - Multiple Endpoints|❌\*|❌\*|❌\*|-|-|-|-|-|
 |Multiple Arm Confirmatory|❌|❌|❌|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
+
+\*For Multiple Endpoints, you can use the [Integration Point: Design](IntegrationPointDesign.html) to implement your own multiplicity method.
 
 **Legend**
 

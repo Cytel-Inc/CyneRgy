@@ -1,4 +1,4 @@
-#' @name GeneratePoissonArrival
+#' @name GeneratePoissonArrivalMEP
 #' @title Generate patient arrival time according to a Poisson process.
 #' @param NumPat The number of participants that need to be simulated, integer value
 #' @param NumPrd Number of time periods that are provided.
@@ -15,7 +15,7 @@
 #' If the UserParam is supplied, a ramp-up in accrual is obtained by
 #' supplying more than one Rate parameter. The rate is per unit time and the Rate with the largest index will be used after the ramp up.
 #' If UserParam is not supplied, then PrdStart, AccrRate are used to simulate arrival times according to a Poisson process.
-GeneratePoissonArrival  <- function(NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+GeneratePoissonArrivalMEP  <- function(NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {
     # Error = 0 --> No Error;
     # Error > 0 --> Non Fatal Error Particular Simulation will be aborted but Next Simulation will be performed

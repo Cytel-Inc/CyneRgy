@@ -15,7 +15,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
 |**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
-|**ArrivalTime**|Vector of Numeric|Optional. Vector of length `NumSub`, indicating the arrival time for each subject.|
+|**ArrivalTime**|Vector of Numeric|Vector of length `NumSub`, indicating the arrival time for each subject.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**EndpointType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the endpoint types:<br>– `0`: Continuous.<br>– `1`: Binary.<br>– `2`: Time-to-Event.|
 |**EndpointName**|Vector of Character|Vector of length equal to the number of endpoints, indicating the endpoint names.|
@@ -35,20 +35,20 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 | **Type**  | **Description**                                                                                  |
 |------------------|--------------------------------------------------------------------------------------------------|
-| List  | A named list containing `SurvivalTime` and `ErrorCode`.                    |
+| List  | A named list containing `Response` and `ErrorCode`.                    |
 
 ## Expected Members of the Output List
 
 | **Members**     | **Type**  | **Description**                                                                                  |
 |----------------|--------------|---------------------------------------------------------------------------------|
-| **Response**   | Named List of Vector of Numeric  | Named List of length equal to the number of endpoints, containing the survival time outputs for each endpoint. For example, `Response[“Endpoint 1”]` is the vector of generated response values for each subject for Endpoint 1. The length of each vector is `NumSub`.|
+| **Response**   | Named List of Vector of Numeric  | Named List of length equal to the number of endpoints, containing the survival time or response outputs for each endpoint. For example, `Response[“Endpoint 1”]` is the vector of generated response values for each subject for Endpoint 1. The length of each vector is `NumSub`.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 Note: Additional custom variables can be included as members of the output list. All outputs will automatically be available as input variables for analysis or treatment selection endpoints in the `SimData` variable as described here: [Variables of SimData](VariablesOfSimData.html).
 
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on TTE-TTE vs. TTE-Binary) must not be declared. Optional parameters such as `ArrivalTime` may be omitted. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+Your R script could contain a function such as this one, with a name of your choice. All applicable input variables must be declared, even if they are not used in the script. Input variables that are not applicable (depending on TTE-TTE vs. TTE-Binary) must not be declared. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
 A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.DEP.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.DEP.R).
 
@@ -78,11 +78,11 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, Endpoint
   nError        	<- 0 # Error handling (no error)
   
   Response          <- list()
-  Response[[EndpointName[[1]]]] <- rep( 0, NumSub ) # Initializing survival times array of the first endpoint to 0
-  Response[[EndpointName[[2]]]] <- rep( 0, NumSub ) # Initializing survival times array of the second endpoint to 0
+  Response[[EndpointName[[1]]]] <- rep( 0, NumSub ) # Initializing response array of the first endpoint to 0
+  Response[[EndpointName[[2]]]] <- rep( 0, NumSub ) # Initializing response array of the second endpoint to 0
   
   # Write the actual code here.
-  # Store the generated survival times values in each array of the list Response.
+  # Store the generated response values in each array of the list Response.
 
   return( list( Response = as.list( vResponse ), ErrorCode = as.integer( nError ) ) )
 }

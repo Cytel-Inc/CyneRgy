@@ -1,0 +1,87 @@
+---
+title: "Multiple Endpoints - Patient Simulation"
+author: "Gabriel Potvin, Anoop Singh Rawat, Pradip Maske"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+---
+
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseMulti.html" class="alert-link">**Integration Point: Response - Multiple Endpoints**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Two Arm Confirmatory - Multiple Endpoints</li>
+<li>**Number of endpoints:** 5 Endpoints</li>
+<li>**Endpoint type:** 3 *Time-to-Event*, 1 *Binary*, 1 *Continuous*</li>
+<li>**Task:** Explore</li>
+</ul></div>
+
+# Introduction
+
+The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon using R functions in the context of 2-arm clinical trials with multiple endpoints. The example combines time-to-event, binary, and continuous outcomes within a single response-generating function. 
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPOutcomePatientSimulation/R) you will find the following R file:
+
+1. [GenerateMEPResponse.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPOutcomePatientSimulation/R/GenerateMEPResponse.R) - This file contains the response-generation logic used to simulate patient-level outcomes across multiple endpoints.
+
+# Example 1 - Simulate Response for 5 Endpoints
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPOutcomePatientSimulation/R/GenerateMEPResponse.R" class="alert-link">GenerateMEPResponse.R</a></p>
+</div>
+
+The function **GenMEPResp** simulates patient-level outcomes for a multiple endpoint design with 5 endpoints in a two-arm clinical trial. In this example, we use 3 TTE endpoints, 1 binary, and 1 continuous. All endpoints are generated within a **single unified Response function**.
+
+Refer to the table below for the definitions of the user-defined parameters used in this example.
+
+|**User parameter**|**Definition**|
+|---|------|
+|**trans_H_D**|Transition rate from the *Healthy* state to the *Disease* state in the multi-state survival model. If not provided, a default value of `0.1` is used.|
+|**trans_H_De**|Transition rate from the *Healthy* state directly to *Death* in the multi-state survival model. If not provided, a default value of `0.05` is used.|
+|**trans_D_De**|Transition rate from the *Disease* state to *Death* in the multi-state survival model. If not provided, a default value of `0.2` is used.|
+|**cont_scale**|Optional scalar used to multiplicatively scale the simulated values of the continuous endpoint after generation. If not provided, no scaling is applied.|
+
+## Time-to-Event Endpoints: Multi-State Survival Model
+
+The three TTE endpoints are generated using a three-state illness–death model:
+
+1. State 1 = *Healthy*  
+2. State 2 = *Disease*  
+3. State 3 = *Death*
+
+Patients transition sequentially through these states, with transition times generated from exponential distributions. Transition intensities can be influenced by treatment assignment and endpoint-specific parameters.
+
+The function supports either of the three alternative parameterizations methods (*Hazard rate*, *Cumulative survival percentage*, *Median survival time*) as chosen in East Horizon.
+
+For each patient and survival endpoint, transitions are simulated until the final state (*Death*) is reached. The reported outcome for each survival endpoint is the time to the terminal state.
+
+## Binary Endpoint
+
+The binary endpoint is simulated using a Bernoulli distribution, with treatment-specific or control-specific event probabilities via `RespParams$Treatment` and `RespParams$Control` (treatment and control probabilities specified in East Horizon). Each patient’s treatment assignment determines which probability is used.
+
+## Continuous Endpoint
+
+The continuous endpoint is simulated from a normal distribution, with arm-specific mean and standard deviation parameters via the lists `RespParams$Treatment` and `RespParams$Control`. Each list contains two elements: the mean (e.g., `RespParams$Treatment[1]`) and the standard deviation (e.g., `RespParams$Treatment[2]`). An optional user-defined scaling factor can be applied to the generated values via `UserParam`.
+
+## Output
+
+Patient arrival times are used to compute an `ArrivalRank`, which preserves the enrollment order and can be used by downstream design integration point. While a correlation matrix could be returned too, it is not included in this example. The final responses are returned.
+
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
+
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Load endpoint definitions and parameters",
+            "Simulate multi-state TTE endpoints",
+            "Simulate binary and continuous endpoints",
+            "Assemble patient-level responses",
+            "Return Response list and ArrivalRank"
+        )
+    )
+)
+```

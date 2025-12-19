@@ -1,0 +1,11 @@
+---
+title: "Multiple Endpoints - Patient Simulation"
+author: "Gabriel Potvin, Anoop Singh Rawat, Pradip Maske"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r child = '../inst/Examples/MEPPatientSimulation/Description.Rmd'}
+```

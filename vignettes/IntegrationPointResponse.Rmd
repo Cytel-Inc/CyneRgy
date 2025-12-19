@@ -39,6 +39,7 @@ This integration point is available in East Horizon Explore for the following st
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
 |Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|-|-|-|-|-|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
 
@@ -184,5 +185,7 @@ The input variables, expected output variables, examples, and templates for this
 <a href="IntegrationPointResponseBinary.html" class="btn btn-primary"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
 
 <a href="IntegrationPointResponseDual.html" class="btn btn-primary"><i class="fas fa-project-diagram"></i> Dual Outcomes (TTE-TTE or TTE-Binary)</a>
+
+<a href="IntegrationPointResponseMulti.html" class="btn btn-primary"><i class="fas fa-sitemap"></i> Multiple Outcomes</a>
 
 ::::

@@ -20,6 +20,7 @@ This integration point is available in East Horizon Explore for the following st
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
 |Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|-|-|-|-|-|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
 
@@ -150,7 +151,7 @@ When creating a custom R script, you can optionally use certain variables provid
 
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
-|**NumSub**|Integer|Number of subjects in the trial.|
+|**NumSub** or **NumPat**|Integer|Number of subjects in the trial. Is called NumPat for `Study Objective = Two Arm Confirmatory - Multiple Endpoints`.|
 |**Type**|Integer|Enrollment type specified by the user:<br>– `0`: Global<br>– `1`: Regional.|
 |**NumPrd**|Integer|Number of accrual periods in the trial. Only applicable if `Type = 0` (Global).|
 |**PrdStart**|Vector of Numeric|Vector of length `NumPrd`, indicating the start time of each period, with `PrdStarr[ 1 ] = 0`. Only applicable if `Type = 0` (Global).|
@@ -183,7 +184,7 @@ Your R script could contain a function such as this one, with a name of your cho
 
 A detailed template with step-by-step explanations is available here: [GenerateArrivalTimes.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/GenerateArrivalTimes.R) 
 
-## If `Type = 0` (Global Enrollment)
+## For `Type = 0` (Global Enrollment)
 
 ```
 GenArrTimes <- function( NumSub, Type = 0, NumPrd, PrdStart, AccrRate, UserParam = NULL )
@@ -198,7 +199,22 @@ GenArrTimes <- function( NumSub, Type = 0, NumPrd, PrdStart, AccrRate, UserParam
 }
 ```
 
-## If `Type = 1` (Regional Enrollment)
+### For `Type = 0` (Global Enrollment) and `Study Objective = Two Arm Confirmatory - Multiple Endpoints`
+
+```
+GenArrTimes <- function( NumPat, Type = 0, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+{
+  nError        	    <- 0 # Error handling (no error)
+  vPatientArrivalTime 	<- rep( 0, NumPat ) # Initializing arrival time array to 0
+  
+  # Write the actual code here.
+  # Store the generated arrival times in a vector called vPatientArrivalTime.
+
+  return( list( ArrivalTime = as.double( vPatientArrivalTime ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+## For `Type = 1` (Regional Enrollment)
 
 ```
 GenArrTimes <- function( NumSub, Type = 1, RegionName, EnrollmentCapPcnt, AccrRate, UserParam = NULL )
@@ -213,10 +229,25 @@ GenArrTimes <- function( NumSub, Type = 1, RegionName, EnrollmentCapPcnt, AccrRa
 }
 ```
 
+### For `Type = 1` (Regional Enrollment) and `Study Objective = Two Arm Confirmatory - Multiple Endpoints`
+
+```
+GenArrTimes <- function( NumPat, Type = 1, RegionName, EnrollmentCapPcnt, AccrRate, UserParam = NULL )
+{
+  nError        	    <- 0 # Error handling (no error)
+  vPatientArrivalTime 	<- rep( 0, NumPat ) # Initializing arrival time array to 0
+  
+  # Write the actual code here.
+  # Store the generated arrival times in a vector called vPatientArrivalTime.
+
+  return( list( ArrivalTime = as.double( vPatientArrivalTime ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
 # Example
 
 Explore the following example for more context:
 
 1. [**Generate Patient Arrival Times with Poisson Process**](GeneratePoissonArrival.html)
     - [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R)
-
+    - [GeneratePoissonArrivalMEP.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrivalMEP.R)

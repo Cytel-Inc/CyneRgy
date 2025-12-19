@@ -27,6 +27,7 @@ This integration point is available in East Horizon Explore for the following st
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
 |Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|-|-|-|-|-|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
 

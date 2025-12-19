@@ -22,7 +22,7 @@ The following examples are included:
 
 <details>
 <summary>**Arrival Times with Poisson Process**
-<span class="badge text-bg-primary ms-1">Any # of Arms</span><span class="badge text-bg-danger ms-1">Any # of Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
+<span class="badge text-bg-primary ms-1">Any # of Arms</span><span class="badge text-bg-danger ms-1">Single/Dual/Multi Endpoints</span><span class="badge text-bg-light ms-1">Any Outcome</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
 This example demonstrates how to add the ability to generate patient arrival times according to a Poisson process with a ramp-up by customizing the Enrollment integration point of East Horizon.  
 [Click here to view the full example.](GeneratePoissonArrival.html)
 </details>
@@ -33,7 +33,7 @@ This example demonstrates how to add the ability to generate patient arrival tim
 
 <details>
 <summary>**Randomization of Subjects**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Any # of Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single/Dual Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
 This example illustrates four ways to customize how subjects are assigned to treatment arms in East Horizon: using a uniform distribution, using the `sample()` function, using the `randomizeR` package, and in the context of a multi-arm trial.
 [Click here to view the full example.](RandomizeSubjects.html)
 </details>
@@ -96,6 +96,12 @@ This example demonstrates how to customize the patient outcome simulation in Eas
 <summary>**Dual Endpoints – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span></summary>
 This example demonstrates how to customize the patient outcome simulation in East Horizon for two-arm trials with dual endpoints (TTE-TTE).
 [Click here to view the full example.](DEPPatientSimulation.html)
+</details>
+
+<details>
+<summary>**Multiple Endpoints – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Multiple Endpoints</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
+This example demonstrates how to customize the patient outcome simulation in East Horizon for two-arm trials with multiple endpoints (Continuous, Binary and/or TTE).
+[Click here to view the full example.](MEPPatientSimulation.html)
 </details>
 
 <details>
