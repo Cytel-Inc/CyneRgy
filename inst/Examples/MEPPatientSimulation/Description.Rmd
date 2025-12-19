@@ -16,7 +16,7 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Study objective:** Two Arm Confirmatory - Multiple Endpoints</li>
 <li>**Number of endpoints:** 5 Endpoints</li>
 <li>**Endpoint type:** 3 *Time-to-Event*, 1 *Binary*, 1 *Continuous*</li>
-<li>**Task:** Explore</li>
+<li>**Task:** Design</li>
 </ul></div>
 
 # Introduction

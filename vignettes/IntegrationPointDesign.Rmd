@@ -1,5 +1,5 @@
 ---
-title: 'Integration Point: Multiplicity Adjustment'
+title: 'Integration Point: Design'
 author: "Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
@@ -9,17 +9,18 @@ output: html_document
 
 # Description
 
-The Multiplicity Adjustment integration point allows you to customize how multiple hypotheses are adjusted for Type I error control, instead of relying on East Horizon's default Fixed Sequence or Fallback methods. For example, you could implement alternative strategies such as Bonferroni, Holm, Hochberg, or graphical approaches.
+The Design integration point allows you to customize the statistical test for the treatment effect, the multiplicity adjustment method, and the decision rules of Multiple Endpoints designs instead of relying on East Horizon's parameters. This integration point replaces the Analysis and Multiplicity Adjustment integration points for Multiple Endpoints.
 
 # Availability
 
-## East Horizon Explore
+## East Horizon Design
 
-This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
+This integration point is available in East Horizon Design for the following study objectives and endpoint types:
 
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|✅|✅|
+|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|❌|❌|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|-|-|-|-|-|
 |Multiple Arm Confirmatory|❌|❌|❌|-|-|-|-|-|
 |Dose Finding|-|-|❌|-|-|-|-|-|
 
@@ -31,67 +32,16 @@ This integration point is available in East Horizon Explore for the following st
 |❌|Not available|
 |🔜|Coming soon|
 
-## East Horizon Design
-
-<details>
-<summary>Click to expand/collapse</summary>
-
-This integration point is available in East Horizon Design for the following study objectives and endpoint types:
-
-||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
-|----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|🔜|🔜|
-|Two Arm Confirmatory - Multiple Endpoints|❌\*|❌\*|❌\*|-|-|-|-|-|
-|Multiple Arm Confirmatory|❌|❌|❌|-|-|-|-|-|
-|Dose Finding|-|-|❌|-|-|-|-|-|
-
-\*For Multiple Endpoints, you can use the [Integration Point: Design](IntegrationPointDesign.html) to implement your own multiplicity method.
-
-This integration point is available in East Horizon Design for the following tests:
-
-|Test|Study Objective|Endpoint|Availability|
-|-------|-----|-----|--|
-|Single Mean (One Arm Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
-|Mean of Paired Differences (Paired Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
-|Mean of paired Ratios (Paired Design)|One Arm Exploratory/Confirmatory|Continuous|❌|
-|Single Proportion (One Arm Design)|One Arm Exploratory/Confirmatory|Binary|❌|
-|Simon's Two Stage (One Arm Design)|One Arm Exploratory/Confirmatory|Binary|❌|
-|Logrank Weibull Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
-|Parametric Weibull Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
-|Logrank Exponential Distribution (One Arm Design)|One Arm Exploratory/Confirmatory|Time to Event|❌|
-|Single Poisson Rate (One Arm Design)|One Arm Exploratory/Confirmatory|Count|❌|
-|Difference of Means (Parallel Design)|Two Arm Confirmatory|Continuous|❌|
-|Ratio of Means (Parallel Design)|Two Arm Confirmatory|Continuous|❌|
-|Difference of Means (Crossover Design)|Two Arm Confirmatory|Continuous|❌|
-|Ratio of Means (Crossover Design)|Two Arm Confirmatory|Continuous|❌|
-|Difference of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|❌|
-|Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|❌|
-|Odds Ratio of Proportions (Parallel Design)|Two Arm Confirmatory|Binary|❌|
-|Fisher's Exact (Parallel Design)|Two Arm Confirmatory|Binary|❌|
-|Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design)|Two Arm Confirmatory|Time to Event|❌|
-|Logrank Test Given Accrual Duration and Study Duration (Parallel Design)|Two Arm Confirmatory|Time to Event|❌|
-|Logrank Test Given Accrual Duration and Accrual Rates (Population Enrichment)|Two Arm Confirmatory|Time to Event|❌|
-|Ratio of Poisson Rates (Parallel Design)|Two Arm Confirmatory|Count|❌|
-|Ratio of Negative Binomial Rates (Parallel Design)|Two Arm Confirmatory|Count|❌|
-|Win Ratio (Parallel Design)|Two Arm Confirmatory|Composite|❌|
-|MAMS Difference of Means (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Continuous|❌|
-|MAMS Difference of Means: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Continuous|❌|
-|MAMS Difference of Proportions (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Binary|❌|
-|MAMS Difference of Proportions: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Binary|❌|
-|MAMS Logrank (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Time to Event|❌|
-|MAMS Logrank: Combining P-Values (Pairwise Comparisons to Control)|Multiple Arm Confirmatory|Time to Event|❌|
-</details>
-
 # Instructions
 
-## In East Horizon Explore
+## In East Horizon Design
 
-You can set up a multiplicity adjustment function under **Multiplicity Adjustment** in a **Design Card** while creating or editing an **Input Set**.
+You can set up a design function under **User Specified Analysis** in the **Design Tab** while creating or editing an **Input Set**.
 
 <details>
 <summary>Follow these steps (click to expand/collapse):</summary>
 
-1. Select **User Specified-R** from the dropdown in the **Multiplicity Adjustment** field in the **Design Card**.
+1. Select **User Specified-R** from the dropdown in the **User Specified Analysis** field in the **Design Tab**.
 1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
 1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
 1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
@@ -99,7 +49,7 @@ You can set up a multiplicity adjustment function under **Multiplicity Adjustmen
 
 For a visual guide of where to find the option, refer to the screenshot below:
 
-![](GettingStarted_files/multiplicityAdjustment.png)
+![](GettingStarted_files/design.png)
 </details>
 
 # Input Variables
@@ -109,9 +59,10 @@ When creating a custom R script, you can optionally use specific variables provi
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|-----------------|---------------------------------------------------------------------------------|
 |**SimData**|Data Frame|Subject data generated in current simulation, one row per subject. To access these variables in your R code, use the syntax: `SimData$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. See below for more information.|
+|**AnalysisData**|Data Frame|Subset of patient data available at the current analysis look. Only relevant for `Statistical Design = Group Sequential`. To access these variables in your R code, use the syntax: `AnalysisData$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. See below for more information.|
 |**DesignParam**|List|Input parameters which may be needed to compute test statistics and perform tests. To access these variables in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. See below for more information.|
 |**LookInfo**|List|Input parameters related to multiple looks. Empty when `Statistical Design = Fixed Sample`, but still mandatory in the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision`. See below for more information.|
-|**TestStat**|Named List of Numeric|Named List of length equal to the number of endpoints, indicating the value of the test statistic on Wald ﴾Z﴿ scale for each endpoint. For example, `TestStat[“Endpoint 1”]` is the test statistic for Endpoint 1. This is returned by the Analysis part.|
+|**DataSummary**|List|Summary statistics for each endpoint. To access these variables in your R code, use the syntax: `DataSummary$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. See below for more information.|
 |**OutList**|List|List of outputs that was returned in the previous look. Only relevant for `Statistical Design = Group Sequential`. Set to `NULL` for the first look. See below in the Output Variable.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointAnalysis.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
@@ -121,6 +72,8 @@ When creating a custom R script, you can optionally use specific variables provi
 
 [Click here to explore the variables of SimData.](VariablesOfSimData.html)
 
+## Variables of AnalysisData
+
 ## Variables of DesignParam
 
 [Click here to explore the variables of DesignParam.](VariablesOfDesignParam.html)
@@ -128,6 +81,8 @@ When creating a custom R script, you can optionally use specific variables provi
 ## Variables of LookInfo
 
 [Click here to explore the variables of LookInfo.](VariablesOfLookInfo.html)
+
+## Variables of DataSummary
 
 # Expected Output Variable
 
@@ -143,12 +98,12 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` and `OutList` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in the interface and whether or not `OutList` is used.
 
-A detailed template with step-by-step explanations is available here: [Decision.DEP.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Decision.DEP.R)
+A detailed template with step-by-step explanations is available here: [Design.MEP.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Design.MEP.R)
 
 ## For `Statistical Design = Fixed Sample`
 
 ```
-PerformMultAdj <- function( SimData, DesignParam, TestStat, OutList = NULL, UserParam = NULL )
+GetMEPDecision <- function( SimData, DataSummary, DesignParam, OutList = NULL, UserParam = NULL )
 {
 	nError 	= 0 # Error handling (no error)
 	
@@ -165,7 +120,7 @@ PerformMultAdj <- function( SimData, DesignParam, TestStat, OutList = NULL, User
 ## For `Statistical Design = Group Sequential`
 
 ```
-PerformMultAdj <- function( SimData, DesignParam, LookInfo, TestStat, OutList = NULL, UserParam = NULL )
+GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList = NULL, UserParam = NULL )
 {
 	nError 	= 0 # Error handling (no error)
 	
@@ -182,9 +137,9 @@ PerformMultAdj <- function( SimData, DesignParam, LookInfo, TestStat, OutList = 
 }
 ```
 
-# Examples
+# Example
 
-Explore the following examples for more context:
+Explore the following example for more context:
     
-1.  [**Dual Endpoints - Multiplicity Adjustment**](DEPDecisionsUsingMCP.html)
-    - [GetDEPDecisions.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPDecisionsUsingMCP/R/GetDEPDecisionsFSD.R)
+1.  [**Multiple Endpoints - Design**](MEPDesign.html)
+    - [GetMEPDecision.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MEPDesign/R/GetMEPDecision.R)
