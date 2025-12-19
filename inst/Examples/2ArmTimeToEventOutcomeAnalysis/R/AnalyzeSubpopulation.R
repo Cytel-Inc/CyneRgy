@@ -318,9 +318,7 @@ AnalyzeSubpopulation <- function(SimData, DesignParam, LookInfo = NULL, UserPara
 
 library(survival)
 compute_gMCPDecisions <- function(testStats, tailType, alpha, weights, tpm) {
-  require(gMCPLite) 
-  
-  #browser()
+  library(gMCPLite) 
   
   isTestStatMissing <- is.nan(testStats) | is.na(testStats);
   if(any(isTestStatMissing)) {
@@ -338,7 +336,6 @@ compute_gMCPDecisions <- function(testStats, tailType, alpha, weights, tpm) {
   graph <- matrix2graph(m=tpm, weights = weights)
   
   #Applying gMCP procedure
-  #As per the current scope for Sub-Init RoADMAP-22, we are using weighted-bonferroni as a local test.
   output <- gMCP(graph=graph, pvalues = raw.p.values, test="Bonferroni", alpha = alpha)
   
   return(list(raw.p.values=raw.p.values, adj.p.values=output@adjPValues, 

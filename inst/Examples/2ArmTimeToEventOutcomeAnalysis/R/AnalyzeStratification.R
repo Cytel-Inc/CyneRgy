@@ -85,7 +85,7 @@ AnalyzeStratification<- function(SimData, DesignParam, LookInfo = NULL, UserPara
     dTestStatistic <- 0
     dTimeOfAnalysis <- 0
 
-    # Step 1: Determine number of events for analysis
+    # Determine number of events for analysis
     if( !is.null( LookInfo ) )
     {
         nQtyOfLooks  <- LookInfo$NumLooks
@@ -100,7 +100,7 @@ AnalyzeStratification<- function(SimData, DesignParam, LookInfo = NULL, UserPara
         nQtyOfEvents <- DesignParam$MaxEvents 
     }
     
-    # Step 2: Prepare analysis dataset
+    # Prepare analysis dataset
     SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime    
     SimData              <- SimData[ order( SimData$TimeOfEvent), ]
     dTimeOfAnalysis      <- SimData[ nQtyOfEvents, ]$TimeOfEvent
@@ -144,8 +144,7 @@ for (fac in strat_factors) {
 
     dTestStatistic <- ifelse(unname(dhr) < 1, dTestStatistic * -1, dTestStatistic)
     
-    # Step 4: Decision rule
-    # Step 7 - Decision logic based on boundaries
+    # Decision logic based on boundaries
     if(!is.na(dTestStatistic)) {
       if(!is.null(LookInfo)) {
         # Use efficacy boundary from LookInfo if available

@@ -331,7 +331,7 @@ The intent of the example is to illustrate the impact that the patient subgroup 
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R" class="alert-link">SimulatePatientOutcomeStratification.R</a></p>
 </div>
 
-This example illustrates how to customize the response generation when turning on `Stratification` in East Horizon. Unlike the previous examples, where a single set of survival parameters applies to all patients, this example allows different survival characteristics for each stratum, while still supporting multiple treatment arms.
+This example illustrates how to customize the response generation when turning on `Stratification` in East Horizon. Unlike the previous examples, where a single set of survival parameters applies to all patients in an arm, this example allows different survival characteristics for each stratum, while still supporting two arms.
 
 For each stratum, the survival parameters provided in East Horizon are converted into arm-specific hazard rates. Patient survival times are then simulated independently within each stratum using an Exponential distribution. This approach enables realistic modeling of heterogeneous patient populations where baseline risk differs across strata.
 

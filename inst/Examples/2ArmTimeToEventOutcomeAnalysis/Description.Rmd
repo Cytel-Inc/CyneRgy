@@ -300,7 +300,7 @@ The analysis is based on a single event-driven look schedule defined for the ful
 
 At each interim or final analysis, the function:
 
-1. Determines the analysis time based on the cumulative number of events in the full population.
+1. Determines the analysis time based on the cumulative number of events in the full population. Note: Analysis times can instead be based on a subpopulation by modifying this code accordingly.
 2. Prepares censored survival data up to this analysis time.
 3. Identifies the full population and each predefined subpopulation using logical filters derived from baseline covariates.
 4. For each population:
