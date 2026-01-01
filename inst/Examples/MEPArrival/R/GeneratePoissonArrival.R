@@ -1,15 +1,16 @@
 #' @name GeneratePoissonArrival
 #' @title Generate patient arrival time according to a Poisson process.
-#' @param NumPat The number of participants that need to be simulated, integer value
-#' @param NumPrd Number of time periods that are provided.
-#' @param PrdStart Vector with start of a time interval, PrdStarr[ 1 ] = 0
-#' @param AccrRate the accrual rate in each period.
-#' @param UserParam A list of user defined parameters that may be provided in East or East Horizon. You must have a default of NULL, as in this example.
+#' @param NumPat Integer. The number of participants that need to be simulated
+#' @param NumPrd Integer. Number of time periods that are provided.
+#' @param PrdStart Vector of numerics. The start time for each enrollment periods. PrdStart[ 1 ] = 0
+#' @param AccrRate Vector of Numerics. The accrual rate in each enrollment period.
+#' @param UserParam A list of user defined parameters that may be provided in East or East Horizon.
 #' The user may supplies rates names Rate1, Rate2, ...., RateX to represent the per unit time accrual rate where the maximum RateX is used after the ramp-up.
 #'    \describe{
 #'      \item{Rate1}{The rate in the first unit of time}
 #'      \item{Rate2}{The rate in the first second of time}
 #'    }
+#' @return A list containing the arrival times (ArrivalTime) and error code (ErrorCode)
 #' @description
 #' This function allows for patient arrival time in the clinical trial according to a Poisson process.  If the UserParam is provided then PrdStart and AccrRate are ignored.
 #' If the UserParam is supplied, a ramp-up in accrual is obtained by

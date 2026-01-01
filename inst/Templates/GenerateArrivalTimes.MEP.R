@@ -1,16 +1,12 @@
 #  Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @title Template for simulating patient arrival time.
-#' @param NumPat The number of participants that need to be simulated, integer value
-#' @param NumPrd Number of time periods that are provided.
-#' @param PrdStart Vector with start of a time interval, PrdStarr[ 1 ] = 0
-#' @param AccrRate the accrual rate in each period.
-#' @param UserParam A list of user defined parameters that may be provided in East or East Horizon. You must have a default of NULL, as in this example.
-#' The user may supplies rates names Rate1, Rate2, ...., RateX to represent the per unit time accrual rate where the maximum RateX is used after the ramp-up.
-#'    \describe{
-#'      \item{Rate1}{The rate in the first unit of time}
-#'      \item{Rate2}{The rate in the first second of time}
-#'    }
+#' @param NumPat Integer. The number of participants that need to be simulated
+#' @param NumPrd Integer. Number of time periods that are provided.
+#' @param PrdStart Vector of Numerics. The start time for each enrollment periods. PrdStart[ 1 ] = 0
+#' @param AccrRate Vector of Numerics. The accrual rate in each enrollment period.
+#' @param UserParam A list of user defined parameters that may be provided in East or East Horizon.
+#' @return A list containing the arrival times (ArrivalTime) and error code (ErrorCode)
 #' @description
 #' This template can be used as a starting point for developing custom functionality when the patient arrives in the trial.  
 #' The function signature must remain the same.  
@@ -28,7 +24,7 @@
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
         # are applied to have the same functionality as East, see the first example
         
-        # EXMAPLE - Set the default if needed
+        # EXAMPLE - Set the default if needed
         # UserParam <- list( dRate = 0.5 )
     }
     

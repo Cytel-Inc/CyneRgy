@@ -2,21 +2,35 @@
 ##'
 ##' Simulates patient responses for 5 endpoints (3 survival, 1 binary, 1 continuous) using a multi-state model for survival endpoints.
 ##'
-##' @param NumPat Number of patients
-##' @param NumArms Number of treatment arms
-##' @param TreatmentID Vector of treatment assignment for each patient
+##' @param NumPat Integer. Number of patients in the trial.
+##' @param NumArms Integer. Number of arms in the trial (including placebo/control).
+##' @param TreatmentID Vector of integers. Treatment assignment for each subject (0 = control, 1 = treatment).
 ##' @param ArrivalTime Vector of patient arrival times
-##' @param EndpointType Character vector of endpoint types ("survival", "binary", "continuous")
-##' @param EndpointName Character vector of endpoint names
-##' @param RespParams List of parameters for each endpoint:
-##'   - For survival: list with SurvMethod and method-specific parameters:
-##'       - SurvMethod=1: Hazard rate method. Use 'NumPiece', 'StartAtTime', 'HR', 'Control' (hazard rates, can be vectors for piecewise)
-##'       - SurvMethod=2: Cumulative %survival method. Use 'ByTime', 'HR', 'Control' (%survival at ByTime)
-##'       - SurvMethod=3: Median survival time method. Use 'HR', 'Control' (median survival time)
-##'   - For binary: list with 'treat_prob' and 'control_prob'
-##'   - For continuous: list with 'mean' and 'sd'
-##' @param Correlation Correlation matrix for endpoints
-##' @param UserParam List with optional scalar elements:
+##' @param EndpointType Vector of integers. Types of endpoints (0 for continuous, 1 for binary, 2 for time-to-event).
+##' @param EndpointName Vector of character strings. Names of the endpoints.
+##' @param RespParams List. Parameters for each endpoint containing control and treatment group parameters.
+##'   Each element corresponds to one endpoint and should contain:
+##'   \itemize{
+##'     \item For continuous endpoints (EndpointType = 0):
+##'       \code{list(Control = c(Mean = 5, SD = 2), Treatment = c(Mean = 10, SD = 2))} where Mean is mean and SD is standard deviation
+##'     \item For binary endpoints (EndpointType = 1):
+##'       \code{list(Control = .1, Treatment = .5)} where Control and Treatment are the expected proportion of responders on each arm (0-1)
+##'     \item For time-to-event endpoints (EndpointType = 2):
+##'       \code{list(SurvMethod = 1, NumPiece = periods, StartAtTime = times, Control = params, HR = hazard_ratio)}
+##'       \code{list(SurvMethod = 2, NumPiece = periods, ByTime = times, Control = params, HR = hazard_ratio)}
+##'       \code{list(SurvMethod = 3, NumPiece = 1, StartAtTime = 0, Control = params, HR = hazard_ratio)}
+##'       where:
+##'       \itemize{
+##'         \item \code{SurvMethod}: 1 = Hazard Rates, 2 = Cumulative % Survival Rates, 3 = Median Survival Times
+##'         \item \code{NumPiece}: Number of periods (1 for single period, >1 for piecewise survival)
+##'         \item \code{StartAtTime}: Vector of time periods. Contains Starting times of hazard pieces for SurvMethod = 1 and is always 0 for SurvMethod = 3
+##'         \item \code{ByTime}: Vector of time periods. Contains times at which cumulative % survivals are specified for SurvMethod = 2
+##'         \item \code{Control}: Vector of Control group parameters (hazard rate for method 1, Cumulative survival % for method 2, median survival for method 3)
+##'         \item \code{HR}: Vector of Hazard ratio (treatment vs control)
+##'       }
+##'   }
+##' @param Correlation Matrix. Correlation matrix between endpoints (NumEP x NumEP).
+##' @param UserParam List. Optional user-defined parameters (default = NULL):
 ##'   - states: vector of state names for multi-state model (default: c("Healthy", "Disease", "Death"))
 ##'   - trans_H_D: transition rate from Healthy to Disease
 ##'   - trans_H_De: transition rate from Healthy to Death
@@ -24,7 +38,9 @@
 ##'   - bin_flip: if 1, flips binary endpoint probability
 ##'   - cont_scale: scales continuous endpoint values
 ##'
-##' @return List with Response (simulated data for each endpoint) and ErrorCode
+##' @return List containing:
+##'   \item{Response}{List of response vectors for each endpoint}
+##'   \item{ErrorCode}{Integer error code (0 = success)}
 GenMEPResp <- function(NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL) {
   # Error handling
   ErrorCode <- 0
