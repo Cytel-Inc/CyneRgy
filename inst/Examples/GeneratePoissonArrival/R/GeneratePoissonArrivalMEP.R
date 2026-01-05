@@ -5,10 +5,10 @@
 #' @param PrdStart Vector of numerics. The start time for each enrollment periods. PrdStart[ 1 ] = 0
 #' @param AccrRate Vector of Numerics. The accrual rate in each enrollment period.
 #' @param UserParam A list of user defined parameters that may be provided in East or East Horizon.
-#' The user may supplies rates names Rate1, Rate2, ...., RateX to represent the per unit time accrual rate where the maximum RateX is used after the ramp-up.
+#' The user may supplies rates names dRate1, dRate2, ...., dRateX to represent the per unit time accrual rate where the maximum dRateX is used after the ramp-up.
 #'    \describe{
-#'      \item{Rate1}{The rate in the first unit of time}
-#'      \item{Rate2}{The rate in the first second of time}
+#'      \item{dRate1}{The rate in the first unit of time}
+#'      \item{dRate2}{The rate in the first second of time}
 #'    }
 #' @return A list containing the arrival times (ArrivalTime) and error code (ErrorCode)
 #' @description

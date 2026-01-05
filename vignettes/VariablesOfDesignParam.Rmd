@@ -67,10 +67,10 @@ The tables below describe each variable and notes any conditions under which it 
 
 ## For `Endpoint Type = Dual (TTE-TTE or TTE-Binary)` (including for Multiplicity Adjustment)
 
-|**Variable Name**|**Type**|**Description**|**Notes for Explore**|
+|**Variable Name**|**Type**|**Description**|**Notes**|
 |-|-|----|-----|
 |**EndpointType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the endpoint types:<br>– 0: Continuous.<br>– 1: Binary.<br>– 2: Time-to-Event.||
-|**EndpointName**|Vector of Character|Vector of length equal to the number of endpoints, indicating the endpoint names.||
+|**EndpointName**|Vector of String|Vector of length equal to the number of endpoints, containing the endpoint names.||
 |**WinCond**|Integer|Winning condition:<br>- `1`: At least endpoint 1.<br>- `2`: At least endpoint 2.<br>- `3`: At least one endpoint.<br>- `4`: Both endpoints.||
 |**TailType**|Named List of Integer|Named List of length equal to the number of endpoints, indicating the nature of critical region for each endpoint. For example, `TailType[“Endpoint 1”]` is the nature for Endpoint 1. Possible values:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.||
 |**FollowUpType**|Named List of Integer|Named List of length equal to the number of endpoints, indicating the follow-up type for each endpoint. For example, `FollowUpType[“Endpoint 1”]` is the type for Endpoint 1. Possible values:<br>– `0`: Until the end of the study.<br>– `1`: For a fixed period.||
@@ -98,6 +98,28 @@ The tables below describe each variable and notes any conditions under which it 
 - Dual endpoints are not available for East Horizon: Design.
 - "Endpoint 1" is used as a sample endpoint name. It will be the actual endpoint name as specified by the user.
 
+# For `Study objective = Two Arm Confirmatory - Multiple Endpoints` (including for Design)
+
+|**Variable Name**|**Type**|**Description**|**Notes**|
+|-|-|----|-----|
+|**TotalLooks**|Integer|Total number of planned looks.||
+|**EndpointName**|Vector of String|Vector of length equal to the number of endpoints, containing the endpoint names.||
+|**EndpointType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the endpoint types:<br>– 0: Continuous.<br>– 1: Binary.<br>– 2: Time-to-Event.||
+|**TailType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the nature of critical region for each endpoint. Possible values:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.||
+|**NumPat**|Integer|Total number of patients.||
+|**AllocRatio**||Treatment allocation ratio.||
+|**TrialType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the trial type for each endpoint. Possible values:<br>– `0`: Superiority.<br>– `1`: Non-inferiority.||
+|**Alpha**|Numeric|Type I Error.||
+|**TestStatistics**||Test statistics specifications.||
+|**TargetInformation**||Target information.||
+|**MultiplicityDetails**||Multiplicity adjustment details.||
+|**EffFlg**||Matrix of size equal to the number of analysis looks $\times$ the number of endpoints, indicating the efficacity flag.||
+|**FutFlg**||Matrix of size equal to the number of analysis looks $\times$ the number of endpoints, indicating the futility flag.||
+|**FutThrsld**||Matrix of size equal to the number of analysis looks $\times$ the number of endpoints, indicating the futility thresholds.||
+|**EffSpending**||Alpha spending details.||
+|**WinCondCriteria**||Win condition criteria.||
+
+^Can you complete this, Anoop?
 
 # For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
 
@@ -121,7 +143,7 @@ The tables below describe each variable and notes any conditions under which it 
 |**PValCombMethod**|Integer|P-value combination method:<br>- `0`: Inverse normal.|Not available.|Only available for `Combining P-Values (MAMS)` tests.|
 |**w1**|Numeric|Inverse normal weights for stage 1.|Not available.|Only available for `Combining P-Values (MAMS)` tests.|
 |**w2**|Numeric|Inverse normal weights for stage 2.|Not available.|Only available for `Combining P-Values (MAMS)` tests.|
-|**MultAdjMethod**|Integer|Multiple comparison procedure.|Possible values:-<br>– `0`: Bonferroni.<br>– `3`: Dunnett's Single Step.<br>– `4`: Weighted Bonferroni.<br>– `5`: Fixed Sequence.<br>– `6`: Fallback.<br>– `7`: Hochberg's Step Up.|Possible values:-<br>– `0`: Bonferroni.<br>– `1`: Sidak.<br>– `2`: Simes.<br>– `3`: Dunnett's Single Step.<br>– `4`: Weighted Bonferroni.<br>– `5`: Fixed Sequence.<br>– `6`: Fallback.<br>– `7`: Hochberg's Step Up.<br>– `10`: Holm's Step Down.<br>– `11`: Hommel's Step Up.<br>– `12`: Dunnett's Step Down.<br>– `13`: Dunnett's Step Up.|
+|**MultAdjMethod**|Integer|Multiple comparison procedure.|Possible values:<br>– `0`: Bonferroni.<br>– `3`: Dunnett's Single Step.<br>– `4`: Weighted Bonferroni.<br>– `5`: Fixed Sequence.<br>– `6`: Fallback.<br>– `7`: Hochberg's Step Up.|Possible values:-<br>– `0`: Bonferroni.<br>– `1`: Sidak.<br>– `2`: Simes.<br>– `3`: Dunnett's Single Step.<br>– `4`: Weighted Bonferroni.<br>– `5`: Fixed Sequence.<br>– `6`: Fallback.<br>– `7`: Hochberg's Step Up.<br>– `10`: Holm's Step Down.<br>– `11`: Hommel's Step Up.<br>– `12`: Dunnett's Step Down.<br>– `13`: Dunnett's Step Up.|
 |**NumTreatments**|Integer|Number of treatment arms (number of arms - 1).|||
 |**AlphaProp**|Vector of Numeric|Vector of length `DesignParam$NumTreatments` (number of arms - 1), containing the proportion of Alpha for each treatment arm.|Only available for `Multiple Comparison Procedure = 4 (Weighted Bonferroni) or 6 (Fallback)`. Not available for `Study Objective = Dose Finding`.|Only available for `Multiple Comparison Procedure = 4 (Weighted Bonferroni) or 6 (Fallback)`. Not available for `Test = MAMS Difference of Means: Combining P-Values (Continuous) or MAMS Difference of Proportions: Combining P-Values (Binary) or MAMS Logrank (Time-to-Event)`.|
 |**TestSeq**|Vector of Integer|Vector of length `DesignParam$NumTreatments` (number of arms - 1), containing the test sequence for each comparison (each treatment arm).|Only available for `Multiple Comparison Procedure = 5 (Fixed Sequence) or 6 (Fallback)`. Not available for `Study Objective = Dose Finding`.|Only available for `Multiple Comparison Procedure = 5 (Fixed Sequence) or 6 (Fallback)`. Not available for `Test = MAMS Difference of Means: Combining P-Values (Continuous) or MAMS Difference of Proportions: Combining P-Values (Binary) or MAMS Logrank (Time-to-Event)`.|

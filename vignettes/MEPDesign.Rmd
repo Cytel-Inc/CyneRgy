@@ -1,5 +1,5 @@
 ---
-title: "Multiple Endpoints - Patient Simulation"
+title: "Multiple Endpoints - Design"
 author: "Anoop Singh Rawat, Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -7,5 +7,5 @@ output:
   word_document: default
 ---
 
-```{r child = '../inst/Examples/MEPPatientSimulation/Description.Rmd'}
+```{r child = '../inst/Examples/MEPDesign/Description.Rmd'}
 ```

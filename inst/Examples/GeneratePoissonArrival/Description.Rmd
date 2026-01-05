@@ -162,5 +162,5 @@ This example demonstrates how to generate patient arrival times when working wit
 
 As in the previous examples, patient arrival times are simulated according to a Poisson process, with optional ramp-up in accrual. The ramp-up can be specified either:
 
-- Via enrollment inputs defined in East Horizon (`PrdStart`, `AccrRate`), or
-- Via user-defined parameters (`UserParam$dRate1`, `UserParam$dRate2`, …). In this case, the built-in inputs are ignored.
+- Via enrollment inputs defined in East Horizon (`PrdStart`, `AccrRate`): see Example 2.
+- Via user-defined parameters (`UserParam$dRate1`, `UserParam$dRate2`, …): see Example 1. In this case, the East Horizon inputs are ignored.

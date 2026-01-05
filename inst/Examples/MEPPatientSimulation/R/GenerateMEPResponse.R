@@ -33,7 +33,7 @@
 ##' @return List containing:
 ##'   \item{Response}{List of response vectors for each endpoint}
 ##'   \item{ErrorCode}{Integer error code (0 = success)}
-GenMEPResp <- function(NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL) {
+GenerateMEPResponse <- function(NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL) {
     nError               <- 0
     lResponse            <- list()
     NumEP                <- length( EndpointType )

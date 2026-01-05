@@ -70,6 +70,19 @@ Named List of length equal to the number of endpoints, indicating the trial type
 - Dual endpoints are not available for East Horizon: Design.
 - "Endpoint 1" is used as a sample endpoint name. It will be the actual endpoint name as specified by the user.
 
+# For `Study objective = Two Arm Confirmatory - Multiple Endpoints` (including for Design)
+
+|**Variable Name**|**Type**|**Description**|**Notes**|
+|-|-|----|-----|
+|**AnalysisTime**||Current analysis time.||
+|**LookNum**||Current look number.||
+|**TestStatisticsOutputs**|Vector|Vector of length equal to the number of endpoints, containing the test statistics results from the engine. Use `TestStatisticsOutputs[[endpointID]]$data$TSPVal` to access the p-value of the endpoint with `ID = endpointID`.||
+|**InfoFrac**||Information fraction.||
+|**LastLookDecision**|Integer|Decision from previous look:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `3`: Futility boundary crossed.<br>– `4`: Equivalence boundary crossed.||
+|**EfficacyBoundaryPScale**|Vector|Vector of length equal to the number of endpoints, containing the efficacy boundaries on the p-value scale.||
+|**EPStatus**|Vector|Vector of length equal to the number of endpoints, containing the status of each endpoint:<br>- `0`: Success.<br>- `1`: Insufficient information.<br>- `2`: Excessive information.<br>- `3`: Computational error.||
+
+^Can you complete this, Anoop?
 
 # For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
 
