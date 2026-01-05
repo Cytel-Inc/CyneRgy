@@ -159,7 +159,7 @@ For a visual guide of where to find the option, refer to the screenshot below:
 
 ![](GettingStarted_files/responseDesign.png)
 
-For Multiple Endpoints, instead of the **Distrbution** field, it is under **Response Generation Method**.
+For Multiple Endpoints, instead of the **Distribution** field, it is under **Response Generation Method**.
 
 </details>
 
