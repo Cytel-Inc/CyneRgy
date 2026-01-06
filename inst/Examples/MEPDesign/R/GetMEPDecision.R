@@ -34,32 +34,63 @@
 #'   }
 #' @param LookInfo List containing information about the current analysis look:
 #'   \itemize{
-#'     \item AnalysisTime: Current analysis time
-#'     \item LookNum: Current look number
-#'     \item TestStatisticsOutputs: Test statistics results from MEP native engine
-#'     \item InfoFrac: Information fraction
-#'     \item LastLookDecision: Decisions from previous look
-#'     \item EfficacyBoundaryPScale: Efficacy boundaries on p-value scale
-#'     \item EPStatus: Vector containing Status of each endpoint. 0=Success,1=Insufficient Information,2=Excessive Information,3=Computational Error
+#'     \item AnalysisTime: Numeric. Current analysis time
+#'     \item LookNum: Integer. Current look number
+#'     \item TestStatisticsOutputs: Named list of test statistics results from MEP native engine. Names are user-specified endpoint names. Each element contains:
+#'       \itemize{
+#'         \item data: List containing test statistics (varies by endpoint type and test):
+#'           \itemize{
+#'             \item For TTE endpoints: Score (numeric), StdErr (numeric standard error), TS (numeric test statistic), TSPVal (numeric p-value)
+#'             \item For Binary endpoints: PropPld (numeric pooled proportion), StdErr (numeric standard error), TS (numeric test statistic), TSPVal (numeric p-value)
+#'             \item For Continuous endpoints: DoF (numeric degrees of freedom), SDPld (numeric pooled standard deviation), StdErr (numeric standard error), TS (numeric test statistic), TSPVal (numeric p-value)
+#'           }
+#'         \item ErrorCode: Integer. Error code from computation. 0=Success
+#'       }
+#'     \item InfoFrac: Unnamed List of numeric vectors. Each element contains the actual information fractions up to the current look for one endpoint. Element order matches EndpointName order
+#'     \item LastLookDecision: Integer vector. Decisions from previous look for each endpoint. 0=Continue, 1=Efficacy, 2=Futility
+#'     \item EfficacyBoundaryPScale: Numeric vector. Final set of efficacy boundaries on p-value scale used for testing each endpoint by native engine. NaN where boundaries were not calculated. Value order matches EndpointName order
+#'     \item EPStatus: Integer vector. Status of each endpoint. 0=Success, 1=Insufficient Information, 2=Excessive Information, 3=Computational Error
 #'   }
 #' @param DesignParam List containing trial design parameters:
 #'   \itemize{
-#'     \item TotalLooks: Total number of planned looks
-#'     \item EndpointName: Names of endpoints
-#'     \item EndpointType: Types of endpoints. 0=Continuous, 1=Binary, 2=TTE
-#'     \item TailType: Tail type for hypothesis tests. 0=Left tail, 1=Right tail
-#'     \item NumPat: Number of patients
-#'     \item AllocRatio: Treatment allocation ratio
-#'     \item TrialType: Type of trial
-#'     \item Alpha: Type I error rate
-#'     \item TestStatistics: Test statistics specifications
-#'     \item TargetInformation: Target information
-#'     \item MultiplicityDetails: Multiplicity adjustment details
-#'     \item EffFlg: Efficacy flag matrix
-#'     \item FutFlg: Futility flag matrix
-#'     \item FutThrsld: Futility thresholds
-#'     \item EffSpending: Alpha spending details
-#'     \item WinCondCriteria: Win condition criteria
+#'     \item TotalLooks: Integer. Total number of planned looks
+#'     \item EndpointName: Character vector. Names of endpoints
+#'     \item EndpointType: Integer vector. Types of endpoints. 0=Continuous, 1=Binary, 2=TTE
+#'     \item TailType: Integer vector. Tail type for hypothesis tests. 0=Left tail, 1=Right tail
+#'     \item NumPat: Integer. Number of patients
+#'     \item AllocRatio: Numeric. Ratio of Number of Patients on Treatment to Control
+#'     \item TrialType: Integer vector. Type of trial. 0=Superiority
+#'     \item Alpha: Numeric. Type I error rate
+#'     \item TestStatistics: Named list of test statistics specifications for each endpoint. Names are user-specified endpoint names. Each element contains:
+#'       \itemize{
+#'         \item Test: Integer. Test type. 0=None, 1=LogRank (TTE), 2=Difference of Means (Continuous), 3=Difference of Proportions (Binary), 4=Ratio of Proportions (Binary)
+#'         \item TestStat: Integer. Test statistic. 0=None, 1=LogRank (TTE), 3=Harrington Fleming (TTE), 4=t Statistics (Continuous), 5=z Statistics (Binary), 6=Modestly Weighted LogRank/MWLR (TTE)
+#'         \item Variance: Integer (Binary/Continuous only). 1=Pooled (Binary), 2=Unpooled (Binary), 3=Equal (Continuous), 4=Unequal (Continuous)
+#'         \item Parameter: Numeric vector (for Harrington Fleming or MWLR). For Harrington Fleming: c(p,q). For MWLR: c(delay,w_max)
+#'       }
+#'     \item TargetInformation: Integer vector. Target information for each endpoint. Completers for continuous/binary and Events for TTE
+#'     \item MultiplicityDetails: List containing multiplicity adjustment settings. Contains:
+#'       \itemize{
+#'         \item MCP: Integer. Multiple comparison procedure. 0=None, 1=Fallback, 2=Fixed Sequence, 3=Bonferroni/Weighted Bonferroni, 4=Holms, 5=Weighted Holms, 6=User Specified GMCP
+#'         \item AlphaAlloc: Numeric vector. Alpha allocation percentages for each endpoint (must match EndpointName order).
+#'         \item TestOrder: Integer vector (for Fallback/Fixed Sequence only). Testing order for each endpoint (must match EndpointName order).
+#'         \item TransMat: Numeric matrix (for GMCP only). Transition matrix for alpha propagation (rows/columns must match EndpointName order).
+#'       }
+#'     \item EffFlg: Integer matrix. Efficacy flag matrix indicating which endpoint is selected for efficacy testing at which analysis. 1=Test for efficacy, 0=Do not test. Rows represent analyses in analysis order, columns represent endpoints in EndpointName order
+#'     \item FutFlg: Integer matrix. Futility flag matrix indicating which endpoint is selected for futility check at which analysis. 1=Check for futility, 0=Do not check. Rows represent analyses in analysis order, columns represent endpoints in EndpointName order
+#'     \item FutThrsld: Numeric matrix. Futility thresholds for each endpoint at each analysis. For TTE endpoints, threshold represents HR (declare futility if HR > threshold). For non-TTE endpoints, threshold represents Delta (declare futility if Delta < threshold). Rows represent analyses in analysis order, columns represent endpoints in EndpointName order. Values are 0 when futility check is not performed (FutFlg=0)
+#'     \item EffSpending: Named list of alpha spending function specifications for each endpoint. Names are user-specified endpoint names. Each element contains:
+#'       \itemize{
+#'         \item EffBdry: Integer. Efficacy boundary type. 0=None, 1=Spending Function
+#'         \item SpendFunc: Integer (when EffBdry=1). Spending function type. 1=Lan-DeMets (LD), 2=Gamma
+#'         \item Parameter: Numeric (when EffBdry=1). For LD: 1=O'Brien-Fleming (OF), 2=Pocock (PK). For Gamma: numeric values (e.g., 1, -3)
+#'       }
+#'     \item WinCondCriteria: List containing trial winning condition criteria. Contains:
+#'       \itemize{
+#'         \item whichEPs: Integer vector. Flag indicating which endpoints are considered for winning condition (must match EndpointName order). 0=Not considered, 1=Considered
+#'         \item NumEPsWin: Integer. Number of endpoints that must be won. Can be 0 if MustWinEPs are the only criteria
+#'         \item MustWinEPs: Integer vector. Flag indicating which endpoints must be won for trial success (must match EndpointName order). 0=Not required, 1=Must win
+#'       }
 #'   }
 #' @param OutList List containing any persistent data to be passed between looks
 #' @param UserParam Optional list of user-defined parameters
