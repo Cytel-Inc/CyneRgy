@@ -98,28 +98,26 @@ The tables below describe each variable and notes any conditions under which it 
 - Dual endpoints are not available for East Horizon: Design.
 - "Endpoint 1" is used as a sample endpoint name. It will be the actual endpoint name as specified by the user.
 
-# For `Study objective = Two Arm Confirmatory - Multiple Endpoints` (including for Design)
+# For `Study objective = Two Arm Confirmatory - Multiple Endpoints`
 
-|**Variable Name**|**Type**|**Description**|**Notes**|
-|-|-|----|-----|
-|**TotalLooks**|Integer|Total number of planned looks.||
-|**EndpointName**|Vector of String|Vector of length equal to the number of endpoints, containing the endpoint names.||
-|**EndpointType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the endpoint types:<br>– 0: Continuous.<br>– 1: Binary.<br>– 2: Time-to-Event.||
-|**TailType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the nature of critical region for each endpoint. Possible values:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.||
-|**NumPat**|Integer|Total number of patients.||
-|**AllocRatio**||Treatment allocation ratio.||
-|**TrialType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the trial type for each endpoint. Possible values:<br>– `0`: Superiority.<br>– `1`: Non-inferiority.||
-|**Alpha**|Numeric|Type I Error.||
-|**TestStatistics**||Test statistics specifications.||
-|**TargetInformation**||Target information.||
-|**MultiplicityDetails**||Multiplicity adjustment details.||
-|**EffFlg**||Matrix of size equal to the number of analysis looks $\times$ the number of endpoints, indicating the efficacity flag.||
-|**FutFlg**||Matrix of size equal to the number of analysis looks $\times$ the number of endpoints, indicating the futility flag.||
-|**FutThrsld**||Matrix of size equal to the number of analysis looks $\times$ the number of endpoints, indicating the futility thresholds.||
-|**EffSpending**||Alpha spending details.||
-|**WinCondCriteria**||Win condition criteria.||
-
-^Can you complete this, Anoop?
+|**Variable Name**|**Type**|**Description**|
+|-|-|----|
+|**TotalLooks**|Integer|Total number of planned looks.|
+|**EndpointName**|Vector of String|Vector of length equal to the number of endpoints, containing the endpoint names.|
+|**EndpointType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the endpoint types. Order matches `EndpointName` order. Possible values:<br>– `0`: Continuous.<br>– `1`: Binary.<br>– `2`: Time-to-Event.|
+|**TailType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the nature of critical region for each endpoint. Order matches `EndpointName` order. Possible values:<br>– `0`: Left-tailed.<br>– `1`: Right-tailed.|
+|**NumPat**|Integer|Total number of patients.|
+|**AllocRatio**|Numeric|Treatment allocation ratio: number of patients in the treatment arm over number of patient in the control arm.|
+|**TrialType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the trial type for each endpoint. Order matches `EndpointName` order. Possible values:<br>– `0`: Superiority.<br>– `1`: Non-inferiority.|
+|**Alpha**|Numeric|Type I error rate.|
+|**TestStatistics**|Named List|Named List of length equal to the number of endpoints, containing the test statistics specifications. Names are user-specified endpoint names from `EndpointName`. Order also matches `EndpointName` order. Each element contains:<br>- `Test`: Integer test type. Possible values: `0` = None, `1` = Log-Rank (TTE), `2` = Difference of Means (Continuous), `3` = Difference of Proportions (Binary), `4` = Ratio of Proportions (Binary).<br>- `TestStat`: Integer test statistic. Possible values: `0` = None, `1` = Log-Rank (TTE), `3` = Harrington Fleming (TTE), `4` = t-statistic (Continuous), `5` = z-statistic (Binary), `6` = Modestly Weighted Log-Rank (TTE).<br>- `Variance`: Integer variance. Only available for Binary or Continuous endpoint. Possible values: `1` = Pooled (Binary), `2` = Unpooled (Binary), `3` = Equal (Continuous), `4` = Unequal (Continuous).<br>- `Parameter`: Vector of Numeric. Only available for TTE with Harrington Fleming or MWLR. For Harrington Fleming: `c(p,q)`. For MWLR: `c(delay,w_max)`.|
+|**TargetInformation**|Vector of Integer|Vector of length equal to the number of endpoints, containing the target information of each endpoint: number of completers for Continuous or Binary, number of events for TTE. Order matches `EndpointName` order.|
+|**MultiplicityDetails**|List|Multiplicity adjustment details. Contains:<br>- `MCP`: Integer, multiple comparison procedure. Possible values: `0` = None, `1` = Fallback, `2` = Fixed Sequence, `3` = Bonferroni/Weighted Bonferroni, `4` = Holms, `5` = Weighted Holms, `6` = User-specified GMCP.<br>- `AlphaAlloc`: Vector of Numeric of length equal to the number of endpoints, containing the Alpha allocation percentages for each endpoint. Order matches `EndpointName` order.<br>- `TestOrder`: Vector of Integer of length equal to the number of endpoints, containing thetesting order for each endpoint. Available for Fallback or Fixed Sequence only. Order matches `EndpointName` order.<br>- `TransMax`: Matrix of Numeric of size equal to the number of endpoints $\times$ the number of endpoints, containing the transitions for Alpha propagation. Available for GMCP only. Order matches `EndpointName` order.|
+|**EffFlg**|Matrix of Integer|Matrix of size equal to the number of analysis looks (rows) $\times$ the number of endpoints (columns), containing the efficacy flag indicating which endpoint is selected for efficacy testing at which analysis. Columns order matches `EndpointName` order. Possible values:<br>- `1`: Test for efficacy.<br>- `0`: Do not test.|
+|**FutFlg**|Matrix of Integer|Matrix of size equal to the number of analysis looks (rows) $\times$ the number of endpoints (columns), containing the futility flag indicating which endpoint is selected for futility testing at which analysis. Columns order matches `EndpointName` order. Possible values:<br>- `1`: Test for futility<br>- `0`: Do not test.|
+|**FutThrsld**|Matrix of Numeric|Matrix of size equal to the number of analysis looks (rows) $\times$ the number of endpoints (columns), containing the futility thresholds. Columns order matches `EndpointName` order. `0` when futility check is not performed (`FutFlg = 0`). Depends on the endpoint:<br>- For TTE endpoint: thresholds represent HR (declare futility if HR > threshold).<br>- For Binary or Continuous endpoint: thresholds represent Delta (declare futility if Delta < threshold).|
+|**EffSpending**|Named List|Named List of length equal to the number of endpoints, containing the Alpha spending details. Names are user-specified endpoint names from `EndpointName`. Order also matches `EndpointName` order. Each element contains:<br>- `EffBdry`: Integer efficacy boundary type. Possible values: `0` = None, `1` = Spending Function.<br>- `SpendFunc`: Integer spending function type. Only available for `EffBdry = 1`. Possible values: `1` = Lan-DeMets (LD), `2` = Gamma.<br>- `Parameter`: Numeric or ineteger value. Only available for `EffBdry = 1`. Possible values:<br>- For LD: `1` = O'Brien-Fleming (OF), `2` = Pocock (PK).<br>For Gamma: numeric values (e.g., 1, -3).|
+|**WinCondCriteria**|List|List containing trial winning condition criteria. Contains:<br>-`whichEPs`: Vector of Integer of length equal to the number of endpoints, indicating which endpoints are considered for winning condition. Order matches `EndpointName` order. Possible values: `0` = Not considered, `1` = Considered.<br>-`NumEPsWin`: Integer. Number of endpoints that must be won. Can be `0` if `MustWinEPs` is used.<br>- `MustWinEPs`: Vector of Integer of length equal to the number of endpoints, indicating  which endpoints must be won for trial success. Order matches `EndpointName` order. Possible values: `0` = Not required, `1` = Must win.|
 
 # For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
 

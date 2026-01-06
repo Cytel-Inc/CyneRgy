@@ -74,11 +74,11 @@ When creating a custom R script, you can optionally use specific variables provi
 
 ## Variables of DesignParam
 
-[Click here to explore the variables of DesignParam.](VariablesOfDesignParam.html#for-study-objective-two-arm-confirmatory---multiple-endpoints-including-for-design)
+[Click here to explore the variables of DesignParam.](VariablesOfDesignParam.html#for-study-objective-two-arm-confirmatory---multiple-endpoints)
 
 ## Variables of LookInfo
 
-[Click here to explore the variables of LookInfo.](VariablesOfLookInfo.html#for-study-objective-two-arm-confirmatory---multiple-endpoints-including-for-design)
+[Click here to explore the variables of LookInfo.](VariablesOfLookInfo.html#for-study-objective-two-arm-confirmatory---multiple-endpoints)
 
 ## Variables of DataSummary
 
