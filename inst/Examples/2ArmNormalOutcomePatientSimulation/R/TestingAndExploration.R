@@ -11,7 +11,7 @@ UserParam       <- readRDS( "../ExampleEastoutput/UserParam.Rds" )
 #UserParam       <- list( dProbOfZeroOutcomeExp = 0, dProbOfZeroOutcomeCtrl = 0)
 
 # Step 3 - Example call to the desired function ####
-lRet <- SimulatePatientOutcomePercentAtZero(NumSub, TreatmentID, Mean, StdDev, UserParam  )
+lRet <- SimulatePatientOutcomePercentAtZero(NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam  )
 
 # Step 4 - Check a few values from simulated data set and create a few visuals to make sure the function you developed appears to function as intended
 # Compute the mean and standard deviation of the patient outcomes for each treatment
@@ -33,3 +33,4 @@ hist( lRet$Response[ TreatmentID == 0], main = "Control")
 hist( lRet$Response[ TreatmentID == 1], main = "Experimental")
 
 # It is always important to test any code that is developed before running extensive simulations
+
