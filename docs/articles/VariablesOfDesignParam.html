@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>VariablesOfDesignParam.Rmd</code></div>
@@ -302,10 +304,12 @@ study.<br>– <code>1</code>: For a fixed period.</td>
 <td>Integer</td>
 <td>Test statistic type. For <code>Time-to-Event</code> tests:<br>-
 <code>0</code>: Logrank.<br>- <code>1</code>: Wilcoxon Gehan.<br>-
-<code>2</code>: Harrington Fleming.<br>For <code>Continuous</code>
-test:<br>- <code>3</code>: Z-test.<br>- <code>4</code>: t-test.<br>For
-<code>Binary</code> test:<br>- <code>5</code>: Wald.<br>-
-<code>6</code>: Score.</td>
+<code>2</code>: Harrington Fleming.<br>- <code>3</code>: Stratified
+Logrank.<br>- <code>4</code>: Stratified Wilcoxon Gehan.<br>-
+<code>5</code>: Stratified Harrington Fleming.<br>For
+<code>Continuous</code> test:<br>- <code>3</code>: Z-test.<br>-
+<code>4</code>: t-test.<br>For <code>Binary</code> test:<br>-
+<code>5</code>: Wald.<br>- <code>6</code>: Score.</td>
 <td>Not available.</td>
 <td>Not available for
 <code>Test = Difference of Proportions or Odds Ratio of Proportions</code>
@@ -497,14 +501,26 @@ on.</td>
 </tr>
 <tr class="even">
 <td><strong>SubPops</strong></td>
-<td>Array of Character</td>
-<td>Array of subpopulation names.</td>
+<td>Named List</td>
+<td>Named list of length equal to the number of subpopulations,
+indicating factor details. For example, <code>SubPops[“Factor1”]</code>
+is an array of level names for Factor 1.</td>
 <td>Only available for <code>Endpoint Type = Time-to-Event</code> with
 <code>Stratification</code> and <code>Subpopulations</code> turned
 on.</td>
 <td>Not available.</td>
 </tr>
 <tr class="odd">
+<td><strong>SubpopName</strong></td>
+<td>Array of Character</td>
+<td>Array of length equal to the number of subpopulations, indicating
+the subpopulation names.</td>
+<td>Only available for <code>Endpoint Type = Time-to-Event</code> with
+<code>Stratification</code> and <code>Subpopulations</code> turned
+on.</td>
+<td>Not available.</td>
+</tr>
+<tr class="even">
 <td><strong>WindCond</strong></td>
 <td>Integer</td>
 <td>Winning condition:<br>- <code>1</code>: At least subpopulation
@@ -520,7 +536,7 @@ populations.</td>
 on.</td>
 <td>Not available.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>PlanEndTrial</strong></td>
 <td>Integer</td>
 <td>Planned end of trial:<br>- <code>1</code>: Subpopulation 1.<br>-
@@ -532,7 +548,7 @@ population.</td>
 on.</td>
 <td>Not available.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>TransitionMatrix</strong></td>
 <td>Matrix of Numeric</td>
 <td>Transition matrix between all populations, including full population
@@ -543,7 +559,7 @@ and subpopulations. Dimension of
 on.</td>
 <td>Not available.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>PropAlpha</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>(NumSubPops + 1)</code>, indicating the
@@ -556,6 +572,11 @@ on.</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>“Factor 1” is used as a sample factor name (stratification). It will
+be the actual factor name as specified by the user.</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="for-endpoint-type-dual-tte-tte-or-tte-binary-including-for-multiplicity-adjustment">For <code>Endpoint Type = Dual (TTE-TTE or TTE-Binary)</code>
@@ -572,7 +593,7 @@ on.</td>
 <th><strong>Variable Name</strong></th>
 <th><strong>Type</strong></th>
 <th><strong>Description</strong></th>
-<th><strong>Notes for Explore</strong></th>
+<th><strong>Notes</strong></th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -585,8 +606,8 @@ Time-to-Event.</td>
 </tr>
 <tr class="even">
 <td><strong>EndpointName</strong></td>
-<td>Vector of Character</td>
-<td>Vector of length equal to the number of endpoints, indicating the
+<td>Vector of String</td>
+<td>Vector of length equal to the number of endpoints, containing the
 endpoint names.</td>
 <td></td>
 </tr>
@@ -794,6 +815,195 @@ actual endpoint name as specified by the user.</li>
 </div>
 </div>
 <div class="section level2">
+<h2 id="for-study-objective-two-arm-confirmatory---multiple-endpoints">For
+<code>Study objective = Two Arm Confirmatory - Multiple Endpoints</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory---multiple-endpoints"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="16%">
+<col width="16%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Variable Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>TotalLooks</strong></td>
+<td>Integer</td>
+<td>Total number of planned looks.</td>
+</tr>
+<tr class="even">
+<td><strong>EndpointName</strong></td>
+<td>Vector of String</td>
+<td>Vector of length equal to the number of endpoints, containing the
+endpoint names.</td>
+</tr>
+<tr class="odd">
+<td><strong>EndpointType</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length equal to the number of endpoints, indicating the
+endpoint types. Order matches <code>EndpointName</code> order. Possible
+values:<br>– <code>0</code>: Continuous.<br>– <code>1</code>:
+Binary.<br>– <code>2</code>: Time-to-Event.</td>
+</tr>
+<tr class="even">
+<td><strong>TailType</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length equal to the number of endpoints, indicating the
+nature of critical region for each endpoint. Order matches
+<code>EndpointName</code> order. Possible values:<br>– <code>0</code>:
+Left-tailed.<br>– <code>1</code>: Right-tailed.</td>
+</tr>
+<tr class="odd">
+<td><strong>NumPat</strong></td>
+<td>Integer</td>
+<td>Total number of patients.</td>
+</tr>
+<tr class="even">
+<td><strong>AllocRatio</strong></td>
+<td>Numeric</td>
+<td>Treatment allocation ratio: number of patients in the treatment arm
+over number of patient in the control arm.</td>
+</tr>
+<tr class="odd">
+<td><strong>TrialType</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length equal to the number of endpoints, indicating the
+trial type for each endpoint. Order matches <code>EndpointName</code>
+order. Possible values:<br>– <code>0</code>: Superiority.<br>–
+<code>1</code>: Non-inferiority.</td>
+</tr>
+<tr class="even">
+<td><strong>Alpha</strong></td>
+<td>Numeric</td>
+<td>Type I error rate.</td>
+</tr>
+<tr class="odd">
+<td><strong>TestStatistics</strong></td>
+<td>Named List</td>
+<td>Named List of length equal to the number of endpoints, containing
+the test statistics specifications. Names are user-specified endpoint
+names from <code>EndpointName</code>. Order also matches
+<code>EndpointName</code> order. Each element contains:<br>-
+<code>Test</code>: Integer test type. Possible values: <code>0</code> =
+None, <code>1</code> = Log-Rank (TTE), <code>2</code> = Difference of
+Means (Continuous), <code>3</code> = Difference of Proportions (Binary),
+<code>4</code> = Ratio of Proportions (Binary).<br>-
+<code>TestStat</code>: Integer test statistic. Possible values:
+<code>0</code> = None, <code>1</code> = Log-Rank (TTE), <code>3</code> =
+Harrington Fleming (TTE), <code>4</code> = t-statistic (Continuous),
+<code>5</code> = z-statistic (Binary), <code>6</code> = Modestly
+Weighted Log-Rank (TTE).<br>- <code>Variance</code>: Integer variance.
+Only available for Binary or Continuous endpoint. Possible values:
+<code>1</code> = Pooled (Binary), <code>2</code> = Unpooled (Binary),
+<code>3</code> = Equal (Continuous), <code>4</code> = Unequal
+(Continuous).<br>- <code>Parameter</code>: Vector of Numeric. Only
+available for TTE with Harrington Fleming or MWLR. For Harrington
+Fleming: <code>c(p,q)</code>. For MWLR:
+<code>c(delay,w_max)</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>TargetInformation</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length equal to the number of endpoints, containing the
+target information of each endpoint: number of completers for Continuous
+or Binary, number of events for TTE. Order matches
+<code>EndpointName</code> order.</td>
+</tr>
+<tr class="odd">
+<td><strong>MultiplicityDetails</strong></td>
+<td>List</td>
+<td>Multiplicity adjustment details. Contains:<br>- <code>MCP</code>:
+Integer, multiple comparison procedure. Possible values: <code>0</code>
+= None, <code>1</code> = Fallback, <code>2</code> = Fixed Sequence,
+<code>3</code> = Bonferroni/Weighted Bonferroni, <code>4</code> = Holms,
+<code>5</code> = Weighted Holms, <code>6</code> = User-specified
+GMCP.<br>- <code>AlphaAlloc</code>: Vector of Numeric of length equal to
+the number of endpoints, containing the Alpha allocation percentages for
+each endpoint. Order matches <code>EndpointName</code> order.<br>-
+<code>TestOrder</code>: Vector of Integer of length equal to the number
+of endpoints, containing thetesting order for each endpoint. Available
+for Fallback or Fixed Sequence only. Order matches
+<code>EndpointName</code> order.<br>- <code>TransMax</code>: Matrix of
+Numeric of size equal to the number of endpoints
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+the number of endpoints, containing the transitions for Alpha
+propagation. Available for GMCP only. Order matches
+<code>EndpointName</code> order.</td>
+</tr>
+<tr class="even">
+<td><strong>EffFlg</strong></td>
+<td>Matrix of Integer</td>
+<td>Matrix of size equal to the number of analysis looks (rows)
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+the number of endpoints (columns), containing the efficacy flag
+indicating which endpoint is selected for efficacy testing at which
+analysis. Columns order matches <code>EndpointName</code> order.
+Possible values:<br>- <code>1</code>: Test for efficacy.<br>-
+<code>0</code>: Do not test.</td>
+</tr>
+<tr class="odd">
+<td><strong>FutFlg</strong></td>
+<td>Matrix of Integer</td>
+<td>Matrix of size equal to the number of analysis looks (rows)
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+the number of endpoints (columns), containing the futility flag
+indicating which endpoint is selected for futility testing at which
+analysis. Columns order matches <code>EndpointName</code> order.
+Possible values:<br>- <code>1</code>: Test for futility<br>-
+<code>0</code>: Do not test.</td>
+</tr>
+<tr class="even">
+<td><strong>FutThrsld</strong></td>
+<td>Matrix of Numeric</td>
+<td>Matrix of size equal to the number of analysis looks (rows)
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+the number of endpoints (columns), containing the futility thresholds.
+Columns order matches <code>EndpointName</code> order. <code>0</code>
+when futility check is not performed (<code>FutFlg = 0</code>). Depends
+on the endpoint:<br>- For TTE endpoint: thresholds represent HR (declare
+futility if HR &gt; threshold).<br>- For Binary or Continuous endpoint:
+thresholds represent Delta (declare futility if Delta &lt;
+threshold).</td>
+</tr>
+<tr class="odd">
+<td><strong>EffSpending</strong></td>
+<td>Named List</td>
+<td>Named List of length equal to the number of endpoints, containing
+the Alpha spending details. Names are user-specified endpoint names from
+<code>EndpointName</code>. Order also matches <code>EndpointName</code>
+order. Each element contains:<br>- <code>EffBdry</code>: Integer
+efficacy boundary type. Possible values: <code>0</code> = None,
+<code>1</code> = Spending Function.<br>- <code>SpendFunc</code>: Integer
+spending function type. Only available for <code>EffBdry = 1</code>.
+Possible values: <code>1</code> = Lan-DeMets (LD), <code>2</code> =
+Gamma.<br>- <code>Parameter</code>: Numeric or ineteger value. Only
+available for <code>EffBdry = 1</code>. Possible values:<br>- For LD:
+<code>1</code> = O’Brien-Fleming (OF), <code>2</code> = Pocock
+(PK).<br>For Gamma: numeric values (e.g., 1, -3).</td>
+</tr>
+<tr class="even">
+<td><strong>WinCondCriteria</strong></td>
+<td>List</td>
+<td>List containing trial winning condition criteria.
+Contains:<br>-<code>whichEPs</code>: Vector of Integer of length equal
+to the number of endpoints, indicating which endpoints are considered
+for winning condition. Order matches <code>EndpointName</code> order.
+Possible values: <code>0</code> = Not considered, <code>1</code> =
+Considered.<br>-<code>NumEPsWin</code>: Integer. Number of endpoints
+that must be won. Can be <code>0</code> if <code>MustWinEPs</code> is
+used.<br>- <code>MustWinEPs</code>: Vector of Integer of length equal to
+the number of endpoints, indicating which endpoints must be won for
+trial success. Order matches <code>EndpointName</code> order. Possible
+values: <code>0</code> = Not required, <code>1</code> = Must win.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
 <h2 id="for-study-objective-multiple-arm-confirmatory-or-dose-finding">For
 <code>Study Objective = Multiple Arm Confirmatory or Dose Finding</code><a class="anchor" aria-label="anchor" href="#for-study-objective-multiple-arm-confirmatory-or-dose-finding"></a>
 </h2>
@@ -962,7 +1172,7 @@ tests.</td>
 <td><strong>MultAdjMethod</strong></td>
 <td>Integer</td>
 <td>Multiple comparison procedure.</td>
-<td>Possible values:-<br>– <code>0</code>: Bonferroni.<br>–
+<td>Possible values:<br>– <code>0</code>: Bonferroni.<br>–
 <code>3</code>: Dunnett’s Single Step.<br>– <code>4</code>: Weighted
 Bonferroni.<br>– <code>5</code>: Fixed Sequence.<br>– <code>6</code>:
 Fallback.<br>– <code>7</code>: Hochberg’s Step Up.</td>

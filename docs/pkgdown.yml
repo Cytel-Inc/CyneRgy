@@ -29,6 +29,7 @@ articles:
   IntegrationPointAnalysisDual: IntegrationPointAnalysisDual.html
   IntegrationPointAnalysisRepeatedMeasures: IntegrationPointAnalysisRepeatedMeasures.html
   IntegrationPointAnalysisTimeToEvent: IntegrationPointAnalysisTimeToEvent.html
+  IntegrationPointDesign: IntegrationPointDesign.html
   IntegrationPointDropout: IntegrationPointDropout.html
   IntegrationPointDropoutBinary: IntegrationPointDropoutBinary.html
   IntegrationPointDropoutContinuous: IntegrationPointDropoutContinuous.html
@@ -43,9 +44,12 @@ articles:
   IntegrationPointResponseBinary: IntegrationPointResponseBinary.html
   IntegrationPointResponseContinuous: IntegrationPointResponseContinuous.html
   IntegrationPointResponseDual: IntegrationPointResponseDual.html
+  IntegrationPointResponseMulti: IntegrationPointResponseMulti.html
   IntegrationPointResponseRepeatedMeasures: IntegrationPointResponseRepeatedMeasures.html
   IntegrationPointResponseTimeToEvent: IntegrationPointResponseTimeToEvent.html
   IntegrationPointTreatmentSelection: IntegrationPointTreatmentSelection.html
+  MEPDesign: MEPDesign.html
+  MEPPatientSimulation: MEPPatientSimulation.html
   MultiArmAnalysis: MultiArmAnalysis.html
   MultiArmPatientDropout: MultiArmPatientDropout.html
   MultiArmPatientSimulation: MultiArmPatientSimulation.html
@@ -60,7 +64,7 @@ articles:
   VariablesOfDesignParam: VariablesOfDesignParam.html
   VariablesOfLookInfo: VariablesOfLookInfo.html
   VariablesOfSimData: VariablesOfSimData.html
-last_built: 2025-10-31T20:25Z
+last_built: 2026-01-09T15:52Z
 urls:
   reference: https://Cytel-Inc.github.io/CyneRgy/reference
   article: https://Cytel-Inc.github.io/CyneRgy/articles

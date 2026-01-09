@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysisTimeToEvent.Rmd</code></div>
@@ -207,8 +209,9 @@ below for the expected output for this integration point:</p>
 of the following members: <code>Decision</code>, <code>TestStat</code>,
 <code>AnalysisTime</code>, <code>Delta</code>,
 <code>CtrlCompleters</code>, <code>TrmtCompleters</code>,
-<code>CtrlPi</code>, <code>HR</code>, <code>StdError</code>. See below
-for more information.</td>
+<code>CtrlPi</code>, <code>HR</code>, <code>StdError</code>,
+<code>ReEstEvents</code>, <code>ReEstCompleters</code>. See below for
+more information.</td>
 </tr></tbody>
 </table>
 <p>The output list can take different forms.</p>
@@ -242,7 +245,11 @@ Futility boundary crossed (only applicable when
 Horizon Explore).<br>You can use the functions
 <code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
 <code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get the decision value. See the
-template below for the correct usage.</td>
+template below for the correct usage. If <code>Subpopulations</code> is
+turned on, this is a named list of integer of length
+<code>DesignParam$NumSubPops</code>, with decisions for each
+subpopulation, e.g., <code>Decision[“FullPopulation”]</code>,
+<code>Decision[“SubPopulation 1”]</code>, etc.</td>
 </tr>
 <tr class="even">
 <td><strong>AnalysisTime</strong></td>
@@ -252,6 +259,12 @@ equivalent to look time; for final analysis, equivalent to study
 duration.</td>
 </tr>
 <tr class="odd">
+<td><strong>ReEstEvents</strong></td>
+<td>Integer</td>
+<td>Re-estimated number of events. Only required for
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code>.</td>
+</tr>
+<tr class="even">
 <td><strong>ErrorCode</strong></td>
 <td>Integer</td>
 <td>Optional. Can be used to handle errors in your script:<br>–
@@ -271,6 +284,13 @@ stands for efficacy in the final look. Use the functions
 <code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
 <code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get decision values in a simple
 way.</p>
+<p><strong>Note for
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code></strong>:
+<em>ReEstEvents</em> is required. Only Option 1 is supported, all other
+output options are not available.</p>
+<p><strong>Note for <code>Subpopulations</code> turned on</strong>:
+“SubPopulation 1” is used as a sample subpopulation name. It will be the
+actual name as specified by the user.</p>
 </div>
 <div class="section level4">
 <h4 id="option-2-teststat-expected-members-of-the-output-list">Option 2 (TestStat): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-2-teststat-expected-members-of-the-output-list"></a>
@@ -290,7 +310,12 @@ way.</p>
 <tr class="odd">
 <td><strong>TestStat</strong></td>
 <td>Numeric</td>
-<td>Value of appropriate test statistic on Wald ﴾Z﴿ scale.</td>
+<td>Value of appropriate test statistic on Wald ﴾Z﴿ scale. If
+<code>Subpopulations</code> is turned on, this is a named list of
+numeric of length <code>DesignParam$NumSubPops</code>, with test
+statistics for each subpopulation, e.g.,
+<code>TestStat[“FullPopulation”]</code>,
+<code>TestStat[“SubPopulation 1”]</code>, etc.</td>
 </tr>
 <tr class="even">
 <td><strong>Delta</strong></td>
@@ -338,7 +363,11 @@ Only applicable when
 <td>Estimate of the hazard ratio. Required if
 <code>LookInfo$FutBdryScale = 6</code> (futility boundary scale is
 hazard ratio scale). Only applicable when
-<code>Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation</code>.</td>
+<code>Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation</code>.
+If <code>Subpopulations</code> is turned on, this is a named list of
+numeric of length <code>DesignParam$NumSubPops</code>, with hazard
+ratios for each subpopulation, e.g., <code>HR[“FullPopulation”]</code>,
+<code>HR[“SubPopulation 1”]</code>, etc.</td>
 </tr>
 <tr class="odd">
 <td><strong>StdError</strong></td>
@@ -367,6 +396,9 @@ further simulations will be attempted.</td>
 <code>Statistical Design = Fixed Sample</code></strong>: As the design
 does not have any futility boundary, <code>TestStat</code> will be used
 to check for efficacy.</p>
+<p><strong>Note for <code>Subpopulations</code> turned on</strong>:
+“SubPopulation 1” is used as a sample subpopulation name. It will be the
+actual name as specified by the user.</p>
 <p><strong>Notes for
 <code>Statistical Design = Group Sequential</code></strong>:</p>
 <ul>
@@ -429,7 +461,11 @@ when <code>Statistical Design = Group Sequential</code>).<br>–
 Horizon Explore).<br>You can use the functions
 <code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
 <code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get the decision value. See the
-template below for the correct usage.</td>
+template below for the correct usage. If <code>Subpopulations</code> is
+turned on, this is a named list of integer of length
+<code>DesignParam$NumSubPops</code>, with decisions for each
+subpopulation, e.g., <code>Decision[“FullPopulation”]</code>,
+<code>Decision[“SubPopulation 1”]</code>, etc.</td>
 </tr>
 <tr class="even">
 <td><strong>AnalysisTime</strong></td>
@@ -462,6 +498,9 @@ there is no futility boundary to be crossed, the return code of
 <code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get decision values in a simple
 way.</li>
 </ul>
+<p><strong>Note for <code>Subpopulations</code> turned on</strong>:
+“SubPopulation 1” is used as a sample subpopulation name. It will be the
+actual name as specified by the user.</p>
 </div>
 <div class="section level4">
 <h4 id="option-2-teststat-expected-members-of-the-output-list-1">Option 2 (TestStat): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-2-teststat-expected-members-of-the-output-list-1"></a>
@@ -483,7 +522,11 @@ way.</li>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>DesignParam$NumTreatments</code>, containing
 the value of appropriate test statistic on Wald ﴾Z﴿ scale for each
-treatment arm.</td>
+treatment arm. If <code>Subpopulations</code> is turned on, this is a
+named list of numeric of length <code>DesignParam$NumSubPops</code>,
+with test statistics for each subpopulation, e.g.,
+<code>TestStat[“FullPopulation”]</code>,
+<code>TestStat[“SubPopulation 1”]</code>, etc.</td>
 </tr>
 <tr class="even">
 <td><strong>Delta</strong></td>
@@ -501,7 +544,12 @@ Only applicable when
 <td>Estimate of the hazard ratio. Required if
 <code>LookInfo$FutBdryScale = 6</code> (futility boundary scale is
 hazard ratio scale). Only applicable when
-<code>Statistical Design = Group Sequential</code>.</td>
+<code>Statistical Design = Group Sequential</code>. If
+<code>Subpopulations</code> is turned on, this is a named list of
+numeric of length <code>DesignParam$NumSubPops</code>, with test
+statistics for each subpopulation, e.g.,
+<code>HR[“FullPopulation”]</code>, <code>HR[“SubPopulation 1”]</code>,
+etc.</td>
 </tr>
 <tr class="even">
 <td><strong>AnalysisTime</strong></td>
@@ -540,6 +588,9 @@ efficacy and <code>Delta</code> will be used to check for futility.</li>
 is hazard ratio scale), <code>TestStat</code> will be used to check for
 efficacy and <code>HR</code> will be used to check for futility.</li>
 </ul>
+<p><strong>Note for <code>Subpopulations</code> turned on</strong>:
+“SubPopulation 1” is used as a sample subpopulation name. It will be the
+actual name as specified by the user.</p>
 </div>
 <div class="section level4">
 <h4 id="option-3-adjpval-expected-members-of-the-output-list">Option 3 (AdjPVal): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-3-adjpval-expected-members-of-the-output-list"></a>
@@ -719,10 +770,25 @@ are not used in the script. We recommend always declaring
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 East Horizon.</p>
-<p>Detailed templates with step-by-step explanations are available here:
+<p>Detailed templates with step-by-step explanations are available
+here:</p>
+<ul>
+<li>
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.R" class="external-link">Analyze.TimeToEvent.R</a>
-for 2-Arm and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.MAMS.R" class="external-link">Analyze.TimeToEvent.MAMS.R</a>
-for Multiple Arm.</p>
+for 2-Arm</li>
+<li>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.MAMS.R" class="external-link">Analyze.TimeToEvent.MAMS.R</a>
+for Multiple Arm</li>
+<li>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.SSR.R" class="external-link">Analyze.TimeToEvent.SSR.R</a>
+for SSR</li>
+<li>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.Stratification.R" class="external-link">Analyze.TimeToEvent.Stratification.R</a>
+for Stratification</li>
+<li>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.Stratification.Subpopulation.R" class="external-link">Analyze.TimeToEvent.Stratification.Subpopulation.R</a>
+for Subpopulations</li>
+</ul>
 <div class="section level3">
 <h3 id="for-study-objective-two-arm-confirmatory-1">For <code>Study Objective = Two Arm Confirmatory</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory-1"></a>
 </h3>
@@ -816,6 +882,36 @@ for Multiple Arm.</p>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential-with-sample-size-re-estimation">For
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-with-sample-size-re-estimation"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    </span>
+<span>    <span class="va">nDecision</span>         <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize decision</span></span>
+<span>    <span class="va">nReEstEvents</span>  <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize number of completers</span></span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nDecision</span> <span class="op">)</span>, ReEstEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nReEstEvents</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-subpopulations-turned-on">For <code>Subpopulations</code> turned on<a class="anchor" aria-label="anchor" href="#for-subpopulations-turned-on"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>                          <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    </span>
+<span>    <span class="va">lDecision</span>                       <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Initialize decision list</span></span>
+<span>    <span class="va">lDecision</span><span class="op">[[</span><span class="st">"FullPopulation"</span><span class="op">]</span><span class="op">]</span>   <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize decision for full population</span></span>
+<span>    <span class="va">lDecision</span><span class="op">[[</span><span class="st">"SubPopulation 1"</span><span class="op">]</span><span class="op">]</span>  <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize decision for subpopulation 1 (sample name, should be changed with the one specified in EH)</span></span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="va">lDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
 </div>
 <div class="section level4">
 <h4 id="minimal-template-for-option-2-teststat">Minimal Template for Option 2 (TestStat)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-2-teststat"></a>
@@ -862,8 +958,8 @@ for Multiple Arm.</p>
 <span><span class="op">}</span></span></code></pre>
 </div>
 <div class="section level5">
-<h5 id="for-statistical-design-group-sequential-with-sample-size-re-estimation">For
-<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-with-sample-size-re-estimation"></a>
+<h5 id="for-statistical-design-group-sequential-with-sample-size-re-estimation-1">For
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-with-sample-size-re-estimation-1"></a>
 </h5>
 <pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
@@ -889,6 +985,21 @@ for Multiple Arm.</p>
 <span>                  HR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dHR</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is conditional power scale</span></span>
 <span>                  StdError <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">dStdError</span> <span class="op">)</span>, <span class="co"># Include if Promising Zone Scale = Conditional Power - Estimated</span></span>
 <span>                  ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-subpopulations-turned-on-1">For <code>Subpopulations</code> turned on<a class="anchor" aria-label="anchor" href="#for-subpopulations-turned-on-1"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>                          <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    </span>
+<span>    <span class="va">lTestStat</span>                       <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Initialize test statistic list</span></span>
+<span>    <span class="va">lTestStat</span><span class="op">[[</span><span class="st">"FullPopulation"</span><span class="op">]</span><span class="op">]</span>   <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize test statistic for full population</span></span>
+<span>    <span class="va">lTestStat</span><span class="op">[[</span><span class="st">"SubPopulation 1"</span><span class="op">]</span><span class="op">]</span>  <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize test statistic for subpopulation 1 (sample name, should be changed with the one specified in EH)</span></span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> TestStat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="va">lTestStat</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
 </div>
@@ -980,6 +1091,21 @@ for Multiple Arm.</p>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">vDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
+<div class="section level5">
+<h5 id="for-subpopulations-turned-on-2">For <code>Subpopulations</code> turned on<a class="anchor" aria-label="anchor" href="#for-subpopulations-turned-on-2"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>                          <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    </span>
+<span>    <span class="va">lDecision</span>                       <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Initialize decision list</span></span>
+<span>    <span class="va">lDecision</span><span class="op">[[</span><span class="st">"FullPopulation"</span><span class="op">]</span><span class="op">]</span>   <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize decision for full population</span></span>
+<span>    <span class="va">lDecision</span><span class="op">[[</span><span class="st">"SubPopulation 1"</span><span class="op">]</span><span class="op">]</span>  <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize decision for subpopulation 1 (sample name, should be changed with the one specified in EH)</span></span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="va">lDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
 </div>
 <div class="section level4">
 <h4 id="minimal-template-for-option-2-teststat-1">Minimal Template for Option 2 (TestStat)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-2-teststat-1"></a>
@@ -1017,6 +1143,21 @@ for Multiple Arm.</p>
 <span>                  Delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dDelta</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is Delta</span></span>
 <span>                  HR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">dHR</span> <span class="op">)</span>, <span class="co"># Include if futility boundary scale is hazard ratio scale</span></span>
 <span>                  ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="section level5">
+<h5 id="for-subpopulations-turned-on-3">For <code>Subpopulations</code> turned on<a class="anchor" aria-label="anchor" href="#for-subpopulations-turned-on-3"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>                          <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    </span>
+<span>    <span class="va">lTestStat</span>                       <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Initialize test statistic list</span></span>
+<span>    <span class="va">lTestStat</span><span class="op">[[</span><span class="st">"FullPopulation"</span><span class="op">]</span><span class="op">]</span>   <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize test statistic for full population</span></span>
+<span>    <span class="va">lTestStat</span><span class="op">[[</span><span class="st">"SubPopulation 1"</span><span class="op">]</span><span class="op">]</span>  <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize test statistic for subpopulation 1 (sample name, should be changed with the one specified in EH)</span></span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> TestStat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="va">lTestStat</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
 </div>
@@ -1114,6 +1255,9 @@ Time-To-Event Outcome - Analysis</strong></a>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R" class="external-link">AnalyzeUsingEastLogrankFormula.R</a></li>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R" class="external-link">AnalyzeUsingHazardRatioLimitsOfCI.R</a></li>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R" class="external-link">AnalyzeUsingSurvivalPackage.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R" class="external-link">AnalyzeTTESSR.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeStratification.R" class="external-link">AnalyzeStratification.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeSubpopulation.R" class="external-link">AnalyzeSubpopulation.R</a></li>
 </ul>
 </li>
 <li>

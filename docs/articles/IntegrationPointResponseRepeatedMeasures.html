@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseRepeatedMeasures.Rmd</code></div>
@@ -124,6 +126,17 @@ outcome.</p>
 <td>Number of subjects in the trial.</td>
 </tr>
 <tr class="even">
+<td><strong>NumVisit</strong></td>
+<td>Integer</td>
+<td>Number of visits.</td>
+</tr>
+<tr class="odd">
+<td><strong>ArrivalTime</strong></td>
+<td>Vector of Numeric</td>
+<td>Optional. Vector of length <code>NumSub</code>, indicating the
+arrival time for each subject.</td>
+</tr>
+<tr class="even">
 <td><strong>TreatmentID</strong></td>
 <td>Vector of Integer</td>
 <td>Vector of length <code>NumSub</code>, indicating the allocation of
@@ -132,55 +145,50 @@ example, <code>[0, 0, 1]</code> indicates three subjects: two in the
 control group and one experimental.</td>
 </tr>
 <tr class="odd">
-<td><strong>NumVisit</strong></td>
-<td>Integer</td>
-<td>Number of visits.</td>
-</tr>
-<tr class="even">
 <td><strong>Inputmethod</strong></td>
 <td>Integer</td>
 <td>Two options:<br>– <code>0</code>: The mean and SD values represent
 actual values.<br>– <code>1</code>: They represent an expected change
 from baseline at each visit rather than the true means.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>VisitTime</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>NumVisit</code>, indicating the visit
 times.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>MeanControl</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>NumVisit</code>, indicating the control mean
 for each visit.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>MeanTrt</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>NumVisit</code>, indicating the treatment
 mean for each visit.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>StdDevControl</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>NumVisit</code>, indicating the control
 standard deviation for each visit.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>StdDevTrt</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>NumVisit</code>, indicating the treatment
 standard deviation for each visit.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>CorrMat</strong></td>
 <td>Matrix of Numeric</td>
 <td>Matrix of size <code>NumVisit</code>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math><code>NumVisit</code>, indicating the correlation between all
 visits.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
@@ -275,15 +283,15 @@ variables for analysis or treatment selection endpoints in the
 </h2>
 <p>Your R script could contain a function such as this one, with a name
 of your choice. All input variables must be declared, even if they are
-not used in the script. We recommend always declaring
+not used in the script. Optional parameters such as
+<code>ArrivalTime</code> may be omitted. We recommend always declaring
 <code>UserParam</code> as a default <code>NULL</code> value in the
 function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 East Horizon.</p>
 <p>A detailed template with step-by-step explanations is available here:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.RepeatedMeasures.R" class="external-link">SimulatePatientOutcome.RepeatedMeasures.R</a></p>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumVisit</span>, <span class="va">TreatmentID</span>, <span class="va">Inputmethod</span>, <span class="va">VisitTime</span>, </span>
-<span>                              <span class="va">MeanControl</span>, <span class="va">MeanTrt</span>, <span class="va">StdDevControl</span>, <span class="va">StdDevTrt</span>, <span class="va">CorrMat</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumVisit</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">Inputmethod</span>, <span class="va">VisitTime</span>, <span class="va">MeanControl</span>, <span class="va">MeanTrt</span>, <span class="va">StdDevControl</span>, <span class="va">StdDevTrt</span>, <span class="va">CorrMat</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">vOutResponse</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span>

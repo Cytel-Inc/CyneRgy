@@ -23,14 +23,14 @@ To try this example, create a new project in East Horizon using the following co
 
 This example illustrates how to integrate new patient outcome simulation (*response*) capabilities into East Horizon using R functions in the context of 2-arm clinical trials with multiple endpoints. The example combines time-to-event, binary, and continuous outcomes within a single response-generating function. 
 
-In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPOutcomePatientSimulation/R) you will find the following R file:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPPatientSimulation/R) you will find the following R file:
 
-1. [GenerateMEPResponse.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPOutcomePatientSimulation/R/GenerateMEPResponse.R) - This file contains the response-generation logic used to simulate patient-level outcomes across multiple endpoints.
+1. [GenerateMEPResponse.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPPatientSimulation/R/GenerateMEPResponse.R) - This file contains the response-generation logic used to simulate patient-level outcomes across multiple endpoints.
 
 # Example 1 - Simulate Response for Multiple Endpoints
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPOutcomePatientSimulation/R/GenerateMEPResponse.R" class="alert-link">GenerateMEPResponse.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPPatientSimulation/R/GenerateMEPResponse.R" class="alert-link">GenerateMEPResponse.R</a></p>
 </div>
 
 The function **GenerateMEPResponse** simulates patient-level outcomes for a two-arm clinical trial with an arbitrary number of endpoints. Each endpoint can independently be defined as continuous, binary, or time-to-event. All endpoints are generated within a **single unified Response function**. No user-defined parameters are used in this example.

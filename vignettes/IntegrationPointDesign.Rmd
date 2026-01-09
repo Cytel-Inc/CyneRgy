@@ -97,12 +97,12 @@ To access these variables in your R code, use the syntax: `DataSummary[[EPNAME]]
 |**Pendings**|Total number of pending events or completers.||
 |**Pendings0**|Number of pending events or completers in the control arm.||
 |**Pendings1**|Number of pending events or completers in the treatment arm.||
-|**Events**|Total number of events.|only available for `Endpoint Type = Time-to-Event`.|
-|**Events0**|Number of events in control arm.|only available for `Endpoint Type = Time-to-Event`.|
-|**Events1**|Number of events in treatment arm.|only available for `Endpoint Type = Time-to-Event`.|
-|**Completers**|Total number of completers.|only available for `Endpoint Type = Continuous or Binary`.|
-|**Completers0**|Number of completers in control arm.|only available for `Endpoint Type = Continuous or Binary`.|
-|**Completers1**|Number of completers in treatment arm.|only available for `Endpoint Type = Continuous or Binary`.|
+|**Events**|Total number of events.|Only available for `Endpoint Type = Time-to-Event`.|
+|**Events0**|Number of events in control arm.|Only available for `Endpoint Type = Time-to-Event`.|
+|**Events1**|Number of events in treatment arm.|Only available for `Endpoint Type = Time-to-Event`.|
+|**Completers**|Total number of completers.|Only available for `Endpoint Type = Continuous or Binary`.|
+|**Completers0**|Number of completers in control arm.|Only available for `Endpoint Type = Continuous or Binary`.|
+|**Completers1**|Number of completers in treatment arm.|Only available for `Endpoint Type = Continuous or Binary`.|
 |**HR**|Estimated hazard ratio comparing treatment to control. |Only available for `Endpoint Type = Time-to-Event`.|
 |**HR0**|Hazard-related summary for the control arm. |Only available for `Endpoint Type = Time-to-Event`.|
 |**HR1**|Hazard-related summary for the treatment arm. |Only available for `Endpoint Type = Time-to-Event`.|
@@ -120,8 +120,15 @@ East Horizon expects an output of a specific type. Refer to the table below for 
 
 | **Output**     | **Type**  | **Description**                                                                                  |
 |-----------------|----------|--------------------------------------------------------------------------------------------------|
-| **Decision**   | Vector of Integer  | Vector of length `DesignParam$NumTreatments`, containing the boundary crossing decision for each treatment arm:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `4`: Futility boundary crossed (only applicable when `Statistical Design = Group Sequential`).|
-|**OutList**|List|List of outputs to pass to the next look. Only relevant for `Statistical Design = Group Sequential`. Will be available as input to this function in the next look. See above in the Input Variables.|
+| **Response**   | Named List of Vector of Numeric  | Named List of length equal to the number of endpoints, containing the survival time or response outputs for each endpoint. For example, `Response[“Endpoint 1”]` is the vector of generated response values for each subject for Endpoint 1. Order also matches `DesignParam$EndpointName` order. The length of each vector is equal to the number of subjects.|
+|**OutList**|List|Optional. List of outputs to pass to the next look. Only relevant for `Statistical Design = Group Sequential`. Will be available as input to this function in the next look. See above in the Input Variables.|
+|**RawPVal**|Vector|Optional. Vector of raw p-values for each endpoint.|
+|**EfficacyBoundary**|Vector|Optional. Vector of efficacy boundaries.|
+|**WinStatus**|Integer|Optional. Trial win status: `0` = No Decision, `1` = Win, `-1` = Lose.|
+|**Score**|Vector|Optional. Vector of score statistics.|
+|**StdErr**|Vector|Optional. Vector of standard errors.|
+|**PropPld**|Vector|Optional. Vector of pooled proportions.|
+|**SDPld**|Vector|Optional. Vector of pooled standard deviations.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 # Minimal Template

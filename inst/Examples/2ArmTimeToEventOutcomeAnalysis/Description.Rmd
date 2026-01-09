@@ -187,7 +187,7 @@ CyneRgy::PlotExampleFlowchart(
 # Example 4 - Analysis With Sample Size Re-Estimation
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R" class="alert-link">AnalyzeNormalSSR.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R" class="alert-link">AnalyzeTTESSR.R</a></p>
 </div>
 
 This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total number of events based on interim results. This is achieved using a conditional power–based SSR approach, which allows the trial to increase its planned number of events when interim results fall within a "promising zone".
@@ -238,7 +238,7 @@ CyneRgy::PlotExampleFlowchart(
 # Example 5 - Analysis with Stratification
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeStratification.R" class="alert-link">AnalyzeStratification.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeStratification.R" class="alert-link">AnalyzeStratification.R</a></p>
 </div>
 
 This example illustrates how to customize the analysis when turning on `Stratification` in East Horizon. Stratification is commonly used to adjust for prognostic baseline covariates and to improve the efficiency and interpretability of treatment comparisons in confirmatory trials.
@@ -289,7 +289,7 @@ CyneRgy::PlotExampleFlowchart(
 # Example 6 - Analysis with Subpopulations (Using gMCP)
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeSubpopulation.R" class="alert-link">AnalyzeSubpopulation.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeSubpopulation.R" class="alert-link">AnalyzeSubpopulation.R</a></p>
 </div>
 
 This example illustrates how to customize the analysis when turning on `Stratification` and `Subpopulations` in East Horizon, while controlling the family-wise Type I error rate using a graphical multiple comparison procedure (gMCP).

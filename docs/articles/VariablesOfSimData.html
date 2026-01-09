@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>VariablesOfSimData.Rmd</code></div>
@@ -149,7 +151,7 @@ Point: Response - Time-to-Event</a> for more information.</td>
 <tr class="even">
 <td><strong>ArrivalTime</strong></td>
 <td>Vector of length equal to the number of subjects, containing the
-generated arrival times for all subjects.</td>
+arrival times in the study for all subjects.</td>
 <td>See the Output section of <a href="IntegrationPointEnrollment.html#expected-output-variable">Integration
 Point: Enrollment</a> for more information.</td>
 </tr>
@@ -197,7 +199,7 @@ information.</td>
 <tr class="odd">
 <td><strong>CensorInd1, CensorInd2, …,
 CensorInd<code>NumVisit</code></strong></td>
-<td>Vectord of length equal to the number of subjects, containing the
+<td>Vector of length equal to the number of subjects, containing the
 generated censor indicator values for all subjects for each visit:<br>–
 <code>0</code>: Dropout.<br>– <code>1</code>: Completer.</td>
 <td>Only available for
@@ -208,6 +210,102 @@ information.</td>
 </tr>
 </tbody>
 </table>
+<div class="section level3">
+<h3 id="for-study-objective-two-arm-confirmatory---multiple-endpoints">For
+<code>Study objective = Two Arm Confirmatory - Multiple Endpoints</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory---multiple-endpoints"></a>
+</h3>
+<p>For Multiple Endpoints, the variables of SimData are different.</p>
+<table class="table">
+<colgroup>
+<col width="7%">
+<col width="30%">
+<col width="61%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Variable</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Notes</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>SimID</strong></td>
+<td>Vector of length equal to the number of subjects, indicating the
+simulation ID.</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>PatId</strong></td>
+<td>Vector of length equal to the number of subjects, containing the
+patient ID identifying a unique patient in a given simulation.</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>ArrivalTime</strong></td>
+<td>Vector of length equal to the number of subjects, containing the
+arrival times in the study for all subjects.</td>
+<td>See the Output section of <a href="IntegrationPointEnrollment.html#expected-output-variable">Integration
+Point: Enrollment</a> for more information.</td>
+</tr>
+<tr class="even">
+<td><strong>TreatmentID</strong></td>
+<td>Vector of length equal to the number of subjects, containing the
+allocation indices for all subjects:<br>– <code>0</code>: Control
+arm.<br>– <code>1</code>: First experimental arm.<br>– etc.</td>
+<td>See the Output section of <a href="IntegrationPointRandomization.html#expected-output-variable">Integration
+Point: Randomization</a> for more information.</td>
+</tr>
+<tr class="odd">
+<td><strong>TResponse.<code>EPNAME</code></strong></td>
+<td>Vector of length equal to the number of subjects, containing the
+generated responses for a specific endpoint.</td>
+<td>
+<code>EPNAME</code> is the endpoint name specified in East Horizon.
+Endpoint names can also be accessed using
+<code>DesignParam$EndpointName</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>CensorID.<code>EPNAME</code></strong></td>
+<td>Vector of length equal to the number of subjects, containing the
+generated censor indicator values for a specific endpoint:<br>–
+<code>0</code>: Dropout.<br>– <code>1</code>: Completer</td>
+<td>
+<code>EPNAME</code> is the endpoint name specified in East Horizon.
+Endpoint names can also be accessed using
+<code>DesignParam$EndpointName</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Response.<code>EPNAME</code></strong></td>
+<td>Vector of length equal to the number of subjects, containing the
+generated responses for a specific endpoint after adjusting for endpoint
+and dropout rules.</td>
+<td>
+<code>EPNAME</code> is the endpoint name specified in East Horizon.
+Endpoint names can also be accessed using
+<code>DesignParam$EndpointName</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>CalRespT.<code>EPNAME</code></strong></td>
+<td>Vector of length equal to the number of subjects, containing the
+generated response times on calendar scale for a specific endpoint.
+Equivalent to <code>Response + ArrivalTime</code>.</td>
+<td>
+<code>EPNAME</code> is the endpoint name specified in East Horizon.
+Endpoint names can also be accessed using
+<code>DesignParam$EndpointName</code>.</td>
+</tr>
+<tr class="odd">
+<td><strong>DropoutID.<code>EPNAME</code></strong></td>
+<td>Vector of length equal to the number of subjects, containing whether
+each patient dropped out before responding for a specific endpoint:<br>–
+<code>0</code>: Dropout.<br>– <code>1</code>: Completer</td>
+<td>
+<code>EPNAME</code> is the endpoint name specified in East Horizon.
+Endpoint names can also be accessed using
+<code>DesignParam$EndpointName</code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
