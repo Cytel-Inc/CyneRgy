@@ -44,6 +44,10 @@ navbar:
                   href: articles/IntegrationPointDropout.html
                 - text: Treatment Selection
                   href: articles/IntegrationPointTreatmentSelection.html
+                - text: Multiplicity Adjustment
+                  href: articles/IntegrationPointMultiplicityAdjustment.html
+                - text: Design
+                  href: articles/IntegrationPointDesign.html
         examples:
             text: Examples
             href: articles/ExampleOutline.html

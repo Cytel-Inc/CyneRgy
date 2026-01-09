@@ -6,10 +6,10 @@
 #' @param PrdStart Vector with start of a time interval, PrdStarr[ 1 ] = 0 
 #' @param AccrRate the accrual rate in each period.  
 #' @param UserParam A list of user defined parameters that may be provided in East or East Horizon. You must have a default of NULL, as in this example.
-#' The user may supplies rates names Rate1, Rate2, ...., RateX to represent the per unit time accrual rate where the maximum RateX is used after the ramp-up.
+#' The user may supplies rates names dRate1, dRate2, ...., dRateX to represent the per unit time accrual rate where the maximum dRateX is used after the ramp-up.
 #'    \describe{
-#'      \item{Rate1}{The rate in the first unit of time}
-#'      \item{Rate2}{The rate in the first second of time}
+#'      \item{dRate1}{The rate in the first unit of time}
+#'      \item{dRate2}{The rate in the first second of time}
 #'    }   
 #' @description
 #' This function allows for patient arrival time in the clinical trial according to a Poisson process.  If the UserParam is provided then PrdStart and AccrRate are ignored.

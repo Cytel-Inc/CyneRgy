@@ -7,6 +7,10 @@ output: html_document
 
 [$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
 
+<div class="alert alert-danger" role="alert"><p style="margin-bottom:0">
+Important: **ArrivalTime** is a new required parameter. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used.
+</p></div>
+
 # Input Variables
 
 When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
@@ -15,11 +19,13 @@ When creating a custom R script, you can optionally use specific variables provi
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
 |**NumArm**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
+|**ArrivalTime**|Vector of Numeric|Vector of length `NumSub`, indicating the arrival time for each subject.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
+|**StratumID**|Vector of Integer|Vector of length `NumSub`, indicating the stratum index to which each subject is allocated. Only required when `Stratification` is turned on.|
 |**SurvMethod**|Integer|Selected input method for survival analysis from the East Horizon dropdown list:<br>– `1`: Hazard rate.<br>– `2`: Cumulative % survival rates.<br>– `3`: Median survival times.|
-|**NumPrd**|Integer|Number of periods in the trial. Fixed to 1 for `Study Objective = Multiple Arm Confirmatory`.|
-|**PrdTime**|Matrix of Numeric|2D array of size `NumPrd x NumArm`, indicating the times used to specify survival parameters. Equals to NA for the control arm. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Starting times of hazard pieces.<br>– If `SurvMethod = 2`: Times at which the cumulative % survivals are specified.<br>– If `SurvMethod = 3`: Defaults to 0.|
-|**SurvParam**|Matrix of List|2D array of size `NumPrd x NumArm`, indicating the survival parameters. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Specifies hazard rates per arm per period. Size: `NumPrd` rows $\times$ `NumArm` columns, where `SurvParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 2`: Specifies cumulative % survival rates per arm per period. Size: `NumPrd` rows $\times$ `NumArm` columns, where `SurvParam[i, j]` represents the cumulative % survival for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 3`: Contains median survival times for each arm. Size: 1 row $\times$ 2 columns, where column 1 is control and column 2 is experimental.|
+|**NumPrd**|Integer|Number of periods in the trial. Fixed to 1 for `Study Objective = Multiple Arm Confirmatory` and when `Stratification` is turned on.|
+|**PrdTime**|Matrix of Numeric|2D array of size `NumPrd x NumArm`, indicating the times used to specify survival parameters. If `Stratification` is turned on, the size is `Number of Strata x NumArm`. Equals to NA for the control arm. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Starting time of hazard pieces for each period or factor.<br>– If `SurvMethod = 2`: Time at which the cumulative % survival is specified for each period or factor.<br>– If `SurvMethod = 3`: Defaults to 0.|
+|**SurvParam**|Matrix of List|2D array of size `NumPrd x NumArm`, indicating the survival parameters. If `Stratification` is turned on, the size is `Number of Strata x NumArm`. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Specifies hazard rates per arm per period or stratum. `SurvParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period or factor<br>– If `SurvMethod = 2`: Specifies cumulative % survival rates per arm per period or factor. `SurvParam[i, j]` represents the cumulative % survival for the `jth` arm in the `ith` period or factor.<br>– If `SurvMethod = 3`: Contains median survival times for each arm (per stratum if using `Stratification`). Only one row if not using `Stratification`. `SurvMethod[i, j]` represents the median survival time for the `jth` arm (in the `ith` factor, if using `Stratification`).|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -43,10 +49,25 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
-A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) 
+Detailed templates with step-by-step explanations are available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) and [SimulatePatientOutcome.TimeToEvent.Stratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.Stratification.R) for Stratification.
 
 ```
-GenerateResponse <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
+GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
+  
+  # Write the actual code here.
+  # Store the generated survival time values in a vector called vSurvTime.
+
+  return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
+## For `Stratification` turned on
+
+```
+GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
   vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
@@ -65,5 +86,6 @@ Explore the following examples for more context:
 1. [**2 Arm, Time-To-Event Outcome - Patient Simulation**](2ArmTimeToEventOutcomePatientSimulation.html)
     - [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R)
     - [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R)
+    - [SimulatePatientOutcomeStratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R)
 <!-- 2. [**Multiple Arm, Patient Simulation**](MultiArmPatientSimulation.html)
-    - [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmOutcomePatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R) -->
+    - [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R) -->

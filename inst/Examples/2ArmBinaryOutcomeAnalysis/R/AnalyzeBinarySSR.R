@@ -1,4 +1,4 @@
-#' @name AnalyzeBinomialSSR
+#' @name AnalyzeBinarySSR
 #'
 #' @param SimData 
 #' A data frame containing the simulated patient-level data for the current simulation iteration.  
@@ -78,7 +78,7 @@
 #'
 #' @export
 
-AnalyzeBinomialSSR <- function(SimData, DesignParam, AdaptInfo = NULL, LookInfo = NULL, UserParam = NULL )
+AnalyzeBinarySSR <- function(SimData, DesignParam, AdaptInfo = NULL, LookInfo = NULL, UserParam = NULL )
 {
     nError         <- 0
     nDecision      <- 0

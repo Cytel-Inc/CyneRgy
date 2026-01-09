@@ -41,7 +41,9 @@ For comprehensive details about each integration point, please refer to the foll
 
 <a href="IntegrationPointTreatmentSelection.html" class="btn btn-primary"><i class="fas fa-project-diagram"></i>Treatment Selection</a>
 
-<a href="IntegrationPointMultiplicityAdjustment.html" class="btn btn-primary"><i class="fas fa-calculator"></i>Multiplicity Adjustment</a>
+<a href="IntegrationPointMultiplicityAdjustment.html" class="btn btn-primary"><i class="fas fa-calculator"></i>Multiplicity Adjustment (DEP)</a>
+
+<a href="IntegrationPointDesign.html" class="btn btn-primary"><i class="fas fa-pencil-ruler"></i>Design (MEP)</a>
 
 ::::
 

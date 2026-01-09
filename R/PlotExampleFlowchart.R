@@ -22,6 +22,7 @@
 #' @param nBigColWidth Numeric. Width of used integration point columns. Default = 3.
 #' @param bShowTreatmentSelection Logical. Whether to include the "Treatment Selection" column. Default = FALSE.
 #' @param bShowMultiplicityAdjustment Logical. Whether to include the "Multiplicity Adjustment" column. Default = FALSE.
+#' @param bShowDesign Logical. Whether to include the "Design" column. Default = FALSE.
 #'
 #' @return A ggplot object containing the flowchart visualization.
 #' @export
@@ -64,7 +65,8 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
                                  nColumnWidth = 0.5,
                                  nBigColWidth = 3,
                                  bShowTreatmentSelection = FALSE,
-                                 bShowMultiplicityAdjustment = FALSE) {
+                                 bShowMultiplicityAdjustment = FALSE,
+                                 bShowDesign = FALSE) {
     library(ggplot2)
     library(grid)
     library(stringr)
@@ -92,17 +94,22 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
     if ("Multiplicity Adjustment" %in% names(lIntPoints)) {
         bShowMultiplicityAdjustment <- TRUE
     }
+    if ("Design" %in% names(lIntPoints)) {
+        bShowDesign <- TRUE
+    }
     
     # Integration points order (base list)
     vIntegrationPoints <- c("Initialization", "Enrollment", "Randomization",
                             "Dropout", "Treatment Selection", "Response",
-                            "Analysis", "Multiplicity Adjustment")
+                            "Analysis", "Multiplicity Adjustment", "Design")
     
     # Filter out hidden points
     if (!bShowTreatmentSelection)
         vIntegrationPoints <- vIntegrationPoints[vIntegrationPoints != "Treatment Selection"]
     if (!bShowMultiplicityAdjustment)
         vIntegrationPoints <- vIntegrationPoints[vIntegrationPoints != "Multiplicity Adjustment"]
+    if (!bShowDesign)
+        vIntegrationPoints <- vIntegrationPoints[vIntegrationPoints != "Design"]
     
     # Remove any hidden point from lIntPoints if present
     lIntPoints <- lIntPoints[intersect(names(lIntPoints), vIntegrationPoints)]
