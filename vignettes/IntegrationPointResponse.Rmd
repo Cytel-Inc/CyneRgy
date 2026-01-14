@@ -53,7 +53,18 @@ This integration point is available in East Horizon Explore for the following st
 ## East Horizon Design
 
 <details>
-<summary>This integration point is available in East Horizon Design for the following tests (click to expand/collapse):</summary>
+<summary>Click to expand/collapse</summary>
+
+This integration point is available in East Horizon Design for the following study objectives and endpoint types:
+
+||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
+|----------------|--|--|--|--|--|--|--|--|
+|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|-|-|-|-|-|
+|Multiple Arm Confirmatory|🔜|🔜|🔜|-|-|-|-|-|
+|Dose Finding|-|-|❌|-|-|-|-|-|
+
+This integration point is available in East Horizon Design for the following tests:
 
 |Test|Study Objective|Endpoint|Availability|
 |-------|-----|-----|--|
@@ -138,7 +149,7 @@ You can set up a response function under **Distribution** in the **Response** se
 1. Create and compute a first **analytical design input set**.
 1. Navigate to the Results section and **simulate** the analytical design.
 1. Navigate to the new **simulation input set** that was created.
-1. Select **User Specified-R** from the dropdown in the **Distribution** field in the **Response** tab.
+1. Select **User Specified-R** from the dropdown in the **Distribution** (or **Response Generation Method**) field in the **Response** tab.
 1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
 1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
 1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
@@ -147,6 +158,9 @@ You can set up a response function under **Distribution** in the **Response** se
 For a visual guide of where to find the option, refer to the screenshot below:
 
 ![](GettingStarted_files/responseDesign.png)
+
+For Multiple Endpoints, instead of the **Distribution** field, it is under **Response Generation Method**.
+
 </details>
 
 ## In East
@@ -184,5 +198,7 @@ The input variables, expected output variables, examples, and templates for this
 <a href="IntegrationPointResponseBinary.html" class="btn btn-primary"><i class="fas fa-toggle-on"></i> Binary Outcome</a>
 
 <a href="IntegrationPointResponseDual.html" class="btn btn-primary"><i class="fas fa-project-diagram"></i> Dual Outcomes (TTE-TTE or TTE-Binary)</a>
+
+<a href="IntegrationPointResponseMulti.html" class="btn btn-primary"><i class="fas fa-sitemap"></i> Multiple Outcomes</a>
 
 ::::

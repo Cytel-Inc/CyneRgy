@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>VariablesOfLookInfo.Rmd</code></div>
@@ -577,6 +579,91 @@ the binding type for each endpoint. For example,
 actual endpoint name as specified by the user.</li>
 </ul>
 </div>
+</div>
+<div class="section level2">
+<h2 id="for-study-objective-two-arm-confirmatory---multiple-endpoints">For
+<code>Study objective = Two Arm Confirmatory - Multiple Endpoints</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory---multiple-endpoints"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="16%">
+<col width="16%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Variable Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>AnalysisTime</strong></td>
+<td>Numeric</td>
+<td>Current analysis time.</td>
+</tr>
+<tr class="even">
+<td><strong>LookNum</strong></td>
+<td>Integer</td>
+<td>Current look number.</td>
+</tr>
+<tr class="odd">
+<td><strong>TestStatisticsOutputs</strong></td>
+<td>Named List</td>
+<td>Named List of length equal to the number of endpoints, containing
+the test statistics results from the engine. Names are user-specified
+endpoint names from <code>DesignParam$EndpointName</code>. Order also
+matches <code>DesignParam$EndpointName</code> order. Each element
+contains the integer <code>ErrorCode</code> (0 = Success) and the list
+<code>data</code>, which contains:<br>- For TTE endpoint:
+<code>Score</code> (numeric), <code>StdErr</code> (numeric standard
+error), <code>TS</code> (numeric test statistic), <code>TSPVal</code>
+(numeric p-value).<br>- For Binary endpoint: <code>PropPld</code>
+(numeric pooled proportion), <code>StdErr</code> (numeric standard
+error), <code>TS</code> (numeric test statistic), <code>TSPVal</code>
+(numeric p-value).<br>- For Continuous endpoint: <code>DoF</code>
+(numeric degrees of freedom), <code>SDPld</code> (numeric pooled
+standard deviation), <code>StdErr</code> (numeric standard error),
+<code>TS</code> (numeric test statistic), <code>TSPVal</code> (numeric
+p-value).</td>
+</tr>
+<tr class="even">
+<td><strong>InfoFrac</strong></td>
+<td>List of Numeric Vector</td>
+<td>List of length equal to the number of endpoints, containing the
+vectors of the actual information fractions up to the current look for
+one endpoint. Order matches <code>DesignParam$EndpointName</code>
+order.</td>
+</tr>
+<tr class="odd">
+<td><strong>LastLookDecision</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length equal to the number of endpoints, containing the
+decisions from previous look. Order matches
+<code>DesignParam$EndpointName</code> order. Possible values:<br>–
+<code>0</code>: Continue.<br>– <code>1</code>: Efficacy.<br>–
+<code>2</code>: Futility.</td>
+</tr>
+<tr class="even">
+<td><strong>EfficacyBoundaryPScale</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length equal to the number of endpoints, containing the
+final set of efficacy boundaries on the p-value scale used for testing
+each endpoint by engine. <code>NaN</code> where boundaries were not
+calculated. Order matches <code>DesignParam$EndpointName</code>
+order.</td>
+</tr>
+<tr class="odd">
+<td><strong>EPStatus</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length equal to the number of endpoints, containing the
+status of each endpoint. Order matches
+<code>DesignParam$EndpointName</code> order. Possible values:<br>-
+<code>0</code>: Success.<br>- <code>1</code>: Insufficient
+information.<br>- <code>2</code>: Excessive information.<br>-
+<code>3</code>: Computational error.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="for-study-objective-multiple-arm-confirmatory-or-dose-finding">For

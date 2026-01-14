@@ -8,7 +8,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointEnrollment.html" class="alert-link">**Integration Point: Enrollment**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
 <div class="alert alert-danger" role="alert">
-To try this example, create a new project in East Horizon with any configuration that supports the Enrollment Integration Point. For more details, refer to the link in the box above.</div>
+To try this example, create a new project in East Horizon with any configuration that supports the Enrollment Integration Point. For more details, refer to the link in the box above. For Example 3, choose the study objective `Two Arm Confirmatory - Multiple Endpoints`.</div>
 
 # Introduction
 
@@ -28,6 +28,8 @@ Running the command above will load the RStudio project in RStudio.
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/R) you will find the following R file:
 
 1. [GeneratePoissonArrival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R) - This file provides the code used for the two examples below.
+
+2. [GeneratePoissonArrivalMEP.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrivalMEP.R) - This file adapts the code to use with Multiple Endpoints.
 
 # Example 1 - Ramp-Up In Accrual Using UserParam
 
@@ -149,3 +151,16 @@ CyneRgy::PlotExampleFlowchart(
     )
 )
 ```
+
+# Example 3 - Enrollment with Multiple Endpoints
+
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrivalMEP.R" class="alert-link">GeneratePoissonArrivalMEP.R</a></p>
+</div>
+
+This example demonstrates how to generate patient arrival times when working with Multiple Endpoints (MEP). The logic for simulating enrollment is identical to Examples 1 and 2, but the function interface is adapted to MEP conventions by using `NumPat` (number of participants) instead of `NumSub`.
+
+As in the previous examples, patient arrival times are simulated according to a Poisson process, with optional ramp-up in accrual. The ramp-up can be specified either:
+
+- Via enrollment inputs defined in East Horizon (`PrdStart`, `AccrRate`): see Example 2.
+- Via user-defined parameters (`UserParam$dRate1`, `UserParam$dRate2`, …): see Example 1. In this case, the East Horizon inputs are ignored.

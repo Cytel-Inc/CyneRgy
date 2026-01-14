@@ -1,6 +1,6 @@
 ---
 title: "2-Arm, Continuous Outcome - Analysis"
-author: "Shubham Lahoti and J. Kyle Wathen"
+author: "Shubham Lahoti, J. Kyle Wathen, and Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   word_document: default

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseBinary.Rmd</code></div>
@@ -97,6 +99,13 @@ Potvin</h4>
     
 <p><a href="IntegrationPointResponse.html"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math>
 Go back to the <em>Integration Point: Response</em> page</a></p>
+<div class="alert alert-danger" role="alert">
+<p style="margin-bottom:0">
+Important: <strong>ArrivalTime</strong> is a new required parameter.
+Existing R scripts must be updated to include this parameter in the
+function definition, even if it is not used.
+</p>
+</div>
 <div class="section level2">
 <h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
@@ -130,6 +139,12 @@ outcome.</p>
 experimental﴿.</td>
 </tr>
 <tr class="odd">
+<td><strong>ArrivalTime</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length <code>NumSub</code>, indicating the arrival time
+for each subject.</td>
+</tr>
+<tr class="even">
 <td><strong>TreatmentID</strong></td>
 <td>Vector of Integer</td>
 <td>Vector of length <code>NumSub</code>, indicating the allocation of
@@ -137,7 +152,7 @@ subjects to arms. Index <code>0</code> represents placebo/control. For
 example, <code>[0, 0, 1]</code> indicates three subjects: two in the
 control group and one experimental.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>PropResp</strong></td>
 <td>Vector of Numeric</td>
 <td>Vector of length <code>NumArm</code>, indicating the expected
@@ -145,7 +160,7 @@ proportions (probabilities) of responders for each arm. The first
 element corresponds to the control group, followed by the probabilities
 for each experimental arm in sequence.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>FollowUpDur</strong></td>
 <td>Numeric</td>
 <td>Follow-up duration, acts as By Time for response proportions. Only
@@ -153,14 +168,14 @@ applicable for Vaccine Efficacy
 (<code>Better Response = Smaller Value</code>,
 <code>Test = 1 - Ratio of Proportions</code>).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>OneMinusROP</strong></td>
 <td>Numeric</td>
 <td>Value of 1 - Ratio of Proportions. Only applicable for Vaccine
 Efficacy (<code>Better Response = Smaller Value</code>,
 <code>Test = 1 - Ratio of Proportions</code>).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
@@ -250,7 +265,7 @@ Efficacy, <code>OneMinusROP</code> must be declared with default value
 (<code>Better Response = Larger Value</code>,
 <code>Test = Difference of Proportions or Custom</code>)<a class="anchor" aria-label="anchor" href="#for-standard-binary-outcome-better-response-larger-value-test-difference-of-proportions-or-custom"></a>
 </h3>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">PropResp</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">PropResp</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">vPatientOutcome</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0  </span></span>
@@ -265,7 +280,7 @@ Efficacy, <code>OneMinusROP</code> must be declared with default value
 <h3 id="for-vaccine-efficacy-better-response-smaller-value-test-1---ratio-of-proportions">For Vaccine Efficacy (<code>Better Response = Smaller Value</code>,
 <code>Test = 1 - Ratio of Proportions</code>)<a class="anchor" aria-label="anchor" href="#for-vaccine-efficacy-better-response-smaller-value-test-1---ratio-of-proportions"></a>
 </h3>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">FollowUpDur</span>, <span class="va">PropResp</span>, <span class="va">OneMinusROP</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">FollowUpDur</span>, <span class="va">PropResp</span>, <span class="va">OneMinusROP</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">vPatientOutcome</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array to 0  </span></span>

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>GeneratePoissonArrival.Rmd</code></div>
@@ -107,7 +109,8 @@ point.
 <div class="alert alert-danger" role="alert">
 To try this example, create a new project in East Horizon with any
 configuration that supports the Enrollment Integration Point. For more
-details, refer to the link in the box above.
+details, refer to the link in the box above. For Example 3, choose the
+study objective <code>Two Arm Confirmatory - Multiple Endpoints</code>.
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -129,9 +132,10 @@ RStudio.</p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/R" class="external-link">R
 directory of this example</a> you will find the following R file:</p>
 <ol style="list-style-type: decimal">
-<li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link">GeneratePoissonArrival.R</a>
-- This file provides the code used for the two examples below.</li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link">GeneratePoissonArrival.R</a>
+- This file provides the code used for the two examples below.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrivalMEP.R" class="external-link">GeneratePoissonArrivalMEP.R</a>
+- This file adapts the code to use with Multiple Endpoints.</p></li>
 </ol>
 </div>
 <div class="section level2">
@@ -325,6 +329,31 @@ change:</p>
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>
 <p><img src="GeneratePoissonArrival_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="example-3---enrollment-with-multiple-endpoints">Example 3 - Enrollment with Multiple Endpoints<a class="anchor" aria-label="anchor" href="#example-3---enrollment-with-multiple-endpoints"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrivalMEP.R" class="external-link alert-link">GeneratePoissonArrivalMEP.R</a>
+</p>
+</div>
+<p>This example demonstrates how to generate patient arrival times when
+working with Multiple Endpoints (MEP). The logic for simulating
+enrollment is identical to Examples 1 and 2, but the function interface
+is adapted to MEP conventions by using <code>NumPat</code> (number of
+participants) instead of <code>NumSub</code>.</p>
+<p>As in the previous examples, patient arrival times are simulated
+according to a Poisson process, with optional ramp-up in accrual. The
+ramp-up can be specified either:</p>
+<ul>
+<li>Via enrollment inputs defined in East Horizon
+(<code>PrdStart</code>, <code>AccrRate</code>): see Example 2.</li>
+<li>Via user-defined parameters (<code>UserParam$dRate1</code>,
+<code>UserParam$dRate2</code>, …): see Example 1. In this case, the East
+Horizon inputs are ignored.</li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

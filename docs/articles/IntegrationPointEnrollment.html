@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointEnrollment.Rmd</code></div>
@@ -179,9 +181,82 @@ following study objectives and endpoint types:</p>
 <h3 id="east-horizon-design">East Horizon Design<a class="anchor" aria-label="anchor" href="#east-horizon-design"></a>
 </h3>
 <details><summary>
-This integration point is available in East Horizon Design for the
-following tests (click to expand/collapse):
-</summary><table style="width:100%;" class="table">
+Click to expand/collapse
+</summary><p>This integration point is available in East Horizon Design for the
+following study objectives and endpoint types:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th></th>
+<th>Time to Event</th>
+<th>Binary</th>
+<th>Continuous</th>
+<th>Continuous with repeated measures</th>
+<th>Count</th>
+<th>Composite</th>
+<th>Dual TTE-TTE</th>
+<th>Dual TTE-Binary</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Two Arm Confirmatory</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>🔜</td>
+<td>🔜</td>
+</tr>
+<tr class="even">
+<td>Two Arm Confirmatory - Multiple Endpoints</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Multiple Arm Confirmatory</td>
+<td>🔜</td>
+<td>🔜</td>
+<td>🔜</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Dose Finding</td>
+<td>-</td>
+<td>-</td>
+<td>❌</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>This integration point is available in East Horizon Design for the
+following tests:</p>
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="36%">
 <col width="26%">
@@ -601,9 +676,12 @@ below for the variable that is available for this integration point.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><strong>NumSub</strong></td>
+<td>
+<strong>NumSub</strong> or <strong>NumPat</strong>
+</td>
 <td>Integer</td>
-<td>Number of subjects in the trial.</td>
+<td>Number of subjects in the trial. Is called NumPat for
+<code>Study Objective = Two Arm Confirmatory - Multiple Endpoints</code>.</td>
 </tr>
 <tr class="even">
 <td><strong>Type</strong></td>
@@ -738,7 +816,7 @@ needs to be declared with a default value.</p>
 <p>A detailed template with step-by-step explanations is available here:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/GenerateArrivalTimes.R" class="external-link">GenerateArrivalTimes.R</a></p>
 <div class="section level3">
-<h3 id="if-type-0-global-enrollment">If <code>Type = 0</code> (Global Enrollment)<a class="anchor" aria-label="anchor" href="#if-type-0-global-enrollment"></a>
+<h3 id="for-type-0-global-enrollment">For <code>Type = 0</code> (Global Enrollment)<a class="anchor" aria-label="anchor" href="#for-type-0-global-enrollment"></a>
 </h3>
 <pre><code><span><span class="va">GenArrTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">Type</span> <span class="op">=</span> <span class="fl">0</span>, <span class="va">NumPrd</span>, <span class="va">PrdStart</span>, <span class="va">AccrRate</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
@@ -750,9 +828,24 @@ needs to be declared with a default value.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> ArrivalTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientArrivalTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
+<div class="section level4">
+<h4 id="for-type-0-global-enrollment-and-study-objective-two-arm-confirmatory---multiple-endpoints">For <code>Type = 0</code> (Global Enrollment) and
+<code>Study Objective = Two Arm Confirmatory - Multiple Endpoints</code><a class="anchor" aria-label="anchor" href="#for-type-0-global-enrollment-and-study-objective-two-arm-confirmatory---multiple-endpoints"></a>
+</h4>
+<pre><code><span><span class="va">GenArrTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumPat</span>, <span class="va">Type</span> <span class="op">=</span> <span class="fl">0</span>, <span class="va">NumPrd</span>, <span class="va">PrdStart</span>, <span class="va">AccrRate</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>  <span class="va">nError</span>                <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>  <span class="va">vPatientArrivalTime</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumPat</span> <span class="op">)</span> <span class="co"># Initializing arrival time array to 0</span></span>
+<span>  </span>
+<span>  <span class="co"># Write the actual code here.</span></span>
+<span>  <span class="co"># Store the generated arrival times in a vector called vPatientArrivalTime.</span></span>
+<span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> ArrivalTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientArrivalTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
 </div>
 <div class="section level3">
-<h3 id="if-type-1-regional-enrollment">If <code>Type = 1</code> (Regional Enrollment)<a class="anchor" aria-label="anchor" href="#if-type-1-regional-enrollment"></a>
+<h3 id="for-type-1-regional-enrollment">For <code>Type = 1</code> (Regional Enrollment)<a class="anchor" aria-label="anchor" href="#for-type-1-regional-enrollment"></a>
 </h3>
 <pre><code><span><span class="va">GenArrTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">Type</span> <span class="op">=</span> <span class="fl">1</span>, <span class="va">RegionName</span>, <span class="va">EnrollmentCapPcnt</span>, <span class="va">AccrRate</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
@@ -764,6 +857,21 @@ needs to be declared with a default value.</p>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> ArrivalTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientArrivalTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
+<div class="section level4">
+<h4 id="for-type-1-regional-enrollment-and-study-objective-two-arm-confirmatory---multiple-endpoints">For <code>Type = 1</code> (Regional Enrollment) and
+<code>Study Objective = Two Arm Confirmatory - Multiple Endpoints</code><a class="anchor" aria-label="anchor" href="#for-type-1-regional-enrollment-and-study-objective-two-arm-confirmatory---multiple-endpoints"></a>
+</h4>
+<pre><code><span><span class="va">GenArrTimes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumPat</span>, <span class="va">Type</span> <span class="op">=</span> <span class="fl">1</span>, <span class="va">RegionName</span>, <span class="va">EnrollmentCapPcnt</span>, <span class="va">AccrRate</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>  <span class="va">nError</span>                <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>  <span class="va">vPatientArrivalTime</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumPat</span> <span class="op">)</span> <span class="co"># Initializing arrival time array to 0</span></span>
+<span>  </span>
+<span>  <span class="co"># Write the actual code here.</span></span>
+<span>  <span class="co"># Store the generated arrival times in a vector called vPatientArrivalTime.</span></span>
+<span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> ArrivalTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span> <span class="va">vPatientArrivalTime</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -776,6 +884,7 @@ needs to be declared with a default value.</p>
 Arrival Times with Poisson Process</strong></a>
 <ul>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R" class="external-link">GeneratePoissonArrival.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrivalMEP.R" class="external-link">GeneratePoissonArrivalMEP.R</a></li>
 </ul>
 </li>
 </ol>

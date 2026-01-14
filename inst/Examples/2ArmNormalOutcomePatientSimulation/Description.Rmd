@@ -16,6 +16,10 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Task:** Any</li>
 </ul></div>
 
+<div class="alert alert-warning" role="alert"><p style="margin-bottom:0">
+Important: **ArrivalTime** is a new required parameter. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used. See <a href="IntegrationPointResponseContinuous.html" class="alert-link">**Integration Point: Response - Continuous Outcome**</a> for more information.
+</p></div>
+
 # Introduction
 
 The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes assumed to follow a normal distribution.

@@ -28,6 +28,7 @@
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysisDual.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysisRepeatedMeasures.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysisTimeToEvent.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDesign.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropout.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropoutBinary.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropoutContinuous.html</loc></url>
@@ -42,9 +43,12 @@
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointResponseBinary.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointResponseContinuous.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointResponseDual.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointResponseMulti.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointResponseRepeatedMeasures.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointResponseTimeToEvent.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointTreatmentSelection.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/MEPDesign.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/MEPPatientSimulation.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmAnalysis.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmPatientDropout.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmPatientSimulation.html</loc></url>

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -85,9 +87,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>2-Arm, Time-To-Event Outcome - Analysis</h1>
                         <h4 data-toc-skip class="author">Anoop Singh
-Rawat and Shubham Lahoti</h4>
+Rawat, Shubham Lahoti, and Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>2ArmTimeToEventOutcomeAnalysis.Rmd</code></div>
@@ -120,14 +122,33 @@ following configuration:
 <li>
 <strong>Task:</strong> Any
 </li>
+<li>
+<strong>Statistical Design:</strong>
+</li>
+<ul style="margin-bottom:0">
+<li>
+<em>Fixed Sample</em> or <em>Group Sequential</em> for Examples 1, 2, 3,
+5, and 6
+</li>
+<li>
+<em>Group Sequential with Sample Size Re-Estimation</em> for Example 4
+</li>
+</ul>
+<li>
+<strong>Stratification turned on</strong>: For Examples 5 and 6
+</li>
+<li>
+<strong>Subpopulations turned on</strong>: For Example 6
+</li>
 </ul>
 </div>
 <div class="alert alert-warning" role="alert">
 <p style="margin-bottom:0">
-<strong>Note:</strong> This example is compatible with both Fixed Sample
-and Group Sequential statistical designs. The R code automatically
-detects whether interim look information (<em>LookInfo</em>) is
-available and adjusts the analysis parameters accordingly.
+<strong>Note:</strong> Examples 1, 2, 3, 5, and 6 are compatible with
+both <em>Fixed Sample</em> and <em>Group Sequential</em> statistical
+designs. The R code automatically detects whether interim look
+information (<em>LookInfo</em>) is available and adjusts the analysis
+parameters accordingly.
 </p>
 </div>
 <div class="section level2">
@@ -151,19 +172,29 @@ RStudio.</p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
-<li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R" class="external-link">AnalyzeUsingEastLogrankFormula.R</a>
-- Contains a function named <em>AnalyzeUsingEastLogrankFormula</em> to
-demonstrate the R code necessary for Example 1 as described below.</li>
-<li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R" class="external-link">AnalyzeUsingSurvivalPackage.R</a>
-- Contains a function named <em>AnalyzeUsingSurvivalPackage</em> to
-demonstrate the R code necessary for Example 2 as described below.</li>
-<li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R" class="external-link">AnalyzeUsingHazardRatioLimitsOfCI.R</a>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R" class="external-link">AnalyzeUsingEastLogrankFormula.R</a>
+- Contains a function named <em>AnalyzeUsingEastLogrankFormula.R</em>
+that computes the test statistic for a TTE endpoint using Formulas of
+Appendix Q.8 from the East manual.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R" class="external-link">AnalyzeUsingSurvivalPackage.R</a>
+- Contains a function named <em>AnalyzeUsingSurvivalPackage</em> that
+performs the analysis the R package <code>survival</code>.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R" class="external-link">AnalyzeUsingHazardRatioLimitsOfCI.R</a>
 - Contains a function named <em>AnalyzeUsingHazardRatioLimitsOfCI</em>
-to demonstrate the R code necessary for Example 3 as described
-below.</li>
+that bases interim and final decisions on confidence interval limits
+rather than East Horizon-provided boundaries. The function uses
+user-defined parameters (MAV, TV, and confidence level) to implement a
+Go / No-Go decision framework.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R" class="external-link">AnalyzeTTESSR.R</a>
+- Contains a function named <em>AnalyzeTTESSR</em> that extends the
+standard TTE analysis to support conditional power–based sample size
+re-estimation (SSR) in a group sequential design.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeStratification.R" class="external-link">AnalyzeStratification.R</a>
+- Contains a function named <em>AnalyzeStratification</em> that extends
+the standard TTE analysis to support stratification.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeSubpopulation.R" class="external-link">AnalyzeSubpopulation.R</a>
+- Contains a function named <em>AnalyzeSubpopulation</em> that extends
+the standard TTE analysis to support subpopulations.</p></li>
 </ol>
 </div>
 <div class="section level2">
@@ -338,6 +369,210 @@ confidence intervals.</p>
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>
 <p><img src="2ArmTimeToEventOutcomeAnalysis_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="example-4---analysis-with-sample-size-re-estimation">Example 4 - Analysis With Sample Size Re-Estimation<a class="anchor" aria-label="anchor" href="#example-4---analysis-with-sample-size-re-estimation"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R" class="external-link alert-link">AnalyzeTTESSR.R</a>
+</p>
+</div>
+<p>This example illustrates how to customize the analysis when using
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code>
+in East Horizon. The key difference from the previous examples is that
+the analysis function is responsible not only for producing a test
+statistic and interim decision, but also for computing a re-estimated
+total number of events based on interim results. This is achieved using
+a conditional power–based SSR approach, which allows the trial to
+increase its planned number of events when interim results fall within a
+“promising zone”.</p>
+<p><strong>Test Statistic:</strong></p>
+<p>At each interim look, the analysis time is determined based on the
+target cumulative number of events implied by the current information
+fraction. Survival data are censored at this analysis time, and a
+log-rank–style standardized Z-statistic is computed based on the
+observed and expected number of events in the treatment arm:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><msub><mi>O</mi><mi>T</mi></msub><mo>−</mo><msub><mi>E</mi><mi>T</mi></msub></mrow><msqrt><mrow><mtext mathvariant="normal">Var</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>O</mi><mi>T</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">Z = \frac{O_T - E_T}{\sqrt{ \text{Var}(O_T) }}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>O</mi><mi>T</mi></msub><annotation encoding="application/x-tex">O_T</annotation></semantics></math>
+is the observed number of events in the treatment arm,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>E</mi><mi>T</mi></msub><annotation encoding="application/x-tex">E_T</annotation></semantics></math>
+is the expected number of events under the null hypothesis, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Var</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>O</mi><mi>T</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\text{Var}(O_T)</annotation></semantics></math>
+is the corresponding variance. Under the proportional hazards
+assumption, this statistic is asymptotically standard normal.</p>
+<p>In addition, a Cox proportional hazards model is fit to the observed
+data to estimate the hazard ratio (HR) between treatment and control
+arms.</p>
+<p><strong>Conditional Power:</strong></p>
+<p>Using the observed Z-statistic, the information fraction at the
+current look, and the efficacy boundary provided by East Horizon, the
+conditional power is computed. This represents the probability of
+eventually crossing the final efficacy boundary, given the interim data
+and assuming the observed treatment effect continues for the remainder
+of the trial.</p>
+<p><strong>Sample Size Re-Estimation (SSR):</strong></p>
+<p>Based on the computed conditional power, the total number of events
+is re-estimated using one of two SSR rules:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Condition</th>
+<th>Rule</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>The SSR function scale for promising zone selected in East Horizon
+is “Continuous” (<code>AdaptInfo$SSRFuncScale == 0</code>)</td>
+<td>If the conditional power falls between the lower and upper
+promising-zone thresholds selected in East Horizon
+(<code>AdaptInfo$PromZoneMin</code> and
+<code>AdaptInfo$PromZoneMax</code>), the maximum number of event is
+multiplied by the maximum sample size multiplier input specified in East
+Horizon (<code>AdaptInfo$MaxSSMultInp$MaxSSMult</code>).</td>
+</tr>
+<tr class="even">
+<td>The SSR function scale for promising zone selected in East Horizon
+is “Step” (<code>AdaptInfo$SSRFuncScale == 1</code>)</td>
+<td>The conditional power is mapped to intervals specified in East
+Horizon (<code>AdaptInfo$MaxSSMultInp$From</code>,
+<code>AdaptInfo$MaxSSMultInp$To</code>), each associated with a specific
+sample size multiplier specified in East Horizon
+(<code>AdaptInfo$MaxSSMultInp$MaxSSMult</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>If the conditional power falls outside the promising zone, the
+original planned number of events is retained.</p>
+<p>Finally, the Z-statistic is compared against the efficacy boundary
+provided by East Horizon. At interim looks, crossing the boundary
+results in an early efficacy decision, while at the final look a lack of
+boundary crossing results in a futility decision. Both the decision and
+the re-estimated total number of events (<code>ReEstEvents</code>) are
+returned to East Horizon.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmTimeToEventOutcomeAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="example-5---analysis-with-stratification">Example 5 - Analysis with Stratification<a class="anchor" aria-label="anchor" href="#example-5---analysis-with-stratification"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeStratification.R" class="external-link alert-link">AnalyzeStratification.R</a>
+</p>
+</div>
+<p>This example illustrates how to customize the analysis when turning
+on <code>Stratification</code> in East Horizon. Stratification is
+commonly used to adjust for prognostic baseline covariates and to
+improve the efficiency and interpretability of treatment comparisons in
+confirmatory trials.</p>
+<p>In this implementation, the look timing and decision boundaries
+continue to be controlled by East Horizon, while the test statistic and
+hazard ratio are computed using a stratified log-rank approach in R.</p>
+<p><strong>Analysis Overview</strong></p>
+<p>At each interim or final analysis, the function:</p>
+<ol style="list-style-type: decimal">
+<li>Determines the target number of events corresponding to the current
+look.</li>
+<li>Censors the data at the analysis time implied by this target.</li>
+<li>Constructs a stratified log-rank test using the stratification
+factors specified in the study design.</li>
+<li>Fits a stratified Cox proportional hazards model to estimate the
+hazard ratio (HR).</li>
+<li>Compares the standardized test statistic to the efficacy boundary
+supplied by East Horizon.</li>
+</ol>
+<p>The stratification factors defined in East Horizon
+(<code>DesignParam$TestStratFactors</code>) are used.</p>
+<p><strong>Test Statistic</strong></p>
+<p>The stratified log-rank test is implemented using
+<code><a href="https://rdrr.io/pkg/survival/man/survdiff.html" class="external-link">survival::survdiff()</a></code> with strata terms dynamically
+constructed from the design inputs. The chi-square statistic returned by
+the function is converted to a signed Z-statistic:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mi>±</mi><msqrt><msup><mi>χ</mi><mn>2</mn></msup></msqrt></mrow><annotation encoding="application/x-tex">Z = \pm \sqrt{\chi^2}</annotation></semantics></math></p>
+<p>The sign of the statistic is determined by the estimated hazard
+ratio:</p>
+<ul>
+<li>If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">HR</mtext><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\text{HR} \lt 1</annotation></semantics></math>,
+the statistic is negative (favoring treatment).</li>
+<li>If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">HR</mtext><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\text{HR} \ge 1</annotation></semantics></math>,
+the statistic is positive.</li>
+</ul>
+<p>Finally, the Z-statistic is compared against the efficacy boundary
+provided by East Horizon. At interim looks, crossing the boundary
+results in an early efficacy decision, while at the final look a lack of
+boundary crossing results in a futility decision.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmTimeToEventOutcomeAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="example-6---analysis-with-subpopulations-using-gmcp">Example 6 - Analysis with Subpopulations (Using gMCP)<a class="anchor" aria-label="anchor" href="#example-6---analysis-with-subpopulations-using-gmcp"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeSubpopulation.R" class="external-link alert-link">AnalyzeSubpopulation.R</a>
+</p>
+</div>
+<p>This example illustrates how to customize the analysis when turning
+on <code>Stratification</code> and <code>Subpopulations</code> in East
+Horizon, while controlling the family-wise Type I error rate using a
+graphical multiple comparison procedure (gMCP).</p>
+<p>The analysis is based on a single event-driven look schedule defined
+for the full population, while treatment effects are evaluated
+simultaneously in the full population, and in each subpopulation.</p>
+<p><strong>Analysis Overview</strong></p>
+<p>At each interim or final analysis, the function:</p>
+<ol style="list-style-type: decimal">
+<li>Determines the analysis time based on the cumulative number of
+events in the full population. Note: Analysis times can instead be based
+on a subpopulation by modifying this code accordingly.</li>
+<li>Prepares censored survival data up to this analysis time.</li>
+<li>Identifies the full population and each predefined subpopulation
+using logical filters derived from baseline covariates.</li>
+<li>For each population:
+<ul>
+<li>Selects the applicable stratification factors</li>
+<li>Computes a stratified log-rank test statistic</li>
+<li>Fits a stratified Cox model to estimate the hazard ratio</li>
+</ul>
+</li>
+<li>Collects population-specific test statistics and applies the
+graphical MCP to determine which null hypotheses can be rejected.</li>
+<li>Maps MCP rejection flags to East Horizon decision codes.</li>
+</ol>
+<p>The subpopulation parameters defined in East Horizon are used
+(<code>DesignParam$NumSubPops</code>,
+<code>DesignParam$SubpopName</code>, <code>DesignParam$SubPops</code>,
+<code>DesignParam$TransitionMatrix</code>).</p>
+<p><strong>Multiple Testing Control</strong></p>
+<p>The graphical multiple comparison procedure is implemented using the
+<code>gMCPLite</code> package. For each population, raw p-values are
+computed from the standardized test statistics. Alpha is allocated
+across hypotheses according to prespecified weights and propagated
+across populations via a transition matrix, allowing flexible testing
+strategies such as hierarchical or parallel testing across
+populations.</p>
+<p>Finally, the Z-statistic is compared against the efficacy boundary
+provided by East Horizon. At interim looks, crossing the boundary
+results in an early efficacy decision, while at the final look a lack of
+boundary crossing results in a futility decision.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmTimeToEventOutcomeAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

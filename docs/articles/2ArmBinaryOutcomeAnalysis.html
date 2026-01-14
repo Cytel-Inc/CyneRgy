@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -84,10 +86,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>2-Arm, Binary Outcome - Analysis</h1>
-                        <h4 data-toc-skip class="author">J. Kyle
-Wathen</h4>
+                        <h4 data-toc-skip class="author">J. Kyle Wathen
+and Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>2ArmBinaryOutcomeAnalysis.Rmd</code></div>
@@ -120,14 +122,27 @@ following configuration:
 <li>
 <strong>Task:</strong> Any
 </li>
+<li>
+<strong>Statistical Design:</strong>
+</li>
+<ul style="margin-bottom:0">
+<li>
+<em>Fixed Sample</em> or <em>Group Sequential</em> for Examples 1, 2, 3,
+4
+</li>
+<li>
+<em>Group Sequential with Sample Size Re-Estimation</em> for Example 5
+</li>
+</ul>
 </ul>
 </div>
 <div class="alert alert-warning" role="alert">
 <p style="margin-bottom:0">
-<strong>Note:</strong> This example is compatible with both Fixed Sample
-and Group Sequential statistical designs. The R code automatically
-detects whether interim look information (<em>LookInfo</em>) is
-available and adjusts the analysis parameters accordingly.
+<strong>Note:</strong> Examples 1, 2, 3, and 4 are compatible with both
+<em>Fixed Sample</em> and <em>Group Sequential</em> statistical designs.
+The R code automatically detects whether interim look information
+(<em>LookInfo</em>) is available and adjusts the analysis parameters
+accordingly.
 </p>
 </div>
 <div class="section level2">
@@ -153,20 +168,27 @@ RStudio.</p>
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R" class="external-link">AnalyzeUsingEastManualFormula.R</a>
-- Contains a function named <em>AnalyzeUsingEastManualFormula</em> to
-demonstrate the R code necessary for Example 1 as described
-below.</p></li>
+- Contains a function named <em>AnalyzeUsingEastManualFormula</em> that
+computes the two-sample Z-statistic for a binary endpoint using Formula
+24.2 from the East manual.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R" class="external-link">AnalyzeUsingPropTest.R</a>
-- Contains a function named <em>AnalyzeUsingPropTest</em> to demonstrate
-the R code necessary for Example 2 as described below.</p></li>
+- Contains a function named <em>AnalyzeUsingPropTest</em> that performs
+the analysis using R’s built-in <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">prop.test()</a></code>
+function.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R" class="external-link">AnalyzeUsingPropLimitsOfCI.R</a>
-- Contains a function named <em>AnalyzeUsingPropLimitsOfCI</em> to
-demonstrate the R code necessary for Example 3 as described
-below.</p></li>
+- Contains a function named <em>AnalyzeUsingPropLimitsOfCI</em> that
+bases interim and final decisions on confidence interval limits rather
+than East Horizon-provided boundaries. The function uses user-defined
+parameters (MAV, TV, and confidence level) to implement a Go / No-Go
+decision framework.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R" class="external-link">AnalyzeUsingBetaBinomial.R</a>
-- Contains a function named <em>AnalyzeUsingBetaBinomial</em> to
-demonstrate the R code necessary for Example 4 as described
-below.</p></li>
+- Contains a function named <em>AnalyzeUsingBetaBinomial</em> that
+performs a Bayesian analysis for binary outcomes using Beta-Binomial
+conjugate priors.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeBinarySSR.R" class="external-link">AnalyzeBinarySSR.R</a>
+- Contains a function named <em>AnalyzeBinarySSR</em> that extends the
+standard binary analysis to support conditional power–based sample size
+re-estimation (SSR) in a group sequential design.</p></li>
 </ol>
 <p>In addition, if you would like to experiment with these examples to
 and would like some code to help you get started we have provided
@@ -477,6 +499,85 @@ affects operating characteristics and overall conclusions.</p>
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>
 <p><img src="2ArmBinaryOutcomeAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="example-5---analysis-with-sample-size-re-estimation">Example 5 - Analysis With Sample Size Re-Estimation<a class="anchor" aria-label="anchor" href="#example-5---analysis-with-sample-size-re-estimation"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeBinarySSR.R" class="external-link alert-link">AnalyzeBinarySSR.R</a>
+</p>
+</div>
+<p>This example illustrates how to customize the analysis when using
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code>
+in East Horizon. The key difference from the previous examples is that
+the analysis function is responsible not only for producing a test
+statistic and interim decision, but also for computing a re-estimated
+total number of completers based on interim results. This is achieved
+using a conditional power–based SSR approach, which allows the trial to
+increase its planned number of completers when interim results fall
+within a “promising zone”.</p>
+<p><strong>Test Statistic:</strong></p>
+<p>A pooled-variance Z-statistic is computed based on the observed
+difference in response rates between the experimental and control
+arms:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><msub><mi>p</mi><mrow><mi>e</mi><mi>x</mi><mi>p</mi></mrow></msub><mo>−</mo><msub><mi>p</mi><mrow><mi>c</mi><mi>t</mi><mi>r</mi><mi>l</mi></mrow></msub></mrow><msqrt><mrow><mover><mi>p</mi><mo accent="true">̂</mo></mover><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mover><mi>p</mi><mo accent="true">̂</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><msub><mi>n</mi><mrow><mi>e</mi><mi>x</mi><mi>p</mi></mrow></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>n</mi><mrow><mi>c</mi><mi>t</mi><mi>r</mi><mi>l</mi></mrow></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">Z = \frac{p_{exp} - p_{ctrl}}{\sqrt{\hat{p} \cdot (1 - \hat{p}) \cdot ( \frac{1}{n_{exp}} + \frac{1}{n_{ctrl}} )}}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>p</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{p}</annotation></semantics></math>
+is the pooled response rate across both arms.</p>
+<p><strong>Conditional Power:</strong></p>
+<p>Using the observed Z-statistic, the information fraction at the
+current look, and the efficacy boundary provided by East Horizon, the
+conditional power is computed. This represents the probability of
+eventually crossing the final efficacy boundary, given the interim
+data.</p>
+<p><strong>Sample Size Re-Estimation (SSR):</strong></p>
+<p>Based on the computed conditional power, the total number of
+completers is re-estimated using one of two SSR rules:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Condition</th>
+<th>Rule</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>The SSR function scale for promising zone selected in East Horizon
+is “Continuous” (<code>AdaptInfo$SSRFuncScale == 0</code>)</td>
+<td>If the conditional power falls between the lower and upper
+promising-zone thresholds selected in East Horizon
+(<code>AdaptInfo$PromZoneMin</code> and
+<code>AdaptInfo$PromZoneMax</code>), the maximum number of completers is
+multiplied by the maximum sample size multiplier input specified in East
+Horizon (<code>AdaptInfo$MaxSSMultInp$MaxSSMult</code>).</td>
+</tr>
+<tr class="even">
+<td>The SSR function scale for promising zone selected in East Horizon
+is “Step” (<code>AdaptInfo$SSRFuncScale == 1</code>)</td>
+<td>The conditional power is mapped to intervals specified in East
+Horizon (<code>AdaptInfo$MaxSSMultInp$From</code>,
+<code>AdaptInfo$MaxSSMultInp$To</code>), each associated with a specific
+sample size multiplier specified in East Horizon
+(<code>AdaptInfo$MaxSSMultInp$MaxSSMult</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>If the conditional power falls outside the promising zone, the
+original planned number of completers is retained.</p>
+<p>Finally, the Z-statistic is compared against the efficacy boundary
+provided by East Horizon. At interim looks, crossing the boundary
+results in an early efficacy decision, while at the final look a lack of
+boundary crossing results in a futility decision. Both the decision and
+the re-estimated total number of completers
+(<code>ReEstCompleters</code>) are returned to East Horizon.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmBinaryOutcomeAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

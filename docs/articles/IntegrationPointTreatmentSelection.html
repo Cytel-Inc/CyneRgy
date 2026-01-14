@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointTreatmentSelection.Rmd</code></div>
@@ -201,9 +203,82 @@ following study objectives and endpoint types:</p>
 <h3 id="east-horizon-design">East Horizon Design<a class="anchor" aria-label="anchor" href="#east-horizon-design"></a>
 </h3>
 <details><summary>
-This integration point is available in East Horizon Design for the
-following tests (click to expand/collapse):
-</summary><table style="width:100%;" class="table">
+Click to expand/collapse
+</summary><p>This integration point is available in East Horizon Design for the
+following study objectives and endpoint types:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th></th>
+<th>Time to Event</th>
+<th>Binary</th>
+<th>Continuous</th>
+<th>Continuous with repeated measures</th>
+<th>Count</th>
+<th>Composite</th>
+<th>Dual TTE-TTE</th>
+<th>Dual TTE-Binary</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Two Arm Confirmatory</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Two Arm Confirmatory - Multiple Endpoints</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Multiple Arm Confirmatory</td>
+<td>🔜</td>
+<td>🔜</td>
+<td>🔜</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Dose Finding</td>
+<td>-</td>
+<td>-</td>
+<td>🔜</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>This integration point is available in East Horizon Design for the
+following tests:</p>
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="36%">
 <col width="26%">

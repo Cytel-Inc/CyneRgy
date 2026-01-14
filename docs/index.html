@@ -32,7 +32,7 @@
 
     <a class="navbar-brand me-2" href="index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,8 @@
     <li><a class="dropdown-item" href="articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="articles/ExampleOutline.html">Examples</a></li>
@@ -93,6 +95,11 @@
 </h1>
 <p>R integration with Cytel’s products provides a highly efficient way to create custom adaptive clinical trial designs and enhance your simulation capabilities, without requiring you to develop an entire R code base.</p>
 <p>The CyneRgy R package demonstrates the synergy between R and Cytel’s products such as East Horizon, providing tools, documentation, templates, and examples. It also offers a streamlined R experience in RStudio, simplifying the creation of new custom scripts.</p>
+<div class="alert alert-danger" role="alert">
+<p style="margin-bottom:0">
+Important (January 2026): <strong>ArrivalTime</strong> is a new required parameter for the Response integration point (binary, continuous and TTE outcomes). Existing R scripts must be updated to include this parameter in the function definition, even if it is not used. See <a href="articles/IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a> for more information.
+</p>
+</div>
 </div>
 <div class="section level1">
 <h1 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>

@@ -1,6 +1,6 @@
 ---
 title: "2-Arm, Time-To-Event Outcome - Patient Simulation"
-author: "Valeria A. G. Mazzanti, J. Kyle Wathen"
+author: "Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
@@ -14,7 +14,12 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Number of endpoints:** Single Endpoint</li>
 <li>**Endpoint type:** Time-to-Event Outcome</li>
 <li>**Task:** Any</li>
+<li>**Stratification turned on**: For Example 3</li>
 </ul></div>
+
+<div class="alert alert-warning" role="alert"><p style="margin-bottom:0">
+Important: **ArrivalTime** is a new required parameter. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used. See <a href="IntegrationPointResponseTimeToEvent.html" class="alert-link">**Integration Point: Response - Time-to-Event Outcome**</a> for more information.
+</p></div>
 
 # Introduction
 
@@ -33,9 +38,13 @@ Running the command above will load the RStudio project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R) you will find the following R files:
 
-1. [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R) - This file provides an example R function to simulate patient time-to-event data from a Weibull distribution.  
+1. [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R) - This file provides an example R function to simulate patient time-to-event data from a Weibull distribution.
 
-2. [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R) - This file provides an example R function to simulate patient data from a mixture of exponential distributions. The mixture is based on having any number of patient groups in the study where each group has a different exponential distribution for simulating the time-to-event from. 
+2. [HelperFunctionsWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R) - This file contains functions to assist in the computation of Weibull parameters.
+
+3. [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R) - This file provides an example R function to simulate patient data from a mixture of exponential distributions. The mixture is based on having any number of patient groups in the study where each group has a different exponential distribution for simulating the time-to-event from.
+
+4. [SimulatePatientOutcomeStratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R) - Contains a function named *SimulatePatientOutcomeStratification* that extends the standard TTE response generation to support stratification.
 
 # Example 1 - Simulation of Patient Time-To-Event Data from a Weibull Distribution
 
@@ -190,6 +199,36 @@ lines( vTime, vHazExp, lty =2, col =4, lwd=2)
 plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazard Ratio", main = "Hazard Ratio with Decreasing Hazards")
 ```
 
+## Notes about the Exponential and Weibull Distributions
+
+In R, the Weibull distribution is defined by a shape parameter $\alpha$ and a scale parameter $\sigma$, with a probability density function (PDF) given by:
+
+$$
+f(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
+$$
+
+Its corresponding hazard function is:
+
+$$
+h(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1}
+$$
+
+The Exponential distribution in R is parameterized by a rate parameter $\lambda$, with a PDF given by:
+
+$$
+f(x) = \lambda e^{-\lambda x}
+$$
+
+Its hazard function remains constant:
+
+$$
+h(x) = \lambda
+$$
+
+We can see that the Exponential distribution is a special case of the Weibull distribution, obtained by setting the shape parameter $\alpha = 1$ and the scale parameter $\sigma = \frac{1}{\lambda}$.  
+
+Functions to assist in the computation of Weibull parameters can be found in [HelperFunctionsWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R).
+
 # Example 2 - Simulation of Patient Time-To-Event Data from a Mixture of Distributions
 
 <div class="alert alert-primary" role="alert">
@@ -286,32 +325,39 @@ We are using two subgroups. Both subgroups have the same Hazard Ratio (HR), $HR 
 
 The intent of the example is to illustrate the impact that the patient subgroup may have on the operating characteristics of the design.
 
-# Notes about the Exponential and Weibull Distributions
+# Example 3 - Response Generation with Stratification
 
-In R, the Weibull distribution is defined by a shape parameter $\alpha$ and a scale parameter $\sigma$, with a probability density function (PDF) given by:
+<div class="alert alert-primary" role="alert">
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R" class="alert-link">SimulatePatientOutcomeStratification.R</a></p>
+</div>
 
-$$
-f(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
-$$
+This example illustrates how to customize the response generation when turning on `Stratification` in East Horizon. Unlike the previous examples, where a single set of survival parameters applies to all patients in an arm, this example allows different survival characteristics for each stratum, while still supporting two arms.
 
-Its corresponding hazard function is:
+For each stratum, the survival parameters provided in East Horizon are converted into arm-specific hazard rates. Patient survival times are then simulated independently within each stratum using an Exponential distribution. This approach enables realistic modeling of heterogeneous patient populations where baseline risk differs across strata.
 
-$$
-h(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1}
-$$
+The behavior of the response simulation depends on the value selected for Survival Method in East Horizon:
 
-The Exponential distribution in R is parameterized by a rate parameter $\lambda$, with a PDF given by:
+- If `SurvMethod = 1` (*Hazard Rates*), the hazard rates provided for each stratum and arm are used directly to simulate patient survival times.
+- If `SurvMethod = 2` (*Cumulative % Survival*), the cumulative survival value at the specified time point is converted into a constant hazard rate for each stratum and arm.
+- If `SurvMethod = 3` (*Median Survival Times*), the median survival time is converted into a hazard rate using $\lambda = \frac{\log(2)}{\text{Median}}$.
 
-$$
-f(x) = \lambda e^{-\lambda x}
-$$
+The stratum ID (`StratumID`) input parameter is a vector indicating the stratum assignment for each subject. Subjects sharing the same value belong to the same stratum.
 
-Its hazard function remains constant:
+The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
-$$
-h(x) = \lambda
-$$
+```{r echo=FALSE,  warning=FALSE, fig.retina=3}
+CyneRgy::PlotExampleFlowchart(
+    lIntPoints = list(
+        "Response" = c(
+            "Identify unique strata from StratumID",
+            "Loop through strata",
+            "Extract stratum-specific survival parameters",
+            "Convert survival parameters to hazard rates",
+            "Loop through patients within stratum",
+            "Simulate survival times using exponential distribution",
+            "Combine responses across strata"
+        )
+    )
+)
+```
 
-We can see that the Exponential distribution is a special case of the Weibull distribution, obtained by setting the shape parameter $\alpha = 1$ and the scale parameter $\sigma = \frac{1}{\lambda}$.  
-
-Functions to assist in the computation of Weibull parameters can be found in [HelperFunctionsWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R).

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="active nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle Wathen,
 Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>ExampleOutline.Rmd</code></div>
@@ -114,7 +116,9 @@ blanks.</li>
 <div class="section level2">
 <h2 id="enrollment">Enrollment<a class="anchor" aria-label="anchor" href="#enrollment"></a>
 </h2>
-<details><summary><strong>Arrival Times with Poisson Process</strong> <span class="badge text-bg-primary ms-1">Any # of Arms</span><span class="badge text-bg-danger ms-1">Any # of Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span>
+<details><summary><strong>Arrival Times with Poisson Process</strong> <span class="badge text-bg-primary ms-1">Any # of Arms</span><span class="badge text-bg-danger ms-1">Single/Dual/Multi
+Endpoints</span><span class="badge text-bg-warning ms-1">Any
+Outcome</span>
 </summary>
 This example demonstrates how to add the ability to generate patient
 arrival times according to a Poisson process with a ramp-up by
@@ -125,7 +129,9 @@ example.</a>
 <div class="section level2">
 <h2 id="randomization">Randomization<a class="anchor" aria-label="anchor" href="#randomization"></a>
 </h2>
-<details><summary><strong>Randomization of Subjects</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Any # of Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span>
+<details><summary><strong>Randomization of Subjects</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single/Dual/Multi
+Endpoints</span><span class="badge text-bg-warning ms-1">Any
+Outcome</span>
 </summary>
 This example illustrates four ways to customize how subjects are
 assigned to treatment arms in East Horizon: using a uniform
@@ -161,12 +167,13 @@ simulation in East Horizon for a two-arm trial with a continuous
 outcome: using a mixture distribution, with or without the mixture
 proportion sampled from a Beta distribution.<br><a href="2ArmNormalOutcomePatientSimulation.html">Click here to view the
 full example.</a>
-</details><details><summary><strong>Time-To-Event Outcome – Patient Simulation</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span>
+</details><details><summary><strong>Time-To-Event Outcome – Patient Simulation</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-info ms-1">Stratification</span>
 </summary>
 This example demonstrates two ways to customize the patient outcome
 simulation in East Horizon for a two-arm trial with a time-to-event
 outcome: using a Weibull distribution, and using a mixture of
-exponential distributions. <a href="2ArmTimeToEventOutcomePatientSimulation.html">Click here to view
+exponential distributions. It also presents additional examples using
+Stratification. <a href="2ArmTimeToEventOutcomePatientSimulation.html">Click here to view
 the full example.</a>
 </details><details><summary><strong>Binary Outcome – Patient Simulation</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span>
 </summary>
@@ -194,6 +201,12 @@ This example demonstrates how to customize the patient outcome
 simulation in East Horizon for two-arm trials with dual endpoints
 (TTE-TTE). <a href="DEPPatientSimulation.html">Click here to view the
 full example.</a>
+</details><details><summary><strong>Multiple Endpoints – Patient Simulation</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Multiple Endpoints</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span>
+</summary>
+This example demonstrates how to customize the patient outcome
+simulation in East Horizon for two-arm trials with multiple endpoints
+(Continuous, Binary and/or TTE). <a href="MEPPatientSimulation.html">Click here to view the full
+example.</a>
 </details><details><summary><strong>Childhood Anxiety Trial</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span>
 </summary>
 This example covers a specific situation where the patient data
@@ -204,28 +217,33 @@ clinical trial in childhood anxiety.<br><a href="ChildhoodAnxiety.html">Click he
 <div class="section level2">
 <h2 id="analysis-test-statistic">Analysis (Test Statistic)<a class="anchor" aria-label="anchor" href="#analysis-test-statistic"></a>
 </h2>
-<details><summary><strong>Continuous Outcome – Analysis</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span>
+<details><summary><strong>Continuous Outcome – Analysis</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-success ms-1">SSR</span>
 </summary>
 This example demonstrates three ways to customize the statistical test
 in East Horizon for a two-arm trial with a continuous outcome: using a
 formula from the East manual, using the <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test()</a></code> function,
-and using confidence interval limits for Go/No-Go decision-making. <a href="2ArmNormalOutcomeAnalysis.html">Click here to view the full
+and using confidence interval limits for Go/No-Go decision-making. It
+also presents an additional example using Sample Size Re-estimation. <a href="2ArmNormalOutcomeAnalysis.html">Click here to view the full
 example.</a>
-</details><details><summary><strong>Time-To-Event Outcome – Analysis</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span>
+</details><details><summary><strong>Time-To-Event Outcome – Analysis</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-success ms-1">SSR</span><span class="badge text-bg-info ms-1">Stratification &amp;
+Subpopulation</span>
 </summary>
 This example demonstrates three ways to customize the statistical test
 in East Horizon for a two-arm trial with a time-to-event outcome: using
 formulas from the East manual, using the
 <code><a href="https://rdrr.io/pkg/survival/man/survdiff.html" class="external-link">survival::survdiff()</a></code> function, and using confidence
-interval limits for Go/No-Go decision-making. <a href="2ArmTimeToEventOutcomeAnalysis.html">Click here to view the full
+interval limits for Go/No-Go decision-making. It also presents
+additional examples using Sample Size Re-estimation, Stratification, and
+Subpopulation options. <a href="2ArmTimeToEventOutcomeAnalysis.html">Click here to view the full
 example.</a>
-</details><details><summary><strong>Binary Outcome – Analysis</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span>
+</details><details><summary><strong>Binary Outcome – Analysis</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-success ms-1">SSR</span>
 </summary>
 This example demonstrates four ways to customize the statistical test in
 East Horizon for a two-arm trial with a binary outcome: using a formula
 from the East manual, using the <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">prop.test()</a></code> function, using
 confidence interval limits for Go/No-Go decision-making, and using a
-Bayesian Beta-Binomial model. <a href="2ArmBinaryOutcomeAnalysis.html">Click here to view the full
+Bayesian Beta-Binomial model. It also presents an additional example
+using Sample Size Re-estimation. <a href="2ArmBinaryOutcomeAnalysis.html">Click here to view the full
 example.</a>
 </details><details><summary><strong>Repeated Measures – Analysis</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Repeated Measures</span>
 </summary>
@@ -264,7 +282,7 @@ view the full example.</a>
 </details><hr>
 </div>
 <div class="section level2">
-<h2 id="multiplicity-adjustment">Multiplicity Adjustment<a class="anchor" aria-label="anchor" href="#multiplicity-adjustment"></a>
+<h2 id="multiplicity-adjustment-dual-endpoints">Multiplicity Adjustment (Dual Endpoints)<a class="anchor" aria-label="anchor" href="#multiplicity-adjustment-dual-endpoints"></a>
 </h2>
 <details><summary><strong>Dual Endpoints - Multiplicity Adjustment</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-warning ms-1">TTE-Binary</span>
 </summary>
@@ -272,6 +290,16 @@ This example demonstrates how to compute decisions for a dual-endpoint
 fixed sample clinical trial using the Bonferroni adjustment for multiple
 testing. <a href="DEPDecisionsUsingMCP.html">Click here to view the full
 example.</a>
+</details><hr>
+</div>
+<div class="section level2">
+<h2 id="design-multiple-endpoints">Design (Multiple Endpoints)<a class="anchor" aria-label="anchor" href="#design-multiple-endpoints"></a>
+</h2>
+<details><summary><strong>Multiple Endpoints - Design</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Multiple Endpoints</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span>
+</summary>
+This example demonstrates how to implement custom decision-making logic
+for multiple endpoints designs. <a href="MEPDesign.html">Click here to
+view the full example.</a>
 </details><hr>
 </div>
 <div class="section level2">
@@ -291,7 +319,7 @@ This example demonstrates the computation of Bayesian assurance, or
 probability of success, using a bi-modal distribution prior featuring a
 two-arm trial with time-to-event outcome.<br><a href="BayesianAssuranceTimeToEvent.html">Click here to view the full
 example.</a>
-</details><details><summary><strong>Consecutive Studies, Binary</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span>
+</details><details><summary><strong>Consecutive Studies, Binary</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-secondary ms-1">FMS</span>
 </summary>
 This example demonstrates the computation of conditional probability of
 success in consecutive studies. It features a sequential design
@@ -308,7 +336,7 @@ by a Phase 3 trial, both with continuous outcome. The objective is to
 understand how conducting a Phase 2 study can reduce the risk associated
 with the Phase 3 trial.<br><a href="ConsecutiveStudiesContinuous.html">Click here to view the full
 example.</a>
-</details><details><summary><strong>Consecutive Studies, Continuous &amp; TTE</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span>
+</details><details><summary><strong>Consecutive Studies, Continuous &amp; TTE</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-secondary ms-1">FMS</span>
 </summary>
 This example demonstrates the computation of Bayesian assurance, or
 probability of success, in consecutive studies: a Phase 2 trial with

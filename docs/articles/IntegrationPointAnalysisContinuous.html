@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysisContinuous.Rmd</code></div>
@@ -207,8 +209,8 @@ below for the expected output for this integration point:</p>
 of the following members: <code>Decision</code>,
 <code>AnalysisTime</code>, <code>TestStat</code>, <code>Delta</code>,
 <code>CtrlCompleters</code>, <code>TrmtCompleters</code>,
-<code>CtrlPi</code>, <code>StdError</code>. See below for more
-information.</td>
+<code>CtrlPi</code>, <code>StdError</code>, <code>ReEstEvents</code>,
+<code>ReEstCompleters</code>. See below for more information.</td>
 </tr></tbody>
 </table>
 <p>The output list can take different forms.</p>
@@ -252,6 +254,12 @@ equivalent to look time; for final analysis, equivalent to study
 duration.</td>
 </tr>
 <tr class="odd">
+<td><strong>ReEstCompleters</strong></td>
+<td>Integer</td>
+<td>Re-estimated number of completers. Only required for
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code>.</td>
+</tr>
+<tr class="even">
 <td><strong>ErrorCode</strong></td>
 <td>Integer</td>
 <td>Optional. Can be used to handle errors in your script:<br>–
@@ -271,6 +279,10 @@ stands for efficacy in the final look. Use the functions
 <code><a href="../reference/GetDecisionString.html">CyneRgy::GetDecisionString</a></code> and
 <code><a href="../reference/GetDecision.html">CyneRgy::GetDecision</a></code> to get decision values in a simple
 way.</p>
+<p><strong>Note for
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code></strong>:
+<em>ReEstCompleters</em> is required. Only Option 1 is supported, all
+other output options are not available.</p>
 </div>
 <div class="section level4">
 <h4 id="option-2-teststat-expected-members-of-the-output-list">Option 2 (TestStat): Expected Members of the Output List<a class="anchor" aria-label="anchor" href="#option-2-teststat-expected-members-of-the-output-list"></a>
@@ -657,7 +669,8 @@ regardless of whether the user has specified any custom parameters in
 East Horizon.</p>
 <p>Detailed templates with step-by-step explanations are available here:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R" class="external-link">Analyze.Continuous.R</a>
-for 2-Arm and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.MAMS.R" class="external-link">Analyze.Continuous.MAMS.R</a>
+for 2-Arm, <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.SSR.R" class="external-link">Analyze.Continuous.SSR.R</a>
+for 2-Arm with SSR, and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.MAMS.R" class="external-link">Analyze.Continuous.MAMS.R</a>
 for Multiple Arm.</p>
 <div class="section level3">
 <h3 id="for-study-objective-two-arm-confirmatory-1">For <code>Study Objective = Two Arm Confirmatory</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory-1"></a>
@@ -729,6 +742,21 @@ for Multiple Arm.</p>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nDecision</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
+<div class="section level5">
+<h5 id="for-statistical-design-group-sequential-with-sample-size-re-estimation">For
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-with-sample-size-re-estimation"></a>
+</h5>
+<pre><code><span><span class="va">PerformDecision</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
+<span>    </span>
+<span>    <span class="va">nDecision</span>         <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize decision</span></span>
+<span>    <span class="va">nReEstCompleters</span>  <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Initialize number of completers</span></span>
+<span>    <span class="co"># Write the actual code here.</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span> Decision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nDecision</span> <span class="op">)</span>, ReEstCompleters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nReEstCompleters</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
 </div>
 <div class="section level4">
 <h4 id="minimal-template-for-option-2-teststat">Minimal Template for Option 2 (TestStat)<a class="anchor" aria-label="anchor" href="#minimal-template-for-option-2-teststat"></a>
@@ -773,8 +801,8 @@ for Multiple Arm.</p>
 <span><span class="op">}</span></span></code></pre>
 </div>
 <div class="section level5">
-<h5 id="for-statistical-design-group-sequential-with-sample-size-re-estimation">For
-<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-with-sample-size-re-estimation"></a>
+<h5 id="for-statistical-design-group-sequential-with-sample-size-re-estimation-1">For
+<code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code><a class="anchor" aria-label="anchor" href="#for-statistical-design-group-sequential-with-sample-size-re-estimation-1"></a>
 </h5>
 <pre><code><span><span class="va">ComputeTestStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">SimData</span>, <span class="va">DesignParam</span>, <span class="va">LookInfo</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
@@ -1016,6 +1044,7 @@ Outcome - Analysis</strong></a>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R" class="external-link">AnalyzeUsingEastManualFormulaNormal.R</a></li>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R" class="external-link">AnalyzeUsingTTestNormal.R</a></li>
 <li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R" class="external-link">AnalyzeUsingMeanLimitsOfCI.R</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R" class="external-link">AnalyzeNormalSSR.R</a></li>
 </ul>
 </li>
 <li>

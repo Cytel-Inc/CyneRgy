@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -85,9 +87,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>2 Arm, Time-To-Event Outcome - Patient Simulation</h1>
                         <h4 data-toc-skip class="author">Valeria A. G.
-Mazzanti, J. Kyle Wathen</h4>
+Mazzanti, J. Kyle Wathen, and Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>2ArmTimeToEventOutcomePatientSimulation.Rmd</code></div>
@@ -120,7 +122,20 @@ following configuration:
 <li>
 <strong>Task:</strong> Any
 </li>
+<li>
+<strong>Stratification turned on</strong>: For Example 3
+</li>
 </ul>
+</div>
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">
+Important: <strong>ArrivalTime</strong> is a new required parameter.
+Existing R scripts must be updated to include this parameter in the
+function definition, even if it is not used. See
+<a href="IntegrationPointResponseTimeToEvent.html" class="alert-link"><strong>Integration
+Point: Response - Time-to-Event Outcome</strong></a> for more
+information.
+</p>
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -145,12 +160,19 @@ directory of this example</a> you will find the following R files:</p>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R" class="external-link">SimulatePatientSurvivalWeibull.R</a>
 - This file provides an example R function to simulate patient
 time-to-event data from a Weibull distribution.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R" class="external-link">HelperFunctionsWeibull.R</a>
+- This file contains functions to assist in the computation of Weibull
+parameters.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R" class="external-link">SimulatePatientSurvivalMixtureExponentials.R</a>
 - This file provides an example R function to simulate patient data from
 a mixture of exponential distributions. The mixture is based on having
 any number of patient groups in the study where each group has a
 different exponential distribution for simulating the time-to-event
 from.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R" class="external-link">SimulatePatientOutcomeStratification.R</a>
+- Contains a function named
+<em>SimulatePatientOutcomeStratification</em> that extends the standard
+TTE response generation to support stratification.</p></li>
 </ol>
 </div>
 <div class="section level2">
@@ -322,6 +344,40 @@ for the values of the user-defined parameters used in this example.</p>
 data differently from East Horizon’s or East’s default simulation
 approach.</p>
 <p><img src="2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-7-1.png" width="700"><img src="2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="notes-about-the-exponential-and-weibull-distributions">Notes about the Exponential and Weibull Distributions<a class="anchor" aria-label="anchor" href="#notes-about-the-exponential-and-weibull-distributions"></a>
+</h3>
+<p>In R, the Weibull distribution is defined by a shape parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+and a scale parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>,
+with a probability density function (PDF) given by:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>α</mi></msup></mrow></msup></mrow><annotation encoding="application/x-tex">
+f(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
+</annotation></semantics></math></p>
+<p>Its corresponding hazard function is:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
+h(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1}
+</annotation></semantics></math></p>
+<p>The Exponential distribution in R is parameterized by a rate
+parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>,
+with a PDF given by:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>λ</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi><mi>x</mi></mrow></msup></mrow><annotation encoding="application/x-tex">
+f(x) = \lambda e^{-\lambda x}
+</annotation></semantics></math></p>
+<p>Its hazard function remains constant:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">
+h(x) = \lambda
+</annotation></semantics></math></p>
+<p>We can see that the Exponential distribution is a special case of the
+Weibull distribution, obtained by setting the shape parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha = 1</annotation></semantics></math>
+and the scale parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mfrac><mn>1</mn><mi>λ</mi></mfrac></mrow><annotation encoding="application/x-tex">\sigma = \frac{1}{\lambda}</annotation></semantics></math>.</p>
+<p>Functions to assist in the computation of Weibull parameters can be
+found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R" class="external-link">HelperFunctionsWeibull.R</a>.</p>
 </div>
 </div>
 <div class="section level2">
@@ -601,38 +657,44 @@ design.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="notes-about-the-exponential-and-weibull-distributions">Notes about the Exponential and Weibull Distributions<a class="anchor" aria-label="anchor" href="#notes-about-the-exponential-and-weibull-distributions"></a>
+<h2 id="example-3---response-generation-with-stratification">Example 3 - Response Generation with Stratification<a class="anchor" aria-label="anchor" href="#example-3---response-generation-with-stratification"></a>
 </h2>
-<p>In R, the Weibull distribution is defined by a shape parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
-and a scale parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>,
-with a probability density function (PDF) given by:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>α</mi></msup></mrow></msup></mrow><annotation encoding="application/x-tex">
-f(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
-</annotation></semantics></math></p>
-<p>Its corresponding hazard function is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
-h(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1}
-</annotation></semantics></math></p>
-<p>The Exponential distribution in R is parameterized by a rate
-parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>,
-with a PDF given by:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>λ</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi><mi>x</mi></mrow></msup></mrow><annotation encoding="application/x-tex">
-f(x) = \lambda e^{-\lambda x}
-</annotation></semantics></math></p>
-<p>Its hazard function remains constant:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">
-h(x) = \lambda
-</annotation></semantics></math></p>
-<p>We can see that the Exponential distribution is a special case of the
-Weibull distribution, obtained by setting the shape parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha = 1</annotation></semantics></math>
-and the scale parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mfrac><mn>1</mn><mi>λ</mi></mfrac></mrow><annotation encoding="application/x-tex">\sigma = \frac{1}{\lambda}</annotation></semantics></math>.</p>
-<p>Functions to assist in the computation of Weibull parameters can be
-found in <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/HelperFunctionsWeibull.R" class="external-link">HelperFunctionsWeibull.R</a>.</p>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R" class="external-link alert-link">SimulatePatientOutcomeStratification.R</a>
+</p>
+</div>
+<p>This example illustrates how to customize the response generation
+when turning on <code>Stratification</code> in East Horizon. Unlike the
+previous examples, where a single set of survival parameters applies to
+all patients in an arm, this example allows different survival
+characteristics for each stratum, while still supporting two arms.</p>
+<p>For each stratum, the survival parameters provided in East Horizon
+are converted into arm-specific hazard rates. Patient survival times are
+then simulated independently within each stratum using an Exponential
+distribution. This approach enables realistic modeling of heterogeneous
+patient populations where baseline risk differs across strata.</p>
+<p>The behavior of the response simulation depends on the value selected
+for Survival Method in East Horizon:</p>
+<ul>
+<li>If <code>SurvMethod = 1</code> (<em>Hazard Rates</em>), the hazard
+rates provided for each stratum and arm are used directly to simulate
+patient survival times.</li>
+<li>If <code>SurvMethod = 2</code> (<em>Cumulative % Survival</em>), the
+cumulative survival value at the specified time point is converted into
+a constant hazard rate for each stratum and arm.</li>
+<li>If <code>SurvMethod = 3</code> (<em>Median Survival Times</em>), the
+median survival time is converted into a hazard rate using
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mtext mathvariant="normal">Median</mtext></mfrac></mrow><annotation encoding="application/x-tex">\lambda = \frac{\log(2)}{\text{Median}}</annotation></semantics></math>.</li>
+</ul>
+<p>The stratum ID (<code>StratumID</code>) input parameter is a vector
+indicating the stratum assignment for each subject. Subjects sharing the
+same value belong to the same stratum.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

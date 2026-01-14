@@ -7,6 +7,10 @@ output: html_document
 
 [$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
 
+<div class="alert alert-danger" role="alert"><p style="margin-bottom:0">
+Important: **ArrivalTime** is a new required parameter. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used.
+</p></div>
+
 # Input Variables
 
 When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and outcome.
@@ -14,6 +18,7 @@ When creating a custom R script, you can optionally use specific variables provi
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
+|**ArrivalTime**|Vector of Numeric|Vector of length `NumSub`, indicating the arrival time for each subject.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental.|
 |**NumArms**|Integer|Number of arms in the trials (includes the control arm). Only applicable when `Study Objective = Multiple Arm Confirmatory`.|
 |**Mean**|Vector of Numeric|Vector of length equal to the number of arms, indicating the mean of the treatments.|
@@ -46,7 +51,7 @@ Detailed templates with step-by-step explanations are available here: [SimulateP
 ## For `Study Objective = Two Arm Confirmatory`
 
 ```
-GenerateResponse <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
+GenerateResponse <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
   vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
@@ -61,7 +66,7 @@ GenerateResponse <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NUL
 ## For `Study Objective = Multiple Arm Confirmatory`
 
 ```
-GenerateResponse <- function( NumSub, NumArms, TreatmentID, Mean, StdDev, UserParam = NULL )
+GenerateResponse <- function( NumSub, NumArms, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
   vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	

@@ -70,6 +70,17 @@ Named List of length equal to the number of endpoints, indicating the trial type
 - Dual endpoints are not available for East Horizon: Design.
 - "Endpoint 1" is used as a sample endpoint name. It will be the actual endpoint name as specified by the user.
 
+# For `Study objective = Two Arm Confirmatory - Multiple Endpoints`
+
+|**Variable Name**|**Type**|**Description**|
+|-|-|----|
+|**AnalysisTime**|Numeric|Current analysis time.|
+|**LookNum**|Integer|Current look number.|
+|**TestStatisticsOutputs**|Named List|Named List of length equal to the number of endpoints, containing the test statistics results from the engine. Names are user-specified endpoint names from `DesignParam$EndpointName`. Order also matches `DesignParam$EndpointName` order. Each element contains the integer `ErrorCode` (0 = Success) and the list `data`, which contains:<br>- For TTE endpoint: `Score` (numeric), `StdErr` (numeric standard error), `TS` (numeric test statistic), `TSPVal` (numeric p-value).<br>- For Binary endpoint: `PropPld` (numeric pooled proportion), `StdErr` (numeric standard error), `TS` (numeric test statistic), `TSPVal` (numeric p-value).<br>- For Continuous endpoint: `DoF` (numeric degrees of freedom), `SDPld` (numeric pooled standard deviation), `StdErr` (numeric standard error), `TS` (numeric test statistic), `TSPVal` (numeric p-value).|
+|**InfoFrac**|List of Numeric Vector|List of length equal to the number of endpoints, containing the vectors of the actual information fractions up to the current look for one endpoint. Order matches `DesignParam$EndpointName` order.|
+|**LastLookDecision**|Vector of Integer|Vector of length equal to the number of endpoints, containing the decisions from previous look. Order matches `DesignParam$EndpointName` order. Possible values:<br>– `0`: Continue.<br>– `1`: Efficacy.<br>– `2`: Futility.|
+|**EfficacyBoundaryPScale**|Vector of Numeric|Vector of length equal to the number of endpoints, containing the final set of efficacy boundaries on the p-value scale used for testing each endpoint by engine. `NaN` where boundaries were not calculated. Order matches `DesignParam$EndpointName` order.|
+|**EPStatus**|Vector of Integer|Vector of length equal to the number of endpoints, containing the status of each endpoint. Order matches `DesignParam$EndpointName` order. Possible values:<br>- `0`: Success.<br>- `1`: Insufficient information.<br>- `2`: Excessive information.<br>- `3`: Computational error.|
 
 # For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
 

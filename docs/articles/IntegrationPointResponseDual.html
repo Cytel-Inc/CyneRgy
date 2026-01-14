@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 31, 2025</h4>
+            <h4 data-toc-skip class="date">January 09, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseDual.Rmd</code></div>
@@ -130,6 +132,12 @@ endpoint.</p>
 experimental﴿.</td>
 </tr>
 <tr class="odd">
+<td><strong>ArrivalTime</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length <code>NumSub</code>, indicating the arrival time
+for each subject.</td>
+</tr>
+<tr class="even">
 <td><strong>TreatmentID</strong></td>
 <td>Vector of Integer</td>
 <td>Vector of length <code>NumSub</code>, indicating the allocation of
@@ -137,20 +145,20 @@ subjects to arms. Index <code>0</code> represents placebo/control. For
 example, <code>[0, 0, 1]</code> indicates three subjects: two in the
 control group and one experimental.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>EndpointType</strong></td>
 <td>Vector of Integer</td>
 <td>Vector of length equal to the number of endpoints, indicating the
 endpoint types:<br>– <code>0</code>: Continuous.<br>– <code>1</code>:
 Binary.<br>– <code>2</code>: Time-to-Event.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>EndpointName</strong></td>
 <td>Vector of Character</td>
 <td>Vector of length equal to the number of endpoints, indicating the
 endpoint names.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>SurvMethod</strong></td>
 <td>Named List of Integer</td>
 <td>Named List of length equal to the number of endpoints, indicating
@@ -161,7 +169,7 @@ for Endpoint 1. Possible values:<br>– <code>1</code>: Hazard rate.<br>–
 survival times.<br>– <code>NA</code>: Endpoint is not Time-to-Event
 (e.g., Binary).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>NumPrd</strong></td>
 <td>Named List of Integer</td>
 <td>Named List of length equal to the number of endpoints, indicating
@@ -170,7 +178,7 @@ the number of periods in the trial for survival endpoints. For example,
 Endpoint 1. Fixed to <code>NA</code> if the endpoint is not
 Time-to-Event (e.g., Binary).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>PrdTime</strong></td>
 <td>Named List of Array of Numeric</td>
 <td>Named List of length equal to the number of endpoints, indicating
@@ -183,7 +191,7 @@ Times at which the cumulative % survivals are specified.<br>– If
 <code>SurvMethod = 3</code>: Defaults to 0.<br>– If the endpoint is not
 Time-to-Event (e.g., Binary): Defaults to <code>NA</code>.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>SurvParam</strong></td>
 <td>Named List of Matrix</td>
 <td>Named List of length equal to the number of endpoints, indicating
@@ -207,7 +215,7 @@ median survival times for each arm. Size: 1 row
 If the endpoint is not Time-to-Event (e.g., Binary): Defaults to
 <code>NA</code>.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>PropResp</strong></td>
 <td>Named List of Vector of Numeric</td>
 <td>Named List of length equal to the number of endpoints, indicating
@@ -218,7 +226,7 @@ length of each vector is <code>NumArm</code>. Fixed to <code>NA</code>
 if the endpoint is not Binary (e.g., Time-to-Event). Only applicable
 when <code>Dual Endpoint = TTE-Binary</code>.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>Correlation</strong></td>
 <td>Integer</td>
 <td>Correlation between the endpoints:<br>– <code>5</code>: Very strong
@@ -230,7 +238,7 @@ Uncorrelated.<br>– <code>-1</code>: Very weak negative.<br>–
 negative.<br>– <code>-4</code>: Strong negative.<br>– <code>-5</code>:
 Very strong negative.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon
@@ -260,7 +268,7 @@ below for the expected output for this integration point:</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td>List</td>
-<td>A named list containing <code>SurvivalTime</code> and
+<td>A named list containing <code>Response</code> and
 <code>ErrorCode</code>.</td>
 </tr></tbody>
 </table>
@@ -283,7 +291,7 @@ below for the expected output for this integration point:</p>
 <td><strong>Response</strong></td>
 <td>Named List of Vector of Numeric</td>
 <td>Named List of length equal to the number of endpoints, containing
-the survival time outputs for each endpoint. For example,
+the survival time or response outputs for each endpoint. For example,
 <code>Response[“Endpoint 1”]</code> is the vector of generated response
 values for each subject for Endpoint 1. The length of each vector is
 <code>NumSub</code>.</td>
@@ -321,8 +329,7 @@ custom parameters in East Horizon.</p>
 <div class="section level3">
 <h3 id="for-dual-endpoint-tte-tte">For <code>Dual Endpoint = TTE-TTE</code><a class="anchor" aria-label="anchor" href="#for-dual-endpoint-tte-tte"></a>
 </h3>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">EndpointType</span>, <span class="va">EndpointName</span>,</span>
-<span>                              <span class="va">SurvMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">SurvParam</span>, <span class="va">Correlation</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">EndpointType</span>, <span class="va">EndpointName</span>, <span class="va">SurvMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">SurvParam</span>, <span class="va">Correlation</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  </span>
@@ -339,17 +346,16 @@ custom parameters in East Horizon.</p>
 <div class="section level3">
 <h3 id="for-dual-endpoint-tte-binary">For <code>Dual Endpoint = TTE-Binary</code><a class="anchor" aria-label="anchor" href="#for-dual-endpoint-tte-binary"></a>
 </h3>
-<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">TreatmentID</span>, <span class="va">EndpointType</span>, <span class="va">EndpointName</span>,</span>
-<span>                              <span class="va">SurvMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">SurvParam</span>, <span class="va">PropResp</span>, <span class="va">Correlation</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
+<pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">EndpointType</span>, <span class="va">EndpointName</span>, <span class="va">SurvMethod</span>, <span class="va">NumPrd</span>, <span class="va">PrdTime</span>, <span class="va">SurvParam</span>, <span class="va">PropResp</span>, <span class="va">Correlation</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
 <span>  <span class="va">nError</span>            <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># Error handling (no error)</span></span>
 <span>  </span>
 <span>  <span class="va">Response</span>          <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="va">Response</span><span class="op">[[</span><span class="va">EndpointName</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing survival times array of the first endpoint to 0</span></span>
-<span>  <span class="va">Response</span><span class="op">[[</span><span class="va">EndpointName</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing survival times array of the second endpoint to 0</span></span>
+<span>  <span class="va">Response</span><span class="op">[[</span><span class="va">EndpointName</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array of the first endpoint to 0</span></span>
+<span>  <span class="va">Response</span><span class="op">[[</span><span class="va">EndpointName</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="va">NumSub</span> <span class="op">)</span> <span class="co"># Initializing response array of the second endpoint to 0</span></span>
 <span>  </span>
 <span>  <span class="co"># Write the actual code here.</span></span>
-<span>  <span class="co"># Store the generated survival times values in each array of the list Response.</span></span>
+<span>  <span class="co"># Store the generated response values in each array of the list Response.</span></span>
 <span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> Response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span> <span class="va">vResponse</span> <span class="op">)</span>, ErrorCode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span> <span class="va">nError</span> <span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
