@@ -1,5 +1,5 @@
-#' @param SimulatePatientOutcomeStratification
-#'
+#' @name SimulatePatientOutcomeStratification
+#' @title Simulate patient outcomes using stratification
 #' @param NumSub The total number of subjects in the trial. A single numeric value, e.g., 250.
 #'
 #' @param NumArm The number of arms in the trial (single numeric value).  

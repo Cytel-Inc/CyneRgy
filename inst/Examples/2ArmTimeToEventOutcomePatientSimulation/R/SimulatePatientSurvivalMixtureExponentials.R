@@ -1,4 +1,5 @@
-#' Simulate patient outcomes from a Weibull distribution 
+#' @name SimulatePatientSurvivalMixtureExponentials
+#' @title Simulate patient outcomes from a mixture of Exponential distributions. 
 #' @param NumSub The number of patient times to generate for the trial. This is a single numeric value, e.g., 250.
 #' @param NumArm The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
@@ -36,6 +37,7 @@
 #'  The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 #'  and only the parameters in UserParam are utilized.  
 #'  @export
+
 SimulatePatientSurvivalMixtureExponentials <- function(NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
  
