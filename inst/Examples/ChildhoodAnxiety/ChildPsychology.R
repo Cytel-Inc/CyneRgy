@@ -2,20 +2,21 @@ source( "R/SimulatePatientOutcomeCHU9.R" )
 
 # Call the function with some parameter values
 NumSub      <- 100
-TreatmentID <- sample(0:1, NumSub, replace = TRUE)
-Mean        <- c(25, 25)
-StdDev      <- c(5, 5)
+ArrivalTime <- sort( runif( NumSub, min = 0, max = 10 ) )
+TreatmentID <- sample( 0:1, NumSub, replace = TRUE )
+Mean        <- c( 25, 25 )
+StdDev      <- c( 5, 5 )
 
 
-UserParam   <- list(dMeanFollowUpCtrl = 25,
-                    dMeanFollowUpExp  = 15,
-                    dStdDevFollowUpCtrl = 5,
-                    dStdDevFollowUpExp =5 )
+UserParam   <- list( dMeanFollowUpCtrl   = 25,
+                     dMeanFollowUpExp    = 15,
+                     dStdDevFollowUpCtrl = 5,
+                     dStdDevFollowUpExp  = 5 )
 
-lRet<-SimulatePatientOutcome(NumSub, TreatmentID, Mean, StdDev, UserParam)
+lRet <- SimulatePatientOutcome( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam )
 
 dfPatientData <- data.frame( TreatmentID = TreatmentID, 
-                             PatientOutcome = lRet$Response)
+                             PatientOutcome = lRet$Response )
 
 # Test the simulated data ####
 # Simulated Data Requirements 
@@ -32,17 +33,15 @@ mean( dfPatientData$PatientOutcome[ dfPatientData$TreatmentID == 1 ]) # Expected
 
 table( dfPatientData)
 
-
-
 # Load the ggplot2 package
 library(ggplot2)
 
 # Create a histogram of PatientOutcome by TreatmentID
-gPlot <- ggplot(dfPatientData, aes(x=PatientOutcome, fill=factor(TreatmentID))) +
-        geom_histogram(binwidth=1, alpha=0.5, position="identity") +
-        labs(x="Patient Outcome", y="Count", fill="Treatment ID") +
-        theme_bw() +
-        facet_grid(~factor(TreatmentID), scales = "free_y") +
-        ggtitle("Histogram of Patient Outcomes by Treatment")
+gPlot <- ggplot( dfPatientData, aes( x = PatientOutcome, fill = factor( TreatmentID ) ) ) +
+    geom_histogram( binwidth = 1, alpha = 0.5, position = "identity" ) +
+    labs( x = "Patient Outcome", y = "Count", fill = "Treatment ID" ) +
+    theme_bw( ) +
+    facet_grid( ~factor( TreatmentID ), scales = "free_y" ) +
+    ggtitle( "Histogram of Patient Outcomes by Treatment" )
 
 print( gPlot )
