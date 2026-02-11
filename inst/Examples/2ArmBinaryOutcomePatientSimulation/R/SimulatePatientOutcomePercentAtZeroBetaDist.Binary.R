@@ -18,7 +18,7 @@
 #' The probability of 0 outcome on the control treatment is sampled from a Beta( UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 ) distribution.
 #' The probability of 0 outcome on the experimental treatment is sampled from a Beta( UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution.
 #' The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.  
-SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function(NumSub, NumArm, ArrivalTime, TreatmentID, PropResp,UserParam = NULL)
+SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file
@@ -40,8 +40,6 @@ SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function(NumSub, NumArm, A
         #Create the vProbabilityOfZeroOutcome that is needed below when the patient outcome is simulated 
         vProbabilityOfZeroOutcome     <- c( dProbabilityofZeroOutcomeCtrl, dProbabilityofZeroOutcomeExp )    
     }
-    
-    
     
     nError           <- 0 # East code for no errors occurred 
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
@@ -65,7 +63,7 @@ SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function(NumSub, NumArm, A
             vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
     }
     
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if(  any( is.na( vPatientOutcome ) ) )
         nError <- -100
     
     return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )

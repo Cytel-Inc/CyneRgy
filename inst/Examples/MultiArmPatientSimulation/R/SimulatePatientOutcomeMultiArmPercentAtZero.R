@@ -2,6 +2,7 @@
 #' @title Simulate patient continuous outcomes from a normal distribution with a percent of patients having an outcome of 0 for multi-arm trials
 #' @param NumSub Integer. The number of subjects that need to be simulated.
 #' @param NumArm Integer. The number of arms in the trial, including the placebo/control.
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID A vector specifying the arm index for each subject. The index for the placebo/control arm is 0.
 #' @param Mean A vector with means for all the arms.
 #' @param StdDev A vector with the standard deviations of each arm.
@@ -28,7 +29,7 @@
 #' As such, this function simulates patient outcome where, on average, 20% will have a value of 0 for the outcome and 80%, on average, will have their value
 #' simulated from a normal distribution with the mean and standard deviation as sent from East Horizon. 
 
-SimulatePatientOutcomeMultiArmPercentAtZero <- function( NumSub, NumArms, TreatmentID, Mean, StdDev, UserParam = NULL )
+SimulatePatientOutcomeMultiArmPercentAtZero <- function( NumSub, NumArms, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     # If the user did not specify the user parameters, but still called this function then the probability
     # of a 0 outcome is 0 for both treatments

@@ -2,6 +2,7 @@
 #' @title Simulate patient binary outcomes from a binary distribution with a specified percent of treatment-resistant patients for multi-arm trials
 #' @param NumSub Integer. The number of subjects to be simulated.
 #' @param NumArm Integer. The number of arms in the trial, including the placebo/control.
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID A vector specifying the arm index for each subject. The index for the placebo/control arm is 0.
 #' @param PropResp A vector of expected proportions of response for each arm
 #' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
@@ -32,7 +33,7 @@
 #'  UserParam$dProbOfTreatmentResistantExp1 or UserParam$dProbOfTreatmentResistantExp2
 #' Step 2: If the patient is determined to be treatment resistant in Step 1, their outcome is set to 0. Otherwise, their outcome is simulated from
 #' a binomial distribution using the response probabilities provided in PropResp. 
-SimulatePatientOutcomeMultiArmPercentAtZero.Binary <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+SimulatePatientOutcomeMultiArmPercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
 
     # If the user did not specify the user parameters, but still called this function then the probability
