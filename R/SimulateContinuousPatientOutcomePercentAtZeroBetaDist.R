@@ -9,6 +9,7 @@
 #' This approach incorporates variability in the unknown probability of no response.
 #'
 #' @param NumSub The number of subjects to simulate. Must be an integer value.
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment IDs, where:
 #' - `0` represents Treatment 1.
 #' - `1` represents Treatment 2.
@@ -36,7 +37,7 @@
 #' @export
 ######################################################################################################################## .
 
-SimulateContinuousPatientOutcomePercentAtZeroBetaDist <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
+SimulateContinuousPatientOutcomePercentAtZeroBetaDist <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
     vRequiredParams <- c( "dCtrlBetaParam1", "dCtrlBetaParam2", "dExpBetaParam1", "dExpBetaParam2" )
@@ -67,7 +68,7 @@ SimulateContinuousPatientOutcomePercentAtZeroBetaDist <- function( NumSub, Treat
             vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ] )
     }
     
-    if(  any( is.na( vPatientOutcome ) == TRUE ) )
+    if(  any( is.na( vPatientOutcome ) ) )
         nError <- -100
     
     return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))

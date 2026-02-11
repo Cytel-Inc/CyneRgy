@@ -1,4 +1,4 @@
-#' @param SimulatePatientOutcomePercentAtZero
+#' @name SimulatePatientOutcomePercentAtZero
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
@@ -18,11 +18,11 @@ SimulatePatientOutcomePercentAtZero <- function(NumSub, ArrivalTime, TreatmentID
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file
     # setwd( "C:/EastRWebinar/Webinar1/2ArmNormalOutcomePatientSimulation/ExampleEastOutput/" )
-    # saveRDS(UserParam, "UserParam.Rds")
-    # saveRDS(NumSub, "NumSub.Rds" )
+    # saveRDS( NumSub, "NumSub.Rds" )
     # saveRDS( TreatmentID, "TreatmentID.Rds" )
     # saveRDS( Mean, "Mean.Rds" )
     # saveRDS( StdDev, "StdDev.Rds" )
+    # saveRDS( UserParam, "UserParam.Rds" )
     
     # If the user did not specify the user parameters, but still called this function then the probability
     # of a 0 outcome is 0 for both treatments
@@ -56,7 +56,7 @@ SimulatePatientOutcomePercentAtZero <- function(NumSub, ArrivalTime, TreatmentID
             vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ])
     }
     
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if(  any( is.na( vPatientOutcome ) ) )
         nError <- -100
     
     return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))
