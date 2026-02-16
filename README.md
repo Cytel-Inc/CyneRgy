@@ -9,7 +9,7 @@ R integration with Cytel's products provides a highly efficient way to create cu
 
 The CyneRgy R package demonstrates the synergy between R and Cytel's products such as East Horizon, providing tools, documentation, templates, and examples. It also offers a streamlined R experience in RStudio, simplifying the creation of new custom scripts.
 
-Important (January 2026): **ArrivalTime** is a new required parameter for the Response integration point (binary, continuous and TTE outcomes). Existing R scripts must be updated to include this parameter in the function definition, even if it is not used. See [**Integration Point: Response**](https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponse.html) for more information.
+Important (January 2026): **ArrivalTime** is a new required parameter for the Response integration point. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used. See [**Integration Point: Response**](https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponse.html) for more information.
 
 # Getting Started
 
