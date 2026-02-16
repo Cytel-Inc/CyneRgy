@@ -1,22 +1,34 @@
-# TODO These notes need to be updated for now using the UserParams
-# Parameter Description 
-# NumSub - The number of patients (subjects) in the trial.  NumSub survival times need to be generated for the trial.  
-#           This is a single numeric value, eg 250.
-# NumArm - The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-# The SurvParam depends on input in East. In the simulation window on the Response Generation tab 
-# SurvMethod - This values is pulled from the Input Method drop-down list.  
-# SurvParam - Depends on the table in the Response Generation tab. 2‐D array of parameters usds to generate time of events.
-# If SurvMethod is 1:
-#   SurvParam is an array that specifies arm by arm hazard rates (one rate per arm per piece). Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
-#   Arms are in columns with column 1 is control, column 2 is experimental
-#   Time periods are in rows
-# If SurvMethod is 2:
-#   SurvParam is an array specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.
-# If SurvMethod is 3:
-#   SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental 
-#  
-# Description: This function simulates from exponential, just included as a simple example as a starting point 
-SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
+#' @name SimulatePatientSurvivalAssuranceUsingPh2Prior
+#' @title Simulate Patient Survival Times Using a Phase 2 Prior for Assurance
+#' @description Function simulates from exponential, just included as a simple example as a starting point
+#' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
+#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
+#' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
+#' @param NumPrd Number of time periods that are provided. 
+#' @param PrdTime \describe{ 
+#'      \item{If SurvMethod = 1}{PrdTime is a vector of starting times of hazard pieces.}
+#'      \item{If SurvMethod = 2}{Times at which the cumulative % survivals are specified.}
+#'      \item{If SurvMethod = 3}{Period time is 0 by default}
+#'      }
+#' @param SurvParam \describe{Depends on the table in the Response Generation tab. 2‐D array of parameters to generate the survival times
+#'    \item{If SurvMethod is 1}{SurvParam is an array (NumPrd rows, NumArm columns) that specifies arm by arm hazard rates (one rate per arm per piece). 
+#'    Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
+#'    Arms are in columns with column 1 is control, column 2 is experimental
+#'    Time periods are in rows, row 1 is time period 1, row 2 is time period 2...}
+#'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
+#'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
+#'  }
+#' @param  UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' If UseParam is supplied, the list must contain the following named elements:
+#' \describe{
+#'      \item{UserParam$dIntercept}{Intercept for the linear relationship between true treatment difference and log(HR).}
+#'      \item{UserParam$dSlope}{Slope for the linear relationship between true treatment difference and log(HR).}
+#'      \item{UserParam$dMeanTTECtrl}{Mean time-to-event for the control group.}
+#'   }
+
+SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
       if( !exists( "gvPrior" ) )
       {
@@ -38,10 +50,10 @@ SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, Treat
     dLogTrueHazardRatio <- UserParam$dIntercept + UserParam$dSlope * dTrueTreatmentDiff
     dTrueHazardRatio    <- exp( dLogTrueHazardRatio )
    
-    # Step 3: Compute the hazard on experimental given the true hazard on control and the computed true hazard ratio####
+    # Step 3: Compute the hazard on experimental given the true hazard on control and the computed true hazard ratio ####
     
     dRateCtrl        <- 1.0/UserParam$dMeanTTECtrl 
-    dRateExp         <- dTrueHazardRatio*dRateCtrl
+    dRateExp         <- dTrueHazardRatio * dRateCtrl
     
     vRates      <- c( dRateCtrl, dRateExp )
     
@@ -52,7 +64,7 @@ SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, Treat
     vSurvTime[ TreatmentID == 1 ] <- vTrt2
        
     
-    return(list(SurvivalTime = as.double(vSurvTime), TrueHR = as.double( rep( dTrueHazardRatio, NumSub)), ErrorCode = ErrorCode) )
+    return( list( SurvivalTime = as.double( vSurvTime ), TrueHR = as.double( rep( dTrueHazardRatio, NumSub ) ), ErrorCode = ErrorCode ) )
 }
 
 LoadData <- function()

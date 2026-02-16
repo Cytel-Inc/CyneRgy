@@ -2,6 +2,7 @@
 #' @title Simulate patient time-to-event outcomes from a Weibull distribution for multi-arm trials
 #' @param NumSub The number of patient times to generate for the trial. This is a single numeric value, eg 250.
 #' @param NumArm  The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID A vector specifying the arm index for each subject. The index for the placebo/control arm is 0.
 #' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided. 
@@ -46,7 +47,7 @@
 #'  and only the parameters in UserParam are utilized.  
 #'  @export
 
-SimulatePatientSurvivalMultiArmWeibull <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
+SimulatePatientSurvivalMultiArmWeibull <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
     # Step 1 - Initialize the return variables or other variables needed ####    
     vSurvTime    <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  

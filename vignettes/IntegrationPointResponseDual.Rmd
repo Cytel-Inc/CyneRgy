@@ -7,6 +7,10 @@ output: html_document
 
 [$\leftarrow$ Go back to the *Integration Point: Response* page](IntegrationPointResponse.html)
 
+<div class="alert alert-danger" role="alert"><p style="margin-bottom:0">
+Important: **ArrivalTime** is a new required parameter. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used.
+</p></div>
+
 # Input Variables
 
 When creating a custom R script, you can optionally use specific variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variables that are available for this integration point and endpoint.

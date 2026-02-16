@@ -7,6 +7,7 @@
 #' 
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
 #' @param UserParam A list of user defined parameters in East Horizon.   
@@ -19,7 +20,7 @@
 #' }
 ######################################################################################################################## .
 
-SimulatePatientOutcomeBinaryWithAssurance <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+SimulatePatientOutcomeBinaryWithAssurance <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
     
     # If the user did not specify the user parameters, but still called this function: error

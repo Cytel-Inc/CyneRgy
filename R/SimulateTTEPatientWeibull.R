@@ -11,6 +11,7 @@
 #'
 #' @param NumSub The number of patient times to generate for the trial. This is a single numeric value, e.g., 250.
 #' @param NumArm The number of arms in the trial, a single numeric value. For a two-arm trial, this will be 2.
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment IDs. `0 = treatment 1`, `1 = treatment 2`. The length of `TreatmentID` must be equal to `NumSub`.
 #' @param SurvMethod This value is pulled from the Input Method drop-down list. 
 #'   \describe{
@@ -53,7 +54,7 @@
 #' @export
 ######################################################################################################################## .
 
-SimulateTTEPatientWeibull <- function( NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
+SimulateTTEPatientWeibull <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
     # Create a fatal error when user parameters are missing to avoid misleading results
     vRequiredParams <- c( "dShapeCtrl", "dScaleCtrl", "dShapeExp", "dScaleExp" )
