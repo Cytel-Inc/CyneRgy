@@ -53,7 +53,7 @@
     }
     
     # Step 4 - Error Checking ####
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if(  any( is.na( vPatientOutcome ) ) )
         nError <- -100
     
     # Step 5 - Build the return object, add other variables to the list as needed

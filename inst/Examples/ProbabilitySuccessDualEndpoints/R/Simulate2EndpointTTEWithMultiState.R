@@ -10,6 +10,7 @@
 #' 
 #' @param NumSub The number of subjects to simulate for the trial. A single numeric value, e.g., 250.
 #' @param NumArm The number of arms in the trial, a single numeric value. For a two-arm trial, this will be 2.
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID A vector of treatment IDs, where 0 corresponds to control and 1 corresponds to experimental. 
 #'                    The length of this vector must equal NumSub.
 #' @param SurvMethod A numeric value specifying the survival method:
@@ -67,7 +68,7 @@
 #'             }
 ######################################################################################################################## .
 
-Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, TreatmentID,  
+Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, TreatmentID,  
                                                 SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
     # Step 1 - Initialize the return variables or other variables needed ####

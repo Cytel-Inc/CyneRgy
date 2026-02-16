@@ -1,4 +1,4 @@
-#' @param SimulatePatientOutcomePercentAtZeroBetaDist
+#' @name SimulatePatientOutcomePercentAtZeroBetaDist
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0 where the probability of a 0 is drawn from a Beta distribution.
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
@@ -40,8 +40,6 @@ SimulatePatientOutcomePercentAtZeroBetaDist <- function(NumSub, ArrivalTime, Tre
         vProbabilityOfZeroOutcome     <- c( dProbabilityofZeroOutcomeCtrl, dProbabilityofZeroOutcomeExp )    
     }
     
-    
-    
     nError           <- 0 # East code for no errors occurred 
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
     
@@ -63,7 +61,7 @@ SimulatePatientOutcomePercentAtZeroBetaDist <- function(NumSub, ArrivalTime, Tre
             vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ])
     }
     
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if(  any( is.na( vPatientOutcome ) ) )
         nError <- -100
     
     return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))

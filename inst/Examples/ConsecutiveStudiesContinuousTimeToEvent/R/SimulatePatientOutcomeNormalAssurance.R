@@ -1,6 +1,7 @@
 #' @param SimulatePatientOutcomeNormalAssurance
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
@@ -17,29 +18,28 @@
 #'      \item{UserParam$dWeight2}{Weight of prior 2}
 #'      \item{UserParam$dMeanCtrl}{Mean form control } 
 #'  }
-#' @description
-#' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
-SimulatePatientOutcomeNormalAssurance <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
+
+SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     
     # Note: Example of how you could save the parameters in East. Do NOT setwd in Solara
-     #setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example2")
-    # #if( !file.exists("SimData.Rds"))
+     #setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example2" )
+    # #if( !file.exists( "SimData.Rds" ) )
     # #{
-        # saveRDS( NumSub,     "NumSub.Rds")
+        # saveRDS( NumSub,     "NumSub.Rds" )
         # saveRDS( TreatmentID, "TreatmentID.Rds" )
         # saveRDS( StdDev, "StdDev.Rds" )
-        # saveRDS( UserParam,   "UserParam.Rds")
+        # saveRDS( UserParam,   "UserParam.Rds" )
     # #}
     
-    # Step 1 - Setup the vectors so we can sample which component of the mixture prior to use
+    # Step 1 - Setup the vectors so we can sample which component of the mixture prior to use ####
     vStdDev     <- c( UserParam$dSDCtrl, UserParam$dSDExp )
     vMean       <- c( UserParam$dMeanCtrl )                     #Note: only need control mean as we will sample experimental mean
     vPriorMeans <- c( UserParam$dMean1, UserParam$dMean2 )
     vPriorSDs   <- c( UserParam$dSD1, UserParam$dSD2 )
     
-    # Step 2 - Sample the prior mean treatment effect according to the weights of the two normal distributions in the mixture 
-    nPrior           <- sample( c(1, 2 ), 1 , prob = c( UserParam$dWeight1, UserParam$dWeight2 ), replace = TRUE )
+    # Step 2 - Sample the prior mean treatment effect according to the weights of the two normal distributions in the mixture #### 
+    nPrior           <- sample( c( 1, 2 ), 1 , prob = c( UserParam$dWeight1, UserParam$dWeight2 ), replace = TRUE )
     dTreatmentEffect <- rnorm( 1, vPriorMeans[ nPrior ], vPriorSDs[ nPrior ] )
     vMean            <- c( vMean,  vMean[ 1 ] + dTreatmentEffect)
     
@@ -57,16 +57,16 @@ SimulatePatientOutcomeNormalAssurance <- function(NumSub, TreatmentID, Mean, Std
     }
     
     # Step 5 - Error Checking ####
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if(  any( is.na( vPatientOutcome ) ) )
         nError <- -100
     
-    # Step 6 - Create any variables that are returned that need to be included in the output
+    # Step 6 - Create any variables that are returned that need to be included in the output ####
     # Note: Need to return the true delta, and East expects it to be a vector.  
-    TrueDelta <- rep( vMean[2], length( vPatientOutcome))
+    TrueDelta <- rep( vMean[ 2 ], length( vPatientOutcome ) )
     
-    # Step 7 - Build the return object, add other variables to the list as needed
+    # Step 7 - Build the return object, add other variables to the list as needed ####
     #       Add the vTrueDeta so it can easily be output by saving the East summary stats. 
-    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double(TrueDelta), Delta = as.double( TrueDelta)  )
+    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double( TrueDelta ), Delta = as.double( TrueDelta ) )
     
     return( lReturn )
 }
@@ -75,16 +75,17 @@ SimulatePatientOutcomeNormalAssurance <- function(NumSub, TreatmentID, Mean, Std
 #' @param SimulatePatientOutcomeNormalAssuranceUsingPriorInput
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
 #' @param  UserParam A list of user defined parameters in East.   The default must be NULL resulting in ignoring the percent of patients at 0.
 #' @description
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
-SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
+SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     # Step 1 - Use the prior that was supplied from output ####
-    if( exists("vPrior"))
+    if( exists( "vPrior" ) )
         nError <- -100
     
     Mean[ 2 ]   <- vPrior[ nSimIndex ]
@@ -104,18 +105,18 @@ SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function(NumSub, Treatme
         nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
         
         # Make any adjustments to the code as needed, example simulating from for a normal distribution 
-        vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ],vStdDev[ nTreatmentID ] )
+        vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], vStdDev[ nTreatmentID ] )
     }
     
     # Step 5 - Error Checking ####
     if(  any( is.na( vPatientOutcome )==TRUE) )
         nError <- -100
     
-    # Step 6 - Create any variables that are returned that need to be included in the output
-    TrueDelta <- rep( Mean[2], length( vPatientOutcome))
+    # Step 6 - Create any variables that are returned that need to be included in the output ####
+    TrueDelta <- rep( Mean[ 2 ], length( vPatientOutcome ) )
     
-    # Step 7 - Build the return object, add other variables to the list as needed
-    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double(TrueDelta), Delta = as.double( TrueDelta)  )
+    # Step 7 - Build the return object, add other variables to the list as needed ####
+    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double( TrueDelta ), Delta = as.double( TrueDelta ) )
     
     return( lReturn )
 }

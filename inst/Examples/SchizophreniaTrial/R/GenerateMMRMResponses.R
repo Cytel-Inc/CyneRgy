@@ -3,6 +3,7 @@
 #' @description This function simulates multivariate normal responses for subjects in a mixed model for repeated measures (MMRM) setting.
 #' @param NumSub Integer. Number of subjects to simulate.
 #' @param NumVisit Integer. Number of visits.
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID Integer vector of length `NumSub`. Treatment assignment for each subject (for two arm confirmatory: 0 = control, 1 = treatment).
 #' @param Inputmethod  Character. Placeholder for input method (currently not used).
 #' @param VisitTime Numeric vector. Visit times (currently not used).
@@ -22,7 +23,7 @@
 #' @export
 ######################################################################################################################## .
 
-GenerateMMRMResponses <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
+GenerateMMRMResponses <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
 {
     library(MASS)
     
