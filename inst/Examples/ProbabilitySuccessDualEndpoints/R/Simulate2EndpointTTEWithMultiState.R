@@ -73,8 +73,7 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
 {
     # Step 1 - Initialize the return variables or other variables needed ####
     Error 	        <- 0
-    vPatientOutcome <- rep( 0, NumSub )  # Note, as you simulate the patient data put in in this vector so it can be returned
-    
+
     # Step 2 - Validate custom variable input and set defaults ####
     if( is.null( UserParam ) )
     {
@@ -84,7 +83,7 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
                       OS            = as.double( 0 ) ) )
     }
     
-    # Step 3 - Simulate the patient data and store in vPatientOutcome ####
+    # Step 3 - Simulate the patient data ####
     # There are two Options:
     vValuesOption1 <- unlist( UserParam[ c( "dMedianPFS0", "dMedianOS0", "dProbOfDeathBeforeProgression0",
                                             "dMedianPFS1", "dMedianOS1", "dProbOfDeathBeforeProgression1"
@@ -98,7 +97,7 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
     
     
     # Option 1: directly input the median times and probabilities of death before progression. In this case, vValuesOption1 are used and vValuesOption2 ignored.
-    if( length( vValuesOption1 ) > 0 && !( all( vValuesOption1 == 0 ) ) )
+    if( length( vValuesOption1 ) == 6 && !( all( vValuesOption1 == 0 ) ) )
     {
         # User provided values that are fixed for the multistate model
         dMedianPFS0 <- UserParam$dMedianPFS0
@@ -117,7 +116,7 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
     # Option 2: customize how patient data is simulated by building a more realistic model for both PFS and OS outcomes 
     # using prior distributions. In this case, vValuesOption2 are used and vValuesOption1 are ignored.
     
-    else if( length( vValuesOption2 ) > 0 && !( all( vValuesOption2 == 0 ) ) )
+    else if( length( vValuesOption2 ) == 12 && !( all( vValuesOption2 == 0 ) ) )
     {
         vPatsPerArm   <- table( TreatmentID )
         
@@ -140,8 +139,10 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
             if( nAttempt > 100 )
             {
                 # Error could not sample a OS that is greater than PFS median
-                ErrorCode <- -1  # Non-fatal error throw this set out, but if this happens alot then the user should reconsider the parameters
-                return(  list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), ErrorCode = as.integer( Error ) ) )
+                Error <- 1  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+                return(  list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                               OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                               ErrorCode = as.integer( Error ) ) )
             }
             
             
@@ -152,8 +153,10 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
         if( nAttempt2 > 100 )
         {
             # Error could not sample a OS that is greater than PFS median
-            ErrorCode <- -2  # Non-fatal error throw this set out, but if this happens alot then the user should reconsider the parameters
-            return( list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), ErrorCode = as.integer( Error ) ) )
+            Error <- 2  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+            return( list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
+                          OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
+                          ErrorCode = as.integer( Error ) ) )
         }
         
         # Sample median PFS, OS and prob  from the experimental arm 
@@ -175,8 +178,10 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
             if( nAttempt > 100 )
             {
                 # Error could not sample a OS that is greater than PFS median
-                ErrorCode <- -1  # Non-fatal error throw this set out, but if this happens alot then the user should reconsider the parameters
-                return(  list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), ErrorCode = as.integer( Error ) ) )
+                Error <- 3  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+                return(  list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                               OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                               ErrorCode = as.integer( Error ) ) )
             }
             
             dfExpPats     <- SimulateDualMultiStateTTE( vPatsPerArm[ 2 ], dMedianPFS1, dMedianOS1, dProbOfDeathBeforeProgression1 )
@@ -187,12 +192,21 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
         if( nAttempt2 > 100 )
         {
             # Error could not sample a OS that is greater than PFS median
-            ErrorCode <- -2  # Non-fatal error throw this set out, but if this happens alot then the user should reconsider the parameters
-            return(list( SurvivalTime = as.double(rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), ErrorCode = as.integer( Error ) ) )
+            Error <- 4  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+            return(list( SurvivalTime = as.double(rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
+                         OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                         ErrorCode = as.integer( Error ) ) )
         }
+    } 
+    else 
+    {
+        # Return fatal error if UserParam variables are partially present for either option or all are zeros.
+        return( list( ErrorCode     = as.integer( -2 ), 
+                      SurvivalTime  = as.integer( 0 ),
+                      OS            = as.double( 0 ) ) ) 
+        
     }
     
-    nQtyPatsSim   <- c( 0, 0 )
     vPFS          <- rep( NA, NumSub )
     vOS           <- rep( NA, NumSub )
     
