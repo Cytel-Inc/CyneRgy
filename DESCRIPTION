@@ -1,7 +1,7 @@
 Package: CyneRgy
 Type: Package
 Title: CyneRgy - Integration for Cytel Products and R
-Version: 1.1.10
+Version: 1.1.11
 Authors@R: c( person( given = "J. Kyle",       family = "Wathen",   email = "Kyle.Wathen@Cytel.com",      role = c("aut","cre")),
               person( given = "Valeria A. G.", family = "Mazzanti", email = "Valeria.Mazzanti@Cytel.com", role = c("aut")),
               person( given = "Gabriel",       family = "Potvin",   email = "Gabriel.Potvin@Cytel.com", role = c("aut")),

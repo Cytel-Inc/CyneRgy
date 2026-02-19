@@ -1,0 +1,220 @@
+# Integration Point: Dropout
+
+[$`\leftarrow`$ Go back to the *Getting Started: Overview*
+page](https://Cytel-Inc.github.io/CyneRgy/articles/Overview.md)
+
+## Description
+
+The Dropout integration point allows you to customize the behavior of
+dropouts in a longitudinal study design using a custom R script. Instead
+of relying on the built-in default distribution, you can implement
+dropout distributions such as Poisson or Weibull, to better suit your
+trial’s requirements.
+
+## Availability
+
+### East Horizon Explore
+
+This integration point is available in East Horizon Explore for the
+following study objectives and endpoint types:
+
+|  | Time to Event | Binary | Continuous | Continuous with repeated measures | Count | Composite | Dual TTE-TTE | Dual TTE-Binary |
+|----|----|----|----|----|----|----|----|----|
+| Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Multiple Arm Confirmatory | 🔜 | ✅ | ✅ | \- | \- | \- | \- | \- |
+| Dose Finding | \- | \- | ❌ | \- | \- | \- | \- | \- |
+
+**Legend**
+
+| Icon | Meaning       |
+|------|---------------|
+| ✅   | Available     |
+| ❌   | Not available |
+| 🔜   | Coming soon   |
+
+### East Horizon Design
+
+Click to expand/collapse
+
+This integration point is available in East Horizon Design for the
+following study objectives and endpoint types:
+
+|  | Time to Event | Binary | Continuous | Continuous with repeated measures | Count | Composite | Dual TTE-TTE | Dual TTE-Binary |
+|----|----|----|----|----|----|----|----|----|
+| Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | 🔜 | 🔜 |
+| Two Arm Confirmatory - Multiple Endpoints | ❌ | ❌ | ❌ | \- | \- | \- | \- | \- |
+| Multiple Arm Confirmatory | 🔜 | 🔜 | 🔜 | \- | \- | \- | \- | \- |
+| Dose Finding | \- | \- | ❌ | \- | \- | \- | \- | \- |
+
+This integration point is available in East Horizon Design for the
+following tests:
+
+| Test | Study Objective | Endpoint | Availability |
+|----|----|----|----|
+| Single Mean (One Arm Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
+| Mean of Paired Differences (Paired Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
+| Mean of paired Ratios (Paired Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
+| Single Proportion (One Arm Design) | One Arm Exploratory/Confirmatory | Binary | ❌ |
+| Simon’s Two Stage (One Arm Design) | One Arm Exploratory/Confirmatory | Binary | ❌ |
+| Logrank Weibull Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
+| Parametric Weibull Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
+| Logrank Exponential Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
+| Single Poisson Rate (One Arm Design) | One Arm Exploratory/Confirmatory | Count | ❌ |
+| Difference of Means (Parallel Design) | Two Arm Confirmatory | Continuous | ✅ |
+| Ratio of Means (Parallel Design) | Two Arm Confirmatory | Continuous | ❌ |
+| Difference of Means (Crossover Design) | Two Arm Confirmatory | Continuous | ❌ |
+| Ratio of Means (Crossover Design) | Two Arm Confirmatory | Continuous | ❌ |
+| Difference of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
+| Ratio of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
+| Odds Ratio of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
+| Fisher’s Exact (Parallel Design) | Two Arm Confirmatory | Binary | ❌ |
+| Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design) | Two Arm Confirmatory | Time to Event | ✅ |
+| Logrank Test Given Accrual Duration and Study Duration (Parallel Design) | Two Arm Confirmatory | Time to Event | ✅ |
+| Logrank Test Given Accrual Duration and Accrual Rates (Population Enrichment) | Two Arm Confirmatory | Time to Event | ❌ |
+| Ratio of Poisson Rates (Parallel Design) | Two Arm Confirmatory | Count | ❌ |
+| Ratio of Negative Binomial Rates (Parallel Design) | Two Arm Confirmatory | Count | ❌ |
+| Win Ratio (Parallel Design) | Two Arm Confirmatory | Composite | ❌ |
+| MAMS Difference of Means (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Continuous | 🔜 |
+| MAMS Difference of Means: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Continuous | ❌ |
+| MAMS Difference of Proportions (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Binary | 🔜 |
+| MAMS Difference of Proportions: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Binary | ❌ |
+| MAMS Logrank (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Time to Event | 🔜 |
+| MAMS Logrank: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Time to Event | 🔜 |
+
+### East
+
+This integration point is available in East for the following tests
+(click to expand/collapse):
+
+| Test | Number of Samples | Endpoint | Availability |
+|----|----|----|----|
+| Difference of Means (Parallel Design) | Two Samples | Continuous | ✅ |
+| Difference of Proportions (Parallel Design) | Two Samples | Discrete | ✅ |
+| Ratio of Proportions (Parallel Design) | Two Samples | Discrete | ✅ |
+| Odds Ratio of Proportions (Parallel Design) | Two Samples | Discrete | ✅ |
+| Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design) | Two Samples | Survival | ✅ |
+| Logrank Test Given Accrual Duration and Study Duration (Parallel Design) | Two Samples | Survival | ✅ |
+| Chi-Square for Specified Proportions in C Categories (Single Arm Design) | Many Samples | Discrete | ✅ |
+| Two Group Chi-Square for Proportions in C Categories (Parallel Design) | Many Samples | Discrete | ✅ |
+| Multiple Looks - Combining P-Values (Pairwise Comparisons to Control - Difference of Means) | Many Samples | Continuous | ❌ |
+| Multiple Looks - Combining P-Values (Multiple Pairwise Comparisons to Control - Difference of Proportions) | Many Samples | Discrete | ❌ |
+| Multiple Looks - Combining P-Values (Pairwise Comparisons to Control - Logrank Test) | Many Samples | Survival | ❌ |
+
+## Instructions
+
+### In East Horizon Explore
+
+You can set up a dropout function under **Dropout Distribution** in a
+**Response Card** while creating or editing an **Input Set**. For a
+Time-to-Event outcome or a Continuous outcome with Repeated Measures, it
+will be under **Distribution** in the **Dropout Rate** tab of the
+**Response Card**.
+
+Follow these steps (click to expand/collapse):
+
+1.  Select **User Specified-R** from the dropdown in the **Dropout
+    Distribution** or **Distribution** field in the **Response Card**.
+2.  Browse and select the appropriate R file (`filename.r`) from your
+    computer, or use the built-in **R Code Assistant** to create one.
+    This file should contain function(s) written to perform various
+    tasks to be used throughout your Project.
+3.  Choose the appropriate function name. If the expected function is
+    not displaying, then check your R code for errors.
+4.  Set any required user parameters (variables) as needed for your
+    function using **+ Add Variables**.
+5.  Continue creating your project.
+
+For a visual guide of where to find the option, refer to the screenshots
+below:
+
+![](GettingStarted_files/dropout.png)
+
+![](GettingStarted_files/dropout2.png)
+
+### In East Horizon Design
+
+You can set up a dropout function under **Dropout Distribution** in the
+**Response** section of an **Input Set** created by simulation.
+
+Follow these steps (click to expand/collapse):
+
+1.  Create and compute a first **analytical design input set**.
+2.  Navigate to the Results section and **simulate** the analytical
+    design.
+3.  Navigate to the new **simulation input set** that was created.
+4.  Select **User Specified-R** from the dropdown in the **Dropout
+    Distribution** field in the **Response** tab.
+5.  Browse and select the appropriate R file (`filename.r`) from your
+    computer, or use the built-in **R Code Assistant** to create one.
+    This file should contain function(s) written to perform various
+    tasks to be used throughout your Project.
+6.  Choose the appropriate function name. If the expected function is
+    not displaying, then check your R code for errors.
+7.  Set any required user parameters (variables) as needed for your
+    function using **+ Add Variables**.
+8.  Continue creating your project.
+
+For a visual guide of where to find the option, refer to the screenshot
+below:
+
+![](GettingStarted_files/dropoutDesign.png)
+
+### In East
+
+You can set up a dropout function by navigating to the **Generate
+Dropout Information** task of the **User Defined R Function** tab of a
+**Simulation Input** window, after including the option.
+
+Follow these steps (click to expand/collapse):
+
+1.  Choose the appropriate test in the **Design** tab.
+2.  In the **Design Input** window, click on the **Include Options**
+    button on the top right corner and select **Accrual / Dropouts**.
+3.  In the **Accrual / Dropouts** tap of the **Design Input** window,
+    input values in the **Response Lag** and **Probability of Dropout**
+    fields. To use a custom R script, these fields cannot be blank.
+4.  Compute the scenario using the **Compute** button, save the design
+    using the **Save in Workbook** button, then navigate to the
+    **Simulation Input** window by clicking on the **Simulate Design**
+    button under **Library**.
+5.  Click on the **Include Options** button on the top right corner of
+    the **Simulation Input** window and select both **Accrual /
+    Dropouts** and **User Defined R Function**.
+6.  In the tab **User Defined R Function**, a list of tasks will appear.
+    Place your cursor in the **File Name** field for the task **Generate
+    Dropout Information**.
+7.  Click on the button **Browse…** to select the appropriate R file
+    (`filename.r`) from your computer. This file should contain
+    function(s) written to perform various tasks to be used throughout
+    your Project.
+8.  Specify the function name you want to initialize. To copy the
+    function’s name from the R script, click on the button **View**.
+9.  Set any required user parameters (variables) as needed for your
+    function using the button **Add/Edit Variables**.
+10. Continue setting up your project.
+
+For a visual guide of where to find the option, refer to the screenshot
+below:
+
+![](GettingStarted_files/dropoutEast.png)
+
+## Endpoint Types
+
+The input variables, expected output variables, examples, and templates
+for this integration point depend on the endpoint type (or outcome) you
+are using. Refer to the relevant pages below:
+
+[ Continuous (Normal)
+Outcome](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropoutContinuous.md)
+
+[ Time-to-Event
+(Survival)](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropoutTimeToEvent.md)
+
+[ Continuous (Normal) Outcome with Repeated
+Measures](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropoutRepeatedMeasures.md)
+
+[ Binary
+Outcome](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropoutBinary.md)
+
+[ Dual Outcomes (TTE-TTE or
+TTE-Binary)](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropoutDual.md)
