@@ -1,5 +1,5 @@
 ######################################################################################################################## .
-#  Last Modified Date: 11/20/2024
+#  Last Modified Date: 02/18/2026
 #' @name Simulate2EndpointTTEWithMultiState
 #' @title Simulate Trial Data for Two Time-to-Event Endpoints Using a Multi-State Model
 #' 
@@ -72,21 +72,32 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
                                                 SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
     # Step 1 - Initialize the return variables or other variables needed ####
-	Error 	        <- 0
-	vPatientOutcome <- rep( 0, NumSub )  # Note, as you simulate the patient data put in in this vector so it can be returned
+    Error 	        <- 0
 
-	# Step 2 - Validate custom variable input and set defaults ####
-	if( is.null( UserParam ) )
-	{
-	    # Return fatal error if no user param
-	    return( list( ErrorCode     = as.integer( -1 ), 
-	                  SurvivalTime  = as.integer( 0 ),
-	                  OS            = as.double( 0 ) ) )
-	}
-	
-	# Step 3 - Simulate the patient data and store in vPatientOutcome ####
-	
-    if( !is.null( UserParam$dMedianPFS0 ) )
+    # Step 2 - Validate custom variable input and set defaults ####
+    if( is.null( UserParam ) )
+    {
+        # Return fatal error if no user param
+        return( list( ErrorCode     = as.integer( -1 ), 
+                      SurvivalTime  = as.integer( 0 ),
+                      OS            = as.double( 0 ) ) )
+    }
+    
+    # Step 3 - Simulate the patient data ####
+    # There are two Options:
+    vValuesOption1 <- unlist( UserParam[ c( "dMedianPFS0", "dMedianOS0", "dProbOfDeathBeforeProgression0",
+                                            "dMedianPFS1", "dMedianOS1", "dProbOfDeathBeforeProgression1"
+    ) ], use.names = FALSE )
+    
+    vValuesOption2 <- unlist( UserParam[ c( "dMedianPFS0PriorShape", "dMedianPFS0PriorRate", "dProbOfDeathBeforeProgression0Param1",
+                                            "dMedianOS0PriorShape", "dMedianOS0PriorRate", "dProbOfDeathBeforeProgression0Param2",
+                                            "dMedianPFS1PriorShape", "dMedianPFS1PriorRate", "dProbOfDeathBeforeProgression1Param1",
+                                            "dMedianOS1PriorShape", "dMedianOS1PriorRate", "dProbOfDeathBeforeProgression1Param2"
+    ) ], use.names = FALSE )
+    
+    
+    # Option 1: directly input the median times and probabilities of death before progression. In this case, vValuesOption1 are used and vValuesOption2 ignored.
+    if( length( vValuesOption1 ) == 6 && !( all( vValuesOption1 == 0 ) ) )
     {
         # User provided values that are fixed for the multistate model
         dMedianPFS0 <- UserParam$dMedianPFS0
@@ -102,92 +113,110 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
         dfExpPats     <- SimulateDualMultiStateTTE( vPatsPerArm[ 2 ], dMedianPFS1, dMedianOS1, dProbOfDeathBeforeProgression1 )
         
     }
-	else if( !is.null( UserParam$dMedianPFS0PriorShape ) )
-	{
-	    vPatsPerArm   <- table( TreatmentID )
-	    
-	    # First need to sample the prior for control 
-	    dfControlPats <-  data.frame( vPFS = NA, vOS = NA )
-	    nAttempt2     <- 1
-	    while( any( is.na( dfControlPats$vPFS ) ) & nAttempt2 <= 100 ) 
-	    {
-    	    dMedianOS0  <- 1
-    	    dMedianPFS0 <- 2
-    	    nAttempt    <- 1 
-    	    while( dMedianOS0 < dMedianPFS0 & nAttempt <= 100 )
-    	    {
-        	    dMedianPFS0 <- rgamma( 1, UserParam$dMedianPFS0PriorShape,  UserParam$dMedianPFS0PriorRate )
-        	    dMedianOS0  <- rgamma( 1, UserParam$dMedianOS0PriorShape, UserParam$dMedianOS0PriorRate )
-        	    dProbOfDeathBeforeProgression0 <- rbeta( 1,  UserParam$dProbOfDeathBeforeProgression0Param1,  UserParam$dProbOfDeathBeforeProgression0Param2 )
-        	    
-        	    nAttempt <- nAttempt + 1
-    	    }
-    	    if( nAttempt > 100 )
-    	    {
-    	        # Error could not sample a OS that is greater than PFS median
-    	        ErrorCode <- -1  # Non-fatal error throw this set out, but if this happens alot then the user should reconsider the parameters
-    	        return(  list( SurvivalTime = as.double(  rep( 1,  vPatsPerArm[ 1 ] +  vPatsPerArm[ 2 ] ) ), OS =  as.double(  rep( 1,  vPatsPerArm[ 1 ] +  vPatsPerArm[ 2 ] ) ), ErrorCode = as.integer( Error ) ) )
-    	    }
-    	    
-    	    
-    	    dfControlPats <- SimulateDualMultiStateTTE( vPatsPerArm[ 1 ], dMedianPFS0, dMedianOS0, dProbOfDeathBeforeProgression0 )
-    	    nAttempt2     <- nAttempt2 + 1 
-	    }
-	    
-	    if( nAttempt2 > 100 )
-	    {
-	        # Error could not sample a OS that is greater than PFS median
-	        ErrorCode <- -2  # Non-fatal error throw this set out, but if this happens alot then the user should reconsider the parameters
-	        return(  list( SurvivalTime = as.double(  rep( 1,  vPatsPerArm[ 1 ] +  vPatsPerArm[ 2 ]) ), OS =  as.double(  rep( 1,  vPatsPerArm[ 1 ] +  vPatsPerArm[ 2 ]) ), ErrorCode = as.integer( Error ) ) )
-	    }
-	    
-	    # Sample median PFS, OS and prob  from the experimental arm 
-	    dfExpPats     <-  data.frame( vPFS = NA, vOS = NA )
-	    nAttempt2     <- 1
-	    while( any( is.na(dfExpPats$vPFS ) ) & nAttempt2 <= 100 ) 
-	    {
-    	    dMedianOS1  <- 1 
-    	    dMedianPFS1 <- 2
-    	    nAttempt    <- 1
-    	    while( dMedianOS1 < dMedianPFS1 & nAttempt <= 100 )
-    	    {
-        	    dMedianPFS1 <- rgamma( 1, UserParam$dMedianPFS1PriorShape, UserParam$dMedianPFS1PriorRate )
-        	    dMedianOS1  <- rgamma( 1, UserParam$dMedianOS1PriorShape, UserParam$dMedianOS1PriorRate )
-        	    dProbOfDeathBeforeProgression1 <- rbeta( 1,  UserParam$dProbOfDeathBeforeProgression1Param1,  UserParam$dProbOfDeathBeforeProgression1Param2 )
-        	    nAttempt <- nAttempt + 1
-    	    }
-    	    
-    	    if( nAttempt > 100 )
-    	    {
-    	        # Error could not sample a OS that is greater than PFS median
-    	        ErrorCode <- -1  # Non-fatal error throw this set out, but if this happens alot then the user should reconsider the parameters
-    	        return(  list( SurvivalTime = as.double(  rep( 1,  vPatsPerArm[ 1 ] +  vPatsPerArm[ 2 ] ) ), OS =  as.double(  rep( 1,  vPatsPerArm[ 1 ] +  vPatsPerArm[ 2 ] ) ), ErrorCode = as.integer( Error ) ) )
-    	    }
-    	    
-    	    dfExpPats     <- SimulateDualMultiStateTTE( vPatsPerArm[ 2 ], dMedianPFS1, dMedianOS1, dProbOfDeathBeforeProgression1 )
-    	    
-    	    nAttempt2     <- nAttempt2 + 1 
-	    }
-	    
-	    if( nAttempt2 > 100 )
-	    {
-	        # Error could not sample a OS that is greater than PFS median
-	        ErrorCode <- -2  # Non-fatal error throw this set out, but if this happens alot then the user should reconsider the parameters
-	        return(  list( SurvivalTime = as.double(  rep( 1,  vPatsPerArm[ 1 ] +  vPatsPerArm[ 2 ]) ), OS =  as.double(  rep( 1,  vPatsPerArm[ 1 ] +  vPatsPerArm[ 2 ] ) ), ErrorCode = as.integer( Error ) ) )
-	    }
-	}
-	
-	nQtyPatsSim   <- c( 0, 0 )
-	vPFS          <- rep( NA, NumSub )
-	vOS           <- rep( NA, NumSub )
-	
-	vPFS[ TreatmentID == 0 ] <- dfControlPats$vPFS
-	vPFS[ TreatmentID == 1 ] <- dfExpPats$vPFS
-	
-	vOS[ TreatmentID == 0 ] <- dfControlPats$vOS
-	vOS[ TreatmentID == 1 ] <- dfExpPats$vOS
-
-	return( list( SurvivalTime = as.double( vPFS ), OS = as.double( vOS ), ErrorCode = as.integer( Error ) ) )
+    # Option 2: customize how patient data is simulated by building a more realistic model for both PFS and OS outcomes 
+    # using prior distributions. In this case, vValuesOption2 are used and vValuesOption1 are ignored.
+    
+    else if( length( vValuesOption2 ) == 12 && !( all( vValuesOption2 == 0 ) ) )
+    {
+        vPatsPerArm   <- table( TreatmentID )
+        
+        # First need to sample the prior for control 
+        dfControlPats <-  data.frame( vPFS = NA, vOS = NA )
+        nAttempt2     <- 1
+        while( any( is.na( dfControlPats$vPFS ) ) & nAttempt2 <= 100 ) 
+        {
+            dMedianOS0  <- 1
+            dMedianPFS0 <- 2
+            nAttempt    <- 1 
+            while( dMedianOS0 < dMedianPFS0 & nAttempt <= 100 )
+            {
+                dMedianPFS0 <- rgamma( 1, UserParam$dMedianPFS0PriorShape, UserParam$dMedianPFS0PriorRate )
+                dMedianOS0  <- rgamma( 1, UserParam$dMedianOS0PriorShape, UserParam$dMedianOS0PriorRate )
+                dProbOfDeathBeforeProgression0 <- rbeta( 1,  UserParam$dProbOfDeathBeforeProgression0Param1,  UserParam$dProbOfDeathBeforeProgression0Param2 )
+                
+                nAttempt <- nAttempt + 1
+            }
+            if( nAttempt > 100 )
+            {
+                # Error could not sample a OS that is greater than PFS median
+                Error <- 1  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+                return(  list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                               OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                               ErrorCode = as.integer( Error ) ) )
+            }
+            
+            
+            dfControlPats <- SimulateDualMultiStateTTE( vPatsPerArm[ 1 ], dMedianPFS0, dMedianOS0, dProbOfDeathBeforeProgression0 )
+            nAttempt2     <- nAttempt2 + 1 
+        }
+        
+        if( nAttempt2 > 100 )
+        {
+            # Error could not sample a OS that is greater than PFS median
+            Error <- 2  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+            return( list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
+                          OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
+                          ErrorCode = as.integer( Error ) ) )
+        }
+        
+        # Sample median PFS, OS and prob  from the experimental arm 
+        dfExpPats     <-  data.frame( vPFS = NA, vOS = NA )
+        nAttempt2     <- 1
+        while( any( is.na(dfExpPats$vPFS ) ) & nAttempt2 <= 100 ) 
+        {
+            dMedianOS1  <- 1 
+            dMedianPFS1 <- 2
+            nAttempt    <- 1
+            while( dMedianOS1 < dMedianPFS1 & nAttempt <= 100 )
+            {
+                dMedianPFS1 <- rgamma( 1, UserParam$dMedianPFS1PriorShape, UserParam$dMedianPFS1PriorRate )
+                dMedianOS1  <- rgamma( 1, UserParam$dMedianOS1PriorShape, UserParam$dMedianOS1PriorRate )
+                dProbOfDeathBeforeProgression1 <- rbeta( 1, UserParam$dProbOfDeathBeforeProgression1Param1, UserParam$dProbOfDeathBeforeProgression1Param2 )
+                nAttempt <- nAttempt + 1
+            }
+            
+            if( nAttempt > 100 )
+            {
+                # Error could not sample a OS that is greater than PFS median
+                Error <- 3  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+                return(  list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                               OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                               ErrorCode = as.integer( Error ) ) )
+            }
+            
+            dfExpPats     <- SimulateDualMultiStateTTE( vPatsPerArm[ 2 ], dMedianPFS1, dMedianOS1, dProbOfDeathBeforeProgression1 )
+            
+            nAttempt2     <- nAttempt2 + 1 
+        }
+        
+        if( nAttempt2 > 100 )
+        {
+            # Error could not sample a OS that is greater than PFS median
+            Error <- 4  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+            return(list( SurvivalTime = as.double(rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
+                         OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
+                         ErrorCode = as.integer( Error ) ) )
+        }
+    } 
+    else 
+    {
+        # Return fatal error if UserParam variables are partially present for either option or all are zeros.
+        return( list( ErrorCode     = as.integer( -2 ), 
+                      SurvivalTime  = as.integer( 0 ),
+                      OS            = as.double( 0 ) ) ) 
+        
+    }
+    
+    vPFS          <- rep( NA, NumSub )
+    vOS           <- rep( NA, NumSub )
+    
+    vPFS[ TreatmentID == 0 ] <- dfControlPats$vPFS
+    vPFS[ TreatmentID == 1 ] <- dfExpPats$vPFS
+    
+    vOS[ TreatmentID == 0 ] <- dfControlPats$vOS
+    vOS[ TreatmentID == 1 ] <- dfExpPats$vOS
+    
+    return( list( SurvivalTime = as.double( vPFS ), OS = as.double( vOS ), ErrorCode = as.integer( Error ) ) )
 }
 
 
@@ -226,7 +255,7 @@ SimulateDualMultiStateTTE <- function( nQtyOfPatients, dMedianPFS, dMedianOS, dP
         dfRet <- data.frame( vPFS = NA, vOS = NA )
         return( dfRet )
     }
-        
+    
     dAlpha01 <- lAlphas$dRateTimeToProgression
     dAlpha02 <- lAlphas$dRateTimeToDeath
     dAlpha12 <- lAlphas$dRateTimeFromProgressionToDeath
@@ -286,12 +315,12 @@ ComputeAlphasForMultiStateModel <- function( dMedianPFS, dMedianOS, dProbOfDeath
     
     if( is.na( dMedianProgToDeath ) )
     {
-        return( list( Error = -1) )
+        return( list( Error = -1 ) )
     }
-    dOneMinusPDivP     <- ((1-dProbOfDeathBeforeProgression)/dProbOfDeathBeforeProgression)
-    dAlpha02           <- log( 2 )/( dMedianPFS * (dOneMinusPDivP + 1 ))
+    dOneMinusPDivP     <- ( ( 1 - dProbOfDeathBeforeProgression ) / dProbOfDeathBeforeProgression )
+    dAlpha02           <- log( 2 ) / ( dMedianPFS * (dOneMinusPDivP + 1 ) )
     dAlpha01           <- dOneMinusPDivP * dAlpha02
-    dAlpha12           <- log( 2 )/dMedianProgToDeath
+    dAlpha12           <- log( 2 ) / dMedianProgToDeath
     
     lRet <- list( dAlpha01 = dAlpha01,
                   dAlpha02 = dAlpha02,
@@ -325,13 +354,13 @@ ComputeMedianProgToDeath <- function( dMedianPFS, dMedianOS, dProbDeathB4Prog )
     
     f <- function( x, dMedianPFS ){ return( ComputeMedianOS( dMedianPFS, x, dProbDeathB4Prog ) - dMedianOS) }
     tryCatch({
-        dMedianProgToDeath <- uniroot( f, lower=.01, upper = dMedianOS, dMedianPFS = dMedianPFS )$root
+        dMedianProgToDeath <- uniroot( f, lower = 0.01, upper = dMedianOS, dMedianPFS = dMedianPFS )$root
     }, error = function(e){
         dMedianProgToDeath <- NA
         return( dMedianProgToDeath )
     })
     
-    return( dMedianProgToDeath)
+    return( dMedianProgToDeath )
 }
 
 
@@ -354,8 +383,8 @@ ComputeMedianOS <- function( dMedianPFS, dMedianProgToDeath, dProbDeathB4Prog )
 {
     n <- 10000
     
-    vPFS <- rexp( n, log(2)/dMedianPFS )
-    vOS  <- vPFS  +rexp( n, log(2)/dMedianProgToDeath)
+    vPFS <- rexp( n, log( 2 ) / dMedianPFS )
+    vOS  <- vPFS  + rexp( n, log( 2 ) / dMedianProgToDeath )
     vDeathB4Prog <- rbinom( n, 1,  dProbDeathB4Prog )
     vOS <- ifelse( vDeathB4Prog == 1, vPFS, vOS )
     
