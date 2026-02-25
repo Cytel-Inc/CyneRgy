@@ -8,16 +8,42 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointRandomization.html" class="alert-link">**Integration Point: Randomization**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
 <div class="alert alert-danger" role="alert">
-To try this example, create a new project in East Horizon using the following configuration:
-<ul style="margin-bottom:0">
-<li>**Study objective:**</li>
-<ul style="margin-bottom:0">
-<li>Two Arm Confirmatory for Examples 1, 2, 3</li>
-<li>Multiple Arm Confirmatory for Example 4</li></ul>
-<li>**Number of endpoints:** Any</li>
-<li>**Endpoint type:** Any</li>
-<li>**Task:** Any</li>
-</ul></div>
+  To try this example, create a new project in East Horizon using the following configuration:
+  <ul style="margin-bottom:0">
+    <li><strong>Study objective:</strong></li>
+    <ul style="margin-bottom:0">
+      <li>Examples 1, 2, and 3: Two-Arm Confirmatory</li>
+      <li>Example 4: Multiple-Arm Confirmatory</li>
+    </ul>
+
+    <li><strong>Number of endpoints:</strong></li>
+    <ul style="margin-bottom:0">
+      <li>
+        <strong>Design:</strong> 1 endpoint only
+      </li>
+      <li>
+        <strong>Explore:</strong> Up to 2 endpoints
+      </li>
+    </ul>
+
+    <li><strong>Endpoint type:</strong></li>
+    <ul style="margin-bottom:0">
+      <li>Examples 1, 2, and 3: Continuous, Binary, or TTE</li>
+      <li>Example 4: Continuous or Binary</li>
+    </ul>
+
+    <li><strong>Task:</strong></li>
+    <ul style="margin-bottom:0">
+      <li>
+        <strong>Design:</strong> Examples 1, 2, and 3 are supported; 
+        Example 4 is not yet supported
+      </li>
+      <li>
+        <strong>Explore:</strong> All the above configurations are supported
+      </li>
+    </ul>
+  </ul>
+</div>
 
 # Introduction
 
@@ -146,6 +172,8 @@ This function also uses parameters specified in East Horizon. Refer to the table
 |**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
 |-----|-----|---|
 |Allocation Ratio|Design Card|$AllocRatio$|
+
+The allocation ratio must be provided as an integer value; non-integer inputs are not supported.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
