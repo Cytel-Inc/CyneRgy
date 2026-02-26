@@ -31,7 +31,7 @@
 #'                      }}
 #'      }
 
-BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio, UserParam )
+BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
 {
     Error 	    <- 0
     

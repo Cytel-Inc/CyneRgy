@@ -9,7 +9,7 @@
 #' 3) Generate a Binary vector where nC = Control sample size and nT = Treatment sample size using sample() functionality available in R.
 #' 
 #' @param NumSub The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#' @param NumArms The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
+#' @param NumArms The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine. Only NumArms == 2 is supported.
 #' @param AllocRatio The ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc). The argument value is passed from Engine.
 #' @param UserParam A list of user defined parameters in East. The default must be NULL. It is an optional parameter.
 #' 

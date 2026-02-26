@@ -1,6 +1,6 @@
 #' @name RandomizeSubjectsAcrossMultipleArms
 #' @author Anoop Rawat
-#' @title 
+#' @title Randomize Subjects Across Multiple Arms
 #' @description The following function randomly allots the subjects on one of the arms
 #' @param NumSub: Mandatory. The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
 #' @param NumArms: Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
