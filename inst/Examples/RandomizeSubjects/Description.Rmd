@@ -19,10 +19,10 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
     <li><strong>Number of endpoints:</strong></li>
     <ul style="margin-bottom:0">
       <li>
-        <strong>Design:</strong> 1 endpoint only
+        <strong>Design:</strong> Single Endpoint
       </li>
       <li>
-        <strong>Explore:</strong> Up to 2 endpoints
+        <strong>Explore:</strong> Single or Dual Endpoints
       </li>
     </ul>
 
