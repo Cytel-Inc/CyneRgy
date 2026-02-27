@@ -173,8 +173,6 @@ This function also uses parameters specified in East Horizon. Refer to the table
 |-----|-----|---|
 |Allocation Ratio|Design Card|$AllocRatio$|
 
-The allocation ratio must be provided as an integer value; non-integer inputs are not supported.
-
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
