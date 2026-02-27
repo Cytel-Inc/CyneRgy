@@ -18,7 +18,10 @@ To try this example, create a new project in East Horizon using the following co
 <li>Time-to-Event Outcome for Example 2</li>
 <li>Continuous Outcome with Repeated Measures for Example 3</li>
 </ul></li>
-<li>**Task:** Any</li>
+<li>**Task:** <ul style="margin-bottom:0">
+        <li><strong>Explore:</strong> All examples are supported</li>
+        <li><strong>Design:</strong> Examples 1 and 2 only</li>
+      </ul></li>
 </ul></div>
 
 # Introduction
