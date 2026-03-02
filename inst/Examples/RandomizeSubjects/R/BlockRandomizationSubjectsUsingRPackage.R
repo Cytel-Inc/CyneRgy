@@ -7,6 +7,7 @@
 #'
 #' The allocation ratio is defined as \deqn{1 : AllocRatio} where `AllocRatio = n_t / n_c`.
 #' Since the underlying `randomizeR` implementation requires integer allocation ratios, the provided numeric ratio is internally converted to the smallest integer ratio using a continued fraction approximation.
+#' The allocation vector is always constructed as c(control, treatment)
 #' 
 #' ## Notation:
 #' - `b`: Number of blocks (length of `UserParam`).
@@ -19,10 +20,10 @@
 #' @section Library Prerequisite:
 #' Requires the `randomizeR` package for block randomization.
 #'
-#' @param NumSub Integer. Total number of subjects to randomize. The value must be divisible by the sum of the allocation ratio (i.e., `sum(c(1, AllocRatio))`), as well as equal to the sum of the block sizes specified in `UserParam`.
+#' @param NumSub Integer. Total number of subjects to randomize. The value must be divisible by the sum of converted integer allocation ratio, as well as equal to the sum of the block sizes specified in `UserParam`.
 #' @param NumArms Integer. Number of arms. Must be exactly 2 (only two-arm designs are supported).
-#' @param AllocRatio Numeric. Ratio of experimental to control group sample size (nt/nc). Must be a positive value. The allocation ratio vector is constructed as `c(1, AllocRatio)` (e.g., `c(1, 1)` for equal allocation).
-#' @param UserParam List. Named list of block sizes. Each element should be named `BlockSize1`, `BlockSize2`, ..., `BlockSizeX` for X blocks. The sum of all block sizes must equal `NumSub`. Each block size must be a positive integer and a multiple of the sum of the allocation ratio. Example: `UserParam <- list(BlockSize1 = 20, BlockSize2 = 10)`.
+#' @param AllocRatio Numeric. Ratio of experimental to control group sample size (nt/nc). Must be a positive value.
+#' @param UserParam List. Named list of block sizes. Each element must be named `BlockSize1`, `BlockSize2`, ..., `BlockSizeX` for X blocks. The sum of all block sizes must equal `NumSub`. Each block size must be a positive integer and a multiple of the sum of the allocation ratio. Example: `UserParam <- list(BlockSize1 = 20, BlockSize2 = 10)`.
 #'
 #' @return A list with the following components:
 #'   \describe{
@@ -100,31 +101,31 @@ BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio
 
 # Convert a numeric treatment-to-control ratio (n_t / n_c) into the smallest integer allocation vector:
 # c(n_c, n_t)
-ConvertRatio <- function( AllocRatio, Tolerance = 1e-8, MaxDenomenator = 100 ) 
+ConvertRatio <- function( AllocRatio, Tolerance = 1e-8, MaxDenominator = 100 ) 
 {
-    dFraction    <- FractionApproximation( AllocRatio, Tolerance, MaxDenomenator )
+    dFraction    <- FractionApproximation( AllocRatio, Tolerance, MaxDenominator )
     nNumerator   <- unname( dFraction[ "nNumerator" ] )    # treatment
-    nDenomenator <- unname( dFraction[ "nDenomenator" ] )  # control
+    nDenominator <- unname( dFraction[ "nDenominator" ] )  # control
     
-    return ( c( as.integer( nDenomenator ), as.integer( nNumerator )))
+    return ( c( as.integer( nDenominator ), as.integer( nNumerator )))
 }
 
 
 # Approximate a positive real number x by a fraction p/q using continued fraction expansion
 # The algorithm iteratively decomposes AllocRatio into: a0 + 1 / (a1 + 1 / (a2 + ...))
-FractionApproximation <- function( AllocRatio, Tolerance = 1e-8, MaxDenomenator = 100 ) 
+FractionApproximation <- function( AllocRatio, Tolerance = 1e-8, MaxDenominator = 100 ) 
 {
     nRoundedDown <- floor( AllocRatio )
     
     if ( abs( AllocRatio - nRoundedDown ) < Tolerance ) 
     {
-        return( c( nNumerator = nRoundedDown, nDenomenator = 1 ))            
+        return( c( nNumerator = nRoundedDown, nDenominator = 1 ))            
     }
     
     nNumerator0   <- 1 
-    nDenomenator0 <- 0
+    nDenominator0 <- 0
     nNumerator1   <- nRoundedDown 
-    nDenomenator1 <- 1
+    nDenominator1 <- 1
     
     dValue <- AllocRatio
     
@@ -136,26 +137,26 @@ FractionApproximation <- function( AllocRatio, Tolerance = 1e-8, MaxDenomenator 
         dRoundedDownValue <- floor ( dValue )
         
         nNumerator2   <- dRoundedDownValue * nNumerator1 + nNumerator0
-        nDenomenator2 <- dRoundedDownValue * nDenomenator1 + nDenomenator0
+        nDenominator2 <- dRoundedDownValue * nDenominator1 + nDenominator0
         
         # If denominator is above the set threshold -> return the values of the latest convergence
-        if ( nDenomenator2 > MaxDenomenator ) break
+        if ( nDenominator2 > MaxDenominator ) break
         
         # If the fraction is a close approximation of the AllocRatio -> return the values of the latest convergence
-        if ( abs( AllocRatio - ( nNumerator2 / nDenomenator2 )) < Tolerance ) 
+        if ( abs( AllocRatio - ( nNumerator2 / nDenominator2 )) < Tolerance ) 
         {
             nNumerator1   <- nNumerator2
-            nDenomenator1 <- nDenomenator2
+            nDenominator1 <- nDenominator2
             break
         }
         
         nNumerator0   <- nNumerator1
-        nDenomenator0 <- nDenomenator1
+        nDenominator0 <- nDenominator1
         
         nNumerator1   <- nNumerator2 
-        nDenomenator1 <- nDenomenator2
+        nDenominator1 <- nDenominator2
     }
     
-    return( c( nNumerator = nNumerator1, nDenomenator = nDenomenator1 ))
+    return( c( nNumerator = nNumerator1, nDenominator = nDenominator1 ))
 }
 
