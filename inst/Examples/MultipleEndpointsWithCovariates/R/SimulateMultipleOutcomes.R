@@ -8,6 +8,7 @@
 #' Note: this code can be extended to any number of endpoints.
 #'
 #' @param NumSub Integer. Number of subjects to simulate.
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID Integer vector of length `NumSub`. Treatment assignment for each subject (for two arm confirmatory: 0 = control, 1 = treatment).
 #' @param Mean Numeric. Not used directly in this function.
 #' @param StdDev Numeric. Not used directly in this function.
@@ -33,20 +34,21 @@
 #'        }
 #' 
 #' @examples 
-#' UserParam <- list(MeanOutcome1Ctrl = 10, MeanOutcome1Trt = 12,
-#'                   MeanOutcome2Ctrl = 20, MeanOutcome2Trt = 22,
-#'                   MeanOutcome3Ctrl = 30, MeanOutcome3Trt = 32)
+#' UserParam <- list( MeanOutcome1Ctrl = 10, MeanOutcome1Trt = 12,
+#'                    MeanOutcome2Ctrl = 20, MeanOutcome2Trt = 22,
+#'                    MeanOutcome3Ctrl = 30, MeanOutcome3Trt = 32 )
 #' 
-#' result <- SimulateMultipleOutcomes(NumSub = 100,
-#'                                    TreatmentID = sample(0:1, 100, replace = TRUE),
-#'                                    Mean = NULL, 
-#'                                    StdDev = NULL, 
-#'                                    UserParam = UserParam)
+#' result <- SimulateMultipleOutcomes( NumSub = 100,
+#'                                     ArrivalTime = NULL,
+#'                                     TreatmentID = sample( 0:1, 100, replace = TRUE ),
+#'                                     Mean = NULL, 
+#'                                     StdDev = NULL, 
+#'                                     UserParam = UserParam )
 #' @export
 
 ######################################################################################################################## .
 
-SimulateMultipleOutcomes <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL ) 
+SimulateMultipleOutcomes <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) 
 {
     
     # Initialize the return variables that will contain results for 3 normal endpoints 

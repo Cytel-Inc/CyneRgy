@@ -2,6 +2,7 @@
 #' @param SimulatePatientOutcomePercentAtZeroBetaDist
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0 where the probability of a 0 is drawn from a Beta distribution.
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
@@ -17,7 +18,7 @@
 #' The probability of 0 outcome on the control treatment is sampled from a Beta( UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 ) distribution.
 #' The probability of 0 outcome on the experimental treatment is sampled from a Beta( UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution.
 #' The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.  
-SimulatePatientOutcomePercentAtZeroBetaDist <- function(NumSub, TreatmentID, Mean, StdDev, ________________________)
+SimulatePatientOutcomePercentAtZeroBetaDist <- function(NumSub, ArrivalTime, TreatmentID, Mean, StdDev, ________________________)
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file

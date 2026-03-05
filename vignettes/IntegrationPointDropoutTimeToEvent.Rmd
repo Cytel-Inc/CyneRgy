@@ -63,7 +63,7 @@ GenDropTimes <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTi
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
+1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](2ArmPatientDropout.html)
     - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)
-2. **Multiple Arm, Time-to-Event Outcome - Simulate Patient Dropout**
-    - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)
+<!-- 2. [**Multiple Arm, Time-to-Event Outcome - Simulate Patient Dropout**](MultiArmPatientDropout.html)
+    - [GenerateDropoutTimeMultiArmForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R) -->

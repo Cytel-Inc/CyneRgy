@@ -1,6 +1,7 @@
 #' @param SimulatePatientOutcomeNormalAssurance
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
@@ -19,7 +20,7 @@
 #'  }
 #' @description
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
-SimulatePatientOutcomeNormalAssurance <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
+SimulatePatientOutcomeNormalAssurance <- function(NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL)
 {
     
     # Note: Example of how you could save the parameters in East. Do NOT setwd in Solara
@@ -75,13 +76,14 @@ SimulatePatientOutcomeNormalAssurance <- function(NumSub, TreatmentID, Mean, Std
 #' @param SimulatePatientOutcomeNormalAssuranceUsingPriorInput
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
 #' @param  UserParam A list of user defined parameters in East.   The default must be NULL resulting in ignoring the percent of patients at 0.
 #' @description
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
-SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
+SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function(NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL)
 {
     # Step 1 - Use the prior that was supplied from output ####
     if( exists("vPrior"))

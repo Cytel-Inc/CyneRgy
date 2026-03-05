@@ -3,6 +3,7 @@
 #' @title Template for simulating patient data in R when the outcome is Dual Endpoints. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param EndpointType A vector of endpoint type for each endpoint, 0 (Continuous), 1 (Binary), 2 (TTE). length( EndpointType ) = number of endpoints.
 #' @param EndpointName A vector of endpoint names for each endpoint, length( EndpointType ) = number of endpoints.

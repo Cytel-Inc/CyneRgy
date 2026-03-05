@@ -7,12 +7,13 @@
 #' 
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
 #' @param UserParam A list of user defined parameters in East Horizon. The UserParam must be NULL or is ignored in this R script
 ######################################################################################################################## .
 
-SimulatePatientOutcomeBinaryWithAssurancePh3 <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+SimulatePatientOutcomeBinaryWithAssurancePh3 <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
   # Step 1: Sample true probability of response 
   if( !exists( "gdfPh2Post" ) )

@@ -3,11 +3,13 @@
 
 # CyneRgy <a href="https://Cytel-Inc.github.io/CyneRgy/"><img src="man/figures/logo.png" align="right" height="120" /></a>
 
-# Introduction 
+# Introduction
 
 R integration with Cytel's products provides a highly efficient way to create custom adaptive clinical trial designs and enhance your simulation capabilities, without requiring you to develop an entire R code base.
 
 The CyneRgy R package demonstrates the synergy between R and Cytel's products such as East Horizon, providing tools, documentation, templates, and examples. It also offers a streamlined R experience in RStudio, simplifying the creation of new custom scripts.
+
+Important (January 2026): **ArrivalTime** is a new required parameter for the Response integration point. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used. See [**Integration Point: Response**](https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponse.html) for more information.
 
 # Getting Started
 

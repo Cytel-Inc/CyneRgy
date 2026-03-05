@@ -3,7 +3,9 @@ template:
   bootstrap: 5
   light-switch: true
   bslib:
-    primary: "#473d81"
+    primary: "#6353A3"
+    danger: "#BE216A"
+    warning: "#FBAE42"
     base_font: {google: "Source Sans 3"}
     heading_font: {google: "Source Sans 3"}
     code_font: {google: "Source Code Pro"}
@@ -42,6 +44,10 @@ navbar:
                   href: articles/IntegrationPointDropout.html
                 - text: Treatment Selection
                   href: articles/IntegrationPointTreatmentSelection.html
+                - text: Multiplicity Adjustment
+                  href: articles/IntegrationPointMultiplicityAdjustment.html
+                - text: Design
+                  href: articles/IntegrationPointDesign.html
         examples:
             text: Examples
             href: articles/ExampleOutline.html

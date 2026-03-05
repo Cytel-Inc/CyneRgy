@@ -6,6 +6,7 @@
 #' @param NumSub The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
 #' @param ProbDrop A Dropout probability for both the arms. The argument value is passed from Engine.
 #' @param NumVisit Number of Visits
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
 #' @param Inputmethod There were two options  1) Actual values, 2) Change from baseline. 
 #' Actual values: You give mean and SD values for each visit and using those you will generate responses.
@@ -25,10 +26,10 @@
 
 #' @return retval : A set of arrays of response for all subjects. Each array corresponds to each visit user has specified 
 
-GenRespDiffOfMeansRepMeasures      <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
+GenRespDiffOfMeansRepMeasures      <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
   library(MASS)
-  Error 	                         <- 0
+  Error 	                       <- 0
   lReturn                          <- list()
   nQtyTimePoints                   <- length( MeanControl )
   
@@ -57,13 +58,13 @@ GenRespDiffOfMeansRepMeasures      <- function( NumSub, NumVisit, TreatmentID, I
   mOutcomes[ TreatmentID == 1, ]   <- mExp
 
   # Build the return list   East expects a Response variable in the return so just make it the first type #### 
-  lReturn <- list( Response = as.double( mOutcomes[,1] ), ErrorCode = as.integer( 0 )  )
+  lReturn <- list( Response = as.double( mOutcomes[ ,1 ] ), ErrorCode = as.integer( 0 )  )
   
   # Add all the types to the list 
   for( nTime in 1:nQtyTimePoints )
   {
     strTypeName <- paste0( "Response", nTime )
-    lReturn[[ strTypeName ]]       <- as.double( mOutcomes[ ,nTime ] )
+    lReturn[[ strTypeName ]]       <- as.double( mOutcomes[ , nTime ] )
   }
   
   lReturn$ErrorCode <- as.integer( Error )

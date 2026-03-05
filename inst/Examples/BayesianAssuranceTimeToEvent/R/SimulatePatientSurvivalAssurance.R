@@ -1,7 +1,8 @@
-#' @param SimulatePatientSurvivalAssurance
+#' @name SimulatePatientSurvivalAssurance
 #' @title Simulate Time-To-Event Data for Assurance 
 #' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, e.g., 250.
 #' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided. 
@@ -35,11 +36,11 @@
 #' The analysis is assumed to be a cox proportional hazard model where a Go decision is made if the p-value $\leq$ 0.025.
 #' For assurance, a bi-modal prior on the Log(HR) is used.   The components of the prior are:
 #' Weight: 25% on $N( 0, 0.02 )$
-#'  Weight: 75% on $Beta( 2, 2)$, rescaled between -0.4 and 0.
+#' Weight: 75% on $Beta( 2, 2)$, rescaled between -0.4 and 0.
 
-SimulatePatientSurvivalAssurance <- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL  ) 
+SimulatePatientSurvivalAssurance <- function(NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL  ) 
 {
-    # The SurvParam depends on input in East, EAST sends the Medan (see the Simulation->Response Generation tab for what is sent)
+    # The SurvParam depends on input in East, EAST sends the Medan (see the Simulation -> Response Generation tab for what is sent)
     # setwd( "C:\\AssuranceNormal\\ExampleArgumentsFromEast\\Example3")
     # #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
     # saveRDS( NumSub, "NumSub.Rds")
@@ -54,7 +55,7 @@ SimulatePatientSurvivalAssurance <- function(NumSub, NumArm, TreatmentID, SurvMe
     vTrtAllocation <- table( TreatmentID )
     vSurvTime      <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
     
-    ErrorCode    <- 0 
+    ErrorCode      <- 0 
     
     # Step 2: First sample the piece of the prior we want to use ####
     
@@ -71,23 +72,21 @@ SimulatePatientSurvivalAssurance <- function(NumSub, NumArm, TreatmentID, SurvMe
         dLogTrueHazard <- rbeta( 1, UserParam$dAlpha, UserParam$dBeta )
         
         dWidth <- UserParam$dUpper - UserParam$dLower
-        dLogTrueHazard <- dWidth * (dLogTrueHazard ) + UserParam$dLower
+        dLogTrueHazard <- dWidth * ( dLogTrueHazard ) + UserParam$dLower
         
     }
     
     # Step 3: Compute the hazard on experimental given the true hazard on control and the sample dLogHazard ####
     dTrueHazard <- exp( dLogTrueHazard )
-    dRateCtrl   <- 1.0/UserParam$dMeanTTECtrl 
-    dRateExp    <- dTrueHazard*dRateCtrl
+    dRateCtrl   <- 1.0 / UserParam$dMeanTTECtrl 
+    dRateExp    <- dTrueHazard * dRateCtrl
     
     vRates      <- c( dRateCtrl, dRateExp )
     
-    
     for( i in 1:NumSub )
     {
-        vSurvTime[ i ] <- rexp( 1, vRates[ TreatmentID[ i  ] + 1 ] )
+        vSurvTime[ i ] <- rexp( 1, vRates[ TreatmentID[ i ] + 1 ] )
     }
-    
     
     #vTrt1 <- rexp( vTrtAllocation[ 1 ], vRates[ 1 ] )
     #vTrt2 <- rexp( vTrtAllocation[ 2 ], vRates[ 2 ] )
@@ -95,9 +94,9 @@ SimulatePatientSurvivalAssurance <- function(NumSub, NumArm, TreatmentID, SurvMe
     #vSurvTime[ TreatmentID == 0 ] <- vTrt1
     #vSurvTime[ TreatmentID == 1 ] <- vTrt2
        
-    lRet <- list( SurvivalTime = as.double(vSurvTime),
-                  ErrorCode    = as.integer( ErrorCode) ,
-                  TrueHR       = as.double( rep( dTrueHazard, NumSub)) )
+    lRet <- list( SurvivalTime = as.double( vSurvTime ),
+                  ErrorCode    = as.integer( ErrorCode ) ,
+                  TrueHR       = as.double( rep( dTrueHazard, NumSub ) ) )
     
     return( lRet )
 }

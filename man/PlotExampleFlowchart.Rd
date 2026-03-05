@@ -9,13 +9,16 @@ PlotExampleFlowchart(
   nBoxHeight = 0.7,
   nBoxSpacing = 0.3,
   nColumnWidth = 0.5,
-  nBigColWidth = 3
+  nBigColWidth = 3,
+  bShowTreatmentSelection = FALSE,
+  bShowMultiplicityAdjustment = FALSE
 )
 }
 \arguments{
 \item{lIntPoints}{A named list where each name is an integration point (e.g., "Response")
 and each element is a character vector of step labels for that integration point.
-Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment Selection", "Response", "Analysis"}
+Options: "Initialization", "Enrollment", "Randomization", "Dropout",
+"Treatment Selection", "Response", "Analysis", "Multiplicity Adjustment"}
 
 \item{nBoxHeight}{Numeric. Base height of each step box. Default = 0.7.}
 
@@ -24,6 +27,10 @@ Options: "Initialization", "Enrollment", "Randomization", "Dropout", "Treatment 
 \item{nColumnWidth}{Numeric. Width of unused integration point columns. Default = 0.5.}
 
 \item{nBigColWidth}{Numeric. Width of used integration point columns. Default = 3.}
+
+\item{bShowTreatmentSelection}{Logical. Whether to include the "Treatment Selection" column. Default = FALSE.}
+
+\item{bShowMultiplicityAdjustment}{Logical. Whether to include the "Multiplicity Adjustment" column. Default = FALSE.}
 }
 \value{
 A ggplot object containing the flowchart visualization.

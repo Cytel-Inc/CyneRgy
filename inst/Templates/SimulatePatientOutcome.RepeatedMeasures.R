@@ -2,6 +2,7 @@
 #' @name {{FUNCTION_NAME}}
 #' @param NumSub: Mandatory. The integer number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
 #' @param NumVisit: Mandatory. Integer number of Visits
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID: Mandatory. Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
 #' @param Inputmethod: Mandatory. 0 - Actual values : Indicating that user has given mean and SD values for each visit. These are used to generate responses.
 #' @param VisitTime: Mandatory. Numeric Visit Times
@@ -26,7 +27,7 @@
 #'                  \item{Response[NumVisit]}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}             
 #'                      
 #'                      
-{{FUNCTION_NAME}} <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
+{{FUNCTION_NAME}} <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
     # TO DO : Modify this function appropriately
     Error 	     <- 0

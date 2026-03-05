@@ -1,6 +1,7 @@
-#' @param SimulatePatientOutcomePercentAtZero
+#' @name SimulatePatientOutcomePercentAtZero
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
@@ -12,16 +13,16 @@
 #' In this example, the continuous outcome is a patient's change from baseline. For this function, 20% of patients are believed to have no change due to treatment.  
 #' As such, this function simulations patient outcome where, on average, 20% will have a value of 0 for the outcome and 80%, on average, will have their value
 #' simulated from a normal distribution with the mean and standard deviation as sent from East. 
-SimulatePatientOutcomePercentAtZero <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
+SimulatePatientOutcomePercentAtZero <- function(NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL)
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file
     # setwd( "C:/EastRWebinar/Webinar1/2ArmNormalOutcomePatientSimulation/ExampleEastOutput/" )
-    # saveRDS(UserParam, "UserParam.Rds")
-    # saveRDS(NumSub, "NumSub.Rds" )
+    # saveRDS( NumSub, "NumSub.Rds" )
     # saveRDS( TreatmentID, "TreatmentID.Rds" )
     # saveRDS( Mean, "Mean.Rds" )
     # saveRDS( StdDev, "StdDev.Rds" )
+    # saveRDS( UserParam, "UserParam.Rds" )
     
     # If the user did not specify the user parameters, but still called this function then the probability
     # of a 0 outcome is 0 for both treatments
@@ -55,7 +56,7 @@ SimulatePatientOutcomePercentAtZero <- function(NumSub, TreatmentID, Mean, StdDe
             vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ])
     }
     
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if(  any( is.na( vPatientOutcome ) ) )
         nError <- -100
     
     return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ))

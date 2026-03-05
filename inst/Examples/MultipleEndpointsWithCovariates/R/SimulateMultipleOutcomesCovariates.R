@@ -13,6 +13,7 @@
 #' Note: this function can be extended to simulate any number of endpoints and covariates.
 #'
 #' @param NumSub Integer. Number of subjects to simulate.
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID Integer vector of length `NumSub`. Treatment assignment for each subject (for two arm confirmatory: 0 = control, 1 = treatment).
 #' @param Mean Numeric. Not used directly in this function.
 #' @param StdDev Numeric. Not used directly in this function.
@@ -53,7 +54,8 @@
 #' NumSub      <- 100
 #' TreatmentID <- rep(c(0,1), NumSub / 2, replace = TRUE)
 #'                    
-#' result <- SimulateMultipleOutcomesCovariates(NumSub = NumSub, 
+#' result <- SimulateMultipleOutcomesCovariates(NumSub = NumSub,
+#'                                              ArrivalTime = NULL, 
 #'                                              TreatmentID = TreatmentID,
 #'                                              Mean = NULL, 
 #'                                              StdDev = NULL, 
@@ -63,7 +65,7 @@
 
 ######################################################################################################################## .
 
-SimulateMultipleOutcomesCovariates <- function( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )   
+SimulateMultipleOutcomesCovariates <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )   
 {
     
     # Initialize the return variables that will contain results for 3 normal endpoints

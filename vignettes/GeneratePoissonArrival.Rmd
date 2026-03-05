@@ -5,6 +5,6 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default
 ---
-```{r child = '../inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.Rmd'}
+```{r child = '../inst/Examples/GeneratePoissonArrival/Description.Rmd'}
 ```
 

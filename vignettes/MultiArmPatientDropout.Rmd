@@ -1,0 +1,11 @@
+---
+title: "Multiple Arm, Single Endpoint - Patient Dropout"
+author: "Gabriel Potvin and Anoop Singh Rawat"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r child = '../inst/Examples/MultiArmPatientDropout/Description.Rmd'}
+```

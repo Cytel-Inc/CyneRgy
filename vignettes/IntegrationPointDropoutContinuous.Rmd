@@ -76,7 +76,7 @@ GenCensorInd <- function( NumSub, NumArm, ProbDrop, TreatmentID, UserParam = NUL
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
+1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](2ArmPatientDropout.html)
     - [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R)
-2. **Multiple Arm, Continuous or Binary Outcome - Simulate Patient Dropout**
-    - [GenerateCensoringUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R)
+2. [**Multiple Arm, Time-to-Event Outcome - Simulate Patient Dropout**](MultiArmPatientDropout.html)
+    - [GenerateCensoringMultiArmUsingBinomialProportion.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateCensoringMultiArmUsingBinomialProportion.R)

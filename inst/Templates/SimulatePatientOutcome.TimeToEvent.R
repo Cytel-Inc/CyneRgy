@@ -3,6 +3,7 @@
 #' @title Template for simulating patient data in R when the outcome time is time-to-event. 
 #' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, eg 250.
 #' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided. 
@@ -36,7 +37,7 @@
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
 #' However, you may choose to ignore the parameters SurvMethod, NumPrd, PrdTime, and SurvParam if the patient simulator
 #' you are creating only requires use of parameters the user will add to UserParam
-{{FUNCTION_NAME}} <- function( NumSub, NumArm, TreatmentID,  SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
+{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID,  SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
     # Step 1 - Initialize the return variables or other variables needed ####
 	Error 	        <- 0

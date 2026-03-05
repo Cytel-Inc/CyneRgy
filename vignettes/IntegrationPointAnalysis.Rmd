@@ -36,7 +36,7 @@ This integration point is available in East Horizon Explore for the following st
 
 ||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
+|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
 |Multiple Arm Confirmatory|🔜|✅|✅|-|-|-|-|-|
 |Dose Finding|-|-|🔜|-|-|-|-|-|
 
@@ -51,7 +51,20 @@ This integration point is available in East Horizon Explore for the following st
 ## East Horizon Design
 
 <details>
-<summary>This integration point is available in East Horizon Design for the following tests (click to expand/collapse):</summary>
+<summary>Click to expand/collapse</summary>
+
+This integration point is available in East Horizon Design for the following study objectives and endpoint types:
+
+||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
+|----------------|--|--|--|--|--|--|--|--|
+|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|🔜|🔜|
+|Two Arm Confirmatory - Multiple Endpoints|❌\*|❌\*|❌\*|-|-|-|-|-|
+|Multiple Arm Confirmatory|🔜|🔜|🔜|-|-|-|-|-|
+|Dose Finding|-|-|🔜|-|-|-|-|-|
+
+\*For Multiple Endpoints, you can use the [Integration Point: Design](IntegrationPointDesign.html) to implement your own test statistic and decision.
+
+This integration point is available in East Horizon Design for the following tests:
 
 |Test|Study Objective|Endpoint|Availability|
 |-------|-----|-----|--|

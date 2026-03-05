@@ -1,6 +1,6 @@
 ---
 title: "Consecutive Studies, Continuous & Time-to-Event Outcomes"
-author: "J. Kyle Wathen and Laurent Spiess"
+author: "J. Kyle Wathen, Laurent Spiess, Gabriel Potvin"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default

@@ -2,6 +2,7 @@
 #' @title Simulate patient outcomes from a binary distribution with a percent of patients are treatment resistant. 
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial including experimental and control, integer value
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
 #' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in simulating from a non-mixture distribution.
@@ -20,20 +21,19 @@
 #'  UserParam$dProbOfTreatmentResistantExp
 #'  Step 2: If the value in Step 1, indicating the patient is treatment resistant then their outcome is set to 0, otherwise the simulate their
 #'  outcome from a binomial distribution using the response probabilities provided in PropRest.  
-SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, TreatmentID, PropResp, UserParam = NULL )
+SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
     # Note: It can be helpful to save to the parameters that East sent.
     # The next two lines show how you could save the UserParam variable to an Rds file
     # setwd(["ENTER THE DESIRED LOCATION TO SAVE THE FILE"])
-    # saveRDS( UserParam, "UserParam.Rds")
-    # saveRDS( NumSub, "NumSub.Rds" )
+    # saveRDS( NumSub, "NumSub.Rds" )    
+    # saveRDS( NumArm, "NumArm.Rds" )
     # saveRDS( TreatmentID, "TreatmentID.Rds" )
     # saveRDS( PropResp, "PropResp.Rds" )
-    # saveRDS( NumArm, "NumArm.Rds" )
- 
-    
+    # saveRDS( UserParam, "UserParam.Rds")    
     # If the user did not specify the user parameters, but still called this function then the probability
     # of treatment resistant is 0 for both treatments
+    
     if( is.null( UserParam ) )
     {
         UserParam <- list( dProbOfTreatmentResistantCtrl = 0, dProbOfTreatmentResistantExp = 0 )
@@ -65,7 +65,7 @@ SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, Treatmen
             vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
     }
     
-    if(  any( is.na( vPatientOutcome )==TRUE) )
+    if(  any( is.na( vPatientOutcome ) ) )
         nError <- -100
    
     return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )

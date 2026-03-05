@@ -135,5 +135,5 @@ GenCensorInd <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
 
 Explore the following examples for more context:
 
-1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](PatientDropout.html)
+1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](2ArmPatientDropout.html)
     - [GenerateDropoutTimeForRM.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM.R)

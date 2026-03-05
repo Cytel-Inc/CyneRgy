@@ -13,10 +13,10 @@
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.9/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Variables of LookInfo">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,8 @@
     <li><a class="dropdown-item" href="../articles/IntegrationPointResponse.html">Response (Patient Simulation)</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointDropout.html">Dropout</a></li>
     <li><a class="dropdown-item" href="../articles/IntegrationPointTreatmentSelection.html">Treatment Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointMultiplicityAdjustment.html">Multiplicity Adjustment</a></li>
+    <li><a class="dropdown-item" href="../articles/IntegrationPointDesign.html">Design</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/ExampleOutline.html">Examples</a></li>
@@ -87,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">October 16, 2025</h4>
+            <h4 data-toc-skip class="date">February 19, 2026</h4>
       
 
       <div class="d-none name"><code>VariablesOfLookInfo.Rmd</code></div>
@@ -367,7 +369,8 @@ Secondary contrast.</td>
 </table>
 </div>
 <div class="section level3">
-<h3 id="for-endpoint-type-dual-tte-tte-or-tte-binary">For <code>Endpoint Type = Dual (TTE-TTE or TTE-Binary)</code><a class="anchor" aria-label="anchor" href="#for-endpoint-type-dual-tte-tte-or-tte-binary"></a>
+<h3 id="for-endpoint-type-dual-tte-tte-or-tte-binary-including-for-multiplicity-adjustment">For <code>Endpoint Type = Dual (TTE-TTE or TTE-Binary)</code>
+(including for Multiplicity Adjustment)<a class="anchor" aria-label="anchor" href="#for-endpoint-type-dual-tte-tte-or-tte-binary-including-for-multiplicity-adjustment"></a>
 </h3>
 <p>Named List of length equal to the number of endpoints, indicating the
 trial type for each endpoint. For example,
@@ -578,6 +581,91 @@ actual endpoint name as specified by the user.</li>
 </div>
 </div>
 <div class="section level2">
+<h2 id="for-study-objective-two-arm-confirmatory---multiple-endpoints">For
+<code>Study objective = Two Arm Confirmatory - Multiple Endpoints</code><a class="anchor" aria-label="anchor" href="#for-study-objective-two-arm-confirmatory---multiple-endpoints"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="16%">
+<col width="16%">
+<col width="66%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Variable Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>AnalysisTime</strong></td>
+<td>Numeric</td>
+<td>Current analysis time.</td>
+</tr>
+<tr class="even">
+<td><strong>LookNum</strong></td>
+<td>Integer</td>
+<td>Current look number.</td>
+</tr>
+<tr class="odd">
+<td><strong>TestStatisticsOutputs</strong></td>
+<td>Named List</td>
+<td>Named List of length equal to the number of endpoints, containing
+the test statistics results from the engine. Names are user-specified
+endpoint names from <code>DesignParam$EndpointName</code>. Order also
+matches <code>DesignParam$EndpointName</code> order. Each element
+contains the integer <code>ErrorCode</code> (0 = Success) and the list
+<code>data</code>, which contains:<br>- For TTE endpoint:
+<code>Score</code> (numeric), <code>StdErr</code> (numeric standard
+error), <code>TS</code> (numeric test statistic), <code>TSPVal</code>
+(numeric p-value).<br>- For Binary endpoint: <code>PropPld</code>
+(numeric pooled proportion), <code>StdErr</code> (numeric standard
+error), <code>TS</code> (numeric test statistic), <code>TSPVal</code>
+(numeric p-value).<br>- For Continuous endpoint: <code>DoF</code>
+(numeric degrees of freedom), <code>SDPld</code> (numeric pooled
+standard deviation), <code>StdErr</code> (numeric standard error),
+<code>TS</code> (numeric test statistic), <code>TSPVal</code> (numeric
+p-value).</td>
+</tr>
+<tr class="even">
+<td><strong>InfoFrac</strong></td>
+<td>List of Numeric Vector</td>
+<td>List of length equal to the number of endpoints, containing the
+vectors of the actual information fractions up to the current look for
+one endpoint. Order matches <code>DesignParam$EndpointName</code>
+order.</td>
+</tr>
+<tr class="odd">
+<td><strong>LastLookDecision</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length equal to the number of endpoints, containing the
+decisions from previous look. Order matches
+<code>DesignParam$EndpointName</code> order. Possible values:<br>–
+<code>0</code>: Continue.<br>– <code>1</code>: Efficacy.<br>–
+<code>2</code>: Futility.</td>
+</tr>
+<tr class="even">
+<td><strong>EfficacyBoundaryPScale</strong></td>
+<td>Vector of Numeric</td>
+<td>Vector of length equal to the number of endpoints, containing the
+final set of efficacy boundaries on the p-value scale used for testing
+each endpoint by engine. <code>NaN</code> where boundaries were not
+calculated. Order matches <code>DesignParam$EndpointName</code>
+order.</td>
+</tr>
+<tr class="odd">
+<td><strong>EPStatus</strong></td>
+<td>Vector of Integer</td>
+<td>Vector of length equal to the number of endpoints, containing the
+status of each endpoint. Order matches
+<code>DesignParam$EndpointName</code> order. Possible values:<br>-
+<code>0</code>: Success.<br>- <code>1</code>: Insufficient
+information.<br>- <code>2</code>: Excessive information.<br>-
+<code>3</code>: Computational error.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
 <h2 id="for-study-objective-multiple-arm-confirmatory-or-dose-finding">For
 <code>Study Objective = Multiple Arm Confirmatory or Dose Finding</code><a class="anchor" aria-label="anchor" href="#for-study-objective-multiple-arm-confirmatory-or-dose-finding"></a>
 </h2>
@@ -719,7 +807,7 @@ proof of concept (PoC) threshold.</td>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

@@ -35,7 +35,18 @@ This integration point is available in East Horizon Explore for the following st
 ## East Horizon Design
 
 <details>
-<summary>This integration point is available in East Horizon Design for the following tests (click to expand/collapse):</summary>
+<summary>Click to expand/collapse</summary>
+
+This integration point is available in East Horizon Design for the following study objectives and endpoint types:
+
+||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
+|----------------|--|--|--|--|--|--|--|--|
+|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|❌|❌|
+|Two Arm Confirmatory - Multiple Endpoints|❌|❌|❌|-|-|-|-|-|
+|Multiple Arm Confirmatory|🔜|🔜|🔜|-|-|-|-|-|
+|Dose Finding|-|-|🔜|-|-|-|-|-|
+
+This integration point is available in East Horizon Design for the following tests:
 
 |Test|Study Objective|Endpoint|Availability|
 |-------|-----|-----|--|
@@ -201,7 +212,7 @@ SelectTreatment <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 
 Explore the following examples for more context:
 
-1. [**Multiple Arm, Binary Outcome - Treatment Selection**](TreatmentSelectionDescription.html)
+1. [**Multiple Arm, Binary Outcome - Treatment Selection**](TreatmentSelection.html)
     - [SelectExpThatAreBetterThanCtrl.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpThatAreBetterThanCtrl.R)
     - [SelectExpUsingBayesianRule.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpUsingBayesianRule.R)
     - [SelectExpWithPValueLessThanSpecified.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/R/SelectExpWithPValueLessThanSpecified.R)

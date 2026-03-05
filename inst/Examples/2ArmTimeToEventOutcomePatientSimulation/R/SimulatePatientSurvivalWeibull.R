@@ -1,6 +1,8 @@
-#' Simulate patient outcomes from a Weibull distribution 
+#' @name SimulatePatientSurvivalWeibull
+#' @title Simulate patient outcomes from a Weibull distribution.
 #' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, eg 250.
 #' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
+#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided. 
@@ -31,13 +33,13 @@
 #'  The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 #'  and only the parameters in UserParam are utilized.  
 #'  @export
-SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
+
+SimulatePatientSurvivalWeibull <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
    
-
     # Step 1 - Initialize the return variables or other variables needed ####    
     vSurvTime    <- rep( -1, NumSub )  # The vector of patient survival times that will be returned.  
-    vTreatmentID <- TreatmentID +1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
+    vTreatmentID <- TreatmentID + 1   # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1 
     ErrorCode    <- as.integer( 0 )
     
     # Step 2 - Validate custom variable input and set defaults ####
@@ -63,10 +65,7 @@ SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMetho
     {
         nPatientTreatment     <- vTreatmentID[ nPatIndx ]
         vSurvTime[ nPatIndx ] <- rweibull( 1, vShapes[ nPatientTreatment ], vScales[ nPatientTreatment ] )
-        
     }
         
-
-    
     return( list(SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode) )
 }
