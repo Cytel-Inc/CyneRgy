@@ -105,14 +105,13 @@ This example demonstrates how to customize the patient outcome simulation in Eas
 </details>
 
 <details>
-<summary>**Childhood Anxiety Trial**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span></summary>
+<summary>**Childhood Anxiety Trial**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span></summary>
 This example covers a specific situation where the patient data simulation needs to be customized to match what is expected in a clinical trial in childhood anxiety.  
 [Click here to view the full example.](ChildhoodAnxiety.html)
 </details>
 
 <details>
-<summary>**PK/PD Modeling for Patient Simulation**</summary>
+<summary>**PK/PD Modeling for Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
 This example illustrates three approaches to customizing patient outcome simulations in East Horizon using PK/PD modeling: simulating plasma drug concentrations via a one-compartment model with first-order absorption and elimination, translating concentrations into effects through an Emax model to produce continuous outcomes, and integrating externally sourced PK/PD data from a CSV file.
 [Click here to view the full example.](PKPDResponseGeneration.html)
 </details>

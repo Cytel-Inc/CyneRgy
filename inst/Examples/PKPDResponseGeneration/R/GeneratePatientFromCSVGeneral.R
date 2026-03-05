@@ -1,10 +1,64 @@
-GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime,
-                              MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat,
-                              UserParam = NULL ) {
+######################################################################################################################## .
+#' @name GeneratePatientFromCSVGeneral
+#' @title Generate Patient Responses from CSV File with Flexible Formatting
+#' 
+#' @description
+#' This function reads pre-simulated patient data from a CSV file and returns visit-level responses for trial subjects.
+#' It accepts flexible column naming conventions and treatment identifiers (case-insensitive), making it compatible with
+#' various CSV formatting styles. Use this function when you have externally generated patient data (e.g., from complex 
+#' PK/PD models) that you want to integrate into your trial simulation. For faster performance with stricter formatting 
+#' requirements, see GeneratePatientFromCSVSpecific.R.
+#'
+#' @param NumSub The number of subjects to simulate, integer value.
+#' @param NumVisit The number of visits, integer value.
+#' @param TreatmentID A vector of treatment IDs. `0 = control`, `1 = treatment`. The length of `TreatmentID` must equal `NumSub`.
+#' @param Inputmethod Method for specifying input parameters (passed from East/East Horizon, not used in this function).
+#' @param VisitTime Numeric vector of visit times (passed from East/East Horizon, not used in this function).
+#' @param MeanControl Numeric vector of control means for all visits (passed from East/East Horizon, not used in this function).
+#' @param MeanTrt Numeric vector of treatment means for all visits (passed from East/East Horizon, not used in this function).
+#' @param StdDevControl Numeric vector of control standard deviations for all visits (passed from East/East Horizon, not used in this function).
+#' @param StdDevTrt Numeric vector of treatment standard deviations for all visits (passed from East/East Horizon, not used in this function).
+#' @param CorrMat Correlation matrix between all visits (passed from East/East Horizon, not used in this function).
+#' @param UserParam A list of user-defined parameters. Must contain the following named element:
+#'   \describe{
+#'      \item{`UserParam$InputFileName`}{The name of the CSV file in the Inputs folder (e.g., "SimPatientDataAlt.csv").}
+#'   }
+#'   
+#' @details
+#' The CSV file must contain:
+#' - A Treatment column (case-insensitive) with treatment assignments
+#' - Visit columns for each visit (accepts "Visit X", "Visit.X", or "VisitX" format, case-insensitive)
+#' 
+#' Accepted Treatment Identifiers:
+#' - Control: "0", "c", "ctl", "control", "placebo", "cntl" (case-insensitive)
+#' - Treatment: "1", "t", "trt", "treatment", "active" (case-insensitive)
+#' 
+#' Missing Values: "", "NA", "NaN", "na", "null", "N/A" are recognized as missing
+#' 
+#' The function caches the CSV data globally (`gdfPatients`) for efficiency across multiple function calls.
+#' Patients are randomly sampled without replacement from each treatment arm, ensuring unique patient 
+#' assignments within each simulation replicate.
+#'
+#' @return A list with the following components:
+#' \item{`Response1`, `Response2`, ...}{Numeric vectors of patient responses for each visit.}
+#' \item{`ErrorCode`}{Integer value:
+#'                      \describe{
+#'                        \item{0}{No error.}
+#'                        \item{-1}{CSV file not found.}
+#'                        \item{-2}{Error reading CSV file.}
+#'                        \item{-4}{Insufficient visit columns in CSV.}
+#'                        \item{-5}{Treatment column not found.}
+#'                        \item{-6}{Insufficient patients in CSV for one or both arms.}
+#'                      }}
+#' @export
+######################################################################################################################## .
+
+GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+    # Initialize return variables and error code
     nError <- 0
     lReturn <- list()
     
-    
+    # Build CSV path and confirm it exists
     strCSVPath <- paste0( "Inputs/", UserParam$InputFileName )
     if( !file.exists( strCSVPath ) ) {
         nError <- -1
@@ -87,7 +141,6 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
         vTakeTrt  <- sample( vIdxTrt , nNeedTrt , replace = FALSE )
     
     # vPick will contain the index of the patient to use from the CSV that was treated with TreatmentID
-    
     vPick <- integer( NumSub )
     nCtl  <- 0L  # Index for which control patient to select
     nTrt  <- 0L  # Index for which treatment patient to select
@@ -123,11 +176,9 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
     return( lReturn )
 }
 
-
-
 # ---------------- Local helpers ----------------
 
-# ---- Case/space/underscore/dot?insensitive column matching (for column names only)
+# Case/space/underscore/dot?insensitive column matching (for column names only)
 NormalizeName <- function( str ) {
     vStr <- tolower( as.character( str ) )
     vStr <- gsub( "[[:space:]_.]+", "", vStr )
@@ -160,7 +211,6 @@ CoerceGroup01 <- function( x ) {
         return( 1L )
     return( NA_integer_ )
 }
-
 
 CoerceVisitNumeric <- function( v ) {
     vChr <- as.character( v )
