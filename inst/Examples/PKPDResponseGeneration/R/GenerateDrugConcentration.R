@@ -3,19 +3,20 @@
 #' @title Generate Drug Concentration Response from a One-Compartment Model with First-order Absorption
 #' 
 #' @description
-#' Use a one-compartment PK model with first-order absorption to generate simulate plasma concentrations for patients.
+#' Use a one-compartment PK model with first-order absorption to simulate plasma concentrations for patients.
 #' 
-#' @param NumSub: Mandatory. The integer number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#' @param NumVisit: Mandatory. Integer number of Visits
-#' @param TreatmentID: Mandatory. Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
-#' @param Inputmethod: Mandatory. 0 - Actual values : Indicating that user has given mean and SD values for each visit. These are used to generate responses.
-#' @param VisitTime: Mandatory. Numeric Visit Times
-#' @param MeanControl: Mandatory. Numeric Control Mean for all visits
-#' @param MeanTrt: Mandatory. Numeric Treatment Mean for all visits
-#' @param StdDevControl: Mandatory. Numeric Control Standard Deviations for all visits
-#' @param StdDevTrt: Mandatory. Numeric Treatment Standard Deviations for all visits
-#' @param CorrMat: Mandatory. Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits. 
-#' @param UserParam User can pass custom scalar variables defined by users as a member of this list. User should access the variables using names, for example UserParam$Var1 and not order. 
+#' @param NumSub Integer. Number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
+#' @param NumVisit Integer. Number of Visits
+#' @param TreatmentID Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
+#' @param Inputmethod There were two options: 0 - the mean and SD values represent actual values.
+#'                                            1 - values represent an expected change from baseline at each visit rather than the true means.
+#' @param VisitTime Numeric. Visit Times
+#' @param MeanControl Numeric. Control Mean for all visits
+#' @param MeanTrt Numeric. Treatment Mean for all visits
+#' @param StdDevControl Numeric. Control Standard Deviations for all visits
+#' @param StdDevTrt Numeric. Treatment Standard Deviations for all visits
+#' @param CorrMat Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits. 
+#' @param UserParam List. User can pass custom scalar variables defined by users as a member of this list. User should access the variables using names, for example UserParam$Var1 and not order. 
 #' \describe{
 #'   \item{ka}{Absorption rate constant}
 #'   \item{ke}{Elimination rate constant}
@@ -35,19 +36,20 @@
 #' @export    
 ######################################################################################################################## .
 
-GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
+{
     library( deSolve )
     
     # Initialize error code and return list
-    nError <- 0
+    nError  <- 0
     lRetval <- list()
     
     # Parameters for ODE model
-    ka <- UserParam$ka  # Absorption rate constant
-    ke <- UserParam$ke  # Elimination rate constant
-    Dose <- UserParam$Dose  # Dose administered
+    dAbsorptionRate   <- UserParam$ka   # Absorption rate constant
+    dEliminationRate  <- UserParam$ke   # Elimination rate constant
+    dDose             <- UserParam$Dose # Dose administered
     
-    if ( is.null( ka ) || is.null( ke ) || is.null( Dose ) ) {
+    if ( is.null(  dAbsorptionRate ) || is.null(  dEliminationRate ) || is.null( dDose ) ) {
         nError <- -1  # Fatal error if required parameters are missing
         lRetval$ErrorCode <- as.integer( nError )
         return( lRetval )
@@ -56,21 +58,25 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     # Simulate drug concentration for each subject
     for ( nPatIndx in 1:NumSub ) {
         
-        # Initial state: A1 = Dose (amount in absorption compartment), A2 = 0 (concentration in central compartment)
-        vState <- c( A1 = Dose, A2 = 0 ) # this is a full dose in absorption compartment, none in central
-        vParameters <- c( ka = ka, ke = ke )
+        # Initial state: A1 = dDose (amount in absorption compartment), A2 = 0 (concentration in central compartment)
+        vState <- c( A1 = dDose, A2 = 0 ) # this is a full dose in absorption compartment, none in central
+        vParameters <- c(  dAbsorptionRate =  dAbsorptionRate,  dEliminationRate =  dEliminationRate )
         
         # Solve ODE for each visit time
         vConcentration <- numeric( NumVisit ) #prepare a vector (NumVisit length) to store concentrations at each visit
-        for ( nVisitIndx in 1:NumVisit ) {
-            vTime <- c( 0, VisitTime[ nVisitIndx ])  # Time points for ODE solver
+        
+        for ( nVisitIndx in 1:NumVisit ) 
+        {
+            vTime   <- c( 0, VisitTime[ nVisitIndx ])  # Time points for ODE solver
             mResult <- deSolve::ode( y = vState, times = vTime, func = OneCompartmentModelPK, parms = vParameters)
-            vState <- mResult[ nrow( mResult ), -1 ]  # Update state for next visit
+            vState  <- mResult[ nrow( mResult ), -1 ]  # Update state for next visit
+            
             vConcentration[ nVisitIndx ] <- vState[ "A2" ]  # Extract concentration at current visit
         }
         
         # Add noise based on treatment group
-        if ( TreatmentID[ nPatIndx ] == 0 ) {
+        if ( TreatmentID[ nPatIndx ] == 0 ) 
+        {
             vConcentration <- vConcentration + rnorm( NumVisit, mean = MeanControl, sd = StdDevControl )
         }
         else
@@ -80,8 +86,11 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
         
         # Store concentration for each visit
         for ( nVisitIndx in 1:NumVisit ) {
+            
             strVisitName <- paste0( "Response", nVisitIndx )
-            if ( !is.null( lRetval[[ strVisitName ]])) {
+            
+            if ( !is.null( lRetval[[ strVisitName ]])) 
+            {
                 lRetval[[ strVisitName ]] <- c( lRetval[[ strVisitName ]], vConcentration[ nVisitIndx ])
             }
             else
@@ -97,12 +106,13 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
 }
 
 # Define helper ODE function for one-compartment model with first-order absorption
-OneCompartmentModelPK <- function( time, state, parameters ) {
+OneCompartmentModelPK <- function( time, state, parameters ) 
+{
     with( as.list( c( state, parameters )), {
         
-          dA1 <- -ka * A1  # Change in drug amount in absorption compartment
-          dA2 <- ( ka * A1 - ke * A2 )  # Change in drug concentration in central compartment
-          
-          return( list( c( dA1, dA2 )))
+        dA1 <- - dAbsorptionRate * A1  # Change in drug amount in absorption compartment
+        dA2 <- (  dAbsorptionRate * A1 -  dEliminationRate * A2 )  # Change in drug concentration in central compartment
+        
+        return( list( c( dA1, dA2 )))
     })
 }
