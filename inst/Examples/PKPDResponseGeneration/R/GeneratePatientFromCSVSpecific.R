@@ -52,71 +52,56 @@
 #' @export
 ######################################################################################################################## .
 
-GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
-{
+GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
     # Initialize return variables and error code
     nError <- 0
     lReturn <- list()
     
     # Build CSV path and confirm it exists
     strCSVPath <- paste0( "Inputs/", UserParam$InputFileName )
-    
-    if ( !file.exists( strCSVPath ) ) 
-    {
+    if ( !file.exists( strCSVPath ) ) {
         nError <- -1
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
     
     # Cache CSV across calls if available
-    if ( !exists( "gdfPatients", envir = .GlobalEnv ) ) 
-    {
+    if ( !exists( "gdfPatients", envir = .GlobalEnv ) ) {
         dfPatients <- tryCatch({
             read.csv( strCSVPath, check.names = FALSE, stringsAsFactors = FALSE )
-        }, error = function( e ) { 
-            nError <<- -2 
-            NULL 
-        })
+        }, error = function( e ) { nError <<- -2; NULL })
         gdfPatients <<- dfPatients
-    } 
-    else 
-    {
+    } else {
         dfPatients <- get( "gdfPatients", envir = .GlobalEnv )
     }
     
-    if ( is.null( dfPatients ) ) 
-    {
+    if ( is.null( dfPatients ) ) {
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
     
     # Check required Treatment column (strict match)
-    if ( !( "Treatment" %in% colnames( dfPatients ) ) ) 
-    {
+    if ( !( "Treatment" %in% colnames( dfPatients ) ) ) {
         nError <- -5
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
     
     # Coerce Treatment column strictly to integer 0/1
-    vTrt  <- suppressWarnings( as.integer( dfPatients[["Treatment"]] ) )
+    vTrt <- suppressWarnings( as.integer( dfPatients[["Treatment"]] ) )
     vKeep <- !is.na( vTrt ) & vTrt %in% c( 0, 1 )
-    
     dfPatients <- dfPatients[ vKeep, , drop = FALSE ]
     dfPatients[["Treatment"]] <- vTrt[ vKeep ]
     
     # Validate and coerce Visit columns (Visit1..VisitK)
     vVisitCols <- paste0( "Visit ", seq_len( NumVisit ) )
-    
-    if ( !all( vVisitCols %in% colnames( dfPatients ) ) ) 
-    {
+    if ( !all( vVisitCols %in% colnames( dfPatients ) ) ) {
         nError <- -4
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
     
-    for ( strCol in vVisitCols ) 
-    {
+    for ( strCol in vVisitCols ) {
         xChr <- as.character( dfPatients[[strCol]] )
         xChr[ xChr %in% c( "", "NA", "NaN", "na", "null", "N/A" ) ] <- NA_character_
         dfPatients[[strCol]] <- suppressWarnings( as.double( xChr ) )
@@ -129,8 +114,7 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, TreatmentID, Input
     vIdxCtrl <- which( dfPatients[["Treatment"]] == 0 )
     vIdxTrt  <- which( dfPatients[["Treatment"]] == 1 )
     
-    if ( length( vIdxCtrl ) < nNeedCtl || length( vIdxTrt ) < nNeedTrt ) 
-    {
+    if ( length( vIdxCtrl ) < nNeedCtl || length( vIdxTrt ) < nNeedTrt ) {
         nError <- -6
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
@@ -142,26 +126,20 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, TreatmentID, Input
     
     # Map selected patients to subjects by requested treatment order
     vPick <- integer( NumSub )
-    nCtl  <- 0
-    nTrt  <- 0
-    
-    for ( iSub in seq_len( NumSub ) ) 
-    {
-        if ( as.integer( TreatmentID[ iSub ] ) == 0 ) 
-        {
+    nCtl <- 0
+    nTrt <- 0
+    for ( iSub in seq_len( NumSub ) ) {
+        if ( as.integer( TreatmentID[ iSub ] ) == 0 ) {
             nCtl <- nCtl + 1
             vPick[ iSub ] <- vTakeCtrl[ nCtl ]
-        } 
-        else 
-        {
+        } else {
             nTrt <- nTrt + 1
             vPick[ iSub ] <- vTakeTrt[ nTrt ]
         }
     }
     
     # Build Response1..ResponseK values for each subject
-    for ( iVisit in seq_len( NumVisit ) ) 
-    {
+    for ( iVisit in seq_len( NumVisit ) ) {
         lReturn[[paste0( "Response", iVisit )]] <- as.double( dfPatients[ vPick, vVisitCols[ iVisit ] ] )
     }
     
