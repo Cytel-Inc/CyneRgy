@@ -46,76 +46,105 @@
 #'                        \item{0}{No error.}
 #'                        \item{-1}{CSV file not found.}
 #'                        \item{-2}{Error reading CSV file.}
+#'                        \item{-3}{Treatment column not found.}                        
 #'                        \item{-4}{Insufficient visit columns in CSV.}
-#'                        \item{-5}{Treatment column not found.}
-#'                        \item{-6}{Insufficient patients in CSV for one or both arms.}
+#'                        \item{-5}{Insufficient patients in CSV for one or both arms.}
+#'                        \item{-6}{Specific visit column not found in CSV.}
+#'                        \item{-7}{The data does not exist}
 #'                      }}
 #' @export
+#' 
+#' 
 ######################################################################################################################## .
-
-GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
+{
     # Initialize return variables and error code
     nError <- 0
     lReturn <- list()
     
-    # Build CSV path and confirm it exists
-    strCSVPath <- paste0( "Inputs/", UserParam$InputFileName )
-    if( !file.exists( strCSVPath ) ) {
+    # Validate input file path
+    if( is.null( UserParam ) || is.null( UserParam$InputFileName ) ) 
+    {
         nError <- -1
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
     
-    # Cache CSV across calls if available
-    if( !exists( "gdfPatients" ) ) {
-        dfPatients <- tryCatch({
-            read.csv( strCSVPath, check.names = FALSE, stringsAsFactors = FALSE )
-        }, error = function( e ) { nError <<- -2; NULL })
-        gdfPatients <<- dfPatients
-    } else {
-        dfPatients <- gdfPatients
+    # Check if file exists
+    if( !file.exists( UserParam$InputFileName ) ) 
+    {
+        nError <- -1
+        lReturn$ErrorCode <- as.integer( nError )
+        return( lReturn )
     }
-    if( is.null( dfPatients ) ) {
+    
+    # Read CSV file with error handling
+    dfPatients <- tryCatch({
+        read.csv( UserParam$InputFileName, check.names = FALSE, stringsAsFactors = FALSE )
+    }, error = function( e ) { 
+        nError <<- -2
+        NULL 
+    })
+    
+    if( is.null( dfPatients ) || nrow( dfPatients ) == 0 ) 
+    {
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
     
     # Ensure Treatment column exists and is 0/1
-    vColNames <- colnames( dfPatients )
-    vNormCol  <- NormalizeName( vColNames )
+    vColNames   <- colnames( dfPatients )       #actual column names
+    vNormCol    <- NormalizeName( vColNames )   #normalized column names
     strTreatCol <- GetColInsensitive( "Treatment", vNormCol, vColNames )
-    if( is.na( strTreatCol ) ) {
-        nError <- -5
+    
+    if( is.na( strTreatCol ) ) 
+    {
+        nError <- -3
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
     
     vTrt <- vapply( dfPatients[[ strTreatCol ]], CoerceGroup01, integer( 1 ) )
-
-    
     
     if( any( is.na( vTrt ) ) ) 
     {
         vNum <- suppressWarnings( as.integer( dfPatients[[ strTreatCol ]] ) )
         vTrt[ is.na( vTrt ) ] <- vNum[ is.na( vTrt ) ]
     }
-    vKeep <- vTrt %in% c( 0L, 1L )
+    
+    vKeep      <- vTrt %in% c( 0L, 1L )
     dfPatients <- dfPatients[ vKeep, , drop = FALSE ]
+    
     dfPatients[[ strTreatCol ]] <- as.integer( vTrt[ vKeep ] )
     
     # Identify visit columns and coerce to numeric
-    vVisitCols <- grep( "^Visit[[:space:]]*\\.?[0-9]+$", colnames( dfPatients ), perl = TRUE, value = TRUE )
-    if( length( vVisitCols ) == 0L ) vVisitCols <- grep( "^Visit", colnames( dfPatients ), value = TRUE )
-    if( length( vVisitCols ) < NumVisit ) {
+    # Find normalized names that match visit pattern, then get actual column names
+    vNormVisit <- vNormCol[ grepl( "^visit[0-9]+$", vNormCol ) ]
+    
+    if( length( vNormVisit ) == 0L ) 
+    {
+        # Fallback: find any column starting with "visit" (case-insensitive)
+        vNormVisit <- vNormCol[ grepl( "^visit", vNormCol ) ]
+    }
+    
+    # Get actual column names (not normalized) for the visit columns
+    vVisitCols <- vColNames[ vNormCol %in% vNormVisit ]
+    
+    # Check if there are enough visit columns for the requested number of visits
+    if( length( vVisitCols ) < NumVisit ) 
+    {
         nError <- -4
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
-    for( strCol in vVisitCols ) {
+    
+    # convert all visit columns to numeric using actual column names
+    for( strCol in vVisitCols ) 
+    {
         dfPatients[[ strCol ]] <- CoerceVisitNumeric( dfPatients[[ strCol ]] )
     }
     
-    # Per-arm availability
+    # Calculate how many patients we need per arm
     nNeedCtl <- sum( as.integer( TreatmentID ) == 0L )
     nNeedTrt <- sum( as.integer( TreatmentID ) == 1L )
     
@@ -123,27 +152,32 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
     vIdxCtrl <- which( dfPatients[[ strTreatCol ]] == 0L )
     vIdxTrt  <- which( dfPatients[[ strTreatCol ]] == 1L )
     
+    # Check there is enough patients in each arm
     if( length( vIdxCtrl ) < nNeedCtl || length( vIdxTrt ) < nNeedTrt ) 
     {
-        # If there are not enough control or treatment patients then this is an error
-        nError <- -6
+        nError <- -5
         lReturn$ErrorCode <- as.integer( nError )
         return( lReturn )
     }
     
-    # Sample unique rows per arm (no replacement), then map to subjects in EAST order
-    vTakeCtrl <- integer( 0  )
+    # Sample unique patients per arm (without replacement)
+    vTakeCtrl <- integer( 0 )
     if( nNeedCtl > 0 ) 
-        vTakeCtrl <- sample( vIdxCtrl, nNeedCtl, replace = FALSE ) 
+    {
+        vTakeCtrl <- sample( vIdxCtrl, nNeedCtl, replace = FALSE )
+    }
     
-    vTakeTrt  <- 0
+    vTakeTrt <- integer( 0 )
     if( nNeedTrt > 0 ) 
-        vTakeTrt  <- sample( vIdxTrt , nNeedTrt , replace = FALSE )
+    {
+        vTakeTrt <- sample( vIdxTrt, nNeedTrt, replace = FALSE )
+    }
     
-    # vPick will contain the index of the patient to use from the CSV that was treated with TreatmentID
+    # Build vector of patient indices matching the TreatmentID order
     vPick <- integer( NumSub )
-    nCtl  <- 0L  # Index for which control patient to select
-    nTrt  <- 0L  # Index for which treatment patient to select
+    nCtl <- 0L  # Counter for control patients
+    nTrt <- 0L  # Counter for treatment patients
+    
     for( iSub in seq_len( NumSub ) ) 
     {
         if( as.integer( TreatmentID[ iSub ] ) == 0L ) 
@@ -159,19 +193,21 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
     }
     
     # Build Response1..ResponseK (numeric) directly from selected rows
-    for( iVisit in seq_len( NumVisit ) ) {
-        vCandidates <- c( paste0( "Visit", iVisit ),
-                          paste0( "Visit ", iVisit ),
-                          paste0( "Visit.", iVisit ) )
+    for( iVisit in seq_len( NumVisit ) ) 
+    {
+        vCandidates <- c( paste0( "visit", iVisit ),
+                          paste0( "visit ", iVisit ),
+                          paste0( "visit.", iVisit ) )
         strFound <- GetColInsensitive( vCandidates, NormalizeName( vVisitCols ), vVisitCols )
-        if( is.na( strFound ) ) {
-            nError <- -4
+        if( is.na( strFound ) ) 
+        {
+            nError <- -6
             lReturn$ErrorCode <- as.integer( nError )
             return( lReturn )
         }
         lReturn[[ paste0( "Response", iVisit ) ]] <- as.double( dfPatients[ vPick, strFound ] )
     }
-  
+    
     lReturn$ErrorCode <- as.integer( nError )
     return( lReturn )
 }
@@ -179,13 +215,15 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
 # ---------------- Local helpers ----------------
 
 # Case/space/underscore/dot?insensitive column matching (for column names only)
-NormalizeName <- function( str ) {
+NormalizeName <- function( str ) 
+{
     vStr <- tolower( as.character( str ) )
     vStr <- gsub( "[[:space:]_.]+", "", vStr )
     return( vStr )
 }
 
-GetColInsensitive <- function( vCandidates, vNormCol, vColNames ) {
+GetColInsensitive <- function( vCandidates, vNormCol, vColNames ) 
+{
     vNormCand <- NormalizeName( vCandidates )
     for ( i in seq_along( vNormCand ) ) {
         iMatch <- match( vNormCand[ i ], vNormCol )
@@ -196,9 +234,11 @@ GetColInsensitive <- function( vCandidates, vNormCol, vColNames ) {
     return( NA_character_ )
 }
 
-CoerceGroup01 <- function( x ) {
+CoerceGroup01 <- function( x ) 
+{
     v <- suppressWarnings( as.numeric( x ) )
-    if ( !is.na( v ) ) {
+    if ( !is.na( v ) ) 
+    {
         if ( v == 0 ) 
             return( 0L )
         if ( v == 1 ) 
@@ -212,8 +252,10 @@ CoerceGroup01 <- function( x ) {
     return( NA_integer_ )
 }
 
-CoerceVisitNumeric <- function( v ) {
+CoerceVisitNumeric <- function( v ) 
+{
     vChr <- as.character( v )
     vChr[ vChr %in% c( "", "NA", "NaN", "na", "null", "N/A" ) ] <- NA_character_
     return( suppressWarnings( as.double( vChr ) ) )
 }
+
