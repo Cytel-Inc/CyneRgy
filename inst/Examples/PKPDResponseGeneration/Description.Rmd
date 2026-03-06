@@ -8,9 +8,7 @@ output:
 ---
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0">These examples are related to the <strong>Integration Point: Response</strong>.
-  <a href="IntegrationPointResponse.html" class="alert-link">Click here for more information about this integration point.</a></p>
-</div>
+<p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponseRepeatedMeasures.html" class="alert-link">**Integration Point: Response - Continuous Outcome with Repeated Measures**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
 <div class="alert alert-danger" role="alert">
 To try this example, create a new project in East Horizon using the following configuration:
@@ -30,7 +28,7 @@ To try this example, create a new project in East Horizon using the following co
 
 # Introduction
 
-The following example demonstrates the capabilities of pharmacokinetic pharmacodynamic (PK/PD) modeling in East Horizon using R integration. We simulate plasma drug concentrations using a one-compartment model with first-order absorption and elimination, then transform concentration to effect via an Emax model to generate continuous outcomes for a two-arm trial (control vs treatment). A final example shows how to integrate externally sourced PK/PD data from a CSV file.
+The following example demonstrates the capabilities of pharmacokinetic-pharmacodynamic (PK/PD) modeling in East Horizon using R integration. We simulate plasma drug concentrations using a one-compartment model with first-order absorption and elimination, then transform concentration to effect via an Emax model to generate continuous outcomes for a two-arm trial (control vs treatment). A final example shows how to integrate externally sourced PK/PD data from a CSV file.
 
 Once CyneRgy is installed, you can load this example in RStudio with the following command:
 
@@ -44,9 +42,9 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 1. [GenerateDrugConcentration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateDrugConcentration.R) - This file contains the R code for simulating drug concentrations for Example 1.
 
-2. [PKPDResponseGeneration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/PKPDResponseGeneration.R) - This file contains the R code to simulate treatment effect responses for patients for Example 2. (Note: Contains *GenerateDrugConcentration.R* function inside)
+2. [GenerateResponseEmaxModel.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateResponseEmaxModel.R) - This file contains the R code to simulate treatment effect responses for patients for Example 2. (Note: Contains *GenerateDrugConcentration* function inside)
 
-3. [PlotEmax.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/PlotEmax.R) - This file plots a visual that shows the mean response for each treatment group as a function of time based on the output of *PKPDResponseGeneration.R*. It is used to create the Emax over visits plot shown in the Example 2 section below.
+3. [PlotEmax.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/PlotEmax.R) - This file plots a visual that shows the mean response for each treatment group as a function of time based on the output of *GenerateResponseEmaxModel.R*. It is used to create the Emax over visits plot shown in the Example 2 section below.
 
 4. [GeneratePatientFromCSVSpecific.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GeneratePatientFromCSVSpecific.R) - This file is able to read in and use simulated patient data from CSV files with a specific formatting style to allow for faster run times. It is used in Example 3.
 
@@ -54,11 +52,11 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 6. [GenerateTreatmentControlCSV.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateTreatmentControlCSV.R) - This file generates CSV files for treatment and control groups based on the simulated patient data. It is used in Example 3.
 
-In the [Inputs directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDResponseGeneration/Inputs), you will find the following CSV files:
+In the [Inputs directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDResponseGeneration/Inputs), you will find the following CSV files used in Example 3:
 
-1. [SimPatientDataNull.csv](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/Inputs/SimPatientDataNull.csv) - This file contains simulated patient data with no treatment effect. It is used in Example 3.
+1. [SimPatientDataNull.csv](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/Inputs/SimPatientDataNull.csv) - This file contains simulated patient data with no treatment effect.
 
-2. [SimPatientDataAlt.csv](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/Inputs/SimPatientDataAlt.csv) - This file contains simulated patient data with a treatment effect. It is used in Example 3.
+2. [SimPatientDataAlt.csv](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/Inputs/SimPatientDataAlt.csv) - This file contains simulated patient data with a treatment effect.
 
 
 # Example 1 - Simulate Drug Concentration Response from a One-Compartment Model with First-order Absorption
@@ -68,17 +66,17 @@ In the [Inputs directory of this example](https://github.com/Cytel-Inc/CyneRgy/t
   This example is related to the R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateDrugConcentration.R" class="alert-link">GenerateDrugConcentration.R</a>.</p>
 </div>
 
-In the R function *GenerateDrugConcentration*, we use a one-compartment PK model with first-order absorption to generate simulate plasma concentrations for patients. The patient outcome is defined as a list of vectors, the exact quantity of vectors determined by the number of visits defined in the function parameters. Each vector contains the drug concentration for each patient at the given *visitTime*. In addition, an output of either `0` or `-1` will also be printed, where the former represents a successful response and the latter is a failure.
+In the R function *GenerateDrugConcentration*, we use a one-compartment PK model with first-order absorption to simulate plasma concentrations for patients. The patient outcome is defined as a list of vectors, where the exact number of vectors is determined by the number of visits defined in the function parameters. Each vector contains the drug concentration for each patient at the specified *VisitTime*. The function also returns an *ErrorCode*. A value of`0` indicates a successful simulation execution, while a value of `-1` indicates a failure.
 
-Refer to the table below for the definitions of the user-defined parameters used in this example and some example values.
+Refer to the table below for the definitions of the user-defined parameters used in this example, along with example values.
 
 |**User parameter**|**Definition**|**Example value**|
 |----|------|----|
-|**ka**|Dose first-order absorption rate constant. Describes the rate at which a drug moves from the site of administration into the central compartment.|1|
-|**ke**|Dose first-order elimination rate constant. Describes the fraction of drug eliminated from the body per unit of time once the drug is in the central compartment.|0.2|
+|**AbsorptionRate**|Dose first-order absorption rate constant. Describes the rate at which a drug moves from the site of administration into the central compartment.|1|
+|**EliminationRate**|Dose first-order elimination rate constant. Describes the fraction of drug eliminated from the body per unit of time once the drug is in the central compartment.|0.2|
 |**Dose**|Amount of drug administered to the body at the start of the model.|500|
 
-The *OneCompartmentModelPK* function is called inside of the main function, and the `deSolve` package will generate a vector of concentrations that are stored inside the *concentration* variable. Then, depending on whether a patient is assigned to the control or treatment group, a normal distribution with their respective means and standard deviations are added to the concentration vector.
+The *OneCompartmentModelPK* function is called inside the main function, and the **deSolve** R package will generate a vector of concentrations that are stored inside the *vConcentration* variable. Then, based on treatment group assignment, the function adds normally distributed noise to the concentration vector using the corresponding group-specific mean and standard deviation.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -87,9 +85,9 @@ CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
         "Response" = c(
             "Load means, standard deviations, and user parameters", 
-            "Generate concentration output using deSolve package", 
-            "Generate normal responses for control and treatment groups", 
-            "Store patient response data"
+            "Generate visit-time concentrations for each patient using deSolve package", 
+            "Add normally distributed noise for control and treatment groups", 
+            "Return visit-level responses for all subjects"
         )
     )
 )
@@ -99,10 +97,10 @@ CyneRgy::PlotExampleFlowchart(
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> 
-  This example is related to the R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/PKPDResponseGeneration.R" class="alert-link">PKPDResponseGeneration.R</a></p>
+  This example is related to the R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateResponseEmaxModel.R" class="alert-link">GenerateResponseEmaxModel.R</a></p>
 </div>
 
-*PKPDResponseGeneration.R* serves as an extension of *GenerateDrugConcentration.R*. It converts per-visit plasma concentrations into treatment responses using the Emax PD model. It first calls the PK function to generate drug concentrations per subject per visit, then applies the Emax equation to convert the concentrations to our expected treatment effect: 
+*GenerateResponseEmaxModel.R* serves as an extension of *GenerateDrugConcentration.R*. It converts per-visit plasma concentrations into treatment responses using the Emax PD model. It first calls the PK function to generate drug concentrations per subject per visit, then applies the Emax equation to convert the concentrations to our expected treatment effect: 
 
 $$E = E_0 + \frac{E_{\text{max}} \times C_p}{E_{C_{50}} + C_p}$$
 
@@ -114,16 +112,16 @@ where:
 - $C_p$ is the per-visit plasma concentration for a subject generated by the PK step.
 - $E_{C_{50}}$ is the concentration at which 50% of $E_{\text{max}}$ is achieved.
 
-Control group subjects are simulated from normal distributions around control means and std, while treatment subjects receive responses from the Emax-predicted effect with added variability. The output of this function is shown as visit-level response arrays for all subjects, along with an error code of `0` for success, and an error code of `-1` if parameter requirements are not met.
+Responses for control group subjects are simulated from normal distributions defined by the control means and sandard deviations, while treatment subjects receive responses from the Emax-predicted effect with additional variability. The output of this function is shown as visit-level response arrays for all subjects, along with an error code of `0` for success, and an error code of `-1` if parameter requirements are not met.
 
-Refer to the table below for the definitions of the user-defined parameters used in this example and some example values.
+Refer to the table below for the definitions of the user-defined parameters used in this example, along with example values.
 
 |**User parameter**|**Definition**|**Example value**|
 |----|------|----|
-|**ka**|Dose first-order absorption rate constant. Describes the rate at which a drug moves from the site of administration into the central compartment.|1|
-|**ke**|Dose first-order elimination rate constant. Describes the fraction of drug eliminated from the body per unit of time once the drug is in the central compartment.|0.2|
+|**AbsorptionRate**|Dose first-order absorption rate constant. Describes the rate at which a drug moves from the site of administration into the central compartment.|1|
+|**EliminationRate**|Dose first-order elimination rate constant. Describes the fraction of drug eliminated from the body per unit of time once the drug is in the central compartment.|0.2|
 |**Dose**|Amount of drug administered to the body at the start of the model.|500|
-|**E0**|Baseline effect, when there is an absence of the drug. Can also be interpreted as the intercept in a effect vs. concentration graph.|0|
+|**E0**|Baseline effect, when there is an absence of the drug. Can also be interpreted as the intercept in an effect vs. concentration graph.|0|
 |**Emax**|Maximum drug effect the system can achieve above baseline.|-12|
 |**EC50**|Drug concentration at which 50% of the maximum effect is achieved.|15|
 
@@ -134,16 +132,16 @@ CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
         "Response" = c(
             "Load means, standard deviations, and user parameters", 
-            "Calls GenerateDrugConcentration to get concentrations", 
-            "Use concentrations as input to calculate TreatmentEffect", 
-            "Generate patient responses with treatment data",
-            "Store results in response matrix"
+            "Calls GenerateDrugConcentration to get visit-time concentrations", 
+            "Use concentrations to compute treatment effect using the Emax model", 
+            "Generate patient responses based on treatment assignment and model outputs",
+            "Return visit-level responses for all subject"
         )
     )
 )
 ```
 
-*PlotEmax.R* was used to plot a visual that shows the mean response for each treatment group as a function of time.
+**[PlotEmax.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/PlotEmax.R)** was used to plot a visual that shows the mean response for each treatment group as a function of time.
 
 ![](PKPDResponseGeneration_files/EmaxOverVisits.png)
 
@@ -159,16 +157,16 @@ In some situations, you may have pre-simulated patient data from external PK/PD 
 
 The example includes three R files:
 
-**1. GenerateTreatmentControlCSV.R** - A helper function that generates sample CSV files with simulated patient data. This is provided to help you test the CSV reading functionality. It creates a CSV file with treatment assignments (0 = control, 1 = treatment) and response values across multiple visits. The function simulates normally distributed responses with an optional treatment effect that grows across visits.
+1. [GenerateTreatmentControlCSV.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateTreatmentControlCSV.R) - A helper function that generates sample CSV files with simulated patient data. This is provided to help you test the CSV reading functionality. It creates a CSV file with treatment assignments (0 = control, 1 = treatment) and response values across multiple visits. The function simulates normally distributed responses with an optional treatment effect that grows across visits.
 
-In the [Inputs directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDResponseGeneration/Inputs), you will find two sample CSV files that were generated using this function:
+In the [Inputs directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDResponseGeneration/Inputs) of this example, you will find two sample CSV files that were generated using this function:
 
 - **SimPatientDataNull.csv** - Contains 500,000 simulated patients with no treatment effect (null hypothesis scenario). Both control and treatment groups have similar response distributions.
 - **SimPatientDataAlt.csv** - Contains 500,000 simulated patients with a treatment effect (alternative hypothesis scenario). Treatment group shows progressively better responses across visits compared to control.
 
 These files serve as examples of properly formatted CSV data that can be used with the CSV reader functions.
 
-**2. GeneratePatientFromCSVGeneral.R** - A flexible CSV reader that accepts various column naming conventions and treatment/control identifiers. This function is more permissive in the CSV formats it accepts:
+2. [GeneratePatientFromCSVGeneral.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GeneratePatientFromCSVGeneral.R) - A flexible CSV reader that accepts various column naming conventions and treatment/control identifiers. This function is more permissive in the CSV formats it accepts:
 
 - **Visit columns**: Accepts "Visit X", "Visit.X", or "VisitX" (case-insensitive)
 - **Treatment column**: Must be named "Treatment" (case-insensitive)
@@ -176,22 +174,13 @@ These files serve as examples of properly formatted CSV data that can be used wi
 - **Control identifiers**: Accepts "0", "c", "ctl", "control", "placebo", or "cntl" (case-insensitive)
 - **Missing values**: Recognizes "", "NA", "NaN", "na", "null", or "N/A"
 
-**3. GeneratePatientFromCSVSpecific.R** - A faster CSV reader with stricter formatting requirements. This function runs faster than the general version but requires a specific CSV format:
+3. [GeneratePatientFromCSVSpecific.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GeneratePatientFromCSVSpecific.R) - A faster CSV reader with stricter formatting requirements. This function runs faster than the general version but requires a specific CSV format:
 
 - **Visit columns**: Must be named exactly "Visit 1", "Visit 2", etc.
 - **Treatment column**: Must be named "Treatment"
 - **Treatment identifiers**: Must be "1"
 - **Control identifiers**: Must be "0"
 - **Missing values**: Recognizes "", "NA", "NaN", "na", "null", or "N/A"
-
-Both CSV readers perform the following steps:
-
-1. Load the CSV file from the specified path (cached across function calls for efficiency)
-2. Validate that required columns exist (Treatment column and sufficient Visit columns)
-3. Filter and validate treatment assignments
-4. Randomly sample patients from the CSV without replacement, ensuring each arm has enough patients
-5. Map the sampled patients to subjects according to the trial's randomization scheme
-6. Return response values for each visit
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -201,7 +190,8 @@ CyneRgy::PlotExampleFlowchart(
         "Response" = c(
             "Load CSV file with pre-simulated patient data", 
             "Validate Treatment and Visit columns", 
-            "Sample patients by treatment arm without replacement", 
+            "Filter and validate treatment assignments",
+            "Sample patient data by treatment arm without replacement", 
             "Map sampled patients to trial subjects", 
             "Return visit-level responses for all subjects"
         )
@@ -209,24 +199,24 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-Refer to the table below for the definitions of the user-defined parameters used in this example and some example values.
+Refer to the table below for the definitions of the user-defined parameter used in this example, along with example values.
 
 |**User parameter**|**Definition**|**Example value**|
 |----|------|----|
-|**InputFileName**|The name of the CSV file (including the `.csv` extension) that contains the pre-simulated patient data. This file should be uploaded to the Inputs folder of your East Horizon project.|`SimPatientDataAlt.csv`|
+|**InputFileName**|Name of a CSV file (including the `.csv` extension) that contains the pre-simulated patient data. This file should be uploaded to the Inputs folder of your East Horizon project.|`SimPatientDataAlt.csv`|
 
 ## Using CSV-based Patient Data in East Horizon
 
 To use pre-simulated patient data from a CSV file in your East Horizon simulation, follow these steps:
 
-### Step 1: Upload R Files to Project Root
+### Step 1: Upload CSV reader R files to Project Root
 
 Upload one of the CSV reader R files to the root folder of your East Horizon project:
 
-- `GeneratePatientFromCSVGeneral.R` (for flexible formatting), or
-- `GeneratePatientFromCSVSpecific.R` (for faster performance with strict formatting)
+- [GeneratePatientFromCSVGeneral.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GeneratePatientFromCSVGeneral.R)  (for flexible formatting), or
+- [GeneratePatientFromCSVSpecific.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GeneratePatientFromCSVSpecific.R)  (for faster performance with strict formatting)
 
-![R Files Location](PKPDResponseGeneration_files/RFiles.png)
+![](PKPDResponseGeneration_files/RFiles.png)
 
 <br>
 
@@ -234,21 +224,21 @@ Upload one of the CSV reader R files to the root folder of your East Horizon pro
 
 Upload your patient data CSV file to the **Inputs** folder of your East Horizon project. You can use one of the provided example files:
 
-- `SimPatientDataNull.csv` (null hypothesis scenario - no treatment effect)
-- `SimPatientDataAlt.csv` (alternative hypothesis scenario - with treatment effect)
+- [SimPatientDataNull.csv](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDResponseGeneration/Inputs/SimPatientDataNull.csv) (null hypothesis scenario - no treatment effect)
+- [SimPatientDataAlt.csv](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDResponseGeneration/Inputs/SimPatientDataAlt.csv) (alternative hypothesis scenario - with treatment effect)
 - Or upload your own CSV file following the required format.
 
-![CSV Files Location](PKPDResponseGeneration_files/CSVFiles.png)
+![](PKPDResponseGeneration_files/CSVFiles.png)
 
 <br>
 
 ### Step 3: Configure Response Card
 
 1. In East Horizon's Response card, select **"User Specified - R"** as your distribution.
-2. In the R code selection, choose the CSV reader file you uploaded in Step 1.
+2. In the R code selection, choose the CSV reader R file you uploaded in Step 1.
 3. Set the user parameter `InputFileName` to the name of your CSV file (include the `.csv` extension).
    - For example: `InputFileName = "SimPatientDataAlt.csv"`
 4. Configure the remaining design parameters as desired.
 5. Run the simulation.
 
-Note: Ensure your CSV file contains enough patients for both treatment arms across all simulation replicates. The CSV readers will return an error if there are insufficient patients available.
+Note: Ensure your CSV file contains enough patients for both treatment arms across all simulation replicates. The CSV readers will return an error if an insufficient number of patients are available.

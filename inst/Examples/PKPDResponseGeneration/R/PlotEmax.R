@@ -95,12 +95,12 @@ StdDevTrt     <- rep( 5, NumVisit )
 CorrMat       <- diag( NumVisit )
 
 UserParam <- list(
+    AbsorptionRate  = 1,   # absorption rate constant
+    EliminationRate = 0.2, # elimination rate constant
+    Dose = 500,   # dose administered
     E0   = 5,     # baseline
     Emax = 40,    # max drug effect
-    EC50 = 50,    # concentration where 50% Emax realized
-    ka   = 1,     # absorption rate constant
-    ke   = 0.2,   # elimination rate constant
-    Dose = 500    # dose administered
+    EC50 = 50     # concentration where 50% Emax realized
 )
 
 # Run simulator
@@ -120,6 +120,7 @@ lEmaxOut <- GenerateResponseEmaxModel(
 
 # Build tidy frame and plot
 dfEmax <- EmaxToLong( lEmaxOut, TreatmentID, VisitTime )
+
 lPlotResults <- PlotEmaxGroups( dfEmax,
                                 sTitle = "Control vs Treatment: Emax Responses over Visits",
                                 bShowIndividuals = TRUE )

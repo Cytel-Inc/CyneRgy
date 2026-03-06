@@ -17,8 +17,8 @@
 #' @param CorrMat: Mandatory. Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits. 
 #' @param UserParam User can pass custom scalar variables defined by users as a member of this list. User should access the variables using names, for example UserParam$Var1 and not order. 
 #' \describe{
-#'   \item{ka}{Absorption rate constant}
-#'   \item{ke}{Elimination rate constant}
+#'   \item{AbsorptionRate}{Absorption rate constant}
+#'   \item{EliminationRate}{Elimination rate constant}
 #'   \item{Dose}{Dose administered}
 #'   \item{E0}{Baseline effect}
 #'   \item{Emax}{Maximum effect}
@@ -38,7 +38,8 @@
 #' @export    
 ######################################################################################################################## .
 
-GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
+{
     nError <- 0
     lRetval <- list()
     
@@ -46,15 +47,16 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     mResponses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
     
     # Define the Emax model parameters from UserParam
+    dAbsorptionRate  <- UserParam$AbsorptionRate
+    dEliminationRate <- UserParam$EliminationRate
+    Dose <- UserParam$Dose 
     E0   <- UserParam$E0    # Baseline effect
     Emax <- UserParam$Emax  # Maximum effect
     EC50 <- UserParam$EC50  # Concentration at 50% of Emax
-    ka   <- UserParam$ka    # Absorption rate constant
-    ke   <- UserParam$ke    # Elimination rate constant
-    Dose <- UserParam$Dose  # Dose administered
+
     
     # Check if all required Emax parameters are provided
-    if ( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( ka ) || is.null( ke ) || is.null( Dose )) {
+    if ( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( Dose )) {
         nError <- -1 # Fatal error if required parameters are missing
         lRetval$ErrorCode <- as.integer( nError )
         return( lRetval )
@@ -62,25 +64,30 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     
     # Call PK function to get concentration responses for treatment group
     lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam )
-
+    
     # Simulate response for each patient
-    for ( nPatIndx in 1:NumSub ) {
-        
-        for ( nVisitIndx in 1:NumVisit ) {
+    for ( nPatIndx in 1:NumSub ) 
+    {
+        for ( nVisitIndx in 1:NumVisit ) 
+        {
             Cp <- lPkResult[[ paste0( "Response", nVisitIndx ) ]] [ nPatIndx ]
             
             dTreatmentEffect <- E0 + ( Emax * Cp ) / ( EC50 + Cp ) # Calculate Emax
             
-            if ( TreatmentID[ nPatIndx ] == 0 ) {
+            if ( TreatmentID[ nPatIndx ] == 0 ) 
+            {
                 mResponses[ nPatIndx, nVisitIndx ] <- rnorm( 1, mean = MeanControl[ nVisitIndx ], sd = StdDevControl[ nVisitIndx ] ) # Generates response for control group 
-            } else {
+            } 
+            else 
+            {
                 mResponses[ nPatIndx, nVisitIndx ] <- rnorm( 1, mean = dTreatmentEffect, sd = StdDevTrt[ nVisitIndx ] ) # Generates response for treatment group (Emax model output)
             }
         }
     }
     
     # Add responses to return list
-    for ( nVisitIndx in 1:NumVisit ) {
+    for ( nVisitIndx in 1:NumVisit ) 
+    {
         
         lRetval[[ paste0( "Response", nVisitIndx )]] <- as.double( mResponses[ , nVisitIndx ])
     }
@@ -91,36 +98,48 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmetho
 }
 
 # Define helper function for PK model generating concentration
-GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
+{
     library( deSolve )
     
     # Initialize error code and return list
-    nError <- 0
+    nError  <- 0
     lRetval <- list()
     
     # Parameters for ODE model
-    ka <- UserParam$ka  # Absorption rate constant
-    ke <- UserParam$ke  # Elimination rate constant
-    Dose <- UserParam$Dose  # Dose administered
+    dAbsorptionRate   <- UserParam$AbsorptionRate   # Absorption rate constant
+    dEliminationRate  <- UserParam$EliminationRate   # Elimination rate constant
+    dDose             <- UserParam$Dose # Dose administered
+    
+    if ( is.null(  dAbsorptionRate ) || is.null(  dEliminationRate ) || is.null( dDose ) ) 
+    {
+        nError <- -1  # Fatal error if required parameters are missing
+        lRetval$ErrorCode <- as.integer( nError )
+        return( lRetval )
+    }
     
     # Simulate drug concentration for each subject
-    for ( nPatIndx in 1:NumSub ) {
-        
-        # Initial state: A1 = Dose (amount in absorption compartment), A2 = 0 (concentration in central compartment)
-        vState <- c( A1 = Dose, A2 = 0 ) # this is a full dose in absorption compartment, none in central
-        vParameters <- c( ka = ka, ke = ke )
+    for ( nPatIndx in 1:NumSub ) 
+    {
+        # Initial state: A1 = dDose (amount in absorption compartment), A2 = 0 (concentration in central compartment)
+        vState <- c( A1 = dDose, A2 = 0 ) # this is a full dose in absorption compartment, none in central
+        vParameters <- c(  dAbsorptionRate =  dAbsorptionRate,  dEliminationRate =  dEliminationRate )
         
         # Solve ODE for each visit time
         vConcentration <- numeric( NumVisit ) #prepare a vector (NumVisit length) to store concentrations at each visit
-        for ( nVisitIndx in 1:NumVisit ) {
-            vTime <- c( 0, VisitTime[ nVisitIndx ])  # Time points for ODE solver
+        
+        for ( nVisitIndx in 1:NumVisit ) 
+        {
+            vTime   <- c( 0, VisitTime[ nVisitIndx ])  # Time points for ODE solver
             mResult <- deSolve::ode( y = vState, times = vTime, func = OneCompartmentModelPK, parms = vParameters)
-            vState <- mResult[ nrow( mResult ), -1 ]  # Update state for next visit
+            vState  <- mResult[ nrow( mResult ), -1 ]  # Update state for next visit
+            
             vConcentration[ nVisitIndx ] <- vState[ "A2" ]  # Extract concentration at current visit
         }
         
         # Add noise based on treatment group
-        if ( TreatmentID[ nPatIndx ] == 0 ) {
+        if ( TreatmentID[ nPatIndx ] == 0 ) 
+        {
             vConcentration <- vConcentration + rnorm( NumVisit, mean = MeanControl, sd = StdDevControl )
         }
         else
@@ -129,9 +148,12 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
         }
         
         # Store concentration for each visit
-        for ( nVisitIndx in 1:NumVisit ) {
+        for ( nVisitIndx in 1:NumVisit ) 
+        {
             strVisitName <- paste0( "Response", nVisitIndx )
-            if ( !is.null( lRetval[[ strVisitName ]])) {
+            
+            if ( !is.null( lRetval[[ strVisitName ]])) 
+            {
                 lRetval[[ strVisitName ]] <- c( lRetval[[ strVisitName ]], vConcentration[ nVisitIndx ])
             }
             else
@@ -147,11 +169,12 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
 }
 
 # Define helper ODE function for one-compartment model with first-order absorption
-OneCompartmentModelPK <- function( time, state, parameters ) {
+OneCompartmentModelPK <- function( time, state, parameters ) 
+{
     with( as.list( c( state, parameters )), {
         
-        dA1 <- -ka * A1  # Change in drug amount in absorption compartment
-        dA2 <- ( ka * A1 - ke * A2 )  # Change in drug concentration in central compartment
+        dA1 <- - dAbsorptionRate * A1  # Change in drug amount in absorption compartment
+        dA2 <- (  dAbsorptionRate * A1 -  dEliminationRate * A2 )  # Change in drug concentration in central compartment
         
         return( list( c( dA1, dA2 )))
     })

@@ -18,8 +18,8 @@
 #' @param CorrMat Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits. 
 #' @param UserParam List. User can pass custom scalar variables defined by users as a member of this list. User should access the variables using names, for example UserParam$Var1 and not order. 
 #' \describe{
-#'   \item{ka}{Absorption rate constant}
-#'   \item{ke}{Elimination rate constant}
+#'   \item{AbsorptionRate}{Absorption rate constant}
+#'   \item{EliminationRate}{Elimination rate constant}
 #'   \item{Dose}{Dose administered}
 #' }
 #' 
@@ -45,19 +45,21 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     lRetval <- list()
     
     # Parameters for ODE model
-    dAbsorptionRate   <- UserParam$ka   # Absorption rate constant
-    dEliminationRate  <- UserParam$ke   # Elimination rate constant
-    dDose             <- UserParam$Dose # Dose administered
+    dAbsorptionRate   <- UserParam$AbsorptionRate
+    dEliminationRate  <- UserParam$EliminationRate   
+    dDose             <- UserParam$Dose
     
-    if ( is.null(  dAbsorptionRate ) || is.null(  dEliminationRate ) || is.null( dDose ) ) {
-        nError <- -1  # Fatal error if required parameters are missing
+    # Fatal error if required parameters are missing
+    if ( is.null(  dAbsorptionRate ) || is.null(  dEliminationRate ) || is.null( dDose ) ) 
+    {
+        nError <- -1  
         lRetval$ErrorCode <- as.integer( nError )
         return( lRetval )
     }
     
     # Simulate drug concentration for each subject
-    for ( nPatIndx in 1:NumSub ) {
-        
+    for ( nPatIndx in 1:NumSub ) 
+    {
         # Initial state: A1 = dDose (amount in absorption compartment), A2 = 0 (concentration in central compartment)
         vState <- c( A1 = dDose, A2 = 0 ) # this is a full dose in absorption compartment, none in central
         vParameters <- c(  dAbsorptionRate =  dAbsorptionRate,  dEliminationRate =  dEliminationRate )
@@ -85,8 +87,8 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
         }
         
         # Store concentration for each visit
-        for ( nVisitIndx in 1:NumVisit ) {
-            
+        for ( nVisitIndx in 1:NumVisit ) 
+            {
             strVisitName <- paste0( "Response", nVisitIndx )
             
             if ( !is.null( lRetval[[ strVisitName ]])) 
