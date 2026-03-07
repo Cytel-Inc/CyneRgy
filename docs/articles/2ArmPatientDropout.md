@@ -14,7 +14,9 @@ following configuration:
   - Continuous or Binary Outcome for Example 1
   - Time-to-Event Outcome for Example 2
   - Continuous Outcome with Repeated Measures for Example 3
-- **Task:** Any
+- **Task:**
+  - **Explore:** All examples are supported
+  - **Design:** Examples 1 and 2 only
 
 ## Introduction
 
