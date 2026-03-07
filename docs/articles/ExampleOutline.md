@@ -125,13 +125,24 @@ simulation in East Horizon for two-arm trials with multiple endpoints
 (Continuous, Binary and/or TTE). [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/MEPPatientSimulation.md)
 
-**Childhood Anxiety Trial** 2-ArmSingle EndpointContinuous
+**Childhood Anxiety Trial**2-ArmSingle EndpointContinuous
 
 This example covers a specific situation where the patient data
 simulation needs to be customized to match what is expected in a
 clinical trial in childhood anxiety.  
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/ChildhoodAnxiety.md)
+
+**PK/PD Modeling for Patient Simulation**2-ArmSingle EndpointRepeated
+MeasuresFMS
+
+This example illustrates three approaches to customizing patient outcome
+simulations in East Horizon using PK/PD modeling: simulating plasma drug
+concentrations via a one-compartment model with first-order absorption
+and elimination, translating concentrations into effects through an Emax
+model to produce continuous outcomes, and integrating externally sourced
+PK/PD data from a CSV file. [Click here to view the full
+example.](https://Cytel-Inc.github.io/CyneRgy/articles/PKPDResponseGeneration.md)
 
 ------------------------------------------------------------------------
 

@@ -108,6 +108,8 @@
   Randomization](https://Cytel-Inc.github.io/CyneRgy/articles/MultipleEndpointsWithCovariates.md):
 - [Getting
   Started](https://Cytel-Inc.github.io/CyneRgy/articles/Overview.md):
+- [PK/PD Modeling for Patient
+  Simulation](https://Cytel-Inc.github.io/CyneRgy/articles/PKPDResponseGeneration.md):
 - [Probability of Success, Dual
   Endpoints](https://Cytel-Inc.github.io/CyneRgy/articles/ProbabilitySuccessDualEndpoints.md):
 - [Randomization of

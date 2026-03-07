@@ -9,11 +9,18 @@ To try this example, create a new project in East Horizon using the
 following configuration:
 
 - **Study objective:**
-  - Two Arm Confirmatory for Examples 1, 2, 3
-  - Multiple Arm Confirmatory for Example 4
-- **Number of endpoints:** Any
-- **Endpoint type:** Any
-- **Task:** Any
+  - Examples 1, 2, and 3: Two-Arm Confirmatory
+  - Example 4: Multiple-Arm Confirmatory
+- **Number of endpoints:**
+  - **Design:** Single Endpoint
+  - **Explore:** Single or Dual Endpoints
+- **Endpoint type:**
+  - Examples 1, 2, and 3: Continuous, Binary, or TTE
+  - Example 4: Continuous or Binary
+- **Task:**
+  - **Design:** Examples 1, 2, and 3 are supported; Example 4 is not yet
+    supported
+  - **Explore:** All the above configurations are supported
 
 ## Introduction
 
