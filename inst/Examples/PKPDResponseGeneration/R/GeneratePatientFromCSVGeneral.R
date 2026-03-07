@@ -112,7 +112,7 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
         vNum <- suppressWarnings( as.integer( dfPatients[[ strTreatCol ]] ) )
         vTrt[ is.na( vTrt ) ] <- vNum[ is.na( vTrt ) ]
     }
-    vKeep <- vTrt %in% c( 0L, 1L )
+    vKeep <- vTrt %in% c( 0, 1 )
     dfPatients <- dfPatients[ vKeep, , drop = FALSE ]
     dfPatients[[ strTreatCol ]] <- as.integer( vTrt[ vKeep ] )
     
@@ -120,7 +120,7 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
     # Find normalized names that match visit pattern, then get actual column names
     vNormVisit <- vNormCol[ grepl( "^visit[0-9]+$", vNormCol ) ]
     
-    if( length( vNormVisit ) == 0L ) 
+    if( length( vNormVisit ) == 0 ) 
     {
         # Fallback: find any column starting with "visit" (case-insensitive)
         vNormVisit <- vNormCol[ grepl( "^visit", vNormCol ) ]
@@ -143,12 +143,12 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
     }
     
     # Per-arm availability
-    nNeedCtl <- sum( as.integer( TreatmentID ) == 0L )
-    nNeedTrt <- sum( as.integer( TreatmentID ) == 1L )
+    nNeedCtl <- sum( as.integer( TreatmentID ) == 0 )
+    nNeedTrt <- sum( as.integer( TreatmentID ) == 1 )
     
     # Create a vector of indexes for the control patients and treatment patients
-    vIdxCtrl <- which( dfPatients[[ strTreatCol ]] == 0L )
-    vIdxTrt  <- which( dfPatients[[ strTreatCol ]] == 1L )
+    vIdxCtrl <- which( dfPatients[[ strTreatCol ]] == 0 )
+    vIdxTrt  <- which( dfPatients[[ strTreatCol ]] == 1 )
     
     if( length( vIdxCtrl ) < nNeedCtl || length( vIdxTrt ) < nNeedTrt ) 
     {
@@ -169,19 +169,19 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
     
     # vPick will contain the index of the patient to use from the CSV that was treated with TreatmentID
     vPick <- integer( NumSub )
-    nCtl  <- 0L  # Index for which control patient to select
-    nTrt  <- 0L  # Index for which treatment patient to select
+    nCtl  <- 0  # Index for which control patient to select
+    nTrt  <- 0  # Index for which treatment patient to select
     
     for( iSub in seq_len( NumSub ) ) 
     {
-        if( as.integer( TreatmentID[ iSub ] ) == 0L ) 
+        if( as.integer( TreatmentID[ iSub ] ) == 0 ) 
         {
-            nCtl <- nCtl + 1L
+            nCtl <- nCtl + 1
             vPick[ iSub ] <- vTakeCtrl[ nCtl ]
         } 
         else 
         {
-            nTrt <- nTrt + 1L
+            nTrt <- nTrt + 1
             vPick[ iSub ] <- vTakeTrt[ nTrt ]
         }
     }
@@ -235,12 +235,12 @@ CoerceGroup01 <- function( x )
     v <- suppressWarnings( as.numeric( x ) )
     if ( !is.na( v ) ) 
     {
-        if ( v == 0 ) return( 0L )
-        if ( v == 1 ) return( 1L )
+        if ( v == 0 ) return( 0 )
+        if ( v == 1 ) return( 1 )
     }
     str <- tolower( trimws( as.character( x ) ) )
-    if ( str %in% c( "0", "c", "ctl", "control", "placebo", "cntl" ) )  return( 0L )
-    if ( str %in% c( "1", "t", "trt", "treatment", "active" ) )         return( 1L )
+    if ( str %in% c( "0", "c", "ctl", "control", "placebo", "cntl" ) )  return( 0 )
+    if ( str %in% c( "1", "t", "trt", "treatment", "active" ) )         return( 1 )
     
     return( NA_integer_ )
 }
