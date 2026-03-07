@@ -169,7 +169,7 @@ These files serve as examples of properly formatted CSV data that can be used wi
 2. [GeneratePatientFromCSVGeneral.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GeneratePatientFromCSVGeneral.R) - A flexible CSV reader that accepts various column naming conventions and treatment/control identifiers. This function is more permissive in the CSV formats it accepts:
 
 - **Visit columns**: Accepts "Visit X", "Visit.X", or "VisitX" (case-insensitive)
-- **Treatment column**: Must be named "Treatment" (case-insensitive)
+- **Treatment column**: Accepts "Treatment", "TreatmentID", "Trt", or "TrtID" (case-insensitive)
 - **Treatment identifiers**: Accepts "1", "t", "trt", "treatment", or "active" (case-insensitive)
 - **Control identifiers**: Accepts "0", "c", "ctl", "control", "placebo", or "cntl" (case-insensitive)
 - **Missing values**: Recognizes "", "NA", "NaN", "na", "null", or "N/A"
