@@ -24,17 +24,14 @@ The Initialization integration point allows you to specify an optional function 
 
 This integration point is available in East Horizon for the following study objectives and endpoint types:
 
-||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
-|----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|✅|✅|✅|✅|❌|❌|✅|✅|
-|Multiple Arm Confirmatory|❌|✅|✅|-|-|-|-|-|
-
-**Legend**
-
-|Icon|Meaning|
-|--|----------|
-|✅|Available|
-|❌|Not available|
+||Time to Event|Time to Event with Stratification|Binary|Continuous|Continuous with Repeated Measures|Count|Composite|Categorical|Dual TTE-TTE|Dual TTE-Binary|
+|----------------|--|--|--|--|--|--|--|--|--|--|--|
+|Dose Escalation|-|-|❌|-|-|-|-|-|-|-|
+|Dose Finding|-|-|❌|❌|-|-|-|-|-|-|
+|Multiple Arm Confirmatory|❌|-|✅|✅|-|-|-|-|-|-|
+|One Arm Exploratory / Confirmatory|❌|-|❌|❌|-|❌|-|❌|-|❌|
+|Two Arm Confirmatory|✅|✅|✅|✅|✅|❌|❌|-|✅|✅|
+|Two Arm Confirmatory - Multiple Endpoints|❌|-|❌|❌|-|-|-|-|-|-|
 
 ## East
 
