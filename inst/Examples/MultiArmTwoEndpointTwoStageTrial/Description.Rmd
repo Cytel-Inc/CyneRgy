@@ -1,0 +1,56 @@
+---
+title: 'Multiple Arm Two Stage Design with Two Endpoints for a Seamless Phase II/III Trial'
+author: "Julija Saltane,  J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">This example is related to both the <a href="IntegrationPointResponse.html" class="alert-link">**Integration Point: Response**</a> and the <a href="IntegrationPointAnalysis.html" class="alert-link">**Integration Point: Analysis**</a>. Click the links for setup instructions, variable details, and additional information about the integration points.</p>
+</div>
+
+<div class="alert alert-danger" role="alert">
+To try this example, create a new project in East Horizon using the following configuration:
+<ul style="margin-bottom:0">
+<li>**Study objective:** Multiple Arm Confirmatory</li>
+<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Endpoint type:** Binary Outcome</li>
+<li>**Task:** Explore</li>
+</ul></div>
+
+<div class="alert alert-secondary" role="alert">
+<p style="margin-bottom:0">**Note:** This example is compatible only with Fixed Sample statistical design. The R code automatically detects whether interim look information (*LookInfo*) is available and stops the simulation.</p>
+</div>
+
+<div class="alert alert-warning" role="alert">
+<p style="margin-bottom:0">**Important note:** This example does not use Time-To-Event outcome in Project settings, as R integration is not yet available for this endpoint type.</p>
+</div>
+
+# Introduction
+
+This example demonstrates how to compute the probability of winning for a multi-arm clinical trial by extending East Horizon’s single-endpoint framework to handle dual endpoints through custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points.
+In this example we are considering a two-stage clinical trial with treatment selection at Stage 1 using binary outcome and efficacy analysis at Stage 2 suing Progression-Free Survival (PFS). It's important to highlight that all PFS data (stage 1+2) for the selected arm and control would be used for the final analysis. So an inferentially seamless Phase II/III design.
+
+## Why do we need R Integration for this example?
+In order to be able to use both binary and time-to-event data in a multi-arm trial setup, we would need the ability of using dual endpoints - this is something that East Horizon cannot handle yet with its current response generation algorithms, so we must integrate a custom R file for the simulation to do so.
+In addition, the way that the endpoint data is analysed to first select the treatment arm based on the binary dataset and then only use control data vs the selected treatment arm to run the efficacy analysis on PFS would also require a custom R code, as this is not something that would be natively supported.
+
+## What do the R functions do?
+
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/R) you will find the following R files:
+
+- **[SimulateBinaryAndPFS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/R/SimulateBinaryAndPFS.R)**
+
+   This R file contains a function that executes the response data generation for both binary and PFS endpoints. Due to the typically assumed correlation between PFS and OS, the timing of the events for each simulated patient must take into account that these endpoints are not completely independent of each other. This function therefore handles this concern by using a multi-state model that takes into consideration:
+
+   1. The rate at which events occur from trial start to a progression event, 
+   2. The rate at which events occur from trial start to a death, and
+   3. The probability that death takes place before a progression event.<br><br>
+   
+   As there may be uncertainty around each of these assumed parameters, the function simulates each of them based on prior distributions rather than single values for each. Users must provide input assumptions that parametrize the prior distributions that will be sampled from to simulate each patient’s response times. 
+
+   For more information on this function, see the [Response (Patient Simulation) Integration Point](#response-patient-simulation-integration-point) section below.
+
+
