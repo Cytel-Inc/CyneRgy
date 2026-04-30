@@ -316,79 +316,37 @@ SelectArmAndAnalyzePFSTwoStages <- function( SimData, DesignParam, LookInfo = NU
     # Order the data by observed time for the remainder of the computations
     dfSimDataStage2   <- dfSimDataStage2[ order( dfSimDataStage2$PFSObservedTime), ]
     
-    # Compute Observed HR
-    coxModel <- coxph( Surv( PFSObservedTime, PFSEvent ) ~ Trt, data = dfSimDataStage2 )
-    dTrueHR  <- exp( coxModel$coefficients )
+    ##### Analyzing Stage 1 patients only -> Get Z1 & p1_adj
+    dfStage1PatientPFSData <- dfSimDataStage2[ dfSimDataStage2$Stage == 1, ]
+    Stage1coxModel <- coxph( Surv( PFSObservedTime, PFSEvent ) ~ Trt, data = dfStage1PatientPFSData )
+    Z1 <- summary( Stage1coxModel )$coef[ 1, "z" ]
     
-    dfSimDataStage2$EventOnTreatment <- ifelse( dfSimDataStage2$Trt == 1, dfSimDataStage2$PFSEvent, 0 ) # If the event is observed on treatment
-    dfSimDataStage2$EventOnControl   <- ifelse( dfSimDataStage2$Trt == 0, dfSimDataStage2$PFSEvent, 0 ) # If the event is observed on control
+    p1     <- 1 - pnorm( Z1 )
+    p1_adj #to be calculated
     
-    # Arm wise count of subjects at risk at the beginning. Is same as arm wise sample size
-    nSubjectsAtRiskTreatment <- nrow( dfSimDataStage2[ dfSimDataStage2$Trt == 1, ] )
-    nSubjectsAtRiskControl   <- nrow( dfSimDataStage2[ dfSimDataStage2$Trt == 0, ] )
+    ##### Analyzing Stage 2 patients only > Get Z2 & p2
+    dfStage2PatientPFSData <- dfSimDataStage2[ dfSimDataStage2$Stage == 2, ]
+    Stage2coxModel <- coxph( Surv( PFSObservedTime, PFSEvent ) ~ Trt, data = dfStage2PatientPFSData )
+    Z2 <- summary( Stage2coxModel )$coef[ 1, "z" ]
+    p2 <- 1-pnorm( Z2 )
     
-    # Initialize intermediate quantities required for test statistic computation
-    dNum <- 0
-    dDen <- 0
     
-    # Iterate over subjects to calculate dNum and dDen required for test statistic computation
-    for ( nSubject in seq_len( nrow( dfSimDataStage2 ) ) )
-    {   # Update the count of subjects at risk for each arm for non event times
-        if ( dfSimDataStage2$PFSEvent[ nSubject ] == 0 ) 
-        {
-            if ( dfSimDataStage2$Trt[ nSubject ] == 1 )
-            {
-                nSubjectsAtRiskTreatment <- nSubjectsAtRiskTreatment - 1
-            }
-            if ( dfSimDataStage2$Trt[ nSubject ] == 0 )
-            {
-                nSubjectsAtRiskControl   <- nSubjectsAtRiskControl - 1
-            }
-            
-        } 
-        # For subjects with events, compute dNum and dDen
-        if ( dfSimDataStage2$PFSEvent[ nSubject ] == 1 )
-        {
-            nEventsOnTreatment <- dfSimDataStage2$EventOnTreatment[ nSubject ]
-            nEventsOnControl   <- dfSimDataStage2$EventOnControl[ nSubject ]
-            nEvents            <- nEventsOnTreatment + nEventsOnControl
-            nSubjectsAtRisk    <- nSubjectsAtRiskTreatment + nSubjectsAtRiskControl
-            
-            # Equation Q.242 in East Manual
-            dNum <- dNum + nEventsOnTreatment - nSubjectsAtRiskTreatment*nEvents/nSubjectsAtRisk
-            
-            # Generate dDen based on number of subjects at risk
-            if ( nSubjectsAtRisk != 1 )
-            {   
-                # Equation Q.243 in East Manual
-                dDen <- dDen + nSubjectsAtRiskTreatment*nSubjectsAtRiskControl*( nSubjectsAtRisk - nEvents )*nEvents/( ( nSubjectsAtRisk - 1)*nSubjectsAtRisk^2 )
-            }
-            # Update the count of subjects at risk before the next iteration
-            nSubjectsAtRiskTreatment <- nSubjectsAtRiskTreatment - nEventsOnTreatment
-            nSubjectsAtRiskControl   <- nSubjectsAtRiskControl - nEventsOnControl
-        }
-    }
+    ##### Deriving weights:
+    nPatientsStage1 <- nrow( dfStage1PatientPFSData )
+    nPatientsStage2 <- nrow( dfStage2PatientPFSData )
     
-    # Check that dDen is not zero
-    if( dDen == 0 )
-    {
-        return( ReturnResult( nTrtArms = nTrtArms, nErrorCode = -6 ) )
-    }
+    dWeightStage1 <- sqrt( nPatientsStage1/( nPatientsStage1+nPatientsStage2 ) )
+    dWeightStage2 <- sqrt( nPatientsStage2/( nPatientsStage1+nPatientsStage2 ) )
     
-    # Compute the logrank test statistic
-    dTS <- dNum/sqrt( dDen )
+    PComb <- 1 - pnorm( dWeightStage1*qnorm( 1 - p1_adj )+ dWeightStage2*qnorm( 1 - p2 ) )
     
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = dTS <  dCriticalPoint, 
-                                               bFAEfficacyCondition = dTS <  dCriticalPoint )
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bIAEfficacyCondition = PComb <  DesignParam$Alpha,
+                                               bFAEfficacyCondition = PComb <  DesignParam$Alpha )
     
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
-    # Calculate the number of patients that were recruited (and their PFS data was used for analysis) at Stage 2
-    dfStage2PatientPFSData <- dfSimDataStage2[dfSimDataStage2$Stage == 2, ]
-    
     vStage2RecruitedPatientsPerArm <- as.vector( table( dfStage2PatientPFSData$TreatmentID ) )
-    
     nCompleters <- nrow( dfSimDataStage1 ) + nrow( dfStage2PatientPFSData )
     
     lRet <- ReturnResult( nTrtArms,

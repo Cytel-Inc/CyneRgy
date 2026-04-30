@@ -26,11 +26,8 @@ LookInfo = NULL
 UserParam = list(Stage1NumCompleters = 300,
                  Stage1FutThreshold = 0.1,
                  Stage1FutilityThreshold = 0.1,
-                 DropoutRate = 0.01,
+                 DropoutProportion = 0,
                  TargetNumPFSEvents = 300,
                  SwitchSign = "yes")
 
-SimData = info$SimData
-DesignParam = info$DesignParam
-UserParam = info$UserParam
 SelectArmAndAnalyzePFSTwoStages ( SimData, DesignParam, LookInfo, UserParam  )
