@@ -16,9 +16,9 @@ To try this example, create a new project in East Horizon using the following co
 <ul style="margin-bottom:0">
 <li>Continuous Outcome for Example 1</li>
 <li>Binary Outcome for Example 2</li>
-<!-- <li>Time-to-Event Outcome for Example 3</li> -->
+<li>Time-to-Event Outcome for Example 3</li>
 </ul>
-<li>**Task:** Explore</li>
+<li>**Task:** Explore or Design</li>
 </ul></div>
 
 # Introduction
@@ -31,7 +31,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 2. [SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R) - Simulates binary outcomes from a mixture distribution where a proportion of patients have no response.
 
-<!-- 3. [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R) - Simulates time-to-event outcomes using a Weibull distribution, allowing arm-specific shape and scale parameters. -->
+3. [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R) - Simulates time-to-event outcomes using a Weibull distribution, allowing arm-specific shape and scale parameters.
 
 # Example 1 - Simulation of Continuous Outcomes with Non-Responders
 
@@ -105,7 +105,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-<!-- # Example 3 - Simulation of Time-to-Event Outcomes from a Weibull Distribution
+# Example 3 - Simulation of Time-to-Event Outcomes from a Weibull Distribution
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R" class="alert-link">SimulatePatientSurvivalMultiArmWeibull.R</a></p>
@@ -142,4 +142,3 @@ CyneRgy::PlotExampleFlowchart(
     )
 )
 ```
--->

@@ -16,7 +16,7 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Study objective:** Multiple Arm Confirmatory, 4-Arm</li>
 <li>**Number of endpoints:** Single Endpoint</li>
 <li>**Endpoint type:** Binary Outcome</li>
-<li>**Task:** Explore</li>
+<li>**Task:** Explore or Design</li>
 <li>**Statistical Design**: Group Sequential, 1 IA</li>
 </ul></div>
 

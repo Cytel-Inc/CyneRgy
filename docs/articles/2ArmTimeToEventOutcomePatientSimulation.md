@@ -12,7 +12,7 @@ following configuration:
 - **Study objective:** Two Arm Confirmatory
 - **Number of endpoints:** Single Endpoint
 - **Endpoint type:** Time-to-Event Outcome
-- **Task:** Any
+- **Task:** Explore or Design
 - **Stratification turned on**: For Example 3
 
 Important: **ArrivalTime** is a new required parameter. Existing R
