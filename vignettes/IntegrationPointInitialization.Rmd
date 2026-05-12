@@ -29,7 +29,7 @@ This integration point is available in East Horizon for the following study obje
 |Dose Escalation|-|-|❌|-|-|-|-|-|-|-|
 |Dose Finding|-|-|❌|❌|-|-|-|-|-|-|
 |Multiple Arm Confirmatory|❌|-|✅|✅|-|-|-|-|-|-|
-|One Arm Exploratory / Confirmatory|❌|-|❌|❌|-|❌|-|❌|-|❌|
+|One Arm Exploratory / Confirmatory|❌|-|❌|❌|-|❌|-|❌|-|-|
 |Two Arm Confirmatory|✅|✅|✅|✅|✅|❌|❌|-|✅|✅|
 |Two Arm Confirmatory - Multiple Endpoints|❌|-|❌|❌|-|-|-|-|-|-|
 
@@ -64,7 +64,7 @@ You can set up an initialization function when **creating a new project** by nav
 
 1. Choose **Initialize R Simulations** in the **Plan** section when setting up a **new Project**.
 1. Turn on the switch to enable the feature.
-1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Browse and select the appropriate R file (`filename.r`) from your computer. This file should contain function(s) written to perform various tasks to be used throughout your Project.
 1. Specify the function name you want to initialize. If the expected function is not displaying, then check your R code for errors.
 1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
 1. Continue creating your project.

@@ -19,11 +19,11 @@ This integration point is available in East Horizon Explore for the following st
 
 ||Time to Event|Time to Event with Stratification|Binary|Continuous|Continuous with Repeated Measures|Count|Composite|Categorical|Dual TTE-TTE|Dual TTE-Binary|
 |----------------|--|--|--|--|--|--|--|--|--|--|--|
-|Dose Escalation|-|-|❌|-|-|-|-|-|-|-|
-|Dose Finding|-|-|❌|❌|-|-|-|-|-|-|
+|Dose Escalation|-|-|-|-|-|-|-|-|-|-|
+|Dose Finding|-|-|-|❌|-|-|-|-|-|-|
 |Multiple Arm Confirmatory|❌|-|❌|❌|-|-|-|-|-|-|
-|One Arm Exploratory / Confirmatory|❌|-|❌|❌|-|❌|-|❌|-|❌|
-|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|❌|-|❌|❌|
+|One Arm Exploratory / Confirmatory|-|-|-|-|-|-|-|-|-|-|
+|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|-|-|❌|❌|
 |Two Arm Confirmatory - Multiple Endpoints|✅|-|✅|✅|-|-|-|-|-|-|
 
 ## East Horizon Design
@@ -35,7 +35,7 @@ This integration point is available in East Horizon Design for the following stu
 |Dose Escalation|-|-|❌|-|-|-|-|-|-|-|
 |Dose Finding|-|-|❌|❌|-|-|-|-|-|-|
 |Multiple Arm Confirmatory|❌|-|❌|❌|-|-|-|-|-|-|
-|One Arm Exploratory / Confirmatory|❌|-|❌|❌|-|❌|-|❌|-|❌|
+|One Arm Exploratory / Confirmatory|❌|-|❌|❌|-|❌|-|❌|-|-|
 |Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|❌|-|❌|❌|
 |Two Arm Confirmatory - Multiple Endpoints|✅|-|✅|✅|-|-|-|-|-|-|
 
