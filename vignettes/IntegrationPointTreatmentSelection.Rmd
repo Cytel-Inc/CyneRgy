@@ -17,28 +17,24 @@ The Treatment Selection integration point allows you to customize the selection 
 
 This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
 
-||Time to Event|Time to Event with Stratification|Binary|Continuous|Continuous with Repeated Measures|Count|Composite|Categorical|Dual TTE-TTE|Dual TTE-Binary|
-|----------------|--|--|--|--|--|--|--|--|--|--|--|
-|Dose Escalation|-|-|-|-|-|-|-|-|-|-|
-|Dose Finding|-|-|-|❌|-|-|-|-|-|-|
-|Multiple Arm Confirmatory|❌|-|✅|✅|-|-|-|-|-|-|
-|One Arm Exploratory / Confirmatory|-|-|-|-|-|-|-|-|-|-|
-|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|-|-|❌|❌|
-|Two Arm Confirmatory - Multiple Endpoints|❌|-|❌|❌|-|-|-|-|-|-|
+||Time to Event|Binary|Continuous|
+|----------------|--|--|--|
+|Dose Finding|-|-|❌|
+|Multiple Arm Confirmatory|❌|✅|✅|
+
+*This integration point is not applicable to other study objectives.*
 
 ## East Horizon Design
 
 <details>
 <summary>This integration point is available in East Horizon Design for the following study objectives and endpoint types (click to expand/collapse):</summary>
 
-||Time to Event|Time to Event with Stratification|Binary|Continuous|Continuous with repeated measures|Count|Composite|Categorical|Dual TTE-TTE|Dual TTE-Binary|
-|----------------|--|--|--|--|--|--|--|--|--|--|
-|Dose Escalation|-|-|❌|-|-|-|-|-|-|-|
-|Dose Finding|-|-|❌|❌|-|-|-|-|-|-|
-|Multiple Arm Confirmatory|✅†|-|✅†|✅†|-|-|-|-|-|-|
-|One Arm Exploratory / Confirmatory|❌|-|❌|❌|-|❌|-|❌|-|-|
-|Two Arm Confirmatory|❌|❌|❌|❌|-|❌|❌|-|❌|❌|
-|Two Arm Confirmatory - Multiple Endpoints|❌|-|❌|❌|-|-|-|-|-|
+||Time to Event|Binary|Continuous|
+|----------------|--|--|--|
+|Dose Finding|-|❌|❌|
+|Multiple Arm Confirmatory|✅†|✅†|✅†|
+
+*This integration point is not applicable to other study objectives.*
 
 †Not every test will be available for this study objective and endpoint type. The availability will depend on the specific test you choose:
 

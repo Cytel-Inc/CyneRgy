@@ -17,27 +17,21 @@ The Design integration point allows you to implement custom decision-making logi
 
 This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
 
-||Time to Event|Time to Event with Stratification|Binary|Continuous|Continuous with Repeated Measures|Count|Composite|Categorical|Dual TTE-TTE|Dual TTE-Binary|
-|----------------|--|--|--|--|--|--|--|--|--|--|--|
-|Dose Escalation|-|-|-|-|-|-|-|-|-|-|
-|Dose Finding|-|-|-|❌|-|-|-|-|-|-|
-|Multiple Arm Confirmatory|❌|-|❌|❌|-|-|-|-|-|-|
-|One Arm Exploratory / Confirmatory|-|-|-|-|-|-|-|-|-|-|
-|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|-|-|❌|❌|
-|Two Arm Confirmatory - Multiple Endpoints|✅|-|✅|✅|-|-|-|-|-|-|
+||Time to Event|Binary|Continuous|
+|----------------|--|--|--|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|
+
+*This integration point is not applicable to other study objectives.*
 
 ## East Horizon Design
 
 This integration point is available in East Horizon Design for the following study objectives and endpoint types:
 
-||Time to Event|Time to Event with Stratification|Binary|Continuous|Continuous with Repeated Measures|Count|Composite|Categorical|Dual TTE-TTE|Dual TTE-Binary|
-|----------------|--|--|--|--|--|--|--|--|--|--|--|
-|Dose Escalation|-|-|❌|-|-|-|-|-|-|-|
-|Dose Finding|-|-|❌|❌|-|-|-|-|-|-|
-|Multiple Arm Confirmatory|❌|-|❌|❌|-|-|-|-|-|-|
-|One Arm Exploratory / Confirmatory|❌|-|❌|❌|-|❌|-|❌|-|-|
-|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|❌|-|❌|❌|
-|Two Arm Confirmatory - Multiple Endpoints|✅|-|✅|✅|-|-|-|-|-|-|
+||Time to Event|Binary|Continuous|
+|----------------|--|--|--|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|
+
+*This integration point is not applicable to other study objectives.*
 
 # Instructions
 
