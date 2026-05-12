@@ -11,7 +11,7 @@ following configuration:
 - **Study objective:** Two Arm Confirmatory
 - **Number of endpoints:** Single Endpoint
 - **Endpoint type:** Binary Outcome
-- **Task:** Any
+- **Task:** Explore or Design
 - **Statistical Design:**
   - *Fixed Sample* or *Group Sequential* for Examples 1, 2, 3, 4
   - *Group Sequential with Sample Size Re-Estimation* for Example 5
