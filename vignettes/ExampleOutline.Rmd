@@ -51,7 +51,7 @@ This example illustrates how to customize the dropout distribution in East Horiz
 
 <details>
 <summary>**Multiple Arm, Patient Dropout**
-<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> --></summary>
+<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
 This example illustrates how to customize the dropout distribution in East Horizon for multi-arm trials, covering continuous, binary, and time-to-event outcomes.
 [Click here to view the full example.](MultiArmPatientDropout.html)
 </details>
@@ -87,7 +87,7 @@ This example demonstrates how to customize the patient outcome simulation in Eas
 </details>
 
 <details>
-<summary>**Multiple Arm – Patient Simulation**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> --></summary>
+<summary>**Multiple Arm – Patient Simulation**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
 This example demonstrates how to customize the patient outcome simulation in East Horizon for multi-arm trials, covering continuous, binary, and time-to-event outcomes.
 [Click here to view the full example.](MultiArmPatientSimulation.html)
 </details>
@@ -148,7 +148,7 @@ This example demonstrates how to customize the statistical test in East Horizon 
 </details>
 
 <details>
-<summary>**Multiple Arm – Analysis**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> --></summary>
+<summary>**Multiple Arm – Analysis**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
 This example demonstrates how to customize the statistical test in East Horizon for multi-arm trials, covering continuous, binary, and time-to-event outcomes.
 [Click here to view the full example.](MultiArmAnalysis.html)
 </details>
