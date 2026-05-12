@@ -93,8 +93,8 @@ This example demonstrates how to customize the patient outcome simulation in Eas
 </details>
 
 <details>
-<summary>**Dual Endpoints – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span></summary>
-This example demonstrates how to customize the patient outcome simulation in East Horizon for two-arm trials with dual endpoints (TTE-TTE).
+<summary>**Dual Endpoints – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-warning ms-1">TTE-Binary</span></summary>
+This example demonstrates how to customize the patient outcome simulation in East Horizon for two-arm trials with dual endpoints (TTE-TTE and TTE-Binary).
 [Click here to view the full example.](DEPPatientSimulation.html)
 </details>
 
