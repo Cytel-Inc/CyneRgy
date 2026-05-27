@@ -12,7 +12,7 @@ following configuration:
 - **Study objective:** Two Arm Confirmatory
 - **Number of endpoints:** Single Endpoint
 - **Endpoint type:** Continuous Outcome
-- **Task:** Any
+- **Task:** Explore or Design
 
 Important: **ArrivalTime** is a new required parameter. Existing R
 scripts must be updated to include this parameter in the function

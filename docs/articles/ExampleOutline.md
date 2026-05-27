@@ -29,8 +29,8 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/GeneratePoissonArrival.md
 
 ## Randomization
 
-**Randomization of Subjects** 2-ArmMultiple ArmSingle/Dual/Multi
-EndpointsAny Outcome
+**Randomization of Subjects** 2-ArmMultiple ArmSingle/Dual EndpointsAny
+Outcome
 
 This example illustrates four ways to customize how subjects are
 assigned to treatment arms in East Horizon: using a uniform
@@ -53,7 +53,7 @@ full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmPatientDropout.md)
 
 **Multiple Arm, Patient Dropout** Multiple ArmSingle
-EndpointContinuousBinary
+EndpointContinuousBinaryTTE
 
 This example illustrates how to customize the dropout distribution in
 East Horizon for multi-arm trials, covering continuous, binary, and
@@ -103,18 +103,19 @@ with repeated measures using the
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalRepeatedMeasuresResponseGeneration.md)
 
 **Multiple Arm – Patient Simulation**Multiple ArmSingle
-EndpointContinuousBinary
+EndpointContinuousBinaryTTE
 
 This example demonstrates how to customize the patient outcome
 simulation in East Horizon for multi-arm trials, covering continuous,
 binary, and time-to-event outcomes. [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmPatientSimulation.md)
 
-**Dual Endpoints – Patient Simulation**2-ArmDual EndpointsTTE-TTE
+**Dual Endpoints – Patient Simulation**2-ArmDual
+EndpointsTTE-TTETTE-Binary
 
 This example demonstrates how to customize the patient outcome
 simulation in East Horizon for two-arm trials with dual endpoints
-(TTE-TTE). [Click here to view the full
+(TTE-TTE and TTE-Binary). [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/DEPPatientSimulation.md)
 
 **Multiple Endpoints – Patient Simulation**2-ArmMultiple
@@ -192,7 +193,8 @@ measures using the
 here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalRepeatedMeasuresAnalysis.md)
 
-**Multiple Arm – Analysis**Multiple ArmSingle EndpointContinuousBinary
+**Multiple Arm – Analysis**Multiple ArmSingle
+EndpointContinuousBinaryTTE
 
 This example demonstrates how to customize the statistical test in East
 Horizon for multi-arm trials, covering continuous, binary, and

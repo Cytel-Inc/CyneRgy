@@ -16,9 +16,9 @@ To try this example, create a new project in East Horizon using the following co
 <ul style="margin-bottom:0">
 <li>Continuous Outcome for Example 1</li>
 <li>Binary Outcome for Example 2</li>
-<!-- <li>Time-to-Event Outcome for Example 3</li> -->
+<li>Time-to-Event Outcome for Example 3</li>
 </ul>
-<li>**Task:** Explore</li>
+<li>**Task:** Explore or Design</li>
 </ul></div>
 
 <div class="alert alert-warning" role="alert">
@@ -35,7 +35,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 2. [AnalyzeMultiArmUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R) - Performs proportion tests for binary endpoints with Bonferroni adjustment.
 
-<!-- 3. [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) - Performs log-rank tests for time-to-event endpoints with Bonferroni adjustment. -->
+3. [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) - Performs log-rank tests for time-to-event endpoints with Bonferroni adjustment.
 
 # Example 1 - Using the `t.test()` Function with Bonferroni Adjustment (Continuous Outcome)
 
@@ -89,7 +89,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-<!-- # Example 3 - Using the `survival::survdiff()` Function with Bonferroni Adjustment (Time-to-Event Outcome)
+# Example 3 - Using the `survival::survdiff()` Function with Bonferroni Adjustment (Time-to-Event Outcome)
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R" class="alert-link">AnalyzeMultiArmUsingLogrankTestBonferroni.R</a></p>
@@ -114,4 +114,3 @@ CyneRgy::PlotExampleFlowchart(
     )
 )
 ```
--->

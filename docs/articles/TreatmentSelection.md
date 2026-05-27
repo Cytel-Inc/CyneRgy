@@ -11,7 +11,7 @@ following configuration:
 - **Study objective:** Multiple Arm Confirmatory, 4-Arm
 - **Number of endpoints:** Single Endpoint
 - **Endpoint type:** Binary Outcome
-- **Task:** Explore
+- **Task:** Explore or Design
 - **Statistical Design**: Group Sequential, 1 IA
 
 ## Introduction

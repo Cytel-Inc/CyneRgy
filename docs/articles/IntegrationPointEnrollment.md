@@ -19,60 +19,54 @@ requirements.
 This integration point is available in East Horizon Explore for the
 following study objectives and endpoint types:
 
-|  | Time to Event | Binary | Continuous | Continuous with repeated measures | Count | Composite | Dual TTE-TTE | Dual TTE-Binary |
-|----|----|----|----|----|----|----|----|----|
-| Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Multiple Arm Confirmatory | 🔜 | ✅ | ✅ | \- | \- | \- | \- | \- |
-| Dose Finding | \- | \- | ❌ | \- | \- | \- | \- | \- |
+|  | Time to Event | Time to Event with Stratification | Binary | Continuous | Continuous with Repeated Measures | Count | Composite | Categorical | Dual TTE-TTE | Dual TTE-Binary |  |
+|----|----|----|----|----|----|----|----|----|----|----|----|
+| Dose Escalation | \- | \- | \- | \- | \- | \- | \- | \- | \- | \- |  |
+| Dose Finding | \- | \- | \- | ❌ | \- | \- | \- | \- | \- | \- |  |
+| Multiple Arm Confirmatory | ❌ | \- | ✅ | ✅ | \- | \- | \- | \- | \- | \- |  |
+| One Arm Exploratory / Confirmatory | \- | \- | \- | \- | \- | \- | \- | \- | \- | \- |  |
+| Two Arm Confirmatory | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | \- | \- | ✅ | ✅ |  |
+| Two Arm Confirmatory - Multiple Endpoints | ✅ | \- | ✅ | ✅ | \- | \- | \- | \- | \- | \- |  |
 
 ### East Horizon Design
 
-Click to expand/collapse
-
 This integration point is available in East Horizon Design for the
-following study objectives and endpoint types:
+following study objectives and endpoint types (click to
+expand/collapse):
 
-|  | Time to Event | Binary | Continuous | Continuous with repeated measures | Count | Composite | Dual TTE-TTE | Dual TTE-Binary |
-|----|----|----|----|----|----|----|----|----|
-| Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | 🔜 | 🔜 |
-| Two Arm Confirmatory - Multiple Endpoints | ✅ | ✅ | ✅ | \- | \- | \- | \- | \- |
-| Multiple Arm Confirmatory | 🔜 | 🔜 | 🔜 | \- | \- | \- | \- | \- |
-| Dose Finding | \- | \- | ❌ | \- | \- | \- | \- | \- |
+|  | Time to Event | Time to Event with Stratification | Binary | Continuous | Continuous with repeated measures | Count | Composite | Categorical | Dual TTE-TTE | Dual TTE-Binary |
+|----|----|----|----|----|----|----|----|----|----|----|
+| Dose Escalation | \- | \- | ❌ | \- | \- | \- | \- | \- | \- | \- |
+| Dose Finding | \- | \- | ❌ | ❌ | \- | \- | \- | \- | \- | \- |
+| Multiple Arm Confirmatory | ❌ | \- | ❌ | ❌ | \- | \- | \- | \- | \- | \- |
+| One Arm Exploratory / Confirmatory | ❌ | \- | ❌ | ❌ | \- | ❌ | \- | ❌ | \- | \- |
+| Two Arm Confirmatory | ✅† | ❌ | ✅† | ✅† | \- | ❌ | ❌ | \- | ❌ | ❌ |
+| Two Arm Confirmatory - Multiple Endpoints | ✅ | \- | ✅ | ✅ | \- | \- | \- | \- | \- |  |
 
-This integration point is available in East Horizon Design for the
-following tests:
+†Not every test will be available for this study objective and endpoint
+type. The availability will depend on the specific test you choose:
 
 | Test | Study Objective | Endpoint | Availability |
 |----|----|----|----|
-| Single Mean (One Arm Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
-| Mean of Paired Differences (Paired Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
-| Mean of paired Ratios (Paired Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
-| Single Proportion (One Arm Design) | One Arm Exploratory/Confirmatory | Binary | ❌ |
-| Simon’s Two Stage (One Arm Design) | One Arm Exploratory/Confirmatory | Binary | ❌ |
-| Logrank Weibull Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
-| Parametric Weibull Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
-| Logrank Exponential Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
-| Single Poisson Rate (One Arm Design) | One Arm Exploratory/Confirmatory | Count | ❌ |
-| Difference of Means (Parallel Design) | Two Arm Confirmatory | Continuous | ✅ |
-| Ratio of Means (Parallel Design) | Two Arm Confirmatory | Continuous | ❌ |
-| Difference of Means (Crossover Design) | Two Arm Confirmatory | Continuous | ❌ |
-| Ratio of Means (Crossover Design) | Two Arm Confirmatory | Continuous | ❌ |
+| Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design) | Two Arm Confirmatory | Time to Event | ✅ |
+| Logrank Test Given Accrual Duration and Study Duration (Parallel Design) | Two Arm Confirmatory | Time to Event | ✅ |
+| Logrank Test Given Accrual Duration and Accrual Rates (Population Enrichment) | Two Arm Confirmatory | Time to Event | ❌ |
 | Difference of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
 | Ratio of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
 | Odds Ratio of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
 | Fisher’s Exact (Parallel Design) | Two Arm Confirmatory | Binary | ❌ |
-| Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design) | Two Arm Confirmatory | Time to Event | ✅ |
-| Logrank Test Given Accrual Duration and Study Duration (Parallel Design) | Two Arm Confirmatory | Time to Event | ✅ |
-| Logrank Test Given Accrual Duration and Accrual Rates (Population Enrichment) | Two Arm Confirmatory | Time to Event | ❌ |
-| Ratio of Poisson Rates (Parallel Design) | Two Arm Confirmatory | Count | ❌ |
-| Ratio of Negative Binomial Rates (Parallel Design) | Two Arm Confirmatory | Count | ❌ |
-| Win Ratio (Parallel Design) | Two Arm Confirmatory | Composite | ❌ |
-| MAMS Difference of Means (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Continuous | 🔜 |
-| MAMS Difference of Means: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Continuous | ❌ |
-| MAMS Difference of Proportions (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Binary | 🔜 |
+| Difference of Means (Parallel Design) | Two Arm Confirmatory | Continuous | ✅ |
+| Ratio of Means (Parallel Design) | Two Arm Confirmatory | Continuous | ❌ |
+| Difference of Means (Crossover Design) | Two Arm Confirmatory | Continuous | ❌ |
+| Ratio of Means (Crossover Design) | Two Arm Confirmatory | Continuous | ❌ |
+| MAMS Logrank: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Time to Event | ❌ |
+| MAMS Difference of Proportions (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Binary | ❌ |
 | MAMS Difference of Proportions: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Binary | ❌ |
-| MAMS Logrank (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Time to Event | 🔜 |
-| MAMS Logrank: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Time to Event | 🔜 |
+| MAMS Difference of Means (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Continuous | ❌ |
+| MAMS Difference of Means: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Continuous | ❌ |
+
+Important: for some tests, you may need to compute the analytical design
+input set before simulating the design to see the option.
 
 ### East
 
@@ -126,7 +120,9 @@ You can set up an enrollment function under **Distribution** in the
 
 Follow these steps (click to expand/collapse):
 
-1.  Create and compute a first **analytical design input set**.
+1.  Create an **simulation input set**. For some tests, you may need to
+    create an **analytical design input set** first. If so, follow the
+    steps 2 and 3. If not, skip to step 4.
 2.  Navigate to the Results section and **simulate** the analytical
     design.
 3.  Navigate to the new **simulation input set** that was created.
@@ -146,6 +142,10 @@ For a visual guide of where to find the option, refer to the screenshot
 below:
 
 ![](GettingStarted_files/enrollmentDesign.png)
+
+For some tests, the option is available under *Accrual Model*.
+
+![](GettingStarted_files/enrollmentDesign2.png)
 
 ### In East
 
@@ -221,8 +221,11 @@ function arguments, as this will ensure that the same function will work
 regardless of whether the user has specified any custom parameters in
 the interface. `Type` needs to be declared with a default value.
 
-A detailed template with step-by-step explanations is available here:
+Detailed templates with step-by-step explanations are available here:
 [GenerateArrivalTimes.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/GenerateArrivalTimes.R)
+and
+[GenerateArrivalTimes.MEP.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/GenerateArrivalTimes.MEP.R)
+(for Multiple Endpoints)
 
 ### For `Type = 0` (Global Enrollment)
 

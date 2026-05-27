@@ -18,73 +18,19 @@ simulations. This function can serve various purposes, such as:
 
 ## Availability
 
-### East Horizon Explore
+### East Horizon (Explore and Design)
 
-This integration point is available in East Horizon Explore for the
-following study objectives and endpoint types:
+This integration point is available in East Horizon for the following
+study objectives and endpoint types:
 
-|  | Time to Event | Binary | Continuous | Continuous with repeated measures | Count | Composite | Dual TTE-TTE | Dual TTE-Binary |
-|----|----|----|----|----|----|----|----|----|
-| Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Multiple Arm Confirmatory | 🔜 | ✅ | ✅ | \- | \- | \- | \- | \- |
-| Dose Finding | \- | \- | ❌ | \- | \- | \- | \- | \- |
-
-**Legend**
-
-| Icon | Meaning       |
-|------|---------------|
-| ✅   | Available     |
-| ❌   | Not available |
-| 🔜   | Coming soon   |
-
-### East Horizon Design
-
-Click to expand/collapse
-
-This integration point is available in East Horizon Design for the
-following study objectives and endpoint types:
-
-|  | Time to Event | Binary | Continuous | Continuous with repeated measures | Count | Composite | Dual TTE-TTE | Dual TTE-Binary |
-|----|----|----|----|----|----|----|----|----|
-| Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | 🔜 | 🔜 |
-| Two Arm Confirmatory - Multiple Endpoints | ✅ | ✅ | ✅ | \- | \- | \- | \- | \- |
-| Multiple Arm Confirmatory | 🔜 | 🔜 | 🔜 | \- | \- | \- | \- | \- |
-| Dose Finding | \- | \- | ❌ | \- | \- | \- | \- | \- |
-
-This integration point is available in East Horizon Design for the
-following tests:
-
-| Test | Study Objective | Endpoint | Availability |
-|----|----|----|----|
-| Single Mean (One Arm Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
-| Mean of Paired Differences (Paired Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
-| Mean of paired Ratios (Paired Design) | One Arm Exploratory/Confirmatory | Continuous | ❌ |
-| Single Proportion (One Arm Design) | One Arm Exploratory/Confirmatory | Binary | ❌ |
-| Simon’s Two Stage (One Arm Design) | One Arm Exploratory/Confirmatory | Binary | ❌ |
-| Logrank Weibull Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
-| Parametric Weibull Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
-| Logrank Exponential Distribution (One Arm Design) | One Arm Exploratory/Confirmatory | Time to Event | ❌ |
-| Single Poisson Rate (One Arm Design) | One Arm Exploratory/Confirmatory | Count | ❌ |
-| Difference of Means (Parallel Design) | Two Arm Confirmatory | Continuous | ✅ |
-| Ratio of Means (Parallel Design) | Two Arm Confirmatory | Continuous | ❌ |
-| Difference of Means (Crossover Design) | Two Arm Confirmatory | Continuous | ❌ |
-| Ratio of Means (Crossover Design) | Two Arm Confirmatory | Continuous | ❌ |
-| Difference of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
-| Ratio of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
-| Odds Ratio of Proportions (Parallel Design) | Two Arm Confirmatory | Binary | ✅ |
-| Fisher’s Exact (Parallel Design) | Two Arm Confirmatory | Binary | ❌ |
-| Logrank Test Given Accrual Duration and Accrual Rates (Parallel Design) | Two Arm Confirmatory | Time to Event | ✅ |
-| Logrank Test Given Accrual Duration and Study Duration (Parallel Design) | Two Arm Confirmatory | Time to Event | ✅ |
-| Logrank Test Given Accrual Duration and Accrual Rates (Population Enrichment) | Two Arm Confirmatory | Time to Event | ❌ |
-| Ratio of Poisson Rates (Parallel Design) | Two Arm Confirmatory | Count | ❌ |
-| Ratio of Negative Binomial Rates (Parallel Design) | Two Arm Confirmatory | Count | ❌ |
-| Win Ratio (Parallel Design) | Two Arm Confirmatory | Composite | ❌ |
-| MAMS Difference of Means (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Continuous | ✅ |
-| MAMS Difference of Means: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Continuous | ✅ |
-| MAMS Difference of Proportions (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Binary | ✅ |
-| MAMS Difference of Proportions: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Binary | ✅ |
-| MAMS Logrank (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Time to Event | 🔜 |
-| MAMS Logrank: Combining P-Values (Pairwise Comparisons to Control) | Multiple Arm Confirmatory | Time to Event | 🔜 |
+|  | Time to Event | Time to Event with Stratification | Binary | Continuous | Continuous with Repeated Measures | Count | Composite | Categorical | Dual TTE-TTE | Dual TTE-Binary |  |
+|----|----|----|----|----|----|----|----|----|----|----|----|
+| Dose Escalation | \- | \- | ❌ | \- | \- | \- | \- | \- | \- | \- |  |
+| Dose Finding | \- | \- | ❌ | ❌ | \- | \- | \- | \- | \- | \- |  |
+| Multiple Arm Confirmatory | ❌ | \- | ✅ | ✅ | \- | \- | \- | \- | \- | \- |  |
+| One Arm Exploratory / Confirmatory | ❌ | \- | ❌ | ❌ | \- | ❌ | \- | ❌ | \- | \- |  |
+| Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | \- | ✅ | ✅ |  |
+| Two Arm Confirmatory - Multiple Endpoints | ❌ | \- | ❌ | ❌ | \- | \- | \- | \- | \- | \- |  |
 
 ### East
 
@@ -119,9 +65,8 @@ Follow these steps (click to expand/collapse):
     setting up a **new Project**.
 2.  Turn on the switch to enable the feature.
 3.  Browse and select the appropriate R file (`filename.r`) from your
-    computer, or use the built-in **R Code Assistant** to create one.
-    This file should contain function(s) written to perform various
-    tasks to be used throughout your Project.
+    computer. This file should contain function(s) written to perform
+    various tasks to be used throughout your Project.
 4.  Specify the function name you want to initialize. If the expected
     function is not displaying, then check your R code for errors.
 5.  Set any required user parameters (variables) as needed for your

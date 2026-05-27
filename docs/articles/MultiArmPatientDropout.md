@@ -12,6 +12,7 @@ following configuration:
 - **Number of endpoints:** Single Endpoint
 - **Endpoint type:**
   - Continuous or Binary Outcome for Example 1
+  - Time-to-Event Outcome for Example 2
 - **Task:** Explore
 
 ## Introduction
@@ -27,6 +28,8 @@ on two common approaches to modeling dropout:
 
 1.  Armwise continuous/binary dropout using dropout probabilities to
     identify completers and non-completers.
+2.  Armwise survival dropout using time-to-dropout models based on
+    hazard rates or probabilities.
 
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R)
@@ -37,6 +40,11 @@ you will find the following R files:
     *GenerateCensoringMultiArmUsingBinomialProportion* in the file is
     used to perform multiple arm dropout with continuous or binary
     outcome as described in Example 1 below.
+
+2.  [GenerateDropoutTimeMultiArmForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R) -
+    The R function named *GenerateDropoutTimeMultiArmForSurvival.R* in
+    the file is used to perform multiple arm dropout with time-to-event
+    outcome as described in Example 2 below.
 
 ## Example 1 - Dropout Using Binomial Proportion (Continuous or Binary Outcome)
 
@@ -83,3 +91,42 @@ integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.
 
 ![](MultiArmPatientDropout_files/figure-html/unnamed-chunk-3-1.png)
+
+## Example 2 - Dropout Time For Time-to-Event Outcome
+
+This example is related to this R file:
+[GenerateDropoutTimeMultiArmForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R)
+
+The R function *GenerateDropoutTimeMultiArmForSurvival* simulates
+dropout times for multi-arm time-to-event designs, allowing dropout
+behavior to vary by treatment arm. Each arm may have its own dropout
+hazard rate or dropout probability, as defined in East Horizon.
+
+The function supports two methods for specifying dropout parameters:
+
+- Hazard rate–based dropout (`DropMethod = 1`): dropout times are drawn
+  directly from exponential distributions parameterized by arm-specific
+  hazard rates.
+- Probability–based dropout (`DropMethod = 2`): dropout probabilities
+  are converted into equivalent exponential hazard rates, offering a
+  simpler way to define dropout intensity.
+
+Subjects who do not drop out receive a dropout time of `Inf`, indicating
+full study completion.
+
+This function does not use user-defined parameters but relies on values
+specified in East Horizon. Refer to the table below for more
+information.
+
+| **Name of the parameter in East Horizon** | **Where to find the parameter in East Horizon** | **Name of the variable in the R script** |
+|----|----|----|
+| Probability of Dropout for Control Arm | Response Card, Dropout Rate tab | $`ProbDrop[ 1 ]`$ |
+| Probability of Dropout for Arm 1 | Response Card, Dropout Rate tab | $`ProbDrop[ 2 ]`$ |
+| Probability of Dropout for Arm 2 | Response Card, Dropout Rate tab | $`ProbDrop[ 3 ]`$ |
+| … |  |  |
+
+The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.
+
+![](MultiArmPatientDropout_files/figure-html/unnamed-chunk-4-1.png)
