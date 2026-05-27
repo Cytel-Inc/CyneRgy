@@ -13,7 +13,8 @@ following configuration:
 - **Endpoint type:**
   - Continuous Outcome for Example 1
   - Binary Outcome for Example 2
-- **Task:** Explore
+  - Time-to-Event Outcome for Example 3
+- **Task:** Explore or Design
 
 ## Introduction
 
@@ -34,6 +35,10 @@ you will find the following R files:
 2.  [SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R) -
     Simulates binary outcomes from a mixture distribution where a
     proportion of patients have no response.
+
+3.  [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R) -
+    Simulates time-to-event outcomes using a Weibull distribution,
+    allowing arm-specific shape and scale parameters.
 
 ## Example 1 - Simulation of Continuous Outcomes with Non-Responders
 
@@ -110,3 +115,42 @@ integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.
 
 ![](MultiArmPatientSimulation_files/figure-html/unnamed-chunk-4-1.png)
+
+## Example 3 - Simulation of Time-to-Event Outcomes from a Weibull Distribution
+
+This example is related to this R file:
+[SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R)
+
+This example demonstrates how to simulate time-to-event data for
+multiple treatment arms using arm-specific Weibull parameters. Each arm
+is characterized by its own shape and scale values, allowing flexible
+modeling of distinct hazard profiles across arms.
+
+The R function *SimulatePatientSurvivalMultiArmWeibull* extends the
+two-arm approach to three arms (two treatment arms), generating a
+survival time for each patient according to the Weibull distribution
+corresponding to their assigned arm. This enables users to evaluate
+study power or expected treatment differences under non-proportional
+hazards or complex multi-arm designs.
+
+**Note**: This example could be extended to any number of treatment arms
+by adding more user parameters such as `dShapeExp3` and `dScaleExp3`,
+`dShapeExp4` and `dScaleExp4`, etc.
+
+Refer to the table below for the definitions of the user-defined
+parameters used in this example.
+
+| **User parameter** | **Definition** |
+|----|----|
+| **dShapeCtrl** | Shape parameter of the Weibull distribution for the control arm. |
+| **dShapeExp1** | Shape parameter of the Weibull distribution for the first experimental arm. |
+| **dShapeExp2** | Shape parameter of the Weibull distribution for the second experimental arm. |
+| **dScaleCtrl** | Scale parameter of the Weibull distribution for the control arm. |
+| **dScaleExp1** | Scale parameter of the Weibull distribution for the first experimental arm. |
+| **dScaleExp2** | Scale parameter of the Weibull distribution for the second experimental arm. |
+
+The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.
+
+![](MultiArmPatientSimulation_files/figure-html/unnamed-chunk-5-1.png)

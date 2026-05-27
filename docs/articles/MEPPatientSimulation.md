@@ -12,7 +12,7 @@ following configuration:
 - **Number of endpoints:** Multiple Endpoints (any number)
 - **Endpoint type:** Any combination of *Time-to-Event*, *Binary*, and
   *Continuous*
-- **Task:** Design
+- **Task:** Explore or Design
 
 ## Introduction
 

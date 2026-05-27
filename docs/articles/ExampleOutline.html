@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle Wathen,
 Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">March 07, 2026</h4>
+            <h4 data-toc-skip class="date">May 27, 2026</h4>
       
 
       <div class="d-none name"><code>ExampleOutline.Rmd</code></div>
@@ -129,9 +129,7 @@ example.</a>
 <div class="section level2">
 <h2 id="randomization">Randomization<a class="anchor" aria-label="anchor" href="#randomization"></a>
 </h2>
-<details><summary><strong>Randomization of Subjects</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single/Dual/Multi
-Endpoints</span><span class="badge text-bg-warning ms-1">Any
-Outcome</span>
+<details><summary><strong>Randomization of Subjects</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single/Dual Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span>
 </summary>
 This example illustrates four ways to customize how subjects are
 assigned to treatment arms in East Horizon: using a uniform
@@ -149,7 +147,7 @@ example.</a>
 This example illustrates how to customize the dropout distribution in
 East Horizon for continuous and binary outcomes, time-to-event outcome,
 and continuous outcome with repeated measures. <a href="2ArmPatientDropout.html">Click here to view the full example.</a>
-</details><details><summary><strong>Multiple Arm, Patient Dropout</strong> <span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> -->
+</details><details><summary><strong>Multiple Arm, Patient Dropout</strong> <span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span>
 </summary>
 This example illustrates how to customize the dropout distribution in
 East Horizon for multi-arm trials, covering continuous, binary, and
@@ -189,18 +187,18 @@ simulation in East Horizon for a two-arm trial with a continuous outcome
 with repeated measures using the <code><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html" class="external-link">MASS::mvrnorm()</a></code> function.
 <a href="2ArmNormalRepeatedMeasuresResponseGeneration.html">Click here
 to view the full example.</a>
-</details><details><summary><strong>Multiple Arm – Patient Simulation</strong><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> -->
+</details><details><summary><strong>Multiple Arm – Patient Simulation</strong><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span>
 </summary>
 This example demonstrates how to customize the patient outcome
 simulation in East Horizon for multi-arm trials, covering continuous,
 binary, and time-to-event outcomes. <a href="MultiArmPatientSimulation.html">Click here to view the full
 example.</a>
-</details><details><summary><strong>Dual Endpoints – Patient Simulation</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span>
+</details><details><summary><strong>Dual Endpoints – Patient Simulation</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-warning ms-1">TTE-Binary</span>
 </summary>
 This example demonstrates how to customize the patient outcome
 simulation in East Horizon for two-arm trials with dual endpoints
-(TTE-TTE). <a href="DEPPatientSimulation.html">Click here to view the
-full example.</a>
+(TTE-TTE and TTE-Binary). <a href="DEPPatientSimulation.html">Click here
+to view the full example.</a>
 </details><details><summary><strong>Multiple Endpoints – Patient Simulation</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Multiple Endpoints</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span>
 </summary>
 This example demonstrates how to customize the patient outcome
@@ -260,7 +258,7 @@ This example demonstrates how to customize the statistical test in East
 Horizon for a two-arm trial with a continuous outcome with repeated
 measures using the <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">nlme::gls()</a></code> function. <a href="2ArmNormalRepeatedMeasuresAnalysis.html">Click here to view the
 full example.</a>
-</details><details><summary><strong>Multiple Arm – Analysis</strong><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> -->
+</details><details><summary><strong>Multiple Arm – Analysis</strong><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span>
 </summary>
 This example demonstrates how to customize the statistical test in East
 Horizon for multi-arm trials, covering continuous, binary, and

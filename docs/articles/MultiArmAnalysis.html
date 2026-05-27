@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin
 and Anoop Singh Rawat</h4>
             
-            <h4 data-toc-skip class="date">March 07, 2026</h4>
+            <h4 data-toc-skip class="date">May 27, 2026</h4>
       
 
       <div class="d-none name"><code>MultiArmAnalysis.Rmd</code></div>
@@ -126,10 +126,12 @@ Continuous Outcome for Example 1
 <li>
 Binary Outcome for Example 2
 </li>
-<!-- <li>Time-to-Event Outcome for Example 3</li> -->
+<li>
+Time-to-Event Outcome for Example 3
+</li>
 </ul>
 <li>
-<strong>Task:</strong> Explore
+<strong>Task:</strong> Explore or Design
 </li>
 </ul>
 </div>
@@ -159,8 +161,10 @@ adjustment.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R" class="external-link">AnalyzeMultiArmUsingPropTestBonferroni.R</a>
 - Performs proportion tests for binary endpoints with Bonferroni
 adjustment.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R" class="external-link">AnalyzeMultiArmUsingLogrankTestBonferroni.R</a>
+- Performs log-rank tests for time-to-event endpoints with Bonferroni
+adjustment.</p></li>
 </ol>
-<!-- 3. [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) - Performs log-rank tests for time-to-event endpoints with Bonferroni adjustment. -->
 </div>
 <div class="section level2">
 <h2 id="example-1---using-the-t-test-function-with-bonferroni-adjustment-continuous-outcome">Example 1 - Using the <code>t.test()</code> Function with Bonferroni
@@ -209,20 +213,31 @@ fixed and group sequential designs.</p>
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>
 <p><img src="MultiArmAnalysis_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
-<!-- # Example 3 - Using the `survival::survdiff()` Function with Bonferroni Adjustment (Time-to-Event Outcome)
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R" class="alert-link">AnalyzeMultiArmUsingLogrankTestBonferroni.R</a></p>
 </div>
-
-For time-to-event outcomes, this example uses the `survival::survdiff()` function to perform a log-rank test between each treatment arm and the control arm. The log-rank statistic from each comparison is converted to a p-value, adjusted using Bonferroni correction, and evaluated against the efficacy boundary to determine if any treatment demonstrates a statistically significant improvement in survival.
-
-This example can handle interim looks and automatically incorporates information fraction and efficacy boundary adjustments provided by `LookInfo`.
-
-The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
-
-<img src="MultiArmAnalysis_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700" />
--->
+<div class="section level2">
+<h2 id="example-3---using-the-survivalsurvdiff-function-with-bonferroni-adjustment-time-to-event-outcome">Example 3 - Using the <code>survival::survdiff()</code> Function
+with Bonferroni Adjustment (Time-to-Event Outcome)<a class="anchor" aria-label="anchor" href="#example-3---using-the-survivalsurvdiff-function-with-bonferroni-adjustment-time-to-event-outcome"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R" class="external-link alert-link">AnalyzeMultiArmUsingLogrankTestBonferroni.R</a>
+</p>
+</div>
+<p>For time-to-event outcomes, this example uses the
+<code><a href="https://rdrr.io/pkg/survival/man/survdiff.html" class="external-link">survival::survdiff()</a></code> function to perform a log-rank test
+between each treatment arm and the control arm. The log-rank statistic
+from each comparison is converted to a p-value, adjusted using
+Bonferroni correction, and evaluated against the efficacy boundary to
+determine if any treatment demonstrates a statistically significant
+improvement in survival.</p>
+<p>This example can handle interim looks and automatically incorporates
+information fraction and efficacy boundary adjustments provided by
+<code>LookInfo</code>.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="MultiArmAnalysis_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

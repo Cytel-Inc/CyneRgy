@@ -13,7 +13,8 @@ following configuration:
 - **Endpoint type:**
   - Continuous Outcome for Example 1
   - Binary Outcome for Example 2
-- **Task:** Explore
+  - Time-to-Event Outcome for Example 3
+- **Task:** Explore or Design
 
 **Note:** This example is compatible with both Fixed Sample and Group
 Sequential statistical designs. The R code automatically detects whether
@@ -39,6 +40,10 @@ you will find the following R files:
 
 2.  [AnalyzeMultiArmUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R) -
     Performs proportion tests for binary endpoints with Bonferroni
+    adjustment.
+
+3.  [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) -
+    Performs log-rank tests for time-to-event endpoints with Bonferroni
     adjustment.
 
 ## Example 1 - Using the `t.test()` Function with Bonferroni Adjustment (Continuous Outcome)
@@ -85,3 +90,26 @@ integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.
 
 ![](MultiArmAnalysis_files/figure-html/unnamed-chunk-4-1.png)
+
+## Example 3 - Using the `survival::survdiff()` Function with Bonferroni Adjustment (Time-to-Event Outcome)
+
+This example is related to this R file:
+[AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R)
+
+For time-to-event outcomes, this example uses the
+[`survival::survdiff()`](https://rdrr.io/pkg/survival/man/survdiff.html)
+function to perform a log-rank test between each treatment arm and the
+control arm. The log-rank statistic from each comparison is converted to
+a p-value, adjusted using Bonferroni correction, and evaluated against
+the efficacy boundary to determine if any treatment demonstrates a
+statistically significant improvement in survival.
+
+This example can handle interim looks and automatically incorporates
+information fraction and efficacy boundary adjustments provided by
+`LookInfo`.
+
+The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.
+
+![](MultiArmAnalysis_files/figure-html/unnamed-chunk-5-1.png)
