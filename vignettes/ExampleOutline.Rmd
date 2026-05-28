@@ -253,6 +253,13 @@ This example demonstrates how to integrate patient outcome simulation and analys
 </details>
 
 <details>
+<summary>**Multiple-Arm Two-Stage Design with Dual Endpoints**
+<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
+This example demonstrates how to implement a two-stage design for a seamless Phase II/III design. In Stage 1, treatment selection is performed using a binary outcome endpoint, while the final efficacy analysis in Stage 2 is based on Progression-Free Survival (PFS). Importantly, the final analysis incorporates all available PFS data from both Stage 1 and Stage 2 for the selected treatment arm and the control arm.
+[Click here to view the full example.](MultiArmTwoEndpointTwoStageTrial.html)
+</details>
+
+<details>
 <summary>**Schizophrenia Trial (MMRM Analysis)**
 <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
 This example demonstrates how to simulate and analyze data using a Mixed Model for Repeated Measures (MMRM) approach in the context of a schizophrenia trial.
