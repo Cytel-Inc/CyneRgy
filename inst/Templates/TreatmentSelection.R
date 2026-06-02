@@ -1,6 +1,6 @@
 ######################################################################################################################## .
-#' @param TreatmentSelectionTemplate
-#' @title A template for treatment selection functions in MAMS binary designs.  
+#  Last Modified Date: {{CREATION_DATE}}
+#' @name {{FUNCTION_NAME}}
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
@@ -49,7 +49,7 @@
 #'       The above code will save each of the input objects to a file so they may be examined within R.
 ######################################################################################################################## .
 
-PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
+{{FUNCTION_NAME}}  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
            
     # If you wanted to save the input objects you could use the following to save the files to your working directory
