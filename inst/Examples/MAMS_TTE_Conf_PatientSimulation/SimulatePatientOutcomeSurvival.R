@@ -42,8 +42,8 @@ SimulatePatientOutcomeTTEGivenHRates <- function( NumSub, NumArm, ArrivalTime, T
     # If inputs are Median Survival Times
     if( SurvMethod == 3 )      
     {
-        vMST        <- SurvParam
-        vHRates     <- vMST / log(2) 
+        vMST        <- as.numeric(SurvParam)
+        vHRates     <- log(2) / vMST
 
         for( nPatID in 1:NumSub )
         {
