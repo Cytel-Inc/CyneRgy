@@ -53,25 +53,25 @@
 #'         }
 ########################################################################################################################
 
-AnalyzeUsingLogrankTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzeUsingLogrankTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, OutList = NULL, UserParam = NULL )
 {
-    require(survival)
+    require( survival )
     # Retrieve necessary information from the objects East Horizon sent
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it
         nQtyOfLooks              <- LookInfo$NumLooks
         nLookIndex               <- LookInfo$CurrLookIndex
-        CumEvents                <- LookInfo$InfoFrac*DesignParam$MaxEvents
-        nQtyOfEvents             <- CumEvents[ nLookIndex ]
+        dCumEvents               <- LookInfo$InfoFrac*DesignParam$MaxEvents
+        nQtyOfEvents             <- dCumEvents[ nLookIndex ]
         vInfoFrac                <- LookInfo$InfoFrac
         vEfficacyBoundary        <- LookInfo$EffBdry[ nLookIndex ]
 
 
-        if(DesignParam$TailType == 1) {
-        vEfficacyBoundaryPScale  <- 1 - pnorm(vEfficacyBoundary)
+        if( DesignParam$TailType == 1 ) {
+            vEfficacyBoundaryPScale  <- 1 - pnorm( vEfficacyBoundary )
         } else {
-        vEfficacyBoundaryPScale  <- pnorm(vEfficacyBoundary)
+            vEfficacyBoundaryPScale  <- pnorm( vEfficacyBoundary )
         }
     }
     else
@@ -83,29 +83,31 @@ AnalyzeUsingLogrankTestBonferroni <- function( SimData, DesignParam, LookInfo = 
         vInfoFrac                <- 1
         vEfficacyBoundaryPScale  <- DesignParam$Alpha
     }
-  vIsTrtPresent                <- DesignParam$IsArmPresent
-    
-    SimData$TimeOfEvent          <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
+
+    vIsTrtPresent                <- DesignParam$IsArmPresent
+    dfSimData                    <- SimData
+    dfSimData$TimeOfEvent        <- dfSimData$ArrivalTime + dfSimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
     
     # Compute the time of analysis 
-    SimData                      <- SimData[ order( SimData$TimeOfEvent), ]
-    dTimeOfAnalysis              <- SimData[ nQtyOfEvents, ]$TimeOfEvent
+    dfSimData                    <- dfSimData[ order( dfSimData$TimeOfEvent ), ]
+    dTimeOfAnalysis              <- dfSimData[ nQtyOfEvents, ]$TimeOfEvent
     
     # Add the Observed Time variable 
-    SimData                      <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis ,]   # Exclude any patients that were not enrolled by the time of the analysis
-    SimData$Event                <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )  # If the event is observed after the analysis it is not observed, eg censored 
-    SimData$ObservedTime         <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
+    dfSimData                    <- dfSimData[ dfSimData$ArrivalTime <= dTimeOfAnalysis , ]   # Exclude any patients that were not enrolled by the time of the analysis
+    dfSimData$Event              <- ifelse( dfSimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )  # If the event is observed after the analysis it is not observed, eg censored
+    dfSimData$ObservedTime       <- ifelse( dfSimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - dfSimData$ArrivalTime, dfSimData$TimeOfEvent - dfSimData$ArrivalTime )
     
     # Order the data by observed time for the remainder of the computations
-    SimData                      <- SimData[ order( SimData$ObservedTime ), ]
+    dfSimData                    <- dfSimData[ order( dfSimData$ObservedTime ), ]
     
     vPValues                     <- rep( NA, DesignParam$NumTreatments )
     vHRRatio                     <- rep( NA, DesignParam$NumTreatments )
-    for (nTrtID in 1:DesignParam$NumTreatments)
+
+    for ( nTrtID in 1:DesignParam$NumTreatments )
     {
-        if (vIsTrtPresent[ nTrtID ] == 1)
+        if ( vIsTrtPresent[ nTrtID ] == 1 )
         {
-            SimDataTrt           <- SimData[ SimData$TreatmentID %in% c(0, nTrtID), ]
+            SimDataTrt           <- dfSimData[ dfSimData$TreatmentID %in% c( 0, nTrtID ), ]
             # Compute Observed HR
             coxModel             <- coxph( Surv( ObservedTime, Event ) ~ TreatmentID, data = SimDataTrt )
             dTrueHR              <- exp( coxModel$coefficients )
@@ -121,8 +123,8 @@ AnalyzeUsingLogrankTestBonferroni <- function( SimData, DesignParam, LookInfo = 
             dTrueHR              <- NA
             dPValue              <- NA
         }
-        vHRRatio[nTrtID]         <- dTrueHR
-        vPValues[nTrtID]         <- dPValue
+        vHRRatio[ nTrtID ]       <- dTrueHR
+        vPValues[ nTrtID ]       <- dPValue
     }
     
     # Calculate Bonferroni adjusted p values
@@ -133,22 +135,22 @@ AnalyzeUsingLogrankTestBonferroni <- function( SimData, DesignParam, LookInfo = 
     vDecision                    <- ifelse( vAdjPValues < vEfficacyBoundaryPScale, 2, 0 )  # A decision of 2 means success, 0 means continue the trial
     
     for( i in 1:length( vDecision ) ){
-         if (!is.na(vDecision[i]) && vDecision[i] == 0) 
+         if ( !is.na( vDecision[i] ) && vDecision[i] == 0 )
          {            
             # Did not hit efficacy, so check futility 
             # We are at the FA, efficacy decision was not made yet so the decision is futility
             if( nLookIndex == nQtyOfLooks ) 
             {
-                vDecision[i]     <- 3 # Code for futility 
+                vDecision[i]    <- 3 # Code for futility
             }
         }
     }
     
-    nError 	                 <- 0    
-    return( list(Decision  = as.integer( vDecision ), 
-                 ErrorCode = as.integer( nError ),
-                 HR = as.double( vHRRatio ),
-                 AnalysisTime = as.double(dTimeOfAnalysis)))
+    nError 	                    <- 0
+    return( list( Decision      = as.integer( vDecision ),
+                  ErrorCode     = as.integer( nError ),
+                  HR            = as.double( vHRRatio ),
+                  AnalysisTime  = as.double( dTimeOfAnalysis ) ) )
 }
 
     
