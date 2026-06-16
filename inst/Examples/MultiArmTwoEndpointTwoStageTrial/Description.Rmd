@@ -1,6 +1,6 @@
 ---
-title: 'Multiple-Arm Two-Stage Design with Dual Endpoints for a Seamless Phase II/III Trial'
-author: "Julija Saltane,  J. Kyle Wathen"
+title: "Multiple-Arm Two-Stage Design with Dual Endpoints for a Seamless Phase II/III Trial"
+author: "Julija Saltane, J. Kyle Wathen"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document: default
@@ -26,8 +26,9 @@ To try this example, create a new project in East Horizon using the following co
 </div>
 
 <div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">**Important note:** This example does not use time-to-event endpoint in Project settings, as R integration is not yet available for this endpoint type.</p>
+<p style="margin-bottom:0">**Important note:** This example uses East Horizon's built-in single-endpoint framework because dual-endpoint functionality is not yet available. It also does not use the time-to-event endpoint configured in Project Settings, as R integration for this endpoint type is not yet supported.</p>
 </div>
+
 
 # Introduction
 
@@ -39,7 +40,8 @@ In Stage 1, treatment selection is performed using a *binary outcome endpoint*, 
 Seamless Phase II/III designs are increasingly used to integrate dose-selection and confirmatory objectives within a single study setup, potentially shortening drug development in areas with high unmet medical needs. This approach is particularly useful when the primary Phase III endpoint requires long follow-up periods to mature. In such settings, an earlier surrogate efficacy endpoint can be used during the Phase II to guide treatment/dose selection while continuing patient follow-up for the time-to-event endpoint used in the final confirmatory analysis. 
 
 ## Why R Integration is Required
-In order to be able to use both binary and time-to-event data in a multi-arm trial setup, we require an ability of using dual endpoints - this is something that East Horizon cannot handle yet with its current response generation algorithms. Therefore, we must integrate a custom R file for the simulation to do so.
+
+To support both binary and time-to-event endpoints in a multi-arm trial setup, we require an ability of using dual endpoints - this is something that East Horizon cannot handle yet with its current response generation algorithms for multi-arm study objectives. Therefore, we must integrate a custom R file for the simulation to do so.
 In addition, the way that the endpoint data is analyzed to first select the treatment arm based on the binary dataset and then only use control data vs the selected treatment arm to run the efficacy analysis on PFS also requires a custom R code, as this type of analysis is not yet natively supported.
 
 ## R Functions Used in the Example
@@ -60,6 +62,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 1.  [SelectArmAndAnalyzePFSTwoStages.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/R/SelectArmAndAnalyzePFSTwoStages.R) - This file provides an example R function that performs a two-stage adaptive analysis for multi-arm clinical trials. In Stage 1, the best-performing treatment arm is selected based on the binary response endpoint. In Stage 2, efficacy is evaluated using PFS through a log-rank test comparing the selected treatment arm with the control arm. The final analysis uses the complete PFS dataset collected across both Stage 1 and Stage 2 for the selected treatment arm and the control arm. Note that users can change the analysis test for the efficacy decision if desired. The function also supports optional dropout during PFS follow-up, allowing patients to be censored prior to experiencing a PFS event.
 
 ## Workflow Overview
+
 The figure below illustrates where this example fits within the R integration points of East Horizon, accompanied by flowcharts outlining the general steps performed by the R code.
 
 ```{r echo=FALSE,  warning=FALSE, fig.retina=3}
@@ -119,31 +122,31 @@ Before starting, make sure you have the required tools and files.
 
 3. Click on the input set you just created, and ensure "Fixed Sample" is selected in the Statistical Design. This option is intentionally used because the treatment selection and two-stage logic are fully implemented within the custom R analysis function. 
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 3a.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 3.jpg){width=700px}
 
 4. Set sample size to 600.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 3b.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 4.jpg){width=700px}
 
 5. Select “User Specified – R” in the Test field.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 3.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 5.jpg){width=700px}
 
 6. Click the “+” icon to open the R Integration pop-up window.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 4.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 6.jpg){width=700px}
 
 7. Click on “Select File” and then on “Continue”.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 5a.jpg){width=500px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 7.jpg){width=500px}
 
 8. Click "Upload", select the file “SelectArmAndAnalyzePFSTwoStages.R” and click on "Open".
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 6.jpg){width=500px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 8.jpg){width=500px}
 
 9. Select the file again, now within the East Horizon files list, and click on "Insert File".
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 7.jpg){width=500px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 9.jpg){width=500px}
 
 10. Check that the correct file has been imported and the correct Function Name has been specified by the system. Note that the User Parameter variables have been automatically pulled from the R function that was imported. Specify the values for each of these variables.
 Refer to the table below for the values of the user-defined parameters used in this example.
@@ -163,7 +166,7 @@ East Horizon determines the direction of the critical value based on the endpoin
 For binary endpoint, treatment benefit is assumed to be associated with larger response values, whereas the final efficacy analysis uses a PFS log-rank test where treatment benefit corresponds to longer survival, and therefore a smaller response value. Depending on the direction of the log-rank statistic, the sign associated with treatment benefit may therefore differ from the binary endpoint setup.
 
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 8.jpg){width=500px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 10.jpg){width=500px}
 
 11. Click on the “Save” button to exit the R Integration details window.
 
@@ -171,23 +174,23 @@ For binary endpoint, treatment benefit is assumed to be associated with larger r
 
 12. Navigate to the Response page, and then select “User Specified – R” in the Distribution field.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 10.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 12.jpg){width=700px}
 
 13. Click on the “+” icon to open the R Integration pop-up window.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 11.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 13.jpg){width=700px}
 
 14. Click on “Select File” and then on “Continue”.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 5a.jpg){width=500px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 7.jpg){width=500px}
 
 15. Click "Upload", select the file “SimulateBinaryAndPFS.R” and click on "Open".
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 13.jpg){width=500px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 15.jpg){width=500px}
 
 16. Select the file again, now within the East Horizon files list, and click on "Insert File". 
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 14.jpg){width=500px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 16.jpg){width=500px}
 
 17. Check that the correct file has been imported and the correct Function Name has been specified by the system. Note that only one User Parameter variable (`MedianSurvCtrl`) has been automatically pulled from the R function that was imported. The user also needs to specify 'HR[x]' values for each treatment arm. 
 Refer to the table below for the values of the user-defined parameters used in this example.
@@ -198,7 +201,7 @@ Refer to the table below for the values of the user-defined parameters used in t
 |**HR1**|Hazard ratio for treatment arm 1 relative to control arm|0.7|
 |**HR2**|Hazard ratio for treatment arm 2 relative to control arm|0.8|
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 15.jpg){width=500px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 17.jpg){width=500px}
 
 18. Click on the “Save” button to exit the R Integration details window.
 
@@ -206,25 +209,25 @@ Refer to the table below for the values of the user-defined parameters used in t
 
 19. Navigate to the Enrollment page, and specify the average number of subjects enrolled per time unit (i.e. the time unit that was specified when creating the Project, e.g. "per month").
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 18.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 19.jpg){width=700px}
 
 ## Simulation Setup
 
 20. Specify the number of simulation runs as needed.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 19.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 20.jpg){width=700px}
 
 21. Check the checkbox to save the simulation data for all simulated models.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 20.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 21.jpg){width=700px}
 
 22. Click the “Save & Simulate” button.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 21.jpg){width=700px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 22.jpg){width=700px}
 
 23. Confirm by clicking on “Simulate” in the pop-up window, and wait for the simulation runs to finish.
 
-![](MultiArmTwoEndpointTwoStageTrial_files/Step 22.jpg){width=350px}
+![](MultiArmTwoEndpointTwoStageTrial_files/Step 23.jpg){width=350px}
     
 # Possible Extensions
 

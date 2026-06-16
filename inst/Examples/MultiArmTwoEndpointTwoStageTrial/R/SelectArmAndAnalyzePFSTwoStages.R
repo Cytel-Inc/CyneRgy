@@ -356,13 +356,13 @@ SelectArmAndAnalyzePFSTwoStages <- function( SimData, DesignParam, LookInfo = NU
     dTS <- dNum/sqrt( dDen )
     
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = dTS <  dCriticalPoint, 
-                                               bFAEfficacyCondition = dTS <  dCriticalPoint )
+                                               bIAEfficacyCondition = dTS < dCriticalPoint, 
+                                               bFAEfficacyCondition = dTS < dCriticalPoint )
     
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     
     # Calculate the number of patients that were recruited (and their PFS data was used for analysis) at Stage 2
-    dfStage2PatientPFSData <- dfSimDataStage2[dfSimDataStage2$Stage == 2, ]
+    dfStage2PatientPFSData <- dfSimDataStage2[ dfSimDataStage2$Stage == 2, ]
     
     vStage2RecruitedPatientsPerArm <- as.vector( table( dfStage2PatientPFSData$TreatmentID ) )
     
@@ -421,7 +421,7 @@ ReturnResult <- function( nTrtArms,
         lRet[[paste0("CriticalPoint_", i)]]        <- as.double( ifelse( i == nBestArm, dCriticalPoint, 0 ) )
         lRet[[paste0("HazardRatio_", i)]]          <- as.double( ifelse( i == nBestArm, dTrueHR, 0 ) )
         lRet[[paste0("Control_Stage_", i, "_Patients")]]  <- as.double( ifelse ( i == 1, vStage1RecruitedPatientsPerArm[ 1 ],
-                                                                                 ifelse ( i == 2, vStage2RecruitedPatientsPerArm[ 1 ] ) ) )
+                                                                                 ifelse ( i == 2, vStage2RecruitedPatientsPerArm[ 1 ], 0 ) ) )
         lRet[[paste0("Stage1Patients_Arm_", i)]]          <- vStage1RecruitedPatientsPerArm[ i + 1 ]
         lRet[[paste0("Stage2Patients_Arm_", i)]]          <- as.double( ifelse( i == nBestArm, vStage2RecruitedPatientsPerArm[ 2 ], 0 ) )
         

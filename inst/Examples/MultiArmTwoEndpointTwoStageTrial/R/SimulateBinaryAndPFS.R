@@ -28,7 +28,7 @@
 #'         }
 ########################################################################################################################
 
-SimulateBinaryAndPFS <- function(NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL)
+SimulateBinaryAndPFS <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
     # Step 1. Initialize error code and output vectors
     nErrorCode     <- 0
@@ -62,7 +62,7 @@ SimulateBinaryAndPFS <- function(NumSub, NumArm, ArrivalTime, TreatmentID, PropR
     HRNames   <- names( UserParam )[ grepl( "^HR", names( UserParam ) ) ]
     HRNumbers <- sort( as.integer( sub( "^HR", "", HRNames ) ) )
     
-    if ( !all( HRNumbers == seq_len(  NumArm-1 ) ) ) 
+    if ( !all( HRNumbers == seq_len( NumArm - 1 ) ) ) 
     {
         nErrorCode <- -1
         return( list( Response = as.double( vBinaryOutcome ),
