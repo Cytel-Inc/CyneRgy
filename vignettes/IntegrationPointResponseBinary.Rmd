@@ -49,6 +49,8 @@ Your R script could contain a function such as this one, with a name of your cho
 
 A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R) 
 
+**NOTE:This example is applicable to studies with either Two-arm or Multi-arm study objectives.**
+
 ## For standard binary outcome (`Better Response = Larger Value`, `Test = Difference of Proportions or Custom`)
 
 ```

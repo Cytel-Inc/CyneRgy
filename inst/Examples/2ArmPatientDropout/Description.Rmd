@@ -11,7 +11,10 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 To try this example, create a new project in East Horizon using the following configuration:
 <ul style="margin-bottom:0">
 <li>**Study objective:** Two Arm Confirmatory</li>
-<li>**Number of endpoints:** Single Endpoint</li>
+<li>**Number of endpoints:** <ul style="margin-bottom:0">
+        <li><strong>Single Endpoint: </strong> All examples are supported</li>
+        <li><strong>Dual Endpoints:</strong> Example 2 works for TTE-TTE and TTE-Binary</li>
+</ul></li>
 <li>**Endpoint type:**
 <ul style="margin-bottom:0">
 <li>Continuous or Binary Outcome for Example 1</li>

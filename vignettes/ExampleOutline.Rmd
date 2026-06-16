@@ -44,7 +44,7 @@ This example illustrates four ways to customize how subjects are assigned to tre
 
 <details>
 <summary>**2-Arm, Patient Dropout**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single/Dual Endpoints</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
 This example illustrates how to customize the dropout distribution in East Horizon for continuous and binary outcomes, time-to-event outcome, and continuous outcome with repeated measures.
 [Click here to view the full example.](2ArmPatientDropout.html)
 </details>
