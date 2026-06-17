@@ -100,25 +100,25 @@
     # Retrieve necessary information from the R objects. You may not need all the variables
     if(  !is.null( LookInfo )  )
     {
-        nQtyOfLooks          <- LookInfo$NumLooks
-        nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-        FutBdryScale         <- LookInfo$FutBdryScale
-        FutBdry              <- LookInfo$FutBdry
-        PoCScale             <- LookInfo$PoCScale
-        PoCThreshold         <- LookInfo$PoCThreshold
-        TailType             <- DesignParam$TailType
+        nQtyOfLooks           <- LookInfo$NumLooks
+        nLookIndex            <- LookInfo$CurrLookIndex
+        nQtyOfPatsInAnalysis  <- LookInfo$CumCompleters[ nLookIndex ]
+        nFutBdryScale         <- LookInfo$FutBdryScale
+        vFutBdry              <- LookInfo$FutBdry
+        nPoCScale             <- LookInfo$PoCScale
+        dPoCThreshold         <- LookInfo$PoCThreshold
+        nTailType             <- DesignParam$TailType
     }
     else
     {
-        nQtyOfLooks          <- 1
-        nLookIndex           <- 1
-        nQtyOfPatsInAnalysis <- DesignParam$MaxCompleters
-        FutBdryScale         <- NA
-        FutBdry              <- NA
-        PoCScale             <- NA
-        PoCThreshold         <- NA
-        TailType             <- DesignParam$TailType
+        nQtyOfLooks           <- 1
+        nLookIndex            <- 1
+        nQtyOfPatsInAnalysis  <- DesignParam$MaxCompleters
+        nFutBdryScale         <- NA
+        vFutBdry              <- NA
+        nPoCScale             <- NA
+        dPoCThreshold         <- NA
+        nTailType             <- DesignParam$TailType
     }
     
     # User must choose one from the following 3 options (Labelled Option 1, Option 2, Option 3) to create the analysis script.
@@ -133,322 +133,32 @@
     # This is the RECOMMENDED approach for Dose Finding analysis.
 
     # Extract parameters from DesignParam
-    NumTrt       <- DesignParam$NumTreatments
-    TotalAlpha   <- DesignParam$Alpha
-    VarType      <- DesignParam$VarType
-    IsArmPresent <- DesignParam$IsArmPresent
+    NumTrt            <- DesignParam$NumTreatments
+    TotalAlpha        <- DesignParam$Alpha
+    VarType           <- DesignParam$VarType
+    IsArmPresent      <- DesignParam$IsArmPresent
 
     # Initialize output vectors
-    vDecision     <- rep(0L, NumTrt)
-    vRawPVal      <- rep(NA_real_, NumTrt)
-    vTestStat     <- rep(NA_real_, NumTrt)
-    vDelta        <- rep(NA_real_, NumTrt)
-    vPOCStatusArm <- rep(0.0, NumTrt)
-    dOverallPOC   <- 0.0
-
-    # Compute Analysis Time
-    RespLag <- ifelse(!is.null(DesignParam$RespLag), DesignParam$RespLag, 0)
-    CompletionTimes <- sort(SimData$ArrivalTime + RespLag)
-    TargetCompleters <- LookInfo$CumCompleters[nLookIndex]
-
-    if (!is.null(TargetCompleters) && !is.na(TargetCompleters) && 
-        TargetCompleters <= length(CompletionTimes)) {
-        dEstAnalysisTime <- CompletionTimes[TargetCompleters]
-    } else {
-        dEstAnalysisTime <- max(CompletionTimes, na.rm = TRUE)
-    }
-
-    # ---- CUSTOMIZE HERE: Your dose-finding analysis logic ----
+    vDecision         <- rep( 0L, NumTrt )
+    vRawPVal          <- rep( NA_real_, NumTrt )
+    vTestStat         <- rep( NA_real_, NumTrt )
+    vDelta            <- rep( NA_real_, NumTrt )
+    vPOCStatusArm     <- rep( 0.0, NumTrt )
+    dOverallPOC       <- 0.0
+    dEstAnalysisTime  <- NA
+    lcurrOutList      <- list()
+    # Logic to compute Analysis Time
     
-    # Step 1: Identify active treatment arms
-    SelectedArmIndex <- which(IsArmPresent == 1)
+    # Logic for Analysis for POC, futility and Efficacy 
     
-    if (length(SelectedArmIndex) == 0) {
-        nError <- 1L
-        return( list( Decision     = as.integer(vDecision),
-                      RawPVal      = as.double(vRawPVal),
-                      TestStat     = as.double(vTestStat),
-                      Delta        = as.double(vDelta),
-                      POCStatusArm = as.integer(vPOCStatusArm),
-                      POCStatus    = as.integer(dOverallPOC),
-                      AnalysisTime = as.double(dEstAnalysisTime),
-                      OutList      = OutList,
-                      ErrorCode    = as.integer(nError) ) )
-    }
-
-    # Mark dropped arms as NA in Decision
-    DroppedArms <- which(IsArmPresent == 0)
-    if (length(DroppedArms) > 0) {
-        vDecision[DroppedArms] <- NA_integer_
-    }
-
-    # Step 2: Extract control data
-    CtrlResp <- SimData$Response[SimData$TreatmentID == 0]
-    nC    <- length(CtrlResp)
-    meanC <- mean(CtrlResp)
-    varC  <- var(CtrlResp)
-
-    # Step 3: Fixed Sequence Pairwise Testing (Top-Down from Highest Dose)
-    NumActive   <- length(SelectedArmIndex)
-    CurrentArms <- SelectedArmIndex
-
-    while (NumActive > 0) {
-        # Highest dose arm under test
-        TrtArmIndex <- CurrentArms[NumActive]
-
-        # Compute pairwise results for all currently active arms
-        pairwise_results <- list(
-            RawPval  = numeric(NumActive),
-            TestStat = numeric(NumActive),
-            Delta    = numeric(NumActive)
-        )
-
-        for (j in seq_along(CurrentArms)) {
-            k <- CurrentArms[j]
-            TrtResp <- SimData$Response[SimData$TreatmentID == k]
-            nT    <- length(TrtResp)
-            meanT <- mean(TrtResp)
-            varT  <- var(TrtResp)
-
-            DeltaEst    <- meanT - meanC
-            pairwise_results$Delta[j] <- DeltaEst
-
-            # Compute variance and degrees of freedom
-            if (VarType == 4L) {
-                # Equal variance: pooled
-                Sp2 <- ((nC - 1) * varC + (nT - 1) * varT) / (nC + nT - 2)
-                SE  <- sqrt(Sp2 * (1/nC + 1/nT))
-                dof <- nC + nT - 2
-            } else {
-                # Unequal variance: Welch
-                vC  <- varC / nC
-                vT  <- varT / nT
-                SE  <- sqrt(vC + vT)
-                dof <- round((vC + vT)^2 / (vC^2/(nC - 1) + vT^2/(nT - 1)))
-            }
-
-            # Compute test statistic and p-value
-            if (SE < 1e-12) {
-                pairwise_results$TestStat[j] <- 0.0
-                pairwise_results$RawPval[j]  <- 1.0
-            } else {
-                tstat <- DeltaEst / SE
-                pairwise_results$TestStat[j] <- tstat
-
-                if (TailType == 1L) {
-                    # Right-Tail: P(T > tstat)
-                    pairwise_results$RawPval[j] <- pt(tstat, df = dof, lower.tail = FALSE)
-                } else {
-                    # Left-Tail: P(T < tstat)
-                    pairwise_results$RawPval[j] <- pt(tstat, df = dof, lower.tail = TRUE)
-                }
-            }
-        }
-
-        # Store results for highest arm
-        HighIdx <- NumActive
-        vDelta[TrtArmIndex]    <- pairwise_results$Delta[HighIdx]
-        vRawPVal[TrtArmIndex]  <- pairwise_results$RawPval[HighIdx]
-        vTestStat[TrtArmIndex] <- pairwise_results$TestStat[HighIdx]
-
-        # Fixed Sequence Decision Logic
-        if (pairwise_results$RawPval[HighIdx] < TotalAlpha) {
-            # EFFICACY: Reject null hypothesis for highest arm
-            vDecision[TrtArmIndex] <- ifelse(TailType == 1L, 2L, 1L)
-
-            # Remove this arm and continue with lower doses
-            CurrentArms <- CurrentArms[CurrentArms != TrtArmIndex]
-            NumActive   <- length(CurrentArms)
-
-        } else {
-            # NO EFFICACY: Check futility and cascade
-
-            # Store results for remaining arms
-            for (jj in seq_along(CurrentArms)) {
-                arm <- CurrentArms[jj]
-                if (is.na(vDelta[arm]))    vDelta[arm]    <- pairwise_results$Delta[jj]
-                if (is.na(vRawPVal[arm]))  vRawPVal[arm]  <- pairwise_results$RawPval[jj]
-                if (is.na(vTestStat[arm])) vTestStat[arm] <- pairwise_results$TestStat[jj]
-            }
-
-            # Check Futility Boundary (if applicable)
-            HasFutility <- !is.null(FutBdry) && !all(is.na(FutBdry))
-
-            if (HasFutility && !is.na(FutBdry[nLookIndex])) {
-                FutBdryVal <- FutBdry[nLookIndex]
-
-                for (jj in seq_along(CurrentArms)) {
-                    arm <- CurrentArms[jj]
-                    futility_hit <- FALSE
-
-                    if (FutBdryScale %in% c(2L, 4L)) {
-                        # Delta Scale: compare delta estimate against futility boundary
-                        if (TailType == 1L) {
-                            futility_hit <- (vDelta[arm] < FutBdryVal)
-                        } else {
-                            futility_hit <- (vDelta[arm] > FutBdryVal)
-                        }
-                    } else {
-                        # Z Scale: compare test statistic against futility boundary
-                        ts <- pairwise_results$TestStat[jj]
-                        if (TailType == 1L) {
-                            futility_hit <- (ts < FutBdryVal)
-                        } else {
-                            futility_hit <- (ts > FutBdryVal)
-                        }
-                    }
-
-                    if (futility_hit && vDecision[arm] == 0L) {
-                        vDecision[arm] <- 3L  # Futility
-                    }
-                }
-            }
-
-            # At final look: assign futility to all remaining arms without decision
-            if (nLookIndex == nQtyOfLooks) {
-                lowerArmIdx <- CurrentArms[CurrentArms <= TrtArmIndex]
-                remaining   <- lowerArmIdx[vDecision[lowerArmIdx] == 0L]
-                if (length(remaining) > 0) {
-                    vDecision[remaining] <- 3L
-                }
-            }
-
-            break  # Exit the while loop
-        }
-    }
-
-    # Proof of Concept Assessment
-    if (!is.null(PoCThreshold) && !is.na(PoCThreshold)) {
-        ActiveForPoC <- which(!is.na(vDelta))
-
-        if (length(ActiveForPoC) > 0) {
-            iso_deltas <- pava_isotonic(vDelta[ActiveForPoC], TailType)
-
-            if (TailType == 1L) {
-                poc_arms <- which(round(iso_deltas, 7) > PoCThreshold)
-            } else {
-                poc_arms <- which(round(iso_deltas, 7) < PoCThreshold)
-            }
-
-            if (length(poc_arms) > 0) {
-                vPOCStatusArm[ActiveForPoC[poc_arms]] <- 1L
-            }
-
-            HighestActiveArm <- max(ActiveForPoC)
-            vPOCStatusArm[HighestActiveArm] <- ifelse(
-                (TailType == 1L && iso_deltas[length(iso_deltas)] > PoCThreshold) ||
-                (TailType == 0L && iso_deltas[length(iso_deltas)] < PoCThreshold),
-                1L, 0L
-            )
-            dOverallPOC <- vPOCStatusArm[HighestActiveArm]
-        }
-    }
-
-    # Prepare OutList for next look
-    NewOutList <- list(
-        PrevDecisions = vDecision,
-        PrevDeltas    = vDelta,
-        LookIndex     = nLookIndex
-    )
-
-    return( list( Decision     = as.integer(vDecision),
-                  RawPVal      = as.double(vRawPVal),
-                  TestStat     = as.double(vTestStat),
-                  Delta        = as.double(vDelta),
-                  POCStatusArm = as.integer(vPOCStatusArm),
-                  POCStatus    = as.integer(dOverallPOC),
-                  AnalysisTime = as.double(dEstAnalysisTime),
-                  OutList      = NewOutList,
-                  ErrorCode    = as.integer(nError) ) )
+    return( list( Decision     = as.integer( vDecision ),
+                  RawPVal      = as.double( vRawPVal ),
+                  TestStat     = as.double( vTestStat ),
+                  Delta        = as.double( vDelta ),
+                  POCStatusArm = as.integer( vPOCStatusArm ),
+                  POCStatus    = as.integer( dOverallPOC ),
+                  AnalysisTime = as.double( dEstAnalysisTime ),
+                  OutList      = as.list( lcurrOutList ),
+                  ErrorCode    = as.integer( nError ) ) )
     
-    
-    # ========================================================================
-    # Option 2: Script returns Raw p-value ####
-    # ========================================================================
-    # Use this option if you want to calculate the raw p-values with your own logic
-    # but want to use the Decision generation logic of East Horizon.
-    # NOTE: Delete this entire section if using Option 1.
-    
-    # vRawPVal <- 0
-    # vDelta <- 0
-    # # Setup raw p-value calculation logic
-    # return( list( RawPVal = vRawPVal,
-    #              Delta = vDelta,
-    #              ErrorCode = as.integer(nError) ) )
-    
-    
-    # ========================================================================
-    # Option 3: Script returns Test Statistic ####
-    # ========================================================================
-    # Use this option if you want to calculate the test statistic with your own logic
-    # but want to use the Decision generation logic of East Horizon.
-    # NOTE: Delete this entire section if using Option 1.
-    
-    # vTestStat <- 0
-    # vDelta <- 0
-    # # Setup test statistic calculation logic
-    # return( list( TestStat = vTestStat,
-    #              Delta = vDelta,
-    #              ErrorCode = as.integer(nError) ) )
-    
-}
-
-
-# ==============================================================================
-# HELPER FUNCTION: Isotonic Regression via PAVA
-# ==============================================================================
-#' @keywords internal
-#' @description
-#' Computes isotonic regression to enforce monotonicity on values using
-#' the Pool Adjacent Violators Algorithm (PAVA).
-#'
-#' @param values numeric vector of values to be monotonized
-#' @param tail_type integer — 0 = non-increasing, 1 = non-decreasing
-#'
-#' @return numeric vector of isotonic values (same length as input)
-#'
-#' @details
-#' The PAVA algorithm iteratively pools adjacent blocks that violate the
-#' monotonicity constraint, replacing each block with its weighted average.
-#' Used for PoC assessment in dose-finding studies.
-pava_isotonic <- function(values, tail_type)
-{
-    n <- length(values)
-    if (n == 0) return(numeric(0))
-
-    # For non-increasing (left-tail), negate values
-    if (tail_type == 0L) values <- -values
-
-    block_val <- values
-    block_idx <- as.list(1:n)
-
-    repeat {
-        merged <- FALSE
-        i <- 1
-        while (i < length(block_val)) {
-            if (block_val[i] > block_val[i + 1]) {
-                # Merge blocks i and i+1 with simple average
-                new_val <- mean(c(block_val[i], block_val[i + 1]))
-                block_val[i] <- new_val
-                block_val <- block_val[-(i + 1)]
-                block_idx[[i]] <- c(block_idx[[i]], block_idx[[i + 1]])
-                block_idx <- block_idx[-(i + 1)]
-                merged <- TRUE
-            } else {
-                i <- i + 1
-            }
-        }
-        if (!merged) break
-    }
-
-    # Reconstruct result vector
-    result <- numeric(n)
-    for (j in seq_along(block_val)) {
-        result[block_idx[[j]]] <- block_val[j]
-    }
-
-    # Negate back if left-tail
-    if (tail_type == 0L) result <- -result
-
-    return(result)
 }

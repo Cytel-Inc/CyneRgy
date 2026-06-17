@@ -56,10 +56,9 @@
 #'
 #' The function signature must remain unchanged. However, additional user-defined logic
 #' and parameters may be incorporated through the UserParam list if needed.
-{{FUNCTION_NAME}} <- function(NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL)
+{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
-
-```
+  
 # Step 1 - Validate custom variable input and set defaults ####
 if( is.null( UserParam ) )
 {
@@ -73,8 +72,8 @@ if( is.null( UserParam ) )
 
 # Step 2 - Initialize variables ####
 # Initialize error codes and vectors used to store simulated survival times
-Error  <- 0
-retval <- c()
+nError  <- 0
+vResponse <- c()
 
 
 # Step 3 - Determine which survival generation method will be used ####
@@ -84,35 +83,22 @@ retval <- c()
 #   Method 3 - Median survival time based exponential model
 
 
-# Step 4 - Compute survival distributions and hazard functions ####
-# Depending on the selected method:
-#   1. Compute survival probabilities
-#   2. Compute cumulative distribution functions
-#   3. Compute hazard rates if needed
+# Step 4 - Implement the data-generation logic ####
 
 
-# Step 5 - Loop over patients and simulate survival times ####
-# For each patient:
-#   1. Determine treatment assignment
-#   2. Generate random uniform variables
-#   3. Determine the survival interval
-#   4. Simulate a survival time from the appropriate distribution
-
-
-# Step 6 - Error checking ####
+# Step 5 - Error checking ####
 # Verify that all subjects received valid survival times
 # and that no missing values were generated
-if( length( retval ) != NumSub || any( is.na( retval ) == TRUE ) )
-    Error <- -100
+if( length( vResponse ) != NumSub || any( is.na( vResponse ) == TRUE ) )
+    nError <- -100
 
 
-# Step 7 - Build the return object ####
+# Step 6 - Build the return object ####
 lReturn <- list(
-    SurvivalTime = as.double( retval ),
-    ErrorCode    = as.integer( Error )
+    SurvivalTime = as.double( vResponse ),
+    ErrorCode    = as.integer( nError )
 )
 
 return( lReturn )
-```
 
 }

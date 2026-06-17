@@ -65,12 +65,16 @@
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
 
-```
 # Step 1 - Load required package ####
 # The survival package is required for the Cox proportional hazards model
 # and the log-rank test computations
 require( survival )
 
+# Initialization
+vDecision       <- c(0, DesignParam$NumTreatments)
+nError          <- 0
+vHRRatio        <- c(NA, DesignParam$NumTreatments)
+dTimeOfAnalysis <- NA
 
 # Step 2 - Retrieve design and interim analysis information ####
 # If interim look information is supplied use the current look specific
@@ -79,9 +83,9 @@ if( !is.null( LookInfo ) )
 {
     
     # Example interim design setup
-    # nQtyOfLooks             <- LookInfo$NumLooks
-    # nLookIndex              <- LookInfo$CurrLookIndex
-    # vEfficacyBoundary       <- LookInfo$EffBdry[ nLookIndex ]
+    nQtyOfLooks             <- LookInfo$NumLooks
+    nLookIndex              <- LookInfo$CurrLookIndex
+    vEfficacyBoundary       <- LookInfo$EffBdry[ nLookIndex ]
     
 }
 else
@@ -95,34 +99,7 @@ else
 }
 
 
-# Step 3 - Prepare the analysis dataset ####
-# Create event times, determine the analysis cutoff time,
-# censor subjects appropriately and compute observed follow-up times
-
-
-# Step 4 - Initialize analysis variables ####
-# Initialize vectors to store p-values, hazard ratios and decisions
-# for each treatment arm
-
-
-# Step 5 - Loop over treatment arms and compute statistics ####
-# For each active treatment arm:
-#   1. Subset treatment and control patients
-#   2. Fit Cox proportional hazards model
-#   3. Compute hazard ratio
-#   4. Perform log-rank test
-#   5. Store p-values and hazard ratios
-
-
-# Step 6 - Apply multiplicity adjustment ####
-# Apply Bonferroni adjustment to the raw p-values using the
-# number of active treatment arms
-
-
-# Step 7 - Make efficacy and futility decisions ####
-# Compare adjusted p-values against the efficacy boundary.
-# If efficacy is not reached at the final analysis then assign
-# futility for that treatment arm
+# Step 3 - Implement the analysis logic ####
 
 
 # Step 8 - Error checking ####
@@ -139,39 +116,5 @@ lReturn <- list(
 )
 
 return( lReturn )
-```
 
 }
-    
-    # Option 2: Script returns adjusted p value ####
-    # Use this option if you want to calculate the adjusted p value with your own logic
-    # but want to use the Decision generation logic of East Horizon
-    vAdjPVal <- 0
-    vHR <- 0
-    # Setup adjusted p value calculation logic
-    return( list(AdjPVal = vAdjPVal,
-                 HR = vHR,
-                 ErrorCode = as.integer(nError)) )
-    
-    # Option 3: Script returns raw p value ####
-    # Use this option if you want to calculate the raw p values with your own logic
-    # but want to use the Decision generation logic of East Horizon
-    vRawPVal <- 0
-    vHR <- 0
-    # Setup raw p value calculation logic
-    return( list(RawPVal = vRawPVal,
-                 HR = vHR,
-                 ErrorCode = as.integer(nError)) )
-
-    # Option 4: Script returns test statistic ####
-    # Use this option if you want to calculate the test statistic with your own logic
-    # but want to use the Decision generation logic of East Horizon
-    vTestStat <- 0
-    vHR <- 0
-    # Setup test statistic calculation logic
-    return( list(TestStat = vTestStat,
-                 HR = vHR,
-                 ErrorCode = as.integer(nError)))
-    
-}
-
