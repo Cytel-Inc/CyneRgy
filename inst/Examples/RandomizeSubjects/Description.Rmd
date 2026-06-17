@@ -42,6 +42,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
         <strong>Explore:</strong> All the above configurations are supported
       </li>
     </ul>
+    <li><strong>Note:</strong> Repeated-measures Continuous endpoints are supported in Examples 1, 2, and 3.</li>
   </ul>
 </div>
 
