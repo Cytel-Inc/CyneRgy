@@ -42,7 +42,10 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
         <strong>Explore:</strong> All the above configurations are supported
       </li>
     </ul>
-    <li><strong>Note:</strong> Repeated-measures Continuous endpoints are supported in Examples 1, 2, and 3.</li>
+    
+    <li>**Statistical design:** Fixed Sample or Group Sequential (Group Sequential with Sample Size Re-Estimation not supported)</li>
+    
+    <li><strong>Note:</strong> Repeated Measures for Continuous endpoints are supported in Examples 1, 2, and 3.</li>
   </ul>
 </div>
 

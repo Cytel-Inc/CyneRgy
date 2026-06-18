@@ -25,6 +25,7 @@ To try this example, create a new project in East Horizon using the following co
         <li><strong>Explore:</strong> All examples are supported</li>
         <li><strong>Design:</strong> Examples 1 and 2 only</li>
       </ul></li>
+<li>**Statistical design:** Fixed Sample or Group Sequential (Group Sequential with Sample Size Re-Estimation not supported)</li>
 </ul></div>
 
 # Introduction
@@ -86,13 +87,15 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-# Example 2 - Dropout Time For Time-to-Event Outcome
+# Example 2 - Dropout Time For Time-to-Event Outcome or DEP
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="alert-link">GenerateDropoutTimeForSurvival.R</a></p>
 </div>
 
-The function *GenerateDropoutTimeForSurvival* generates dropout times for a two-arm time-to-event design. In this case, dropout information can be specified separately for each arm (in East Horizon, *Control* and *Treatment* in the *Dropout Rate* tab), and dropout times are drawn from an exponential distribution accordingly. The number of periods is fixed at 1.
+This example supports both time-to-event single endpoint and dual endpoints (TTE-TTE or TTE-Binary).
+
+The function *GenerateDropoutTimeForSurvival* generates dropout times for a two-arm time-to-event or DEP design. In this case, dropout information can be specified separately for each arm (in East Horizon, *Control* and *Treatment* in the *Dropout Rate* tab), and dropout times are drawn from an exponential distribution accordingly. The number of periods is fixed at 1.
 
 This function does not use any user-defined parameters, but uses parameters specified in East Horizon. Refer to the table below for more information.
 

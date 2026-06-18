@@ -14,7 +14,7 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Number of endpoints:** Single Endpoint</li>
 <li>**Endpoint type:** Time-to-Event Outcome</li>
 <li>**Task:** Explore or Design</li>
-<li>**Statistical Design:** Any</li>
+<li>**Statistical Design:** Fixed Sample, Group Sequential, or Group Sequential with Sample Size Re-Estimation</li>
 <li>**Stratification turned on**: For Example 3</li>
 </ul></div>
 
@@ -331,6 +331,8 @@ The intent of the example is to illustrate the impact that the patient subgroup 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R" class="alert-link">SimulatePatientOutcomeStratification.R</a></p>
 </div>
+
+This example is compatible with both standard Stratification and with Stratification + Subpopulations.
 
 This example illustrates how to customize the response generation when turning on `Stratification` in East Horizon. Unlike the previous examples, where a single set of survival parameters applies to all patients in an arm, this example allows different survival characteristics for each stratum, while still supporting two arms.
 

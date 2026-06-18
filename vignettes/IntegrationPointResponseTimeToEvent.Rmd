@@ -49,7 +49,7 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
-Detailed templates with step-by-step explanations are available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) and [SimulatePatientOutcome.TimeToEvent.Stratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.Stratification.R) for Stratification.
+Detailed templates with step-by-step explanations are available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) and [SimulatePatientOutcome.TimeToEvent.Stratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.Stratification.R) for Stratification (also compatible with Subpopulations).
 
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
