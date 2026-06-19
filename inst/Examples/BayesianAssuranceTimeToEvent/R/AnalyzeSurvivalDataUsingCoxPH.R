@@ -1,20 +1,55 @@
-#' @param SimData Dataframe which consists of data generated in current simulation.
+#' @name AnalyzeSurvivalDataUsingCoxPH
+#' @title Analyze Simulated Survival Data Using a Cox Proportional Hazards Model
+#' @details Performs a Cox proportional hazards regression analysis on simulated
+#' time-to-event data. The function determines the analysis time based on the specified 
+#' interim or final look, applies administrative censoring, fits a Cox proportional hazards 
+#' model comparing treatment groups, and returns the resulting test statistic, p-value, 
+#' decision code, and hazard ratio information.
+#'
+#' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#' @param UserParam Optional list of user-defined parameters in East Horizon. If \code{NULL}, default values are used. 
+#' The list may contain the following named elements:
+#'        \describe
+#'        {
+#'         \item{bReturnLogTrueHazard}{Logical (True / False) indicating whether the returned hazard ratio should be transformed using 
+#'               the natural logarithm. Default is \code{FALSE}.}
+#'         \item{bReturnNAForNoGoTrials}{Logical (True / False) indicating whether the hazard ratio should be returned as \code{NA} when 
+#'               the trial does not meet the efficacy criterion. Default is \code{FALSE}.}
+#'        }
+#' @return A named list containing elements as described below.
+#'        \describe
+#'        {
+#'          \item{TestStat}{Z statistic from the Cox proportional hazards model}
+#'          \item{Decision}{Required value. Integer Value with the following meaning:
+#'                          \describe{
+#'                             \item{Decision = 0}{No boundary crossed}
+#'                             \item{Decision = 1}{Lower Efficacy Boundary Crossed}
+#'                             \item{Decision = 2}{Upper Efficacy Boundary Crossed}
+#'                             \item{Decision = 3}{Futility Boundary Crossed}
+#'                             \item{Decision = 4}{Equivalence Boundary Crossed}
+#'                           } 
+#'                           }
+#'          \item{ErrorCode}{Decision codes:
+#'                          \describe{
+#'                             \item{ErrorCode = 0}{No Error}
+#'                             \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                             \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
+#'                           }
+#'                           }
+#'          \item{dPValue}{One-sided p-value derived from the z-statistic}
+#'          \item{HazardRatio}{Returned true hazard ratio (or log hazard ratio if requested)}
+#'          \item{TrueHR}{Same value as \code{HazardRatio}}
+#'        } 
+#'        
+
 AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library( survival )
-    Error <- 0 
-    # Example of saving parameters (EAST ONLY)
-    # setwd( "C:\\AssuranceNormal\\ExampleArgumentsFromEast\\Example3")
-    # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-    # saveRDS( UserParam, "UserParam.Rds" )
     
-    nLookIndex           <- 1 
+    nError      <- 0 
+    nLookIndex <- 1 
     
     if( !is.null( LookInfo ) )
     {
@@ -26,8 +61,6 @@ AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL,
     {
         nQtyOfEvents         <- DesignParam$MaxEvents 
     }
-    
-    
     
     if( is.null( UserParam ) )
     {
@@ -53,33 +86,24 @@ AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL,
     dPValue   <- pnorm( dZVal, lower.tail = TRUE)
     nDecision <- ifelse( dPValue <= DesignParam$Alpha, 2, 3 ) 
 
-    #
-    # Decision Code
-    # 0  No Boundary Crossed
-    # 1  Lower Efficacy Boundary Crossed
-    # 2  Upper Efficacy Boundary Crossed
-    # 3  Futility Boundary Crossed
-    # 4  Equivalence Boundary Crossed
-    #
-    
     dTrueHR <- as.double( SimData$TrueHR[ 1 ] )
  
-    if( UserParam$bReturnLogTrueHazard )
+    if( as.logical( UserParam$bReturnLogTrueHazard ) )
     {
         dTrueHR <- log( dTrueHR )       
     }
     
-    if( UserParam$bReturnNAForNoGoTrials & nDecision != 2 )
+    if( as.logical( UserParam$bReturnNAForNoGoTrials ) & nDecision != 2 )
     {
         dTrueHR <- NA
     }
-    lRet <- list( TestStat = as.double(dZVal), 
+    
+    lRet <- list( TestStat  = as.double( dZVal ), 
                   Decision  = as.integer( nDecision ),
-                  ErrorCode = as.integer(Error), 
+                  ErrorCode = as.integer( nError ), 
                   dPValue   = as.double( dPValue ), 
                   HazardRatio = as.double( dTrueHR ),
                   TrueHR    = as.double( dTrueHR ) )
-    
     
     return( lRet)
 }
