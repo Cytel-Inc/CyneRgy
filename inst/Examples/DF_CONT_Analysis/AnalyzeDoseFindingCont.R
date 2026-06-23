@@ -21,19 +21,19 @@
 #'          \item{VarType}{Integer. Variance Type. Values are Equal/Pooled: 4, Unequal/Welch: 5}
 #'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of treatment arms. Values are - Dropped in the interim: 0, Still present in the trial: 1}
 #'          \item{MultAdjMethod}{Integer. Multiple Comparison Procedure. Values are Fixed Sequence Pairwise: 8}
-#'          \item{dRespLag}{Numeric. Follow up duration (optional)}
+#'          \item{RespLag}{Numeric. Follow up duration (optional)}
 #'      }
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic
 #'                 and perform test. User should access the variables using names,
 #'                 for example LookInfo$nNumLooks and not order. Other important variables are:
 #'                 \describe{
-#'                      \item{nNumLooks}{An integer value with the number of looks in the study.}
-#'                      \item{nCurrLookIndex}{An integer value with the current index look, starting from 1.}
+#'                      \item{NumLooks}{An integer value with the number of looks in the study.}
+#'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1.}
 #'                      \item{CumCompleters}{Vector of Cumulative number of completers. Length = Number of looks.}
-#'                      \item{nFutBdryScale}{Integer. Futility boundary scale. Values are: vDelta: 2, Isotonic vDelta: 4}
-#'                      \item{vFutBdry}{Vector of numeric futility boundaries. Length = Number of looks. Can be NA.}
-#'                      \item{nPoCScale}{Integer. Proof of Concept scale. Values are High Dose vs. Control: 0}
-#'                      \item{dPoCThreshold}{Numeric scalar. Proof of Concept threshold value.}
+#'                      \item{FutBdryScale}{Integer. Futility boundary scale. Values are: vDelta: 2, Isotonic vDelta: 4}
+#'                      \item{FutBdry}{Vector of numeric futility boundaries. Length = Number of looks. Can be NA.}
+#'                      \item{PoCScale}{Integer. Proof of Concept scale. Values are High Dose vs. Control: 0}
+#'                      \item{PoCThreshold}{Numeric scalar. Proof of Concept threshold value.}
 #' }
 #' @param OutList List or NULL. Pass-through list from previous look (for multi-look tracking).
 #'        Engine sets this to NULL for the first look. Supports Numeric/Integer/Character/List.
@@ -55,8 +55,8 @@
 #'                                    }
 #'                                    }
 #'                  \item{RawPVal}{p-Value computed from test statistics. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value.}
-#'                  \item{vTestStat}{Value of appropriate Test Statistic on Wald (Z) scale for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value.}
-#'                  \item{vDelta}{Estimate of vDelta (Difference from Control) for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Conditionally Mandatory if nFutBdryScale = 2 or 4.}
+#'                  \item{TestStat}{Value of appropriate Test Statistic on Wald (Z) scale for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value.}
+#'                  \item{Delta}{Estimate of vDelta (Difference from Control) for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Conditionally Mandatory if nFutBdryScale = 2 or 4.}
 #'                  \item{POCStatusArm}{Per-arm Proof of Concept status. Vector of Integers (0 or 1) having length the same as number of treatment arms. 1 = PoC threshold crossed for this arm, 0 = not crossed. Optional - Dose Finding only.}
 #'                  \item{POCStatus}{Overall Proof of Concept status. Integer scalar (0 or 1). 1 = PoC threshold crossed overall, 0 = not crossed. Determined by highest dose arm. Optional - Dose Finding only.}
 #'                  \item{AnalysisTime}{Optional Numeric scalar. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis.}
