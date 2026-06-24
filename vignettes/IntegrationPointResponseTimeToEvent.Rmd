@@ -51,7 +51,7 @@ Your R script could contain a function such as this one, with a name of your cho
 
 Detailed templates with step-by-step explanations are available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) for 2-Arm, [SimulatePatientOutcome.TimeToEvent.Stratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.Stratification.R) for Stratification (also compatible with Subpopulations), and [SimulatePatientOutcome.TimeToEvent.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.MAMS.R) for Multiple Arm.
 
-## For 2-Arm
+## For 2-Arm or Multiple Arm
 
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
@@ -66,25 +66,10 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMeth
 }
 ```
 
-## For `Stratification` turned on
+## For 2-Arm with `Stratification` turned on
 
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
-{
-  nError        	<- 0 # Error handling (no error)
-  vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
-  
-  # Write the actual code here.
-  # Store the generated survival time values in a vector called vSurvTime.
-
-  return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = as.integer( nError ) ) )
-}
-```
-
-## For Multiple Arm
-
-```
-GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
   vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
