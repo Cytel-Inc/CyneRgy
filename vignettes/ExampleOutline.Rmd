@@ -154,6 +154,12 @@ This example demonstrates how to customize the statistical test in East Horizon 
 </details>
 
 <details>
+<summary>**Dose Finding – Analysis**<span class="badge text-bg-primary ms-1">Dose Finding</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span></summary>
+This example demonstrates how to customize the statistical test in East Horizon for dose finding trials, covering fixed sequence pairwise testing with isotonic dose-response estimation for continuous outcome.
+[Click here to view the full example.](DoseFindingAnalysis.html)
+</details>
+
+<details>
 <summary>**Dual Endpoints – Analysis**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-warning ms-1">TTE-Binary</span></summary>
 This example demonstrates how to customize the statistical test in East Horizon for two-arm trials with dual endpoints.
 [Click here to view the full example.](DEPAnalysis.html)

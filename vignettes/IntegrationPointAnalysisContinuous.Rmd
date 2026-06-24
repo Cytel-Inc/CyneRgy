@@ -542,4 +542,5 @@ Explore the following examples for more context:
     - [AnalyzeNormalSSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R)
 2. [**Multiple Arm, Analysis**](MultiArmAnalysis.html)
     - [AnalyzeMultiArmUsingTTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingTTestBonferroni.R)
-3. Dose Finding
+3. [**Dose Finding, Analysis**](DoseFindingAnalysis.html)
+    - [AnalyzeDoseFindingContinuousUsingPairwiseTTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DoseFindingAnalysis/R/AnalyzeDoseFindingContinuousUsingPairwiseTTest.R)
