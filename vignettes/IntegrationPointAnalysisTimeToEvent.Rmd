@@ -183,7 +183,7 @@ Detailed templates with step-by-step explanations are available here:
 - [Analyze.TimeToEvent.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.MAMS.R) for Multiple Arm
 - [Analyze.TimeToEvent.SSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.SSR.R) for SSR
 - [Analyze.TimeToEvent.Stratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.Stratification.R) for Stratification
-- [Analyze.TimeToEvent.Stratification.Subpopulation.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.Stratification.Subpopulation.R) for Subpopulations
+- [Analyze.TimeToEvent.Stratification.Subpopulation.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.TimeToEvent.Stratification.Subpopulation.R) for Stratification with Subpopulations
 
 ## For `Study Objective = Two Arm Confirmatory`
 
