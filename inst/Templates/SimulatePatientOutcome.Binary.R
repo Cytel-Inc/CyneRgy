@@ -7,7 +7,7 @@
 #' @param TreatmentID A vector of treatment ids, 0 is control treatment and  1 experimental treatment. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of length NumArm with the response probabilities for each arm
 #' @param  UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
-#' If UseParam are supplied, they will be an element in the list, UserParam.   
+#' If UserParam are supplied, they will be an element in the list, UserParam.   
 #' @return The function must return a list in the return statement of the function. The information below lists 
 #'             elements of the list, if the element is required or optional and a description of the return values if needed. 
 #'             \describe{
@@ -37,7 +37,7 @@
         
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues.   Also, if there is a default value for the parameters you may want to set them here.  Default values usually
-        # are applied to have the same functionality as East, see the first example
+        # are applied to have the same functionality as East Horizon, see the first example
         
         # EXMAPLE - Set the default if needed
         #UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
@@ -51,7 +51,7 @@
         # Add code here to modify how patient data is generated to fit your need
         
         # EXAMPLE
-        # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
+        # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
         # nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 
         
         # Make any adjustments to the code as needed, example simulating from for a normal distribution 
