@@ -49,7 +49,9 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
-Detailed templates with step-by-step explanations are available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) and [SimulatePatientOutcome.TimeToEvent.Stratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.Stratification.R) for Stratification (also compatible with Subpopulations).
+Detailed templates with step-by-step explanations are available here: [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R) for 2-Arm, [SimulatePatientOutcome.TimeToEvent.Stratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.Stratification.R) for Stratification (also compatible with Subpopulations), and [SimulatePatientOutcome.TimeToEvent.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.MAMS.R) for Multiple Arm.
+
+## For 2-Arm
 
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
@@ -79,6 +81,21 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumI
 }
 ```
 
+## For Multiple Arm
+
+```
+GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
+{
+  nError        	<- 0 # Error handling (no error)
+  vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
+  
+  # Write the actual code here.
+  # Store the generated survival time values in a vector called vSurvTime.
+
+  return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = as.integer( nError ) ) )
+}
+```
+
 # Examples
 
 Explore the following examples for more context:
@@ -87,5 +104,5 @@ Explore the following examples for more context:
     - [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R)
     - [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R)
     - [SimulatePatientOutcomeStratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R)
-<!-- 2. [**Multiple Arm, Patient Simulation**](MultiArmPatientSimulation.html)
-    - [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R) -->
+2. [**Multiple Arm, Patient Simulation**](MultiArmPatientSimulation.html)
+    - [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R)
