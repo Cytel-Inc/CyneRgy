@@ -179,7 +179,8 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
     
     nError 	                     <- 0
     
-    return( list( Decision    = as.integer( vDecision ), 
-                  ErrorCode   = as.integer( nError ),
-                  HazardRatio = as.numeric( vHRRatio )))
+    return( list( Decision     = as.integer( vDecision ), 
+                  ErrorCode    = as.integer( nError ),
+                  HR           = as.double( vHRRatio ),
+                  AnalysisTime = as.double( dTimeOfAnalysis ) ) )
 }

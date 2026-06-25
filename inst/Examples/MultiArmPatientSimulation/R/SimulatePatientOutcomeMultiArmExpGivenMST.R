@@ -1,7 +1,7 @@
 
 ########################################################################################################################
-#' @name SimulatePatientOutcomeTTEGivenMST
-#' @title Simulate survival outcomes for multi-arm clinical trial simulations given Median Survial Times (MST)
+#' @name SimulatePatientOutcomeMultiArmExpGivenMST
+#' @title Simulate survival outcomes for multi-arm clinical trial simulations given Median Survival Times (MST)
 #' @description
 #' Generates patient-level survival times under several survival distribution
 #' parameterizations for multi-arm clinical trial simulations. The function supports:
@@ -34,7 +34,7 @@
 #'         }
 ########################################################################################################################
 
-SimulatePatientOutcomeTTEGivenHRates <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
+SimulatePatientOutcomeMultiArmExpGivenMST <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
     nError        <- 0
     vResponse     <- c()
@@ -42,15 +42,17 @@ SimulatePatientOutcomeTTEGivenHRates <- function( NumSub, NumArm, ArrivalTime, T
     # If inputs are Median Survival Times
     if( SurvMethod == 3 )      
     {
-        vMST        <- as.numeric(SurvParam)
-        vHRates     <- log(2) / vMST
+        vMST        <- as.numeric( SurvParam )
+        vHRates     <- log( 2 ) / vMST
 
         for( nPatID in 1:NumSub )
         {
-            nTrmt               <- TreatmentID[ nPatID ]
-            vResponse[ nPatID ] <- rexp( n=1, rate=vHRates[ nTrmt ] )
+            nArmIndex           <- TreatmentID[ nPatID ] + 1
+            vResponse[ nPatID ] <- rexp( n = 1, rate = vHRates[ nArmIndex ] )
         }
-    } 
+    } else {
+        nError      <- -100  
+    }
 
     if(length( vResponse ) != NumSub || any( is.na( vResponse ) == TRUE ) )
         nError      <- -100

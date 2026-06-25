@@ -1,8 +1,6 @@
 # Last Modified Date: {{CREATION_DATE}}
 
 #' @name {{FUNCTION_NAME}}
-#' @title Template for analyzing survival outcomes using the log-rank test with Bonferroni adjustment.
-#'
 #' @param SimData A data frame containing simulated patient level data.
 #'        Required variables in the data frame include:
 #'        \describe{
@@ -56,65 +54,53 @@
 #'         }
 #'
 #' @description
-#' This template analyzes time-to-event endpoints using the log-rank test and Cox proportional hazards model.
-#' The function supports both fixed sample and group sequential survival designs.
-#' Bonferroni multiplicity adjustment is applied across active treatment arms.
+#' This is analysis task template for Multi-Arm, time-to-event endpoints.
 #'
 #' The function signature must remain unchanged. However, additional user-defined logic
 #' and parameters may be incorporated through the UserParam list if needed.
+#' @keywords Multi-Arm, time-to-event endpoints analysis.
+#' @export
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-
-# Step 1 - Load required package ####
-# The survival package is required for the Cox proportional hazards model
-# and the log-rank test computations
-require( survival )
-
-# Initialization
-vDecision       <- c(0, DesignParam$NumTreatments)
-nError          <- 0
-vHRRatio        <- c(NA, DesignParam$NumTreatments)
-dTimeOfAnalysis <- NA
-
-# Step 2 - Retrieve design and interim analysis information ####
-# If interim look information is supplied use the current look specific
-# efficacy boundaries and event counts. Otherwise use the fixed sample settings
-if( !is.null( LookInfo ) )
-{
+    # Step 1 - Initialization
+    vDecision       <- rep( 0, DesignParam$NumTreatments )
+    nError          <- 0
+    vHRRatio        <- rep( NA, DesignParam$NumTreatments )
+    dTimeOfAnalysis <- NA
     
-    # Example interim design setup
-    nQtyOfLooks             <- LookInfo$NumLooks
-    nLookIndex              <- LookInfo$CurrLookIndex
-    vEfficacyBoundary       <- LookInfo$EffBdry[ nLookIndex ]
+    # Step 2 - Retrieve design and interim analysis information ####
+    # If interim look information is supplied use the current look specific
+    # efficacy boundaries and event counts. Otherwise use the fixed sample settings
+    if( !is.null( LookInfo ) )
+    {
+        
+        # Example interim design setup
+        nQtyOfLooks             <- LookInfo$NumLooks
+        nLookIndex              <- LookInfo$CurrLookIndex
+        vEfficacyBoundary       <- LookInfo$EffBdry[ nLookIndex ]
+        
+    } else {
+        
+        # Example fixed sample setup
+        nQtyOfLooks             <- 1
+        nLookIndex              <- 1
+        vEfficacyBoundaryPScale <- DesignParam$Alpha
+    }
     
-}
-else
-{
     
-    # Example fixed sample setup
-    # nQtyOfLooks             <- 1
-    # nLookIndex              <- 1
-    # vEfficacyBoundaryPScale <- DesignParam$Alpha
+    # Step 3 - Implement the analysis logic ####
     
-}
-
-
-# Step 3 - Implement the analysis logic ####
-
-
-# Step 8 - Error checking ####
-# Add any required validation checks and update the error code if needed
-nError <- 0
-
-
-# Step 9 - Build the return object ####
-lReturn <- list(
-    Decision    = as.integer( vDecision ),
-    ErrorCode   = as.integer( nError ),
-    HR          = as.double( vHRRatio ),
-    AnalysisTime = as.double( dTimeOfAnalysis )
-)
-
-return( lReturn )
+    
+    # Step 4 - Error checking ####
+    # Add any required validation checks and update the error code if needed
+    nError <- 0
+    
+    # Step 5 - Build the return object ####
+    lReturn <- list( Decision    = as.integer( vDecision ),
+                     ErrorCode   = as.integer( nError ),
+                     HR          = as.double( vHRRatio ),
+                     AnalysisTime = as.double( dTimeOfAnalysis ) )
+    
+    return( lReturn )
 
 }

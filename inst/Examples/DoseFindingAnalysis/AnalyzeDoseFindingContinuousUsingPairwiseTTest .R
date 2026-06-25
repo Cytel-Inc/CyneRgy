@@ -1,4 +1,4 @@
-#' @name AnalyzeDoseFindingCont
+#' @name AnalyzeDoseFindingContinuousUsingPairwiseTTest 
 #' @title Analyze continuous outcome for dose finding design using Fixed Sequence Pairwise t-test.
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient.
 #'        It will have headers indicating the names of the columns. These names will be same as those used in
@@ -74,7 +74,7 @@
 #' rejecting the null hypothesis only if the raw p-value is less than the total alpha. Once a hypothesis fails
 #' to reject, all lower dose hypotheses are automatically rejected (futility cascade).
 #' @export
-AnalyzeDoseFindingCont <- function( SimData, DesignParam, LookInfo, OutList, UserParam = NULL )
+AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam, LookInfo, OutList, UserParam = NULL )
 {
   nErrorCode      <- 0L
   
@@ -127,35 +127,35 @@ AnalyzeDoseFindingCont <- function( SimData, DesignParam, LookInfo, OutList, Use
   nNumActive        <- length( vSelectedArmIndex )
   vDroppedArms      <- which( bIsArmPresent == 0 )
   
-  vCtrlResp         <- dfSimData$Response[ dfSimData$TreatmentID == 0 ]
-  nNC               <- length( vCtrlResp )
-  dMeanC            <- mean( vCtrlResp )
-  dVarC             <- var( vCtrlResp )
-  vNT               <- rep( NA_real_, nNumActive )
-  vMeanT            <- rep( NA_real_, nNumActive )
-  vVarT             <- rep( NA_real_, nNumActive )  
+  vRespCtrl         <- dfSimData$Response[ dfSimData$TreatmentID == 0 ]
+  nNumCtrl          <- length( vRespCtrl )
+  dMeanRespCtrl     <- mean( vRespCtrl )
+  dVarRespCtrl      <- var( vRespCtrl )
+  vNumTrt           <- rep( NA_real_, nNumActive )
+  vMeanRespTrt      <- rep( NA_real_, nNumActive )
+  vVarRespTrt       <- rep( NA_real_, nNumActive )  
   vDeltaEst         <- rep( NA_real_, nNumActive )
   
-  for ( j in seq_along( vSelectedArmIndex ) ) 
+  for( nArmNum in seq_along( vSelectedArmIndex ) ) 
   {
-    nK              <- vSelectedArmIndex[j]
-    vTrtResp        <- dfSimData$Response[ dfSimData$TreatmentID == nK ]
-    vNT[ j ]        <- length( vTrtResp )
-    vMeanT[ j ]     <- mean( vTrtResp ) 
-    vVarT[ j ]      <- var( vTrtResp )
-    vDeltaEst[ j ]  <- vMeanT[ j ] - dMeanC
+    nTrtArmIndex            <- vSelectedArmIndex[ nArmNum ]
+    vRespTrt                <- dfSimData$Response[ dfSimData$TreatmentID == nTrtArmIndex ]
+    vNumTrt[ nArmNum ]      <- length( vRespTrt )
+    vMeanRespTrt[ nArmNum ] <- mean( vRespTrt ) 
+    vVarRespTrt[ nArmNum ]  <- var( vRespTrt )
+    vDeltaEst[ nArmNum ]    <- vMeanRespTrt[ nArmNum ] - dMeanRespCtrl
   }
   # Compute isotonic deltas: enforce monotonicity on deltas
-  vIsoDelta[ vSelectedArmIndex ] <- ComupteIsotonicDeltas( vDeltaEst, nTailType )
+  vIsoDelta[ vSelectedArmIndex ] <- ComputeIsotonicDeltas( vDeltaEst, nTailType )
 
   # Proof of Concept Assessment ####
-  if ( !is.null( dPoCThreshold ) && !is.na( dPoCThreshold ) ) 
+  if( !is.null( dPoCThreshold ) && !is.na( dPoCThreshold ) ) 
   {
     vActiveForPoC   <- which( !is.na( vIsoDelta ) )
-    if ( length( vActiveForPoC ) > 0 ) 
+    if( length( vActiveForPoC ) > 0 ) 
     {
       # PoC: independent per-arm check for Pairwise test
-      if ( nTailType == 1L ) {
+      if( nTailType == 1L ) {
         # Right-Tail: PoC if delta > threshold
         vArmWithPOC <- which( round( vIsoDelta[ vSelectedArmIndex ], 7 ) > dPoCThreshold )
         
@@ -173,12 +173,12 @@ AnalyzeDoseFindingCont <- function( SimData, DesignParam, LookInfo, OutList, Use
 
   # Check for Futility in interims using isotonic delta ####
   bTestFutility     <- !is.null( vFutBdry ) && !is.na( vFutBdry[ nCurrLookIndex] ) && nCurrLookIndex < nNumLooks
-  if ( bTestFutility ) 
+  if( bTestFutility ) 
   {
     dFutBdryVal     <- vFutBdry[ nCurrLookIndex ]
 
     # vDelta Scale: compare delta estimate against futility boundary
-    if ( nTailType == 1L ) {
+    if( nTailType == 1L ) {
       vDecision[ vSelectedArmIndex ] <- as.numeric( vIsoDelta[ vSelectedArmIndex ] < dFutBdryVal ) * 3
     } else {
       vDecision[ vSelectedArmIndex ] <- as.numeric( vIsoDelta[ vSelectedArmIndex ] > dFutBdryVal ) * 3 
@@ -187,83 +187,79 @@ AnalyzeDoseFindingCont <- function( SimData, DesignParam, LookInfo, OutList, Use
 
   
   # Testing for efficacy at the last look #### 
-    if ( nCurrLookIndex == nNumLooks &&  nNumActive > 0 )
+  if( nCurrLookIndex == nNumLooks &&  nNumActive > 0 )
+  {
+    # Compute variance and degrees of freedom
+    if( nVarType == 4L ) 
     {
-      # Compute variance and degrees of freedom
-      if ( nVarType == 4L ) 
-      {
-        # Equal variance: pooled
-        vSp2    <- ( ( nNC - 1 ) * dVarC + ( vNT - 1 ) * vVarT ) / ( nNC + vNT - 2 )
-        vSE     <- sqrt( vSp2 * ( 1/nNC + 1/vNT ) )
-        vDOF    <- nNC + vSp2 - 2
-      } else 
-      {
-        # Unequal variance: Welch
-        dSEC    <- dVarC / nNC
-        vSET    <- vVarT / vSp2
-        vSE     <- sqrt( dSEC + vSET )
-        vDOF    <- round( ( dSEC + vSET )^2 / ( dSEC^2/( nNC - 1 ) + vSET^2/( vNT - 1 ) ) )
-      }
-
-      # Compute test statistic and p-value
-      vTestStat[ vSelectedArmIndex ]  <- vIsoDelta[ vSelectedArmIndex ] / vSE
-
-      if ( nTailType == 1L ) 
-      {
-        # Right-Tail: P(T > dTstat)
-        vRawPVal[ vSelectedArmIndex ] <- pt( vTestStat[ vSelectedArmIndex ], df = vDOF, lower.tail = FALSE )
-      } else 
-      { 
-        # Left-Tail: P(T < dTstat)
-        vRawPVal[ vSelectedArmIndex ] <- pt( vTestStat[ vSelectedArmIndex ], df = vDOF, lower.tail = TRUE )
-      }
-
-      lTestResults <-  ApplyFixedSeqPairwiseTest( vRawPValues = vRawPVal [ vSelectedArmIndex ], 
-                                                  vDoseSequence = nNumActive:1, 
-                                                  dAlpha =  dTotalAlpha )
-      if( nTailType == 0)
-      {
-        lTestResults$vDecision <- as.integer( lTestResults$vDecision * 1 )
-      } else {
-        lTestResults$vDecision <- as.integer( lTestResults$vDecision * 2 )
-      }
-
-      vDecision[ vSelectedArmIndex ]  <- lTestResults$vDecision
-      vDecision[ vDecision == 0 ]     <- 3 # Setting all the non-concluded hypotheses as futile
+      # Equal variance: pooled
+      vSp2    <- ( ( nNumCtrl - 1 ) * dVarRespCtrl + ( vNumTrt - 1 ) * vVarRespTrt ) / ( nNumCtrl + vNumTrt - 2 )
+      vSE     <- sqrt( vSp2 * ( 1 / nNumCtrl + 1 / vNumTrt ) )
+      vDOF    <- nNumCtrl + vNumTrt - 2
+    } else {
+      # Unequal variance: Welch
+      dSEC    <- dVarRespCtrl / nNumCtrl
+      vSET    <- vVarRespTrt / vNumTrt
+      vSE     <- sqrt( dSEC + vSET )
+      vDOF    <- round( ( dSEC + vSET )^2 / ( dSEC^2 / ( nNumCtrl - 1 ) + vSET^2 / ( vNumTrt - 1 ) ) )
     }
+
+    # Compute test statistic and p-value
+    vTestStat[ vSelectedArmIndex ]  <- vIsoDelta[ vSelectedArmIndex ] / vSE
+
+    if( nTailType == 1L ) 
+    {
+      # Right-Tail: P(T > dTstat)
+      vRawPVal[ vSelectedArmIndex ] <- pt( vTestStat[ vSelectedArmIndex ], df = vDOF, lower.tail = FALSE )
+    } else { 
+      # Left-Tail: P(T < dTstat)
+      vRawPVal[ vSelectedArmIndex ] <- pt( vTestStat[ vSelectedArmIndex ], df = vDOF, lower.tail = TRUE )
+    }
+
+    lTestResults <-  ApplyFixedSeqPairwiseTest( vRawPValues = vRawPVal [ vSelectedArmIndex ], 
+                                                vDoseSequence = nNumActive:1, 
+                                                dAlpha =  dTotalAlpha )
+    if( nTailType == 0)
+    {
+      lTestResults$vDecision <- as.integer( lTestResults$vDecision * 1 )
+    } else {
+      lTestResults$vDecision <- as.integer( lTestResults$vDecision * 2 )
+    }
+
+    vDecision[ vSelectedArmIndex ]  <- lTestResults$vDecision
+    vDecision[ vDecision == 0 ]     <- 3 # Setting all the non-concluded hypotheses as futile
+  }
   
   # Prepare OutList for next look ####
   lNewOutList <- list( vPOCStatusArm  = vPOCStatusArm, dOverallPOC    = dOverallPOC)
   
   # Return Results ####
-  return(list(
-    Decision     = as.integer(vDecision),
-    RawPVal      = as.double(vRawPVal),
-    TestStat     = as.double(vTestStat),
-    Delta        = as.double(vIsoDelta),
-    POCStatusArm = as.integer(vPOCStatusArm),
-    POCStatus    = as.integer(dOverallPOC),
-    AnalysisTime = as.double(dEstAnalysisTime),
-    OutList      = lNewOutList,
-    ErrorCode    = as.integer(nErrorCode)
-  ))
+  return( list( Decision     = as.integer( vDecision ),
+                RawPVal      = as.double( vRawPVal ),
+                TestStat     = as.double( vTestStat ),
+                Delta        = as.double( vIsoDelta ),
+                POCStatusArm = as.integer( vPOCStatusArm ),
+                POCStatus    = as.integer( dOverallPOC ),
+                AnalysisTime = as.double( dEstAnalysisTime ),
+                OutList      = lNewOutList,
+                ErrorCode    = as.integer( nErrorCode ) ) )
 }
 
 
 # HELPER FUNCTION: Analysis Time Computation ####
 ComputeAnalysisTime <- function( dRespLag, vArrivalTime, vCumCompleters, nCurrLookIndex )
 {
-  dRespLag <- ifelse( !is.null( dRespLag ), dRespLag, 0 )
-  dCompletionTimes <- sort( vArrivalTime + dRespLag )
-  nTargetCompleters <- vCumCompleters[ nCurrLookIndex ]
+  dRespLag            <- ifelse( !is.null( dRespLag ), dRespLag, 0 )
+  dCompletionTimes    <- sort( vArrivalTime + dRespLag )
+  nTargetCompleters   <- vCumCompleters[ nCurrLookIndex ]
   
   if( !is.null( nTargetCompleters ) &&
       !is.na( nTargetCompleters ) &&
       nTargetCompleters <= length( dCompletionTimes ) ) 
   {
-    dEstAnalysisTime <- dCompletionTimes[ nTargetCompleters ]
+    dEstAnalysisTime  <- dCompletionTimes[ nTargetCompleters ]
   } else {
-    dEstAnalysisTime <- max( dCompletionTimes, na.rm = TRUE )
+    dEstAnalysisTime  <- max( dCompletionTimes, na.rm = TRUE )
   }
   return( dEstAnalysisTime )
 }
@@ -279,13 +275,13 @@ ComputeAnalysisTime <- function( dRespLag, vArrivalTime, vCumCompleters, nCurrLo
 #
 # Output:
 # numeric vector of isotonic values (same length as input)
-ComupteIsotonicDeltas <- function( vValues, nTailType )
+ComputeIsotonicDeltas <- function( vValues, nTailType )
 {
   n <- length( vValues )
-  if ( n == 0 ) return( numeric(0) )
+  if( n == 0 ) return( numeric(0) )
   
   # For non-increasing (left-tail), negate values
-  if ( nTailType == 0L ) vValues <- -vValues
+  if( nTailType == 0L ) vValues <- -vValues
   
   vBlockVal <- vValues
   vBlockIdx <- as.list( 1:n )
@@ -293,30 +289,30 @@ ComupteIsotonicDeltas <- function( vValues, nTailType )
   repeat {
     bMerged <- FALSE
     i <- 1
-    while ( i < length( vBlockVal ) ) {
-      if ( vBlockVal[i] > vBlockVal[i + 1] ) {
+    while( i < length( vBlockVal ) ) {
+      if( vBlockVal[ i ] > vBlockVal[ i + 1 ] ) {
         # Merge blocks i and i+1 with simple average
-        dNewVal <- mean( c( vBlockVal[i], vBlockVal[i + 1] ) )
-        vBlockVal[i] <- dNewVal
-        vBlockVal <- vBlockVal[ -(i + 1) ]
-        vBlockIdx[[i]] <- c( vBlockIdx[[i]], vBlockIdx[[i + 1]] )
-        vBlockIdx <- vBlockIdx[ -(i + 1) ]
-        bMerged <- TRUE
+        dNewVal         <- mean( c( vBlockVal[ i ], vBlockVal[ i + 1 ] ) )
+        vBlockVal[i]    <- dNewVal
+        vBlockVal       <- vBlockVal[ -( i + 1 ) ]
+        vBlockIdx[[i]]  <- c( vBlockIdx[[ i ]], vBlockIdx[[ i + 1 ]] )
+        vBlockIdx       <- vBlockIdx[ -( i + 1 ) ]
+        bMerged         <- TRUE
       } else {
-        i <- i + 1
+        i               <- i + 1
       }
     }
-    if (!bMerged) break
+    if( !bMerged ) break
   }
   
   # Reconstruct result vector
   vResult <- numeric( n )
-  for ( j in seq_along(vBlockVal ) ) {
-    vResult[ vBlockIdx[[j]] ] <- vBlockVal[ j ]
+  for( j in seq_along(vBlockVal ) ) {
+    vResult[ vBlockIdx[[j]] ]     <- vBlockVal[ j ]
   }
   
   # Negate back if left-tail
-  if ( nTailType == 0L ) vResult <- -vResult
+  if( nTailType == 0L ) vResult  <- -vResult
   
   return( vResult )
 }
@@ -334,28 +330,24 @@ ComupteIsotonicDeltas <- function( vValues, nTailType )
 #   Decision
 ApplyFixedSeqPairwiseTest <- function( vRawPValues, vDoseSequence, dAlpha ) {
   # Input validation
-  if ( length( vRawPValues ) != length( vDoseSequence ) ) {
+  if( length( vRawPValues ) != length( vDoseSequence ) ) {
     stop("Length of vRawPValues and vDoseSequence must be equal")
   }
   
-  J <- length(vRawPValues)
-  
   # Step 1: Order p-values according to sequence
-  vOrdRawPValues <- vRawPValues[ order( vDoseSequence ) ]
+  vOrdRawPValues  <- vRawPValues[ order( vDoseSequence ) ]
   
-  # Step 3: Compute adjusted p-values for each hypothesis
-  vAdjPValues <- cummax( vOrdRawPValues )
+  # Step 2: Compute adjusted p-values for each hypothesis
+  vAdjPValues     <- cummax( vOrdRawPValues )
   
-  # Step 4: Compute adjusted p-value for global null hypothesis
-  dAdjPValGlobal <- vOrdRawPValues[ 1 ]
+  # Step 3: Compute adjusted p-value for global null hypothesis
+  dAdjPValGlobal  <- vOrdRawPValues[ 1 ]
   
-  # Step 5: Rearrange adjusted p-values and decisions back to original order
-  vIdxOrder <- order( vDoseSequence )
-  vAdjPValues <- vAdjPValues[ order( vIdxOrder ) ]
+  # Step 4: Rearrange adjusted p-values and decisions back to original order
+  vIdxOrder       <- order( vDoseSequence )
+  vAdjPValues     <- vAdjPValues[ order( vIdxOrder ) ]
   
-  return(list(
-    vAdjPValues = vAdjPValues,
-    dAdjPValGlobal = dAdjPValGlobal,
-    vDecision = (vAdjPValues < dAlpha)
-  ))
+  return( list( vAdjPValues = vAdjPValues,
+                dAdjPValGlobal = dAdjPValGlobal,
+                vDecision = (vAdjPValues < dAlpha ) ) )
 }

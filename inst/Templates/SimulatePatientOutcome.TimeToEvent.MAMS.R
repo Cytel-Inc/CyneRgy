@@ -1,7 +1,6 @@
 # Last Modified Date: {{CREATION_DATE}}
 
 #' @name {{FUNCTION_NAME}}
-#' @title Template for simulating survival outcomes in R.
 #'
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #'
@@ -50,54 +49,52 @@
 #'         }
 #'
 #' @description
-#' This template simulates time-to-event outcomes for multi-arm clinical trial simulations.
-#' The function supports several survival generation approaches including piecewise
-#' exponential models and median survival based exponential models.
+#' This is patient data generation task template for Multi-Arm, Time to Events. 
 #'
 #' The function signature must remain unchanged. However, additional user-defined logic
 #' and parameters may be incorporated through the UserParam list if needed.
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
   
-# Step 1 - Validate custom variable input and set defaults ####
-if( is.null( UserParam ) )
-{
+    # Step 1 - Validate custom variable input and set defaults ####
+    if( is.null( UserParam ) )
+    {
+        
+        # If this function requires user defined parameters to be sent via the UserParam variable
+        # check to make sure the values are valid and take care of any issues.
+        # Also, if there is a default value for the parameters you may want to set them here
+        
+    }
     
-    # If this function requires user defined parameters to be sent via the UserParam variable
-    # check to make sure the values are valid and take care of any issues.
-    # Also, if there is a default value for the parameters you may want to set them here
     
-}
-
-
-# Step 2 - Initialize variables ####
-# Initialize error codes and vectors used to store simulated survival times
-nError  <- 0
-vResponse <- c()
-
-
-# Step 3 - Determine which survival generation method will be used ####
-# The implementation supports:
-#   Method 1 - Piecewise exponential hazard model
-#   Method 2 - Survival probability based piecewise exponential model
-#   Method 3 - Median survival time based exponential model
-
-
-# Step 4 - Implement the data-generation logic ####
-
-
-# Step 5 - Error checking ####
-# Verify that all subjects received valid survival times
-# and that no missing values were generated
-if( length( vResponse ) != NumSub || any( is.na( vResponse ) == TRUE ) )
-    nError <- -100
-
-
-# Step 6 - Build the return object ####
-lReturn <- list(
-    SurvivalTime = as.double( vResponse ),
-    ErrorCode    = as.integer( nError )
-)
+    # Step 2 - Initialize variables ####
+    # Initialize error codes and vectors used to store simulated survival times
+    nError  <- 0
+    vResponse <- c()
+    
+    
+    # Step 3 - Determine which survival generation method will be used ####
+    # The implementation supports:
+    #   Method 1 - Piecewise exponential hazard model
+    #   Method 2 - Survival probability based piecewise exponential model
+    #   Method 3 - Median survival time based exponential model
+    
+    
+    # Step 4 - Implement the data-generation logic ####
+    
+    
+    # Step 5 - Error checking ####
+    # Verify that all subjects received valid survival times
+    # and that no missing values were generated
+    if( length( vResponse ) != NumSub || any( is.na( vResponse ) == TRUE ) )
+        nError <- -100
+    
+    
+    # Step 6 - Build the return object ####
+    lReturn <- list(
+        SurvivalTime = as.double( vResponse ),
+        ErrorCode    = as.integer( nError )
+    )
 
 return( lReturn )
 
