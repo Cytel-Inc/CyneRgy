@@ -96,9 +96,9 @@
     nError <- 0
     
     # Step 5 - Build the return object ####
-    lReturn <- list( Decision    = as.integer( vDecision ),
-                     ErrorCode   = as.integer( nError ),
-                     HR          = as.double( vHRRatio ),
+    lReturn <- list( Decision     = as.integer( vDecision ),
+                     ErrorCode    = as.integer( nError ),
+                     HR           = as.double( vHRRatio ),
                      AnalysisTime = as.double( dTimeOfAnalysis ) )
     
     return( lReturn )
