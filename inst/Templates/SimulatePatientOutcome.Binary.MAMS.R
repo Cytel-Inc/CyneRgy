@@ -32,7 +32,6 @@
     # Step 1 - Validate custom variable input and set defaults ####
     if( is.null( UserParam ) )
     {
-        
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
         # are applied to have the same functionality as East, see the first example
@@ -44,7 +43,6 @@
     # Step 2 - Initialize variable ####
     nError          <- 0 # East Horizon code for no errors occurred
     vPatientOutcome <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a response will be simulated
-    
     
     # Step 3 - Loop over the patients and simulate the outcome according to the treatment they received ####
     for( nPatIndx in 1:NumSub )

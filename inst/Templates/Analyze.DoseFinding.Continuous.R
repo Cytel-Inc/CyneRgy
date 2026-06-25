@@ -1,6 +1,5 @@
 #  Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Analyze continuous outcome for dose finding design using Fixed Sequence Pairwise t-test.
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
 #'        It will have headers indicating the names of the columns. These names will be same as those used in 
 #'        Data Generation. User should access the variables using headers, for example, SimData$ArrivalTime, 
@@ -72,73 +71,20 @@
 #'                                     }
 #'                      }
 #' @details
-#' This function implements Fixed Sequence Pairwise testing for dose-finding studies with continuous endpoints.
-#' The Fixed Sequence gatekeeping procedure tests hypotheses sequentially from the highest dose downward,
-#' rejecting the null hypothesis only if the raw p-value is less than the total alpha. Once a hypothesis fails
-#' to reject, all lower dose hypotheses are automatically rejected (futility cascade).
-#'
-#' Key Features:
-#' - Pairwise t-tests comparing each treatment arm versus control
-#' - Support for both equal and unequal variance assumptions
-#' - Fixed Sequence multiple comparison procedure (inherently controls FWER)
-#' - Multi-look capability with futility and efficacy boundaries
-#' - Proof of Concept (PoC) threshold assessment
-#' - Handles arm dropping and treatment selection
-#'
-#' Statistical Details:
-#' - For equal variance (VarType=4): uses pooled variance with DOF = n_control + n_treatment - 2
-#' - For unequal variance (VarType=5): uses Welch's t-test with Satterthwaite DOF approximation
-#' - Right-Tail (TailType=1): P(T > t_stat) under H0
-#' - Left-Tail (TailType=0): P(T < t_stat) under H0
-#' @keywords dose-finding continuous fixed-sequence pairwise gatekeeping
+#' Template for Dose Finding analysis R task. 
+#' 
+#' The function signature must remain unchanged. However, additional user-defined logic
+#' and parameters may be incorporated through the UserParam list if needed.
+#' 
+#' @keywords dose-finding analysis with continuous endpoint
 #' @export
-{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, OutList, UserParam = NULL )
 {
     nError            <- 0
 
-    # If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxCompleters
-    # Retrieve necessary information from the R objects. You may not need all the variables
-    if(  !is.null( LookInfo )  )
-    {
-        nQtyOfLooks           <- LookInfo$NumLooks
-        nLookIndex            <- LookInfo$CurrLookIndex
-        nQtyOfPatsInAnalysis  <- LookInfo$CumCompleters[ nLookIndex ]
-        nFutBdryScale         <- LookInfo$FutBdryScale
-        vFutBdry              <- LookInfo$FutBdry
-        nPoCScale             <- LookInfo$PoCScale
-        dPoCThreshold         <- LookInfo$PoCThreshold
-        nTailType             <- DesignParam$TailType
-    }
-    else
-    {
-        nQtyOfLooks           <- 1
-        nLookIndex            <- 1
-        nQtyOfPatsInAnalysis  <- DesignParam$MaxCompleters
-        nFutBdryScale         <- NA
-        vFutBdry              <- NA
-        nPoCScale             <- NA
-        dPoCThreshold         <- NA
-        nTailType             <- DesignParam$TailType
-    }
-    
-    # User must choose one from the following 3 options (Labelled Option 1, Option 2, Option 3) to create the analysis script.
-    # Option 1 is the most flexible since it lets you setup your own Decision logic.
-    # The other options allow you to partially customize the analysis logic while relying on East Horizon to do the rest of the computations.
-    # Remember to delete the three return statements from the unused options. ####
-    
-    # ========================================================================
-    # Option 1: Script returns Decision ####
-    # ========================================================================
-    # Use this option if you want to use your own decision rules.
-    # This is the RECOMMENDED approach for Dose Finding analysis.
+    # Step 1: Read inputs
 
-    # Extract parameters from DesignParam
-    NumTrt            <- DesignParam$NumTreatments
-    TotalAlpha        <- DesignParam$Alpha
-    VarType           <- DesignParam$VarType
-    IsArmPresent      <- DesignParam$IsArmPresent
-
-    # Initialize output vectors
+    # Step 2: Initialize output vectors
     vDecision         <- rep( 0L, NumTrt )
     vRawPVal          <- rep( NA_real_, NumTrt )
     vTestStat         <- rep( NA_real_, NumTrt )
@@ -147,10 +93,12 @@
     dOverallPOC       <- 0.0
     dEstAnalysisTime  <- NA
     lcurrOutList      <- list()
-    # Logic to compute Analysis Time
     
-    # Logic for Analysis for POC, futility and Efficacy 
+    # Step 3: Logic to compute Analysis Time
     
+    # Step 4: Logic for Analysis for POC, futility and Efficacy 
+    
+    # Step 5: Return the output list
     return( list( Decision     = as.integer( vDecision ),
                   RawPVal      = as.double( vRawPVal ),
                   TestStat     = as.double( vTestStat ),
