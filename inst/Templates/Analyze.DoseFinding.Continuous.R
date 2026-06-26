@@ -85,6 +85,7 @@
     # Step 1: Read inputs
 
     # Step 2: Initialize output vectors
+    nNumTrt           <- DesignParam$NumTreatments
     vDecision         <- rep( 0L, NumTrt )
     vRawPVal          <- rep( NA_real_, NumTrt )
     vTestStat         <- rep( NA_real_, NumTrt )

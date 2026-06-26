@@ -28,7 +28,7 @@
 {
 
     # Step 1 - Initialize the return variables or other variables needed ####
-    Error 	        <- 0
+    nError 	        <- 0
     vPatientOutcome <- rep( 0, NumSub )  # Note, as you simulate the patient data put in in this vector so it can be returned
     
     # Step 2 - Validate custom variable input and set defaults ####
@@ -39,7 +39,7 @@
         # take care of any issues.   Also, if there is a default value for the parameters you may want to set them here.  Default values usually
         # are applied to have the same functionality as East, see the first example
         
-        # EXMAPLE - Set the default if needed
+        # EXAMPLE - Set the default if needed
         #UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
     }
     
@@ -67,5 +67,5 @@
     # Use appropriate error handling and modify the
     # Error appropriately
     
-    return(list(Response = as.double(vPatientOutcome), ErrorCode = as.integer(Error)))
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
 }

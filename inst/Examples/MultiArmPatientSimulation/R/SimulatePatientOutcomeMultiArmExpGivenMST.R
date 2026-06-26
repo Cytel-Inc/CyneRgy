@@ -59,8 +59,3 @@ SimulatePatientOutcomeMultiArmExpGivenMST <- function( NumSub, NumArm, ArrivalTi
   
     return( list( SurvivalTime = as.double( vResponse ), ErrorCode = as.integer( nError ) ))
 }
-
-
-
-
-
