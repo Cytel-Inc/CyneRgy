@@ -86,11 +86,11 @@
 
     # Step 2: Initialize output vectors
     nNumTrt           <- DesignParam$NumTreatments
-    vDecision         <- rep( 0L, NumTrt )
-    vRawPVal          <- rep( NA_real_, NumTrt )
-    vTestStat         <- rep( NA_real_, NumTrt )
-    vDelta            <- rep( NA_real_, NumTrt )
-    vPOCStatusArm     <- rep( 0.0, NumTrt )
+    vDecision         <- rep( 0L, nNumTrt )
+    vRawPVal          <- rep( NA_real_, nNumTrt )
+    vTestStat         <- rep( NA_real_, nNumTrt )
+    vDelta            <- rep( NA_real_, nNumTrt )
+    vPOCStatusArm     <- rep( 0.0, nNumTrt )
     dOverallPOC       <- 0.0
     dEstAnalysisTime  <- NA
     lcurrOutList      <- list()
