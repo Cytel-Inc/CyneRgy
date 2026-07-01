@@ -4,7 +4,7 @@
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param NumArm  The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
-#' @param TreatmentID A vector of treatment ids, 0 is control treatment and  1 experimental treatment. length( TreatmentID ) = NumSub
+#' @param TreatmentID A vector of treatment ids, 0 is control treatment and  1,2,...,NumArms-1 for treatment arms.
 #' @param PropResp A vector of length NumArm with the response probabilities for each arm
 #' @param  UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
 #' If UseParam are supplied, they will be an element in the list, UserParam.   
@@ -45,7 +45,6 @@
     
     # Step 3 - Loop over the patients and simulate the outcome according to the treatment they received ####
     
-    #Example 1 - Loop over the patient vector and sample patient outcome using rbinom
     for( nPatIndx in 1:NumSub )
     {
         # Add code here to modify how patient data is generated to fit your need
@@ -58,7 +57,7 @@
         # vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
     }
     
-    #End of End of example block
+    #End of example block
 
     
     # Write the actual code here.

@@ -88,9 +88,7 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
   # Extracting parameters from LookInfo
   nNumLooks       <- LookInfo$NumLooks
   nCurrLookIndex  <- LookInfo$CurrLookIndex
-  nFutBdryScale   <- LookInfo$FutBdryScale
   vFutBdry        <- LookInfo$FutBdry
-  nPoCScale       <- LookInfo$PoCScale
   dPoCThreshold   <- LookInfo$PoCThreshold
   vCumCompleters  <- LookInfo$CumCompleters
   
