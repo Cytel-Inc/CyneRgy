@@ -8,7 +8,9 @@ information about this integration point.
 To try this example, create a new project in East Horizon with any
 configuration that supports the Enrollment Integration Point. For more
 details, refer to the link in the box above. For Example 3, choose the
-study objective `Two Arm Confirmatory - Multiple Endpoints`.
+study objective `Two Arm Confirmatory - Multiple Endpoints`. Note: The
+Group Sequential with Sample Size Re-Estimation statistical design is
+not supported. Reapeated measures are supported.
 
 ## Introduction
 

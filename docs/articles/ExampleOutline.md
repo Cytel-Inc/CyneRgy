@@ -17,7 +17,7 @@ The following examples are included:
 ## Enrollment
 
 **Arrival Times with Poisson Process** Any \# of ArmsSingle/Dual/Multi
-EndpointsAny Outcome
+EndpointsAny OutcomeRepeated Measures
 
 This example demonstrates how to add the ability to generate patient
 arrival times according to a Poisson process with a ramp-up by
@@ -30,7 +30,7 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/GeneratePoissonArrival.md
 ## Randomization
 
 **Randomization of Subjects** 2-ArmMultiple ArmSingle/Dual EndpointsAny
-Outcome
+OutcomeRepeated Measures
 
 This example illustrates four ways to customize how subjects are
 assigned to treatment arms in East Horizon: using a uniform
@@ -43,8 +43,8 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/RandomizeSubjects.md)
 
 ## Dropout
 
-**2-Arm, Patient Dropout** 2-ArmSingle
-EndpointContinuousTTEBinaryRepeated Measures
+**2-Arm, Patient Dropout** 2-ArmSingle/Dual
+EndpointsContinuousTTEBinaryRepeated Measures
 
 This example illustrates how to customize the dropout distribution in
 East Horizon for continuous and binary outcomes, time-to-event outcome,
@@ -65,7 +65,7 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmPatientDropout.md
 ## Response (Patient Simulation)
 
 **Continuous Outcome – Patient Simulation** 2-ArmSingle
-EndpointContinuous
+EndpointContinuousSSR
 
 This example demonstrates two ways to customize the patient outcome
 simulation in East Horizon for a two-arm trial with a continuous
@@ -75,7 +75,7 @@ proportion sampled from a Beta distribution.
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulation.md)
 
 **Time-To-Event Outcome – Patient Simulation** 2-ArmSingle
-EndpointTTEStratification
+EndpointTTESSRStratification & Subpopulations
 
 This example demonstrates two ways to customize the patient outcome
 simulation in East Horizon for a two-arm trial with a time-to-event
@@ -84,7 +84,7 @@ exponential distributions. It also presents additional examples using
 Stratification. [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomePatientSimulation.md)
 
-**Binary Outcome – Patient Simulation**2-ArmSingle EndpointBinary
+**Binary Outcome – Patient Simulation**2-ArmSingle EndpointBinarySSR
 
 This example demonstrates two ways to customize the patient outcome
 simulation in East Horizon for a two-arm trial with a binary outcome:
@@ -161,7 +161,7 @@ here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomeAnalysis.md)
 
 **Time-To-Event Outcome – Analysis** 2-ArmSingle
-EndpointTTESSRStratification & Subpopulation
+EndpointTTESSRStratification & Subpopulations
 
 This example demonstrates three ways to customize the statistical test
 in East Horizon for a two-arm trial with a time-to-event outcome: using
@@ -169,8 +169,8 @@ formulas from the East manual, using the
 [`survival::survdiff()`](https://rdrr.io/pkg/survival/man/survdiff.html)
 function, and using confidence interval limits for Go/No-Go
 decision-making. It also presents additional examples using Sample Size
-Re-estimation, Stratification, and Subpopulation options. [Click here to
-view the full
+Re-estimation, Stratification, and Subpopulations options. [Click here
+to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomeAnalysis.md)
 
 **Binary Outcome – Analysis** 2-ArmSingle EndpointBinarySSR
@@ -200,6 +200,14 @@ This example demonstrates how to customize the statistical test in East
 Horizon for multi-arm trials, covering continuous, binary, and
 time-to-event outcomes. [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmAnalysis.md)
+
+**Dose Finding – Analysis**Dose FindingSingle EndpointContinuous
+
+This example demonstrates how to customize the statistical test in East
+Horizon for dose finding trials, covering fixed sequence pairwise
+testing with isotonic dose-response estimation for continuous outcome.
+[Click here to view the full
+example.](https://Cytel-Inc.github.io/CyneRgy/articles/DoseFindingAnalysis.md)
 
 **Dual Endpoints – Analysis**2-ArmDual EndpointsTTE-TTETTE-Binary
 

@@ -14,6 +14,10 @@ requirements.
 
 ## Availability
 
+Note: This integration point is not compatible with Sample Size
+Re-Estimation or Stratification/Subpopulations. It is however compatible
+with Repeated Measures.
+
 ### East Horizon Explore
 
 This integration point is available in East Horizon Explore for the

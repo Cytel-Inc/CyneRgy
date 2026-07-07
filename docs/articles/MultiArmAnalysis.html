@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin
 and Anoop Singh Rawat</h4>
             
-            <h4 data-toc-skip class="date">May 27, 2026</h4>
+            <h4 data-toc-skip class="date">July 07, 2026</h4>
       
 
       <div class="d-none name"><code>MultiArmAnalysis.Rmd</code></div>
@@ -215,8 +215,8 @@ outlining the general steps performed by the R code.</p>
 <p><img src="MultiArmAnalysis_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
-<h2 id="example-3---using-the-survivalsurvdiff-function-with-bonferroni-adjustment-time-to-event-outcome">Example 3 - Using the <code>survival::survdiff()</code> Function
-with Bonferroni Adjustment (Time-to-Event Outcome)<a class="anchor" aria-label="anchor" href="#example-3---using-the-survivalsurvdiff-function-with-bonferroni-adjustment-time-to-event-outcome"></a>
+<h2 id="example-3---using-the-survival-package-with-bonferroni-adjusted-log-rank-tests-time-to-event-outcome">Example 3 - Using the <code>survival</code> Package with
+Bonferroni-Adjusted Log-Rank Tests (Time-to-Event Outcome)<a class="anchor" aria-label="anchor" href="#example-3---using-the-survival-package-with-bonferroni-adjusted-log-rank-tests-time-to-event-outcome"></a>
 </h2>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
@@ -224,16 +224,22 @@ This example is related to this R file:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R" class="external-link alert-link">AnalyzeMultiArmUsingLogrankTestBonferroni.R</a>
 </p>
 </div>
-<p>For time-to-event outcomes, this example uses the
-<code><a href="https://rdrr.io/pkg/survival/man/survdiff.html" class="external-link">survival::survdiff()</a></code> function to perform a log-rank test
-between each treatment arm and the control arm. The log-rank statistic
-from each comparison is converted to a p-value, adjusted using
-Bonferroni correction, and evaluated against the efficacy boundary to
-determine if any treatment demonstrates a statistically significant
-improvement in survival.</p>
-<p>This example can handle interim looks and automatically incorporates
-information fraction and efficacy boundary adjustments provided by
-<code>LookInfo</code>.</p>
+<p>For time-to-event outcomes, this example analyzes a multi-arm
+survival trial by comparing each active treatment arm with the control
+arm. It uses <code><a href="https://rdrr.io/pkg/survival/man/survdiff.html" class="external-link">survival::survdiff()</a></code> to perform
+<strong>pairwise log-rank tests</strong> and estimates
+treatment-versus-control hazard ratios using <strong>Cox proportional
+hazards models</strong>.</p>
+<p>For each active treatment arm, the raw log-rank p-value is adjusted
+using a Bonferroni correction based on the number of active arms. The
+adjusted p-value is then compared with the applicable efficacy boundary
+to determine whether the treatment crosses for efficacy, continues to
+the next analysis, or is declared futile at the final analysis.</p>
+<p>The example supports both fixed-sample and group sequential designs.
+For interim analyses, it uses LookInfo to determine the current
+information fraction and efficacy boundary. Patients are
+administratively censored at the analysis time corresponding to the
+planned number of events for the current look.</p>
 <p>The figure below illustrates where this example fits within the R
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>

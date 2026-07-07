@@ -59,8 +59,11 @@ must be declared with default value `NULL`.
 
 A detailed template with step-by-step explanations is available here:
 [SimulatePatientOutcome.Binary.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R)
+for 2-Arm and
+[SimulatePatientOutcome.Binary.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.MAMS.R)
+for Multiple Arm.
 
-### For standard binary outcome (`Better Response = Larger Value`, `Test = Difference of Proportions or Custom`)
+### For 2-Arm or Multiple Arm (`Better Response = Larger Value`, `Test = Difference of Proportions or Custom`)
 
     GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
     {
@@ -73,7 +76,7 @@ A detailed template with step-by-step explanations is available here:
       return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
     }
 
-### For Vaccine Efficacy (`Better Response = Smaller Value`, `Test = 1 - Ratio of Proportions`)
+### For 2-Arm and Vaccine Efficacy (`Better Response = Smaller Value`, `Test = 1 - Ratio of Proportions`)
 
     GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, FollowUpDur, PropResp, OneMinusROP = NULL, UserParam = NULL )
     {

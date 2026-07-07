@@ -13,16 +13,16 @@ following configuration:
 - **Endpoint type:**
   - Continuous Outcome for Example 1
   - Binary Outcome for Example 2
-  - Time-to-Event Outcome for Example 3
+  - Time-to-Event Outcome for Example 3 and 4
 - **Task:** Explore or Design
 
 ## Introduction
 
 The following examples illustrate how to integrate new patient outcome
 simulation (*response*) capabilities into East Horizon using R functions
-in the context of a multi-arm clinical trials. Each example demonstrates
-a different type of statistical endpoint (continuous, time-to-event, and
-binary).
+in the context of a multi-arm clinical trials. The following examples
+demonstrate different approaches for simulating continuous, binary, and
+time-to-event endpoints in multi-arm clinical trials.
 
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientSimulation/R)
@@ -39,6 +39,10 @@ you will find the following R files:
 3.  [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R) -
     Simulates time-to-event outcomes using a Weibull distribution,
     allowing arm-specific shape and scale parameters.
+
+4.  [SimulatePatientSurvivalMultiArmExpGivenMST.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmExpGivenMST.R) -
+    Simulates time-to-event outcomes using exponential survival
+    distributions specified through arm-specific median survival times.
 
 ## Example 1 - Simulation of Continuous Outcomes with Non-Responders
 
@@ -154,3 +158,33 @@ integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.
 
 ![](MultiArmPatientSimulation_files/figure-html/unnamed-chunk-5-1.png)
+
+## Example 4 - Simulation of Time-to-Event Outcomes from Median Survival Times
+
+This example is related to this R file:
+[SimulatePatientSurvivalMultiArmExpGivenMST.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmExpGivenMST.R)
+
+This example demonstrates how to simulate time-to-event outcomes for
+multiple treatment arms using arm-specific median survival times (MSTs).
+Rather than requiring hazard rates directly, the function accepts the
+median survival time for each treatment arm, internally converts each
+value into an exponential hazard rate using
+$`\lambda = \frac{\log(2)}{\text{MST}}`$ and then generates survival
+times from exponential distributions.
+
+The R function *SimulatePatientSurvivalMultiArmExpGivenMST* extends the
+multi-arm survival simulation framework by allowing users to specify
+clinically interpretable median survival times (from East Horizon)
+instead of hazard rates. Each patient’s treatment assignment determines
+which exponential distribution is used for simulation.
+
+**Note**: This example currently supports exponential survival models
+based on median survival times (`SurvMethod = 3`). It can easily be
+extended to additional treatment arms by supplying additional median
+survival time values.
+
+The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.
+
+![](MultiArmPatientSimulation_files/figure-html/unnamed-chunk-6-1.png)

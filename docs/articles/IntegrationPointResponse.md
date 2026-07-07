@@ -21,6 +21,11 @@ response. For example, you can:
 
 ## Availability
 
+Note: This integration point is compatible with Sample Size
+Re-Estimation (standard templates and examples are compatible) and
+Stratification/Subpopulations (distinct templates and examples were
+created for Stratification and are compatible with Subpopulations).
+
 ### East Horizon Explore
 
 This integration point is available in East Horizon Explore for the

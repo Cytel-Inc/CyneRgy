@@ -21,6 +21,10 @@ following configuration:
   - **Design:** Examples 1, 2, and 3 are supported; Example 4 is not yet
     supported
   - **Explore:** All the above configurations are supported
+- **Statistical design:** Fixed Sample or Group Sequential (Group
+  Sequential with Sample Size Re-Estimation not supported)
+- **Note:** Repeated Measures for Continuous endpoints are supported in
+  Examples 1, 2, and 3.
 
 ## Introduction
 

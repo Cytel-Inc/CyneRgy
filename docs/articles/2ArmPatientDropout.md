@@ -9,7 +9,9 @@ To try this example, create a new project in East Horizon using the
 following configuration:
 
 - **Study objective:** Two Arm Confirmatory
-- **Number of endpoints:** Single Endpoint
+- **Number of endpoints:**
+  - **Single Endpoint:** All examples are supported
+  - **Dual Endpoints:** Example 2 works for TTE-TTE and TTE-Binary
 - **Endpoint type:**
   - Continuous or Binary Outcome for Example 1
   - Time-to-Event Outcome for Example 2
@@ -17,6 +19,8 @@ following configuration:
 - **Task:**
   - **Explore:** All examples are supported
   - **Design:** Examples 1 and 2 only
+- **Statistical design:** Fixed Sample or Group Sequential (Group
+  Sequential with Sample Size Re-Estimation not supported)
 
 ## Introduction
 
@@ -98,17 +102,20 @@ outlining the general steps performed by the R code.
 
 ![](2ArmPatientDropout_files/figure-html/unnamed-chunk-4-1.png)
 
-## Example 2 - Dropout Time For Time-to-Event Outcome
+## Example 2 - Dropout Time For Time-to-Event Outcome or DEP
 
 This example is related to this R file:
 [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)
 
+This example supports both time-to-event single endpoint and dual
+endpoints (TTE-TTE or TTE-Binary).
+
 The function *GenerateDropoutTimeForSurvival* generates dropout times
-for a two-arm time-to-event design. In this case, dropout information
-can be specified separately for each arm (in East Horizon, *Control* and
-*Treatment* in the *Dropout Rate* tab), and dropout times are drawn from
-an exponential distribution accordingly. The number of periods is fixed
-at 1.
+for a two-arm time-to-event or DEP design. In this case, dropout
+information can be specified separately for each arm (in East Horizon,
+*Control* and *Treatment* in the *Dropout Rate* tab), and dropout times
+are drawn from an exponential distribution accordingly. The number of
+periods is fixed at 1.
 
 This function does not use any user-defined parameters, but uses
 parameters specified in East Horizon. Refer to the table below for more

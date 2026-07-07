@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle Wathen,
 Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">May 27, 2026</h4>
+            <h4 data-toc-skip class="date">July 07, 2026</h4>
       
 
       <div class="d-none name"><code>ExampleOutline.Rmd</code></div>
@@ -118,7 +118,8 @@ blanks.</li>
 </h2>
 <details><summary><strong>Arrival Times with Poisson Process</strong> <span class="badge text-bg-primary ms-1">Any # of Arms</span><span class="badge text-bg-danger ms-1">Single/Dual/Multi
 Endpoints</span><span class="badge text-bg-warning ms-1">Any
-Outcome</span>
+Outcome</span><span class="badge text-bg-warning ms-1">Repeated
+Measures</span>
 </summary>
 This example demonstrates how to add the ability to generate patient
 arrival times according to a Poisson process with a ramp-up by
@@ -129,7 +130,7 @@ example.</a>
 <div class="section level2">
 <h2 id="randomization">Randomization<a class="anchor" aria-label="anchor" href="#randomization"></a>
 </h2>
-<details><summary><strong>Randomization of Subjects</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single/Dual Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span>
+<details><summary><strong>Randomization of Subjects</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single/Dual Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span><span class="badge text-bg-warning ms-1">Repeated Measures</span>
 </summary>
 This example illustrates four ways to customize how subjects are
 assigned to treatment arms in East Horizon: using a uniform
@@ -142,7 +143,7 @@ example.</a>
 <div class="section level2">
 <h2 id="dropout">Dropout<a class="anchor" aria-label="anchor" href="#dropout"></a>
 </h2>
-<details><summary><strong>2-Arm, Patient Dropout</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">Repeated Measures</span>
+<details><summary><strong>2-Arm, Patient Dropout</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single/Dual Endpoints</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">Repeated Measures</span>
 </summary>
 This example illustrates how to customize the dropout distribution in
 East Horizon for continuous and binary outcomes, time-to-event outcome,
@@ -158,14 +159,15 @@ to view the full example.</a>
 <div class="section level2">
 <h2 id="response-patient-simulation">Response (Patient Simulation)<a class="anchor" aria-label="anchor" href="#response-patient-simulation"></a>
 </h2>
-<details><summary><strong>Continuous Outcome – Patient Simulation</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span>
+<details><summary><strong>Continuous Outcome – Patient Simulation</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-success ms-1">SSR</span>
 </summary>
 This example demonstrates two ways to customize the patient outcome
 simulation in East Horizon for a two-arm trial with a continuous
 outcome: using a mixture distribution, with or without the mixture
 proportion sampled from a Beta distribution.<br><a href="2ArmNormalOutcomePatientSimulation.html">Click here to view the
 full example.</a>
-</details><details><summary><strong>Time-To-Event Outcome – Patient Simulation</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-info ms-1">Stratification</span>
+</details><details><summary><strong>Time-To-Event Outcome – Patient Simulation</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-success ms-1">SSR</span><span class="badge text-bg-info ms-1">Stratification &amp;
+Subpopulations</span>
 </summary>
 This example demonstrates two ways to customize the patient outcome
 simulation in East Horizon for a two-arm trial with a time-to-event
@@ -173,7 +175,7 @@ outcome: using a Weibull distribution, and using a mixture of
 exponential distributions. It also presents additional examples using
 Stratification. <a href="2ArmTimeToEventOutcomePatientSimulation.html">Click here to view
 the full example.</a>
-</details><details><summary><strong>Binary Outcome – Patient Simulation</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span>
+</details><details><summary><strong>Binary Outcome – Patient Simulation</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-success ms-1">SSR</span>
 </summary>
 This example demonstrates two ways to customize the patient outcome
 simulation in East Horizon for a two-arm trial with a binary outcome:
@@ -233,7 +235,7 @@ and using confidence interval limits for Go/No-Go decision-making. It
 also presents an additional example using Sample Size Re-estimation. <a href="2ArmNormalOutcomeAnalysis.html">Click here to view the full
 example.</a>
 </details><details><summary><strong>Time-To-Event Outcome – Analysis</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-success ms-1">SSR</span><span class="badge text-bg-info ms-1">Stratification &amp;
-Subpopulation</span>
+Subpopulations</span>
 </summary>
 This example demonstrates three ways to customize the statistical test
 in East Horizon for a two-arm trial with a time-to-event outcome: using
@@ -241,7 +243,7 @@ formulas from the East manual, using the
 <code><a href="https://rdrr.io/pkg/survival/man/survdiff.html" class="external-link">survival::survdiff()</a></code> function, and using confidence
 interval limits for Go/No-Go decision-making. It also presents
 additional examples using Sample Size Re-estimation, Stratification, and
-Subpopulation options. <a href="2ArmTimeToEventOutcomeAnalysis.html">Click here to view the full
+Subpopulations options. <a href="2ArmTimeToEventOutcomeAnalysis.html">Click here to view the full
 example.</a>
 </details><details><summary><strong>Binary Outcome – Analysis</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-success ms-1">SSR</span>
 </summary>
@@ -264,6 +266,13 @@ This example demonstrates how to customize the statistical test in East
 Horizon for multi-arm trials, covering continuous, binary, and
 time-to-event outcomes. <a href="MultiArmAnalysis.html">Click here to
 view the full example.</a>
+</details><details><summary><strong>Dose Finding – Analysis</strong><span class="badge text-bg-primary ms-1">Dose Finding</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span>
+</summary>
+This example demonstrates how to customize the statistical test in East
+Horizon for dose finding trials, covering fixed sequence pairwise
+testing with isotonic dose-response estimation for continuous outcome.
+<a href="DoseFindingAnalysis.html">Click here to view the full
+example.</a>
 </details><details><summary><strong>Dual Endpoints – Analysis</strong><span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-warning ms-1">TTE-Binary</span>
 </summary>
 This example demonstrates how to customize the statistical test in East

@@ -18,6 +18,7 @@ objective.
 | **DesignParam** | List | Input parameters which may be needed to compute test statistics and perform tests. To access these variables in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. See below for more information. |
 | **LookInfo** | List | Input parameters related to multiple looks. Empty when `Statistical Design = Fixed Sample`, but still mandatory in the functions [`CyneRgy::GetDecisionString`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecisionString.md) and [`CyneRgy::GetDecision`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.md). See below for more information. |
 | **AdaptInfo** | List | Input parameters related to sample size re-estimation. See below for more information. Only applicable when `Statistical Design = Group Sequential with Sample Size Re-Estimation`. |
+| **OutList** | List | List of outputs that was returned in the previous look. Only relevant for `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation` and `Study Design = Multiple Arm Confirmatory or Dose Finding`. Set to `NULL` for the first look. See below in the Output Variable. |
 | **UserParam** | List | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysis.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 ### Variables of SimData
@@ -102,7 +103,7 @@ futility and efficacy checks. Then, if
 `Promising Zone Scale = Conditional Power - Estimated`, `Delta` and
 `StdError` will be used for sample size re-estimation.
 
-### For `Study Objective = Multiple Arm Confirmatory`
+### For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
 
 #### Option 1 (Decision): Expected Members of the Output List
 
@@ -190,9 +191,11 @@ Detailed templates with step-by-step explanations are available here:
 [Analyze.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R)
 for 2-Arm,
 [Analyze.Continuous.SSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.SSR.R)
-for 2-Arm with SSR, and
+for 2-Arm with SSR,
 [Analyze.Continuous.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.MAMS.R)
-for Multiple Arm.
+for Multiple Arm, and
+[Analyze.DoseFinding.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.DoseFinding.Continuous.R)
+for Dose Finding.
 
 ### For `Study Objective = Two Arm Confirmatory`
 
@@ -338,7 +341,7 @@ for Multiple Arm.
                       ErrorCode = as.integer( nError ) ) )
     }
 
-### For `Study Objective = Multiple Arm Confirmatory`
+### For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
 
 #### Minimal Template for Option 1 (Decision)
 
@@ -534,3 +537,6 @@ Explore the following examples for more context:
 2.  [**Multiple Arm,
     Analysis**](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmAnalysis.md)
     - [AnalyzeMultiArmUsingTTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingTTestBonferroni.R)
+3.  [**Dose Finding,
+    Analysis**](https://Cytel-Inc.github.io/CyneRgy/articles/DoseFindingAnalysis.md)
+    - [AnalyzeDoseFindingContinuousUsingPairwiseTTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DoseFindingAnalysis/R/AnalyzeDoseFindingContinuousUsingPairwiseTTest.R)

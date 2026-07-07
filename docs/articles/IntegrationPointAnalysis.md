@@ -25,6 +25,11 @@ tests. For example:
 
 ## Availability
 
+Note: This integration point is compatible with Sample Size
+Re-Estimation (distinct templates and examples were created for SSR) and
+Stratification/Subpopulations (distinct templates and examples were
+created for Stratification and Stratification with Subpopulations).
+
 ### East Horizon Explore
 
 This integration point is available in East Horizon Explore for the
@@ -33,7 +38,7 @@ following study objectives and endpoint types:
 |  | Time to Event | Time to Event with Stratification | Binary | Continuous | Continuous with Repeated Measures | Count | Composite | Categorical | Dual TTE-TTE | Dual TTE-Binary |  |
 |----|----|----|----|----|----|----|----|----|----|----|----|
 | Dose Escalation | \- | \- | \- | \- | \- | \- | \- | \- | \- | \- |  |
-| Dose Finding | \- | \- | \- | ❌ | \- | \- | \- | \- | \- | \- |  |
+| Dose Finding | \- | \- | \- | ✅ |  | \- | \- | \- | \- | \- | \- |
 | Multiple Arm Confirmatory | ❌ | \- | ✅ | ✅ | \- | \- | \- | \- | \- | \- |  |
 | One Arm Exploratory / Confirmatory | \- | \- | \- | \- | \- | \- | \- | \- | \- | \- |  |
 | Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | \- | \- | ✅ | ✅ |  |
