@@ -61,5 +61,5 @@
     # Write the actual code here.
     # Use appropriate error handling and modify the error code appropriately.
     
-    return(list(Response = as.double(vPatientOutcome), ErrorCode = as.integer(Error)))
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( Error ) ) )
 }
