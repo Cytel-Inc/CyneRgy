@@ -90,6 +90,7 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
 {
     library( survival )
     
+    # Retrieve necessary information from the objects East Horizon sent
     if( !is.null( LookInfo ))
     {
         nQtyOfLooks              <- LookInfo$NumLooks
@@ -108,6 +109,7 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
     }
     else
     {
+        # Look info is not provided for fixed sample designs so fetch the information appropriately
         nQtyOfLooks              <- 1
         nLookIndex               <- 1
         nQtyOfEvents             <- DesignParam$MaxEvents
@@ -116,8 +118,10 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
     
     vIsTrtPresent                <- DesignParam$IsArmPresent
     
+    # This is the calendar time in the trial that the patient event is observed
     SimData$TimeOfEvent          <- SimData$ArrivalTime + SimData$SurvivalTime
     
+    # Order the data by observed time for the remainder of the computations
     SimData                      <- SimData[ order( SimData$TimeOfEvent ), ]
     
     if( nrow( SimData ) < nQtyOfEvents )
@@ -154,11 +158,13 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
         {
             SimDataTrt           <- SimData[ SimData$TreatmentID %in% c( 0, nTrtID ), ]
             
+            # Compute Observed HR
             coxModel             <- survival::coxph(
                                         survival::Surv( ObservedTime, Event ) ~ TreatmentID,
                                         data = SimDataTrt
                                     )
             
+            # Compute the test statistic using survival package
             logrankTest          <- survival::survdiff(
                                         survival::Surv( ObservedTime, Event ) ~ TreatmentID,
                                         data = SimDataTrt
@@ -169,11 +175,14 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
         }
     }
     
+    # Calculate Bonferroni adjusted p values
+    # Assumes that each present arm has a valid hypothesis test and p-value
     nActiveArms                  <- sum( vIsTrtPresent == 1, na.rm = TRUE )
     vAdjPValues                  <- pmin( vPValues * nActiveArms, 1 )
     
     vDecision                    <- c()
     
+    # Perform the desired analysis
     for( i in 1:DesignParam$NumTreatments )
     {
         if( vIsTrtPresent[ i ] == 1 )
