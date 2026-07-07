@@ -29,17 +29,17 @@
 
     # Step 1 - Initialize the return variables or other variables needed ####
     Error 	        <- 0
-    vPatientOutcome <- rep( 0, NumSub )  # Note, as you simulate the patient data put in in this vector so it can be returned
+    vPatientOutcome <- rep( 0, NumSub )  # Note, as you simulate the patient data put in this vector so it can be returned
     
     # Step 2 - Validate custom variable input and set defaults ####
     if( is.null( UserParam ) )
     {
         
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
-        # take care of any issues.   Also, if there is a default value for the parameters you may want to set them here.  Default values usually
+        # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
         # are applied to have the same functionality as East Horizon, see the first example
         
-        # EXMAPLE - Set the default if needed
+        # EXAMPLE - Set the default if needed
         #UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
     }
     
@@ -54,18 +54,12 @@
         # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
         # nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 
         
-        # Make any adjustments to the code as needed, example simulating from for a normal distribution 
+        # Make any adjustments to the code as needed, for example simulating from a normal distribution 
         # vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
     }
-    
-    #End of End of example block
 
-    
     # Write the actual code here.
-    # Store the generated binary response values 
-    # in an array called retval.
-    # Use appropriate error handling and modify the
-    # Error appropriately
+    # Use appropriate error handling and modify the error code appropriately.
     
     return(list(Response = as.double(vPatientOutcome), ErrorCode = as.integer(Error)))
 }

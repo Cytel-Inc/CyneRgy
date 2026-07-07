@@ -23,7 +23,7 @@
 #'             }
 #'             
 #' @description
-#' This template can be used as a starting point for developing custom functionality when the patient response is binary.
+#' This template can be used as a starting point for developing custom functionality for multi-arm, binary patient response.
 #' The function signature must remain the same.
 #' However, you may choose to ignore the parameter PropResp if the patient simulator
 #' you are creating only requires use of parameters the user will add to UserParam
@@ -38,8 +38,7 @@
     if( is.null( UserParam ) )
     {
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
-        # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
-        # are applied to have the same functionality as East, see the first example
+        # take care of any issues. Also, if there is a default value for the parameters you may want to set them here.
         
         # EXAMPLE - Set the default if needed
         #UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
