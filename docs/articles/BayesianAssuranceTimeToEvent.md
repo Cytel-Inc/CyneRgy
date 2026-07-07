@@ -23,19 +23,19 @@ analysis parameters accordingly.
 
 ## Introduction
 
-The intent of the following examples is to demonstrate the computation
-of Bayesian assurance, or probability of success, through the
-integration of R with Cytel products. The examples feature a two-arm
-trial with time-to-event outcomes, using a **bi-modal distribution**
-prior to compute assurance.
+The intent of the following example is to demonstrate the computation of
+Bayesian assurance, or probability of success, through the integration
+of R with Cytel products. The example features a two-arm trial with
+time-to-event outcome, using a **bi-modal distribution** prior to
+compute assurance.
 
-The scenarios covered are as follows:
+The scenario covered is as follows:
 
 1.  Fixed sample design using a bi-modal distribution and Cox
     proportional hazards model to compute Bayesian assurance.
 
 Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+following command:
 
 ``` r
 CyneRgy::RunExample( "BayesianAssuranceTimeToEvent" )

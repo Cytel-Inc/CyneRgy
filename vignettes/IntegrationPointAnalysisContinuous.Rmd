@@ -17,6 +17,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |**DesignParam**|List|Input parameters which may be needed to compute test statistics and perform tests. To access these variables in your R code, use the syntax: `DesignParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate variable name. See below for more information.|
 |**LookInfo**|List|Input parameters related to multiple looks. Empty when `Statistical Design = Fixed Sample`, but still mandatory in the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision`. See below for more information.|
 |**AdaptInfo**|List|Input parameters related to sample size re-estimation. See below for more information. Only applicable when `Statistical Design = Group Sequential with Sample Size Re-Estimation`.|
+|**OutList**|List|List of outputs that was returned in the previous look. Only relevant for `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation` and `Study Design = Multiple Arm Confirmatory or Dose Finding`. Set to `NULL` for the first look. See below in the Output Variable.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointAnalysis.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 ## Variables of SimData
@@ -54,6 +55,7 @@ The output list can take different forms.
 | **Decision**   | Integer  | Boundary crossing decision:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `3`: Futility boundary crossed (only applicable when `Statistical Design = Group Sequential`).<br>– `4`: Equivalence boundary crossed (not available in East Horizon Explore).<br>You can use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See the template below for the correct usage.|
 |**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
 |**ReEstCompleters**|Integer|Re-estimated number of completers. Only required for `Statistical Design = Group Sequential with Sample Size Re-Estimation`.|
+|**OutList**|List|Optional. List of outputs to pass to the next look. Only relevant for `Statistical Design = Group Sequential`. Will be available as input to this function in the next look. See above in the Input Variables.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Group Sequential`**: When there is no efficacy boundary to be crossed, the return code of `0` stands for futility in the final look. Similarly, when there is no futility boundary to be crossed, the return code of `0` stands for efficacy in the final look. Use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get decision values in a simple way.
@@ -87,7 +89,7 @@ The output list can take different forms.
 See the notes for `Statistical Design = Group Sequential` above for futility and efficacy checks. Then, if `Promising Zone Scale = Conditional Power - Estimated`, `Delta` and `StdError` will be used for sample size re-estimation.
 
 
-## For `Study Objective = Multiple Arm Confirmatory`
+## For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
 
 ### Option 1 (Decision): Expected Members of the Output List
 
@@ -95,6 +97,9 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 |----------------|--------------|---------------------------------------------------------------------------------|
 | **Decision**   | Vector of Integer  | Vector of length `DesignParam$NumTreatments`, containing the boundary crossing decision for each treatment arm:<br>– `0`: No boundary crossed.<br>– `1`: Lower efficacy boundary crossed.<br>– `2`: Upper efficacy boundary crossed.<br>– `3`: Futility boundary crossed (only applicable when `Statistical Design = Group Sequential`).<br>– `4`: Equivalence boundary crossed (not available in East Horizon Explore).<br>You can use the functions `CyneRgy::GetDecisionString` and `CyneRgy::GetDecision` to get the decision value. See the template below for the correct usage.|
 |**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+|**OutList**|List|Optional. List of outputs to pass to the next look. Only relevant for `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`. Will be available as input to this function in the next look. See above in the Input Variables.|
+|**POCStatusArm**|Vector of Numeric|Optional. Vector of length `NumArm`, indicating whether the Proof of Concept threshold has been crossed in the current look for each treatment arm:<br>- `0`: Has not been crossed.<br>- `1`: Has been crossed. Only relevant for `Study Design = Dose Finding`.|
+|**POCStatus**|Numeric|Optional. Indicates whether the Proof of Concept threshold has been crossed in the current look:<br>- `0`: Has not been crossed.<br>- `1`: Has been crossed. Only relevant for `Study Design = Dose Finding`.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Notes for `Statistical Design = Group Sequential`**:
@@ -110,6 +115,9 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 | **TestStat**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the value of appropriate test statistic on Wald ﴾Z﴿ scale for each treatment arm.|
 |**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
 |**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+|**OutList**|List|Optional. List of outputs to pass to the next look. Only relevant for `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`. Will be available as input to this function in the next look. See above in the Input Variables.|
+|**POCStatusArm**|Vector of Numeric|Optional. Vector of length `NumArm`, indicating whether the Proof of Concept threshold has been crossed in the current look for each treatment arm:<br>- `0`: Has not been crossed.<br>- `1`: Has been crossed. Only relevant for `Study Design = Dose Finding`.|
+|**POCStatus**|Numeric|Optional. Indicates whether the Proof of Concept threshold has been crossed in the current look:<br>- `0`: Has not been crossed.<br>- `1`: Has been crossed. Only relevant for `Study Design = Dose Finding`.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `TestStat` will be used to check for efficacy.
@@ -127,6 +135,9 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 | **AdjPVal**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the p-values computed from test statistics and adjusted for multiple comparison procedures for each treatment arm.|
 |**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
 |**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+|**OutList**|List|Optional. List of outputs to pass to the next look. Only relevant for `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`. Will be available as input to this function in the next look. See above in the Input Variables.|
+|**POCStatusArm**|Vector of Numeric|Optional. Vector of length `NumArm`, indicating whether the Proof of Concept threshold has been crossed in the current look for each treatment arm:<br>- `0`: Has not been crossed.<br>- `1`: Has been crossed. Only relevant for `Study Design = Dose Finding`.|
+|**POCStatus**|Numeric|Optional. Indicates whether the Proof of Concept threshold has been crossed in the current look:<br>- `0`: Has not been crossed.<br>- `1`: Has been crossed. Only relevant for `Study Design = Dose Finding`.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `AdjPVal` will be used to check for efficacy.
@@ -144,6 +155,9 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 | **RawPVal**   | Vector of Numeric  | Vector of length `DesignParam$NumTreatments`, containing the p-values computed from test statistics for each treatment arm.|
 |**Delta**|Numeric|Estimate of Delta. Required if `LookInfo$FutBdryScale = 2` (futility boundary scale is Delta). Only applicable when `Statistical Design = Group Sequential`.|
 |**AnalysisTime**|Numeric|Optional. Estimate of analysis time. For interim analyses, equivalent to look time; for final analysis, equivalent to study duration.|
+|**OutList**|List|Optional. List of outputs to pass to the next look. Only relevant for `Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation`. Will be available as input to this function in the next look. See above in the Input Variables.|
+|**POCStatusArm**|Vector of Numeric|Optional. Vector of length `NumArm`, indicating whether the Proof of Concept threshold has been crossed in the current look for each treatment arm:<br>- `0`: Has not been crossed.<br>- `1`: Has been crossed. Only relevant for `Study Design = Dose Finding`.|
+|**POCStatus**|Numeric|Optional. Indicates whether the Proof of Concept threshold has been crossed in the current look:<br>- `0`: Has not been crossed.<br>- `1`: Has been crossed. Only relevant for `Study Design = Dose Finding`.|
 | **ErrorCode**   | Integer  | Optional. Can be used to handle errors in your script:<br>– `0`: No error.<br> – `Positive Integer`: Nonfatal error, the current simulation will be aborted, but the next simulation will proceed.<br>– `Negative Integer`: Fatal error, no further simulations will be attempted.                  |
 
 **Note for `Statistical Design = Fixed Sample`**: As the design does not have any futility boundary, `RawPVal` will be used to check for efficacy.
@@ -159,7 +173,7 @@ See the notes for `Statistical Design = Group Sequential` above for futility and
 
 Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
-Detailed templates with step-by-step explanations are available here: [Analyze.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R) for 2-Arm, [Analyze.Continuous.SSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.SSR.R) for 2-Arm with SSR, and [Analyze.Continuous.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.MAMS.R) for Multiple Arm.
+Detailed templates with step-by-step explanations are available here: [Analyze.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.R) for 2-Arm, [Analyze.Continuous.SSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.SSR.R) for 2-Arm with SSR, [Analyze.Continuous.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.Continuous.MAMS.R) for Multiple Arm, and [Analyze.DoseFinding.Continuous.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Analyze.DoseFinding.Continuous.R) for Dose Finding.
 
 ## For `Study Objective = Two Arm Confirmatory`
 
@@ -318,7 +332,7 @@ ComputeTestStat <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 ```
 
 
-## For `Study Objective = Multiple Arm Confirmatory`
+## For `Study Objective = Multiple Arm Confirmatory or Dose Finding`
 
 ### Minimal Template for Option 1 (Decision)
 
@@ -528,3 +542,5 @@ Explore the following examples for more context:
     - [AnalyzeNormalSSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R)
 2. [**Multiple Arm, Analysis**](MultiArmAnalysis.html)
     - [AnalyzeMultiArmUsingTTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingTTestBonferroni.R)
+3. [**Dose Finding, Analysis**](DoseFindingAnalysis.html)
+    - [AnalyzeDoseFindingContinuousUsingPairwiseTTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DoseFindingAnalysis/R/AnalyzeDoseFindingContinuousUsingPairwiseTTest.R)

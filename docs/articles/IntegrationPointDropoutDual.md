@@ -41,6 +41,9 @@ default `NULL` value in the function arguments, as this will ensure that
 the same function will work regardless of whether the user has specified
 any custom parameters in East Horizon.
 
+A detailed template with step-by-step explanations is available here:
+[Dropout.Survival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R)
+
     GenDropTimes <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
     {
       nError            <- 0 # Error handling (no error)
@@ -51,3 +54,11 @@ any custom parameters in East Horizon.
 
       return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nError ) ) )
     }
+
+Explore the example below for more context. Note that the example
+illustrates a single-endpoint setup; however, the same configuration
+applies to dual-endpoint projects.
+
+1.  [**2-Arm, Single Endpoint - Simulate Patient
+    Dropout**](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmPatientDropout.md)
+    - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)

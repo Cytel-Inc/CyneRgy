@@ -47,9 +47,13 @@ any custom parameters in East Horizon.
 
 Detailed templates with step-by-step explanations are available here:
 [SimulatePatientOutcome.TimeToEvent.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R)
-and
+for 2-Arm,
 [SimulatePatientOutcome.TimeToEvent.Stratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.Stratification.R)
-for Stratification.
+for Stratification (also compatible with Subpopulations), and
+[SimulatePatientOutcome.TimeToEvent.MAMS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.MAMS.R)
+for Multiple Arm.
+
+### For 2-Arm or Multiple Arm
 
     GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
     {
@@ -62,7 +66,7 @@ for Stratification.
       return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = as.integer( nError ) ) )
     }
 
-### For `Stratification` turned on
+### For 2-Arm with `Stratification` turned on
 
     GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
     {
@@ -84,3 +88,7 @@ Explore the following examples for more context:
     - [SimulatePatientSurvivalWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R)
     - [SimulatePatientSurvivalMixtureExponentials.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R)
     - [SimulatePatientOutcomeStratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R)
+2.  [**Multiple Arm, Patient
+    Simulation**](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmPatientSimulation.md)
+    - [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R)
+    - [SimulatePatientSurvivalMultiArmExpGivenMST.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmExpGivenMST.R)

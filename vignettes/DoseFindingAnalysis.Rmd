@@ -1,0 +1,8 @@
+---
+title: "Dose Finding, Analysis"
+author: "Sayantan Biswas, Pradip Maske, Gabriel Potvin"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+```{r child = '../inst/Examples/DoseFindingAnalysis/Description.Rmd'}
+```

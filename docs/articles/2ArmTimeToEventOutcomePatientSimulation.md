@@ -13,6 +13,8 @@ following configuration:
 - **Number of endpoints:** Single Endpoint
 - **Endpoint type:** Time-to-Event Outcome
 - **Task:** Explore or Design
+- **Statistical Design:** Fixed Sample, Group Sequential, or Group
+  Sequential with Sample Size Re-Estimation
 - **Stratification turned on**: For Example 3
 
 Important: **ArrivalTime** is a new required parameter. Existing R
@@ -309,6 +311,9 @@ subgroup may have on the operating characteristics of the design.
 
 This example is related to this R file:
 [SimulatePatientOutcomeStratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R)
+
+This example is compatible with both standard Stratification and with
+Stratification + Subpopulations.
 
 This example illustrates how to customize the response generation when
 turning on `Stratification` in East Horizon. Unlike the previous

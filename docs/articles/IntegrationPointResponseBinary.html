@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">May 27, 2026</h4>
+            <h4 data-toc-skip class="date">July 07, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointResponseBinary.Rmd</code></div>
@@ -259,11 +259,13 @@ has specified any custom parameters in East Horizon. For Vaccine
 Efficacy, <code>OneMinusROP</code> must be declared with default value
 <code>NULL</code>.</p>
 <p>A detailed template with step-by-step explanations is available here:
-<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R" class="external-link">SimulatePatientOutcome.Binary.R</a></p>
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.R" class="external-link">SimulatePatientOutcome.Binary.R</a>
+for 2-Arm and <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.Binary.MAMS.R" class="external-link">SimulatePatientOutcome.Binary.MAMS.R</a>
+for Multiple Arm.</p>
 <div class="section level3">
-<h3 id="for-standard-binary-outcome-better-response-larger-value-test-difference-of-proportions-or-custom">For standard binary outcome
+<h3 id="for-2-arm-or-multiple-arm-better-response-larger-value-test-difference-of-proportions-or-custom">For 2-Arm or Multiple Arm
 (<code>Better Response = Larger Value</code>,
-<code>Test = Difference of Proportions or Custom</code>)<a class="anchor" aria-label="anchor" href="#for-standard-binary-outcome-better-response-larger-value-test-difference-of-proportions-or-custom"></a>
+<code>Test = Difference of Proportions or Custom</code>)<a class="anchor" aria-label="anchor" href="#for-2-arm-or-multiple-arm-better-response-larger-value-test-difference-of-proportions-or-custom"></a>
 </h3>
 <pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">PropResp</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
@@ -277,8 +279,9 @@ Efficacy, <code>OneMinusROP</code> must be declared with default value
 <span><span class="op">}</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="for-vaccine-efficacy-better-response-smaller-value-test-1---ratio-of-proportions">For Vaccine Efficacy (<code>Better Response = Smaller Value</code>,
-<code>Test = 1 - Ratio of Proportions</code>)<a class="anchor" aria-label="anchor" href="#for-vaccine-efficacy-better-response-smaller-value-test-1---ratio-of-proportions"></a>
+<h3 id="for-2-arm-and-vaccine-efficacy-better-response-smaller-value-test-1---ratio-of-proportions">For 2-Arm and Vaccine Efficacy
+(<code>Better Response = Smaller Value</code>,
+<code>Test = 1 - Ratio of Proportions</code>)<a class="anchor" aria-label="anchor" href="#for-2-arm-and-vaccine-efficacy-better-response-smaller-value-test-1---ratio-of-proportions"></a>
 </h3>
 <pre><code><span><span class="va">GenerateResponse</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">NumSub</span>, <span class="va">NumArm</span>, <span class="va">ArrivalTime</span>, <span class="va">TreatmentID</span>, <span class="va">FollowUpDur</span>, <span class="va">PropResp</span>, <span class="va">OneMinusROP</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">UserParam</span> <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span></span>
 <span><span class="op">{</span></span>
