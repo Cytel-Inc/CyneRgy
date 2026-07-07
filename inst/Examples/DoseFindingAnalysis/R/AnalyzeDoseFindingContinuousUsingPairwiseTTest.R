@@ -88,9 +88,7 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
   # Extracting parameters from LookInfo
   nNumLooks       <- LookInfo$NumLooks
   nCurrLookIndex  <- LookInfo$CurrLookIndex
-  nFutBdryScale   <- LookInfo$FutBdryScale
   vFutBdry        <- LookInfo$FutBdry
-  nPoCScale       <- LookInfo$PoCScale
   dPoCThreshold   <- LookInfo$PoCThreshold
   vCumCompleters  <- LookInfo$CumCompleters
   
@@ -308,7 +306,7 @@ ComputeIsotonicDeltas <- function( vValues, nTailType )
   # Reconstruct result vector
   vResult <- numeric( n )
   for( j in seq_along(vBlockVal ) ) {
-    vResult[ vBlockIdx[[j]] ]     <- vBlockVal[ j ]
+    vResult[ vBlockIdx[[ j ]] ]     <- vBlockVal[ j ]
   }
   
   # Negate back if left-tail
@@ -347,7 +345,7 @@ ApplyFixedSeqPairwiseTest <- function( vRawPValues, vDoseSequence, dAlpha ) {
   vIdxOrder       <- order( vDoseSequence )
   vAdjPValues     <- vAdjPValues[ order( vIdxOrder ) ]
   
-  return( list( vAdjPValues = vAdjPValues,
+  return( list( vAdjPValues    = vAdjPValues,
                 dAdjPValGlobal = dAdjPValGlobal,
-                vDecision = (vAdjPValues < dAlpha ) ) )
+                vDecision      = ( vAdjPValues < dAlpha ) ) )
 }
