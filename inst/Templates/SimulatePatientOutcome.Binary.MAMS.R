@@ -5,7 +5,8 @@
 #' @param NumSub The number of subjects that need to be simulated, integer value
 #' @param NumArm The number of arms in the trial (including placebo/control), integer value
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = control, 1,2,...,NumArm-1 for treatment arms. length(TreatmentID) = NumSub
+#' @param NumArm  The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
+#' @param TreatmentID A vector of treatment ids, 0 is control treatment and 1, 2, ..., NumArms-1 for treatment arms.
 #' @param PropResp A vector of length NumArm with the response probabilities for each arm
 #' @param UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
 #' If UserParam are supplied, they will be an element in the list, UserParam.
@@ -28,8 +29,12 @@
 #' you are creating only requires use of parameters the user will add to UserParam
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
+
+    # Step 1 - Initialize the return variables or other variables needed ####
+    nError 	        <- 0 # East Horizon code for no errors occurred
+    vPatientOutcome <- rep( 0, NumSub )  # Note, as you simulate the patient data put in this vector so it can be returned
     
-    # Step 1 - Validate custom variable input and set defaults ####
+    # Step 2 - Validate custom variable input and set defaults ####
     if( is.null( UserParam ) )
     {
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
@@ -40,24 +45,21 @@
         #UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
     }
     
-    # Step 2 - Initialize variable ####
-    nError          <- 0 # East Horizon code for no errors occurred
-    vPatientOutcome <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a response will be simulated
-    
     # Step 3 - Loop over the patients and simulate the outcome according to the treatment they received ####
     for( nPatIndx in 1:NumSub )
     {
-        nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has treatments as 0, 1, 2,..., so add 1 to get a vector index
+        # Add code here to modify how patient data is generated to fit your need
+
+        # EXAMPLE
+        # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
+        # nTreatmentID <- TreatmentID[ nPatIndx ] + 1 
         
-        # Make any adjustments to the code as needed, example simulating a binary response using rbinom
-        vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ] )
+        # Make any adjustments to the code as needed, for example simulating from a normal distribution 
+        # vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
     }
     
-    # Step 4 - Error Checking ####
-    if( any( is.na( vPatientOutcome ) ) )
-        nError <- -100
+    # Write the actual code here.
+    # Use appropriate error handling and modify the error code appropriately.
     
-    # Step 5 - Build the return object, add other variables to the list as needed
-    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) )
-    return( lReturn )
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
 }

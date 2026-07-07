@@ -93,7 +93,7 @@
     
     # Step 4 - Error checking ####
     # Add any required validation checks and update the error code if needed
-    nError <- 0
+
     
     # Step 5 - Build the return object ####
     lReturn <- list( Decision     = as.integer( vDecision ),

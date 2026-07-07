@@ -1,0 +1,3744 @@
+{
+    "templates": [
+        {
+            "name": "Analyze Binary MAMS Template",
+            "description": "Customizes the statistical test for a binary endpoint in a MAMS design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.Binary.MAMS.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisBinary.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Binary Template",
+            "description": "Customizes the statistical test for a binary endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.Binary.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisBinary.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Binary SSR Template",
+            "description": "Customizes the statistical test for a binary endpoint with SSR.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.Binary.SSR.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisBinary.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Continuous MAMS Template",
+            "description": "Customizes the statistical test for a continuous endpoint in a MAMS design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.Continuous.MAMS.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisContinuous.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Continuous Template",
+            "description": "Customizes the statistical test for a continuous endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.Continuous.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisContinuous.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Dose Finding Continuous Template",
+            "description": "Customizes the statistical test for a continuous endpoint in a dose finding design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.DoseFinding.Continuous.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisContinuous.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 6,
+                        "name": "MultiArm-Continuous-DoseFinding"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Continuous SSR Template",
+            "description": "Customizes the statistical test for a continuous endpoint with SSR.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.Continuous.SSR.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisContinuous.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze DEP Template",
+            "description": "Customizes the statistical test for dual endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.DEP.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisDual.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Repeated Measures Continuous Template",
+            "description": "Customizes the statistical test for a repeated measures continuous endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.RepeatedMeasures.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisRepeatedMeasures.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Time-to-Event Template",
+            "description": "Customizes the statistical test for a time-to-event endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.TimeToEvent.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Time-to-Event MAMS Template",
+            "description": "Customizes the statistical test for a TTE endpoint in a MAMS design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.TimeToEvent.MAMS.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 16,
+                        "name": "MultiArm-Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Time-to-Event SSR Template",
+            "description": "Customizes the statistical test for a TTE endpoint with SSR.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.TimeToEvent.SSR.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisTimeToEventSSR.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Time-to-Event Stratification Template",
+            "description": "Customizes the statistical test for a TTE endpoint with stratification.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.TimeToEvent.Stratification.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    true
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Analyze Time-to-Event Stratification and Subpopulation Template",
+            "description": "Customizes the statistical test for a TTE endpoint with stratification and subpopulation.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Analyze.TimeToEvent.Stratification.Subpopulation.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointAnalysisTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    true
+                ],
+                "has_subpopulation": [
+                    true
+                ]
+            }
+        },
+        {
+            "name": "Multiplicity Adjustment DEP Template",
+            "description": "Customizes Type I error multiplicity adjustment for dual endpoint designs.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Decision.DEP.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointMultiplicityAdjustment.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 9,
+                        "name": "MultiplicityAdjustment"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Design MEP Template",
+            "description": "Customizes the statistical test, multiplicity adjustment, and decision rules for multiple endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Design.MEP.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointDesign.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 18,
+                        "name": "Two Arm-Multiple Endpoints"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Dropout Binary and Continuous Template",
+            "description": "Customizes dropouts for binary and continuous endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Dropout.BinaryAndContinuous.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointDropout.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 3,
+                        "name": "Dropout"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Dropout Binary and Continuous MAMS Template",
+            "description": "Customizes dropouts for binary and continuous endpoints in a MAMS design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Dropout.BinaryAndContinuous.MAMS.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointDropout.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 3,
+                        "name": "Dropout"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    },
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Dropout Repeated Measures Continuous Template",
+            "description": "Customizes dropouts for a repeated measures continuous endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Dropout.RepeatedMeasures.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointDropoutRepeatedMeasures.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 3,
+                        "name": "Dropout"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Dropout Time-to-Event Template",
+            "description": "Customizes dropouts for a TTE endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Dropout.Survival.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointDropoutTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 3,
+                        "name": "Dropout"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Enrollment Template",
+            "description": "Customizes patient arrival time generation.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/GenerateArrivalTimes.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointEnrollment.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 0,
+                        "name": "Enrollment"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    },
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false,
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Enrollment MEP Template",
+            "description": "Customizes patient arrival time generation for multiple endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/GenerateArrivalTimes.MEP.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointEnrollment.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 0,
+                        "name": "Enrollment"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 18,
+                        "name": "Two Arm-Multiple Endpoints"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Randomization Template",
+            "description": "Customizes subject assignment to treatment arms.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/Randomization.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointRandomization.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 1,
+                        "name": "Allocation"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    },
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false,
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response Binary Template",
+            "description": "Customizes patient outcome simulation for a binary endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.Binary.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseBinary.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false,
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response Continuous Template",
+            "description": "Customizes patient outcome simulation for a continuous endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.Continuous.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseContinuous.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false,
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response Continuous MAMS Template",
+            "description": "Customizes patient outcome simulation for a continuous endpoint in a MAMS design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.Continuous.MAMS.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseContinuous.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response Binary MAMS Template",
+            "description": "Customizes patient outcome simulation for a binary endpoint in a MAMS design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.Binary.MAMS.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseBinary.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response Time-to-Event MAMS Template",
+            "description": "Customizes patient outcome simulation for a time-to-event endpoint in a MAMS design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.MAMS.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 16,
+                        "name": "MultiArm-Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response DEP Template",
+            "description": "Customizes patient outcome simulation for dual endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.DEP.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseDual.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response MEP Template",
+            "description": "Customizes patient outcome simulation for multiple endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.MEP.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseMulti.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 18,
+                        "name": "Two Arm-Multiple Endpoints"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response Repeated Measures Continuous Template",
+            "description": "Customizes patient outcome simulation for a repeated measures continuous endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.RepeatedMeasures.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseRepeatedMeasures.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response Time-to-Event Template",
+            "description": "Customizes patient outcome simulation for a TTE endpoint.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false,
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Response Time-to-Event Stratification Template",
+            "description": "Customizes patient outcome simulation for a TTE endpoint with stratification.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/SimulatePatientOutcome.TimeToEvent.Stratification.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponseTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    true
+                ],
+                "has_subpopulation": [
+                    false,
+                    true
+                ]
+            }
+        },
+        {
+            "name": "Treatment Selection Template",
+            "description": "Customizes arm selection after an interim analysis in a multi-arm design.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Templates/TreatmentSelection.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointTreatmentSelection.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 7,
+                        "name": "TreatmentSeletion"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    },
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    },
+                    {
+                        "id": 16,
+                        "name": "MultiArm-Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        }
+    ],
+    "examples": [
+        {
+            "name": "2-Arm, Binary Outcome - Analysis",
+            "description": "Binary two-arm analysis using East manual formula, prop.test(), CI-based Go/No-Go, and Bayesian Beta-Binomial.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropLimitsOfCI.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmBinaryOutcomeAnalysis.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Binary Outcome - Analysis - SSR",
+            "description": "Binary two-arm analysis with SSR.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeBinarySSR.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmBinaryOutcomeAnalysis.html#example-5---analysis-with-sample-size-re-estimation",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Binary Outcome - Patient Simulation",
+            "description": "Binary patient outcome simulation using a mixture distribution, with or without Beta-sampled mixture proportion.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.Binary.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmBinaryOutcomePatientSimulation.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false,
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Continuous Outcome - Analysis",
+            "description": "Continuous two-arm analysis using East manual formula, t.test(), and CI-based Go/No-Go.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmNormalOutcomeAnalysis.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Continuous Outcome - Analysis - SSR",
+            "description": "Continuous two-arm analysis with SSR.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmNormalOutcomeAnalysis.html#example-4---analysis-with-sample-size-re-estimation",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Continuous Outcome - Patient Simulation",
+            "description": "Continuous patient outcome simulation using a mixture distribution, with or without Beta-sampled mixture proportion.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulation.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false,
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Continuous Outcome, Repeated Measures - Analysis",
+            "description": "Continuous repeated measures analysis using nlme::gls().",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalRepeatedMeasuresAnalysis/R/Analyze.RepeatedMeasures.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmNormalRepeatedMeasuresAnalysis.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Continuous Outcome, Repeated Measures - Patient Simulation",
+            "description": "Continuous repeated measures patient simulation using MASS::mvrnorm().",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmNormalRepeatedMeasuresResponseGeneration.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Single Endpoint - Simulate Patient Dropout - Continuous and Binary",
+            "description": "Customizes the dropout distribution for continuous and binary outcomes.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmPatientDropout/R/GenerateCensoringUsingBinomialProportion.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmPatientDropout.html#example-1---dropout-using-binomial-proportion-continuous-or-binary-outcome",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 3,
+                        "name": "Dropout"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Single Endpoint - Simulate Patient Dropout - TTE",
+            "description": "Customizes the dropout distribution for TTE outcomes.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmPatientDropout.html#example-2---dropout-time-for-time-to-event-outcome",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 3,
+                        "name": "Dropout"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Single Endpoint - Simulate Patient Dropout - Continuous with Repeated Measures",
+            "description": "Customizes the dropout distribution for continuous outcomes with repeated measures.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForRM.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmPatientDropout.html#example-3---dropout-time-for-repeated-measures",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 3,
+                        "name": "Dropout"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Time-To-Event Outcome - Analysis",
+            "description": "TTE two-arm analysis using East manual logrank formula, survival::survdiff(), and CI-based Go/No-Go.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomeAnalysis.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Time-To-Event Outcome - Analysis - SSR",
+            "description": "TTE two-arm analysis with SSR.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomeAnalysis.html#example-4---analysis-with-sample-size-re-estimation",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Time-To-Event Outcome - Analysis - Stratification",
+            "description": "TTE two-arm analysis with stratification.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeStratification.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomeAnalysis.html#example-5---analysis-with-stratification",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    true
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2-Arm, Time-To-Event Outcome - Analysis - Subpopulations",
+            "description": "TTE two-arm analysis with stratification and subpopulations using gMCP.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeSubpopulation.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomeAnalysis.html#example-6---analysis-with-subpopulations-using-gmcp",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    true
+                ],
+                "has_subpopulation": [
+                    true
+                ]
+            }
+        },
+        {
+            "name": "2 Arm, Time-To-Event Outcome - Patient Simulation",
+            "description": "TTE patient simulation using a Weibull distribution or a mixture of exponentials.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalWeibull.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientSurvivalMixtureExponentials.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomePatientSimulation.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false,
+                    true
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "2 Arm, Time-To-Event Outcome - Patient Simulation - Stratification",
+            "description": "TTE patient simulation with stratification.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R/SimulatePatientOutcomeStratification.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomePatientSimulation.html#example-3---response-generation-with-stratification",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    true
+                ],
+                "has_subpopulation": [
+                    false,
+                    true
+                ]
+            }
+        },
+        {
+            "name": "Dual Endpoints - Analysis",
+            "description": "Customizes the statistical test for two-arm trials with dual endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/DEPAnalysis/R/AnalyzeDEPUsingFisherExact.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/DEPAnalysis/R/AnalyzeDEPUsingModWtLogRank.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/DEPAnalysis.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 8,
+                        "name": "TestStatisticDual"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Dual Endpoints - Multiplicity Adjustment",
+            "description": "Computes trial decisions for dual endpoints using Bonferroni adjustment.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/DEPDecisionsUsingMCP/R/GetDEPDecisionsFSD.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/DEPDecisionsUsingMCP.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 9,
+                        "name": "MultiplicityAdjustment"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Dual Endpoints - Patient Simulation - TTE-TTE",
+            "description": "Customizes patient outcome simulation for dual TTE-TTE endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/DEPPatientSimulation.html#example-1---simulate-correlated-tte-tte-dual-endpoints",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Dual Endpoints - Patient Simulation - TTE-Binary",
+            "description": "Customizes patient outcome simulation for dual TTE-Binary endpoints.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/DEPPatientSimulation.html#example-2---simulate-correlated-tte-binary-dual-endpoints",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Generate Patient Arrival Times with Poisson Process",
+            "description": "Generates patient arrival times using a Poisson process with ramp-up.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrival.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/GeneratePoissonArrival.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 0,
+                        "name": "Enrollment"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    },
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false,
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Generate Patient Arrival Times with Poisson Process - MEP",
+            "description": "Generates patient arrival times using a Poisson process with ramp-up for multiple endpoint designs.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/GeneratePoissonArrival/R/GeneratePoissonArrivalMEP.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/GeneratePoissonArrival.html#example-3---enrollment-with-multiple-endpoints",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 0,
+                        "name": "Enrollment"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 18,
+                        "name": "Two Arm-Multiple Endpoints"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Endpoints - Design",
+            "description": "Implements custom decision-making logic for multiple endpoints designs.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MEPDesign/R/GetMEPDecision.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MEPDesign.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 18,
+                        "name": "Two Arm-Multiple Endpoints"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Endpoints - Patient Simulation",
+            "description": "Customizes patient outcome simulation for multiple endpoints (Continuous, Binary and/or TTE).",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MEPPatientSimulation/R/GenerateMEPResponse.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MEPPatientSimulation.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 18,
+                        "name": "Two Arm-Multiple Endpoints"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Arm, Analysis - Continuous",
+            "description": "Customizes the statistical test for multi-arm trials with continuous outcomes.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingTTestBonferroni.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultiArmAnalysis.html#example-1---using-the-t-test-function-with-bonferroni-adjustment-continuous-outcome",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Arm, Analysis - Binary",
+            "description": "Customizes the statistical test for multi-arm trials with binary outcomes.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultiArmAnalysis.html#example-2---using-the-prop-test-function-with-bonferroni-adjustment-binary-outcome",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Arm, Analysis - TTE",
+            "description": "Customizes the statistical test for multi-arm trials with time-to-event outcomes.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultiArmAnalysis.html#example-3---using-the-survival-package-with-bonferroni-adjusted-log-rank-tests-time-to-event-outcomee",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 16,
+                        "name": "MultiArm-Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Dose Finding, Analysis - Continuous",
+            "description": "Customizes the statistical test for dose finding trials with continuous outcomes.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/DoseFindingAnalysis/R/AnalyzeDoseFindingContinuousUsingPairwiseTTest.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/DoseFindingAnalysis.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 6,
+                        "name": "MultiArm-Continuous-DoseFinding"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Arm, Single Endpoint - Patient Dropout - Continuous and Binary",
+            "description": "Customizes the dropout distribution for multi-arm trials with continuous and binary outcomes.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultiArmPatientDropout/R/GenerateCensoringMultiArmUsingBinomialProportion.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultiArmPatientDropout.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 3,
+                        "name": "Dropout"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    },
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Arm, Patient Simulation - Continuous",
+            "description": "Customizes patient outcome simulation for multi-arm trials with a continuous outcome.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultiArmPatientSimulation.html#example-1---simulation-of-continuous-outcomes-with-non-responders",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Arm, Patient Simulation - Binary",
+            "description": "Customizes patient outcome simulation for multi-arm trials with a binary outcome.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultiArmPatientSimulation.html#example-2---simulation-of-binary-outcomes-with-treatment-resistance",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Arm, Patient Simulation - TTE from Weibull",
+            "description": "Customizes patient outcome simulation for multi-arm trials with a time-to-event outcome using arm-specific Weibull parameters.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultiArmPatientSimulation.html#example-3---simulation-of-time-to-event-outcomes-from-a-weibull-distribution",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 16,
+                        "name": "MultiArm-Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+                {
+            "name": "Multiple Arm, Patient Simulation - TTE from Median Survival Times",
+            "description": "Customizes patient outcome simulation for multi-arm trials with a time-to-event outcome using arm-specific median survival times.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmExpGivenMST.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultiArmPatientSimulation.html#example-4---simulation-of-time-to-event-outcomes-from-median-survival-times",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 16,
+                        "name": "MultiArm-Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Randomization of Subjects",
+            "description": "Customizes subject randomization using uniform distribution, sample(), or the randomizeR package.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingUniformDistribution.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/RandomizeSubjects/R/RandomizationSubjectsUsingSampleFunctionInR.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/RandomizeSubjects/R/BlockRandomizationSubjectsUsingRPackage.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/RandomizeSubjects.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 1,
+                        "name": "Allocation"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Time to Event-Time to Event"
+                    },
+                    {
+                        "id": 9,
+                        "name": "DEP-TTE-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false,
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Randomization of Subjects - Multiple Arms",
+            "description": "Customizes subject assignment to treatment arms in a multi-arm trial.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/RandomizeSubjects/R/RandomizeSubjectsAcrossMultipleArms.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/RandomizeSubjects.html#example-4---randomize-subjects-across-multiple-arms",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 1,
+                        "name": "Allocation"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 5,
+                        "name": "MultiArm-Continuous"
+                    },
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false,
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiarm, Binary Outcome - Treatment Selection",
+            "description": "Customizes treatment selection for a multi-arm binary trial using response rates, p-value, response count, or Bayesian posterior probabilities.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/TreatmentSelection/R/SelectExpThatAreBetterThanCtrl.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/TreatmentSelection/R/SelectExpWithPValueLessThanSpecified.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/TreatmentSelection/R/SelectSpecifiedNumberOfExpWithHighestResponses.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/TreatmentSelection/R/SelectExpUsingBayesianRule.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/TreatmentSelection.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 7,
+                        "name": "TreatmentSeletion"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 7,
+                        "name": "MultiArm-Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Time-To-Event Weighted Conditional Power Futility Analysis",
+            "description": "Customizes TTE analysis using conditional power and Logrank-based futility boundaries.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/TimeToEventConditionalPowerFutilityAnalysis.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 2,
+                        "name": "Design"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "PK/PD Modeling for Patient Simulation",
+            "description": "Customizes patient simulations using PK/PD modeling: one-compartment drug concentration model, Emax effect model, and external CSV data.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/PKPDResponseGeneration/R/GenerateDrugConcentration.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/PKPDResponseGeneration/R/GenerateResponseEmaxModel.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/PKPDResponseGeneration/R/GeneratePatientFromCSVSpecific.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/PKPDResponseGeneration/R/GeneratePatientFromCSVGeneral.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/PKPDResponseGeneration.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Childhood Anxiety Trial",
+            "description": "Customizes patient data simulation for a childhood anxiety clinical trial.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9V2.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/ChildhoodAnxiety.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Bayesian Assurance, Continuous Outcome (Advanced Example)",
+            "description": "Computes Bayesian assurance using a mixture of normal priors for a continuous two-arm trial.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/BayesianAssuranceContinuous/R/SimulatePatientOutcomeNormalAssurance.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/BayesianAssuranceContinuous/R/AnalyzeUsingBayesianNormals.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/BayesianAssuranceContinuous.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Bayesian Assurance, Time-to-Event Outcome (Advanced Example)",
+            "description": "Computes Bayesian assurance using a bi-modal prior for a TTE two-arm trial.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/BayesianAssuranceTimeToEvent/R/SimulatePatientSurvivalAssurance.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/BayesianAssuranceTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/BayesianAssuranceTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        }, 
+        {
+            "name": "Consecutive Studies, Binary Outcome (Advanced Example)",
+            "description": "Computes conditional probability of success across Phase 2 and Phase 3 binary trials, using Phase 2 results as a prior for Phase 3.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurance.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesBinary/R/SimulatePatientOutcomeBinaryWithAssurancePh3.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/ConsecutiveStudiesBinary.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Consecutive Studies, Continuous Outcome (Advanced Example)",
+            "description": "Computes Bayesian assurance across Phase 2 and Phase 3 continuous trials to assess how Phase 2 reduces Phase 3 risk.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuous/R/SimulatePatientOutcomeNormalAssurance.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuous/R/AnalyzeUsingBayesianNormals.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/ConsecutiveStudiesContinuous.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Consecutive Studies, Continuous & Time-to-Event Outcomes (Advanced Example)",
+            "description": "Computes Bayesian assurance across a Phase 2 continuous trial and Phase 3 TTE trial, including extraction of Phase 2 treatment differences as a prior.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/ConsecutiveStudiesContinuousTimeToEvent.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Multiple Endpoints With Covariates and Stratified Randomization (Advanced Example)",
+            "description": "Patient simulation and analysis for multiple continuous endpoints using t-test, ANCOVA, and stratified randomization. Does not use the built-in MEP framework.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomes.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariates.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultipleEndpointsWithCovariates/R/SimulateMultipleOutcomesCovariatesStratRandomization.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomes.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariates.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/MultipleEndpointsWithCovariates/R/AnalyzeMultipleOutcomesCovariatesStratRandomization.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/MultipleEndpointsWithCovariates.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Binary"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        
+        {
+            "name": "Probability of Success, Dual Endpoints, PFS & OS (Advanced Example)",
+            "description": "Computes probability of success for dual endpoints (PFS and OS). Does not use the built-in DEP framework.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ProbabilitySuccessDualEndpoints/R/Simulate2EndpointTTEWithMultiState.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ProbabilitySuccessDualEndpoints/R/AnalyzePFSAndOS.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/ProbabilitySuccessDualEndpoints.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 1,
+                        "name": "Time to Event"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
+            "name": "Schizophrenia Trial, MMRM Analysis (Advanced Example)",
+            "description": "Simulates and analyzes data using MMRM for a schizophrenia trial.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/SchizophreniaTrial/R/AnalyzeUsingMMRM.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/SchizophreniaTrial/R/AnalyzeUsingMMRMWithGLS.R",
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/SchizophreniaTrial/R/GenerateMMRMResponses.R"
+            ],
+            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/SchizophreniaTrial.html",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Design"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 3,
+                        "name": "Continuous"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    true
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        }
+    ]
+}
