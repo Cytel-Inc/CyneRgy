@@ -3541,57 +3541,6 @@
             }
         },
         {
-            "name": "Consecutive Studies, Continuous & Time-to-Event Outcomes (Advanced Example)",
-            "description": "Computes Bayesian assurance across a Phase 2 continuous trial and Phase 3 TTE trial, including extraction of Phase 2 treatment differences as a prior.",
-            "download_urls": [
-                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R",
-                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R",
-                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R",
-                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R"
-            ],
-            "website_url": "https://cytel-inc.github.io/CyneRgy/articles/ConsecutiveStudiesContinuousTimeToEvent.html",
-            "related_to": {
-                "task": [
-                    {
-                        "id": 2,
-                        "name": "Response"
-                    },
-                    {
-                        "id": 4,
-                        "name": "Design"
-                    }
-                ],
-                "endpoint_group": [
-                    {
-                        "id": 1,
-                        "name": "Time to Event"
-                    },
-                    {
-                        "id": 3,
-                        "name": "Continuous"
-                    }
-                ],
-                "run_type": [
-                    {
-                        "id": 1,
-                        "name": "Explore"
-                    }
-                ],
-                "has_repeated_measures": [
-                    false
-                ],
-                "has_ssr": [
-                    false
-                ],
-                "has_stratification": [
-                    false
-                ],
-                "has_subpopulation": [
-                    false
-                ]
-            }
-        },
-        {
             "name": "Multiple Endpoints With Covariates and Stratified Randomization (Advanced Example)",
             "description": "Patient simulation and analysis for multiple continuous endpoints using t-test, ANCOVA, and stratified randomization. Does not use the built-in MEP framework.",
             "download_urls": [
