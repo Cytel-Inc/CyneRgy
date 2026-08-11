@@ -7,3 +7,4 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^registry\.json$
+^logo\.png$
