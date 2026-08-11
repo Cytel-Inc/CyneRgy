@@ -4,6 +4,26 @@ author: "Shubham Lahoti"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
+# Opening this example
+
+To inspect the example in the active supported IDE, run:
+
+```r
+CyneRgy::RunExample( "2ArmPatientDropout" )
+```
+
+With an installed package, this creates or reuses a writable copy under `~/CyneRgyExamples`; files in the R package library are
+not opened. With a development checkout loaded by `pkgload::load_all()`, the repository example is opened directly.
+
+To choose another copy location, provide an existing destination directory:
+
+```r
+CyneRgy::RunExample( "2ArmPatientDropout", strDirectory = getwd() )
+```
+
+`RunExample()` opens `2ArmPatientDropout.Rproj` in RStudio. In VS Code it opens the example folder, `Description.Rmd`, and every R script
+under `R/`. The R scripts do not require an RStudio project.
+
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointDropout.html" class="alert-link">**Integration Point: Dropout**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
@@ -38,7 +58,7 @@ Once CyneRgy is installed, you can load this example in RStudio with the followi
 CyneRgy::RunExample( "2ArmPatientDropout" )
 ```
 
-Running the command above will load the RStudio project in RStudio. 
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 **RStudio Project File**: [2ArmPatientDropout.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/2ArmPatientDropout.Rproj)
 

@@ -4,6 +4,26 @@ author: "Gabriel Potvin and Anoop Singh Rawat"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
+# Opening this example
+
+To inspect the example in the active supported IDE, run:
+
+```r
+CyneRgy::RunExample( "MultiArmPatientSimulation" )
+```
+
+With an installed package, this creates or reuses a writable copy under `~/CyneRgyExamples`; files in the R package library are
+not opened. With a development checkout loaded by `pkgload::load_all()`, the repository example is opened directly.
+
+To choose another copy location, provide an existing destination directory:
+
+```r
+CyneRgy::RunExample( "MultiArmPatientSimulation", strDirectory = getwd() )
+```
+
+`RunExample()` opens `MultiArmPatientSimulation.Rproj` in RStudio. In VS Code it opens the example folder, `Description.Rmd`, and every R script
+under `R/`. The R scripts do not require an RStudio project.
+
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointResponse.html" class="alert-link">**Integration Point: Response**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 

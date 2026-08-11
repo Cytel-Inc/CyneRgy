@@ -11,19 +11,23 @@ Author: J. Kyle Wathen [aut, cre],
         Gabriel Potvin [aut],
         Julija Saltane [ctb]
 Maintainer: J. Kyle Wathen <Kyle.Wathen@Cytel.com>
-Description: R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial 
- designs, without requiring you to develop an entire R code base. The CyneRgy R package illustrates the synergy of using R and 
- Cytel products for clinical trial simulation and provide tools to help develop new functions.  
+Description: Examples, templates, documentation, and development tools for integrating R with Cytel products in clinical trial
+ simulation. The package helps users inspect complete examples, create scripts from integration-point templates, and prepare custom
+ R code for use with Cytel products.
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
-Depends: R(>= 4.0.0),
-         whisker,
-         stringr,
-         stats
-Suggests: 
-    testthat (>= 2.1.0)
-VignetteBuilder: knitr
+RoxygenNote: 7.3.3
+Depends: R (>= 4.0.0)
+Imports:
+    ggplot2,
+    stringr,
+    whisker
+Suggests:
+    knitr,
+    rmarkdown,
+    rstudioapi,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 URL: https://Cytel-Inc.github.io/CyneRgy
+BugReports: https://github.com/Cytel-Inc/CyneRgy/issues

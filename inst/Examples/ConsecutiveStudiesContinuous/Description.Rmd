@@ -7,6 +7,26 @@ output:
   word_document: default
 ---
 
+# Opening this example
+
+To inspect the example in the active supported IDE, run:
+
+```r
+CyneRgy::RunExample( "ConsecutiveStudiesContinuous" )
+```
+
+With an installed package, this creates or reuses a writable copy under `~/CyneRgyExamples`; files in the R package library are
+not opened. With a development checkout loaded by `pkgload::load_all()`, the repository example is opened directly.
+
+To choose another copy location, provide an existing destination directory:
+
+```r
+CyneRgy::RunExample( "ConsecutiveStudiesContinuous", strDirectory = getwd() )
+```
+
+`RunExample()` opens `ConsecutiveStudiesContinuous.Rproj` in RStudio. In VS Code it opens the example folder, `Description.Rmd`, and every R script
+under `R/`. The R scripts do not require an RStudio project.
+
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">This example is related to both the <a href="IntegrationPointResponseContinuous.html" class="alert-link">**Integration Point: Response - Continuous Outcome**</a> and the <a href="IntegrationPointAnalysisContinuous.html" class="alert-link">**Integration Point: Analysis - Continuous Outcome**</a>. Click the links for setup instructions, variable details, and additional information about the integration points.</p>
 </div>
@@ -43,7 +63,7 @@ Once CyneRgy is installed, you can load this example in RStudio with the followi
 CyneRgy::RunExample( "ConsecutiveStudiesContinuous" )
 ```
 
-Running the command above will load the RStudio project in RStudio. 
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/ConsecutiveStudiesContinuous/R) you will find the R files used in the examples:
 

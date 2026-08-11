@@ -2,39 +2,34 @@
 % Please edit documentation in R/CreateCyneRgyFunction.R
 \name{CreateCyneRgyFunction}
 \alias{CreateCyneRgyFunction}
-\title{Create a CyneRgy Function Template}
+\title{Create a CyneRgy Function from a Template}
 \usage{
 CreateCyneRgyFunction(
   strFunctionType = "",
   strNewFunctionName = NA,
   strDirectory = NA,
-  bOpen = TRUE
+  bOpen = interactive()
 )
 }
 \arguments{
-\item{strFunctionType}{A string specifying the type of function to create. This determines the integration
-template to use. Valid values for \code{strFunctionType} can be obtained from the available templates.}
+\item{strFunctionType}{Character string naming the template to use.}
 
-\item{strNewFunctionName}{The name of the new function to be created. This also determines the name of the
-resulting file, which will be named \verb{[strNewFunctionName].R}. If no value is provided, the default name
-will be derived from \code{strFunctionType}.}
+\item{strNewFunctionName}{Character string used for the function and file name. Defaults to \code{strFunctionType}.}
 
-\item{strDirectory}{The directory where the new file will be created. If not provided, the file will be created
-in the current working directory. A sub-directory with this name will also be created if it does not exist.}
+\item{strDirectory}{Directory where the file should be created. Defaults to the current working directory.}
 
-\item{bOpen}{Logical value (TRUE/FALSE). When TRUE, the newly created file will be opened in RStudio using
-the RStudio API (works only in RStudio). When FALSE, the file will be created but not opened.}
+\item{bOpen}{Logical value indicating whether to open the new file in the active IDE. Defaults to \code{interactive()}.}
+}
+\value{
+Invisibly returns the created file path. When called without \code{strFunctionType}, invisibly returns the available template names.
 }
 \description{
-This function generates a new R script file containing a template for a CyneRgy function,
-which can be integrated with Cytel products. The template is selected based on the provided function type.
+Creates an R script from one of the integration-point templates included with CyneRgy. Call the function without a
+template name to list the available templates.
 }
 \examples{
-\dontrun{
-CreateCyneRgyFunction()  # Run without arguments to see valid options for `strFunctionType`.
-
-# Example: Create a new file named `NewBinaryAnalysis.R` using the `Analyze.Binary` template.
-CreateCyneRgyFunction("Analyze.Binary", "NewBinaryAnalysis")
-}
-
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+CreateCyneRgyFunction()
+CreateCyneRgyFunction( "Analyze.Binary", "NewBinaryAnalysis" )
+\dontshow{\}) # examplesIf}
 }

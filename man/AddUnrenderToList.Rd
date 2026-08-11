@@ -22,3 +22,4 @@ in the provided list to the list, assigning their unrendered form (\code{{{tag}}
 \seealso{
 \code{\link[stringr]{str_extract_all}}, \code{\link[base]{substring}}, \code{\link[base]{names}}
 }
+\keyword{internal}

@@ -7,7 +7,7 @@
 ReplaceTagsInFile(strFileName, vTags, vReplace)
 }
 \arguments{
-\item{strFileName}{The name of the file to use as input. Tags, defined by {{tags}}, will be replaced with the corresponding values.}
+\item{strFileName}{The name of the file to use as input. Named double-brace tags will be replaced with the corresponding values.}
 
 \item{vTags}{A vector of tag names, e.g., FUNCTION_NAME, VARIABLE_NAME, that will be replaced with the values in vReplace.}
 
@@ -17,7 +17,7 @@ ReplaceTagsInFile(strFileName, vTags, vReplace)
 A logical value (TRUE/FALSE) indicating whether the function was successful.
 }
 \description{
-This function replaces {{tags}} in template files with corresponding values.
+This function replaces named double-brace tags in template files with corresponding values.
 }
 \examples{
 \dontrun{
@@ -27,3 +27,4 @@ strFileName <- "MyTemplate.R" # A file that contains {{FUNCTION_NAME}} and {{CRE
 ReplaceTagsInFile(strFileName, vTags, vReplace)
 }
 }
+\keyword{internal}
