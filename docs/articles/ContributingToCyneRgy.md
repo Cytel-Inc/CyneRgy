@@ -26,52 +26,43 @@ you find something that is not clear or incorrect, please add an issue.
 2.  If an issue does not exist in the CyneRgy repository, then please
     add one and use it to create a new branch for development. If an
     issue already exists, then create a branch for development.
-3.  You can start a new example with the function
-    CyneRgy::CreateCyneRgyExample.
-4.  Once the example is complete, copy the example folder to the
-    inst/Examples directory of CyneRgy.  
+3.  Start a new example with
+    [`CyneRgy::CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md).
+    It creates `Description.Rmd`, an `R` folder, and a matching RStudio
+    project by default. Use `bCreateProject = FALSE` only when a project
+    file is not wanted.
+4.  Once the example is complete, place the example folder in
+    `inst/Examples`. The example’s functions belong in that folder, not
+    in the package-level `R` directory.
 5.  Use Git to add the files to the repository.  
 6.  Update the vignettes/ExampleOutline.Rmd file to include a brief
     description and link to the new example.
 7.  Use Git to commit to the branch created above.
-8.  Add a Pull Request in GitHub to merge your development branch to the
-    Dev branch.
-
-Please note that all branches are merged into Dev. Dev is used to
-combine all branches, then a branch is created for building the package
-website and reviewed for documentation and completeness. Once this is
-done, the Dev branch is merged into Main via a Pull Request and the
-example is then included on the website as well as in the package when
-it is installed from GitHub.
+8.  Open a pull request against the integration branch identified by the
+    repository’s current contribution workflow. After the example and
+    generated website are reviewed, it can be included in the default
+    branch and in future package installations.
 
 ## Package Development
 
-This document is intended to help with development of this package. In
-this document you can find packages that are helpful, example code
-snippets and function calls that were made to create new functions.
+This document is intended to help with development of this package.
 
-### Helpful packages
+### Standard Workflow
 
-1.  [pkgdown](https://pkgdown.r-lib.org/reference/build_home.html) -
-    Package used to create the package website.
+Run these commands from the repository root after changing package code
+or documentation:
 
-&nbsp;
+``` r
+devtools::document()  # Regenerate NAMESPACE and files under man/.
+devtools::test()      # Run the package unit tests.
+devtools::check()     # Build and check the installed package.
+pkgdown::build_site() # Rebuild and preview the documentation website.
+```
 
-    usethis::use_pkgdown_github_pages()  # Likely you do not need to run this again as it was set up already.
-    devtools::document() # Build the Rd scripts in /man for the reference section using the R scripts in /R.
-    devtools::install() # Re-install CyneRgy after adding new functions to /R.
-    pkgdown::build_site() # Build the site pages using Rmd scripts in /vignettes. Preview the site locally before publishing.
-
-2.  [testthat](https://testthat.r-lib.org/) - Useful for creating and
-    testing R packages.
-3.  [covr](https://covr.r-lib.org/) - Use to create a test coverage
-    report with the following commands
-
-&nbsp;
-
-    usethis::use_coverage()  # Likely you do not need to run this again as it was set up already.
-    covr::package_coverage() # Computes the coverage
-    covr::report()           # Creates a report
+The repository commits generated package documentation and website
+files, so include relevant changes under `man/` and `docs/` in the pull
+request. Use [covr](https://covr.r-lib.org/) when a coverage report is
+useful.
 
 ### Helpful Links
 
@@ -94,11 +85,11 @@ snippets and function calls that were made to create new functions.
 
 If you need help please ask Kyle Wathen or another team member.
 
-Add code snippet by Clicking Tools → Global Options → Code → Edit
-Snippets. In the Snippets menu choose R. When creating new snippets the
-keyword “snippet” should start in column 1 and the snippets should be
-indented. To insert a snippet in RStudio, type the snippet name, or
-partial name, and click tab.
+Add a code snippet by selecting Tools -\> Global Options -\> Code -\>
+Edit Snippets. In the Snippets menu, choose R. When creating new
+snippets, the keyword “snippet” should start in column 1 and the
+snippets should be indented. To insert a snippet in RStudio, type the
+snippet name, or partial name, and press Tab.
 
 Snippet to insert a new comment (newcom) will insert a commented code
 block.

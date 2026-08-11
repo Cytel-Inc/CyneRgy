@@ -18,8 +18,8 @@
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="CyneRgy - Integration for Cytel Products and R">
-<meta name="description" content="R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial designs, without requiring you to develop an entire R code base. The CyneRgy R package illustrates the synergy of using R and Cytel products for clinical trial simulation and provide tools to help develop new functions.">
-<meta property="og:description" content="R integration with Cytel products provides a highly efficient approach to achieving custom adaptive clinical trial designs, without requiring you to develop an entire R code base. The CyneRgy R package illustrates the synergy of using R and Cytel products for clinical trial simulation and provide tools to help develop new functions.">
+<meta name="description" content="Examples, templates, documentation, and development tools for integrating R with Cytel products in clinical trial simulation. The package helps users inspect complete examples, create scripts from integration-point templates, and prepare custom R code for use with Cytel products.">
+<meta property="og:description" content="Examples, templates, documentation, and development tools for integrating R with Cytel products in clinical trial simulation. The package helps users inspect complete examples, create scripts from integration-point templates, and prepare custom R code for use with Cytel products.">
 <meta property="og:image" content="https://Cytel-Inc.github.io/CyneRgy/logo.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
@@ -67,7 +67,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -94,7 +94,7 @@
 <h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h1>
 <p>R integration with Cytel’s products provides a highly efficient way to create custom adaptive clinical trial designs and enhance your simulation capabilities, without requiring you to develop an entire R code base.</p>
-<p>The CyneRgy R package demonstrates the synergy between R and Cytel’s products such as East Horizon, providing tools, documentation, templates, and examples. It also offers a streamlined R experience in RStudio, simplifying the creation of new custom scripts.</p>
+<p>The CyneRgy repository provides documentation, templates, and complete examples for Cytel products such as East Horizon. The accompanying R package provides a small set of tools for finding those examples, creating custom scripts from templates, and preparing R code for use in Cytel products.</p>
 <div class="alert alert-danger" role="alert">
 <p style="margin-bottom:0">
 Important (January 2026): <strong>ArrivalTime</strong> is a new required parameter for the Response integration point. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used. See <a href="articles/IntegrationPointResponse.html" class="alert-link"><strong>Integration Point: Response</strong></a> for more information.
@@ -109,33 +109,62 @@ Important (January 2026): <strong>ArrivalTime</strong> is a new required paramet
 <div class="section level1">
 <h1 id="examples-and-templates">Examples and Templates<a class="anchor" aria-label="anchor" href="#examples-and-templates"></a>
 </h1>
-<p>A variety of examples highlighting how R scripts can seamlessly integrate with Cytel’s simulation tools can be found in this package. Please see <a href="articles/ExampleOutline.html">Examples Outline</a> for a complete list of examples and their descriptions.</p>
-<p><a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples" class="external-link">Each example directory</a> provides:</p>
+<p>A variety of examples showing how R scripts integrate with Cytel’s simulation tools are stored in the repository’s <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples" class="external-link"><code>inst/Examples</code></a> directory. Please see the <a href="articles/ExampleOutline.html">Examples Outline</a> for the complete list and descriptions.</p>
+<p>The R functions used by these examples remain in their example directories; they are not exported as <code>CyneRgy::</code> package functions. Each example is self-contained and generally includes:</p>
 <ul>
-<li>An <strong>RStudio project file</strong> for setup.<br>
-</li>
-<li>A <strong>Description file</strong> detailing the example.<br>
-</li>
-<li>An <strong>R folder</strong> which contains the example R scripts.<br>
-</li>
-<li>A <strong>FillInTheBlankR folder</strong> which contains practice scripts with sections removed for hands-on learning.</li>
+<li>A <code>Description.Rmd</code> file explaining the example.</li>
+<li>An <code>R</code> folder containing its scripts.</li>
+<li>Any inputs or supporting files required by that example.</li>
+<li>A matching <code>&lt;ExampleName&gt;.Rproj</code> file as an optional RStudio entry point.</li>
 </ul>
+<p>The R scripts do not depend on the RStudio project. It is provided for users who clone or copy an example and prefer to open the whole folder directly in RStudio. Some examples also include hands-on practice files.</p>
+<p>After installing CyneRgy, list and open the included examples with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="reference/RunExample.html">RunExample</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"TreatmentSelection"</span> <span class="op">)</span></span></code></pre></div>
+<p>For an installed package, the second call creates or reuses a writable copy under <code>~/CyneRgyExamples</code>; files inside the R package library are never opened. When CyneRgy is loaded from a development checkout with <code><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">pkgload::load_all()</a></code>, it opens the repository example directly. To choose another copy location, provide an existing destination directory:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"TreatmentSelection"</span>, strDirectory <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<p>The default user location can also be changed with <code>options( CyneRgy.examples.path = "path" )</code>.</p>
+<p><code><a href="reference/RunExample.html">RunExample()</a></code> opens the matching project in RStudio. In VS Code it opens the example folder, <code>Description.Rmd</code>, and every R script under <code>R/</code>. Positron and browser-based environments use their available IDE hooks. In other environments the function displays and returns the example path so it can be opened manually.</p>
 <p>Templates are available in the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Templates" class="external-link">Templates directory</a>, and exploratory, in-progress examples can be found in the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/Sandbox" class="external-link">Sandbox directory</a>. Note that Sandbox examples are incomplete and untested.</p>
 </div>
 <div class="section level1">
 <h1 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
 </h1>
-<p>The CyneRgy package also provides many built-in functions to facilitate the creation of your custom R scripts. For a complete list of available functions, see <a href="reference/index.html">References</a>.</p>
+<p>The package intentionally keeps a small public API. Its main functions are:</p>
+<ul>
+<li>
+<code><a href="reference/RunExample.html">RunExample()</a></code> lists, opens, or copies an included example.</li>
+<li>
+<code><a href="reference/CreateCyneRgyFunction.html">CreateCyneRgyFunction()</a></code> creates one R script from an integration-point template.</li>
+<li>
+<code><a href="reference/CreateCyneRgyExample.html">CreateCyneRgyExample()</a></code> creates an example folder with a matching RStudio project by default; the project can be omitted.</li>
+<li>
+<code><a href="reference/CombineAllRFiles.html">CombineAllRFiles()</a></code> combines a folder of R scripts for upload to a Cytel product.</li>
+<li>
+<code><a href="reference/GetDecisionString.html">GetDecisionString()</a></code> and <code><a href="reference/GetDecision.html">GetDecision()</a></code> help create valid analysis decisions.</li>
+</ul>
+<p><code><a href="reference/PlotExampleFlowchart.html">PlotExampleFlowchart()</a></code> supports the diagrams used in example documentation. For details, see the <a href="reference/index.html">function reference</a>.</p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <p>Currently, this package is not officially released and is not available on CRAN. However, it may be installed directly from GitHub using the <a href="https://remotes.r-lib.org/" class="external-link">remotes package</a> with the following code:</p>
-<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span> <span class="st">"Cytel-Inc/CyneRgy@main"</span> <span class="op">)</span></span></code></pre>
-<p>You must have the remotes package to use the above command. To launch the examples, you will also need to have the rstudioapi package.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span> <span class="st">"Cytel-Inc/CyneRgy@main"</span> <span class="op">)</span></span></code></pre></div>
+<p>You must have the <code>remotes</code> package to use the command above. The optional <code>rstudioapi</code> package provides the best opening experience in RStudio and Positron; it is not required to list, locate, or copy examples.</p>
 </div>
 
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/Cytel-Inc/CyneRgy/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>

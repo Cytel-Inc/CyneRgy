@@ -1,5 +1,31 @@
 # Childhood Anxiety Trial
 
+## Opening this example
+
+To inspect the example in the active supported IDE, run:
+
+``` r
+CyneRgy::RunExample( "ChildhoodAnxiety" )
+```
+
+With an installed package, this creates or reuses a writable copy under
+`~/CyneRgyExamples`; files in the R package library are not opened. With
+a development checkout loaded by
+[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
+the repository example is opened directly.
+
+To choose another copy location, provide an existing destination
+directory:
+
+``` r
+CyneRgy::RunExample( "ChildhoodAnxiety", strDirectory = getwd() )
+```
+
+[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
+opens `ChildhoodAnxiety.Rproj` in RStudio. In VS Code it opens the
+example folder, `Description.Rmd`, and every R script under `R/`. The R
+scripts do not require an RStudio project.
+
 This example is related to the [**Integration Point: Response -
 Continuous
 Outcome**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointResponseContinuous.md).
@@ -44,7 +70,8 @@ following commands:
 CyneRgy::RunExample( "ChildhoodAnxiety" )
 ```
 
-Running the command above will load the RStudio project in RStudio.
+Running the command opens `Description.Rmd` and all R scripts in the
+active supported IDE.
 
 **RStudio Project File**:
 [ChildhoodAnxiety.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildhoodAnxiety.Rproj)

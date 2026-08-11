@@ -1,5 +1,31 @@
 # Dose Finding, Analysis
 
+## Opening this example
+
+To inspect the example in the active supported IDE, run:
+
+``` r
+CyneRgy::RunExample( "DoseFindingAnalysis" )
+```
+
+With an installed package, this creates or reuses a writable copy under
+`~/CyneRgyExamples`; files in the R package library are not opened. With
+a development checkout loaded by
+[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
+the repository example is opened directly.
+
+To choose another copy location, provide an existing destination
+directory:
+
+``` r
+CyneRgy::RunExample( "DoseFindingAnalysis", strDirectory = getwd() )
+```
+
+[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
+opens `DoseFindingAnalysis.Rproj` in RStudio. In VS Code it opens the
+example folder, `Description.Rmd`, and every R script under `R/`. The R
+scripts do not require an RStudio project.
+
 This example is related to the [**Integration Point:
 Analysis**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysis.md).
 Click the link for setup instructions, variable details, and additional

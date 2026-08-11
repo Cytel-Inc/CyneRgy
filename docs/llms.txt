@@ -7,10 +7,11 @@ create custom adaptive clinical trial designs and enhance your
 simulation capabilities, without requiring you to develop an entire R
 code base.
 
-The CyneRgy R package demonstrates the synergy between R and Cytel’s
-products such as East Horizon, providing tools, documentation,
-templates, and examples. It also offers a streamlined R experience in
-RStudio, simplifying the creation of new custom scripts.
+The CyneRgy repository provides documentation, templates, and complete
+examples for Cytel products such as East Horizon. The accompanying R
+package provides a small set of tools for finding those examples,
+creating custom scripts from templates, and preparing R code for use in
+Cytel products.
 
 Important (January 2026): **ArrivalTime** is a new required parameter
 for the Response integration point. Existing R scripts must be updated
@@ -30,21 +31,54 @@ expected, and links to related templates and examples.
 
 # Examples and Templates
 
-A variety of examples highlighting how R scripts can seamlessly
-integrate with Cytel’s simulation tools can be found in this package.
-Please see [Examples
+A variety of examples showing how R scripts integrate with Cytel’s
+simulation tools are stored in the repository’s
+[`inst/Examples`](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples)
+directory. Please see the [Examples
 Outline](https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.md)
-for a complete list of examples and their descriptions.
+for the complete list and descriptions.
 
-[Each example
-directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples)
-provides:
+The R functions used by these examples remain in their example
+directories; they are not exported as `CyneRgy::` package functions.
+Each example is self-contained and generally includes:
 
-- An **RStudio project file** for setup.  
-- A **Description file** detailing the example.  
-- An **R folder** which contains the example R scripts.  
-- A **FillInTheBlankR folder** which contains practice scripts with
-  sections removed for hands-on learning.
+- A `Description.Rmd` file explaining the example.
+- An `R` folder containing its scripts.
+- Any inputs or supporting files required by that example.
+- A matching `<ExampleName>.Rproj` file as an optional RStudio entry
+  point.
+
+The R scripts do not depend on the RStudio project. It is provided for
+users who clone or copy an example and prefer to open the whole folder
+directly in RStudio. Some examples also include hands-on practice files.
+
+After installing CyneRgy, list and open the included examples with:
+
+``` r
+CyneRgy::RunExample()
+CyneRgy::RunExample( "TreatmentSelection" )
+```
+
+For an installed package, the second call creates or reuses a writable
+copy under `~/CyneRgyExamples`; files inside the R package library are
+never opened. When CyneRgy is loaded from a development checkout with
+[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
+it opens the repository example directly. To choose another copy
+location, provide an existing destination directory:
+
+``` r
+CyneRgy::RunExample( "TreatmentSelection", strDirectory = getwd() )
+```
+
+The default user location can also be changed with
+`options( CyneRgy.examples.path = "path" )`.
+
+[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
+opens the matching project in RStudio. In VS Code it opens the example
+folder, `Description.Rmd`, and every R script under `R/`. Positron and
+browser-based environments use their available IDE hooks. In other
+environments the function displays and returns the example path so it
+can be opened manually.
 
 Templates are available in the [Templates
 directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Templates),
@@ -54,10 +88,27 @@ that Sandbox examples are incomplete and untested.
 
 # Functions
 
-The CyneRgy package also provides many built-in functions to facilitate
-the creation of your custom R scripts. For a complete list of available
-functions, see
-[References](https://Cytel-Inc.github.io/CyneRgy/reference/index.md).
+The package intentionally keeps a small public API. Its main functions
+are:
+
+- [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
+  lists, opens, or copies an included example.
+- [`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md)
+  creates one R script from an integration-point template.
+- [`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md)
+  creates an example folder with a matching RStudio project by default;
+  the project can be omitted.
+- [`CombineAllRFiles()`](https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.md)
+  combines a folder of R scripts for upload to a Cytel product.
+- [`GetDecisionString()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecisionString.md)
+  and
+  [`GetDecision()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.md)
+  help create valid analysis decisions.
+
+[`PlotExampleFlowchart()`](https://Cytel-Inc.github.io/CyneRgy/reference/PlotExampleFlowchart.md)
+supports the diagrams used in example documentation. For details, see
+the [function
+reference](https://Cytel-Inc.github.io/CyneRgy/reference/index.md).
 
 # Installation
 
@@ -65,85 +116,40 @@ Currently, this package is not officially released and is not available
 on CRAN. However, it may be installed directly from GitHub using the
 [remotes package](https://remotes.r-lib.org/) with the following code:
 
-    remotes::install_github( "Cytel-Inc/CyneRgy@main" )
+``` r
+remotes::install_github( "Cytel-Inc/CyneRgy@main" )
+```
 
-You must have the remotes package to use the above command. To launch
-the examples, you will also need to have the rstudioapi package.
+You must have the `remotes` package to use the command above. The
+optional `rstudioapi` package provides the best opening experience in
+RStudio and Positron; it is not required to list, locate, or copy
+examples.
 
 # Package index
 
-## All functions
+## Examples and templates
 
-- [`AddUnrenderToList()`](https://Cytel-Inc.github.io/CyneRgy/reference/AddUnrenderToList.md)
-  : Add Unrendered Tags to List
-- [`AnalyzeBinaryUsingBetaBinomial()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeBinaryUsingBetaBinomial.md)
-  : Analyze Binary Data Using Beta-Binomial Model
-- [`AnalyzeBinaryUsingEastManualFormula()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeBinaryUsingEastManualFormula.md)
-  : Analyze Binary Data Using Formula 28.2 from the East Manual
-- [`AnalyzeBinaryUsingPropLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeBinaryUsingPropLimitsOfCI.md)
-  : Analyze Binary Data Using Proportion Limits of Confidence Interval
-- [`AnalyzeBinaryUsingPropTest()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeBinaryUsingPropTest.md)
-  : Analyze Binary Data Using the prop.test Function
-- [`AnalyzeContinuousUsingEastManualFormula()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeContinuousUsingEastManualFormula.md)
-  : Analyze Continuous Data Using East Manual Formula
-- [`AnalyzeContinuousUsingMeanLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeContinuousUsingMeanLimitsOfCI.md)
-  : Analyze Continuous Data Using Mean Limits of Confidence Interval
-- [`AnalyzeContinuousUsingTTestNormal()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeContinuousUsingTTestNormal.md)
-  : Analyze Continuous Data Using t-Test
-- [`AnalyzeTTEUsingHazardRatioLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeTTEUsingHazardRatioLimitsOfCI.md)
-  : Analyze Time-to-Event Data Using Hazard Ratio Limits of Confidence
-  Interval
+- [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
+  : Open a CyneRgy Example
+- [`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md)
+  : Create a CyneRgy Function from a Template
+- [`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md)
+  : Create a CyneRgy Example Folder
+
+## Integration helpers
+
 - [`CombineAllRFiles()`](https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.md)
   : Combine All R Files
-- [`ComputeBayesianPredictiveProbabilityWithBayesianAnalysis()`](https://Cytel-Inc.github.io/CyneRgy/reference/ComputeBayesianPredictiveProbabilityWithBayesianAnalysis.md)
-  : Compute Bayesian Predictive Probability of Success
-- [`ComputeDEPAnalysisTime()`](https://Cytel-Inc.github.io/CyneRgy/reference/ComputeDEPAnalysisTime.md)
-  : Compute Analysis Time for Dual Endpoint (DEP) Designs
-- [`ComputeHazardWeibull()`](https://Cytel-Inc.github.io/CyneRgy/reference/ComputeHazardWeibull.md)
-  : Compute Hazard of Weibull Distribution
-- [`ComputeScaleGivenShapeMedian()`](https://Cytel-Inc.github.io/CyneRgy/reference/ComputeScaleGivenShapeMedian.md)
-  : Compute Weibull scale parameter
-- [`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md)
-  : Create a New CyneRgy Example Using Templates
-- [`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md)
-  : Create a CyneRgy Function Template
-- [`GetDecision()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.md)
-  : Determine Decision Based on Decision String, Design and Look
-  Information
 - [`GetDecisionString()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecisionString.md)
   : Generate Decision String Based on Interim and Final Analysis
   Conditions
-- [`InitLoadCyneRgy()`](https://Cytel-Inc.github.io/CyneRgy/reference/InitLoadCyneRgy.md)
-  : Initialize CyneRgy Library for Simulations
+- [`GetDecision()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.md)
+  : Convert a Decision Label to an Integration Decision Value
+
+## Documentation helpers
+
 - [`PlotExampleFlowchart()`](https://Cytel-Inc.github.io/CyneRgy/reference/PlotExampleFlowchart.md)
   : Generate a Flowchart for a CyneRgy Example
-- [`ProbExpGreaterCtrlBeta()`](https://Cytel-Inc.github.io/CyneRgy/reference/ProbExpGreaterCtrlBeta.md)
-  : Compute Posterior Probability of Experimental Treatment Being
-  Greater than Control
-- [`ReplaceTagsInFile()`](https://Cytel-Inc.github.io/CyneRgy/reference/ReplaceTagsInFile.md)
-  : Replace Tags in a File
-- [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-  : Launch Example from the CyneRgy Package
-- [`SelectExpThatAreBetterThanCtrl()`](https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpThatAreBetterThanCtrl.md)
-  : Select Experimental Treatments Better Than Control
-- [`SelectExpUsingBayesianRule()`](https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpUsingBayesianRule.md)
-  : Select Experimental Treatments Using a Bayesian Rule
-- [`SelectExpWithPValueLessThanSpecified()`](https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpWithPValueLessThanSpecified.md)
-  : Select Experimental Treatments Using P-value Comparison
-- [`SelectSpecifiedNumberOfExpWithHighestResponses()`](https://Cytel-Inc.github.io/CyneRgy/reference/SelectSpecifiedNumberOfExpWithHighestResponses.md)
-  : Select Treatments with the Highest Number of Responses
-- [`SimulateContinuousPatientOutcomePercentAtZero()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulateContinuousPatientOutcomePercentAtZero.md)
-  : Simulate Continuous Patient Outcomes with Proportion at Zero
-- [`SimulateContinuousPatientOutcomePercentAtZeroBetaDist()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulateContinuousPatientOutcomePercentAtZeroBetaDist.md)
-  : Simulate Continuous Patient Outcomes with Probability of Zero from a
-  Beta Distribution
-- [`SimulateTTEPatientMixtureExponentials()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulateTTEPatientMixtureExponentials.md)
-  : Simulate TTE Patient Outcomes from a Mixture Exponential
-  Distribution
-- [`SimulateTTEPatientWeibull()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulateTTEPatientWeibull.md)
-  : Simulate TTE Patient Outcomes from a Weibull Distribution
-- [`WhiskerKeepUnrender()`](https://Cytel-Inc.github.io/CyneRgy/reference/WhiskerKeepUnrender.md)
-  : Render Template While Preserving Unmatched Tags
 
 # Articles
 

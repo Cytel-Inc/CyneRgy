@@ -1,5 +1,31 @@
 # Generate Patient Arrival Times with Poisson Process
 
+## Opening this example
+
+To inspect the example in the active supported IDE, run:
+
+``` r
+CyneRgy::RunExample( "GeneratePoissonArrival" )
+```
+
+With an installed package, this creates or reuses a writable copy under
+`~/CyneRgyExamples`; files in the R package library are not opened. With
+a development checkout loaded by
+[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
+the repository example is opened directly.
+
+To choose another copy location, provide an existing destination
+directory:
+
+``` r
+CyneRgy::RunExample( "GeneratePoissonArrival", strDirectory = getwd() )
+```
+
+[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
+opens `GeneratePoissonArrival.Rproj` in RStudio. In VS Code it opens the
+example folder, `Description.Rmd`, and every R script under `R/`. The R
+scripts do not require an RStudio project.
+
 This example is related to the [**Integration Point:
 Enrollment**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointEnrollment.md).
 Click the link for setup instructions, variable details, and additional
@@ -27,7 +53,8 @@ following commands:
 CyneRgy::RunExample( "GeneratePoissonArrival" )
 ```
 
-Running the command above will load the RStudio project in RStudio.
+Running the command opens `Description.Rmd` and all R scripts in the
+active supported IDE.
 
 **East Workbook**:
 [GeneratePoissonArrival.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx)
