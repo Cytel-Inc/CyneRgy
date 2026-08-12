@@ -132,19 +132,14 @@ Important (January 2026): <strong>ArrivalTime</strong> is a new required paramet
 <div class="section level1">
 <h1 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
 </h1>
-<p>The package keeps a focused public API. Common simulation functions include:</p>
+<p>The package keeps a focused public API. Selected common functions cover:</p>
 <ul>
-<li>
-<code><a href="reference/GeneratePoissonArrival.html">GeneratePoissonArrival()</a></code> generates patient arrival times.</li>
-<li>
-<code><a href="reference/RandomizationSubjectsUsingUniformDistribution.html">RandomizationSubjectsUsingUniformDistribution()</a></code> randomizes subjects between two arms.</li>
-<li>
-<code><a href="reference/GenerateCensoringUsingBinomialProportion.html">GenerateCensoringUsingBinomialProportion()</a></code> generates dropout indicators.</li>
-<li>
-<code><a href="reference/SimulatePatientOutcomePercentAtZero.Binary.html">SimulatePatientOutcomePercentAtZero.Binary()</a></code> simulates two-arm binary responses.</li>
-<li>
-<code><a href="reference/AnalyzeUsingBetaBinomial.html">AnalyzeUsingBetaBinomial()</a></code> analyzes two-arm binary responses using a beta-binomial model.</li>
+<li>Trial operations: arrival, randomization, and dropout.</li>
+<li>Binary, continuous, time-to-event, and repeated-measures response generation and analysis.</li>
+<li>Dual-endpoint (DEP) patient simulation, analysis, and decisions.</li>
+<li>Multiple-endpoint (MEP) arrival, response generation, and decisions.</li>
 </ul>
+<p>For example, <code><a href="reference/GeneratePoissonArrival.html">GeneratePoissonArrival()</a></code>, <code><a href="reference/SimulatePatientOutcomePercentAtZero.Binary.html">SimulatePatientOutcomePercentAtZero.Binary()</a></code>, <code><a href="reference/SimulatePatientOutcomePercentAtZero.html">SimulatePatientOutcomePercentAtZero()</a></code>, <code><a href="reference/SimulatePatientSurvivalWeibull.html">SimulatePatientSurvivalWeibull()</a></code>, <code><a href="reference/GenRespDiffOfMeansRepMeasures.html">GenRespDiffOfMeansRepMeasures()</a></code>, <code><a href="reference/AnalyzeDEPUsingFisherExact.html">AnalyzeDEPUsingFisherExact()</a></code>, and <code><a href="reference/GenerateMEPResponse.html">GenerateMEPResponse()</a></code> can be called directly from R. The package functions use the same implementations as the corresponding repository examples.</p>
 <p>Functions for working with the repository examples and integration templates include:</p>
 <ul>
 <li>

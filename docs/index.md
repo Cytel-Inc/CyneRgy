@@ -89,19 +89,25 @@ that Sandbox examples are incomplete and untested.
 
 # Functions
 
-The package keeps a focused public API. Common simulation functions
-include:
+The package keeps a focused public API. Selected common functions cover:
 
-- [`GeneratePoissonArrival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.md)
-  generates patient arrival times.
-- [`RandomizationSubjectsUsingUniformDistribution()`](https://Cytel-Inc.github.io/CyneRgy/reference/RandomizationSubjectsUsingUniformDistribution.md)
-  randomizes subjects between two arms.
-- [`GenerateCensoringUsingBinomialProportion()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateCensoringUsingBinomialProportion.md)
-  generates dropout indicators.
-- [`SimulatePatientOutcomePercentAtZero.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.md)
-  simulates two-arm binary responses.
-- [`AnalyzeUsingBetaBinomial()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.md)
-  analyzes two-arm binary responses using a beta-binomial model.
+- Trial operations: arrival, randomization, and dropout.
+- Binary, continuous, time-to-event, and repeated-measures response
+  generation and analysis.
+- Dual-endpoint (DEP) patient simulation, analysis, and decisions.
+- Multiple-endpoint (MEP) arrival, response generation, and decisions.
+
+For example,
+[`GeneratePoissonArrival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.md),
+[`SimulatePatientOutcomePercentAtZero.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.md),
+[`SimulatePatientOutcomePercentAtZero()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.md),
+[`SimulatePatientSurvivalWeibull()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalWeibull.md),
+[`GenRespDiffOfMeansRepMeasures()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenRespDiffOfMeansRepMeasures.md),
+[`AnalyzeDEPUsingFisherExact()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeDEPUsingFisherExact.md),
+and
+[`GenerateMEPResponse()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateMEPResponse.md)
+can be called directly from R. The package functions use the same
+implementations as the corresponding repository examples.
 
 Functions for working with the repository examples and integration
 templates include:
