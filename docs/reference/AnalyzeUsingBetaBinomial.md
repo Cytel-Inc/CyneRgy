@@ -1,10 +1,7 @@
 # Analyze Binary Data Using a Beta-Binomial Model
 
-Computes the posterior probability that the experimental response rate
-is greater than the control response rate. At an interim look, efficacy
-and futility are determined by `dUpperCutoffEfficacy` and
-`dLowerCutoffForFutility`. At the final look, efficacy is declared when
-the posterior probability exceeds the efficacy cutoff.
+Calls the beta-binomial implementation from the common
+`2ArmBinaryOutcomeAnalysis` example.
 
 ## Usage
 
@@ -21,26 +18,20 @@ AnalyzeUsingBetaBinomial(
 
 - SimData:
 
-  Data frame containing `Response` and `TreatmentID`, where treatment
-  `0` is control and treatment `1` is experimental.
+  Data frame containing the simulated patient data.
 
 - DesignParam:
 
-  List containing `TailType`. For compatibility with fixed-design
-  inputs, it may also contain `MaxCompleters`.
+  List of design and simulation parameters.
 
 - LookInfo:
 
-  Optional list describing the current look. When supplied, it must
-  contain `CurrLookIndex`, `NumLooks`, `CumCompleters`, and `RejType`.
+  Optional list describing the current analysis look.
 
 - UserParam:
 
-  List containing `dAlphaCtrl`, `dBetaCtrl`, `dAlphaExp`, `dBetaExp`,
-  `dUpperCutoffEfficacy`, and `dLowerCutoffForFutility`.
+  Optional list of user-defined parameters.
 
 ## Value
 
-A list containing posterior probability `TestStat`, integer `ErrorCode`,
-integer `Decision`, and posterior mean difference `Delta`. Missing
-`UserParam` values produce fatal `ErrorCode = -1`.
+A list in the format required by the analysis integration point.

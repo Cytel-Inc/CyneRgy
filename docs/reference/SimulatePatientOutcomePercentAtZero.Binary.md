@@ -1,9 +1,7 @@
 # Simulate Binary Patient Outcomes
 
-Simulates a binary response for each subject. `UserParam` can define
-arm-specific probabilities that a subject is treatment resistant and
-therefore always has response `0`. Without `UserParam`, outcomes are
-sampled directly from `PropResp`.
+Calls the structural-zero implementation from the common
+`2ArmBinaryOutcomePatientSimulation` example.
 
 ## Usage
 
@@ -30,8 +28,7 @@ SimulatePatientOutcomePercentAtZero.Binary(
 
 - ArrivalTime:
 
-  Numeric subject arrival times. Retained for compatibility with the
-  response integration point.
+  Numeric subject arrival times.
 
 - TreatmentID:
 
@@ -43,9 +40,9 @@ SimulatePatientOutcomePercentAtZero.Binary(
 
 - UserParam:
 
-  Optional list containing `dProbOfTreatmentResistantCtrl` and
-  `dProbOfTreatmentResistantExp`.
+  Optional list of user-defined parameters described in the complete
+  example.
 
 ## Value
 
-A list containing numeric `Response` and integer `ErrorCode`.
+A list in the format required by the response integration point.
