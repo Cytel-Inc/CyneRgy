@@ -2,31 +2,53 @@
 % Please edit documentation in R/GetDecision.R
 \name{GetDecision}
 \alias{GetDecision}
-\title{Convert a Decision Label to an Integration Decision Value}
+\title{Determine Decision Based on Decision String, Design and Look Information}
 \usage{
-GetDecision(strDecision, DesignParam, LookInfo = NULL)
+GetDecision(strDecision, DesignParam, LookInfo)
 }
 \arguments{
-\item{strDecision}{Character string equal to \code{"Efficacy"}, \code{"Futility"}, or \code{"Continue"}.}
+\item{strDecision}{A string indicating the desired decision: "Efficacy", "Futility", or "Continue".}
 
-\item{DesignParam}{List containing \code{TailType}, where \code{0} is left-tailed and \code{1} is right-tailed.}
+\item{DesignParam}{A list containing design parameters sent from East Horizon Explore to the R integration for analysis.}
 
-\item{LookInfo}{Optional list containing \code{RejType}, \code{CurrLookIndex}, and \code{NumLooks}.}
-}
-\value{
-Integer decision value: \code{0} for no boundary crossed, \code{1} for lower efficacy, \code{2} for upper efficacy, or \code{3} for futility.
+\item{LookInfo}{A list containing look information sent from East Horizon Explore to the R integration for analysis.}
 }
 \description{
-Converts \code{"Efficacy"}, \code{"Futility"}, or \code{"Continue"} into the integer decision value expected by the analysis
-integration point. The result depends on the tail direction, the boundaries enabled by \code{LookInfo$RejType}, and whether the current
-look is interim or final.
-
-Supported \code{LookInfo$RejType} values are:
+This function takes a string indicating the desired decision ("Efficacy", "Futility", or "Continue"), design parameters, and look information, and returns the appropriate decision value.
+If \code{LookInfo} is not NULL, the function uses \code{LookInfo$RejType} to help determine the design type:
 \itemize{
-\item \code{0} or \code{2}: efficacy boundary only.
-\item \code{1} or \code{3}: futility boundary only.
-\item \code{4} or \code{5}: efficacy and futility boundaries.
+\item \strong{LookInfo$RejType Codes}:
+\itemize{
+\item \emph{Efficacy Only}:
+\itemize{
+\item 1-Sided Efficacy Upper = 0
+\item 1-Sided Efficacy Lower = 2
+}
+\item \emph{Futility Only}:
+\itemize{
+\item 1-Sided Futility Upper = 1
+\item 1-Sided Futility Lower = 3
+}
+\item \emph{Efficacy and Futility}:
+\itemize{
+\item 1-Sided Efficacy Upper & Futility Lower = 4
+\item 1-Sided Efficacy Lower & Futility Upper = 5
+}
+\item \emph{Additional Scenarios Not in East Horizon Explore}:
+\itemize{
+\item 2-Sided Efficacy Only = 6
+\item 2-Sided Futility Only = 7
+\item 2-Sided Efficacy & Futility = 8
+\item Equivalence = 9
+}
+}
 }
 
-A fixed design is represented by \code{LookInfo = NULL} and is treated as an efficacy-only final analysis.
+The function also uses \code{DesignParam$TailType} to determine tail direction:
+\itemize{
+\item 0: Left-tailed
+\item 1: Right-tailed
+}
+
+Based on the design type and tail direction, the function evaluates the decision and returns the corresponding integer decision value. Errors are raised for invalid input combinations.
 }

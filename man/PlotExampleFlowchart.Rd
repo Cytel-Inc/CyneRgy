@@ -11,8 +11,7 @@ PlotExampleFlowchart(
   nColumnWidth = 0.5,
   nBigColWidth = 3,
   bShowTreatmentSelection = FALSE,
-  bShowMultiplicityAdjustment = FALSE,
-  bShowDesign = FALSE
+  bShowMultiplicityAdjustment = FALSE
 )
 }
 \arguments{
@@ -32,8 +31,6 @@ Options: "Initialization", "Enrollment", "Randomization", "Dropout",
 \item{bShowTreatmentSelection}{Logical. Whether to include the "Treatment Selection" column. Default = FALSE.}
 
 \item{bShowMultiplicityAdjustment}{Logical. Whether to include the "Multiplicity Adjustment" column. Default = FALSE.}
-
-\item{bShowDesign}{Logical. Whether to include the "Design" column. Default = FALSE.}
 }
 \value{
 A ggplot object containing the flowchart visualization.

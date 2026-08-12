@@ -15,7 +15,7 @@ CombineAllRFiles(
 
 \item{strDirectory}{The directory where the R files are located. Defaults to the current working directory.}
 
-\item{strFileNameToIgnore}{The name, or part of the name, of any file to ignore. Defaults to \code{NA}.}
+\item{strFileNameToIgnore}{The name of any file to be ignored during the combination process. Defaults to NA.}
 }
 \value{
 A list containing the following elements:
@@ -25,15 +25,12 @@ A list containing the following elements:
 }
 \description{
 This function combines the contents of all R files in a specified directory into one file.
-Files are combined in alphabetical order and the output file itself is automatically excluded when it is located in the input directory.
+It also replaces any sequence of one or more \verb{#} characters with a single \verb{#}.
 }
 \examples{
 \dontrun{
-  result <- CombineAllRFiles(
-      strOutFileName = "combined.R",
-      strDirectory = "/path/to/your/directory"
-  )
-  print( result$strReturn )
+  result <- CombineAllRFiles(strOutFileName = "combined.R", strDirectory = "/path/to/your/directory")
+  print(result$strReturn)
 }
 
 }

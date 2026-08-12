@@ -2,38 +2,25 @@
 % Please edit documentation in R/CreateCyneRgyExample.R
 \name{CreateCyneRgyExample}
 \alias{CreateCyneRgyExample}
-\title{Create a CyneRgy Example Folder}
+\title{Create a New CyneRgy Example Using Templates}
 \usage{
 CreateCyneRgyExample(
-  strFunctionType = "",
+  strFunctionType,
   strNewExampleName = "",
-  strDirectory = NA,
-  bCreateProject = TRUE,
-  bOpen = interactive()
+  strDirectory = NA
 )
 }
 \arguments{
-\item{strFunctionType}{Character string naming the integration-point template to use.}
+\item{strFunctionType}{The type of CyneRgy template to use. Must be a valid template name.}
 
-\item{strNewExampleName}{Character string naming the new example folder and starter function.}
+\item{strNewExampleName}{A string representing the name of the new example directory. Defaults to an empty string.}
 
-\item{strDirectory}{Existing parent directory where the example should be created. Defaults to the current working directory.}
-
-\item{bCreateProject}{Logical value indicating whether to include an RStudio project file. Defaults to \code{TRUE}.}
-
-\item{bOpen}{Logical value indicating whether to open the new example in the active IDE. Defaults to \code{interactive()}.}
+\item{strDirectory}{The directory path where the example will be created. If not provided, the current working directory is used.}
 }
 \value{
-Invisibly returns the created example path. When called without \code{strFunctionType}, invisibly returns the available template names.
+Creates the specified example directory and files within the provided or default directory path.
 }
 \description{
-Creates an example folder containing \code{Description.Rmd}, an \code{R} directory with a selected integration-point
-template, and a matching RStudio project by default. The R scripts do not depend on the project file.
-}
-\examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
-CreateCyneRgyExample()
-CreateCyneRgyExample( "Analyze.Binary", "MyBinaryAnalysis" )
-CreateCyneRgyExample( "Analyze.Binary", "MyBinaryFolder", bCreateProject = FALSE )
-\dontshow{\}) # examplesIf}
+This function creates a new directory containing the necessary files
+for the desired CyneRgy template. The directory can be used in connection with Cytel-R integration.
 }
