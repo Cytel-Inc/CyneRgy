@@ -167,6 +167,14 @@ examples.
 
 - [`SimulatePatientOutcomePercentAtZero.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.md)
   : Simulate Binary Patient Outcomes
+- [`SimulatePatientOutcomePercentAtZeroBetaDist.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.md)
+  : Simulate Binary Outcomes With Random Structural-Zero Probabilities
+- [`AnalyzeUsingPropTest()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropTest.md)
+  : Analyze Two-Arm Binary Outcomes With a Proportion Test
+- [`AnalyzeUsingPropLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropLimitsOfCI.md)
+  : Analyze Binary Outcomes Using Confidence-Interval Limits
+- [`AnalyzeUsingEastManualFormula()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula.md)
+  : Analyze Binary Outcomes Using the Manual Test-Statistic Formula
 - [`AnalyzeUsingBetaBinomial()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.md)
   : Analyze Binary Data Using a Beta-Binomial Model
 

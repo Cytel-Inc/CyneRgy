@@ -73,9 +73,12 @@
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeDEPUsingModWtLogRank.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastLogrankFormula.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormulaNormal.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingHazardRatioLimitsOfCI.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingMeanLimitsOfCI.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropLimitsOfCI.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropTest.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingSurvivalPackage.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingTTestNormal.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.html</loc></url>
@@ -101,6 +104,7 @@
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZeroBetaDist.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalMixtureExponentials.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalWeibull.html</loc></url>
