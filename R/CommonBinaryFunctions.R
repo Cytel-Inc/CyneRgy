@@ -1,6 +1,34 @@
 #################################################################################################### .
 #   Description: Common two-arm binary endpoint functions.
 #################################################################################################### .
+#' @name SimulatePatientOutcomePercentAtZero.Binary
+#' @title Simulate Binary Patient Outcomes
+#'
+#' @description Calls the structural-zero implementation from the common `2ArmBinaryOutcomePatientSimulation` example.
+#'
+#' @param NumSub Integer number of subjects.
+#' @param NumArm Integer number of trial arms.
+#' @param ArrivalTime Numeric subject arrival times.
+#' @param TreatmentID Integer treatment identifiers beginning at `0`.
+#' @param PropResp Numeric response probability for each arm.
+#' @param UserParam Optional list of user-defined parameters described in the complete example.
+#'
+#' @return A list in the format required by the response integration point.
+#' @export
+#################################################################################################### .
+
+SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
+                                                         PropResp, UserParam = NULL )
+{
+    return( .CallCommonExampleFunction(
+        "2ArmBinaryOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZero.Binary.R",
+        "SimulatePatientOutcomePercentAtZero.Binary",
+        list( NumSub = NumSub, NumArm = NumArm, ArrivalTime = ArrivalTime, TreatmentID = TreatmentID,
+              PropResp = PropResp, UserParam = UserParam )
+    ) )
+}
+
+
 #' @name SimulatePatientOutcomePercentAtZeroBetaDist.Binary
 #' @title Simulate Binary Outcomes With Random Structural-Zero Probabilities
 #'
@@ -82,6 +110,24 @@ AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo = NULL
 {
     return( .CallCommonExampleFunction(
         "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingEastManualFormula.R", "AnalyzeUsingEastManualFormula",
+        list( SimData = SimData, DesignParam = DesignParam, LookInfo = LookInfo, UserParam = UserParam )
+    ) )
+}
+
+
+#' @name AnalyzeUsingBetaBinomial
+#' @title Analyze Binary Data Using a Beta-Binomial Model
+#'
+#' @description Calls the beta-binomial implementation from the common `2ArmBinaryOutcomeAnalysis` example.
+#'
+#' @inheritParams AnalyzeUsingPropTest
+#' @return A list in the format required by the analysis integration point.
+#' @export
+
+AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+{
+    return( .CallCommonExampleFunction(
+        "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingBetaBinomial.R", "AnalyzeUsingBetaBinomial",
         list( SimData = SimData, DesignParam = DesignParam, LookInfo = LookInfo, UserParam = UserParam )
     ) )
 }

@@ -65,10 +65,12 @@ test_that( "common functions validate unsupported inputs", {
 
 test_that( "common endpoint wrappers expose and load their bundled implementations", {
     lFunctions <- list(
+        SimulatePatientOutcomePercentAtZero.Binary = c( "2ArmBinaryOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZero.Binary.R" ),
         SimulatePatientOutcomePercentAtZeroBetaDist.Binary = c( "2ArmBinaryOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R" ),
         AnalyzeUsingPropTest = c( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingPropTest.R" ),
         AnalyzeUsingPropLimitsOfCI = c( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingPropLimitsOfCI.R" ),
         AnalyzeUsingEastManualFormula = c( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingEastManualFormula.R" ),
+        AnalyzeUsingBetaBinomial = c( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingBetaBinomial.R" ),
         SimulatePatientOutcomePercentAtZero = c( "2ArmNormalOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZero.R" ),
         SimulatePatientOutcomePercentAtZeroBetaDist = c( "2ArmNormalOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZeroBetaDist.R" ),
         AnalyzeUsingTTestNormal = c( "2ArmNormalOutcomeAnalysis", "AnalyzeUsingTTestNormal.R" ),
