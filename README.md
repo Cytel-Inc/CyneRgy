@@ -53,13 +53,17 @@ Templates are available in the [Templates directory](inst/Templates), and explor
 
 # Functions
 
-The package keeps a focused public API. Common simulation functions include:
+The package keeps a focused public API. Selected common functions cover:
 
-- `GeneratePoissonArrival()` generates patient arrival times.
-- `RandomizationSubjectsUsingUniformDistribution()` randomizes subjects between two arms.
-- `GenerateCensoringUsingBinomialProportion()` generates dropout indicators.
-- `SimulatePatientOutcomePercentAtZero.Binary()` simulates two-arm binary responses.
-- `AnalyzeUsingBetaBinomial()` analyzes two-arm binary responses using a beta-binomial model.
+- Trial operations: arrival, randomization, and dropout.
+- Binary, continuous, time-to-event, and repeated-measures response generation and analysis.
+- Dual-endpoint (DEP) patient simulation, analysis, and decisions.
+- Multiple-endpoint (MEP) arrival, response generation, and decisions.
+
+For example, `GeneratePoissonArrival()`, `SimulatePatientOutcomePercentAtZero.Binary()`,
+`SimulatePatientOutcomePercentAtZero()`, `SimulatePatientSurvivalWeibull()`,
+`GenRespDiffOfMeansRepMeasures()`, `AnalyzeDEPUsingFisherExact()`, and `GenerateMEPResponse()` can be called directly from R.
+The package functions use the same implementations as the corresponding repository examples.
 
 Functions for working with the repository examples and integration templates include:
 

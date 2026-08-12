@@ -64,13 +64,47 @@ navbar:
               href: https://github.com/Cytel-Inc/CyneRgy
 
 reference:
-    - title: Common simulation functions
+    - title: Common trial operations
       contents:
           - GeneratePoissonArrival
+          - GeneratePoissonArrivalMEP
           - RandomizationSubjectsUsingUniformDistribution
           - GenerateCensoringUsingBinomialProportion
+          - GenerateDropoutTimeForRM
+          - GenerateDropoutTimeForSurvival
+    - title: Binary endpoints
+      contents:
           - SimulatePatientOutcomePercentAtZero.Binary
           - AnalyzeUsingBetaBinomial
+    - title: Continuous endpoints
+      contents:
+          - SimulatePatientOutcomePercentAtZero
+          - SimulatePatientOutcomePercentAtZeroBetaDist
+          - AnalyzeUsingTTestNormal
+          - AnalyzeUsingMeanLimitsOfCI
+          - AnalyzeUsingEastManualFormulaNormal
+    - title: Repeated-measures endpoints
+      contents:
+          - GenRespDiffOfMeansRepMeasures
+          - Analyze.RepeatedMeasures
+    - title: Time-to-event endpoints
+      contents:
+          - SimulatePatientSurvivalWeibull
+          - SimulatePatientSurvivalMixtureExponentials
+          - AnalyzeUsingSurvivalPackage
+          - AnalyzeUsingHazardRatioLimitsOfCI
+          - AnalyzeUsingEastLogrankFormula
+    - title: Dual endpoints
+      contents:
+          - SimulatePatientOutcomeDEPSurvBinSingleHazardPiece
+          - SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece
+          - AnalyzeDEPUsingFisherExact
+          - AnalyzeDEPUsingModWtLogRank
+          - GetDEPDecisionsFSD
+    - title: Multiple endpoints
+      contents:
+          - GenerateMEPResponse
+          - GetMEPDecision
     - title: Examples and templates
       contents:
           - RunExample

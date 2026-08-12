@@ -61,3 +61,78 @@ test_that( "common functions validate unsupported inputs", {
     lResult <- AnalyzeUsingBetaBinomial( SimData, list( TailType = 1 ), UserParam = NULL )
     expect_identical( lResult$ErrorCode, -1L )
 } )
+
+
+test_that( "common endpoint wrappers expose and load their bundled implementations", {
+    lFunctions <- list(
+        SimulatePatientOutcomePercentAtZero = c( "2ArmNormalOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZero.R" ),
+        SimulatePatientOutcomePercentAtZeroBetaDist = c( "2ArmNormalOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZeroBetaDist.R" ),
+        AnalyzeUsingTTestNormal = c( "2ArmNormalOutcomeAnalysis", "AnalyzeUsingTTestNormal.R" ),
+        AnalyzeUsingMeanLimitsOfCI = c( "2ArmNormalOutcomeAnalysis", "AnalyzeUsingMeanLimitsOfCI.R" ),
+        AnalyzeUsingEastManualFormulaNormal = c( "2ArmNormalOutcomeAnalysis", "AnalyzeUsingEastManualFormulaNormal.R" ),
+        SimulatePatientSurvivalWeibull = c( "2ArmTimeToEventOutcomePatientSimulation", "SimulatePatientSurvivalWeibull.R" ),
+        SimulatePatientSurvivalMixtureExponentials = c( "2ArmTimeToEventOutcomePatientSimulation", "SimulatePatientSurvivalMixtureExponentials.R" ),
+        AnalyzeUsingSurvivalPackage = c( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeUsingSurvivalPackage.R" ),
+        AnalyzeUsingHazardRatioLimitsOfCI = c( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeUsingHazardRatioLimitsOfCI.R" ),
+        AnalyzeUsingEastLogrankFormula = c( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeUsingEastLogrankFormula.R" ),
+        GenRespDiffOfMeansRepMeasures = c( "2ArmNormalRepeatedMeasuresResponseGeneration", "GenerateResponseDiffOfMeansRepeatedMeasures.R" ),
+        Analyze.RepeatedMeasures = c( "2ArmNormalRepeatedMeasuresAnalysis", "Analyze.RepeatedMeasures.R" ),
+        GenerateDropoutTimeForRM = c( "2ArmPatientDropout", "GenerateDropoutTimeForRM.R" ),
+        GenerateDropoutTimeForSurvival = c( "2ArmPatientDropout", "GenerateDropoutTimeForSurvival.R" ),
+        AnalyzeDEPUsingFisherExact = c( "DEPAnalysis", "AnalyzeDEPUsingFisherExact.R" ),
+        AnalyzeDEPUsingModWtLogRank = c( "DEPAnalysis", "AnalyzeDEPUsingModWtLogRank.R" ),
+        GetDEPDecisionsFSD = c( "DEPDecisionsUsingMCP", "GetDEPDecisionsFSD.R" ),
+        SimulatePatientOutcomeDEPSurvBinSingleHazardPiece = c( "DEPPatientSimulation", "SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.R" ),
+        SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece = c( "DEPPatientSimulation", "SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R" ),
+        GeneratePoissonArrivalMEP = c( "GeneratePoissonArrival", "GeneratePoissonArrivalMEP.R" ),
+        GenerateMEPResponse = c( "MEPPatientSimulation", "GenerateMEPResponse.R" ),
+        GetMEPDecision = c( "MEPDesign", "GetMEPDecision.R" )
+    )
+
+    expect_true( all( names( lFunctions ) %in% getNamespaceExports( "CyneRgy" ) ) )
+
+    for( strFunction in names( lFunctions ) )
+    {
+        vLocation <- lFunctions[[ strFunction ]]
+        fnExample <- .GetCommonExampleFunction( vLocation[ 1 ], vLocation[ 2 ], strFunction )
+        expect_true( is.function( fnExample ), info = strFunction )
+        expect_identical( formals( getExportedValue( "CyneRgy", strFunction ) ),
+                          formals( fnExample ), info = strFunction )
+    }
+} )
+
+
+test_that( "continuous, TTE, RM, and MEP wrappers run representative simulations", {
+    set.seed( 7 )
+    nQtyOfPatients <- 20
+    lArrival       <- GeneratePoissonArrival( nQtyOfPatients, 1, 0, 5 )
+    lTreatment     <- RandomizationSubjectsUsingUniformDistribution( nQtyOfPatients, 2, 1 )
+
+    lContinuous <- SimulatePatientOutcomePercentAtZero(
+        nQtyOfPatients, lArrival$ArrivalTime, lTreatment$TreatmentID,
+        Mean = c( 0, 0.5 ), StdDev = c( 1, 1 )
+    )
+    expect_length( lContinuous$Response, nQtyOfPatients )
+    expect_identical( lContinuous$ErrorCode, 0L )
+
+    lTTE <- SimulatePatientSurvivalWeibull(
+        nQtyOfPatients, 2, lArrival$ArrivalTime, lTreatment$TreatmentID,
+        SurvMethod = 3, NumPrd = 1, PrdTime = 0, SurvParam = matrix( c( 1, 1 ), nrow = 1 )
+    )
+    expect_length( lTTE$SurvivalTime, nQtyOfPatients )
+    expect_true( all( lTTE$SurvivalTime > 0 ) )
+
+    skip_if_not_installed( "MASS" )
+    lRM <- GenRespDiffOfMeansRepMeasures(
+        nQtyOfPatients, NumVisit = 2, ArrivalTime = lArrival$ArrivalTime,
+        TreatmentID = lTreatment$TreatmentID, Inputmethod = 1, VisitTime = c( 1, 2 ),
+        MeanControl = c( 0, 0 ), MeanTrt = c( 0.5, 0.5 ),
+        StdDevControl = c( 1, 1 ), StdDevTrt = c( 1, 1 ),
+        CorrMat = matrix( c( 1, 0.5, 0.5, 1 ), nrow = 2 )
+    )
+    expect_length( lRM$Response, nQtyOfPatients )
+    expect_length( lRM$Response2, nQtyOfPatients )
+
+    lMEPArrival <- GeneratePoissonArrivalMEP( nQtyOfPatients, 1, 0, 5 )
+    expect_length( lMEPArrival$ArrivalTime, nQtyOfPatients )
+} )
