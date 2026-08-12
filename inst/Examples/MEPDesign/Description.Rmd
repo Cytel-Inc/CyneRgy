@@ -23,13 +23,13 @@ To try this example, create a new project in East Horizon using the following co
 
 This example illustrates how to implement custom decision-making logic for **Multiple Endpoints designs** into East Horizon using R functions in the context of 2-arm clinical trials with multiple endpoints. This integration point enables the customization of the statistical test for the treatment effect, the multiplicity adjustment method, and the decision rules, similarly to the **Analysis** and **Multiplicity Adjustment** integration points of other designs. The example supports an arbitrary number of endpoints, heterogeneous endpoint types, and look-specific efficacy and futility rules.
 
-Once CyneRgy is installed, open this example with:
+Once CyneRgy is installed, you can load this example with the following command:
 
 ```r
 CyneRgy::RunExample( "MEPDesign" )
 ```
 
-The command opens `Description.Rmd` and all R scripts in the active supported IDE.
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPDesign/R) you will find the following R file:
 

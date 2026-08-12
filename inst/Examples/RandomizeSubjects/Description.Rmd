@@ -53,7 +53,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 
 The following examples illustrate how to integrate new custom randomization methods and control how subjects are assigned to designated arms into East Horizon or East using R functions in the context of a two-arm trial.
 
-Once CyneRgy is installed, you can load this example in RStudio with the following commands
+Once CyneRgy is installed, you can load this example with the following command:
 
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "RandomizeSubjects" )

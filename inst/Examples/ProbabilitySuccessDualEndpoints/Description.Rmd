@@ -34,13 +34,13 @@ To try this example, create a new project in East Horizon using the following co
 
 This example demonstrates how to compute the probability of success for a clinical trial by extending East Horizon’s single-endpoint framework to handle dual endpoints through custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. This example uses **Progression Free Survival (PFS)** and **Overall Survival (OS)** as endpoints, however, this could be extended to other types of endpoints by modifying the R code.
 
-Once CyneRgy is installed, open this example with:
+Once CyneRgy is installed, you can load this example with the following command:
 
 ```r
 CyneRgy::RunExample( "ProbabilitySuccessDualEndpoints" )
 ```
 
-The command opens `Description.Rmd` and all R scripts in the active supported IDE.
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 ## Why do we need R Integration for this example?
 

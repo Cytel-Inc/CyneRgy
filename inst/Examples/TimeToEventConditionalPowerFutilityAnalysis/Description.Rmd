@@ -28,13 +28,13 @@ This example demonstrates how to perform a time-to-event (TTE) analysis with an 
 
 In this example, we set up in East Horizon a **Two Arm Confirmatory** trial with a **single TTE endpoint** using the *Design task* and the *Logrank Test Given Accrual Duration and Study Duration (Parallel Design)* option. In East Horizon: Design, custom R scripts can only be applied during simulations. Therefore, an analytical design must first be created, after which simulations can be run based on its computation. During the simulation, the futility evaluation from the original design is replaced by the custom futility logic implemented in the R script.
 
-Once CyneRgy is installed, open this example with:
+Once CyneRgy is installed, you can load this example with the following command:
 
 ```r
 CyneRgy::RunExample( "TimeToEventConditionalPowerFutilityAnalysis" )
 ```
 
-The command opens `Description.Rmd` and all R scripts in the active supported IDE.
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 ## Why do we need R Integration for this example?
 

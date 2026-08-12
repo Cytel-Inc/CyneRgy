@@ -31,13 +31,13 @@ To try this example, create a new project in East Horizon using the following co
 
 The following examples illustrate how to integrate new *analysis* capabilities into East Horizon using R functions in the context of 2-arm clinical trials with dual endpoints. These functions can be customized to support complex evaluation rules, correlated outcomes, and flexible statistical designs.
 
-Once CyneRgy is installed, open this example with:
+Once CyneRgy is installed, you can load this example with the following command:
 
 ```r
 CyneRgy::RunExample( "DEPAnalysis" )
 ```
 
-The command opens `Description.Rmd` and all R scripts in the active supported IDE.
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 **Note:** Each script in this example is designed to be applied to an **individual endpoint** within a Dual Endpoint (DEP) design, rather than to both endpoints simultaneously.
 

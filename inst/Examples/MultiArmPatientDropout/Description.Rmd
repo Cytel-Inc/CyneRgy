@@ -27,13 +27,13 @@ To try this example, create a new project in East Horizon using the following co
 
 In multi-arm studies, dropout rates often differ across treatment groups due to varying efficacy, tolerability, or burden of treatment. Modeling these differences is essential for accurate trial simulation, as dropout can impact both power and interpretation of results.
 
-Once CyneRgy is installed, open this example with:
+Once CyneRgy is installed, you can load this example with the following command:
 
 ```r
 CyneRgy::RunExample( "MultiArmPatientDropout" )
 ```
 
-The command opens `Description.Rmd` and all R scripts in the active supported IDE.
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 In the following examples, we demonstrate how to integrate a **custom dropout distribution** into East Horizon through R integration. We focus on two common approaches to modeling dropout:
 
