@@ -11,9 +11,9 @@ Author: J. Kyle Wathen [aut, cre],
         Gabriel Potvin [aut],
         Julija Saltane [ctb]
 Maintainer: J. Kyle Wathen <Kyle.Wathen@Cytel.com>
-Description: Examples, templates, documentation, and development tools for integrating R with Cytel products in clinical trial
- simulation. The package helps users inspect complete examples, create scripts from integration-point templates, and prepare custom
- R code for use with Cytel products.
+Description: Examples, templates, documentation, common simulation functions, and development tools for integrating R with Cytel
+ products in clinical trial simulation. The package helps users inspect complete examples, run selected common simulation steps,
+ create scripts from integration-point templates, and prepare custom R code for use with Cytel products.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

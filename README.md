@@ -6,7 +6,7 @@
 
 R integration with Cytel's products provides a highly efficient way to create custom adaptive clinical trial designs and enhance your simulation capabilities, without requiring you to develop an entire R code base.
 
-The CyneRgy repository provides documentation, templates, and complete examples for Cytel products such as East Horizon. The accompanying R package provides a small set of tools for finding those examples, creating custom scripts from templates, and preparing R code for use in Cytel products.
+The CyneRgy repository provides documentation, templates, and complete examples for Cytel products such as East Horizon. The accompanying R package provides tools for finding those examples, creating custom scripts from templates, preparing R code for use in Cytel products, and running selected common simulation functions directly from R.
 
 Important (January 2026): **ArrivalTime** is a new required parameter for the Response integration point. Existing R scripts must be updated to include this parameter in the function definition, even if it is not used. See [**Integration Point: Response**](https://cytel-inc.github.io/CyneRgy/articles/IntegrationPointResponse.html) for more information.
 
@@ -18,7 +18,7 @@ For a quick start, visit the [Getting Started](https://cytel-inc.github.io/CyneR
 
 A variety of examples showing how R scripts integrate with Cytel's simulation tools are stored in the repository's [`inst/Examples`](inst/Examples) directory. Please see the [Examples Outline](https://cytel-inc.github.io/CyneRgy/articles/ExampleOutline.html) for the complete list and descriptions.
 
-The R functions used by these examples remain in their example directories; they are not exported as `CyneRgy::` package functions. Each example is self-contained and generally includes:
+Selected functions from common examples are also exported by the package and can be called directly with `CyneRgy::`. Specialized and advanced functions remain in their example directories. Each repository example is self-contained and generally includes:
 
 - A `Description.Rmd` file explaining the example.
 - An `R` folder containing its scripts.
@@ -53,7 +53,15 @@ Templates are available in the [Templates directory](inst/Templates), and explor
 
 # Functions
 
-The package intentionally keeps a small public API. Its main functions are:
+The package keeps a focused public API. Common simulation functions include:
+
+- `GeneratePoissonArrival()` generates patient arrival times.
+- `RandomizationSubjectsUsingUniformDistribution()` randomizes subjects between two arms.
+- `GenerateCensoringUsingBinomialProportion()` generates dropout indicators.
+- `SimulatePatientOutcomePercentAtZero.Binary()` simulates two-arm binary responses.
+- `AnalyzeUsingBetaBinomial()` analyzes two-arm binary responses using a beta-binomial model.
+
+Functions for working with the repository examples and integration templates include:
 
 - `RunExample()` lists, opens, or copies an included example.
 - `CreateCyneRgyFunction()` creates one R script from an integration-point template.

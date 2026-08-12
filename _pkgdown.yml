@@ -64,6 +64,13 @@ navbar:
               href: https://github.com/Cytel-Inc/CyneRgy
 
 reference:
+    - title: Common simulation functions
+      contents:
+          - GeneratePoissonArrival
+          - RandomizationSubjectsUsingUniformDistribution
+          - GenerateCensoringUsingBinomialProportion
+          - SimulatePatientOutcomePercentAtZero.Binary
+          - AnalyzeUsingBetaBinomial
     - title: Examples and templates
       contents:
           - RunExample
