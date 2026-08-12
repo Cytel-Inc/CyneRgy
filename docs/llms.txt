@@ -7,11 +7,8 @@ create custom adaptive clinical trial designs and enhance your
 simulation capabilities, without requiring you to develop an entire R
 code base.
 
-The CyneRgy repository provides documentation, templates, and complete
-examples for Cytel products such as East Horizon. The accompanying R
-package provides tools for finding those examples, creating custom
-scripts from templates, preparing R code for use in Cytel products, and
-running selected common simulation functions directly from R.
+CyneRgy provides documentation, templates, examples, and R functions for
+integrating R with Cytel products such as East Horizon.
 
 Important (January 2026): **ArrivalTime** is a new required parameter
 for the Response integration point. Existing R scripts must be updated
@@ -31,55 +28,26 @@ expected, and links to related templates and examples.
 
 # Examples and Templates
 
-A variety of examples showing how R scripts integrate with Cytel’s
-simulation tools are stored in the repository’s
-[`inst/Examples`](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples)
-directory. Please see the [Examples
+A variety of examples highlighting how R scripts integrate with Cytel’s
+simulation tools can be found in
+[`inst/Examples`](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples).
+Please see the [Examples
 Outline](https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.md)
-for the complete list and descriptions.
+for the complete list and descriptions. Each example includes a
+description and R scripts; some also include supporting files, practice
+scripts, and an optional RStudio project.
 
-Selected functions from common examples are also exported by the package
-and can be called directly with `CyneRgy::`. Specialized and advanced
-functions remain in their example directories. Each repository example
-is self-contained and generally includes:
-
-- A `Description.Rmd` file explaining the example.
-- An `R` folder containing its scripts.
-- Any inputs or supporting files required by that example.
-- A matching `<ExampleName>.Rproj` file as an optional RStudio entry
-  point.
-
-The R scripts do not depend on the RStudio project. It is provided for
-users who clone or copy an example and prefer to open the whole folder
-directly in RStudio. Some examples also include hands-on practice files.
-
-After installing CyneRgy, list and open the included examples with:
+After installing CyneRgy, list or open an example with:
 
 ``` r
 CyneRgy::RunExample()
 CyneRgy::RunExample( "TreatmentSelection" )
 ```
 
-For an installed package, the second call creates or reuses a writable
-copy under `~/CyneRgyExamples`; files inside the R package library are
-never opened. When CyneRgy is loaded from a development checkout with
-[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
-it opens the repository example directly. To choose another copy
-location, provide an existing destination directory:
-
-``` r
-CyneRgy::RunExample( "TreatmentSelection", strDirectory = getwd() )
-```
-
-The default user location can also be changed with
-`options( CyneRgy.examples.path = "path" )`.
-
 [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-opens the matching project in RStudio. In VS Code it opens the example
-folder, `Description.Rmd`, and every R script under `R/`. Positron and
-browser-based environments use their available IDE hooks. In other
-environments the function displays and returns the example path so it
-can be opened manually.
+creates a writable copy when needed, then opens the description and R
+scripts in the active supported IDE. Use `strDirectory` to choose the
+copy location.
 
 Templates are available in the [Templates
 directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Templates),
@@ -89,47 +57,17 @@ that Sandbox examples are incomplete and untested.
 
 # Functions
 
-The package keeps a focused public API. Selected common functions cover:
-
-- Trial operations: arrival, randomization, and dropout.
-- Binary, continuous, time-to-event, and repeated-measures response
-  generation and analysis.
-- Dual-endpoint (DEP) patient simulation, analysis, and decisions.
-- Multiple-endpoint (MEP) arrival, response generation, and decisions.
-
-For example,
-[`GeneratePoissonArrival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.md),
-[`SimulatePatientOutcomePercentAtZero.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.md),
-[`SimulatePatientOutcomePercentAtZero()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.md),
-[`SimulatePatientSurvivalWeibull()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalWeibull.md),
-[`GenRespDiffOfMeansRepMeasures()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenRespDiffOfMeansRepMeasures.md),
-[`AnalyzeDEPUsingFisherExact()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeDEPUsingFisherExact.md),
+The package exports selected common functions for trial operations and
+binary, continuous, repeated-measures, time-to-event, DEP, and MEP
+endpoints. It also provides
+[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md),
+[`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md),
+[`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md),
 and
-[`GenerateMEPResponse()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateMEPResponse.md)
-can be called directly from R. The package functions use the same
-implementations as the corresponding repository examples.
-
-Functions for working with the repository examples and integration
-templates include:
-
-- [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-  lists, opens, or copies an included example.
-- [`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md)
-  creates one R script from an integration-point template.
-- [`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md)
-  creates an example folder with a matching RStudio project by default;
-  the project can be omitted.
-- [`CombineAllRFiles()`](https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.md)
-  combines a folder of R scripts for upload to a Cytel product.
-- [`GetDecisionString()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecisionString.md)
-  and
-  [`GetDecision()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.md)
-  help create valid analysis decisions.
-
-[`PlotExampleFlowchart()`](https://Cytel-Inc.github.io/CyneRgy/reference/PlotExampleFlowchart.md)
-supports the diagrams used in example documentation. For details, see
-the [function
-reference](https://Cytel-Inc.github.io/CyneRgy/reference/index.md).
+[`CombineAllRFiles()`](https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.md)
+for working with examples and integration scripts. See the [function
+reference](https://Cytel-Inc.github.io/CyneRgy/reference/index.md) for
+details.
 
 # Installation
 

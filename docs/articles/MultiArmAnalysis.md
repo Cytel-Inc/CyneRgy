@@ -1,31 +1,5 @@
 # Multiple Arm, Analysis
 
-## Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-``` r
-CyneRgy::RunExample( "MultiArmAnalysis" )
-```
-
-With an installed package, this creates or reuses a writable copy under
-`~/CyneRgyExamples`; files in the R package library are not opened. With
-a development checkout loaded by
-[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
-the repository example is opened directly.
-
-To choose another copy location, provide an existing destination
-directory:
-
-``` r
-CyneRgy::RunExample( "MultiArmAnalysis", strDirectory = getwd() )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-opens `MultiArmAnalysis.Rproj` in RStudio. In VS Code it opens the
-example folder, `Description.Rmd`, and every R script under `R/`. The R
-scripts do not require an RStudio project.
-
 This example is related to the [**Integration Point:
 Analysis**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysis.md).
 Click the link for setup instructions, variable details, and additional
@@ -55,6 +29,15 @@ multi-arm clinical trials. Each example demonstrates a different type of
 statistical endpoint (continuous, time-to-event, and binary), using
 standard R functions and a Bonferroni adjustment to handle multiple
 comparisons.
+
+Once CyneRgy is installed, open this example with:
+
+``` r
+CyneRgy::RunExample( "MultiArmAnalysis" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active
+supported IDE.
 
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmAnalysis/R)

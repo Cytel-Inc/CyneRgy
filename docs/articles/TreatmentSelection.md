@@ -1,31 +1,5 @@
 # Multiarm, Binary Outcome - Treatment Selection
 
-## Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-``` r
-CyneRgy::RunExample( "TreatmentSelection" )
-```
-
-With an installed package, this creates or reuses a writable copy under
-`~/CyneRgyExamples`; files in the R package library are not opened. With
-a development checkout loaded by
-[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
-the repository example is opened directly.
-
-To choose another copy location, provide an existing destination
-directory:
-
-``` r
-CyneRgy::RunExample( "TreatmentSelection", strDirectory = getwd() )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-opens `TreatmentSelection.Rproj` in RStudio. In VS Code it opens the
-example folder, `Description.Rmd`, and every R script under `R/`. The R
-scripts do not require an RStudio project.
-
 This example is related to the [**Integration Point: Treatment
 Selection**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointTreatmentSelection.md).
 Click the link for setup instructions, variable details, and additional
@@ -59,7 +33,7 @@ Once CyneRgy is installed, you can load this example in R Studio with
 the following commands:
 
 ``` r
-CyneRgy::RunExample("TreatmentSelection")
+CyneRgy::RunExample( "TreatmentSelection" )
 ```
 
 Running the command opens `Description.Rmd` and all R scripts in the

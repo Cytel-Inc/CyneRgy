@@ -1,31 +1,5 @@
 # Time-To-Event Weighted Conditional Power Futility Analysis
 
-## Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-``` r
-CyneRgy::RunExample( "TimeToEventConditionalPowerFutilityAnalysis" )
-```
-
-With an installed package, this creates or reuses a writable copy under
-`~/CyneRgyExamples`; files in the R package library are not opened. With
-a development checkout loaded by
-[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
-the repository example is opened directly.
-
-To choose another copy location, provide an existing destination
-directory:
-
-``` r
-CyneRgy::RunExample( "TimeToEventConditionalPowerFutilityAnalysis", strDirectory = getwd() )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-opens `TimeToEventConditionalPowerFutilityAnalysis.Rproj` in RStudio. In
-VS Code it opens the example folder, `Description.Rmd`, and every R
-script under `R/`. The R scripts do not require an RStudio project.
-
 This example is related to the [**Integration Point: Analysis -
 Time-to-Event
 Outcome**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysisTimeToEvent.md).
@@ -61,6 +35,15 @@ applied during simulations. Therefore, an analytical design must first
 be created, after which simulations can be run based on its computation.
 During the simulation, the futility evaluation from the original design
 is replaced by the custom futility logic implemented in the R script.
+
+Once CyneRgy is installed, open this example with:
+
+``` r
+CyneRgy::RunExample( "TimeToEventConditionalPowerFutilityAnalysis" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active
+supported IDE.
 
 ### Why do we need R Integration for this example?
 

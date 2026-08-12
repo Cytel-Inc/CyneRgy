@@ -28,41 +28,28 @@ you find something that is not clear or incorrect, please add an issue.
     issue already exists, then create a branch for development.
 3.  Start a new example with
     [`CyneRgy::CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md).
-    It creates `Description.Rmd`, an `R` folder, and a matching RStudio
-    project by default. Use `bCreateProject = FALSE` only when a project
-    file is not wanted.
-4.  Once the example is complete, place the example folder in
-    `inst/Examples`. The example’s functions belong in that folder, not
-    in the package-level `R` directory.
+4.  Place the completed example in `inst/Examples`; keep its
+    example-specific functions there rather than in the package-level
+    `R` directory.
 5.  Use Git to add the files to the repository.  
 6.  Update the vignettes/ExampleOutline.Rmd file to include a brief
     description and link to the new example.
 7.  Use Git to commit to the branch created above.
-8.  Open a pull request against the integration branch identified by the
-    repository’s current contribution workflow. After the example and
-    generated website are reviewed, it can be included in the default
-    branch and in future package installations.
+8.  Open a pull request against the integration branch used by the
+    repository.
 
 ## Package Development
 
 This document is intended to help with development of this package.
 
-### Standard Workflow
-
-Run these commands from the repository root after changing package code
-or documentation:
-
-``` r
-devtools::document()  # Regenerate NAMESPACE and files under man/.
-devtools::test()      # Run the package unit tests.
-devtools::check()     # Build and check the installed package.
-pkgdown::build_site() # Rebuild and preview the documentation website.
-```
-
-The repository commits generated package documentation and website
-files, so include relevant changes under `man/` and `docs/` in the pull
-request. Use [covr](https://covr.r-lib.org/) when a coverage report is
-useful.
+After changing package code or documentation, run
+[`devtools::document()`](https://devtools.r-lib.org/reference/document.html),
+[`devtools::test()`](https://devtools.r-lib.org/reference/test.html),
+[`devtools::check()`](https://devtools.r-lib.org/reference/check.html),
+and
+[`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html).
+Include the relevant generated files under `man/` and `docs/` in the
+pull request.
 
 ### Helpful Links
 

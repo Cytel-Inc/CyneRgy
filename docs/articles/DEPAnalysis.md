@@ -1,31 +1,5 @@
 # Dual Endpoints - Analysis
 
-## Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-``` r
-CyneRgy::RunExample( "DEPAnalysis" )
-```
-
-With an installed package, this creates or reuses a writable copy under
-`~/CyneRgyExamples`; files in the R package library are not opened. With
-a development checkout loaded by
-[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
-the repository example is opened directly.
-
-To choose another copy location, provide an existing destination
-directory:
-
-``` r
-CyneRgy::RunExample( "DEPAnalysis", strDirectory = getwd() )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-opens `DEPAnalysis.Rproj` in RStudio. In VS Code it opens the example
-folder, `Description.Rmd`, and every R script under `R/`. The R scripts
-do not require an RStudio project.
-
 This example is related to the [**Integration Point: Analysis - Dual
 Endpoints**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysisDual.md).
 Click the link for setup instructions, variable details, and additional
@@ -54,6 +28,15 @@ capabilities into East Horizon using R functions in the context of 2-arm
 clinical trials with dual endpoints. These functions can be customized
 to support complex evaluation rules, correlated outcomes, and flexible
 statistical designs.
+
+Once CyneRgy is installed, open this example with:
+
+``` r
+CyneRgy::RunExample( "DEPAnalysis" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active
+supported IDE.
 
 **Note:** Each script in this example is designed to be applied to an
 **individual endpoint** within a Dual Endpoint (DEP) design, rather than

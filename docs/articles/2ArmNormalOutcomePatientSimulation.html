@@ -97,26 +97,6 @@ Wathen</h4>
 
     
     
-<div class="section level2">
-<h2 id="opening-this-example">Opening this example<a class="anchor" aria-label="anchor" href="#opening-this-example"></a>
-</h2>
-<p>To inspect the example in the active supported IDE, run:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmNormalOutcomePatientSimulation"</span> <span class="op">)</span></span></code></pre></div>
-<p>With an installed package, this creates or reuses a writable copy
-under <code>~/CyneRgyExamples</code>; files in the R package library are
-not opened. With a development checkout loaded by
-<code><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">pkgload::load_all()</a></code>, the repository example is opened
-directly.</p>
-<p>To choose another copy location, provide an existing destination
-directory:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmNormalOutcomePatientSimulation"</span>, strDirectory <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
-<p><code><a href="../reference/RunExample.html">RunExample()</a></code> opens
-<code>2ArmNormalOutcomePatientSimulation.Rproj</code> in RStudio. In VS
-Code it opens the example folder, <code>Description.Rmd</code>, and
-every R script under <code>R/</code>. The R scripts do not require an
-RStudio project.</p>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
 This example is related to the
@@ -157,7 +137,6 @@ function definition, even if it is not used. See
 Point: Response - Continuous Outcome</strong></a> for more information.
 </p>
 </div>
-</div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -169,7 +148,7 @@ experimental treatment arm, with patient outcomes assumed to follow a
 normal distribution.</p>
 <p>Once CyneRgy is installed, you can load this example in RStudio with
 the following commands:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmNormalOutcomePatientSimulation"</span> <span class="op">)</span></span></code></pre></div>
 <p>Running the command opens <code>Description.Rmd</code> and all R
 scripts in the active supported IDE.</p>

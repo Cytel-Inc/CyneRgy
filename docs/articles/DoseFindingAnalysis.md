@@ -1,31 +1,5 @@
 # Dose Finding, Analysis
 
-## Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-``` r
-CyneRgy::RunExample( "DoseFindingAnalysis" )
-```
-
-With an installed package, this creates or reuses a writable copy under
-`~/CyneRgyExamples`; files in the R package library are not opened. With
-a development checkout loaded by
-[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
-the repository example is opened directly.
-
-To choose another copy location, provide an existing destination
-directory:
-
-``` r
-CyneRgy::RunExample( "DoseFindingAnalysis", strDirectory = getwd() )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-opens `DoseFindingAnalysis.Rproj` in RStudio. In VS Code it opens the
-example folder, `Description.Rmd`, and every R script under `R/`. The R
-scripts do not require an RStudio project.
-
 This example is related to the [**Integration Point:
 Analysis**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointAnalysis.md).
 Click the link for setup instructions, variable details, and additional
@@ -44,6 +18,15 @@ following configuration:
 The following examples illustrate how to integrate new **analysis**
 capabilities into East Horizon using R functions in the context of a
 dose finding clinical trial with a continuous endpoint.
+
+Once CyneRgy is installed, open this example with:
+
+``` r
+CyneRgy::RunExample( "DoseFindingAnalysis" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active
+supported IDE.
 
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DoseFindingAnalysis/R)

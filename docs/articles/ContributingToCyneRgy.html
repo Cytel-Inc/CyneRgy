@@ -126,22 +126,17 @@ an issue.</p>
 add one and use it to create a new branch for development. If an issue
 already exists, then create a branch for development.</li>
 <li>Start a new example with
-<code><a href="../reference/CreateCyneRgyExample.html">CyneRgy::CreateCyneRgyExample()</a></code>. It creates
-<code>Description.Rmd</code>, an <code>R</code> folder, and a matching
-RStudio project by default. Use <code>bCreateProject = FALSE</code> only
-when a project file is not wanted.</li>
-<li>Once the example is complete, place the example folder in
-<code>inst/Examples</code>. The example’s functions belong in that
-folder, not in the package-level <code>R</code> directory.</li>
+<code><a href="../reference/CreateCyneRgyExample.html">CyneRgy::CreateCyneRgyExample()</a></code>.</li>
+<li>Place the completed example in <code>inst/Examples</code>; keep its
+example-specific functions there rather than in the package-level
+<code>R</code> directory.</li>
 <li>Use Git to add the files to the repository.<br>
 </li>
 <li>Update the vignettes/ExampleOutline.Rmd file to include a brief
 description and link to the new example.</li>
 <li>Use Git to commit to the branch created above.</li>
-<li>Open a pull request against the integration branch identified by the
-repository’s current contribution workflow. After the example and
-generated website are reviewed, it can be included in the default branch
-and in future package installations.</li>
+<li>Open a pull request against the integration branch used by the
+repository.</li>
 </ol>
 </div>
 <div class="section level2">
@@ -149,21 +144,11 @@ and in future package installations.</li>
 </h2>
 <p>This document is intended to help with development of this
 package.</p>
-<div class="section level3">
-<h3 id="standard-workflow">Standard Workflow<a class="anchor" aria-label="anchor" href="#standard-workflow"></a>
-</h3>
-<p>Run these commands from the repository root after changing package
-code or documentation:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Regenerate NAMESPACE and files under man/.</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span><span class="op">)</span>      <span class="co"># Run the package unit tests.</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span><span class="op">)</span>     <span class="co"># Build and check the installed package.</span></span>
-<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Rebuild and preview the documentation website.</span></span></code></pre></div>
-<p>The repository commits generated package documentation and website
-files, so include relevant changes under <code>man/</code> and
-<code>docs/</code> in the pull request. Use <a href="https://covr.r-lib.org/" class="external-link">covr</a> when a coverage report is
-useful.</p>
-</div>
+<p>After changing package code or documentation, run
+<code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code>, <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code>,
+<code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code>, and <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code>.
+Include the relevant generated files under <code>man/</code> and
+<code>docs/</code> in the pull request.</p>
 <div class="section level3">
 <h3 id="helpful-links">Helpful Links<a class="anchor" aria-label="anchor" href="#helpful-links"></a>
 </h3>

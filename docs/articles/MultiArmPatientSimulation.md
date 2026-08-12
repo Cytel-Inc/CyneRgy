@@ -1,31 +1,5 @@
 # Multiple Arm, Patient Simulation
 
-## Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-``` r
-CyneRgy::RunExample( "MultiArmPatientSimulation" )
-```
-
-With an installed package, this creates or reuses a writable copy under
-`~/CyneRgyExamples`; files in the R package library are not opened. With
-a development checkout loaded by
-[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
-the repository example is opened directly.
-
-To choose another copy location, provide an existing destination
-directory:
-
-``` r
-CyneRgy::RunExample( "MultiArmPatientSimulation", strDirectory = getwd() )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-opens `MultiArmPatientSimulation.Rproj` in RStudio. In VS Code it opens
-the example folder, `Description.Rmd`, and every R script under `R/`.
-The R scripts do not require an RStudio project.
-
 This example is related to the [**Integration Point:
 Response**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointResponse.md).
 Click the link for setup instructions, variable details, and additional
@@ -49,6 +23,15 @@ simulation (*response*) capabilities into East Horizon using R functions
 in the context of a multi-arm clinical trials. The following examples
 demonstrate different approaches for simulating continuous, binary, and
 time-to-event endpoints in multi-arm clinical trials.
+
+Once CyneRgy is installed, open this example with:
+
+``` r
+CyneRgy::RunExample( "MultiArmPatientSimulation" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active
+supported IDE.
 
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientSimulation/R)

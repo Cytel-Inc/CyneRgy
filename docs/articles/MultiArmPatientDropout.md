@@ -1,31 +1,5 @@
 # Multiple Arm, Single Endpoint - Patient Dropout
 
-## Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-``` r
-CyneRgy::RunExample( "MultiArmPatientDropout" )
-```
-
-With an installed package, this creates or reuses a writable copy under
-`~/CyneRgyExamples`; files in the R package library are not opened. With
-a development checkout loaded by
-[`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html),
-the repository example is opened directly.
-
-To choose another copy location, provide an existing destination
-directory:
-
-``` r
-CyneRgy::RunExample( "MultiArmPatientDropout", strDirectory = getwd() )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-opens `MultiArmPatientDropout.Rproj` in RStudio. In VS Code it opens the
-example folder, `Description.Rmd`, and every R script under `R/`. The R
-scripts do not require an RStudio project.
-
 This example is related to the [**Integration Point:
 Dropout**](https://Cytel-Inc.github.io/CyneRgy/articles/IntegrationPointDropout.md).
 Click the link for setup instructions, variable details, and additional
@@ -47,6 +21,15 @@ In multi-arm studies, dropout rates often differ across treatment groups
 due to varying efficacy, tolerability, or burden of treatment. Modeling
 these differences is essential for accurate trial simulation, as dropout
 can impact both power and interpretation of results.
+
+Once CyneRgy is installed, open this example with:
+
+``` r
+CyneRgy::RunExample( "MultiArmPatientDropout" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active
+supported IDE.
 
 In the following examples, we demonstrate how to integrate a **custom
 dropout distribution** into East Horizon through R integration. We focus
