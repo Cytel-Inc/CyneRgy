@@ -64,14 +64,11 @@ navbar:
               href: https://github.com/Cytel-Inc/CyneRgy
 
 reference:
-    - title: Common trial operations
+    - title: Shared trial operations
       contents:
           - GeneratePoissonArrival
-          - GeneratePoissonArrivalMEP
           - RandomizationSubjectsUsingUniformDistribution
           - GenerateCensoringUsingBinomialProportion
-          - GenerateDropoutTimeForRM
-          - GenerateDropoutTimeForSurvival
     - title: Binary endpoints
       contents:
           - SimulatePatientOutcomePercentAtZero.Binary
@@ -90,11 +87,13 @@ reference:
     - title: Repeated-measures endpoints
       contents:
           - GenRespDiffOfMeansRepMeasures
+          - GenerateDropoutTimeForRM
           - Analyze.RepeatedMeasures
     - title: Time-to-event endpoints
       contents:
           - SimulatePatientSurvivalWeibull
           - SimulatePatientSurvivalMixtureExponentials
+          - GenerateDropoutTimeForSurvival
           - AnalyzeUsingSurvivalPackage
           - AnalyzeUsingHazardRatioLimitsOfCI
           - AnalyzeUsingEastLogrankFormula
@@ -107,6 +106,7 @@ reference:
           - GetDEPDecisionsFSD
     - title: Multiple endpoints
       contents:
+          - GeneratePoissonArrivalMEP
           - GenerateMEPResponse
           - GetMEPDecision
     - title: Examples and templates
