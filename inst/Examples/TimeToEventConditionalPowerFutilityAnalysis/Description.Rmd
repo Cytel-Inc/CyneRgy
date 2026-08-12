@@ -8,26 +8,6 @@ output:
   html_document: default
 ---
 
-# Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-```r
-CyneRgy::RunExample( "TimeToEventConditionalPowerFutilityAnalysis" )
-```
-
-With an installed package, this creates or reuses a writable copy under `~/CyneRgyExamples`; files in the R package library are
-not opened. With a development checkout loaded by `pkgload::load_all()`, the repository example is opened directly.
-
-To choose another copy location, provide an existing destination directory:
-
-```r
-CyneRgy::RunExample( "TimeToEventConditionalPowerFutilityAnalysis", strDirectory = getwd() )
-```
-
-`RunExample()` opens `TimeToEventConditionalPowerFutilityAnalysis.Rproj` in RStudio. In VS Code it opens the example folder, `Description.Rmd`, and every R script
-under `R/`. The R scripts do not require an RStudio project.
-
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointAnalysisTimeToEvent.html" class="alert-link">**Integration Point: Analysis - Time-to-Event Outcome**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
@@ -47,6 +27,14 @@ To try this example, create a new project in East Horizon using the following co
 This example demonstrates how to perform a time-to-event (TTE) analysis with an evaluation of futility at an interim look by extending East Horizon: Design’s functionalities using a custom R script for the Analysis integration point. The analysis of patient data is based on the Logrank test and the interim analysis evaluates futility based on a **Conditional Power** threshold, which is computed using a **weighted hazard ratio**.
 
 In this example, we set up in East Horizon a **Two Arm Confirmatory** trial with a **single TTE endpoint** using the *Design task* and the *Logrank Test Given Accrual Duration and Study Duration (Parallel Design)* option. In East Horizon: Design, custom R scripts can only be applied during simulations. Therefore, an analytical design must first be created, after which simulations can be run based on its computation. During the simulation, the futility evaluation from the original design is replaced by the custom futility logic implemented in the R script.
+
+Once CyneRgy is installed, open this example with:
+
+```r
+CyneRgy::RunExample( "TimeToEventConditionalPowerFutilityAnalysis" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 ## Why do we need R Integration for this example?
 

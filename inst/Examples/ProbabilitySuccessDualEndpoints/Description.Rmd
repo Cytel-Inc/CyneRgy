@@ -8,26 +8,6 @@ output:
   pdf_document: default
 ---
 
-# Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-```r
-CyneRgy::RunExample( "ProbabilitySuccessDualEndpoints" )
-```
-
-With an installed package, this creates or reuses a writable copy under `~/CyneRgyExamples`; files in the R package library are
-not opened. With a development checkout loaded by `pkgload::load_all()`, the repository example is opened directly.
-
-To choose another copy location, provide an existing destination directory:
-
-```r
-CyneRgy::RunExample( "ProbabilitySuccessDualEndpoints", strDirectory = getwd() )
-```
-
-`RunExample()` opens `ProbabilitySuccessDualEndpoints.Rproj` in RStudio. In VS Code it opens the example folder, `Description.Rmd`, and every R script
-under `R/`. The R scripts do not require an RStudio project.
-
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">This example is related to both the <a href="IntegrationPointResponse.html" class="alert-link">**Integration Point: Response**</a> and the <a href="IntegrationPointAnalysis.html" class="alert-link">**Integration Point: Analysis**</a>. Click the links for setup instructions, variable details, and additional information about the integration points.</p>
 </div>
@@ -53,6 +33,14 @@ To try this example, create a new project in East Horizon using the following co
 # Introduction
 
 This example demonstrates how to compute the probability of success for a clinical trial by extending East Horizon’s single-endpoint framework to handle dual endpoints through custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points. This example uses **Progression Free Survival (PFS)** and **Overall Survival (OS)** as endpoints, however, this could be extended to other types of endpoints by modifying the R code.
+
+Once CyneRgy is installed, open this example with:
+
+```r
+CyneRgy::RunExample( "ProbabilitySuccessDualEndpoints" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 ## Why do we need R Integration for this example?
 

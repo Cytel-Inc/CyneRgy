@@ -26,12 +26,12 @@ To make sure the examples are clear and included in the package website please u
 
 1. Use Git to clone the CyneRgy repository. 
 1. If an issue does not exist in the CyneRgy repository, then please add one and use it to create a new branch for development. If an issue already exists, then create a branch for development. 
-1. Start a new example with `CyneRgy::CreateCyneRgyExample()`. It creates `Description.Rmd`, an `R` folder, and a matching RStudio project by default. Use `bCreateProject = FALSE` only when a project file is not wanted.
-1. Once the example is complete, place the example folder in `inst/Examples`. The example's functions belong in that folder, not in the package-level `R` directory.
+1. Start a new example with `CyneRgy::CreateCyneRgyExample()`.
+1. Place the completed example in `inst/Examples`; keep its example-specific functions there rather than in the package-level `R` directory.
 1. Use Git to add the files to the repository.  
 1. Update the vignettes/ExampleOutline.Rmd file to include a brief description and link to the new example. 
 1. Use Git to commit to the branch created above.
-1. Open a pull request against the integration branch identified by the repository's current contribution workflow. After the example and generated website are reviewed, it can be included in the default branch and in future package installations.
+1. Open a pull request against the integration branch used by the repository.
 
 
 
@@ -40,19 +40,7 @@ To make sure the examples are clear and included in the package website please u
 
 This document is intended to help with development of this package.
 
-## Standard Workflow
-
-Run these commands from the repository root after changing package code or documentation:
-
-```r
-devtools::document()  # Regenerate NAMESPACE and files under man/.
-devtools::test()      # Run the package unit tests.
-devtools::check()     # Build and check the installed package.
-pkgdown::build_site() # Rebuild and preview the documentation website.
-```
-
-The repository commits generated package documentation and website files, so include relevant changes under `man/` and `docs/` in
-the pull request. Use [covr](https://covr.r-lib.org/) when a coverage report is useful.
+After changing package code or documentation, run `devtools::document()`, `devtools::test()`, `devtools::check()`, and `pkgdown::build_site()`. Include the relevant generated files under `man/` and `docs/` in the pull request.
 
 ## Helpful Links
 

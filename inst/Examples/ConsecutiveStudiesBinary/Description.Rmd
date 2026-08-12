@@ -7,26 +7,6 @@ output:
   html_document: default
 ---
 
-# Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-```r
-CyneRgy::RunExample( "ConsecutiveStudiesBinary" )
-```
-
-With an installed package, this creates or reuses a writable copy under `~/CyneRgyExamples`; files in the R package library are
-not opened. With a development checkout loaded by `pkgload::load_all()`, the repository example is opened directly.
-
-To choose another copy location, provide an existing destination directory:
-
-```r
-CyneRgy::RunExample( "ConsecutiveStudiesBinary", strDirectory = getwd() )
-```
-
-`RunExample()` opens `ConsecutiveStudiesBinary.Rproj` in RStudio. In VS Code it opens the example folder, `Description.Rmd`, and every R script
-under `R/`. The R scripts do not require an RStudio project.
-
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">This example is related to both the <a href="IntegrationPointResponseBinary.html" class="alert-link">**Integration Point: Response - Binary Outcome**</a> and the <a href="IntegrationPointAnalysisBinary.html" class="alert-link">**Integration Point: Analysis - Binary Outcome**</a>. Click the links for setup instructions, variable details, and additional information about the integration points.</p>
 </div>
@@ -47,6 +27,14 @@ To try this example, create a new project in East Horizon using the following co
 # Introduction
 
 This example demonstrates the computation of conditional probability of success in consecutive studies by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points of East Horizon. It features a sequential trial program involving a Phase 2 trial followed by a Phase 3 trial, both with the same binary endpoint.
+
+Once CyneRgy is installed, open this example with:
+
+```r
+CyneRgy::RunExample( "ConsecutiveStudiesBinary" )
+```
+
+The command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 We show how Phase 2 results are simulated, saved, and then used as the prior data for Phase 3, allowing the Phase 3 patient outcomes to be generated only conditional on the Phase 2 trial's success. This approach illustrates how simulations can mimic using an earlier trial's data to directly inform subsequent trials, which is particularly valuable in drug development where Phase 3 studies are expensive and resource-intensive.
 

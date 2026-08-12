@@ -7,26 +7,6 @@ output:
   word_document: default
 ---
 
-# Opening this example
-
-To inspect the example in the active supported IDE, run:
-
-```r
-CyneRgy::RunExample( "TreatmentSelection" )
-```
-
-With an installed package, this creates or reuses a writable copy under `~/CyneRgyExamples`; files in the R package library are
-not opened. With a development checkout loaded by `pkgload::load_all()`, the repository example is opened directly.
-
-To choose another copy location, provide an existing destination directory:
-
-```r
-CyneRgy::RunExample( "TreatmentSelection", strDirectory = getwd() )
-```
-
-`RunExample()` opens `TreatmentSelection.Rproj` in RStudio. In VS Code it opens the example folder, `Description.Rmd`, and every R script
-under `R/`. The R scripts do not require an RStudio project.
-
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">This example is related to the <a href="IntegrationPointTreatmentSelection.html" class="alert-link">**Integration Point: Treatment Selection**</a>. Click the link for setup instructions, variable details, and additional information about this integration point.</p></div>
 
@@ -47,8 +27,8 @@ The following examples illustrate how to integrate new treatment selection capab
 At the IA, one or more experimental treatments are selected to continue into stage 2 of the trial. If the trial is not stopped early for efficacy or futility, the control arm and the selected treatments proceed to the final stage. These examples showcase different approaches for selecting treatments to carry forward into stage 2.
 
 Once CyneRgy is installed, you can load this example in R Studio with the following commands:
-```{r , eval=FALSE}
-CyneRgy::RunExample("TreatmentSelection")
+```{r, eval=FALSE}
+CyneRgy::RunExample( "TreatmentSelection" )
 ```
 
 Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.

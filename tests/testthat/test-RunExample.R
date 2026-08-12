@@ -64,19 +64,24 @@ test_that( "RunExample copies installed examples outside the package library and
     expect_identical( strReusedPath, strCopiedPath )
 } )
 
-test_that( "Every example has a matching RStudio project and opening instructions", {
+test_that( "Every example has a matching project and concise introduction instructions", {
     strExamplesPath <- system.file( "Examples", package = "CyneRgy" )
     vExamples       <- list.dirs( strExamplesPath, recursive = FALSE, full.names = FALSE )
 
     for( strExample in vExamples )
     {
-        strExamplePath  <- file.path( strExamplesPath, strExample )
-        strProjectPath  <- file.path( strExamplePath, paste0( strExample, ".Rproj" ) )
-        strDescription  <- paste( readLines( file.path( strExamplePath, "Description.Rmd" ), warn = FALSE ), collapse = "\n" )
+        strExamplePath   <- file.path( strExamplesPath, strExample )
+        strProjectPath   <- file.path( strExamplePath, paste0( strExample, ".Rproj" ) )
+        strDescription   <- paste( readLines( file.path( strExamplePath, "Description.Rmd" ), warn = FALSE ), collapse = "\n" )
+        strRunCommand    <- paste0( 'CyneRgy::RunExample( "', strExample, '"' )
+        nIntroduction    <- regexpr( "# Introduction", strDescription, fixed = TRUE )[ 1 ]
+        vRunInstructions <- gregexpr( strRunCommand, strDescription, fixed = TRUE )[[ 1 ]]
 
         expect_true( file.exists( strProjectPath ), info = strExample )
-        expect_match( strDescription, "# Opening this example", fixed = TRUE, info = strExample )
-        expect_match( strDescription, paste0( 'CyneRgy::RunExample( "', strExample, '"' ), fixed = TRUE, info = strExample )
+        expect_false( grepl( "# Opening this example", strDescription, fixed = TRUE ), info = strExample )
+        expect_true( nIntroduction > 0, info = strExample )
+        expect_identical( sum( vRunInstructions > 0 ), 1L, info = strExample )
+        expect_true( vRunInstructions[ 1 ] > nIntroduction, info = strExample )
     }
 } )
 
