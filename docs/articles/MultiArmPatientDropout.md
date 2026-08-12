@@ -22,15 +22,6 @@ due to varying efficacy, tolerability, or burden of treatment. Modeling
 these differences is essential for accurate trial simulation, as dropout
 can impact both power and interpretation of results.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "MultiArmPatientDropout" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 In the following examples, we demonstrate how to integrate a **custom
 dropout distribution** into East Horizon through R integration. We focus
 on two common approaches to modeling dropout:

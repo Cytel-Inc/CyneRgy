@@ -64,8 +64,7 @@ by installing CyneRgy and running this command into RStudio:
 CyneRgy::RunExample( "SchizophreniaTrial" )
 ```
 
-Running this code opens `Description.Rmd` and all R scripts in the
-active supported IDE.
+Running this code above will load the RStudio project.
 
 **RStudio Project File**:
 [SchizophreniaTrial.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/SchizophreniaTrial.Rproj)

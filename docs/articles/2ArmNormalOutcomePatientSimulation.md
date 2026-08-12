@@ -39,11 +39,10 @@ following commands:
 CyneRgy::RunExample( "2ArmNormalOutcomePatientSimulation" )
 ```
 
-Running the command opens `Description.Rmd` and all R scripts in the
-active supported IDE.
+Running the command above will load the RStudio project in RStudio.
 
 **East Workbook**:
-[2ArmNormalOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.cywx)
+[2ArmNormalOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj)
 
 **RStudio Project File**:
 [2ArmNormalOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj)

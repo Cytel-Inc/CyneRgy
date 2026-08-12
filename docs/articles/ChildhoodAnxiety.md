@@ -44,8 +44,7 @@ following commands:
 CyneRgy::RunExample( "ChildhoodAnxiety" )
 ```
 
-Running the command opens `Description.Rmd` and all R scripts in the
-active supported IDE.
+Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**:
 [ChildhoodAnxiety.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildhoodAnxiety.Rproj)

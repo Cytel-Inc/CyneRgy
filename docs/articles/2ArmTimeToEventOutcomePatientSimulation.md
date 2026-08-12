@@ -39,8 +39,7 @@ following commands:
 CyneRgy::RunExample( "2ArmTimeToEventOutcomePatientSimulation" )
 ```
 
-Running the command opens `Description.Rmd` and all R scripts in the
-active supported IDE.
+Running the command above will load the RStudio project in RStudio.
 
 **East Workbook**:
 [2ArmTimeToEventOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.cywx)

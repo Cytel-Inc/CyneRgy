@@ -1,7 +1,6 @@
 # Replace Tags in a File
 
-This function replaces named double-brace tags in template files with
-corresponding values.
+This function replaces tags in template files with corresponding values.
 
 ## Usage
 
@@ -13,7 +12,7 @@ ReplaceTagsInFile(strFileName, vTags, vReplace)
 
 - strFileName:
 
-  The name of the file to use as input. Named double-brace tags will be
+  The name of the file to use as input. Tags, defined by tags, will be
   replaced with the corresponding values.
 
 - vTags:

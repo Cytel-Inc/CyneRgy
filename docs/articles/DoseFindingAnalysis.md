@@ -19,15 +19,6 @@ The following examples illustrate how to integrate new **analysis**
 capabilities into East Horizon using R functions in the context of a
 dose finding clinical trial with a continuous endpoint.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "DoseFindingAnalysis" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DoseFindingAnalysis/R)
 you will find the following R file:

@@ -29,15 +29,6 @@ clinical trials with dual endpoints. These functions can be customized
 to support complex evaluation rules, correlated outcomes, and flexible
 statistical designs.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "DEPAnalysis" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 **Note:** Each script in this example is designed to be applied to an
 **individual endpoint** within a Dual Endpoint (DEP) design, rather than
 to both endpoints simultaneously.

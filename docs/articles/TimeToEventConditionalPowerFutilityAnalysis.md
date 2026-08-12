@@ -36,15 +36,6 @@ be created, after which simulations can be run based on its computation.
 During the simulation, the futility evaluation from the original design
 is replaced by the custom futility logic implemented in the R script.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "TimeToEventConditionalPowerFutilityAnalysis" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 ### Why do we need R Integration for this example?
 
 East Horizon: Design’s built-in analysis algorithms do not natively

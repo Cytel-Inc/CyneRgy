@@ -22,15 +22,6 @@ context of 2-arm clinical trials with multiple endpoints. The example
 combines time-to-event, binary, and continuous outcomes within a single
 response-generating function.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "MEPPatientSimulation" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPPatientSimulation/R)
 you will find the following R file:

@@ -26,6 +26,16 @@ type.
 
   - 1-Sided Efficacy Lower and Futility Upper = 5
 
+- **Not in East Horizon Explore Yet**:
+
+  - 2-Sided Efficacy Only = 6
+
+  - 2-Sided Futility Only = 7
+
+  - 2-Sided Efficacy and Futility = 8
+
+  - Equivalence = 9
+
 ## Usage
 
 ``` r
@@ -76,7 +86,3 @@ GetDecisionString(
 
   Logical condition evaluated to determine final futility at the last
   look (defaults to `FALSE`).
-
-## Value
-
-Character string equal to `"Efficacy"`, `"Futility"`, or `"Continue"`.

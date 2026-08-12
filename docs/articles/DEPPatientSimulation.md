@@ -23,15 +23,6 @@ in the context of 2-arm clinical trials with dual endpoints. The first
 example shows how to simulate correlated dual time-to-event (TTE)
 endpoints.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "DEPPatientSimulation" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DEPOutcomePatientSimulation/R)
 you will find the following R files:

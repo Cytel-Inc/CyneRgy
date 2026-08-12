@@ -15,8 +15,7 @@ PlotExampleFlowchart(
   nColumnWidth = 0.5,
   nBigColWidth = 3,
   bShowTreatmentSelection = FALSE,
-  bShowMultiplicityAdjustment = FALSE,
-  bShowDesign = FALSE
+  bShowMultiplicityAdjustment = FALSE
 )
 ```
 
@@ -55,10 +54,6 @@ PlotExampleFlowchart(
 
   Logical. Whether to include the "Multiplicity Adjustment" column.
   Default = FALSE.
-
-- bShowDesign:
-
-  Logical. Whether to include the "Design" column. Default = FALSE.
 
 ## Value
 

@@ -33,11 +33,10 @@ Once CyneRgy is installed, you can load this example in R Studio with
 the following commands:
 
 ``` r
-CyneRgy::RunExample( "TreatmentSelection" )
+CyneRgy::RunExample("TreatmentSelection")
 ```
 
-Running the command opens `Description.Rmd` and all R scripts in the
-active supported IDE.
+Running the command above will load the RStudio project in RStudio.
 
 **East Workbook**:
 [TreatmentSelection.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.cywx)

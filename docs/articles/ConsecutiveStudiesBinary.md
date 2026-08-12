@@ -30,15 +30,6 @@ points of East Horizon. It features a sequential trial program involving
 a Phase 2 trial followed by a Phase 3 trial, both with the same binary
 endpoint.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "ConsecutiveStudiesBinary" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 We show how Phase 2 results are simulated, saved, and then used as the
 prior data for Phase 3, allowing the Phase 3 patient outcomes to be
 generated only conditional on the Phase 2 trial’s success. This approach

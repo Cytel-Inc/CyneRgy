@@ -35,15 +35,6 @@ example uses **Progression Free Survival (PFS)** and **Overall Survival
 (OS)** as endpoints, however, this could be extended to other types of
 endpoints by modifying the R code.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "ProbabilitySuccessDualEndpoints" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 ### Why do we need R Integration for this example?
 
 To compute the Probability of Success of a trial, users need to simulate

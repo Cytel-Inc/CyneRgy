@@ -7,8 +7,10 @@ create custom adaptive clinical trial designs and enhance your
 simulation capabilities, without requiring you to develop an entire R
 code base.
 
-CyneRgy provides documentation, templates, examples, and R functions for
-integrating R with Cytel products such as East Horizon.
+The CyneRgy R package demonstrates the synergy between R and Cytel’s
+products such as East Horizon, providing tools, documentation,
+templates, and examples. It also offers a streamlined R experience in
+RStudio, simplifying the creation of new custom scripts.
 
 Important (January 2026): **ArrivalTime** is a new required parameter
 for the Response integration point. Existing R scripts must be updated
@@ -28,26 +30,21 @@ expected, and links to related templates and examples.
 
 # Examples and Templates
 
-A variety of examples highlighting how R scripts integrate with Cytel’s
-simulation tools can be found in
-[`inst/Examples`](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples).
-Please see the [Examples
+A variety of examples highlighting how R scripts can seamlessly
+integrate with Cytel’s simulation tools can be found in this package.
+Please see [Examples
 Outline](https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.md)
-for the complete list and descriptions. Each example includes a
-description and R scripts; some also include supporting files, practice
-scripts, and an optional RStudio project.
+for a complete list of examples and their descriptions.
 
-After installing CyneRgy, list or open an example with:
+[Each example
+directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples)
+provides:
 
-``` r
-CyneRgy::RunExample()
-CyneRgy::RunExample( "TreatmentSelection" )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-creates a writable copy when needed, then opens the description and R
-scripts in the active supported IDE. Use `strDirectory` to choose the
-copy location.
+- An **RStudio project file** for setup.  
+- A **Description file** detailing the example.  
+- An **R folder** which contains the example R scripts.  
+- A **FillInTheBlankR folder** which contains practice scripts with
+  sections removed for hands-on learning.
 
 Templates are available in the [Templates
 directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Templates),
@@ -57,17 +54,10 @@ that Sandbox examples are incomplete and untested.
 
 # Functions
 
-The package exports selected common functions for trial operations and
-binary, continuous, repeated-measures, time-to-event, DEP, and MEP
-endpoints. It also provides
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md),
-[`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md),
-[`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md),
-and
-[`CombineAllRFiles()`](https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.md)
-for working with examples and integration scripts. See the [function
-reference](https://Cytel-Inc.github.io/CyneRgy/reference/index.md) for
-details.
+The CyneRgy package also provides many built-in functions to facilitate
+the creation of your custom R scripts. For a complete list of available
+functions, see
+[References](https://Cytel-Inc.github.io/CyneRgy/reference/index.md).
 
 # Installation
 
@@ -75,125 +65,85 @@ Currently, this package is not officially released and is not available
 on CRAN. However, it may be installed directly from GitHub using the
 [remotes package](https://remotes.r-lib.org/) with the following code:
 
-``` r
-remotes::install_github( "Cytel-Inc/CyneRgy@main" )
-```
+    remotes::install_github( "Cytel-Inc/CyneRgy@main" )
 
-You must have the `remotes` package to use the command above. The
-optional `rstudioapi` package provides the best opening experience in
-RStudio and Positron; it is not required to list, locate, or copy
-examples.
+You must have the remotes package to use the above command. To launch
+the examples, you will also need to have the rstudioapi package.
 
 # Package index
 
-## Shared trial operations
+## All functions
 
-- [`GeneratePoissonArrival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.md)
-  : Generate Patient Arrival Times
-- [`RandomizationSubjectsUsingUniformDistribution()`](https://Cytel-Inc.github.io/CyneRgy/reference/RandomizationSubjectsUsingUniformDistribution.md)
-  : Randomize Subjects Between Two Arms
-- [`GenerateCensoringUsingBinomialProportion()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateCensoringUsingBinomialProportion.md)
-  : Generate Dropout Indicators
-
-## Binary endpoints
-
-- [`SimulatePatientOutcomePercentAtZero.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.md)
-  : Simulate Binary Patient Outcomes
-- [`SimulatePatientOutcomePercentAtZeroBetaDist.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZeroBetaDist.Binary.md)
-  : Simulate Binary Outcomes With Random Structural-Zero Probabilities
-- [`AnalyzeUsingPropTest()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropTest.md)
-  : Analyze Two-Arm Binary Outcomes With a Proportion Test
-- [`AnalyzeUsingPropLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropLimitsOfCI.md)
-  : Analyze Binary Outcomes Using Confidence-Interval Limits
-- [`AnalyzeUsingEastManualFormula()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormula.md)
-  : Analyze Binary Outcomes Using the Manual Test-Statistic Formula
-- [`AnalyzeUsingBetaBinomial()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.md)
-  : Analyze Binary Data Using a Beta-Binomial Model
-
-## Continuous endpoints
-
-- [`SimulatePatientOutcomePercentAtZero()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.md)
-  : Simulate Two-Arm Continuous Outcomes
-- [`SimulatePatientOutcomePercentAtZeroBetaDist()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZeroBetaDist.md)
-  : Simulate Two-Arm Continuous Outcomes With Random Structural-Zero
-  Probabilities
-- [`AnalyzeUsingTTestNormal()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingTTestNormal.md)
-  : Analyze Two-Arm Continuous Outcomes With a T-Test
-- [`AnalyzeUsingMeanLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingMeanLimitsOfCI.md)
-  : Analyze Continuous Outcomes Using Confidence-Interval Limits
-- [`AnalyzeUsingEastManualFormulaNormal()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastManualFormulaNormal.md)
-  : Analyze Continuous Outcomes Using the Manual Test-Statistic Formula
-
-## Repeated-measures endpoints
-
-- [`GenRespDiffOfMeansRepMeasures()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenRespDiffOfMeansRepMeasures.md)
-  : Generate Repeated-Measures Responses
-- [`GenerateDropoutTimeForRM()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateDropoutTimeForRM.md)
-  : Generate Dropout Times for Repeated-Measures Outcomes
-- [`Analyze.RepeatedMeasures()`](https://Cytel-Inc.github.io/CyneRgy/reference/Analyze.RepeatedMeasures.md)
-  : Analyze Repeated-Measures Outcomes
-
-## Time-to-event endpoints
-
-- [`SimulatePatientSurvivalWeibull()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalWeibull.md)
-  : Simulate Two-Arm Weibull Survival Outcomes
-- [`SimulatePatientSurvivalMixtureExponentials()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalMixtureExponentials.md)
-  : Simulate Survival Outcomes From a Mixture of Exponentials
-- [`GenerateDropoutTimeForSurvival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateDropoutTimeForSurvival.md)
-  : Generate Dropout Times for Survival Outcomes
-- [`AnalyzeUsingSurvivalPackage()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingSurvivalPackage.md)
-  : Analyze Two-Arm Time-to-Event Outcomes
-- [`AnalyzeUsingHazardRatioLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingHazardRatioLimitsOfCI.md)
-  : Analyze Time-to-Event Outcomes Using Hazard-Ratio Confidence Limits
-- [`AnalyzeUsingEastLogrankFormula()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingEastLogrankFormula.md)
-  : Analyze Time-to-Event Outcomes Using a Log-Rank Formula
-
-## Dual endpoints
-
-- [`SimulatePatientOutcomeDEPSurvBinSingleHazardPiece()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomeDEPSurvBinSingleHazardPiece.md)
-  : Simulate Correlated Survival and Binary Dual Endpoints
-- [`SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.md)
-  : Simulate Correlated Survival Dual Endpoints
-- [`AnalyzeDEPUsingFisherExact()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeDEPUsingFisherExact.md)
-  : Analyze Survival and Binary Dual Endpoints
-- [`AnalyzeDEPUsingModWtLogRank()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeDEPUsingModWtLogRank.md)
-  : Analyze Survival Dual Endpoints With a Modestly Weighted Log-Rank
-  Test
-- [`GetDEPDecisionsFSD()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDEPDecisionsFSD.md)
-  : Generate Dual-Endpoint Decisions
-
-## Multiple endpoints
-
-- [`GeneratePoissonArrivalMEP()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrivalMEP.md)
-  : Generate Patient Arrival Times for an MEP Design
-- [`GenerateMEPResponse()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateMEPResponse.md)
-  : Generate Correlated Multiple-Endpoint Responses
-- [`GetMEPDecision()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetMEPDecision.md)
-  : Generate Multiple-Endpoint Decisions
-
-## Examples and templates
-
-- [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-  : Open a CyneRgy Example
-- [`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md)
-  : Create a CyneRgy Function from a Template
-- [`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md)
-  : Create a CyneRgy Example Folder
-
-## Integration helpers
-
+- [`AddUnrenderToList()`](https://Cytel-Inc.github.io/CyneRgy/reference/AddUnrenderToList.md)
+  : Add Unrendered Tags to List
+- [`AnalyzeBinaryUsingBetaBinomial()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeBinaryUsingBetaBinomial.md)
+  : Analyze Binary Data Using Beta-Binomial Model
+- [`AnalyzeBinaryUsingEastManualFormula()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeBinaryUsingEastManualFormula.md)
+  : Analyze Binary Data Using Formula 28.2 from the East Manual
+- [`AnalyzeBinaryUsingPropLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeBinaryUsingPropLimitsOfCI.md)
+  : Analyze Binary Data Using Proportion Limits of Confidence Interval
+- [`AnalyzeBinaryUsingPropTest()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeBinaryUsingPropTest.md)
+  : Analyze Binary Data Using the prop.test Function
+- [`AnalyzeContinuousUsingEastManualFormula()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeContinuousUsingEastManualFormula.md)
+  : Analyze Continuous Data Using East Manual Formula
+- [`AnalyzeContinuousUsingMeanLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeContinuousUsingMeanLimitsOfCI.md)
+  : Analyze Continuous Data Using Mean Limits of Confidence Interval
+- [`AnalyzeContinuousUsingTTestNormal()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeContinuousUsingTTestNormal.md)
+  : Analyze Continuous Data Using t-Test
+- [`AnalyzeTTEUsingHazardRatioLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeTTEUsingHazardRatioLimitsOfCI.md)
+  : Analyze Time-to-Event Data Using Hazard Ratio Limits of Confidence
+  Interval
 - [`CombineAllRFiles()`](https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.md)
   : Combine All R Files
+- [`ComputeBayesianPredictiveProbabilityWithBayesianAnalysis()`](https://Cytel-Inc.github.io/CyneRgy/reference/ComputeBayesianPredictiveProbabilityWithBayesianAnalysis.md)
+  : Compute Bayesian Predictive Probability of Success
+- [`ComputeDEPAnalysisTime()`](https://Cytel-Inc.github.io/CyneRgy/reference/ComputeDEPAnalysisTime.md)
+  : Compute Analysis Time for Dual Endpoint (DEP) Designs
+- [`ComputeHazardWeibull()`](https://Cytel-Inc.github.io/CyneRgy/reference/ComputeHazardWeibull.md)
+  : Compute Hazard of Weibull Distribution
+- [`ComputeScaleGivenShapeMedian()`](https://Cytel-Inc.github.io/CyneRgy/reference/ComputeScaleGivenShapeMedian.md)
+  : Compute Weibull scale parameter
+- [`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md)
+  : Create a New CyneRgy Example Using Templates
+- [`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md)
+  : Create a CyneRgy Function Template
+- [`GetDecision()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.md)
+  : Determine Decision Based on Decision String, Design and Look
+  Information
 - [`GetDecisionString()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecisionString.md)
   : Generate Decision String Based on Interim and Final Analysis
   Conditions
-- [`GetDecision()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.md)
-  : Convert a Decision Label to an Integration Decision Value
-
-## Documentation helpers
-
+- [`InitLoadCyneRgy()`](https://Cytel-Inc.github.io/CyneRgy/reference/InitLoadCyneRgy.md)
+  : Initialize CyneRgy Library for Simulations
 - [`PlotExampleFlowchart()`](https://Cytel-Inc.github.io/CyneRgy/reference/PlotExampleFlowchart.md)
   : Generate a Flowchart for a CyneRgy Example
+- [`ProbExpGreaterCtrlBeta()`](https://Cytel-Inc.github.io/CyneRgy/reference/ProbExpGreaterCtrlBeta.md)
+  : Compute Posterior Probability of Experimental Treatment Being
+  Greater than Control
+- [`ReplaceTagsInFile()`](https://Cytel-Inc.github.io/CyneRgy/reference/ReplaceTagsInFile.md)
+  : Replace Tags in a File
+- [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
+  : Launch Example from the CyneRgy Package
+- [`SelectExpThatAreBetterThanCtrl()`](https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpThatAreBetterThanCtrl.md)
+  : Select Experimental Treatments Better Than Control
+- [`SelectExpUsingBayesianRule()`](https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpUsingBayesianRule.md)
+  : Select Experimental Treatments Using a Bayesian Rule
+- [`SelectExpWithPValueLessThanSpecified()`](https://Cytel-Inc.github.io/CyneRgy/reference/SelectExpWithPValueLessThanSpecified.md)
+  : Select Experimental Treatments Using P-value Comparison
+- [`SelectSpecifiedNumberOfExpWithHighestResponses()`](https://Cytel-Inc.github.io/CyneRgy/reference/SelectSpecifiedNumberOfExpWithHighestResponses.md)
+  : Select Treatments with the Highest Number of Responses
+- [`SimulateContinuousPatientOutcomePercentAtZero()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulateContinuousPatientOutcomePercentAtZero.md)
+  : Simulate Continuous Patient Outcomes with Proportion at Zero
+- [`SimulateContinuousPatientOutcomePercentAtZeroBetaDist()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulateContinuousPatientOutcomePercentAtZeroBetaDist.md)
+  : Simulate Continuous Patient Outcomes with Probability of Zero from a
+  Beta Distribution
+- [`SimulateTTEPatientMixtureExponentials()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulateTTEPatientMixtureExponentials.md)
+  : Simulate TTE Patient Outcomes from a Mixture Exponential
+  Distribution
+- [`SimulateTTEPatientWeibull()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulateTTEPatientWeibull.md)
+  : Simulate TTE Patient Outcomes from a Weibull Distribution
+- [`WhiskerKeepUnrender()`](https://Cytel-Inc.github.io/CyneRgy/reference/WhiskerKeepUnrender.md)
+  : Render Template While Preserving Unmatched Tags
 
 # Articles
 

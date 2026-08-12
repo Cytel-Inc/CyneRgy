@@ -7,8 +7,10 @@ create custom adaptive clinical trial designs and enhance your
 simulation capabilities, without requiring you to develop an entire R
 code base.
 
-CyneRgy provides documentation, templates, examples, and R functions for
-integrating R with Cytel products such as East Horizon.
+The CyneRgy R package demonstrates the synergy between R and Cytel’s
+products such as East Horizon, providing tools, documentation,
+templates, and examples. It also offers a streamlined R experience in
+RStudio, simplifying the creation of new custom scripts.
 
 Important (January 2026): **ArrivalTime** is a new required parameter
 for the Response integration point. Existing R scripts must be updated
@@ -28,26 +30,21 @@ expected, and links to related templates and examples.
 
 # Examples and Templates
 
-A variety of examples highlighting how R scripts integrate with Cytel’s
-simulation tools can be found in
-[`inst/Examples`](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples).
-Please see the [Examples
+A variety of examples highlighting how R scripts can seamlessly
+integrate with Cytel’s simulation tools can be found in this package.
+Please see [Examples
 Outline](https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.md)
-for the complete list and descriptions. Each example includes a
-description and R scripts; some also include supporting files, practice
-scripts, and an optional RStudio project.
+for a complete list of examples and their descriptions.
 
-After installing CyneRgy, list or open an example with:
+[Each example
+directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples)
+provides:
 
-``` r
-CyneRgy::RunExample()
-CyneRgy::RunExample( "TreatmentSelection" )
-```
-
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
-creates a writable copy when needed, then opens the description and R
-scripts in the active supported IDE. Use `strDirectory` to choose the
-copy location.
+- An **RStudio project file** for setup.  
+- A **Description file** detailing the example.  
+- An **R folder** which contains the example R scripts.  
+- A **FillInTheBlankR folder** which contains practice scripts with
+  sections removed for hands-on learning.
 
 Templates are available in the [Templates
 directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Templates),
@@ -57,17 +54,10 @@ that Sandbox examples are incomplete and untested.
 
 # Functions
 
-The package exports selected common functions for trial operations and
-binary, continuous, repeated-measures, time-to-event, DEP, and MEP
-endpoints. It also provides
-[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md),
-[`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md),
-[`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md),
-and
-[`CombineAllRFiles()`](https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.md)
-for working with examples and integration scripts. See the [function
-reference](https://Cytel-Inc.github.io/CyneRgy/reference/index.md) for
-details.
+The CyneRgy package also provides many built-in functions to facilitate
+the creation of your custom R scripts. For a complete list of available
+functions, see
+[References](https://Cytel-Inc.github.io/CyneRgy/reference/index.md).
 
 # Installation
 
@@ -75,11 +65,7 @@ Currently, this package is not officially released and is not available
 on CRAN. However, it may be installed directly from GitHub using the
 [remotes package](https://remotes.r-lib.org/) with the following code:
 
-``` r
-remotes::install_github( "Cytel-Inc/CyneRgy@main" )
-```
+    remotes::install_github( "Cytel-Inc/CyneRgy@main" )
 
-You must have the `remotes` package to use the command above. The
-optional `rstudioapi` package provides the best opening experience in
-RStudio and Positron; it is not required to list, locate, or copy
-examples.
+You must have the remotes package to use the above command. To launch
+the examples, you will also need to have the rstudioapi package.

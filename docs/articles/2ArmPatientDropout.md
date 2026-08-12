@@ -41,8 +41,7 @@ following command:
 CyneRgy::RunExample( "2ArmPatientDropout" )
 ```
 
-Running the command opens `Description.Rmd` and all R scripts in the
-active supported IDE.
+Running the command above will load the RStudio project in RStudio.
 
 **RStudio Project File**:
 [2ArmPatientDropout.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/2ArmPatientDropout.Rproj)

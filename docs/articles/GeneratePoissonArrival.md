@@ -27,8 +27,7 @@ following commands:
 CyneRgy::RunExample( "GeneratePoissonArrival" )
 ```
 
-Running the command opens `Description.Rmd` and all R scripts in the
-active supported IDE.
+Running the command above will load the RStudio project in RStudio.
 
 **East Workbook**:
 [GeneratePoissonArrival.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx)

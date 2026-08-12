@@ -43,8 +43,7 @@ following command:
 CyneRgy::RunExample( "MultipleEndpointsWithCovariates" )
 ```
 
-This opens `Description.Rmd` and all R scripts in the active supported
-IDE.
+This will open the corresponding RStudio project.
 
 **RStudio Project File**:
 [MultipleEndpointsWithCovariates.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/MultipleEndpointsWithCovariates.Rproj)

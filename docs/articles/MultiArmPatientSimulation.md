@@ -24,15 +24,6 @@ in the context of a multi-arm clinical trials. The following examples
 demonstrate different approaches for simulating continuous, binary, and
 time-to-event endpoints in multi-arm clinical trials.
 
-Once CyneRgy is installed, open this example with:
-
-``` r
-CyneRgy::RunExample( "MultiArmPatientSimulation" )
-```
-
-The command opens `Description.Rmd` and all R scripts in the active
-supported IDE.
-
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientSimulation/R)
 you will find the following R files:

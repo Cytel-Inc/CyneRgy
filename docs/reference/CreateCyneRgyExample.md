@@ -1,18 +1,16 @@
-# Create a CyneRgy Example Folder
+# Create a New CyneRgy Example Using Templates
 
-Creates an example folder containing `Description.Rmd`, an `R` directory
-with a selected integration-point template, and a matching RStudio
-project by default. The R scripts do not depend on the project file.
+This function creates a new directory containing the necessary files for
+the desired CyneRgy template. The directory can be used in connection
+with Cytel-R integration.
 
 ## Usage
 
 ``` r
 CreateCyneRgyExample(
-  strFunctionType = "",
+  strFunctionType,
   strNewExampleName = "",
-  strDirectory = NA,
-  bCreateProject = TRUE,
-  bOpen = interactive()
+  strDirectory = NA
 )
 ```
 
@@ -20,39 +18,19 @@ CreateCyneRgyExample(
 
 - strFunctionType:
 
-  Character string naming the integration-point template to use.
+  The type of CyneRgy template to use. Must be a valid template name.
 
 - strNewExampleName:
 
-  Character string naming the new example folder and starter function.
+  A string representing the name of the new example directory. Defaults
+  to an empty string.
 
 - strDirectory:
 
-  Existing parent directory where the example should be created.
-  Defaults to the current working directory.
-
-- bCreateProject:
-
-  Logical value indicating whether to include an RStudio project file.
-  Defaults to `TRUE`.
-
-- bOpen:
-
-  Logical value indicating whether to open the new example in the active
-  IDE. Defaults to
-  [`interactive()`](https://rdrr.io/r/base/interactive.html).
+  The directory path where the example will be created. If not provided,
+  the current working directory is used.
 
 ## Value
 
-Invisibly returns the created example path. When called without
-`strFunctionType`, invisibly returns the available template names.
-
-## Examples
-
-``` r
-if (FALSE) { # interactive()
-CreateCyneRgyExample()
-CreateCyneRgyExample( "Analyze.Binary", "MyBinaryAnalysis" )
-CreateCyneRgyExample( "Analyze.Binary", "MyBinaryFolder", bCreateProject = FALSE )
-}
-```
+Creates the specified example directory and files within the provided or
+default directory path.

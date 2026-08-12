@@ -12,9 +12,6 @@
 
 ## Citation
 
-Source:
-[`DESCRIPTION`](https://github.com/Cytel-Inc/CyneRgy/blob/HEAD/DESCRIPTION)
-
 Wathen J, Mazzanti V, Potvin G (2026). *CyneRgy: CyneRgy - Integration
 for Cytel Products and R*. R package version 1.2.0,
 <https://Cytel-Inc.github.io/CyneRgy>.

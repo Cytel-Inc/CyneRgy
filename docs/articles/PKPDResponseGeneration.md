@@ -37,11 +37,8 @@ following command:
 CyneRgy::RunExample( "PKPDResponseGeneration" )
 ```
 
-Running the command opens `Description.Rmd` and all R scripts in the
-active supported IDE.
-
 **RStudio Project File**:
-[PKPDResponseGeneration.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/PKPDResponseGeneration.Rproj)
+[PKPDResponseGeneration.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/PKPDResponseGeneration)
 
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDResponseGeneration/R)
