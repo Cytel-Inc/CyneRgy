@@ -450,6 +450,10 @@
                 ],
                 "run_type": [
                     {
+                        "id": 1,
+                        "name": "Explore"
+                    },
+                    {
                         "id": 2,
                         "name": "Design"
                     }
@@ -1158,6 +1162,10 @@
                     {
                         "id": 5,
                         "name": "MultiArm-Continuous"
+                    },
+                    {
+                        "id": 6,
+                        "name": "MultiArm-Continuous-DoseFinding"
                     }
                 ],
                 "run_type": [
