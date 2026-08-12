@@ -75,6 +75,10 @@ reference:
     - title: Binary endpoints
       contents:
           - SimulatePatientOutcomePercentAtZero.Binary
+          - SimulatePatientOutcomePercentAtZeroBetaDist.Binary
+          - AnalyzeUsingPropTest
+          - AnalyzeUsingPropLimitsOfCI
+          - AnalyzeUsingEastManualFormula
           - AnalyzeUsingBetaBinomial
     - title: Continuous endpoints
       contents:

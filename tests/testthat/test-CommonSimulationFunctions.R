@@ -65,6 +65,10 @@ test_that( "common functions validate unsupported inputs", {
 
 test_that( "common endpoint wrappers expose and load their bundled implementations", {
     lFunctions <- list(
+        SimulatePatientOutcomePercentAtZeroBetaDist.Binary = c( "2ArmBinaryOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZeroBetaDist.Binary.R" ),
+        AnalyzeUsingPropTest = c( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingPropTest.R" ),
+        AnalyzeUsingPropLimitsOfCI = c( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingPropLimitsOfCI.R" ),
+        AnalyzeUsingEastManualFormula = c( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingEastManualFormula.R" ),
         SimulatePatientOutcomePercentAtZero = c( "2ArmNormalOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZero.R" ),
         SimulatePatientOutcomePercentAtZeroBetaDist = c( "2ArmNormalOutcomePatientSimulation", "SimulatePatientOutcomePercentAtZeroBetaDist.R" ),
         AnalyzeUsingTTestNormal = c( "2ArmNormalOutcomeAnalysis", "AnalyzeUsingTTestNormal.R" ),
@@ -102,7 +106,7 @@ test_that( "common endpoint wrappers expose and load their bundled implementatio
 } )
 
 
-test_that( "continuous, TTE, RM, and MEP wrappers run representative simulations", {
+test_that( "binary, continuous, TTE, RM, and MEP wrappers run representative simulations", {
     set.seed( 7 )
     nQtyOfPatients <- 20
     lArrival       <- GeneratePoissonArrival( nQtyOfPatients, 1, 0, 5 )
@@ -114,6 +118,28 @@ test_that( "continuous, TTE, RM, and MEP wrappers run representative simulations
     )
     expect_length( lContinuous$Response, nQtyOfPatients )
     expect_identical( lContinuous$ErrorCode, 0L )
+
+    lBinary <- SimulatePatientOutcomePercentAtZeroBetaDist.Binary(
+        nQtyOfPatients, 2, lArrival$ArrivalTime, lTreatment$TreatmentID,
+        PropResp = c( 0.3, 0.5 ),
+        UserParam = list( dCtrlBetaParam1 = 2, dCtrlBetaParam2 = 8,
+                          dExpBetaParam1 = 2, dExpBetaParam2 = 8 )
+    )
+    expect_length( lBinary$Response, nQtyOfPatients )
+    expect_identical( lBinary$ErrorCode, 0L )
+
+    dfBinary       <- data.frame( Response = rep( c( 0, 1, 0, 1 ), 10 ),
+                                  TreatmentID = rep( c( 0, 0, 1, 1 ), 10 ) )
+    lBinaryDesign  <- list( TailType = 1, CriticalPoint = 1.96, MaxCompleters = nrow( dfBinary ) )
+    lPropTest      <- AnalyzeUsingPropTest( dfBinary, lBinaryDesign )
+    lPropLimits    <- AnalyzeUsingPropLimitsOfCI(
+        dfBinary, lBinaryDesign,
+        UserParam = list( dConfLevel = 0.9, dLowerLimit = -0.2, dUpperLimit = 0.2 )
+    )
+    lManualFormula <- AnalyzeUsingEastManualFormula( dfBinary, lBinaryDesign )
+    expect_identical( lPropTest$ErrorCode, 0L )
+    expect_identical( lPropLimits$ErrorCode, 0L )
+    expect_identical( lManualFormula$ErrorCode, 0L )
 
     lTTE <- SimulatePatientSurvivalWeibull(
         nQtyOfPatients, 2, lArrival$ArrivalTime, lTreatment$TreatmentID,
