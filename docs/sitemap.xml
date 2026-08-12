@@ -68,15 +68,20 @@
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/authors.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/index.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AddUnrenderToList.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/GenerateCensoringUsingBinomialProportion.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/GetDecision.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/GetDecisionString.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/index.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/PlotExampleFlowchart.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/RandomizationSubjectsUsingUniformDistribution.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/ReplaceTagsInFile.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.html</loc></url>
+<url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.html</loc></url>
 <url><loc>https://Cytel-Inc.github.io/CyneRgy/reference/WhiskerKeepUnrender.html</loc></url>
 </urlset>
 

@@ -1,5 +1,18 @@
 # Package index
 
+## Common simulation functions
+
+- [`GeneratePoissonArrival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.md)
+  : Generate Patient Arrival Times
+- [`RandomizationSubjectsUsingUniformDistribution()`](https://Cytel-Inc.github.io/CyneRgy/reference/RandomizationSubjectsUsingUniformDistribution.md)
+  : Randomize Subjects Between Two Arms
+- [`GenerateCensoringUsingBinomialProportion()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateCensoringUsingBinomialProportion.md)
+  : Generate Dropout Indicators
+- [`SimulatePatientOutcomePercentAtZero.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.md)
+  : Simulate Binary Patient Outcomes
+- [`AnalyzeUsingBetaBinomial()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.md)
+  : Analyze Binary Data Using a Beta-Binomial Model
+
 ## Examples and templates
 
 - [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)

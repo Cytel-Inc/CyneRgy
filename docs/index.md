@@ -9,9 +9,9 @@ code base.
 
 The CyneRgy repository provides documentation, templates, and complete
 examples for Cytel products such as East Horizon. The accompanying R
-package provides a small set of tools for finding those examples,
-creating custom scripts from templates, and preparing R code for use in
-Cytel products.
+package provides tools for finding those examples, creating custom
+scripts from templates, preparing R code for use in Cytel products, and
+running selected common simulation functions directly from R.
 
 Important (January 2026): **ArrivalTime** is a new required parameter
 for the Response integration point. Existing R scripts must be updated
@@ -38,9 +38,10 @@ directory. Please see the [Examples
 Outline](https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.md)
 for the complete list and descriptions.
 
-The R functions used by these examples remain in their example
-directories; they are not exported as `CyneRgy::` package functions.
-Each example is self-contained and generally includes:
+Selected functions from common examples are also exported by the package
+and can be called directly with `CyneRgy::`. Specialized and advanced
+functions remain in their example directories. Each repository example
+is self-contained and generally includes:
 
 - A `Description.Rmd` file explaining the example.
 - An `R` folder containing its scripts.
@@ -88,8 +89,22 @@ that Sandbox examples are incomplete and untested.
 
 # Functions
 
-The package intentionally keeps a small public API. Its main functions
-are:
+The package keeps a focused public API. Common simulation functions
+include:
+
+- [`GeneratePoissonArrival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.md)
+  generates patient arrival times.
+- [`RandomizationSubjectsUsingUniformDistribution()`](https://Cytel-Inc.github.io/CyneRgy/reference/RandomizationSubjectsUsingUniformDistribution.md)
+  randomizes subjects between two arms.
+- [`GenerateCensoringUsingBinomialProportion()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateCensoringUsingBinomialProportion.md)
+  generates dropout indicators.
+- [`SimulatePatientOutcomePercentAtZero.Binary()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientOutcomePercentAtZero.Binary.md)
+  simulates two-arm binary responses.
+- [`AnalyzeUsingBetaBinomial()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingBetaBinomial.md)
+  analyzes two-arm binary responses using a beta-binomial model.
+
+Functions for working with the repository examples and integration
+templates include:
 
 - [`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
   lists, opens, or copies an included example.
