@@ -1,19 +1,13 @@
 # Package index
 
-## Common trial operations
+## Shared trial operations
 
 - [`GeneratePoissonArrival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.md)
   : Generate Patient Arrival Times
-- [`GeneratePoissonArrivalMEP()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrivalMEP.md)
-  : Generate Patient Arrival Times for an MEP Design
 - [`RandomizationSubjectsUsingUniformDistribution()`](https://Cytel-Inc.github.io/CyneRgy/reference/RandomizationSubjectsUsingUniformDistribution.md)
   : Randomize Subjects Between Two Arms
 - [`GenerateCensoringUsingBinomialProportion()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateCensoringUsingBinomialProportion.md)
   : Generate Dropout Indicators
-- [`GenerateDropoutTimeForRM()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateDropoutTimeForRM.md)
-  : Generate Dropout Times for Repeated-Measures Outcomes
-- [`GenerateDropoutTimeForSurvival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateDropoutTimeForSurvival.md)
-  : Generate Dropout Times for Survival Outcomes
 
 ## Binary endpoints
 
@@ -48,6 +42,8 @@
 
 - [`GenRespDiffOfMeansRepMeasures()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenRespDiffOfMeansRepMeasures.md)
   : Generate Repeated-Measures Responses
+- [`GenerateDropoutTimeForRM()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateDropoutTimeForRM.md)
+  : Generate Dropout Times for Repeated-Measures Outcomes
 - [`Analyze.RepeatedMeasures()`](https://Cytel-Inc.github.io/CyneRgy/reference/Analyze.RepeatedMeasures.md)
   : Analyze Repeated-Measures Outcomes
 
@@ -57,6 +53,8 @@
   : Simulate Two-Arm Weibull Survival Outcomes
 - [`SimulatePatientSurvivalMixtureExponentials()`](https://Cytel-Inc.github.io/CyneRgy/reference/SimulatePatientSurvivalMixtureExponentials.md)
   : Simulate Survival Outcomes From a Mixture of Exponentials
+- [`GenerateDropoutTimeForSurvival()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateDropoutTimeForSurvival.md)
+  : Generate Dropout Times for Survival Outcomes
 - [`AnalyzeUsingSurvivalPackage()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingSurvivalPackage.md)
   : Analyze Two-Arm Time-to-Event Outcomes
 - [`AnalyzeUsingHazardRatioLimitsOfCI()`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingHazardRatioLimitsOfCI.md)
@@ -80,6 +78,8 @@
 
 ## Multiple endpoints
 
+- [`GeneratePoissonArrivalMEP()`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrivalMEP.md)
+  : Generate Patient Arrival Times for an MEP Design
 - [`GenerateMEPResponse()`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateMEPResponse.md)
   : Generate Correlated Multiple-Endpoint Responses
 - [`GetMEPDecision()`](https://Cytel-Inc.github.io/CyneRgy/reference/GetMEPDecision.md)
