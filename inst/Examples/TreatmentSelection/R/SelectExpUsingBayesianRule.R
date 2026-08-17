@@ -33,16 +33,6 @@
 #' @note The order of AllocRatio should be the same as TreatmentID, and the corresponding elements will have the assigned allocation ratio
 #' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, e.g., TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 #' @note You must return at LEAST one treatment and one allocation ratio
-#' @note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example. It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them. This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'       saveRDS( UserParam,   "UserParam.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
 #' @export
 ######################################################################################################################## .
 
@@ -56,14 +46,7 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     # 3)	If none of the treatments meet the above criteria for selection, then select the treatment with the largest Pr( pj > UserParam$dHistoricResponseRate | data ).
     # 4)	After selecting the treatments, use a randomization ratio of 2:1 (experimental: control) for all experimental treatments that are selected for stage 2
 
-          
-    #Input objects can be saved through the following lines:
-    #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
-    
-    # The below lines set the values of the parameters if a user does not specify a value
+          # The below lines set the values of the parameters if a user does not specify a value
     
     if( is.null( UserParam ) )
     {

@@ -18,16 +18,6 @@
 #' If UserParam is not supplied, then PrdStart, AccrRate are used to simulate arrival times according to a Poisson process.  
 GeneratePoissonArrival  <- function(NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {
-
-    # setwd( "C:/GeneratePoissonArrival/ExampleArgumentsFromEast/Example1")
-    # saveRDS( NumSub,    "NumSub.Rds")
-    # saveRDS( NumPrd,    "NumPrd.Rds")
-    # saveRDS( PrdStart,  "PrdStart.Rds" )
-    # saveRDS( AccrRate,  "AccrRate.Rds" )
-    # saveRDS( UserParam, "UserParam.Rds" )
-    # Error = 0 --> No Error; 
-    # Error > 0 --> Non Fatal Error Particular Simulation will be aborted but Next Simulation will be performed
-    # Error < 0 --> Fatal Error - No further simulation will be attempted. We suggest that user should classify error in these categories depending on the context.
     # Step 1 - Initialize the return variables or other variables needed ####
     Error 	            <- 0  
     vPatientArrivalTime <- c() # Note, as you simulate the patient data put in in this vector so it can be returned

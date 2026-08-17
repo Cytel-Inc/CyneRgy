@@ -45,15 +45,7 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
+
 ######################################################################################################################## .
 
 SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo)
@@ -61,14 +53,6 @@ SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo)
     # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
     # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
     # The fully worked examples are provided in the corresponding example R files. 
-    
-    
-    # Input objects can be saved through the following lines:
-    
-    #setwd( "[ENTER THE DIRECTORY WHERE YOU WANT TO SAVE DATA]")
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
     
     # Calculate the number of responders and treatment failures for each treatment
     

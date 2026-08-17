@@ -38,28 +38,12 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
+
 ######################################################################################################################## .
 
 PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
-           
-    # If you wanted to save the input objects you could use the following to save the files to your working directory
-    # Saving is not available in East Horizon Explore
-    # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-    
-    # Pulling the important information from the simulated data, SimData, sent from East 
+   # Pulling the important information from the simulated data, SimData, sent from East 
     vTreatmentID    <- SimData$TreatmentID  # TreatmentIDs are 0, 1,..., number of experimental treatments
     vPatientOutcome <- SimData$Response     # Response = 0 or 1
     

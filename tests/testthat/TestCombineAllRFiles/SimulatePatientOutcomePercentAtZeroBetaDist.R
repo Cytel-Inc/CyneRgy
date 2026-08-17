@@ -22,10 +22,6 @@
 #' @export
 SimulatePatientOutcomePercentAtZeroBetaDist <- function(NumSub, TreatmentID, Mean, StdDev, UserParam = NULL)
 {
-    # Note: It can be helpful to save to the parameters that East sent.
-    # The next two lines show how you could save the UserParam variable to an Rds file
-    # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    # saveRDS(UserParam, "UserParam.Rds")
     
     # If the user did not specify the user parameters, but still called this function then the probability
     # of a 0 outcome is 0 for both treatments

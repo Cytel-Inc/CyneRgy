@@ -35,15 +35,6 @@
 #       If user variables are not specifed we assume:
 #       pi_S ~ beta( 10, 40 ); to reflect that knowledge that on standard of care 10/50 previous patients responded
 #       pi_E ~ beta( 0.2, 0.8 ); non-informative prior for Experimental to have the same prior mean as S but only 1 prior patient observed
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
 
 ######################################################################################################################## .
 
@@ -106,12 +97,6 @@ AnalyzeUsingBayesAnalysisWithFutility <- function(SimData, DesignParam, LookInfo
         
     }
     
-    if( !file.exists( paste0( "SimData", nLookIndex, ".Rds") ))
-    {
-        saveRDS( SimData, paste0( "SimData", nLookIndex, ".Rds") )
-        saveRDS( DesignParam, paste0( "DesignParam", nLookIndex, ".Rds") )
-        saveRDS( LookInfo, paste0( "LookInfo", nLookIndex, ".Rds") )
-    }
     Error 	<- 0
     #retval 	= 0
     
