@@ -57,9 +57,11 @@ Running the command above will load the project in RStudio.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/R) you will find the following R files:
 
-1.  [SimulateBinaryAndPFS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/R/SimulateBinaryAndPFS.R) - This file contains a function that executes the response data generation for both binary and PFS endpoints. The current implementation assumes independence between the two endpoints. However, users can modify the code to incorporate correlation between binary response and PFS outcomes if desired. The function uses the native binary endpoint parameters available within the East Horizon inputs interface to generate binary response data, while user-defined parameters supplied through `UserParam` are used for simulating PFS outcomes.
+1.  [SimulateBinaryAndPFS.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/R/SimulateBinaryAndPFS.R) - This function is responsible for generating the patient-level response data used in each simulated trial. It generates the short-term binary endpoint for all treatment and control arms and generates PFS outcomes for the same patients. The binary response is simulated using a binomial distribution based on the treatment-specific response probabilities specified in the East Horizon inputs. PFS data are generated using an exponential distribution, with the control-arm median survival and treatment-specific hazard ratios supplied through the `UserParam` input. The function returns both the binary responses and PFS survival times so that the two endpoints can subsequently be used by the analysis function.
+The current implementation assumes independence between the binary and PFS endpoints. This assumption can be modified in the R code if a correlation between short-term response and long-term PFS is required for a particular trial design.
 
-1.  [SelectArmAndAnalyzePFSTwoStages.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/R/SelectArmAndAnalyzePFSTwoStages.R) - This file provides an example R function that performs a two-stage adaptive analysis for multi-arm clinical trials. In Stage 1, the best-performing treatment arm is selected based on the binary response endpoint. In Stage 2, efficacy is evaluated using PFS through a log-rank test comparing the selected treatment arm with the control arm. The final analysis uses the complete PFS dataset collected across both Stage 1 and Stage 2 for the selected treatment arm and the control arm. Note that users can change the analysis test for the efficacy decision if desired. The function also supports optional dropout during PFS follow-up, allowing patients to be censored prior to experiencing a PFS event.
+1.  [SelectArmAndAnalyzePFSTwoStages.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/R/SelectArmAndAnalyzePFSTwoStages.R) - This function implements the two-stage adaptive analysis. First, it identifies the patients available for the Phase II analysis and calculates the observed binary response rate for each treatment arm and the control arm. The treatment arm with the largest observed improvement over control is selected for further evaluation. A futility criterion is then applied to determine whether the selected treatment provides sufficient evidence to proceed.
+If the trial proceeds to Phase III, the function retains only the selected treatment arm and the concurrent control arm for the final efficacy analysis. It determines the appropriate analysis timing based on the target number of PFS events, applies censoring where necessary, and performs a log-rank test using the available PFS data. Importantly, PFS information collected during both phases is retained for the selected treatment and control arms and contributes to the final analysis.
 
 ## Workflow Overview
 
@@ -228,7 +230,14 @@ Refer to the table below for the values of the user-defined parameters used in t
 23. Confirm by clicking on “Simulate” in the pop-up window, and wait for the simulation runs to finish.
 
 ![](MultiArmTwoEndpointTwoStageTrial_files/Step 23.jpg){width=350px}
-    
+
+# Interpreting the Results
+
+After the simulation is complete, simulation-level results can be downloaded from East Horizon. These results can be used to determine the number of Phase II and Phase III completers, assess how frequently each treatment arm was selected at Stage 1, as well as calculate the PoS - the proportion of simulations that meet the prespecified final efficacy criterion.
+
+The results should be interpreted in the context of the simulation assumptions, including independent binary and PFS endpoints, exponential PFS distributions, and treatment selection based on observed binary response rates. Users can vary these assumptions and other design parameters, such as treatment effects, sample size, futility threshold, and target number of PFS events, to evaluate how they affect the operating characteristics of the design.
+
+
 # Possible Extensions
 
 While this example demonstrates one specific inferentially seamless Phase II/III design, the R integration framework is flexible and can be extended to support a variety of alternative design features and analysis strategies. The current implementation provides a foundation for exploring more complex inferentially seamless designs and for evaluating their operating characteristics through simulation.
