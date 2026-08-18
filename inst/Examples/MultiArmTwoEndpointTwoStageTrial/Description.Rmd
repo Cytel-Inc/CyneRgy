@@ -35,7 +35,7 @@ To try this example, create a new project in East Horizon using the following co
 This example demonstrates how to compute probability of success for a multi-arm clinical trial with two endpoints. This is achieved by extending East Horizon’s single-endpoint framework to support dual endpoints through custom R scripts implemented at the **Response (Patient Simulation)** and **Analysis** integration points.
 
 The example considers an *inferentially seamless two-stage Phase II/III clinical trial design*. 
-In Stage 1, treatment selection is performed using a *binary outcome endpoint*, while the final efficacy analysis in Stage 2 is based on *Progression-Free Survival (PFS)*. Importantly, the final analysis incorporates all available PFS data from both Stage 1 and Stage 2 for the selected treatment arm and the control arm.
+The design includes a concurrent control arm in both phases and uses a short-term *binary endpoint* in Phase II to select the optimal dose for further evaluation. In Phase III, treatment efficacy is evaluated using a long-term time-to-event (TTE) endpoint, specifically *Progression-Free Survival (PFS)*.
 
 Seamless Phase II/III designs are increasingly used to integrate dose-selection and confirmatory objectives within a single study setup, potentially shortening drug development in areas with high unmet medical needs. This approach is particularly useful when the primary Phase III endpoint requires long follow-up periods to mature. In such settings, an earlier surrogate efficacy endpoint can be used during the Phase II to guide treatment/dose selection while continuing patient follow-up for the time-to-event endpoint used in the final confirmatory analysis. 
 
@@ -231,12 +231,22 @@ Refer to the table below for the values of the user-defined parameters used in t
     
 # Possible Extensions
 
-While this example demonstrates one specific seamless Phase II/III setup, the R integration framework is flexible and can be extended to support a variety of alternative design features and analysis strategies, including:
+While this example demonstrates one specific inferentially seamless Phase II/III design, the R integration framework is flexible and can be extended to support a variety of alternative design features and analysis strategies. The current implementation provides a foundation for exploring more complex inferentially seamless designs and for evaluating their operating characteristics through simulation.
 
-1. Simulating patient-level outcomes based on correlated (i.e. dependent) binary and PFS endpoints
-1. Incorporating alternative data generation mechanisms
-1. Supporting multiple interim analyses
-1. Evaluating alternative treatment selection strategies
-1. Applying alternative p-value adjustment methods
-1. Customizing enrollment models or accrual data
-1. Implementing alternative efficacy testing methods
+Possible extensions include:
+
+1. *Modelling dependence between endpoints:* The current example assumes independence between the binary and PFS endpoints. The response-generation function could be extended to simulate correlated binary and PFS outcomes, allowing the relationship between the short-term and long-term endpoints to be incorporated into the trial simulation.
+
+1. *Alternative response-generation mechanisms:* Alternative distributions or patient-level models could be implemented for both the binary and PFS endpoints to reflect different assumptions about treatment effects, survival distributions, or patient heterogeneity.
+
+1. *Multiple interim analyses:* The design could be extended to include additional interim analyses for efficacy, futility, or treatment selection, allowing more flexible adaptation of the trial based on accumulating data.
+
+1. *Alternative treatment-selection strategies:* Instead of selecting the treatment arm solely according to the observed binary response rate, alternative selection criteria could be evaluated.
+
+1. *Multiplicity and Type I error control:* Because dose selection favors treatment arms with more positive observed effects, the final confirmatory analysis requires appropriate adjustment to maintain control of the family-wise error rate. To control the FWER, different approached can be implemented such as p-value combination methods, closed testing procedures, Dunnett-type adjustment.
+
+1. *Alternative efficacy-testing methods:* The final PFS analysis currently uses a log-rank test. The framework could be extended to support alternative time-to-event analyses, including different test statistics or modeling approaches, depending on the assumptions and objectives of the clinical trial.
+
+1. *Alternative enrollment and follow-up assumptions:* The simulation could incorporate more realistic enrollment patterns, staggered recruitment, alternative dropout and censoring mechanisms during PFS follow-up.
+
+These extensions illustrate how R integration can be used to move beyond the currently supported native East Horizon functionality and evaluate a broader range of seamless Phase II/III designs. By implementing design-specific response generation and analysis logic in R, users can investigate important operating characteristics of adaptive strategies, including power, the probability of selecting the optimal treatment, and Type I error control. This provides a flexible framework for exploring complex designs that combine treatment selection with confirmatory efficacy assessment across different endpoints and stages.
