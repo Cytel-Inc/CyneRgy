@@ -33,13 +33,7 @@
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
 #' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 #' @note You must return at LEAST one treatment and one allocation ratio
-
-
-#TODO(Kyle)-does the following format work for examples/ helpful hints?
-
-
-
-
+#' 
 #'@examples  Example Output Object:
 #'       Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
 #'       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
@@ -59,10 +53,6 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'
-
-
-
-
 ######################################################################################################################## .
 
 SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserParam= NULL)

@@ -1,5 +1,4 @@
 ######################################################################################################################## .
-# TODO(Kyle)-Could you check that this documentation is correct (specifically the description)
 #' @param AnalyzeUsingPropLimitsOfCI
 #' @title Analyze using a simplified limits of confidence interval design
 #' @param SimData Data frame which consists of data generated in current simulation.
@@ -53,9 +52,8 @@
 #                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #'@note In this example, the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
-
-
 ######################################################################################################################## .
+
 AnalyzeUsingPropLimitsOfCI<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
     library(CyneRgy)

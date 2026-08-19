@@ -22,14 +22,10 @@
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-
-
-
 ######################################################################################################################## .
+
 AnalyzeUsingPropLimitsOfCI<- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
-    
-    
     # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
     # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
     # The fully worked examples are provided in the corresponding example R files. 

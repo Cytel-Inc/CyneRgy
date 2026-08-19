@@ -41,11 +41,9 @@
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.
-
-#'@note In this example, the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
-
-
+#'@note In this example, the boundary information that is computed and sent from East Horizon is ignored in order to implement this decision approach.
 ################################################################################################################################################################################################
+
 AnalyzeUsingHazardRatioLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {   
     library(CyneRgy)

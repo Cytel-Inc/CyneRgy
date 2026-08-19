@@ -1,7 +1,4 @@
 ######################################################################################################################## .
-#' TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
-#' TODO(Kyle): Should the functions at the bottom be left at the bottom or do they need to be added to top documentation?
-#' 
 #' @param AnalyzeUsingBayesAnalysisWithFutility
 #' @title Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care. 
 #' @param SimData Data frame which consists of data generated in current simulation.
@@ -69,9 +66,7 @@ AnalyzeUsingBayesAnalysisWithFutility <- function(SimData, DesignParam, LookInfo
     vOutcomesS           <- vPatientOutcome[ vPatientTreatment == 0 ]
     vOutcomesE           <- ___________[ vPatientTreatment == 1 ]
     
-    #TODO(Kyle): Should this below note move into the top formatting section?
-    
-    
+
     # Important Note: 
     # When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should set dLowerCutoffForFutility = 0
     # when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  

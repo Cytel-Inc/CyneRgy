@@ -38,9 +38,8 @@
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
 #'@note This function is only applicable to the case where MAV <= TV.  
 #'       In this example, the boundary information that is computed and sent from East is ignored in order to implement this decision approach.
-
-
 ################################################################################################################################################################################################
+
 AnalyzeUsingMeanLimitsOfCI <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
     library(CyneRgy)

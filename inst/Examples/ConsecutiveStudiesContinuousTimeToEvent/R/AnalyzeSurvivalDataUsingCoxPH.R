@@ -5,8 +5,7 @@
 AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library( survival )
-    Error <- 0 
-  
+    Error <- 0   
     nLookIndex           <- 1 
     
     if( !is.null( LookInfo ) )

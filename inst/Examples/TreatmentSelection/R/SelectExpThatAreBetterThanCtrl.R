@@ -40,6 +40,7 @@
 #'
 #' @export
 ######################################################################################################################## .
+
 SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo, UserParam=NULL)
 {
     # Calculate the number of responders and treatment failures for each treatment

@@ -51,8 +51,6 @@
 #'                                            Used in Solara for creating the observed hazard ratio graph. 
 #'                                            Only applicable for time-to-event data.}
 #'                                            
-
-
 ######################################################################################################################## .
 
 AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )

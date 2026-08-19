@@ -38,12 +38,11 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'
-
 ######################################################################################################################## .
 
 PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
-   # Pulling the important information from the simulated data, SimData, sent from East 
+    # Pulling the important information from the simulated data, SimData, sent from East 
     vTreatmentID    <- SimData$TreatmentID  # TreatmentIDs are 0, 1,..., number of experimental treatments
     vPatientOutcome <- SimData$Response     # Response = 0 or 1
     
@@ -62,14 +61,14 @@ PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam
     
     # Step 2: Perform any data analysis to decide which treatment(s) are selected ####
     
-    # TODO: Add any code here for analysis
+    # Add any code here for analysis
     
     
     # Step 3: Create the vector of experimental treatments that will continue to the next part of the trial ####
     # Example: 
     # vReturnTreatmentID <- c( 1, 2 ) # Always select treatment 1 and 2
     
-    # TODO: Add any code here for creating the treatment id vector
+    # Add any code here for creating the treatment id vector
     
     
     # Step 4: Create a vector of allocation ratios #### 
@@ -77,7 +76,7 @@ PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam
     # Example: Put twice as many on experimental treatment 1 as there are on 2
     # vAllocationRatio   <- c( 2, 1 )    # This puts twice as many on Experimental treatment 1 because vReturnTreatmentID = c( 1, 2 ) in this example
     
-    # TODO: Add any code necessary for creating the allocation ratio vector.                                    
+    # Add any code necessary for creating the allocation ratio vector.                                    
     
     
     # If you use the variable vReturnTreatmentID and vAllocationRatio above, then the remainder of this code will perform a basic error check 

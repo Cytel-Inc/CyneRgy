@@ -24,8 +24,6 @@
 #' @export
 SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
-    #TODO: Need to test that the paths that hit an error actually stop
-    
     # The SurvParam depends on input in East, EAST sends the Median (see the Simulation->Response Generation tab for what is sent)
     setwd( "C:\\Kyle\\Cytel\\Software\\East-R\\EastRExamples\\Examples\\2ArmTimeToEventOutcomePatientSimulation\\ExampleOutput")
 

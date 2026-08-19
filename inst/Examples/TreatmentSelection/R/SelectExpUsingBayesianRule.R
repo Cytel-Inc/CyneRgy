@@ -22,7 +22,7 @@
 #' If none of the treatments meet the criteria for selection, then select the treatment with the largest Pr( pj > UserParam$dHistoricResponseRate | data ).
 #' User-specified pj ~ Beta( UserParam$dPriorAlpha, UserParam$dPriorBeta ). All experimental arms assume the same prior. 
 #' After the IA, use a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for stage 2.
-
+#' 
 #' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
 #' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
@@ -46,7 +46,7 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     # 3)	If none of the treatments meet the above criteria for selection, then select the treatment with the largest Pr( pj > UserParam$dHistoricResponseRate | data ).
     # 4)	After selecting the treatments, use a randomization ratio of 2:1 (experimental: control) for all experimental treatments that are selected for stage 2
 
-          # The below lines set the values of the parameters if a user does not specify a value
+    # The below lines set the values of the parameters if a user does not specify a value
     
     if( is.null( UserParam ) )
     {
@@ -58,7 +58,7 @@ SelectExpUsingBayesianRule  <- function(SimData, DesignParam, LookInfo, UserPara
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
     tabResults               <- table( SimData$TreatmentID, SimData$Response )
    
-     # Only want data on experimental treatments is wanted, experimental data starts in row 2
+    # Only want data on experimental treatments is wanted, experimental data starts in row 2
     tabResultsExperimental   <- tabResults[ c( 2:nrow( tabResults )), ]  
     nQtyOfExperimentalArms   <- nrow( tabResultsExperimental ) 
     

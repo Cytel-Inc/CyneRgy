@@ -18,10 +18,8 @@
 #' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
 #                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
 #                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-
 ######################################################################################################################## .
 
-#TODO(Kyle)- I am not sure where to substitute in the user parameters since most seems to be sent from East and then analyzed using prop.test
 AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
     # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
@@ -31,6 +29,7 @@ AnalyzeUsingPropTest<- function(SimData, DesignParam, LookInfo, UserParam = NULL
     # Retrieve necessary information from the objects East sent
     nLookIndex           <- LookInfo$CurrLookIndex
     nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
+    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
      
     # Create the vector of simulated data for this IA - East sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]

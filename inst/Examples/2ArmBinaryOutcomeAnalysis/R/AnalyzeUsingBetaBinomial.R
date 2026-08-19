@@ -70,7 +70,6 @@
 #'                  \item{Delta}{Estimated different between experimental and standard of care}
 #'                  }
 #'
-
 ######################################################################################################################## .
 
 AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)

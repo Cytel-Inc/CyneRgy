@@ -47,8 +47,8 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'
-
 #' @export
+
 SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
     if( !exists( "UserParam" ) | is.null( UserParam ) )

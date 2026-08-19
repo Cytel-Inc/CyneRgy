@@ -43,9 +43,9 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'
-
 #' @export
 ######################################################################################################################## .
+
 SelectExpWithPValueLessThanSpecified  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
     if( is.null( UserParam ) )

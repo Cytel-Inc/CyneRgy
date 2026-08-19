@@ -18,8 +18,7 @@
 #' The probability of 0 outcome on the experimental treatment is sampled from a Beta( UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution.
 #' The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.  
 SimulatePatientOutcomePercentAtZeroBetaDist <- function(NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL)
-{
-    
+{ 
     # If the user did not specify the user parameters, but still called this function then the probability
     # of a 0 outcome is 0 for both treatments
     if( is.null( UserParam ) )

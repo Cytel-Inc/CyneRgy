@@ -28,7 +28,6 @@
 #'             }
 #'
 #'
-
 #' @note The current code assumes there are no dropouts. Modify the code accordingly for dropout case.
 ######################################################################################################################## .
 

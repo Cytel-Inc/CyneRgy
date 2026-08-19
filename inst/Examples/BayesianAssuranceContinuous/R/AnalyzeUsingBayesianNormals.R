@@ -15,6 +15,7 @@
 #'    \item{UserParam$dPUFutility}{A value in [0, 1] that specifies the threshold probability of futility stopping. If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early for futility.}
 #'    }
 #' @export
+
 AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
     bInterimAnalysis <- FALSE   # Assuming a fixed design, the next if statement will check this
