@@ -84,6 +84,38 @@
 #'                                     }
 #'                                     }
 #'                      }
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' The analysis may use `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to determine the decision returned to
+#' East Horizon Explore.
+#'
+#' When these helpers are used, the following input fields are required
+#' and MUST be included when generating sample/test data:
+#'
+#' DesignParam:
+#'   - TailType: Integer indicating the direction of the statistical test.
+#'       0 = Left-tailed
+#'       1 = Right-tailed
+#'
+#' LookInfo (for group sequential designs, NULL for fixed designs):
+#' When not NULL, must contain the following fields:
+#'   - NumLooks: Total number of looks.
+#'   - CurrLookIndex: Current look index, starting at 1.
+#'   - RejType: Integer identifying which stopping boundaries are enabled.
+#'       0 = 1-Sided Efficacy Upper
+#'       1 = 1-Sided Futility Upper
+#'       2 = 1-Sided Efficacy Lower
+#'       3 = 1-Sided Futility Lower
+#'       4 = 1-Sided Efficacy Upper and Futility Lower
+#'       5 = 1-Sided Efficacy Lower and Futility Upper
+#'       6 = 2-Sided Efficacy Only (not used in East Horizon Explore)
+#'       7 = 2-Sided Futility Only (not used in East Horizon Explore)
+#'       8 = 2-Sided Efficacy and Futility (not used in East Horizon Explore)
+#'       9 = Equivalence (not used in East Horizon Explore)
+#' 
+
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     nError            <- 0
