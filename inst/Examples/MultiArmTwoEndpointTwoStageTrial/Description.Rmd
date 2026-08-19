@@ -46,12 +46,12 @@ In addition, the way that the endpoint data is analyzed to first select the trea
 
 ## R Functions Used in the Example
 
-Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+Once CyneRgy is installed, you can load this example with the following command:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "MultiArmTwoEndpointTwoStageTrial" )
 ```
 
-Running the command above will load the project in RStudio. 
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 **RStudio Project File**: [MultiArmTwoEndpointTwoStageTrial.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmTwoEndpointTwoStageTrial/MultiArmTwoEndpointTwoStageTrial.Rproj)
 
@@ -167,7 +167,6 @@ East Horizon determines the direction of the critical value based on the endpoin
 
 For binary endpoint, treatment benefit is assumed to be associated with larger response values, whereas the final efficacy analysis uses a PFS log-rank test where treatment benefit corresponds to longer survival, and therefore a smaller response value. Depending on the direction of the log-rank statistic, the sign associated with treatment benefit may therefore differ from the binary endpoint setup.
 
-
 ![](MultiArmTwoEndpointTwoStageTrial_files/Step 10.jpg){width=500px}
 
 11. Click on the “Save” button to exit the R Integration details window.
@@ -236,7 +235,6 @@ Refer to the table below for the values of the user-defined parameters used in t
 After the simulation is complete, simulation-level results can be downloaded from East Horizon. These results can be used to determine the number of Phase II and Phase III completers, assess how frequently each treatment arm was selected at Stage 1, as well as calculate the PoS - the proportion of simulations that meet the prespecified final efficacy criterion.
 
 The results should be interpreted in the context of the simulation assumptions, including independent binary and PFS endpoints, exponential PFS distributions, and treatment selection based on observed binary response rates. Users can vary these assumptions and other design parameters, such as treatment effects, sample size, futility threshold, and target number of PFS events, to evaluate how they affect the operating characteristics of the design.
-
 
 # Possible Extensions
 
