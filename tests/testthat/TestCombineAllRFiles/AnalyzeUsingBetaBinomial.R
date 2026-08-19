@@ -38,16 +38,6 @@
 #' When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should set dLowerCutoffForFutility = 0
 #' when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  
 #' When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed. 
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
-#' TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
 #' @export
 ######################################################################################################################## .
 AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
@@ -104,12 +94,6 @@ AnalyzeUsingBetaBinomial <- function(SimData, DesignParam, LookInfo, UserParam =
         
     }
     
-    if( !file.exists( paste0( "SimData", nLookIndex, ".Rds") ))
-    {
-        saveRDS( SimData, paste0( "SimData", nLookIndex, ".Rds") )
-        saveRDS( DesignParam, paste0( "DesignParam", nLookIndex, ".Rds") )
-        saveRDS( LookInfo, paste0( "LookInfo", nLookIndex, ".Rds") )
-    }
     Error 	<- 0
     #retval 	= 0
     

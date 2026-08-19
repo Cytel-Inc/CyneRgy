@@ -24,20 +24,8 @@
 #' @export
 SimulatePatientSurvivalWeibull<- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) 
 {
-    #TODO: Need to test that the paths that hit an error actually stop
-    
     # The SurvParam depends on input in East, EAST sends the Median (see the Simulation->Response Generation tab for what is sent)
     setwd( "C:\\Kyle\\Cytel\\Software\\East-R\\EastRExamples\\Examples\\2ArmTimeToEventOutcomePatientSimulation\\ExampleOutput")
- 
-    # If you wanted to save the input objects you could use the following to save the files to your working directory
-    
-    # Example of how to save the data sent from East for each look.
-    # If the DesignParam.Rds exists, then don't save it again.
-    if( !file.exists(  "DesignParam.Rds" ))
-    {
-        saveRDS( SurvParam, paste0( "SurvParam.Rds") )
-        # Use the same function as previous line if you want to save the other objects
-    }
 
     # For this example, in East the user must set the Input Method to Hazard Rate and have the # of pieces = 2. 
     # This will cause SurvParam to be a 2x2 matrix. 

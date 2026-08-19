@@ -43,7 +43,7 @@ CreateCyneRgyFunction <- function( strFunctionType = "", strNewFunctionName = NA
     
     
     
-    #TODO: Make sure the strFunctionType is a valid type, eg PatientSimulator, Analysis ect
+    #: Make sure the strFunctionType is a valid type, eg PatientSimulator, Analysis ect
     # Make sure the file does not already exist
     # create it and open it
     strPackage <- "CyneRgy"

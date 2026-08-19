@@ -47,29 +47,10 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
 #' @export
+
 SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
-          
-    # Input objects can be saved through the following lines:
-    # First set the working directory
-    # setwd(Sys.getenv("R_USER")) # You could specify the location directly. 
-    # setwd( "C://TreatmentSelection" )
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-    # saveRDS( UserParam, "UserParam.Rds")
-
-
     if( !exists( "UserParam" ) | is.null( UserParam ) )
     {
         # Default is to select the treatment with highest number of responses and allocation of 2:1 (Experimental:Control)

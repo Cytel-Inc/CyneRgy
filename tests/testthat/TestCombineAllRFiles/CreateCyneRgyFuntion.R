@@ -13,8 +13,6 @@ CreateCyneRgyFuntion <- function( strFunctionType, strNewFunctionName = "", strD
     strNewFileExt <- ".R"
     strNewFileName <- strNewFunctionName
     
-    
-    #TODO: Make sure the strFunctionType is a valid type, eg PatientSimulator, Analysis ect
     # Make sure the file does not already exist
     # create it and open it
     strPackage <- "CyneRgy"
