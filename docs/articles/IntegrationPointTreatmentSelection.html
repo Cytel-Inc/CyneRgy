@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">March 07, 2026</h4>
+            <h4 data-toc-skip class="date">July 07, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointTreatmentSelection.Rmd</code></div>
@@ -119,165 +119,64 @@ Bayesian rules.</p>
 <p>This integration point is available in East Horizon Explore for the
 following study objectives and endpoint types:</p>
 <table class="table">
-<colgroup>
-<col width="50%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-</colgroup>
 <thead><tr class="header">
 <th></th>
 <th>Time to Event</th>
 <th>Binary</th>
 <th>Continuous</th>
-<th>Continuous with repeated measures</th>
-<th>Count</th>
-<th>Composite</th>
-<th>Dual TTE-TTE</th>
-<th>Dual TTE-Binary</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
-<td>Two Arm Confirmatory</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Multiple Arm Confirmatory</td>
-<td>🔜</td>
-<td>✅</td>
-<td>✅</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
 <tr class="odd">
 <td>Dose Finding</td>
 <td>-</td>
 <td>-</td>
-<td>🔜</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Legend</strong></p>
-<table class="table">
-<thead><tr class="header">
-<th>Icon</th>
-<th>Meaning</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>✅</td>
-<td>Available</td>
+<td>❌</td>
 </tr>
 <tr class="even">
+<td>Multiple Arm Confirmatory</td>
 <td>❌</td>
-<td>Not available</td>
-</tr>
-<tr class="odd">
-<td>🔜</td>
-<td>Coming soon</td>
+<td>✅</td>
+<td>✅</td>
 </tr>
 </tbody>
 </table>
+<p><em>This integration point is not applicable to other study
+objectives.</em></p>
 </div>
 <div class="section level3">
 <h3 id="east-horizon-design">East Horizon Design<a class="anchor" aria-label="anchor" href="#east-horizon-design"></a>
 </h3>
 <details><summary>
-Click to expand/collapse
-</summary><p>This integration point is available in East Horizon Design for the
-following study objectives and endpoint types:</p>
-<table class="table">
-<colgroup>
-<col width="50%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-</colgroup>
+This integration point is available in East Horizon Design for the
+following study objectives and endpoint types (click to
+expand/collapse):
+</summary><table class="table">
 <thead><tr class="header">
 <th></th>
 <th>Time to Event</th>
 <th>Binary</th>
 <th>Continuous</th>
-<th>Continuous with repeated measures</th>
-<th>Count</th>
-<th>Composite</th>
-<th>Dual TTE-TTE</th>
-<th>Dual TTE-Binary</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Two Arm Confirmatory</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Two Arm Confirmatory - Multiple Endpoints</td>
-<td>❌</td>
-<td>❌</td>
-<td>❌</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr class="odd">
-<td>Multiple Arm Confirmatory</td>
-<td>🔜</td>
-<td>🔜</td>
-<td>🔜</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr class="even">
 <td>Dose Finding</td>
 <td>-</td>
-<td>-</td>
-<td>🔜</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Multiple Arm Confirmatory</td>
+<td>✅†</td>
+<td>✅†</td>
+<td>✅†</td>
 </tr>
 </tbody>
 </table>
-<p>This integration point is available in East Horizon Design for the
-following tests:</p>
+<p><em>This integration point is not applicable to other study
+objectives.</em></p>
+<p>†Not every test will be available for this study objective and
+endpoint type. The availability will depend on the specific test you
+choose:</p>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="36%">
@@ -293,81 +192,24 @@ following tests:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Single Mean (One Arm Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
-<td>Continuous</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Mean of Paired Differences (Paired Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
-<td>Continuous</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Mean of paired Ratios (Paired Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
-<td>Continuous</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Single Proportion (One Arm Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
-<td>Binary</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Simon’s Two Stage (One Arm Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
-<td>Binary</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Logrank Weibull Distribution (One Arm Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
-<td>Time to Event</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Parametric Weibull Distribution (One Arm Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
+<td>Logrank Test Given Accrual Duration and Accrual Rates (Parallel
+Design)</td>
+<td>Two Arm Confirmatory</td>
 <td>Time to Event</td>
 <td>❌</td>
 </tr>
 <tr class="even">
-<td>Logrank Exponential Distribution (One Arm Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
+<td>Logrank Test Given Accrual Duration and Study Duration (Parallel
+Design)</td>
+<td>Two Arm Confirmatory</td>
 <td>Time to Event</td>
 <td>❌</td>
 </tr>
 <tr class="odd">
-<td>Single Poisson Rate (One Arm Design)</td>
-<td>One Arm Exploratory/Confirmatory</td>
-<td>Count</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Difference of Means (Parallel Design)</td>
+<td>Logrank Test Given Accrual Duration and Accrual Rates (Population
+Enrichment)</td>
 <td>Two Arm Confirmatory</td>
-<td>Continuous</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Ratio of Means (Parallel Design)</td>
-<td>Two Arm Confirmatory</td>
-<td>Continuous</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Difference of Means (Crossover Design)</td>
-<td>Two Arm Confirmatory</td>
-<td>Continuous</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Ratio of Means (Crossover Design)</td>
-<td>Two Arm Confirmatory</td>
-<td>Continuous</td>
+<td>Time to Event</td>
 <td>❌</td>
 </tr>
 <tr class="even">
@@ -395,86 +237,68 @@ following tests:</p>
 <td>❌</td>
 </tr>
 <tr class="even">
-<td>Logrank Test Given Accrual Duration and Accrual Rates (Parallel
-Design)</td>
+<td>Difference of Means (Parallel Design)</td>
 <td>Two Arm Confirmatory</td>
-<td>Time to Event</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Logrank Test Given Accrual Duration and Study Duration (Parallel
-Design)</td>
-<td>Two Arm Confirmatory</td>
-<td>Time to Event</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Logrank Test Given Accrual Duration and Accrual Rates (Population
-Enrichment)</td>
-<td>Two Arm Confirmatory</td>
-<td>Time to Event</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Ratio of Poisson Rates (Parallel Design)</td>
-<td>Two Arm Confirmatory</td>
-<td>Count</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>Ratio of Negative Binomial Rates (Parallel Design)</td>
-<td>Two Arm Confirmatory</td>
-<td>Count</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>Win Ratio (Parallel Design)</td>
-<td>Two Arm Confirmatory</td>
-<td>Composite</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>MAMS Difference of Means (Pairwise Comparisons to Control)</td>
-<td>Multiple Arm Confirmatory</td>
 <td>Continuous</td>
 <td>❌</td>
 </tr>
 <tr class="odd">
-<td>MAMS Difference of Means: Combining P-Values (Pairwise Comparisons
-to Control)</td>
-<td>Multiple Arm Confirmatory</td>
+<td>Ratio of Means (Parallel Design)</td>
+<td>Two Arm Confirmatory</td>
 <td>Continuous</td>
-<td>🔜</td>
+<td>❌</td>
 </tr>
 <tr class="even">
+<td>Difference of Means (Crossover Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Ratio of Means (Crossover Design)</td>
+<td>Two Arm Confirmatory</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>MAMS Logrank: Combining P-Values (Pairwise Comparisons to
+Control)</td>
+<td>Multiple Arm Confirmatory</td>
+<td>Time to Event</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
 <td>MAMS Difference of Proportions (Pairwise Comparisons to
 Control)</td>
 <td>Multiple Arm Confirmatory</td>
 <td>Binary</td>
 <td>❌</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>MAMS Difference of Proportions: Combining P-Values (Pairwise
 Comparisons to Control)</td>
 <td>Multiple Arm Confirmatory</td>
 <td>Binary</td>
-<td>🔜</td>
-</tr>
-<tr class="even">
-<td>MAMS Logrank (Pairwise Comparisons to Control)</td>
-<td>Multiple Arm Confirmatory</td>
-<td>Time to Event</td>
-<td>❌</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
-<td>MAMS Logrank: Combining P-Values (Pairwise Comparisons to
-Control)</td>
+<td>MAMS Difference of Means (Pairwise Comparisons to Control)</td>
 <td>Multiple Arm Confirmatory</td>
-<td>Time to Event</td>
-<td>🔜</td>
+<td>Continuous</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>MAMS Difference of Means: Combining P-Values (Pairwise Comparisons
+to Control)</td>
+<td>Multiple Arm Confirmatory</td>
+<td>Continuous</td>
+<td>✅</td>
 </tr>
 </tbody>
-</table></details>
+</table>
+Important: for some tests, you may need to compute the analytical design
+input set before simulating the design to see the option.
+</details>
 </div>
 <div class="section level3">
 <h3 id="east">East<a class="anchor" aria-label="anchor" href="#east"></a>
@@ -607,6 +431,39 @@ function using <strong>+ Add Variables</strong>.</li>
 <p>For a visual guide of where to find the option, refer to the
 screenshot below:</p>
 <img src="GettingStarted_files/treatmentselection.png"></details>
+</div>
+<div class="section level3">
+<h3 id="in-east-horizon-design">In East Horizon Design<a class="anchor" aria-label="anchor" href="#in-east-horizon-design"></a>
+</h3>
+<p>You can set up a treatment selection function under <strong>Based
+On</strong> in the <strong>Treatment Selection</strong> section of a
+<strong>Design Card</strong> while creating or editing an <strong>Input
+Set</strong>. Early stopping and treatment selection must be
+enabled.</p>
+<details><summary>
+Follow these steps (click to expand/collapse):
+</summary><ol style="list-style-type: decimal">
+<li>In the <strong>Design Card</strong>, enable Early Stopping by
+choosing an efficacy or futility boundary family under <strong>Early
+Stopping</strong>.</li>
+<li>Enable Treatment Selection under <strong>Treatment
+Selection</strong>.</li>
+<li>Select <strong>User Specified-R</strong> from the dropdown in the
+<strong>Based On</strong> field.</li>
+<li>Browse and select the appropriate R file (<code>filename.r</code>)
+from your computer, or use the built-in <strong>R Code
+Assistant</strong> to create one. This file should contain function(s)
+written to perform various tasks to be used throughout your
+Project.</li>
+<li>Choose the appropriate function name. If the expected function is
+not displaying, then check your R code for errors.</li>
+<li>Set any required user parameters (variables) as needed for your
+function using <strong>+ Add Variables</strong>.</li>
+<li>Continue creating your project.</li>
+</ol>
+<p>For a visual guide of where to find the option, refer to the
+screenshot below:</p>
+<img src="GettingStarted_files/treatmentselectionDesign.png"></details>
 </div>
 <div class="section level3">
 <h3 id="in-east">In East<a class="anchor" aria-label="anchor" href="#in-east"></a>

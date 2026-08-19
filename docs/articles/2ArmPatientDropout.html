@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Shubham
 Lahoti</h4>
             
-            <h4 data-toc-skip class="date">March 07, 2026</h4>
+            <h4 data-toc-skip class="date">July 07, 2026</h4>
       
 
       <div class="d-none name"><code>2ArmPatientDropout.Rmd</code></div>
@@ -114,7 +114,16 @@ following configuration:
 <strong>Study objective:</strong> Two Arm Confirmatory
 </li>
 <li>
-<strong>Number of endpoints:</strong> Single Endpoint
+<strong>Number of endpoints:</strong>
+<ul style="margin-bottom:0">
+<li>
+<strong>Single Endpoint: </strong> All examples are supported
+</li>
+<li>
+<strong>Dual Endpoints:</strong> Example 2 works for TTE-TTE and
+TTE-Binary
+</li>
+</ul>
 </li>
 <li>
 <strong>Endpoint type:</strong>
@@ -140,6 +149,10 @@ Continuous Outcome with Repeated Measures for Example 3
 <strong>Design:</strong> Examples 1 and 2 only
 </li>
 </ul>
+</li>
+<li>
+<strong>Statistical design:</strong> Fixed Sample or Group Sequential
+(Group Sequential with Sample Size Re-Estimation not supported)
 </li>
 </ul>
 </div>
@@ -248,7 +261,7 @@ outlining the general steps performed by the R code.</p>
 <p><img src="2ArmPatientDropout_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
-<h2 id="example-2---dropout-time-for-time-to-event-outcome">Example 2 - Dropout Time For Time-to-Event Outcome<a class="anchor" aria-label="anchor" href="#example-2---dropout-time-for-time-to-event-outcome"></a>
+<h2 id="example-2---dropout-time-for-time-to-event-outcome-or-dep">Example 2 - Dropout Time For Time-to-Event Outcome or DEP<a class="anchor" aria-label="anchor" href="#example-2---dropout-time-for-time-to-event-outcome-or-dep"></a>
 </h2>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
@@ -256,12 +269,14 @@ This example is related to this R file:
 <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R" class="external-link alert-link">GenerateDropoutTimeForSurvival.R</a>
 </p>
 </div>
+<p>This example supports both time-to-event single endpoint and dual
+endpoints (TTE-TTE or TTE-Binary).</p>
 <p>The function <em>GenerateDropoutTimeForSurvival</em> generates
-dropout times for a two-arm time-to-event design. In this case, dropout
-information can be specified separately for each arm (in East Horizon,
-<em>Control</em> and <em>Treatment</em> in the <em>Dropout Rate</em>
-tab), and dropout times are drawn from an exponential distribution
-accordingly. The number of periods is fixed at 1.</p>
+dropout times for a two-arm time-to-event or DEP design. In this case,
+dropout information can be specified separately for each arm (in East
+Horizon, <em>Control</em> and <em>Treatment</em> in the <em>Dropout
+Rate</em> tab), and dropout times are drawn from an exponential
+distribution accordingly. The number of periods is fixed at 1.</p>
 <p>This function does not use any user-defined parameters, but uses
 parameters specified in East Horizon. Refer to the table below for more
 information.</p>

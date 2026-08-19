@@ -13,7 +13,8 @@ To try this example, create a new project in East Horizon using the following co
 <li>**Study objective:** Two Arm Confirmatory</li>
 <li>**Number of endpoints:** Single Endpoint</li>
 <li>**Endpoint type:** Binary Outcome</li>
-<li>**Task:** Any</li>
+<li>**Task:** Explore or Design</li>
+<li>**Statistical Design:** Fixed Sample, Group Sequential, or Group Sequential with Sample Size Re-Estimation</li>
 </ul></div>
 
 <div class="alert alert-warning" role="alert"><p style="margin-bottom:0">

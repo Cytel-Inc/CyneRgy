@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel
 Potvin</h4>
             
-            <h4 data-toc-skip class="date">March 07, 2026</h4>
+            <h4 data-toc-skip class="date">July 07, 2026</h4>
       
 
       <div class="d-none name"><code>IntegrationPointAnalysisBinary.Rmd</code></div>
@@ -154,6 +154,17 @@ more information. Only applicable when
 <code>Statistical Design = Group Sequential with Sample Size Re-Estimation</code>.</td>
 </tr>
 <tr class="odd">
+<td><strong>OutList</strong></td>
+<td>List</td>
+<td>List of outputs that was returned in the previous look. Only
+relevant for
+<code>Statistical Design = Group Sequential or Group Sequential with Sample Size Re-Estimation</code>
+and
+<code>Study Design = Multiple Arm Confirmatory or Dose Finding</code>.
+Set to <code>NULL</code> for the first look. See below in the Output
+Variable.</td>
+</tr>
+<tr class="even">
 <td><strong>UserParam</strong></td>
 <td>List</td>
 <td>Contains all user-defined parameters specified in the East Horizon

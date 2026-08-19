@@ -11,7 +11,9 @@ following configuration:
 - **Study objective:** Two Arm Confirmatory
 - **Number of endpoints:** Single Endpoint
 - **Endpoint type:** Binary Outcome
-- **Task:** Any
+- **Task:** Explore or Design
+- **Statistical Design:** Fixed Sample, Group Sequential, or Group
+  Sequential with Sample Size Re-Estimation
 
 Important: **ArrivalTime** is a new required parameter. Existing R
 scripts must be updated to include this parameter in the function

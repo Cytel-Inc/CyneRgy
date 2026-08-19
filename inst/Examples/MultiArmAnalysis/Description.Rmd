@@ -16,9 +16,9 @@ To try this example, create a new project in East Horizon using the following co
 <ul style="margin-bottom:0">
 <li>Continuous Outcome for Example 1</li>
 <li>Binary Outcome for Example 2</li>
-<!-- <li>Time-to-Event Outcome for Example 3</li> -->
+<li>Time-to-Event Outcome for Example 3</li>
 </ul>
-<li>**Task:** Explore</li>
+<li>**Task:** Explore or Design</li>
 </ul></div>
 
 <div class="alert alert-warning" role="alert">
@@ -35,7 +35,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 2. [AnalyzeMultiArmUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R) - Performs proportion tests for binary endpoints with Bonferroni adjustment.
 
-<!-- 3. [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) - Performs log-rank tests for time-to-event endpoints with Bonferroni adjustment. -->
+3. [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) - Performs log-rank tests for time-to-event endpoints with Bonferroni adjustment.
 
 # Example 1 - Using the `t.test()` Function with Bonferroni Adjustment (Continuous Outcome)
 
@@ -89,15 +89,17 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-<!-- # Example 3 - Using the `survival::survdiff()` Function with Bonferroni Adjustment (Time-to-Event Outcome)
+# Example 3 - Using the `survival` Package with Bonferroni-Adjusted Log-Rank Tests (Time-to-Event Outcome)
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R" class="alert-link">AnalyzeMultiArmUsingLogrankTestBonferroni.R</a></p>
 </div>
 
-For time-to-event outcomes, this example uses the `survival::survdiff()` function to perform a log-rank test between each treatment arm and the control arm. The log-rank statistic from each comparison is converted to a p-value, adjusted using Bonferroni correction, and evaluated against the efficacy boundary to determine if any treatment demonstrates a statistically significant improvement in survival.
+For time-to-event outcomes, this example analyzes a multi-arm survival trial by comparing each active treatment arm with the control arm. It uses `survival::survdiff()` to perform **pairwise log-rank tests** and estimates treatment-versus-control hazard ratios using **Cox proportional hazards models**.
 
-This example can handle interim looks and automatically incorporates information fraction and efficacy boundary adjustments provided by `LookInfo`.
+For each active treatment arm, the raw log-rank p-value is adjusted using a Bonferroni correction based on the number of active arms. The adjusted p-value is then compared with the applicable efficacy boundary to determine whether the treatment crosses for efficacy, continues to the next analysis, or is declared futile at the final analysis.
+
+The example supports both fixed-sample and group sequential designs. For interim analyses, it uses LookInfo to determine the current information fraction and efficacy boundary. Patients are administratively censored at the analysis time corresponding to the planned number of events for the current look.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -106,12 +108,12 @@ CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
         "Analysis" = c(
             "Load survival times from East Horizon",
-            "Perform log-rank test (survdiff) for each treatment vs. control",
-            "Adjust p-values using Bonferroni correction",
-            "Compare adjusted p-values to efficacy boundaries",
-            "Return arm-level decisions"
+            "Estimate hazard ratios using Cox proportional hazards models",
+            "Perform pairwise log-rank tests using survdiff",
+            "Apply Bonferroni adjustment to raw p-values",
+            "Compare adjusted p-values with efficacy boundary",
+            "Return arm-level decisions, hazard ratios, p-values, and analysis time"
         )
     )
 )
 ```
--->

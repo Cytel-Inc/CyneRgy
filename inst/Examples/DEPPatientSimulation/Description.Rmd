@@ -15,7 +15,7 @@ To try this example, create a new project in East Horizon using the following co
 <ul style="margin-bottom:0">
 <li>**Study objective:** Two Arm Confirmatory</li>
 <li>**Number of endpoints:** Dual Endpoints</li>
-<li>**Endpoint type:** *Time-to-Event - Time-to-Event*</li>
+<li>**Endpoint type:** *Time-to-Event - Time-to-Event* for Example 1, *Time-to-Event - Binary* for Example 2</li>
 <li>**Task:** Explore</li>
 <li>**Response Input Method:** Hazard Rate</li>
 </ul></div>

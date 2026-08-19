@@ -1,7 +1,4 @@
 ######################################################################################################################## .
-#' TODO(Kyle): I am not sure how to define the alpha and beta user parameters. Could you define and add to documentation?
-#' TODO(Kyle): Should the functions at the bottom be left at the bottom or do they need to be added to top documentation?
-#' 
 #' @param AnalyzeUsingBayesAnalysisWithFutility
 #' @title Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care. 
 #' @param SimData Data frame which consists of data generated in current simulation.
@@ -35,15 +32,6 @@
 #       If user variables are not specifed we assume:
 #       pi_S ~ beta( 10, 40 ); to reflect that knowledge that on standard of care 10/50 previous patients responded
 #       pi_E ~ beta( 0.2, 0.8 ); non-informative prior for Experimental to have the same prior mean as S but only 1 prior patient observed
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
 
 ######################################################################################################################## .
 
@@ -78,9 +66,7 @@ AnalyzeUsingBayesAnalysisWithFutility <- function(SimData, DesignParam, LookInfo
     vOutcomesS           <- vPatientOutcome[ vPatientTreatment == 0 ]
     vOutcomesE           <- ___________[ vPatientTreatment == 1 ]
     
-    #TODO(Kyle): Should this below note move into the top formatting section?
-    
-    
+
     # Important Note: 
     # When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should set dLowerCutoffForFutility = 0
     # when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.  
@@ -106,12 +92,6 @@ AnalyzeUsingBayesAnalysisWithFutility <- function(SimData, DesignParam, LookInfo
         
     }
     
-    if( !file.exists( paste0( "SimData", nLookIndex, ".Rds") ))
-    {
-        saveRDS( SimData, paste0( "SimData", nLookIndex, ".Rds") )
-        saveRDS( DesignParam, paste0( "DesignParam", nLookIndex, ".Rds") )
-        saveRDS( LookInfo, paste0( "LookInfo", nLookIndex, ".Rds") )
-    }
     Error 	<- 0
     #retval 	= 0
     

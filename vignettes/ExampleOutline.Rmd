@@ -22,7 +22,7 @@ The following examples are included:
 
 <details>
 <summary>**Arrival Times with Poisson Process**
-<span class="badge text-bg-primary ms-1">Any # of Arms</span><span class="badge text-bg-danger ms-1">Single/Dual/Multi Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
+<span class="badge text-bg-primary ms-1">Any # of Arms</span><span class="badge text-bg-danger ms-1">Single/Dual/Multi Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
 This example demonstrates how to add the ability to generate patient arrival times according to a Poisson process with a ramp-up by customizing the Enrollment integration point of East Horizon.  
 [Click here to view the full example.](GeneratePoissonArrival.html)
 </details>
@@ -33,7 +33,7 @@ This example demonstrates how to add the ability to generate patient arrival tim
 
 <details>
 <summary>**Randomization of Subjects**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single/Dual/Multi Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span></summary>
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single/Dual Endpoints</span><span class="badge text-bg-warning ms-1">Any Outcome</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
 This example illustrates four ways to customize how subjects are assigned to treatment arms in East Horizon: using a uniform distribution, using the `sample()` function, using the `randomizeR` package, and in the context of a multi-arm trial.
 [Click here to view the full example.](RandomizeSubjects.html)
 </details>
@@ -44,14 +44,14 @@ This example illustrates four ways to customize how subjects are assigned to tre
 
 <details>
 <summary>**2-Arm, Patient Dropout**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single/Dual Endpoints</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">Repeated Measures</span></summary>
 This example illustrates how to customize the dropout distribution in East Horizon for continuous and binary outcomes, time-to-event outcome, and continuous outcome with repeated measures.
 [Click here to view the full example.](2ArmPatientDropout.html)
 </details>
 
 <details>
 <summary>**Multiple Arm, Patient Dropout**
-<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> --></summary>
+<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
 This example illustrates how to customize the dropout distribution in East Horizon for multi-arm trials, covering continuous, binary, and time-to-event outcomes.
 [Click here to view the full example.](MultiArmPatientDropout.html)
 </details>
@@ -62,20 +62,20 @@ This example illustrates how to customize the dropout distribution in East Horiz
 
 <details>
 <summary>**Continuous Outcome – Patient Simulation**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span></summary>
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-success ms-1">SSR</span></summary>
 This example demonstrates two ways to customize the patient outcome simulation in East Horizon for a two-arm trial with a continuous outcome: using a mixture distribution, with or without the mixture proportion sampled from a Beta distribution.  
 [Click here to view the full example.](2ArmNormalOutcomePatientSimulation.html)
 </details>
 
 <details>
 <summary>**Time-To-Event Outcome – Patient Simulation**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-info ms-1">Stratification</span></summary>
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-success ms-1">SSR</span><span class="badge text-bg-info ms-1">Stratification & Subpopulations</span></summary>
 This example demonstrates two ways to customize the patient outcome simulation in East Horizon for a two-arm trial with a time-to-event outcome: using a Weibull distribution, and using a mixture of exponential distributions. It also presents additional examples using Stratification. 
 [Click here to view the full example.](2ArmTimeToEventOutcomePatientSimulation.html)
 </details>
 
 <details>
-<summary>**Binary Outcome – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span></summary>
+<summary>**Binary Outcome – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-success ms-1">SSR</span></summary>
 This example demonstrates two ways to customize the patient outcome simulation in East Horizon for a two-arm trial with a binary outcome: using a mixture distribution, with or without the mixture proportion sampled from a Beta distribution. 
 [Click here to view the full example.](2ArmBinaryOutcomePatientSimulation.html)
 </details>
@@ -87,14 +87,14 @@ This example demonstrates how to customize the patient outcome simulation in Eas
 </details>
 
 <details>
-<summary>**Multiple Arm – Patient Simulation**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> --></summary>
+<summary>**Multiple Arm – Patient Simulation**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
 This example demonstrates how to customize the patient outcome simulation in East Horizon for multi-arm trials, covering continuous, binary, and time-to-event outcomes.
 [Click here to view the full example.](MultiArmPatientSimulation.html)
 </details>
 
 <details>
-<summary>**Dual Endpoints – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span></summary>
-This example demonstrates how to customize the patient outcome simulation in East Horizon for two-arm trials with dual endpoints (TTE-TTE).
+<summary>**Dual Endpoints – Patient Simulation**<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Dual Endpoints</span><span class="badge text-bg-warning ms-1">TTE-TTE</span><span class="badge text-bg-warning ms-1">TTE-Binary</span></summary>
+This example demonstrates how to customize the patient outcome simulation in East Horizon for two-arm trials with dual endpoints (TTE-TTE and TTE-Binary).
 [Click here to view the full example.](DEPPatientSimulation.html)
 </details>
 
@@ -129,8 +129,8 @@ This example demonstrates three ways to customize the statistical test in East H
 
 <details>
 <summary>**Time-To-Event Outcome – Analysis**
-<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-success ms-1">SSR</span><span class="badge text-bg-info ms-1">Stratification & Subpopulation</span></summary>
-This example demonstrates three ways to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome: using formulas from the East manual, using the `survival::survdiff()` function, and using confidence interval limits for Go/No-Go decision-making. It also presents additional examples using Sample Size Re-estimation, Stratification, and Subpopulation options. 
+<span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">TTE</span><span class="badge text-bg-success ms-1">SSR</span><span class="badge text-bg-info ms-1">Stratification & Subpopulations</span></summary>
+This example demonstrates three ways to customize the statistical test in East Horizon for a two-arm trial with a time-to-event outcome: using formulas from the East manual, using the `survival::survdiff()` function, and using confidence interval limits for Go/No-Go decision-making. It also presents additional examples using Sample Size Re-estimation, Stratification, and Subpopulations options. 
 [Click here to view the full example.](2ArmTimeToEventOutcomeAnalysis.html)
 </details>
 
@@ -148,9 +148,15 @@ This example demonstrates how to customize the statistical test in East Horizon 
 </details>
 
 <details>
-<summary>**Multiple Arm – Analysis**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><!-- <span class="badge text-bg-warning ms-1">TTE</span> --></summary>
+<summary>**Multiple Arm – Analysis**<span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span></summary>
 This example demonstrates how to customize the statistical test in East Horizon for multi-arm trials, covering continuous, binary, and time-to-event outcomes.
 [Click here to view the full example.](MultiArmAnalysis.html)
+</details>
+
+<details>
+<summary>**Dose Finding – Analysis**<span class="badge text-bg-primary ms-1">Dose Finding</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Continuous</span></summary>
+This example demonstrates how to customize the statistical test in East Horizon for dose finding trials, covering fixed sequence pairwise testing with isotonic dose-response estimation for continuous outcome.
+[Click here to view the full example.](DoseFindingAnalysis.html)
 </details>
 
 <details>

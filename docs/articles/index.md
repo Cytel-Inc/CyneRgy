@@ -40,6 +40,8 @@
   Adjustment](https://Cytel-Inc.github.io/CyneRgy/articles/DEPDecisionsUsingMCP.md):
 - [Dual Endpoints - Patient
   Simulation](https://Cytel-Inc.github.io/CyneRgy/articles/DEPPatientSimulation.md):
+- [Dose Finding,
+  Analysis](https://Cytel-Inc.github.io/CyneRgy/articles/DoseFindingAnalysis.md):
 - [Examples
   Outline](https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.md):
 - [Generate Patient Arrival Times with Poisson

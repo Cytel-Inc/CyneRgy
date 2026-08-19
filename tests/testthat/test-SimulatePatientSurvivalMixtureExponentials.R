@@ -17,8 +17,6 @@ test_that("Test- SimulatePatientSurvivalMixtureExponentials", {
     NumPrd               <-1
     PrdTime             <-1
     
-    #TODO(kyle wathen) look up parameters for simulating survival data 
-    
     TreatmentID          <- c( rep(0,nQtyOfPatientsPerArm ), rep( 1, nQtyOfPatientsPerArm) )
    
     

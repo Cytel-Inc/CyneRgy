@@ -13,26 +13,45 @@ The Design integration point allows you to implement custom decision-making logi
 
 # Availability
 
+## East Horizon Explore
+
+This integration point is available in East Horizon Explore for the following study objectives and endpoint types:
+
+||Time to Event|Binary|Continuous|
+|----------------|--|--|--|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|
+
+*This integration point is not applicable to other study objectives.*
+
 ## East Horizon Design
 
 This integration point is available in East Horizon Design for the following study objectives and endpoint types:
 
-||Time to Event|Binary|Continuous|Continuous with repeated measures|Count|Composite|Dual TTE-TTE|Dual TTE-Binary|
-|----------------|--|--|--|--|--|--|--|--|
-|Two Arm Confirmatory|❌|❌|❌|❌|❌|❌|❌|❌|
-|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|-|-|-|-|-|
-|Multiple Arm Confirmatory|❌|❌|❌|-|-|-|-|-|
-|Dose Finding|-|-|❌|-|-|-|-|-|
+||Time to Event|Binary|Continuous|
+|----------------|--|--|--|
+|Two Arm Confirmatory - Multiple Endpoints|✅|✅|✅|
 
-**Legend**
-
-|Icon|Meaning|
-|--|----------|
-|✅|Available|
-|❌|Not available|
-|🔜|Coming soon|
+*This integration point is not applicable to other study objectives.*
 
 # Instructions
+
+## In East Horizon Explore
+
+You can set up a design function under **User Specified Analysis** in the **Design Tab** while creating or editing an **Input Set**.
+
+<details>
+<summary>Follow these steps (click to expand/collapse):</summary>
+
+1. Select **User Specified-R** from the dropdown in the **User Specified Analysis** field in the **Design Tab**.
+1. Browse and select the appropriate R file (`filename.r`) from your computer, or use the built-in **R Code Assistant** to create one. This file should contain function(s) written to perform various tasks to be used throughout your Project.
+1. Choose the appropriate function name. If the expected function is not displaying, then check your R code for errors.
+1. Set any required user parameters (variables) as needed for your function using **+ Add Variables**.
+1. Continue creating your project by specifying scenarios for patient Response, Enrollments, etc.
+
+For a visual guide of where to find the option, refer to the screenshot below:
+
+![](GettingStarted_files/designExplore.png)
+</details>
 
 ## In East Horizon Design
 

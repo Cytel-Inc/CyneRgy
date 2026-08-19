@@ -51,16 +51,6 @@
 #'                                            Used in Solara for creating the observed hazard ratio graph. 
 #'                                            Only applicable for time-to-event data.}
 #'                                            
-
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
 ######################################################################################################################## .
 
 AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )

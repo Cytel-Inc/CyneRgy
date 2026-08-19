@@ -1,5 +1,6 @@
+########################################################################################################################
 #' @name AnalyzeMultiArmUsingLogrankTestBonferroni
-#' @title Analyze time-to-event outcome for multi-arm design using the survival library.
+#' @title Analyze multi-arm time-to-event outcomes using Bonferroni-adjusted log-rank tests.
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
 #'        It will have headers indicating the names of the columns. These names will be same as those used in 
 #'        Data Generation. User should access the variables using headers, for example, SimData$ArrivalTime, 
@@ -83,103 +84,140 @@
 #'                                     }
 #'                                     }
 #'                      }
+########################################################################################################################
+
 AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library( survival )
+    
     # Retrieve necessary information from the objects East Horizon sent
     if( !is.null( LookInfo ))
     {
-        # Look info was provided so use it
         nQtyOfLooks              <- LookInfo$NumLooks
         nLookIndex               <- LookInfo$CurrLookIndex
-        CumEvents                <- LookInfo$InfoFrac*DesignParam$MaxEvents
-        nQtyOfEvents             <- CumEvents[ nLookIndex ]
-        vInfoFrac                <- LookInfo$InfoFrac
-        vEfficacyBoundary        <- gsDesign::gsDesign( k = nQtyOfLooks, test.type = 1, alpha = DesignParam$Alpha, 
-                                                        sfu = gsDesign::sfLDOF, timing = vInfoFrac )
-        vEfficacyBoundaryPScale  <- 1 - pnorm( vEfficacyBoundary$upper$bound )
-    }
-    else
-    {   # Look info is not provided for fixed sample designs so fetch the information appropriately
-        nQtyOfLooks              <- 1
-        nLookIndex               <- 1
-        nQtyOfEvents             <- DesignParam$MaxEvents
-        dEffBdry                 <- DesignParam$CriticalPoint
-        vInfoFrac                <- 1
-        vEfficacyBoundaryPScale  <- DesignParam$Alpha
-    }
-    vIsTrtPresent                <- DesignParam$IsArmPresent
-    
-    SimData$TimeOfEvent          <- SimData$ArrivalTime + SimData$SurvivalTime    # This is the calendar time in the trial that the patients event is observed
-    
-    # Compute the time of analysis 
-    SimData                      <- SimData[ order( SimData$TimeOfEvent), ]
-    dTimeOfAnalysis              <- SimData[ nQtyOfEvents, ]$TimeOfEvent
-    
-    # Add the Observed Time variable 
-    SimData                      <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis ,]   # Exclude any patients that were not enrolled by the time of the analysis
-    SimData$Event                <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )  # If the event is observed after the analysis it is not observed, eg censored 
-    SimData$ObservedTime         <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
-    
-    # Order the data by observed time for the remainder of the computations
-    SimData                      <- SimData[ order( SimData$ObservedTime ), ]
-    
-    vPValues                     <- rep( NA, DesignParam$NumTreatments )
-    vHRRatio                     <- rep( NA, DesignParam$NumTreatments )
-    for (nTrtID in 1:DesignParam$NumTreatments)
-    {
-        if (vIsTrtPresent[ nTrtID ] == 1)
+        nQtyOfEvents             <- LookInfo$InfoFrac[ nLookIndex ] * DesignParam$MaxEvents
+        dEffBoundary             <- LookInfo$EffBdry[ nLookIndex ]
+        
+        if( DesignParam$TailType == 1 )
         {
-            SimDataTrt           <- SimData[ SimData$TreatmentID %in% c(0, nTrtID), ]
-            # Compute Observed HR
-            coxModel             <- coxph( Surv( ObservedTime, Event ) ~ TreatmentID, data = SimDataTrt )
-            dTrueHR              <- exp( coxModel$coefficients )
-            
-            # Compute the test statistic using survival package
-            logrankTest          <- survdiff( Surv( ObservedTime, Event ) ~ TreatmentID, SimDataTrt )
-            
-            # Compute the logrank test statistic
-            dPValue              <- logrankTest$pvalue
+            dBoundaryPScale      <- 1 - pnorm( dEffBoundary )
         }
         else
         {
-            dTrueHR              <- NA
-            dPValue              <- NA
+            dBoundaryPScale      <- pnorm( dEffBoundary )
         }
-        vHRRatio[nTrtID]         <- dTrueHR
-        vPValues[nTrtID]         <- dPValue
+    }
+    else
+    {
+        # Look info is not provided for fixed sample designs so fetch the information appropriately
+        nQtyOfLooks              <- 1
+        nLookIndex               <- 1
+        nQtyOfEvents             <- DesignParam$MaxEvents
+        dBoundaryPScale          <- DesignParam$Alpha
+    }
+    
+    vIsTrtPresent                <- DesignParam$IsArmPresent
+    
+    # This is the calendar time in the trial that the patient event is observed
+    SimData$TimeOfEvent          <- SimData$ArrivalTime + SimData$SurvivalTime
+    
+    # Order the data by observed time for the remainder of the computations
+    SimData                      <- SimData[ order( SimData$TimeOfEvent ), ]
+    
+    if( nrow( SimData ) < nQtyOfEvents )
+    {
+        return( list(
+            Decision             = rep( NA_integer_, DesignParam$NumTreatments ),
+            ErrorCode            = as.integer( 1 ),
+            HR                   = rep( NA_real_, DesignParam$NumTreatments ),
+            HazardRatio          = rep( NA_real_, DesignParam$NumTreatments ),
+            RawPVal              = rep( NA_real_, DesignParam$NumTreatments ),
+            AdjPVal              = rep( NA_real_, DesignParam$NumTreatments ),
+            AnalysisTime         = NA_real_
+        ) )
+    }
+    
+    dTimeOfAnalysis              <- SimData[ nQtyOfEvents, ]$TimeOfEvent
+    
+    SimData                      <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ]
+    SimData$Event                <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )
+    SimData$ObservedTime         <- ifelse(
+                                        SimData$TimeOfEvent > dTimeOfAnalysis,
+                                        dTimeOfAnalysis - SimData$ArrivalTime,
+                                        SimData$TimeOfEvent - SimData$ArrivalTime
+                                    )
+    
+    SimData                      <- SimData[ order( SimData$ObservedTime ), ]
+    
+    vPValues                     <- rep( NA_real_, DesignParam$NumTreatments )
+    vHRRatio                     <- rep( NA_real_, DesignParam$NumTreatments )
+    
+    for( nTrtID in 1:DesignParam$NumTreatments )
+    {
+        if( vIsTrtPresent[ nTrtID ] == 1 )
+        {
+            SimDataTrt           <- SimData[ SimData$TreatmentID %in% c( 0, nTrtID ), ]
+            
+            # Compute Observed HR
+            coxModel             <- survival::coxph(
+                                        survival::Surv( ObservedTime, Event ) ~ TreatmentID,
+                                        data = SimDataTrt
+                                    )
+            
+            # Compute the test statistic using survival package
+            logrankTest          <- survival::survdiff(
+                                        survival::Surv( ObservedTime, Event ) ~ TreatmentID,
+                                        data = SimDataTrt
+                                    )
+            
+            vHRRatio[ nTrtID ]   <- as.numeric( exp( coxModel$coefficients ) )
+            vPValues[ nTrtID ]   <- logrankTest$pvalue
+        }
     }
     
     # Calculate Bonferroni adjusted p values
     # Assumes that each present arm has a valid hypothesis test and p-value
-    vAdjPValues                  <- vPValues * sum( vIsTrtPresent ) 
+    nActiveArms                  <- sum( vIsTrtPresent == 1, na.rm = TRUE )
+    vAdjPValues                  <- pmin( vPValues * nActiveArms, 1 )
     
-    # Perform the desired analysis. NA should be returned for arms that are not available at this look
-    # vDecision                    <- ifelse( vAdjPValues < vEfficacyBoundaryPScale[ nLookIndex ], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
-    vDecision <- c()
-    for ( i in 1:length( vAdjPValues ))
+    vDecision                    <- c()
+    
+    # Perform the desired analysis
+    for( i in 1:DesignParam$NumTreatments )
     {
-        strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                                   bIAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ], 
-                                                   bFAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ])
-        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+        if( vIsTrtPresent[ i ] == 1 )
+        {
+            strDecision <- CyneRgy::GetDecisionString(
+                                LookInfo,
+                                nLookIndex,
+                                nQtyOfLooks,
+                                bIAEfficacyCondition = !is.na( vAdjPValues[ i ] ) &&
+                                                       vAdjPValues[ i ] < dBoundaryPScale,
+                                bFAEfficacyCondition = !is.na( vAdjPValues[ i ] ) &&
+                                                       vAdjPValues[ i ] < dBoundaryPScale
+                            )
+            
+            nDecision <- CyneRgy::GetDecision(
+                                strDecision,
+                                DesignParam,
+                                LookInfo
+                            )
+        }
+        else
+        {
+            nDecision <- NA_integer_
+        }
+        
         vDecision <- c( vDecision, nDecision )
     }
-    # for( i in 1:length( vDecision ) ){
-    #     if( vDecision[i] == 0 )
-    #     {
-    #         # Did not hit efficacy, so check futility 
-    #         # We are at the FA, efficacy decision was not made yet so the decision is futility
-    #         if( nLookIndex == nQtyOfLooks ) 
-    #         {
-    #             vDecision[i]     <- 3 # Code for futility 
-    #         }
-    #     }
-    # }
     
-    nError 	                     <- 0
-    
-    return( list( Decision    = as.integer( vDecision ), 
-                  ErrorCode   = as.integer( nError ),
-                  HazardRatio = as.numeric( vHRRatio )))
+    return( list(
+        Decision                 = as.integer( vDecision ),
+        ErrorCode                = as.integer( 0 ),
+        HR                       = as.double( vHRRatio ),
+        HazardRatio              = as.double( vHRRatio ),
+        RawPVal                  = as.double( vPValues ),
+        AdjPVal                  = as.double( vAdjPValues ),
+        AnalysisTime             = as.double( dTimeOfAnalysis )
+    ) )
 }

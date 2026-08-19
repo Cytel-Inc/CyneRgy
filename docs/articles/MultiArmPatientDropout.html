@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin
 and Anoop Singh Rawat</h4>
             
-            <h4 data-toc-skip class="date">March 07, 2026</h4>
+            <h4 data-toc-skip class="date">July 07, 2026</h4>
       
 
       <div class="d-none name"><code>MultiArmPatientDropout.Rmd</code></div>
@@ -122,7 +122,9 @@ following configuration:
 <li>
 Continuous or Binary Outcome for Example 1
 </li>
-<!-- <li>Time-to-Event Outcome for Example 2</li> -->
+<li>
+Time-to-Event Outcome for Example 2
+</li>
 </ul>
 </li>
 <li>
@@ -142,21 +144,23 @@ as dropout can impact both power and interpretation of results.</p>
 integration. We focus on two common approaches to modeling dropout:</p>
 <ol style="list-style-type: decimal">
 <li>Armwise continuous/binary dropout using dropout probabilities to
-identify completers and non-completers.
-<!-- 2. Armwise survival dropout using time-to-dropout models based on hazard rates or probabilities. -->
-</li>
+identify completers and non-completers.</li>
+<li>Armwise survival dropout using time-to-dropout models based on
+hazard rates or probabilities.</li>
 </ol>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
-<li>
-<a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R/GenerateCensoringMultiArmUsingBinomialProportion.R" class="external-link">GenerateCensoringMultiArmUsingBinomialProportion.R</a>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R/GenerateCensoringMultiArmUsingBinomialProportion.R" class="external-link">GenerateCensoringMultiArmUsingBinomialProportion.R</a>
 - The R function named
 <em>GenerateCensoringMultiArmUsingBinomialProportion</em> in the file is
 used to perform multiple arm dropout with continuous or binary outcome
-as described in Example 1 below.</li>
+as described in Example 1 below.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R" class="external-link">GenerateDropoutTimeMultiArmForSurvival.R</a>
+- The R function named <em>GenerateDropoutTimeMultiArmForSurvival.R</em>
+in the file is used to perform multiple arm dropout with time-to-event
+outcome as described in Example 2 below.</p></li>
 </ol>
-<!-- 2. [GenerateDropoutTimeMultiArmForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R) - The R function named *GenerateDropoutTimeMultiArmForSurvival.R* in the file is used to perform multiple arm dropout with time-to-event outcome as described in Example 2 below. -->
 </div>
 <div class="section level2">
 <h2 id="example-1---dropout-using-binomial-proportion-continuous-or-binary-outcome">Example 1 - Dropout Using Binomial Proportion (Continuous or Binary
@@ -242,34 +246,74 @@ not drop out).<br>
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>
 <p><img src="MultiArmPatientDropout_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700"></p>
-<!-- # Example 2 - Dropout Time For Time-to-Event Outcome
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R" class="alert-link">GenerateDropoutTimeMultiArmForSurvival.R</a></p>
 </div>
-
-The R function *GenerateDropoutTimeMultiArmForSurvival* simulates dropout times for multi-arm time-to-event designs, allowing dropout behavior to vary by treatment arm. Each arm may have its own dropout hazard rate or dropout probability, as defined in East Horizon.
-
-The function supports two methods for specifying dropout parameters:
-
-- Hazard rate–based dropout (`DropMethod = 1`): dropout times are drawn directly from exponential distributions parameterized by arm-specific hazard rates.
-- Probability–based dropout (`DropMethod = 2`): dropout probabilities are converted into equivalent exponential hazard rates, offering a simpler way to define dropout intensity.
-
-Subjects who do not drop out receive a dropout time of `Inf`, indicating full study completion.
-
-This function does not use user-defined parameters but relies on values specified in East Horizon. Refer to the table below for more information.
-
-|**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
-|-----|-----|---|
-|Probability of Dropout for Control Arm|Response Card, Dropout Rate tab|$ProbDrop[ 1 ]$|
-|Probability of Dropout for Arm 1|Response Card, Dropout Rate tab|$ProbDrop[ 2 ]$|
-|Probability of Dropout for Arm 2|Response Card, Dropout Rate tab|$ProbDrop[ 3 ]$|
-|...|
-
-The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
-
-<img src="MultiArmPatientDropout_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700" />
--->
+<div class="section level2">
+<h2 id="example-2---dropout-time-for-time-to-event-outcome">Example 2 - Dropout Time For Time-to-Event Outcome<a class="anchor" aria-label="anchor" href="#example-2---dropout-time-for-time-to-event-outcome"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R" class="external-link alert-link">GenerateDropoutTimeMultiArmForSurvival.R</a>
+</p>
+</div>
+<p>The R function <em>GenerateDropoutTimeMultiArmForSurvival</em>
+simulates dropout times for multi-arm time-to-event designs, allowing
+dropout behavior to vary by treatment arm. Each arm may have its own
+dropout hazard rate or dropout probability, as defined in East
+Horizon.</p>
+<p>The function supports two methods for specifying dropout
+parameters:</p>
+<ul>
+<li>Hazard rate–based dropout (<code>DropMethod = 1</code>): dropout
+times are drawn directly from exponential distributions parameterized by
+arm-specific hazard rates.</li>
+<li>Probability–based dropout (<code>DropMethod = 2</code>): dropout
+probabilities are converted into equivalent exponential hazard rates,
+offering a simpler way to define dropout intensity.</li>
+</ul>
+<p>Subjects who do not drop out receive a dropout time of
+<code>Inf</code>, indicating full study completion.</p>
+<p>This function does not use user-defined parameters but relies on
+values specified in East Horizon. Refer to the table below for more
+information.</p>
+<table class="table">
+<colgroup>
+<col width="38%">
+<col width="38%">
+<col width="23%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Name of the parameter in East Horizon</strong></th>
+<th><strong>Where to find the parameter in East Horizon</strong></th>
+<th><strong>Name of the variable in the R script</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Probability of Dropout for Control Arm</td>
+<td>Response Card, Dropout Rate tab</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>o</mi><mi>b</mi><mi>D</mi><mi>r</mi><mi>o</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">ProbDrop[ 1 ]</annotation></semantics></math></td>
+</tr>
+<tr class="even">
+<td>Probability of Dropout for Arm 1</td>
+<td>Response Card, Dropout Rate tab</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>o</mi><mi>b</mi><mi>D</mi><mi>r</mi><mi>o</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>2</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">ProbDrop[ 2 ]</annotation></semantics></math></td>
+</tr>
+<tr class="odd">
+<td>Probability of Dropout for Arm 2</td>
+<td>Response Card, Dropout Rate tab</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>o</mi><mi>b</mi><mi>D</mi><mi>r</mi><mi>o</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>3</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">ProbDrop[ 3 ]</annotation></semantics></math></td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="MultiArmPatientDropout_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

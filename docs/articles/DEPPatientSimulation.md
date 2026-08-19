@@ -10,7 +10,8 @@ following configuration:
 
 - **Study objective:** Two Arm Confirmatory
 - **Number of endpoints:** Dual Endpoints
-- **Endpoint type:** *Time-to-Event - Time-to-Event*
+- **Endpoint type:** *Time-to-Event - Time-to-Event* for Example 1,
+  *Time-to-Event - Binary* for Example 2
 - **Task:** Explore
 - **Response Input Method:** Hazard Rate
 

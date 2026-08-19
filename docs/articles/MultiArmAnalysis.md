@@ -13,7 +13,8 @@ following configuration:
 - **Endpoint type:**
   - Continuous Outcome for Example 1
   - Binary Outcome for Example 2
-- **Task:** Explore
+  - Time-to-Event Outcome for Example 3
+- **Task:** Explore or Design
 
 **Note:** This example is compatible with both Fixed Sample and Group
 Sequential statistical designs. The R code automatically detects whether
@@ -39,6 +40,10 @@ you will find the following R files:
 
 2.  [AnalyzeMultiArmUsingPropTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingPropTestBonferroni.R) -
     Performs proportion tests for binary endpoints with Bonferroni
+    adjustment.
+
+3.  [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R) -
+    Performs log-rank tests for time-to-event endpoints with Bonferroni
     adjustment.
 
 ## Example 1 - Using the `t.test()` Function with Bonferroni Adjustment (Continuous Outcome)
@@ -85,3 +90,34 @@ integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.
 
 ![](MultiArmAnalysis_files/figure-html/unnamed-chunk-4-1.png)
+
+## Example 3 - Using the `survival` Package with Bonferroni-Adjusted Log-Rank Tests (Time-to-Event Outcome)
+
+This example is related to this R file:
+[AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R)
+
+For time-to-event outcomes, this example analyzes a multi-arm survival
+trial by comparing each active treatment arm with the control arm. It
+uses
+[`survival::survdiff()`](https://rdrr.io/pkg/survival/man/survdiff.html)
+to perform **pairwise log-rank tests** and estimates
+treatment-versus-control hazard ratios using **Cox proportional hazards
+models**.
+
+For each active treatment arm, the raw log-rank p-value is adjusted
+using a Bonferroni correction based on the number of active arms. The
+adjusted p-value is then compared with the applicable efficacy boundary
+to determine whether the treatment crosses for efficacy, continues to
+the next analysis, or is declared futile at the final analysis.
+
+The example supports both fixed-sample and group sequential designs. For
+interim analyses, it uses LookInfo to determine the current information
+fraction and efficacy boundary. Patients are administratively censored
+at the analysis time corresponding to the planned number of events for
+the current look.
+
+The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.
+
+![](MultiArmAnalysis_files/figure-html/unnamed-chunk-5-1.png)

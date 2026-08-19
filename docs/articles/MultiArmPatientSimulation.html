@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_3-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin
 and Anoop Singh Rawat</h4>
             
-            <h4 data-toc-skip class="date">March 07, 2026</h4>
+            <h4 data-toc-skip class="date">July 07, 2026</h4>
       
 
       <div class="d-none name"><code>MultiArmPatientSimulation.Rmd</code></div>
@@ -126,10 +126,12 @@ Continuous Outcome for Example 1
 <li>
 Binary Outcome for Example 2
 </li>
-<!-- <li>Time-to-Event Outcome for Example 3</li> -->
+<li>
+Time-to-Event Outcome for Example 3 and 4
+</li>
 </ul>
 <li>
-<strong>Task:</strong> Explore
+<strong>Task:</strong> Explore or Design
 </li>
 </ul>
 </div>
@@ -138,9 +140,10 @@ Binary Outcome for Example 2
 </h2>
 <p>The following examples illustrate how to integrate new patient
 outcome simulation (<em>response</em>) capabilities into East Horizon
-using R functions in the context of a multi-arm clinical trials. Each
-example demonstrates a different type of statistical endpoint
-(continuous, time-to-event, and binary).</p>
+using R functions in the context of a multi-arm clinical trials. The
+following examples demonstrate different approaches for simulating
+continuous, binary, and time-to-event endpoints in multi-arm clinical
+trials.</p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmPatientSimulation/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
 <ol style="list-style-type: decimal">
@@ -150,8 +153,14 @@ proportion of patients have no response.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R" class="external-link">SimulatePatientOutcomeMultiArmPercentAtZero.Binary.R</a>
 - Simulates binary outcomes from a mixture distribution where a
 proportion of patients have no response.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R" class="external-link">SimulatePatientSurvivalMultiArmWeibull.R</a>
+- Simulates time-to-event outcomes using a Weibull distribution,
+allowing arm-specific shape and scale parameters.</p></li>
+<li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmExpGivenMST.R" class="external-link">SimulatePatientSurvivalMultiArmExpGivenMST.R</a>
+- Simulates time-to-event outcomes using exponential survival
+distributions specified through arm-specific median survival
+times.</p></li>
 </ol>
-<!-- 3. [SimulatePatientSurvivalMultiArmWeibull.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R) - Simulates time-to-event outcomes using a Weibull distribution, allowing arm-specific shape and scale parameters. -->
 </div>
 <div class="section level2">
 <h2 id="example-1---simulation-of-continuous-outcomes-with-non-responders">Example 1 - Simulation of Continuous Outcomes with
@@ -273,33 +282,110 @@ treatment-resistant in the second experimental arm.</td>
 integration points of Cytel products, accompanied by a flowchart
 outlining the general steps performed by the R code.</p>
 <p><img src="MultiArmPatientSimulation_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
-<!-- # Example 3 - Simulation of Time-to-Event Outcomes from a Weibull Distribution
-
-<div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R" class="alert-link">SimulatePatientSurvivalMultiArmWeibull.R</a></p>
 </div>
-
-This example demonstrates how to simulate time-to-event data for multiple treatment arms using arm-specific Weibull parameters. Each arm is characterized by its own shape and scale values, allowing flexible modeling of distinct hazard profiles across arms.
-
-The R function *SimulatePatientSurvivalMultiArmWeibull* extends the two-arm approach to three arms (two treatment arms), generating a survival time for each patient according to the Weibull distribution corresponding to their assigned arm. This enables users to evaluate study power or expected treatment differences under non-proportional hazards or complex multi-arm designs.
-
-**Note**: This example could be extended to any number of treatment arms by adding more user parameters such as `dShapeExp3` and `dScaleExp3`, `dShapeExp4` and `dScaleExp4`, etc.
-
-Refer to the table below for the definitions of the user-defined parameters used in this example.
-
-|**User parameter**|**Definition**|
-|---|---------|
-|**dShapeCtrl**|Shape parameter of the Weibull distribution for the control arm.|
-|**dShapeExp1**|Shape parameter of the Weibull distribution for the first experimental arm.|
-|**dShapeExp2**|Shape parameter of the Weibull distribution for the second experimental arm.|
-|**dScaleCtrl**|Scale parameter of the Weibull distribution for the control arm.|
-|**dScaleExp1**|Scale parameter of the Weibull distribution for the first experimental arm.|
-|**dScaleExp2**|Scale parameter of the Weibull distribution for the second experimental arm.|
-
-The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
-
-<img src="MultiArmPatientSimulation_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700" />
--->
+<div class="section level2">
+<h2 id="example-3---simulation-of-time-to-event-outcomes-from-a-weibull-distribution">Example 3 - Simulation of Time-to-Event Outcomes from a Weibull
+Distribution<a class="anchor" aria-label="anchor" href="#example-3---simulation-of-time-to-event-outcomes-from-a-weibull-distribution"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmWeibull.R" class="external-link alert-link">SimulatePatientSurvivalMultiArmWeibull.R</a>
+</p>
+</div>
+<p>This example demonstrates how to simulate time-to-event data for
+multiple treatment arms using arm-specific Weibull parameters. Each arm
+is characterized by its own shape and scale values, allowing flexible
+modeling of distinct hazard profiles across arms.</p>
+<p>The R function <em>SimulatePatientSurvivalMultiArmWeibull</em>
+extends the two-arm approach to three arms (two treatment arms),
+generating a survival time for each patient according to the Weibull
+distribution corresponding to their assigned arm. This enables users to
+evaluate study power or expected treatment differences under
+non-proportional hazards or complex multi-arm designs.</p>
+<p><strong>Note</strong>: This example could be extended to any number
+of treatment arms by adding more user parameters such as
+<code>dShapeExp3</code> and <code>dScaleExp3</code>,
+<code>dShapeExp4</code> and <code>dScaleExp4</code>, etc.</p>
+<p>Refer to the table below for the definitions of the user-defined
+parameters used in this example.</p>
+<table class="table">
+<colgroup>
+<col width="25%">
+<col width="75%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>User parameter</strong></th>
+<th><strong>Definition</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>dShapeCtrl</strong></td>
+<td>Shape parameter of the Weibull distribution for the control
+arm.</td>
+</tr>
+<tr class="even">
+<td><strong>dShapeExp1</strong></td>
+<td>Shape parameter of the Weibull distribution for the first
+experimental arm.</td>
+</tr>
+<tr class="odd">
+<td><strong>dShapeExp2</strong></td>
+<td>Shape parameter of the Weibull distribution for the second
+experimental arm.</td>
+</tr>
+<tr class="even">
+<td><strong>dScaleCtrl</strong></td>
+<td>Scale parameter of the Weibull distribution for the control
+arm.</td>
+</tr>
+<tr class="odd">
+<td><strong>dScaleExp1</strong></td>
+<td>Scale parameter of the Weibull distribution for the first
+experimental arm.</td>
+</tr>
+<tr class="even">
+<td><strong>dScaleExp2</strong></td>
+<td>Scale parameter of the Weibull distribution for the second
+experimental arm.</td>
+</tr>
+</tbody>
+</table>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="MultiArmPatientSimulation_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="example-4---simulation-of-time-to-event-outcomes-from-median-survival-times">Example 4 - Simulation of Time-to-Event Outcomes from Median
+Survival Times<a class="anchor" aria-label="anchor" href="#example-4---simulation-of-time-to-event-outcomes-from-median-survival-times"></a>
+</h2>
+<div class="alert alert-primary" role="alert">
+<p style="margin-bottom:0">
+This example is related to this R file:
+<a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientSimulation/R/SimulatePatientSurvivalMultiArmExpGivenMST.R" class="external-link alert-link">SimulatePatientSurvivalMultiArmExpGivenMST.R</a>
+</p>
+</div>
+<p>This example demonstrates how to simulate time-to-event outcomes for
+multiple treatment arms using arm-specific median survival times (MSTs).
+Rather than requiring hazard rates directly, the function accepts the
+median survival time for each treatment arm, internally converts each
+value into an exponential hazard rate using
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mtext mathvariant="normal">MST</mtext></mfrac></mrow><annotation encoding="application/x-tex">\lambda = \frac{\log(2)}{\text{MST}}</annotation></semantics></math>
+and then generates survival times from exponential distributions.</p>
+<p>The R function <em>SimulatePatientSurvivalMultiArmExpGivenMST</em>
+extends the multi-arm survival simulation framework by allowing users to
+specify clinically interpretable median survival times (from East
+Horizon) instead of hazard rates. Each patient’s treatment assignment
+determines which exponential distribution is used for simulation.</p>
+<p><strong>Note</strong>: This example currently supports exponential
+survival models based on median survival times
+(<code>SurvMethod = 3</code>). It can easily be extended to additional
+treatment arms by supplying additional median survival time values.</p>
+<p>The figure below illustrates where this example fits within the R
+integration points of Cytel products, accompanied by a flowchart
+outlining the general steps performed by the R code.</p>
+<p><img src="MultiArmPatientSimulation_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
