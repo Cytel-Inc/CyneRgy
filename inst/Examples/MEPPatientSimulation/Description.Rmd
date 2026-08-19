@@ -23,6 +23,14 @@ To try this example, create a new project in East Horizon using the following co
 
 This example illustrates how to integrate new patient outcome simulation (*response*) capabilities into East Horizon using R functions in the context of 2-arm clinical trials with multiple endpoints. The example combines time-to-event, binary, and continuous outcomes within a single response-generating function. 
 
+Once CyneRgy is installed, you can load this example with the following command:
+
+```r
+CyneRgy::RunExample( "MEPPatientSimulation" )
+```
+
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
+
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPPatientSimulation/R) you will find the following R file:
 
 1. [GenerateMEPResponse.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPPatientSimulation/R/GenerateMEPResponse.R) - This file contains the response-generation logic used to simulate patient-level outcomes across multiple endpoints.

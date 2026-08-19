@@ -25,12 +25,12 @@ Important: **ArrivalTime** is a new required parameter. Existing R scripts must 
 
 The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes modeled as binary data.
 
-Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+Once CyneRgy is installed, you can load this example with the following command:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "2ArmBinaryOutcomePatientSimulation" )
 ```
 
-Running the command above will load the RStudio project in RStudio. 
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 **East Workbook**: [2ArmBinaryOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/2ArmBinaryOutcomePatientSimulation.cywx)
 

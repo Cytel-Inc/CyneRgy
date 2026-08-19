@@ -45,13 +45,13 @@ Together, this example provides a foundation for trial designers to estimate pow
 
 ## Required Files
 
-Before running anything in East Horizon, load the Schizophrenia example by installing CyneRgy and running this command into RStudio:
+Once CyneRgy is installed, you can load this example with the following command:
 
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "SchizophreniaTrial" )
 ```
 
-Running this code above will load the RStudio project.
+Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 **RStudio Project File**: [SchizophreniaTrial.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/SchizophreniaTrial.Rproj)
 
