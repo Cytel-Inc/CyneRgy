@@ -23,17 +23,6 @@
 #'  outcome from a binomial distribution using the response probabilities provided in PropRest.  
 SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
-    # Note: It can be helpful to save to the parameters that East sent.
-    # The next two lines show how you could save the UserParam variable to an Rds file
-    # setwd(["ENTER THE DESIRED LOCATION TO SAVE THE FILE"])
-    # saveRDS( NumSub, "NumSub.Rds" )    
-    # saveRDS( NumArm, "NumArm.Rds" )
-    # saveRDS( TreatmentID, "TreatmentID.Rds" )
-    # saveRDS( PropResp, "PropResp.Rds" )
-    # saveRDS( UserParam, "UserParam.Rds")    
-    # If the user did not specify the user parameters, but still called this function then the probability
-    # of treatment resistant is 0 for both treatments
-    
     if( is.null( UserParam ) )
     {
         UserParam <- list( dProbOfTreatmentResistantCtrl = 0, dProbOfTreatmentResistantExp = 0 )

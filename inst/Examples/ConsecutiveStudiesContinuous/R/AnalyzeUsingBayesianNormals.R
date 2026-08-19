@@ -16,23 +16,10 @@
 #' @export
 AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
-    
-    # setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example4")
-    # if( !file.exists("SimData.Rds"))
-    # {
-    #     saveRDS( SimData,     "SimData.Rds")
-    #    saveRDS( DesignParam, "DesignParam.Rds" )
-    #    saveRDS( UserParam,   "UserParam.Rds")
-    #    saveRDS( LookInfo,   "LookInfo.Rds")
-    # }
-    
-    
     bInterimAnalysis <- FALSE   # Assuming a fixed design, the next if statement will check this
 
     if( missing( LookInfo ) == FALSE && !is.null( LookInfo ) )
     {
-        
-        #saveRDS( LookInfo,    "LookInfo.Rds" )
         # Step 1 - If this is the IA then subset the data to include only those for the first look. East sends all simulated data
         
         if(  LookInfo$CurrLookIndex == 1 )
