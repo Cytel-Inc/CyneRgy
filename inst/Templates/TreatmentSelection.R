@@ -1,6 +1,6 @@
 ######################################################################################################################## .
-#' @param TreatmentSelectionTemplate
-#' @title A template for treatment selection functions in MAMS binary designs.  
+#  Last Modified Date: {{CREATION_DATE}}
+#' @name {{FUNCTION_NAME}}
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
@@ -40,7 +40,7 @@
 #'
 ######################################################################################################################## .
 
-PerformTreatmentSelection  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
+{{FUNCTION_NAME}}  <- function(SimData, DesignParam, LookInfo, UserParam = NULL)
 {
     # Pulling the important information from the simulated data, SimData, sent from East 
     vTreatmentID    <- SimData$TreatmentID  # TreatmentIDs are 0, 1,..., number of experimental treatments
