@@ -16,6 +16,10 @@
 #' @param StdDevTrt: Mandatory. Numeric Treatment Standard Deviations for all visits
 #' @param CorrMat: Mandatory. Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits. 
 #' @param UserParam User can pass custom scalar variables defined by users as a member of this list. User should access the variables using names, for example UserParam$Var1 and not order. 
+#' Note: UserParam values should be referenced in the main function before
+#' being passed to helper functions. Passing UserParam directly to a helper
+#' may prevent East Horizon from automatically populating the required parameters.
+#' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'   \item{AbsorptionRate}{Absorption rate constant}
 #'   \item{EliminationRate}{Elimination rate constant}
@@ -35,7 +39,6 @@
 #'                                     }
 #'                                     
 #'                  \item{Response<NumVisit>}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}             
-#' @export    
 ######################################################################################################################## .
 
 GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
@@ -46,24 +49,23 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     # Initialize simulated response matrix
     mResponses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
     
-    # Define the Emax model parameters from UserParam
-    dAbsorptionRate  <- UserParam$AbsorptionRate
-    dEliminationRate <- UserParam$EliminationRate
-    Dose <- UserParam$Dose 
-    E0   <- UserParam$E0    # Baseline effect
-    Emax <- UserParam$Emax  # Maximum effect
-    EC50 <- UserParam$EC50  # Concentration at 50% of Emax
+    # Define the Emax model parameters from UserParam 
+    E0                <- UserParam$E0               # Baseline effect
+    Emax              <- UserParam$Emax             # Maximum effect
+    EC50              <- UserParam$EC50             # Concentration at 50% of Emax
+    dAbsorptionRate   <- UserParam$AbsorptionRate   # Absorption rate constant
+    dEliminationRate  <- UserParam$EliminationRate  # Elimination rate constant
+    dDose             <- UserParam$Dose             # Dose administered
 
-    
     # Check if all required Emax parameters are provided
-    if ( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( Dose )) {
+    if ( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose )) {
         nError <- -1 # Fatal error if required parameters are missing
         lRetval$ErrorCode <- as.integer( nError )
         return( lRetval )
     }
-    
+
     # Call PK function to get concentration responses for treatment group
-    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam )
+    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose )
     
     # Simulate response for each patient
     for ( nPatIndx in 1:NumSub ) 
@@ -97,19 +99,30 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     
 }
 
-# Define helper function for PK model generating concentration
-GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
+
+######################################################################################################################## .
+# Helper function for PK model generating concentration ####
+#' @param NumSub Number of subjects
+#' @param NumVisit Number of visits
+#' @param TreatmentID Vector of treatment IDs for each subject
+#' @param Inputmethod Method of input (0 for actual values)
+#' @param VisitTime Vector of visit times
+#' @param MeanControl Vector of mean control values for each visit
+#' @param MeanTrt Vector of mean treatment values for each visit
+#' @param StdDevControl Vector of standard deviations for control group for each visit
+#' @param StdDevTrt Vector of standard deviations for treatment group for each visit
+#' @param CorrMat Correlation matrix between visits
+#' @param dAbsorptionRate Absorption rate constant
+#' @param dEliminationRate Elimination rate constant
+#' @param dDose Dose administered
+######################################################################################################################## .
+GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose ) 
 {
     library( deSolve )
     
     # Initialize error code and return list
     nError  <- 0
     lRetval <- list()
-    
-    # Parameters for ODE model
-    dAbsorptionRate   <- UserParam$AbsorptionRate   # Absorption rate constant
-    dEliminationRate  <- UserParam$EliminationRate   # Elimination rate constant
-    dDose             <- UserParam$Dose # Dose administered
     
     if ( is.null(  dAbsorptionRate ) || is.null(  dEliminationRate ) || is.null( dDose ) ) 
     {
@@ -168,7 +181,12 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     return( lRetval )
 }
 
-# Define helper ODE function for one-compartment model with first-order absorption
+######################################################################################################################## .
+# Helper ODE function for one-compartment model with first-order absorption ####
+#' @param time Time variable for ODE solver
+#' @param state State variables (A1: amount in absorption compartment, A2: concentration in central compartment)
+#' @param parameters Parameters for the ODE (dAbsorptionRate, dEliminationRate)
+######################################################################################################################## .
 OneCompartmentModelPK <- function( time, state, parameters ) 
 {
     with( as.list( c( state, parameters )), {
