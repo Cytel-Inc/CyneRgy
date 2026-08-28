@@ -20,6 +20,12 @@ To try this example, create a new project in East Horizon using the following co
 
 The following examples illustrate how to integrate new **analysis** capabilities into East Horizon using R functions in the context of a dose finding clinical trial with a continuous endpoint.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
+
+```r
+CyneRgy::RunExample( "DoseFindingAnalysis" )
+```
+
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DoseFindingAnalysis/R) you will find the following R file:
 
 1. [AnalyzeDoseFindingContinuousUsingPairwiseTTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DoseFindingAnalysis/R/AnalyzeDoseFindingContinuousUsingPairwiseTTest.R) - Performs fixed-sequence pairwise comparisons between treatment doses and control using t-tests. Supports interim futility assessment, isotonic dose-response estimation, and proof-of-concept evaluation.

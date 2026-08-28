@@ -32,13 +32,11 @@ The following examples illustrate how to incorporate new patient outcome simulat
 
 Two of the examples include two binary covariates, and one of these also applies stratified randomization based on the covariates. All designs include a single final analysis. In the example without covariates, the response data is analyzed using a t-test. In contrast, the other two examples employ Analysis of covariance (ANCOVA) to account for covariate effects.
 
-Once CyneRgy is installed, you can load this example in RStudio with the following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "MultipleEndpointsWithCovariates" )
 ```
-
-This will open the corresponding RStudio project.
 
 **RStudio Project File**: [MultipleEndpointsWithCovariates.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/MultipleEndpointsWithCovariates.Rproj)
 
