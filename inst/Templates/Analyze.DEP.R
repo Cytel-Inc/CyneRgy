@@ -1,9 +1,9 @@
-########################################################################################################################
-#  Last Modified Date: {{CREATION_DATE}}
-#  
+######################################################################################################################## .
+# Last Modified Date: {{CREATION_DATE}}
+#
 #' @name {{FUNCTION_NAME}}
-#' 
-#' @title R Template for analysis integration point when the outcome is Dual Endpoints.
+#'
+#' @title Analyze Dual Endpoints
 #'
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient.
 #'        It will have headers indicating the names of the columns. These names will be same as those used in
@@ -19,10 +19,10 @@
 #'                    User should access the variables using names, for example, DesignParam$Alpha, and not order.
 #'                    The list includes the following parameters:
 #'                    \describe{
-#'                      \item{EndpointType}{Integer vector with number of endpoints elements. Indicates endpoint type for each endpoint: 
+#'                      \item{EndpointType}{Integer vector with number of endpoints elements. Indicates endpoint type for each endpoint:
 #'                            0 - Continuous, 1 - Binary, 2 - TTE}
 #'                      \item{EndpointName}{Character vector with number of endpoints elements. Names for each endpoint as specified by the user}
-#'                      \item{WinCond}{Integer value indicating winning condition: 1 - At least Endpoint 1, 
+#'                      \item{WinCond}{Integer value indicating winning condition: 1 - At least Endpoint 1,
 #'                            2 - At least Endpoint 2, 3 - At least one endpoint, 4 - Both endpoints}
 #'                      \item{TailType}{List with tail type for each endpoint. Access using the actual endpoint names specified by the user,
 #'                            e.g., TailType[EndpointName[1]] or TailType[EndpointName[2]]. Values: 0 - Left Tailed, 1 - Right Tailed}
@@ -39,13 +39,13 @@
 #'                            2 - Full Info for Endpoint 1, 3 - Full Info for Endpoint 2}
 #'                      \item{AllocInfo}{Numeric vector with ratios of treatment group sample sizes to control group sample size}
 #'                      \item{Alpha}{Numeric value for Type I Error}
-#'                      \item{CriticalPoint}{List with critical value for each endpoint in fixed sample designs. 
+#'                      \item{CriticalPoint}{List with critical value for each endpoint in fixed sample designs.
 #'                            Access using the actual endpoint names specified by the user,
 #'                            e.g., CriticalPoint[EndpointName[1]] or CriticalPoint[EndpointName[2]]}
-#'                      \item{UpperCriticalPoint}{List with upper critical value for each endpoint in right-tailed fixed sample designs. 
+#'                      \item{UpperCriticalPoint}{List with upper critical value for each endpoint in right-tailed fixed sample designs.
 #'                            Access using the actual endpoint names specified by the user,
 #'                            e.g., UpperCriticalPoint[EndpointName[1]] or UpperCriticalPoint[EndpointName[2]]}
-#'                      \item{LowerCriticalPoint}{List with lower critical value for each endpoint in left-tailed fixed sample designs. 
+#'                      \item{LowerCriticalPoint}{List with lower critical value for each endpoint in left-tailed fixed sample designs.
 #'                            Access using the actual endpoint names specified by the user,
 #'                            e.g., LowerCriticalPoint[EndpointName[1]] or LowerCriticalPoint[EndpointName[2]]}
 #'                      \item{SampleSize}{Integer value for total sample size}
@@ -126,36 +126,36 @@
 #'             }
 #'
 #' @description
-#' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
+#' Analyze simulated outcomes for a dual-endpoint design at the current analysis look.
+#' The function signature must remain the same.
 #' If you are creating logic that requires use of additional parameters not listed above, add that as element to UserParam.
-{{FUNCTION_NAME}} <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL) 
+######################################################################################################################## .
+
+{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    require(survival)
-    
     dTrueHR     <- 0
     dTS         <- 0
     ErrorCode   <- 0
 
-    bGSD <- ifelse(is.null(LookInfo), FALSE, TRUE)                              # Is the trial using Group sequential Design?
-    syncEPID <- ifelse(bGSD, LookInfo$SyncInterim, DesignParam$PlanEndTrial)    # Endpoint ID to be used for look positioning
-    syncEPType <- DesignParam$EndpointType[[syncEPID]]                          # Endpoint type of the endpoint used for look positioning
-    
-    if(bGSD)               # Group Sequential Design   
+    bGSD <- ifelse( is.null( LookInfo ), FALSE, TRUE )                              # Is the trial using Group sequential Design?
+    syncEPID <- ifelse( bGSD, LookInfo$SyncInterim, DesignParam$PlanEndTrial )    # Endpoint ID to be used for look positioning
+    syncEPType <- DesignParam$EndpointType[[syncEPID ] ]                          # Endpoint type of the endpoint used for look positioning
+
+    if( bGSD )               # Group Sequential Design
     {
         # Write logic to read GS Design inputs
-    } 
+    }
     else                    # Fixed Sample Design
     {
         # Write logic to read FSD Design inputs
     }
-    
-    # Compute Hazard Ratio and test statistic taking into account the analysis time.
 
-    
-    
-    return(list(
-        TestStat  = as.double(dTS),
-        HR        = as.double(dTrueHR), # For binary endpoint, return Delta instead
-        ErrorCode = as.integer(Error)
-    ))
+    # Compute Hazard Ratio and test statistic taking into account the analysis time.
+    nError <- 0
+
+    return( list(
+        TestStat  = as.double( dTS ),
+        HR        = as.double( dTrueHR ), # For binary endpoint, return Delta instead
+        ErrorCode = as.integer( nError )
+    ) )
 }

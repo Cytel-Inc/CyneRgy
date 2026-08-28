@@ -1,10 +1,11 @@
-#' User Design Function for Trial Analysis
-#'
+######################################################################################################################## .
 #' @name GetMEPDecision
+#' @title Make Multi-Endpoint Trial Decisions
 #' @description
 #' This function allows users to implement custom decision-making logic for the MEP engine.
 #' It is called at each analysis look to make decisions about endpoint efficacy, futility
 #' and trial continuation based on user-defined criteria.
+#' @author Anoop Singh Rawat, Gabriel Potvin
 #'
 #' @param SimData Data frame containing the full simulation data for all patients with the following columns:
 #'   \itemize{
@@ -92,8 +93,8 @@
 #'         \item MustWinEPs: Integer vector. Flag indicating which endpoints must be won for trial success (must match EndpointName order). 0=Not required, 1=Must win
 #'       }
 #'   }
-#' @param OutList List containing any persistent data to be passed between looks
-#' @param UserParam Optional list of user-defined parameters
+#' @param OutList Optional list containing persistent data returned by the previous look. Defaults to `NULL`.
+#' @param UserParam Optional list of user-defined parameters. Defaults to `NULL`.
 #'
 #' @return A list containing:
 #'   \itemize{
@@ -110,91 +111,107 @@
 #'   }
 #' @examples
 #' # Example implementation for a trial with an arbitrary number of endpoints. Check for Futility only where Efficacy is checked
-GetMEPDecision <- function(SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam) {
-  # Initialize Decision with last look's decisions
-  Decision <- LookInfo$LastLookDecision
+######################################################################################################################## .
 
-  # Get number of endpoints
-  nNumEP <- length(DesignParam$EndpointName)
+GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam )
+{
+    # Initialize Decision with last look's decisions
+    Decision <- LookInfo$LastLookDecision
 
-  # For each endpoint
-  for (nEPID in 1:nNumEP) {
-    # Only process if last look decision was Continue (0)
-    if (Decision[nEPID] == 0) {
-      # Get efficacy boundary and p-value for current endpoint
-      boundary <- LookInfo$EfficacyBoundaryPScale[nEPID]
-      pvalue <- LookInfo$TestStatisticsOutputs[[nEPID]]$data$TSPVal
+    # Get number of endpoints
+    nNumEP <- length( DesignParam$EndpointName )
 
-      # Check if both boundary and p-value exist and p-value is less than boundary
-      if (!is.nan(boundary) && !is.nan(pvalue)) {
-        if (pvalue < boundary) {
-          Decision[nEPID] <- 1  # Set to Efficacy
-          next
-        } else {
+    # For each endpoint
+    for( nEPID in 1:nNumEP )
+    {
+        # Only process if last look decision was Continue (0)
+        if( Decision[ nEPID ] == 0 )
+        {
+            # Get efficacy boundary and p-value for current endpoint
+            boundary <- LookInfo$EfficacyBoundaryPScale[ nEPID ]
+            pvalue <- LookInfo$TestStatisticsOutputs[[ nEPID ] ]$data$TSPVal
+
+            # Check if both boundary and p-value exist and p-value is less than boundary
+            if( !is.nan( boundary ) && !is.nan( pvalue ) )
+            {
+                if( pvalue < boundary )
+                {
+                    Decision[ nEPID ] <- 1
+                    next
+                }
+
             # Check for futility if efficacy is not declared
             nCurrentLook <- LookInfo$LookNum
-            if (DesignParam$FutFlg[nCurrentLook, nEPID] == 1) {
+            if( DesignParam$FutFlg[ nCurrentLook, nEPID ] == 1 )
+            {
                 # Get futility threshold for this endpoint at this look
-                futThreshold <- DesignParam$FutThrsld[nCurrentLook, nEPID]
-                
+                futThreshold <- DesignParam$FutThrsld[ nCurrentLook, nEPID ]
+
                 # Get endpoint name and type
-                strEPName <- DesignParam$EndpointName[nEPID]
-                nEPType <- DesignParam$EndpointType[nEPID]
-                
+                strEPName <- DesignParam$EndpointName[ nEPID ]
+                nEPType <- DesignParam$EndpointType[ nEPID ]
+
                 # Get HR or Delta from DataSummary based on endpoint type
-                if (nEPType == 2) {  # TTE endpoint
-                    observedValue <- DataSummary[[strEPName]]$HR
+                if( nEPType == 2 )
+                {
+                    observedValue <- DataSummary[[strEPName ] ]$HR
                     # Declare futility if HR > threshold
-                    if (!is.nan(observedValue)) {
-                        if (observedValue > futThreshold) Decision[nEPID] <- 2  # Set to Futility
+                    if( !is.nan( observedValue ) && observedValue > futThreshold )
+                    {
+                        Decision[ nEPID ] <- 2
                     }
-                } else {  # Non-TTE endpoint
-                    observedValue <- DataSummary[[strEPName]]$Delta
+                }
+                else
+                {
+                    observedValue <- DataSummary[[strEPName ] ]$Delta
                     # Declare futility if Delta < threshold
-                    if (!is.nan(observedValue)) {
-                        if (observedValue < futThreshold) Decision[nEPID] <- 2  # Set to Futility
+                    if( !is.nan( observedValue ) && observedValue < futThreshold )
+                    {
+                        Decision[ nEPID ] <- 2
                     }
                 }
             }
         }
-      } 
+        }
+
+        # If still not stopped, check if we've reached or exceeded target information
+        if( Decision[ nEPID ] == 0 )
+        {
+            strEPName <- DesignParam$EndpointName[ nEPID ]
+            nEPType <- DesignParam$EndpointType[ nEPID ]
+            targetInfo <- DesignParam$TargetInformation[ nEPID ]
+
+            # Get current events/completers count based on endpoint type
+            currentCount <- if( nEPType == 2 )
+            {
+                DataSummary[[ strEPName ] ]$Events
+            }
+            else
+            {
+                DataSummary[[ strEPName ] ]$Completers
+            }
+
+            if( currentCount >= targetInfo ) Decision[ nEPID ] <- 2
+            if( LookInfo$EPStatus[ nEPID ] == 1 ) Decision[ nEPID ] <- 2
+
+            nCurrentLook <- LookInfo$LookNum
+            futureEfficacyLooks <- if( nCurrentLook < nrow( DesignParam$EffFlg ) )
+            {
+                any( DesignParam$EffFlg[ ( nCurrentLook + 1 ):nrow( DesignParam$EffFlg ), nEPID ] == 1 )
+            }
+            else
+            {
+                FALSE
+            }
+
+            if( !futureEfficacyLooks && DesignParam$EffFlg[ nCurrentLook, nEPID ] == 1 )
+            {
+                Decision[ nEPID ] <- 2
+            }
+        }
     }
 
-    # If still not stopped, check if we've reached or exceeded target information
-    if (Decision[nEPID] == 0) {
-      strEPName <- DesignParam$EndpointName[nEPID]
-      nEPType <- DesignParam$EndpointType[nEPID]
-      targetInfo <- DesignParam$TargetInformation[nEPID]
+    lRet <- list( Decision = Decision )
 
-          # Get current events/completers count based on endpoint type
-      currentCount <- if (nEPType == 2) {
-        DataSummary[[strEPName]]$Events  # For TTE endpoints
-      } else {
-        DataSummary[[strEPName]]$Completers  # For binary and continuous endpoints
-      }
-
-      # Check if we've reached or exceeded target information
-      if (currentCount >= targetInfo) Decision[nEPID] <- 2  # Set to Futility
-
-      # Check if there is insufficient information
-      if (LookInfo$EPStatus[nEPID] == 1) Decision[nEPID] <- 2 # Set to Futility
-
-      # Check if this is the last efficacy look for this endpoint
-      nCurrentLook <- LookInfo$LookNum
-      # Check if there are any efficacy looks (1s) after current look for this endpoint
-      futureEfficacyLooks <- if (nCurrentLook < nrow(DesignParam$EffFlg)) {
-        any(DesignParam$EffFlg[(nCurrentLook + 1):nrow(DesignParam$EffFlg), nEPID] == 1)
-      } else {
-        FALSE
-      }
-
-      # If this is the last efficacy look (no more 1s after this) and current look has efficacy testing
-      if (!futureEfficacyLooks && DesignParam$EffFlg[nCurrentLook, nEPID] == 1) {
-        Decision[nEPID] <- 2  # Set to Futility
-      }
-    }
-  }
-  lRet <- list(Decision = Decision)
-
-  return(lRet)
+    return( lRet )
 }

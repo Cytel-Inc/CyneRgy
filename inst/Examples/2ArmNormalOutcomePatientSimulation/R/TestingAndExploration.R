@@ -1,3 +1,11 @@
+######################################################################################################################## .
+#' @name TestingAndExploration
+#' @title Explore Simulated Continuous Outcomes
+#' @description Sources the continuous outcome simulation example, loads saved inputs, runs the callback, summarizes its output, and draws diagnostic histograms.
+#' @author J. Kyle Wathen
+#' @return This interactive support script produces summary values and diagnostic plots as side effects; it does not return a value.
+######################################################################################################################## .
+
 # Step 1 - source the desired files ####
 source( "SimulatePatientOutcomePercentAtZero.R" )
 
@@ -15,15 +23,15 @@ lRet <- SimulatePatientOutcomePercentAtZero( NumSub, ArrivalTime, TreatmentID, M
 
 # Step 4 - Check a few values from simulated data set and create a few visuals to make sure the function you developed appears to function as intended ####
 # Compute the mean and standard deviation of the patient outcomes for each treatment
-dMeanTrt0       <- mean( lRet$Response[ TreatmentID == 0 ] )    
+dMeanTrt0       <- mean( lRet$Response[ TreatmentID == 0 ] )
 dProb0Trt0      <- mean( ifelse( lRet$Response[ TreatmentID == 0 ] == 0, 1, 0 ) )   # Compute the probability that the outcome = 0
 dMeanTrt1       <- mean( lRet$Response[ TreatmentID == 1 ] )
 dProb0Trt1      <- mean( ifelse( lRet$Response[ TreatmentID == 1 ] == 0, 1, 0 ) )   # Compute the probability that the outcome = 0
 
 # Inspect the output
-dMeanTrt0 
+dMeanTrt0
 dProb0Trt0
-dMeanTrt1 
+dMeanTrt1
 dProb0Trt1
 
 # Step 5 - Create a few visual to check if the simulated data looks as expected ####
@@ -32,4 +40,3 @@ hist( lRet$Response[ TreatmentID == 0 ], main = "Control" )
 hist( lRet$Response[ TreatmentID == 1 ], main = "Experimental" )
 
 # It is always important to test any code that is developed before running extensive simulations
-

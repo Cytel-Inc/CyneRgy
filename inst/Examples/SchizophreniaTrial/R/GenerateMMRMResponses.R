@@ -1,6 +1,10 @@
+######################################################################################################################## .
 #' @name GenerateMMRMResponses
 #' @title Simulate Response Data for MMRM Analysis in Two-arm Confirmatory Trial
-#' @description This function simulates multivariate normal responses for subjects in a mixed model for repeated measures (MMRM) setting.
+#' @description
+#' Simulates multivariate normal repeated-measures responses for control and
+#' treatment subjects.
+#' @author Jacob Wathen
 #' @param NumSub Integer. Number of subjects to simulate.
 #' @param NumVisit Integer. Number of visits.
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
@@ -20,57 +24,54 @@
 #'         \item \code{Response1}, \code{Response2}, ..., \code{ResponseN}: Simulated response vectors for each visit.
 #'         \item \code{ErrorCode}: Integer error code (0 = success, -1 = input dimension mismatch).
 #'       }
-#' @export
 ######################################################################################################################## .
 
-GenerateMMRMResponses <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) 
+GenerateMMRMResponses <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
-    library(MASS)
-    
     # Initialize outputs
     nError <- 0
     lRet   <- list()
-    
+
     # Step 1: Validate input dimensions ####
-    if ( length( MeanControl )   != NumVisit ||
-         length( MeanTrt )       != NumVisit ||
+    if( length( MeanControl )   != NumVisit ||
+         length( MeanTrt )      != NumVisit ||
          length( StdDevControl ) != NumVisit ||
-         length( StdDevTrt )     != NumVisit ||
-         nrow( CorrMat )         != NumVisit ||
-         ncol( CorrMat )         != NumVisit ) 
+         length( StdDevTrt )    != NumVisit ||
+         nrow( CorrMat )        != NumVisit ||
+         ncol( CorrMat )        != NumVisit )
     {
-        nError <- -1                        
+        nError <- -1
         lRet$ErrorCode <- as.integer( nError )
-        return( lRet )                   
+        return( lRet )
     }
-    
+
     # Step 2: Build covariance matrices for each arm ####
     CovMatControl <- ( StdDevControl %*% t( StdDevControl ) ) * CorrMat
     CovMatTrt     <- ( StdDevTrt     %*% t( StdDevTrt ) )     * CorrMat
-    
+
     # Step 3: Draw multivariate‐normal samples for each arm ####
-    ControlResponses <- mvrnorm( n    = sum( TreatmentID == 0 ),
-                                 mu    = MeanControl,
-                                 Sigma = CovMatControl )
-    
-    TrtResponses     <- mvrnorm( n     = sum( TreatmentID == 1 ),
-                                 mu    = MeanTrt,
-                                 Sigma = CovMatTrt )
-    
+    ControlResponses <- MASS::mvrnorm( n     = sum( TreatmentID == 0 ),
+                                      mu    = MeanControl,
+                                      Sigma = CovMatControl )
+
+    TrtResponses     <- MASS::mvrnorm( n     = sum( TreatmentID == 1 ),
+                                      mu    = MeanTrt,
+                                      Sigma = CovMatTrt )
+
     # Step 4: Combine responses into a matrix ####
     Responses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
-    
+
     Responses[ TreatmentID == 0, ] <- ControlResponses
     Responses[ TreatmentID == 1, ] <- TrtResponses
-    
+
     # Step 5: Return the simulated outcomes and error code ####
-    for ( i in seq_len( NumVisit ) ) 
+    for( i in seq_len( NumVisit ) )
     {
-        lRet[[ paste0( "Response", i ) ]] <- as.double( Responses[ , i ] )
+        lRet[[ paste0( "Response", i ) ] ] <- as.double( Responses[ , i ] )
     }
-    
+
     lRet$ErrorCode <- as.integer( nError )
-    
+
     return( lRet )
-    
+
 }

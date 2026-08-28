@@ -1,9 +1,10 @@
-########################################################################################################################
+######################################################################################################################## .
 #' @name SimulatePatientOutcomeMultiArmExpGivenMST
 #' @title Simulate survival outcomes for multi-arm clinical trial simulations given Median Survival Times (MST)
 #' @description
 #' Generates patient-level survival times under several survival distribution
 #' parameterizations for multi-arm clinical trial simulations.
+#' @author Gabriel Potvin and Anoop Singh Rawat
 #'
 #' @param NumSub Integer. Total number of subjects.
 #' @param NumArm Integer. Number of treatment arms including control.
@@ -13,7 +14,7 @@
 #' @param SurvMethod This example supports SurvMethod = 3, i.e. Median Survival Times.
 #' @param NumPrd Integer specifying the number of survival periods.
 #' @param PrdTime Numeric vector containing period boundary times.
-#' @param SurvParam For SurvMethod = 3, this will be an array of arm-wise Median Survival Times. 
+#' @param SurvParam For SurvMethod = 3, this will be an array of arm-wise Median Survival Times.
 #' @param UserParam Optional user-defined list of custom parameters.
 #'
 #' @return List containing:
@@ -21,15 +22,15 @@
 #'           \item{SurvivalTime}{Numeric vector of generated survival times.}
 #'           \item{ErrorCode}{Integer error code. 0 indicates success and -100 indicates invalid output generation.}
 #'         }
-########################################################################################################################
+######################################################################################################################## .
 
 SimulatePatientOutcomeMultiArmExpGivenMST <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
-    nError        <- 0
-    vResponse     <- c()
+    nError    <- 0
+    vResponse <- c()
 
     # If inputs are Median Survival Times
-    if( SurvMethod == 3 )      
+    if( SurvMethod == 3 )
     {
         vMST        <- as.numeric( SurvParam )
         vHRates     <- log( 2 ) / vMST
@@ -39,12 +40,14 @@ SimulatePatientOutcomeMultiArmExpGivenMST <- function( NumSub, NumArm, ArrivalTi
             nArmIndex           <- TreatmentID[ nPatID ] + 1
             vResponse[ nPatID ] <- rexp( n = 1, rate = vHRates[ nArmIndex ] )
         }
-    } else {
-        nError      <- -100  
+    }
+    else
+    {
+        nError <- -100
     }
 
-    if(length( vResponse ) != NumSub || any( is.na( vResponse ) == TRUE ) )
-        nError      <- -100
-  
-    return( list( SurvivalTime = as.double( vResponse ), ErrorCode = as.integer( nError ) ))
+    if( length( vResponse ) != NumSub || any( is.na( vResponse ) == TRUE ) )
+        nError <- -100
+
+    return( list( SurvivalTime = as.double( vResponse ), ErrorCode = as.integer( nError ) ) )
 }

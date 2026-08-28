@@ -1,10 +1,17 @@
-# This library is used to run mvrnorm() function in R for generating Normal responses in Repeated measures.
+######################################################################################################################## .
+#' @name LoadMass
+#' @title Initialize MASS for Repeated-Measures Simulation
+#' @description Sets the simulation seed and loads MASS for multivariate normal response generation.
+#' @author Shubham Lahoti
+#' @param Seed Integer randomization seed supplied by the engine.
+#' @return Integer error code `0` after initialization.
+######################################################################################################################## .
 
 LoadMass <- function( Seed )
-{   
-  Error = 0
+{
+  nError <- 0
   set.seed( Seed )
   library( MASS )
-  return( as.integer( Error ) )
-  
+  return( as.integer( nError ) )
+
 }

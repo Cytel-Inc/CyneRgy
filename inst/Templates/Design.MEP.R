@@ -1,8 +1,9 @@
-#' Last Modified Date: {{CREATION_DATE}}
+######################################################################################################################## .
+# Last Modified Date: {{CREATION_DATE}}
 #'
 #' @name {{FUNCTION_NAME}}
 #'
-#' @title R Template for generating Decisions for MEP.
+#' @title Generate Multiple-Endpoint Decisions
 #' @description
 #' This function allows users to implement custom decision-making logic for the MEP engine.
 #' It is called at each analysis look to make decisions about endpoint efficacy, futility
@@ -20,7 +21,7 @@
 #'     \item CalRespT.EPNAME: Numeric. Response time on calendar scale for this endpoint. Same as 'Response + ArrivalTime'. EPNAME is the user specified endpoint name
 #'     \item DropoutID.EPNAME: Integer. Whether the patient dropped out before responding to the endpoint. 1 - dropout; 0 - no dropout. EPNAME is the user specified endpoint name
 #'   }
-#' @param AnalysisData Data frame containing the subset of patient data (SimData) available at the current analysis look. 
+#' @param AnalysisData Data frame containing the subset of patient data (SimData) available at the current analysis look.
 #' @param DataSummary List containing summary statistics for each endpoint, including:
 #'   \itemize{
 #'     \item AvgFollowupTime: Mean follow-up time
@@ -110,13 +111,16 @@
 #'     \item SDPld: Vector of pooled standard deviation (optional)
 #'     \item ErrorCode: Error code if any errors occurred (optional)
 #'   }
-#' 
-{{FUNCTION_NAME}} <- function(SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam) {
-    
+#'
+######################################################################################################################## .
+
+{{FUNCTION_NAME}} <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam )
+{
+
     # Write the decision generation logic here
-    Decision <- c(1,1,1,1,1) # Decision vector for 5 Endpoint design
-    
-    lRet <- list(Decision = Decision)
-    
-    return(lRet)
+    vDecision <- c( 1, 1, 1, 1, 1 ) # Decision vector for 5 Endpoint design
+
+    lRet <- list( Decision = vDecision )
+
+    return( lRet )
 }

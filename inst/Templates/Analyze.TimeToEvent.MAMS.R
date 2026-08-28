@@ -1,6 +1,8 @@
+######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 
 #' @name {{FUNCTION_NAME}}
+#' @title Analyze Multi-Arm Time-to-Event Outcomes
 #' @param SimData A data frame containing simulated patient level data.
 #'        Required variables in the data frame include:
 #'        \describe{
@@ -53,13 +55,13 @@
 #'                         }
 #'         }
 #'
-#' @description
-#' This is analysis task template for Multi-Arm, time-to-event endpoints.
+#' @description Analyze simulated time-to-event outcomes for a multiple-arm confirmatory design at the current look.
 #'
 #' The function signature must remain unchanged. However, additional user-defined logic
 #' and parameters may be incorporated through the UserParam list if needed.
 #' @keywords Multi-Arm, time-to-event endpoints analysis.
-#' @export
+######################################################################################################################## .
+
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # Step 1 - Initialization
@@ -67,40 +69,37 @@
     nError          <- 0
     vHRRatio        <- rep( NA, DesignParam$NumTreatments )
     dTimeOfAnalysis <- NA
-    
+
     # Step 2 - Retrieve design and interim analysis information ####
     # If interim look information is supplied use the current look specific
     # efficacy boundaries and event counts. Otherwise use the fixed sample settings
     if( !is.null( LookInfo ) )
     {
-        
+
         # Example interim design setup
         nQtyOfLooks             <- LookInfo$NumLooks
         nLookIndex              <- LookInfo$CurrLookIndex
         vEfficacyBoundary       <- LookInfo$EffBdry[ nLookIndex ]
-        
+
     } else {
-        
+
         # Example fixed sample setup
         nQtyOfLooks             <- 1
         nLookIndex              <- 1
         vEfficacyBoundaryPScale <- DesignParam$Alpha
     }
-    
-    
+
     # Step 3 - Implement the analysis logic ####
-    
-    
+
     # Step 4 - Error checking ####
     # Add any required validation checks and update the error code if needed
 
-    
     # Step 5 - Build the return object ####
     lReturn <- list( Decision     = as.integer( vDecision ),
                      ErrorCode    = as.integer( nError ),
                      HR           = as.double( vHRRatio ),
                      AnalysisTime = as.double( dTimeOfAnalysis ) )
-    
+
     return( lReturn )
 
 }

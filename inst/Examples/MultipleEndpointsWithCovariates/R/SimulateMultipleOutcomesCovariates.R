@@ -11,6 +11,7 @@
 #'        }
 #' Covariate effects are incorporated linearly into the outcome generation.
 #' Note: this function can be extended to simulate any number of endpoints and covariates.
+#' @author Julija Saltane
 #'
 #' @param NumSub Integer. Number of subjects to simulate.
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
@@ -50,63 +51,61 @@
 #'                   MeanOutcome3Ctrl = 30, MeanOutcome3Trt = 32,
 #'                   Beta1 = 0.1, Beta2 = 2,
 #'                   Cov1Prob = 0.2, Cov2Prob = 0.5)
-#'                   
+#'
 #' NumSub      <- 100
 #' TreatmentID <- rep(c(0,1), NumSub / 2, replace = TRUE)
-#'                    
+#'
 #' result <- SimulateMultipleOutcomesCovariates(NumSub = NumSub,
-#'                                              ArrivalTime = NULL, 
+#'                                              ArrivalTime = NULL,
 #'                                              TreatmentID = TreatmentID,
-#'                                              Mean = NULL, 
-#'                                              StdDev = NULL, 
+#'                                              Mean = NULL,
+#'                                              StdDev = NULL,
 #'                                              UserParam = UserParam)
 #'
-#' @export
-
 ######################################################################################################################## .
 
-SimulateMultipleOutcomesCovariates <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )   
+SimulateMultipleOutcomesCovariates <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
-    
+
     # Initialize the return variables that will contain results for 3 normal endpoints
-    vPatientOutcome1 <- rep( 0, NumSub )    
+    vPatientOutcome1 <- rep( 0, NumSub )
     vPatientOutcome2 <- rep( 0, NumSub )
     vPatientOutcome3 <- rep( 0, NumSub )
-    
+
     # Validate custom variable input and set defaults
     nError <- 0
-    
-    if ( is.null( UserParam ) )  
+
+    if( is.null( UserParam ) )
     {
         nError <- 1
     }
-    
+
     # Extract means for each outcome and group
-    vMeansOutcome1 <- c( UserParam$MeanOutcome1Ctrl, UserParam$MeanOutcome1Trt ) 
-    vMeansOutcome2 <- c( UserParam$MeanOutcome2Ctrl, UserParam$MeanOutcome2Trt ) 
-    vMeansOutcome3 <- c( UserParam$MeanOutcome3Ctrl, UserParam$MeanOutcome3Trt ) 
-    
+    vMeansOutcome1 <- c( UserParam$MeanOutcome1Ctrl, UserParam$MeanOutcome1Trt )
+    vMeansOutcome2 <- c( UserParam$MeanOutcome2Ctrl, UserParam$MeanOutcome2Trt )
+    vMeansOutcome3 <- c( UserParam$MeanOutcome3Ctrl, UserParam$MeanOutcome3Trt )
+
     # Extract covariate effects
     dBeta1 <- UserParam$Beta1
     dBeta2 <- UserParam$Beta2
-    
+
     # Simulate the effect of covariates
-    vCovariate1 <- rbinom( NumSub, size = 1, prob = UserParam$Cov1Prob )  
-    vCovariate2 <- rbinom( NumSub, size = 1, prob = UserParam$Cov2Prob )   
-    
+    vCovariate1 <- rbinom( NumSub, size = 1, prob = UserParam$Cov1Prob )
+    vCovariate2 <- rbinom( NumSub, size = 1, prob = UserParam$Cov2Prob )
+
     vCovariateEffect <- dBeta1 * vCovariate1 + dBeta2 * vCovariate2
-    
+
     # Simulate the patient independent outcome data
-    for ( nPatientIndex in 1:NumSub )  
+    for( nPatientIndex in 1:NumSub )
     {
         # Convert 0(Ctrl) -> 1 to 1 (Trt) -> 2 for indexing
-        nTreatmentID <- TreatmentID[  nPatientIndex ] + 1  
-        
-        vPatientOutcome1[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome1[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 ) 
-        vPatientOutcome2[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome2[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 ) 
-        vPatientOutcome3[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome3[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 ) 
+        nTreatmentID <- TreatmentID[ nPatientIndex ] + 1
+
+        vPatientOutcome1[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome1[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
+        vPatientOutcome2[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome2[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
+        vPatientOutcome3[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome3[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
     }
-    
+
     # Return the simulated outcomes and error code
     lReturn <- list( PatientOutcome1 = as.double( vPatientOutcome1 ),
                      PatientOutcome2 = as.double( vPatientOutcome2 ),
@@ -115,7 +114,6 @@ SimulateMultipleOutcomesCovariates <- function( NumSub, ArrivalTime, TreatmentID
                      Covariate2 = as.double( vCovariate2 ),
                      Response   = as.double( rep( 0, NumSub ) ),
                      ErrorCode  = as.integer( nError ) )
-    
+
     return( lReturn )
 }
-

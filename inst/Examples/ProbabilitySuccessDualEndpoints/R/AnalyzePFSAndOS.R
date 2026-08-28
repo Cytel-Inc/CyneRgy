@@ -1,9 +1,11 @@
 ######################################################################################################################## .
-#  Last Modified Date: 11/20/2024
-#' @name AnalyzeDualEndpointTTE
+#' @name AnalyzePFSAndOS
 #' @title Analyze Progression-Free Survival (PFS) and Overall Survival (OS) Data Using Probability of Success (PoS)
-#' 
-#' @param SimData A data frame containing subject-level data generated during the simulation. Each row corresponds to a patient, 
+#' @description
+#' Analyzes progression-free and overall survival at the current look and returns
+#' the PFS test statistic, endpoint summaries, and a combined efficacy decision.
+#' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
+#' @param SimData A data frame containing subject-level data generated during the simulation. Each row corresponds to a patient,
 #'                and the columns include relevant variables such as arrival time, treatment assignment, survival time, and dropout time. Key columns include:
 #'                \describe{
 #'                  \item{ArrivalTime}{Numeric value representing the time the patient entered the trial.}
@@ -66,35 +68,13 @@
 #'                    \item{HazardRatioCutoffIA}{OS hazard ratio threshold for interim analysis.}
 #'                    \item{HazardRatioCutoffFA}{OS hazard ratio threshold for final analysis.}
 #'                  }
-#' 
+#'
 #' @return A list containing the following elements:
 #'         \describe{
-#'           \item{Decision}{Optional integer value indicating the decision:
-#'                           \describe{
-#'                             \item{0}{No boundary crossed (neither efficacy nor futility).}
-#'                             \item{1}{Lower efficacy boundary crossed.}
-#'                             \item{2}{Upper efficacy boundary crossed.}
-#'                             \item{3}{Futility boundary crossed.}
-#'                             \item{4}{Equivalence boundary crossed.}
-#'                           }}
-#'           \item{TestStat}{Numeric test statistic value (required if Decision is not returned).}
-#'           \item{ErrorCode}{Optional integer value:
-#'                            \describe{
-#'                              \item{0}{No error.}
-#'                              \item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
-#'                              \item{< 0}{Fatal error; no further simulations are attempted.}
-#'                            }}
-#'           \item{Delta}{Hazard ratio (optional numeric value). Used in Solara for creating the observed hazard ratio graph. Applicable for time-to-event data.}
-#'           \item{nPFSEfficacy}{Indicator for PFS efficacy decision:
-#'                              \describe{
-#'                                \item{0}{No PFS efficacy decision.}
-#'                                \item{1}{PFS efficacy decision made.}
-#'                              }}
-#'           \item{nOSEfficacy}{Indicator for OS efficacy decision:
-#'                              \describe{
-#'                                \item{0}{No OS efficacy decision.}
-#'                                \item{1}{OS efficacy decision made.}
-#'                              }}
+#'           \item{TestStat}{PFS Wald Z statistic.}
+#'           \item{Decision}{Integer efficacy, futility, or continuation decision.}
+#'           \item{nPFSEfficacy}{Integer indicator for a PFS efficacy result.}
+#'           \item{nOSEfficacy}{Integer indicator for an OS efficacy result.}
 #'           \item{dPValuePFS}{P-value for progression-free survival endpoint.}
 #'           \item{dZValPFS}{Z-value for progression-free survival endpoint.}
 #'           \item{dPValueOS}{P-value for overall survival endpoint.}
@@ -103,6 +83,8 @@
 #'           \item{dEffBdry}{Efficacy boundary value for the current look.}
 #'           \item{HazardRatioCutoffIA}{Hazard ratio threshold for interim analysis.}
 #'           \item{HazardRatioCutoffFA}{Hazard ratio threshold for final analysis.}
+#'           \item{ErrorCode}{Integer error code; `0` indicates no error.}
+#'           \item{HazardRatio}{PFS hazard ratio supplied for observed-hazard-ratio output.}
 #'         }
 #' @details
 #' ## CyneRgy Decision Helpers
@@ -134,62 +116,59 @@
 #'       7 = 2-Sided Futility Only (not used in East Horizon Explore)
 #'       8 = 2-Sided Efficacy and Futility (not used in East Horizon Explore)
 #'       9 = Equivalence (not used in East Horizon Explore)
-#' 
+#'
 ######################################################################################################################## .
 
-AnalyzePFSAndOS <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzePFSAndOS <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    library( survival )
-    library( CyneRgy )
-    
     if( !is.null( LookInfo ) )
     {
         nQtyOfLooks  <- LookInfo$NumLooks
         nLookIndex   <- LookInfo$CurrLookIndex
-        CumEvents    <- LookInfo$InfoFrac*DesignParam$MaxEvents
-        nQtyOfEvents <- CumEvents[ nLookIndex ]
+        vCumEvents   <- LookInfo$InfoFrac * DesignParam$MaxEvents
+        nQtyOfEvents <- vCumEvents[ nLookIndex ]
         dEffBdry     <- LookInfo$EffBdryLower[ nLookIndex ]
     }
     else
     {
         nQtyOfLooks  <- 1
         nLookIndex   <- 1
-        nQtyOfEvents <- DesignParam$MaxEvents 
+        nQtyOfEvents <- DesignParam$MaxEvents
         dEffBdry     <- DesignParam$CriticalPoint
     }
-    
-    # Build the dataset 
-    SimData$TimeOfPFSEvent    <- SimData$ArrivalTime + SimData$SurvivalTime    
-    SimData$TimeOfOSEvent     <- SimData$ArrivalTime + SimData$OS 
-    SimData                   <- SimData[ order( SimData$TimeOfPFSEvent), ]
+
+    # Build the dataset
+    SimData$TimeOfPFSEvent    <- SimData$ArrivalTime + SimData$SurvivalTime
+    SimData$TimeOfOSEvent     <- SimData$ArrivalTime + SimData$OS
+    SimData                   <- SimData[ order( SimData$TimeOfPFSEvent ), ]
     dTimeOfAnalysis           <- SimData[ nQtyOfEvents, ]$TimeOfPFSEvent
-    SimData                   <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis ,]   
-    
+    SimData                   <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis , ]
+
     # Set the PFS event and observed times
-    SimData$Event             <- ifelse( SimData$TimeOfPFSEvent > dTimeOfAnalysis, 0, 1 )  
+    SimData$Event             <- ifelse( SimData$TimeOfPFSEvent > dTimeOfAnalysis, 0, 1 )
     SimData$ObservedTime      <- ifelse( SimData$TimeOfPFSEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfPFSEvent - SimData$ArrivalTime )
-    
+
     # Set the OS event and observed times
-    SimData$OSEvent             <- ifelse( SimData$TimeOfOSEvent > dTimeOfAnalysis, 0, 1 )  
+    SimData$OSEvent             <- ifelse( SimData$TimeOfOSEvent > dTimeOfAnalysis, 0, 1 )
     SimData$ObservedTimeOS      <- ifelse( SimData$TimeOfOSEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfOSEvent - SimData$ArrivalTime )
-    
+
     # Analyze the PFS data
-    fitCox          <- coxph( Surv( ObservedTime, Event ) ~ as.factor( TreatmentID ), data = SimData )
-    dPValuePFS      <- summary( fitCox )$coefficients[ ,"Pr(>|z|)" ]
-    dZValPFS        <- summary( fitCox )$coefficients[ ,"z" ]
+    fitCox          <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ as.factor( TreatmentID ), data = SimData )
+    dPValuePFS      <- summary( fitCox )$coefficients[ , "Pr(>|z|)" ]
+    dZValPFS        <- summary( fitCox )$coefficients[ , "z" ]
     dHazardRatioPFS <- exp( coef( fitCox ) )
-    
+
     # Analyze the OS data
-    fitCoxOS        <- coxph( Surv( ObservedTimeOS, Event ) ~ as.factor( TreatmentID ), data = SimData )
-    dPValueOS       <- summary( fitCoxOS )$coefficients[ ,"Pr(>|z|)" ]
-    dHazardRatioOS  <- exp(coef( fitCoxOS ) )
-    dZValOS         <- summary( fitCoxOS )$coefficients[ ,"z" ]
-    
+    fitCoxOS        <- survival::coxph( survival::Surv( ObservedTimeOS, OSEvent ) ~ as.factor( TreatmentID ), data = SimData )
+    dPValueOS       <- summary( fitCoxOS )$coefficients[ , "Pr(>|z|)" ]
+    dHazardRatioOS  <- exp( coef( fitCoxOS ) )
+    dZValOS         <- summary( fitCoxOS )$coefficients[ , "z" ]
+
     nPFSEfficacy    <- 0   # 0 if NOT an efficacy decision for PFS, 1 if efficacy decision for PFS
     nOSEfficacy     <- 0   # 0 if NOT an efficacy decision for OS, 1 if efficacy decision for OS
     if( nLookIndex < nQtyOfLooks )  # Interim Analysis
     {
-        if( dZValPFS <= dEffBdry  )
+        if( dZValPFS <= dEffBdry )
         {
             nPFSEfficacy <- 1
         }
@@ -197,11 +176,11 @@ AnalyzePFSAndOS <- function(SimData, DesignParam, LookInfo = NULL, UserParam = N
         {
             nOSEfficacy  <- 1
         }
-        
+
         if( dZValPFS <= dEffBdry && dHazardRatioOS < UserParam$HazardRatioCutoffIA )
         {
             strDecision <- "Efficacy"
-            
+
         }
         else
         {
@@ -210,8 +189,8 @@ AnalyzePFSAndOS <- function(SimData, DesignParam, LookInfo = NULL, UserParam = N
     }
     else # Final Analysis
     {
-        
-        if( dZValPFS <= dEffBdry  )
+
+        if( dZValPFS <= dEffBdry )
         {
             nPFSEfficacy <- 1
         }
@@ -219,9 +198,8 @@ AnalyzePFSAndOS <- function(SimData, DesignParam, LookInfo = NULL, UserParam = N
         {
             nOSEfficacy  <- 1
         }
-        
-        
-        if(  dZValPFS <= dEffBdry && dHazardRatioOS < UserParam$HazardRatioCutoffFA )
+
+        if( dZValPFS <= dEffBdry && dHazardRatioOS < UserParam$HazardRatioCutoffFA )
         {
             strDecision <- "Efficacy"
         }
@@ -230,23 +208,23 @@ AnalyzePFSAndOS <- function(SimData, DesignParam, LookInfo = NULL, UserParam = N
             strDecision <- "Futility"
         }
     }
-    
+
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-    
+
     lRet <- list( TestStat            = as.double( dZValPFS ),
-                  Decision            = as.integer( nDecision ), 
+                  Decision            = as.integer( nDecision ),
                   nPFSEfficacy        = as.integer( nPFSEfficacy ),
                   nOSEfficacy         = as.integer( nOSEfficacy ),
                   dPValuePFS          = as.double( dPValuePFS ),
-                  dZValPFS            = as.double( dZValPFS), 
+                  dZValPFS            = as.double( dZValPFS ),
                   dPValueOS           = as.double( dPValueOS ),
-                  dHazardRatioPFS     = as.double( dHazardRatioPFS ), 
+                  dHazardRatioPFS     = as.double( dHazardRatioPFS ),
                   dHazardRatioOS      = as.double( dHazardRatioOS ),
-                  dEffBdry            = as.double( dEffBdry ), 
+                  dEffBdry            = as.double( dEffBdry ),
                   HazardRatioCutoffIA = as.double( UserParam$HazardRatioCutoffIA ),
                   HazardRatioCutoffFA = as.double( UserParam$HazardRatioCutoffFA ),
                   ErrorCode           = as.integer( 0 ),
                   HazardRatio         = as.double( dHazardRatioPFS ) )
-    
+
     return( lRet )
 }

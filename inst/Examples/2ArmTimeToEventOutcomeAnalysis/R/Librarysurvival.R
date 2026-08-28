@@ -1,12 +1,17 @@
-## For example - 1 of 2-Arm Time To Event (TTE) analysis, computation of Hazard Ratio requires installation
-# of package named "survival". Hence, we need to call this function via "Initialize R Environment"
-
+######################################################################################################################## .
+#' @name Loadsurvival
+#' @title Initialize the survival Package
+#' @description Sets the simulation seed and loads survival for time-to-event analysis callbacks.
+#' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
+#' @param Seed Integer randomization seed supplied by the engine.
+#' @return Integer error code `0` after initialization.
+######################################################################################################################## .
 
 Loadsurvival <- function( Seed )
-{   
-    Error = 0
+{
+    nError <- 0
     set.seed( Seed )
     library( survival )
-    return( as.integer( Error ) )
-    
+    return( as.integer( nError ) )
+
 }

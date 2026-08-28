@@ -1,15 +1,15 @@
 ######################################################################################################################## .
 #  Last Modified Date: 24/09/2025
 #' @name GetDEPDecisionsFSD
-#' @author Pradip Maske
+#' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
 #' @title Computing Decisions for DEP Fixed Sample design.
 #'
 #' @description Compute decisions for DEP given test statistic and total Alpha using Bonferroni multiplicity adjustment method.
 #'
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
+#' @param SimData Data frame with subject data generated in current simulation with one row per patient.
 #' @param DesignParam Input Parameters which user may need to compute test statistic and perform test. Refer to the DEP analysis template (Analyze.DEP.R) for details of this list.
-#' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic and perform test. Refer to the DEP analysis template (Analyze.DEP.R) for details of this list.
-#' @param UserParam User can pass custom scalar variables defined by them as a member of this list. 
+#' @param LookInfo List containing information for multiple-look designs. This is `NULL` for a fixed sample design.
+#' @param UserParam User can pass custom scalar variables defined by them as a member of this list.
 #' @param TestStat List of test statistics for both the endpoints. These test statistics will be on the Z-scale. Access using the actual endpoint names specified by the user,
 #'                            e.g., TestStat[EndpointName[1]] or TestStat[EndpointName[2]]
 #' @param OutList List of outputs that was returned by the user in the previous look. Only relevant for Group Sequential Design and set to NULL for first look.
@@ -36,29 +36,29 @@ GetDEPDecisionsFSD <- function( SimData, DesignParam, LookInfo = NULL, TestStat,
 {
     lDecision      <- list()
     vEndpointName  <- DesignParam$vEndpointName
-    
-    if( DesignParam$TailType[[ 1 ]] == 0 )
+
+    if( DesignParam$TailType[[ 1 ] ] == 0 )
     {
-        lDecision[ vEndpointName[[ 1 ]]] <- ifelse( pnorm( TestStat[[ 1 ]]) < DesignParam$Alpha / 2, 1, 0 )            
+        lDecision[ vEndpointName[[ 1 ] ] ] <- ifelse( pnorm( TestStat[[ 1 ] ] ) < DesignParam$Alpha / 2, 1, 0 )
     }
-    else 
+    else
     {
-        lDecision[ vEndpointName[[ 1 ]]] <- ifelse( pnorm( TestStat[[ 1 ]], lower.tail = FALSE) < DesignParam$Alpha / 2, 1, 0 )            
+        lDecision[ vEndpointName[[ 1 ] ] ] <- ifelse( pnorm( TestStat[[ 1 ] ], lower.tail = FALSE ) < DesignParam$Alpha / 2, 1, 0 )
     }
-    
-    if( DesignParam$TailType[[ 2 ]] == 0 )
+
+    if( DesignParam$TailType[[ 2 ] ] == 0 )
     {
-        lDecision[ vEndpointName[[ 2 ]]] <- ifelse( pnorm( TestStat[[ 2 ]]) < DesignParam$Alpha / 2, 1, 0 )            
+        lDecision[ vEndpointName[[ 2 ] ] ] <- ifelse( pnorm( TestStat[[ 2 ] ] ) < DesignParam$Alpha / 2, 1, 0 )
     }
-    else 
+    else
     {
-        lDecision[ vEndpointName[[ 2 ]]] <- ifelse( pnorm( TestStat[[ 2 ]], lower.tail = FALSE) < DesignParam$Alpha / 2, 1, 0 )            
+        lDecision[ vEndpointName[[ 2 ] ] ] <- ifelse( pnorm( TestStat[[ 2 ] ], lower.tail = FALSE ) < DesignParam$Alpha / 2, 1, 0 )
     }
-    
+
     nError          <- 0
     nRetval         <- 0
     lOutList        <- list()
     lOutList$OutVal <- nRetval
-    
-    return( list( Decision = as.list( lDecision ), OutList = as.list( lOutList ), ErrorCode = as.integer( nError )))
+
+    return( list( Decision = as.list( lDecision ), OutList = as.list( lOutList ), ErrorCode = as.integer( nError ) ) )
 }

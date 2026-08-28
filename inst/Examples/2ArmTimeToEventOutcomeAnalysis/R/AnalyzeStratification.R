@@ -1,7 +1,10 @@
+######################################################################################################################## .
 #' @name AnalyzeStratification
+#' @title Analyze a Stratified Time-to-Event Outcome
+#' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
 #'
-#' @param SimData 
-#' A data frame containing the simulated patient-level data for the current simulation iteration.  
+#' @param SimData
+#' A data frame containing the simulated patient-level data for the current simulation iteration.
 #' INcludes at least the following variables:
 #' \itemize{
 #'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
@@ -9,7 +12,7 @@
 #'   \item{TreatmentID}{— 0 = Control, 1 = Treatment}
 #' }
 #'
-#' @param DesignParam 
+#' @param DesignParam
 #' A list containing the design and simulation parameters required for analysis. Includes:
 #' \itemize{
 #'   \item{MaxCompleters}{— Maximum number of completers for the study}
@@ -19,8 +22,8 @@
 #'   %% Stratification parameters
 #'   \item{NumStratFactors}{— Number of stratification factors used in the analysis}
 #'   \item{TestStratFactors}{— Subset of stratification factors to be used specifically for testing (may include \code{NA})}
-#'   \item{StratFactors}{— A list of stratification factor levels, where each element corresponds 
-#'         to a stratification variable.  
+#'   \item{StratFactors}{— A list of stratification factor levels, where each element corresponds
+#'         to a stratification variable.
 #'         For example:
 #'         \itemize{
 #'            \item{\code{Var1}}{— Levels for stratification variable 1 (e.g., \code{c("1","2")})}
@@ -28,8 +31,8 @@
 #'         }}
 #' }
 #'
-#' @param LookInfo 
-#' A list containing group sequential design information for multi-look trials.  
+#' @param LookInfo
+#' A list containing group sequential design information for multi-look trials.
 #' For group sequential designs, it includes:
 #' \itemize{
 #'   \item{NumLooks}{— Total number of interim analyses}
@@ -38,12 +41,12 @@
 #'   \item{EffBdry}{— Efficacy boundary at each look}
 #' }
 #'
-#' @param UserParam 
+#' @param UserParam
 #' A list of user-defined parameters in East Horizon. Default = NULL.
 #'
 #' @description
-#' Computes a stratified log-rank test, hazard ratio, analysis time and decision   
-#' at a given interim analysis.  
+#' Computes a stratified log-rank test, hazard ratio, analysis time and decision
+#' at a given interim analysis.
 #'
 #' \enumerate{
 #'   \item Prepares observed data up to the interim analysis time
@@ -52,7 +55,7 @@
 #'   \item Generates a decision at the current look (efficacy, continue, or futility at final look)
 #' }
 #'
-#' @return The function must return a list in the return statement of the function. The information below lists 
+#' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #' \describe{
 #'   \item{Decision}{An integer value indicating the outcome of the analysis:
@@ -73,11 +76,11 @@
 #'       \item{<0}{— Fatal error (simulation terminated)}
 #'     }}
 #' }
-#' @export
-library(survival)
+#' }
+######################################################################################################################## .
 
 ## AnalyzeStratification() : Returning Test Stat, HR and Analysis Time and Decision
-AnalyzeStratification<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzeStratification<- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
 
     nError <- 0
@@ -97,79 +100,77 @@ AnalyzeStratification<- function(SimData, DesignParam, LookInfo = NULL, UserPara
     {
         nQtyOfLooks  <- 1
         nLookIndex   <- 1
-        nQtyOfEvents <- DesignParam$MaxEvents 
+        nQtyOfEvents <- DesignParam$MaxEvents
     }
-    
+
     # Prepare analysis dataset
-    SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime    
-    SimData              <- SimData[ order( SimData$TimeOfEvent), ]
+    SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime
+    SimData              <- SimData[ order( SimData$TimeOfEvent ), ]
     dTimeOfAnalysis      <- SimData[ nQtyOfEvents, ]$TimeOfEvent
-    SimData              <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis ,]
+    SimData              <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis , ]
     SimData$Event        <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )
     SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
-    
+
     dtime <- SimData$ObservedTime
     nstatus <- SimData$Event
     ntreatment <- SimData$TreatmentID
 
     # Determine which stratification factors to use
-    if (!all(is.na(DesignParam$TestStratFactors))) {
+    if( !all( is.na( DesignParam$TestStratFactors ) ) ) {
       strat_factors <- DesignParam$TestStratFactors
     } else {
       # For Design, as TestStratFactors is NA
-      strat_factors <- names(DesignParam$StratFactors)
+      strat_factors <- names( DesignParam$StratFactors )
     }
 
 # Convert each stratification column to factor
-for (fac in strat_factors) {
-  SimData[[fac]] <- factor(SimData[[fac]], levels = unique(SimData[[fac]]))
+for( fac in strat_factors ) {
+  SimData[[fac ] ] <- factor( SimData[[fac ] ], levels = unique( SimData[[fac ] ] ) )
 }
 
   # Construct the formula for strata dynamically
-    strata_formula <- as.formula(
+    strata_formula <- stats::as.formula(
       paste0(
-        "Surv(dtime, nstatus) ~ ntreatment + ",
-        paste0("strata(`", strat_factors, "`)", collapse = " + ")
+        "survival::Surv(dtime, nstatus) ~ ntreatment + ",
+        paste0( "survival::strata(`", strat_factors, "`)", collapse = " + " )
       )
     )
- 
-    # Perform stratified log-rank test
-    dfit <- survdiff(strata_formula, data = SimData)
-    dTestStatistic <- sqrt(dfit$chisq)
-    
-    
-    # Compute Hazard Ratio (HR)
-    dcox_fit <- coxph(strata_formula, data = SimData)
-    dhr <- exp(coef(dcox_fit))
 
-    dTestStatistic <- ifelse(unname(dhr) < 1, dTestStatistic * -1, dTestStatistic)
-    
+    # Perform stratified log-rank test
+    dfit <- survival::survdiff( strata_formula, data = SimData )
+    dTestStatistic <- sqrt( dfit$chisq )
+
+    # Compute Hazard Ratio (HR)
+    dcox_fit <- survival::coxph( strata_formula, data = SimData )
+    dhr <- exp( coef( dcox_fit ) )
+
+    dTestStatistic <- ifelse( unname( dhr ) < 1, dTestStatistic * -1, dTestStatistic )
+
     # Decision logic based on boundaries
-    if(!is.na(dTestStatistic)) {
-      if(!is.null(LookInfo)) {
+    if( !is.na( dTestStatistic ) ) {
+      if( !is.null( LookInfo ) ) {
         # Use efficacy boundary from LookInfo if available
-        if(!is.null(LookInfo$EffBdry)) {
-          dEffBdry <- LookInfo$EffBdry[nLookIndex]
-          nDecision <- ifelse(is.nan(dEffBdry) | is.na(dEffBdry), 0,
-                              ifelse(dTestStatistic > dEffBdry, 2, 0))
-        } 
+        if( !is.null( LookInfo$EffBdry ) ) {
+          dEffBdry <- LookInfo$EffBdry[ nLookIndex ]
+          nDecision <- ifelse( is.nan( dEffBdry ) | is.na( dEffBdry ), 0,
+                              ifelse( dTestStatistic > dEffBdry, 2, 0 ) )
+        }
       } else {
         # Use fixed design boundary
-        if(!is.null(DesignParam$CriticalPoint)) {
-          nDecision <- ifelse(dTestStatistic > DesignParam$CriticalPoint, 2, 0)
+        if( !is.null( DesignParam$CriticalPoint ) ) {
+          nDecision <- ifelse( dTestStatistic > DesignParam$CriticalPoint, 2, 0 )
         }
       }
       # If no efficacy, check for futility at final look
-      if(nDecision == 0 && nLookIndex == nQtyOfLooks) {
+      if( nDecision == 0 && nLookIndex == nQtyOfLooks ) {
         nDecision <- 3
       }
     }
-       
-    lRet <- list(TestStat = as.double(dTestStatistic),
-                 AnalysisTime = as.double(dTimeOfAnalysis),
-                 HR = as.double(dhr),
-                 Decision  = as.integer(nDecision), 
-                 ErrorCode = as.integer(nError))
+
+    lRet <- list( TestStat = as.double( dTestStatistic ),
+                 AnalysisTime = as.double( dTimeOfAnalysis ),
+                 HR = as.double( dhr ),
+                 Decision  = as.integer( nDecision ),
+                 ErrorCode = as.integer( nError ) )
     return( lRet )
 }
-
