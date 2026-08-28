@@ -32,12 +32,10 @@ The scenario covered is as follows:
 
 1. Fixed sample design using a bi-modal distribution and Cox proportional hazards model to compute Bayesian assurance.
 
-Once CyneRgy is installed, you can load this example with the following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "BayesianAssuranceTimeToEvent" )
 ```
-
-Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/BayesianAssuranceContinuous/R) you will find the R files used in the examples:
 

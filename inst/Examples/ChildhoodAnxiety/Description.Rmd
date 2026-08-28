@@ -27,12 +27,10 @@ The primary outcome in this clinical trial is the change from baseline to follow
 
 To try out this example, start by creating a new project on East Horizon using the **Two Arm Confirmatory** study objective and the **Continuous** endpoint, and then create an input set using the **Explore** task.
 
-Once CyneRgy is installed, you can load this example with the following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "ChildhoodAnxiety" )
 ```
-
-Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 **RStudio Project File**: [ChildhoodAnxiety.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildhoodAnxiety.Rproj)
 

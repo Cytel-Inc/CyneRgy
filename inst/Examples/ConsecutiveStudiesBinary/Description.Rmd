@@ -28,13 +28,11 @@ To try this example, create a new project in East Horizon using the following co
 
 This example demonstrates the computation of conditional probability of success in consecutive studies by using custom R scripts for the **Response (Patient Simulation)** and the **Analysis** integration points of East Horizon. It features a sequential trial program involving a Phase 2 trial followed by a Phase 3 trial, both with the same binary endpoint.
 
-Once CyneRgy is installed, you can load this example with the following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 
 ```r
 CyneRgy::RunExample( "ConsecutiveStudiesBinary" )
 ```
-
-Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 We show how Phase 2 results are simulated, saved, and then used as the prior data for Phase 3, allowing the Phase 3 patient outcomes to be generated only conditional on the Phase 2 trial's success. This approach illustrates how simulations can mimic using an earlier trial's data to directly inform subsequent trials, which is particularly valuable in drug development where Phase 3 studies are expensive and resource-intensive.
 

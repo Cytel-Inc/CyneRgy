@@ -32,12 +32,10 @@ To try this example, create a new project in East Horizon using the following co
 
 The following examples illustrate how to integrate new analysis capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes assumed to follow a normal distribution. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
 
-Once CyneRgy is installed, you can load this example with the following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "2ArmNormalOutcomeAnalysis" )
 ```
-
-Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 **East Workbook**: [2ArmNormalOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.cywx)
 

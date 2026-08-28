@@ -34,12 +34,10 @@ The scenarios covered are as follows:
 
 1. Two consecutive studies: phase 2 with a normal endpoint followed by phase 3, with a time-to-event endpoint.
 
-Once CyneRgy is installed, you can load this example with the following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "ConsecutiveStudiesContinuousTimeToEvent" )
 ```
-
-Running the command opens `Description.Rmd` and all R scripts in the active supported IDE.
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R) you will find the R files used in the examples:
 
