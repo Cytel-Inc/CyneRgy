@@ -23,7 +23,7 @@
 #'                   LookInfo$NumLooks An integer value with the number of looks in the study
 #'                   LookInfo$CurrLookIndex An integer value with the current index look, starting from 1
 #'                   LookInfo$InfoFrac A numeric vector containing information fraction
-#' @param UserParam User can pass custom scalar variables defined by users as a member of this list.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  User should access the variables using names, for example UserParam$Var1 and not order.
 #'                  These variables can be of the following types: Integer, Numeric, or Character
 #' @return A named list containing log-rank `TestStat`, integer `Decision`, integer `ErrorCode`, and observed `HazardRatio`.

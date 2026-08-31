@@ -4,7 +4,7 @@
 #' @title Initialize the R Simulation Environment
 #'
 #' @param Seed An integer value to set the seed used in generating random numbers in R. Default is NULL.
-#' @param UserParam A named list to pass custom scalar variables defined by users. Users should access the variables using names,
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  for example UserParam$Var1. Default is NULL.
 #'
 #' @description Performs initialization for all simulations that use R before other user-defined functions execute.

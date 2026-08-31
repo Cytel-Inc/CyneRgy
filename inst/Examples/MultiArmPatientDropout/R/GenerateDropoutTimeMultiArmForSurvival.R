@@ -11,7 +11,7 @@
 #' @param NumPrd Integer. Number of dropout periods. This example uses one period.
 #' @param PrdTime Numeric vector containing the times associated with `DropParam`.
 #' @param DropParam Numeric matrix containing dropout parameters by period and arm.
-#' @param UserParam Optional list of user-defined parameters. This example does not use it. Defaults to `NULL`.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing `DropOutTime`, a numeric vector of length `NumSub` where `Inf` denotes no dropout, and
 #' `ErrorCode`, an integer status code where 0 indicates success.
 ######################################################################################################################## .

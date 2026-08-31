@@ -110,7 +110,7 @@
 #'                     \item{BindingType}{Integer list with binding type for each endpoint. Access using endpoint names,
 #'                           e.g., BindingType["Endpoint 1"] or BindingType["Endpoint 2"]. Values: 0 - Non Binding}
 #'                   }
-#' @param UserParam User can pass custom scalar variables defined by them as a member of this list.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  User should access the variables using names, for example UserParam$Var1 and not order.
 #'                  These variables can be of the following types: Integer, Numeric, or Character
 #' @return The function must return a list in the return statement of the function. The information below lists

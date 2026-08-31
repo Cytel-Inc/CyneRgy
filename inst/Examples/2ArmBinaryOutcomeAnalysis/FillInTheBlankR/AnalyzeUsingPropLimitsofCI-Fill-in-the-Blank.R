@@ -5,7 +5,7 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  If UserParam is supplied, the list must contain the following named elements:
 #'                  UserParam$dLowerLimit - A value (0,1) that specifies the lower limit for the confidence interval.
 #'                  UserParam$dUpperLimit - A value (0,1) that specifies the upper limit for the confidence interval.

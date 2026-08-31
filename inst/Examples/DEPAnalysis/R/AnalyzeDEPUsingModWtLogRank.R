@@ -111,9 +111,10 @@
 #'                     \item{BindingType}{Integer list with binding type for each endpoint. Access using endpoint names,
 #'                           e.g., BindingType["Endpoint 1"] or BindingType["Endpoint 2"]. Values: 0 - Non Binding}
 #'                   }
-#' @param UserParam User can pass custom scalar variables defined by them as a member of this list.
-#'                  User should access the variables using names, for example UserParam$Var1 and not order.
-#'                  These variables can be of the following types: Integer, Numeric, or Character
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#'                  \describe{
+#'                    \item{UserParam[[endpoint name]]$delay}{Delay time for the modestly weighted log-rank test for the named endpoint. Defaults to 0 when omitted.}
+#'                  }
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{

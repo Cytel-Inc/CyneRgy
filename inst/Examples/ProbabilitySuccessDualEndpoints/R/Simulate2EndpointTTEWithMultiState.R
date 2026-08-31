@@ -30,7 +30,7 @@
 #'                      \item{If SurvMethod = 2}{A NumPrd x NumArm array specifying cumulative survival percentages for each arm and time period.}
 #'                      \item{If SurvMethod = 3}{A 1x2 array specifying median survival times for each arm (control in column 1, experimental in column 2).}
 #'                  }
-#' @param UserParam A list of user-defined parameters. Can contain the following named elements:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  \describe{
 #'                      \item{UserParam$dMedianPFS0}{Median time to PFS event for the control group.}
 #'                      \item{UserParam$dMedianPFS1}{Median time to PFS event for the treatment group.}

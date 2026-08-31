@@ -9,17 +9,17 @@
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East Horizon. The list must contain:
-#'   \itemize{
-#'     \item \code{dMeanBaselineCtrl} – Mean baseline outcome for the control group.
-#'     \item \code{dMeanBaselineExp} –Mean baseline outcome for the experimental group.
-#'     \item \code{dStdDevBaselineCtrl} – Standard deviation of baseline outcome for the control group.
-#'     \item \code{dStdDevBaselineExp} – Standard deviation of baseline outcome for the experimental group.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#'   \describe{
+#'     \item{UserParam$dMeanBaselineCtrl}{Mean baseline outcome for the control group.}
+#'     \item{UserParam$dMeanBaselineExp}{Mean baseline outcome for the experimental group.}
+#'     \item{UserParam$dStdDevBaselineCtrl}{Standard deviation of baseline outcome for the control group.}
+#'     \item{UserParam$dStdDevBaselineExp}{Standard deviation of baseline outcome for the experimental group.}
 #'   }
 #' @return A named list containing the numeric `Response` vector and integer `ErrorCode`.
 ######################################################################################################################## .
 
-SimulatePatientOutcome <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam )
+SimulatePatientOutcome <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
     # Initialize variable
     nError <- 0 # No errors occurred

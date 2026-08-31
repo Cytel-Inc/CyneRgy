@@ -10,7 +10,7 @@
 #' @param TreatmentID A vector specifying the arm index for each subject. The index for the placebo/control arm is 0.
 #' @param Mean A vector with means for all the arms.
 #' @param StdDev A vector with the standard deviations of each arm.
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dProbOfZeroOutcomeCtrl}{A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control arm.}

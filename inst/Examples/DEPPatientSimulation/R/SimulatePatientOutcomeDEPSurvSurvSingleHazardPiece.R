@@ -51,7 +51,7 @@
 #'    \item{-4} {Strong Negative}
 #'    \item{-5} {Very Strong Negative}
 #' @param PropResp Optional binary response probabilities retained for compatibility with the dual-endpoint response interface. This survival-survival example does not use the value.
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam are supplied in East Horizon, they will be an element in the list, eg UserParam$ParameterName.
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.

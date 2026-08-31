@@ -14,7 +14,7 @@
 #' `Treatment` mean/standard-deviation pairs; binary entries contain control and treatment probabilities; and
 #' time-to-event entries contain `SurvMethod`, its time parameters, `Control`, and `HR`.
 #' @param Correlation Numeric correlation matrix with one row and column per endpoint.
-#' @param UserParam Optional list of user-defined parameters. This example does not use it. Defaults to `NULL`.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing `Response`, a named list of response vectors in `EndpointName` order, and `ErrorCode`,
 #' an integer status code where 0 indicates success.
 ######################################################################################################################## .

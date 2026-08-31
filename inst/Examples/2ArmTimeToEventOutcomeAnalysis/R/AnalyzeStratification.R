@@ -41,7 +41,7 @@
 #'   \item{EffBdry}{— Efficacy boundary at each look}
 #' }
 #'
-#' @param UserParam
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' A list of user-defined parameters in East Horizon. Default = NULL.
 #'
 #' @description

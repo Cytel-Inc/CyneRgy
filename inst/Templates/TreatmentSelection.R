@@ -5,7 +5,7 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @description
 #' This function is used for the MAMS binary design and will perform treatment selection at the interim analysis (IA).
 #' The example R code below will guide you through what needs to be done. Step 1, Step 2, Step 3, and Step 4 comments are added below

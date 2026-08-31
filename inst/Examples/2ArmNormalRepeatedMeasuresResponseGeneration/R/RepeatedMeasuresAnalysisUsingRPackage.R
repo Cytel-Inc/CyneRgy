@@ -5,7 +5,7 @@
 #' @author Shubham Lahoti
 #' @param SimData Data frame containing treatment assignments and visit-specific response columns.
 #' @param DesignParam List containing `SampleSize` and `NumVisit` for the simulated design.
-#' @param UserParam Optional list of user-defined parameters; unused by this example.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A named list containing `TestStat`, `PrimDelta`, `SecDelta`, and `ErrorCode`.
 ######################################################################################################################## .
 

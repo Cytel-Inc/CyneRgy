@@ -7,7 +7,7 @@
 #' @param ProbDrop Mandatory. A vector of numeric values specifying probability of dropout for each arm
 #' @param NumArm Mandatory. The integer value specifying the number of arms (including Control) in the trial.
 #' @param TreatmentID Mandatory. A vector of length NumSub specifying indexes of arms to which subjects are allocated (one arm index per subject). Index for control is 0.
-#' @param UserParam User can pass custom scalar variables defined by users as a member of this list.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                    User should access the variables using names, for example UserParam$Var1 and not order.
 #'                    These variables can be of the following types: Integer, Numeric, or Character
 

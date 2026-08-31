@@ -11,7 +11,7 @@
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
-#' @param UserParam A list of user defined parameters in East Horizon. The UserParam must be NULL or is ignored in this R script
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A named list containing `Response`, `ErrorCode`, the advanced prior index, and subject-level control and
 #' experimental response probabilities. On first use, the function loads Phase 2 results into global state.
 ######################################################################################################################## .

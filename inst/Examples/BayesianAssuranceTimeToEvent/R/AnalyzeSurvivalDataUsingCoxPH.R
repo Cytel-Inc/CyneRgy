@@ -13,12 +13,12 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam Optional list of user-defined parameters in East Horizon. If \code{NULL}, default values are used.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' The list may contain the following named elements:
 #'        \describe{
-#'         \item{bReturnLogTrueHazard}{Logical (True / False) indicating whether the returned hazard ratio should be transformed using
+#'         \item{UserParam$bReturnLogTrueHazard}{Logical indicating whether the returned hazard ratio should be transformed using
 #'               the natural logarithm. Default is \code{FALSE}.}
-#'         \item{bReturnNAForNoGoTrials}{Logical (True / False) indicating whether the hazard ratio should be returned as \code{NA} when
+#'         \item{UserParam$bReturnNAForNoGoTrials}{Logical indicating whether the hazard ratio should be returned as \code{NA} when
 #'               the trial does not meet the efficacy criterion. Default is \code{FALSE}.}
 #'        }
 #' @return A named list containing elements as described below.

@@ -14,18 +14,18 @@
 #' @param StdDevControl Mandatory numeric vector of control standard deviations by visit.
 #' @param StdDevTrt Mandatory numeric vector of treatment standard deviations by visit.
 #' @param CorrMat Mandatory numeric correlation matrix between visits.
-#' @param UserParam User can pass custom scalar variables defined by users as a member of this list. User should access the variables using names, for example UserParam$Var1 and not order.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' Note: UserParam values should be referenced in the main function before
 #' being passed to helper functions. Passing UserParam directly to a helper
 #' may prevent East Horizon from automatically populating the required parameters.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
-#'   \item{AbsorptionRate}{Absorption rate constant}
-#'   \item{EliminationRate}{Elimination rate constant}
-#'   \item{Dose}{Dose administered}
-#'   \item{E0}{Baseline effect}
-#'   \item{Emax}{Maximum effect}
-#'   \item{EC50}{Concentration at 50% of Emax}
+#'   \item{UserParam$AbsorptionRate}{First-order absorption rate constant.}
+#'   \item{UserParam$EliminationRate}{First-order elimination rate constant.}
+#'   \item{UserParam$Dose}{Administered dose.}
+#'   \item{UserParam$E0}{Baseline effect in the Emax model.}
+#'   \item{UserParam$Emax}{Maximum drug effect.}
+#'   \item{UserParam$EC50}{Concentration producing 50% of the maximum effect.}
 #' }
 #'
 #' @return The function must return a list in the return statement of the function. The information below lists

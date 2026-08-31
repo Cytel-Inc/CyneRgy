@@ -7,12 +7,14 @@
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam is supplied, the list must contain the following named elements:
-#'  UserParam$dCtrlBetaParam1 -  First parameter in the Beta distribution for the control (ctrl) treatment.
-#'  UserParam$dCtrlBetaParam2 - Second parameter in the Beta distribution for the control (ctrl) treatment.
-#'  UserParam$dExpBetaParam1 - First parameter in the Beta distribution for the experimental (exp) treatment.
-#'  UserParam$dExpBetaParam2 - Second parameter in the Beta distribution for the experimental (exp) treatment.
+#' \describe{
+#'   \item{UserParam$dCtrlBetaParam1}{First parameter in the Beta distribution for the control treatment.}
+#'   \item{UserParam$dCtrlBetaParam2}{Second parameter in the Beta distribution for the control treatment.}
+#'   \item{UserParam$dExpBetaParam1}{First parameter in the Beta distribution for the experimental treatment.}
+#'   \item{UserParam$dExpBetaParam2}{Second parameter in the Beta distribution for the experimental treatment.}
+#' }
 #' @description
 #' The function assumes that the probability a patient has a zero response is random and follows a Beta( a, b ) distribution.
 #' Each distribution must provide 2 parameters for the Beta distribution and the probability of 0 outcome is selected from the corresponding Beta distribution.

@@ -10,10 +10,10 @@
 #' @param ArrivalTime Numeric vector of subject arrival times.
 #' @param TreatmentID Integer vector indicating treatment assignment for each subject (0 = control, 1...n = treatment arms).
 #' @param PropResp Numeric vector of response probabilities for each arm. Length must equal `NumArm`.
-#' @param UserParam Optional list of user-defined parameters:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'        \describe{
-#'          \item{MedianSurvCtrl}{Median survival time for the control arm}
-#'          \item{HR1, HR2, ..., HR(n)}{Hazard ratios for each treatment arm relative to control}
+#'          \item{UserParam$MedianSurvCtrl}{Median PFS time for the control arm. Defaults to 12.}
+#'          \item{UserParam$HR1, UserParam$HR2, ..., UserParam$HR(NumArm - 1)}{Treatment-to-control hazard ratio for each experimental arm. Each value defaults to 0.7.}
 #'        }
 #'
 #' @return A list with the following components:

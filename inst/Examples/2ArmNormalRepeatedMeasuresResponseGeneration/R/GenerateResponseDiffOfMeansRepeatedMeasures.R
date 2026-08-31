@@ -16,7 +16,7 @@
 #' @param StdDevControl Control Standard Deviations for all visits
 #' @param StdDevTrt Treatment Standard Deviations for all visits
 #' @param CorrMat Correlation Matrix between all visits
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL. It is an optional parameter.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 
 #' @return A named list containing `Response`, one response vector per visit named `Response1` through `ResponseNumVisit`, and integer `ErrorCode`.
 ######################################################################################################################## .

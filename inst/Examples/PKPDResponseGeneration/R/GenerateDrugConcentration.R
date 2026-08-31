@@ -15,11 +15,11 @@
 #' @param StdDevControl Numeric. Control Standard Deviations for all visits
 #' @param StdDevTrt Numeric. Treatment Standard Deviations for all visits
 #' @param CorrMat Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits.
-#' @param UserParam List. User can pass custom scalar variables defined by users as a member of this list. User should access the variables using names, for example UserParam$Var1 and not order.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' \describe{
-#'   \item{AbsorptionRate}{Absorption rate constant}
-#'   \item{EliminationRate}{Elimination rate constant}
-#'   \item{Dose}{Dose administered}
+#'   \item{UserParam$AbsorptionRate}{First-order absorption rate constant.}
+#'   \item{UserParam$EliminationRate}{First-order elimination rate constant.}
+#'   \item{UserParam$Dose}{Administered dose.}
 #' }
 #'
 #' @return The function must return a list in the return statement of the function. The information below lists

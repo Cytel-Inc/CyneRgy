@@ -26,7 +26,11 @@
 #' @param NumSub Integer. Total number of subjects to randomize. The value must be divisible by the sum of converted integer allocation ratio, as well as equal to the sum of the block sizes specified in `UserParam`.
 #' @param NumArms Integer. Number of arms. Must be exactly 2 (only two-arm designs are supported).
 #' @param AllocRatio Numeric. Ratio of experimental to control group sample size (nt/nc). Must be a positive value.
-#' @param UserParam List. Named list of block sizes. Each element must be named `BlockSize1`, `BlockSize2`, ..., `BlockSizeX` for X blocks. The sum of all block sizes must equal `NumSub`. Each block size must be a positive integer and a multiple of the sum of the allocation ratio. Example: `UserParam <- list(BlockSize1 = 20, BlockSize2 = 10)`.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#'   \describe{
+#'     \item{UserParam$BlockSize1, ..., UserParam$BlockSizeN}{Ordered positive integer block sizes. Their sum must equal `NumSub`, and each must be a multiple of the sum of the converted integer allocation ratio.}
+#'   }
+#'   For example, `UserParam <- list( BlockSize1 = 20, BlockSize2 = 10 )` defines two blocks.
 #'
 #' @return A list with the following components:
 #'   \describe{

@@ -23,7 +23,7 @@
 #'          \item{Alpha}{1-sided Type I Error. Note it will be internally converted to two-sided (i.e., 2 × Alpha) for ANCOVA.}
 #'        }
 #' @param LookInfo List. Not used in this function.
-#' @param UserParam List. Not used in this function.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return A named list containing elements as described below. Note that the return list expands dynamically depending on the
 #' number of endpoints (X) and covariates (Y).

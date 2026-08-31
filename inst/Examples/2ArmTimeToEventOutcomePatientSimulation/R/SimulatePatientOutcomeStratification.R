@@ -54,7 +54,7 @@
 #'
 #' }
 #'
-#' @param UserParam A list of user-defined parameters in East Horizon (not used in this function).
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' The default is NULL.
 #'
 #'

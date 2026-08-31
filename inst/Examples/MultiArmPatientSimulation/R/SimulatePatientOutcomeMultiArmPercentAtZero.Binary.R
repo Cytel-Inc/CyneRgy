@@ -9,7 +9,7 @@
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
 #' @param TreatmentID A vector specifying the arm index for each subject. The index for the placebo/control arm is 0.
 #' @param PropResp A vector of expected proportions of response for each arm
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dProbOfTreatmentResistantCtrl}{A value in (0, 1) that defines the probability a patient is treatment resistant on the control arm.}

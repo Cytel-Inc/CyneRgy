@@ -18,18 +18,18 @@
 #' @param TreatmentID Integer vector of length `NumSub`. Treatment assignment for each subject (for two arm confirmatory: 0 = control, 1 = treatment).
 #' @param Mean Numeric. Not used directly in this function.
 #' @param StdDev Numeric. Not used directly in this function.
-#' @param UserParam List. Contains treatment-specific means and covariate parameters:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'        \describe{
-#'          \item{MeanOutcome1Ctrl}{Mean of outcome 1 for control group}
-#'          \item{MeanOutcome1Trt} {Mean of outcome 1 for treatment group}
-#'          \item{MeanOutcome2Ctrl}{Mean of outcome 2 for control group}
-#'          \item{MeanOutcome2Trt} {Mean of outcome 2 for treatment group}
-#'          \item{MeanOutcome3Ctrl}{Mean of outcome 3 for control group}
-#'          \item{MeanOutcome3Trt} {Mean of outcome 3 for treatment group}
-#'          \item{Beta1} {Effect size of covariate 1}
-#'          \item{Beta2} {Effect size of covariate 2}
-#'          \item{Cov1Prob} {Probability of covariate 1 being 1}
-#'          \item{Cov2Prob} {Probability of covariate 2 being 1}
+#'          \item{UserParam$MeanOutcome1Ctrl}{Mean of outcome 1 for the control group.}
+#'          \item{UserParam$MeanOutcome1Trt}{Mean of outcome 1 for the treatment group.}
+#'          \item{UserParam$MeanOutcome2Ctrl}{Mean of outcome 2 for the control group.}
+#'          \item{UserParam$MeanOutcome2Trt}{Mean of outcome 2 for the treatment group.}
+#'          \item{UserParam$MeanOutcome3Ctrl}{Mean of outcome 3 for the control group.}
+#'          \item{UserParam$MeanOutcome3Trt}{Mean of outcome 3 for the treatment group.}
+#'          \item{UserParam$Beta1}{Additive effect of covariate 1 on each outcome.}
+#'          \item{UserParam$Beta2}{Additive effect of covariate 2 on each outcome.}
+#'          \item{UserParam$Cov1Prob}{Probability that binary covariate 1 equals 1.}
+#'          \item{UserParam$Cov2Prob}{Probability that binary covariate 2 equals 1.}
 #'        }
 #'
 #' @return A list containing:

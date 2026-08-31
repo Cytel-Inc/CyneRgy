@@ -62,7 +62,7 @@
 #'                      \item{FutContrast}{The contrast based on which futility boundaries are being computed. 0- Primary, 1-Secondary}
 #'                      \item{IncludePipeline}{Flag indicating whether to include pipeline subjects in the interim or not. 0- Don't include. 1- Include}
 #'                 }
-#' @param UserParam User can pass custom scalar variables defined by users as a member of this list.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  User should access the variables using names, for example UserParam$Var1 and not order.
 #'                  These variables can be of the following types: Integer, Numeric, or Character
 #' @return A named list containing integer `Decision`, numeric `PrimDelta`, numeric `SecDelta`, and integer `ErrorCode`.

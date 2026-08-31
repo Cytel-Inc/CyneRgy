@@ -21,12 +21,11 @@
 #'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
-#' @param UserParam A list of user defined parameters in East Horizon.
-#' If UseParam must be supplied supplied and the list must contain the following named elements:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' UserParam must be supplied and contain the following named elements:
 #' \describe{
 #'      \item{UserParam$dWeight1}{Probability of sampling from part 1}
-#'      \item{UserParam$dWeight2}{Probability of sampling from part 2}
-#'      \item{UserParam$dPriorMean}{Prior mean for normal distibution}
+#'      \item{UserParam$dPriorMean}{Prior mean for the normal distribution}
 #'      \item{UserParam$dPriorSD}{Prior standard deviation for the normal distribution}
 #'      \item{UserParam$dAlpha}{The alpha parameter in the Beta( alpha, beta ) piece of the prior distribution}
 #'      \item{UserParam$dBeta}{The beta parameter in the Beta( alpha, beta ) piece of the prior distribution}

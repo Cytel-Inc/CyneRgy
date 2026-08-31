@@ -63,10 +63,10 @@
 #'                   \item{FutBdryUpper}{Vector of upper futility boundaries for two-sided tests.}
 #'                   \item{FutBdryLower}{Vector of lower futility boundaries for two-sided tests.}
 #'                 }
-#' @param UserParam A list of user-defined parameters. These custom scalar variables can be of types Integer, Numeric, or Character. Relevant elements include:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  \describe{
-#'                    \item{HazardRatioCutoffIA}{OS hazard ratio threshold for interim analysis.}
-#'                    \item{HazardRatioCutoffFA}{OS hazard ratio threshold for final analysis.}
+#'                    \item{UserParam$HazardRatioCutoffIA}{OS hazard-ratio efficacy threshold used at interim analyses.}
+#'                    \item{UserParam$HazardRatioCutoffFA}{OS hazard-ratio efficacy threshold used at the final analysis.}
 #'                  }
 #'
 #' @return A list containing the following elements:

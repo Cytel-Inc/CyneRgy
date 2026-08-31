@@ -7,7 +7,7 @@
 #' @param TreatmentID Integer vector of arm assignments with length `NumSub`; 0 denotes control.
 #' @param Mean Numeric vector of arm-specific outcome means.
 #' @param StdDev Numeric vector of arm-specific outcome standard deviations.
-#' @param UserParam Optional list of user-defined parameters from East Horizon. The default must be `NULL`.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{

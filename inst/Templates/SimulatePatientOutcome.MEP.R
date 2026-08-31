@@ -11,7 +11,7 @@
 #' @param EndpointName Character vector naming the endpoints in `EndpointType` order.
 #' @param RespParams List of endpoint-specific generation parameters. Continuous entries contain arm means and standard deviations; binary entries contain arm response probabilities; time-to-event entries contain the survival method, periods, control parameters, and hazard ratios.
 #' @param Correlation Numeric endpoint correlation matrix with one row and column per endpoint.
-#' @param UserParam Optional named list of user-defined parameters.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing `Response`, a named list of response vectors by endpoint, and optional integer `ErrorCode`.
 ######################################################################################################################## .
 

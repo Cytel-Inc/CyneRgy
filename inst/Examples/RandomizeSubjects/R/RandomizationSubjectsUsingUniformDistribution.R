@@ -15,7 +15,7 @@
 #' @param NumSub Integer. The number of subjects that need to be simulated. The argument value is passed from Engine.
 #' @param NumArms Integer. Number of trial arms. Only \code{NumArms == 2} is supported. The argument value is passed from Engine.
 #' @param AllocRatio Numeric. The ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc). The argument value is passed from Engine.
-#' @param UserParam List. Optional user-defined parameters. Default is \code{NULL}.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return A list with the following components:
 #'   \describe{

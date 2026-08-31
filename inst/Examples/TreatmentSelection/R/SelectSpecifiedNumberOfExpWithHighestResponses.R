@@ -8,17 +8,14 @@
 #' @param SimData Data frame which consists of data generated in current simulation
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing parameters for the current analysis look.
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #' \item{UserParam$QtyOfArmsToSelect}{A value that defines how many treatment arms are chosen to advance.
-#'                          Note this number must match the number of user-specified allocation values.
-#'                          If this value is not specified, the default is 2.}
-#' \item{UserParam$Rank1AllocationRatio}{A value that specifies the allocation to the arm with the highest response
-#'                             If this value is not specified, the default is 2.}
-#' \item{UserParam$Rank2AllocationRatio}{A value that specifies the allocation to the arm with the next highest response
-#'                                 If this value is not specified, the default is 1.}
+#'                          This number must match the number of rank-specific allocation values.}
+#' \item{UserParam$Rank1AllocationRatio, ..., UserParam$RankNAllocationRatio}{Allocation ratio relative to control for the arm with response rank `1` through `N`, where `N` is `UserParam$QtyOfArmsToSelect`.}
 #'          }
+#' If `UserParam` is `NULL`, one arm is selected and `UserParam$Rank1AllocationRatio` defaults to 2.
 #' @return A list containing `TreatmentID`, the selected experimental-arm indexes;
 #'   `AllocRatio`, their allocation ratios relative to control; and integer `ErrorCode`.
 ######################################################################################################################## .

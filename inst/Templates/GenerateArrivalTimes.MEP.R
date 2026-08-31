@@ -6,7 +6,7 @@
 #' @param NumPrd Integer. Number of time periods that are provided.
 #' @param PrdStart Vector of Numerics. The start time for each enrollment periods. PrdStart[ 1 ] = 0
 #' @param AccrRate Vector of Numerics. The accrual rate in each enrollment period.
-#' @param UserParam A list of user defined parameters that may be provided in East Horizon.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing the arrival times (ArrivalTime) and error code (ErrorCode)
 #' @description
 #' This template can be used as a starting point for developing custom functionality when the patient arrives in the trial.

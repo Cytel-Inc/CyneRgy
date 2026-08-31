@@ -14,7 +14,7 @@
 #' @param StdDevControl Mandatory. Numeric Control Standard Deviations for all visits
 #' @param StdDevTrt Mandatory. Numeric Treatment Standard Deviations for all visits
 #' @param CorrMat Mandatory. Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits.
-#' @param UserParam Optional. User can pass custom scalar variables defined by users as a member of this list.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  User should access the variables using names, for example UserParam$Var1 and not order.
 #'                  These variables can be of the following types: Integer, Numeric, or Character
 #'

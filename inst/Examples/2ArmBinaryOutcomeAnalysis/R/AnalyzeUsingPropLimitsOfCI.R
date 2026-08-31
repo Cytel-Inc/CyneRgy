@@ -21,7 +21,7 @@
 #'                   - **Efficacy and Futility:**
 #'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
 #'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East Horizon. UserParam must be supplied, the list must contain the following named elements:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' \describe{
 #'   \item{UserParam$dLowerLimit}{A value (0,1) that specifies the lower limit, eg  Minimum Acceptable Value (MAV).}
 #'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg Target Value (TV).}

@@ -7,7 +7,7 @@
 #' @param ProbDrop Numeric vector containing the dropout probability for each arm.
 #' @param NumArm Integer. Number of arms in the trial, including control.
 #' @param TreatmentID Integer vector of length `NumSub` containing arm indices, with 0 denoting control.
-#' @param UserParam Optional list of user-defined parameters. This example does not use it. Defaults to `NULL`.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing `CensorInd`, an integer vector of length `NumSub` where 0 denotes dropout and 1 denotes
 #' completion, and `ErrorCode`, an integer status code where 0 indicates success.
 ######################################################################################################################## .

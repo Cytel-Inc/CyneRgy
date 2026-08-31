@@ -9,7 +9,7 @@
 #' @param NumArms Mandatory integer number of trial arms, including control.
 #' @param AllocRatio Mandatory vector of experimental-to-control allocation ratios
 #'   with length `NumArms - 1`.
-#' @param UserParam Optional list of user-defined scalar variables.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                    User should access the variables using names, for example UserParam$Var1 and not order.
 #'                    These variables can be of the following types: Integer, Numeric, or Character
 #'

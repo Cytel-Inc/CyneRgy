@@ -15,7 +15,7 @@
 #' @param NumPrd Integer specifying the number of survival periods.
 #' @param PrdTime Numeric vector containing period boundary times.
 #' @param SurvParam For SurvMethod = 3, this will be an array of arm-wise Median Survival Times.
-#' @param UserParam Optional user-defined list of custom parameters.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return List containing:
 #'         \describe{

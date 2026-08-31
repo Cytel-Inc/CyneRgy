@@ -96,7 +96,7 @@
 #'       }
 #'   }
 #' @param OutList List containing any persistent data to be passed between looks
-#' @param UserParam Optional list of user-defined parameters
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return A list containing:
 #'   \itemize{
@@ -114,7 +114,7 @@
 #'
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam )
+{{FUNCTION_NAME}} <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam = NULL )
 {
 
     # Write the decision generation logic here

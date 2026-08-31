@@ -8,8 +8,11 @@
 #' @param NumPrd Integer. Number of accrual periods.
 #' @param PrdStart Numeric vector containing the start time of each accrual period. The first value must be 0.
 #' @param AccrRate Numeric vector containing the accrual rate for each period.
-#' @param UserParam Optional list of user-defined accrual rates named `dRate1`, `dRate2`, and so on. The rate with
-#' the largest index is used after the ramp-up. Defaults to `NULL`.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#'   \describe{
+#'     \item{UserParam$dRate1, ..., UserParam$dRateN}{Poisson accrual rate for each successive one-unit period. The final rate continues after period `N`.}
+#'   }
+#'   When `UserParam` is `NULL`, the function uses `PrdStart` and `AccrRate`.
 #' @return A list containing `ArrivalTime`, a numeric vector of length `NumSub`, and `ErrorCode`, an integer status
 #' code where 0 indicates success.
 ######################################################################################################################## .

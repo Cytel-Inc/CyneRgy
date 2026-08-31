@@ -7,7 +7,7 @@
 #' @param NumArm Integer number of trial arms, including control.
 #' @param TreatmentID Integer vector of arm assignments with length `NumSub`; 0 denotes control.
 #' @param PropResp A vector of length NumArm with the response probabilities for each arm
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default of NULL, as in this example.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam are supplied, they will be an element in the list, UserParam.
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.

@@ -11,7 +11,7 @@
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
-#' @param UserParam A list of user defined parameters in East Horizon.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dParameter1Ctrl}{For control treament, the design prior parameter 1 in the Beta distribution }

@@ -21,17 +21,13 @@
 #'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'  If UserParam is supplied it must contain the following
 #'  \describe{
-#'       \item{UserParam$QtyOfSubgroups}{The quantity of patient subgroups. For each subgroup II = 1,2..,QtyOfSubgroups,
-#'       you must specify ProbSubgroupII, MedianTTECtrlSubgroupII, MedianTTEExpSubgroupII }
-#'       \item{UserParam$ProbSubgroup1}{The probability a patient is in subgroup 1}
-#'       \item{UserParam$MedianTTECtrlSubgroup1}{The median time-to-event for a patient in subgroup 1 that receives control treatment}
-#'       \item{UserParam$MedianTTEExpSubgroup1}{The median time-to-event for a patient in subgroup 1 that receives experimental treatment}
-#'       \item{UserParam$ProbSubgroup2}{The probability a patient is in subgroup 2}
-#'       \item{UserParam$MedianTTECtrlSubgroup2}{The median time-to-event for a patient in subgroup 2 that receives control treatment}
-#'       \item{UserParam$MedianTTEExpSubgroup2}{The median time-to-event for a patient in subgroup 2 that receives experimental treatment}
+#'       \item{UserParam$QtyOfSubgroups}{Number of patient subgroups.}
+#'       \item{UserParam$ProbSubgroup1, ..., UserParam$ProbSubgroupN}{Probability that a patient belongs to subgroup `1` through `N`, where `N` is `UserParam$QtyOfSubgroups`.}
+#'       \item{UserParam$MedianTTECtrlSubgroup1, ..., UserParam$MedianTTECtrlSubgroupN}{Median time to event on control for each subgroup.}
+#'       \item{UserParam$MedianTTEExpSubgroup1, ..., UserParam$MedianTTEExpSubgroupN}{Median time to event on experimental treatment for each subgroup.}
 #'  }
 #' @description
 #'  This function simulates patient data from a mixture of Exponential distributions. The mixture is based on patient subgroups.  For each,

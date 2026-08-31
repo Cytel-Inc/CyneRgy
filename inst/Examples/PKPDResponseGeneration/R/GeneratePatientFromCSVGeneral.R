@@ -19,7 +19,7 @@
 #' @param StdDevControl Numeric vector of control standard deviations for all visits (passed from East Horizon, not used in this function).
 #' @param StdDevTrt Numeric vector of treatment standard deviations for all visits (passed from East Horizon, not used in this function).
 #' @param CorrMat Correlation matrix between all visits (passed from East Horizon, not used in this function).
-#' @param UserParam A list of user-defined parameters. Must contain the following named element:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'   \describe{
 #'      \item{`UserParam$InputFileName`}{The name of the CSV file in the Inputs folder (e.g., "SimPatientDataAlt.csv").}
 #'   }

@@ -7,18 +7,17 @@
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
-#' If UseParam is supplied, the list must contain the following named elements:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' \describe{
-#'      \item{UserParam$dWeight1}{Probability of sampiling from part 1}
-#'      \item{UserParam$dWeight}{Probability of sampling from part 2}
-#'      \item{UserParam$dMean1}{Prior mean for part 1}
-#'      \item{UserParam$dMean2}{Prior mean for part 2}
-#'      \item{UserParam$dSD1}{Prior SD for part 1}
-#'      \item{UserParam$dSD2}{Prior SD for part 2}
-#'      \item{UserParam$dWeight1}{Weight of prior 1}
-#'      \item{UserParam$dWeight2}{Weight of prior 2}
-#'      \item{UserParam$dMeanCtrl}{Mean form control }
+#'      \item{UserParam$dWeight1}{Mixture weight for the first treatment-effect prior.}
+#'      \item{UserParam$dWeight2}{Mixture weight for the second treatment-effect prior.}
+#'      \item{UserParam$dMean1}{Mean of the first treatment-effect prior.}
+#'      \item{UserParam$dMean2}{Mean of the second treatment-effect prior.}
+#'      \item{UserParam$dSD1}{Standard deviation of the first treatment-effect prior.}
+#'      \item{UserParam$dSD2}{Standard deviation of the second treatment-effect prior.}
+#'      \item{UserParam$dMeanCtrl}{Mean outcome for the control arm.}
+#'      \item{UserParam$dSDCtrl}{Outcome standard deviation for the control arm.}
+#'      \item{UserParam$dSDExp}{Outcome standard deviation for the experimental arm.}
 #'  }
 #' @description Sample a treatment effect from a two-component normal mixture prior and generate normal outcomes by arm.
 #' @return A named list containing `Response`, `ErrorCode`, `vTrueDelta`, and `Delta` vectors.

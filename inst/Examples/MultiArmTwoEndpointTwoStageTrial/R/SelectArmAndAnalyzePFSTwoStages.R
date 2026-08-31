@@ -54,13 +54,13 @@
 #'          \item{CriticalPoint}{Critical value for testing (e.g., 1.96)}
 #'        }
 #' @param LookInfo List with interim analysis information, or NULL for fixed design. **Currently only fixed design is supported**, adaptive designs not yet implemented.
-#' @param UserParam A list of user-defined parameters. These custom scalar variables can be of types Integer, Numeric, or Character. Relevant elements include:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'        \describe{
-#'          \item{Stage1NumCompleters}{Number of patients for Stage 1 analysis}
-#'          \item{Stage1FutThreshold}{Stage 1 futility threshold}
-#'          \item{DropoutProportion}{Proportion of patients who drop out during PFS follow-up}
-#'          \item{TargetNumPFSEvents}{Target number of PFS events for Stage 2 timing}
-#'          \item{SwitchSign}{Character value ('yes' or 'no') indicating whether the critical-point sign should be reversed for the PFS analysis}
+#'          \item{UserParam$Stage1NumCompleters}{Number of patients included in the Stage 1 arm-selection analysis.}
+#'          \item{UserParam$Stage1FutThreshold}{Minimum best-arm response-rate difference required to continue beyond Stage 1.}
+#'          \item{UserParam$DropoutProportion}{Proportion of patients who drop out during PFS follow-up.}
+#'          \item{UserParam$TargetNumPFSEvents}{Target number of PFS events used to time the Stage 2 analysis.}
+#'          \item{UserParam$SwitchSign}{Character value (`"yes"` or `"no"`) indicating whether the critical-point sign should be reversed for the PFS analysis.}
 #'        }
 #'
 #' @return A list containing the following elements:

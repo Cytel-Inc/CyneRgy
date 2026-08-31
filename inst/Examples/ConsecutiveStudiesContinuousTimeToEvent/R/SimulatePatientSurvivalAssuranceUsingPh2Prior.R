@@ -22,8 +22,8 @@
 #'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
-#' If UseParam is supplied, the list must contain the following named elements:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'      \item{UserParam$dIntercept}{Intercept for the linear relationship between true treatment difference and log(HR).}
 #'      \item{UserParam$dSlope}{Slope for the linear relationship between true treatment difference and log(HR).}

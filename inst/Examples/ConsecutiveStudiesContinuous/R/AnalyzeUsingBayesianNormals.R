@@ -7,7 +7,7 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' Note: UserParam values should be referenced in the main function before
 #' being passed to helper functions. Passing UserParam directly to a helper
 #' may prevent East Horizon from automatically populating the required parameters.

@@ -8,7 +8,7 @@
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient.
 #' @param DesignParam Input Parameters which user may need to compute test statistic and perform test. Refer to the DEP analysis template (Analyze.DEP.R) for details of this list.
 #' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic and perform test. Refer to the DEP analysis template (Analyze.DEP.R) for details of this list.
-#' @param UserParam User can pass custom scalar variables defined by them as a member of this list.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @param TestStat List of test statistics for both the endpoints. These test statistics will be on the Z-scale. Access using the actual endpoint names specified by the user,
 #'                            e.g., TestStat[EndpointName[1]] or TestStat[EndpointName[2]]
 #' @param OutList List of outputs that was returned by the user in the previous look. Only relevant for Group Sequential Design and set to NULL for first look.

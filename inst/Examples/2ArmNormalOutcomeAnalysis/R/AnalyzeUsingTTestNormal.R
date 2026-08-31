@@ -5,7 +5,7 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @description Use the t.test() function in the base package to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
 #'              The test statistic is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
 #' @return A named list containing `TestStat`, `Decision`, and `ErrorCode`.

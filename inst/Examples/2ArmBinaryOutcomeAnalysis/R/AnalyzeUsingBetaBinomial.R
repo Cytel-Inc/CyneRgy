@@ -22,7 +22,7 @@
 #'                   - **Efficacy and Futility:**
 #'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
 #'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East Horizon.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  UserParam must be supplied and contain the following named elements:
 #'  \describe{
 #'      \item{UserParam$dAlphaCtrl}{Prior alpha parameter for control treatment.  Equivalent to the prior number of treatment successes.}

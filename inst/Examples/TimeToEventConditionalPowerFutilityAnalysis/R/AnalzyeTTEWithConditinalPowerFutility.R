@@ -8,16 +8,16 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' \describe{
-#'   \item{nComputationOption}{Specifies method for conditional power:
+#'   \item{UserParam$nComputationOption}{Specifies the method for conditional power:
 #'       1 = Target hazard ratio (using UserParam$TargetHazardRatio),
 #'       2 = Estimated hazard ratio,
 #'       3 = Weighted hazard ratio (must supply UserParam$WeightEstimatedHR, UserParam$WeightTargetHR and UserParam$TargetHazardRatio).}
-#'   \item{FutilityThreshold}{Threshold below which futility is declared.}
-#'   \item{TargetHazardRatio}{User-specified hazard ratio (used in options 1 and 3).}
-#'   \item{WeightEstimatedHR}{Weight assigned to the estimated hazard ratio (used in option 3).}
-#'   \item{WeightTargetHR}{Weight assigned to the target hazard ratio (used in option 3).}
+#'   \item{UserParam$FutilityThreshold}{Conditional-power threshold below which futility is declared.}
+#'   \item{UserParam$TargetHazardRatio}{Target hazard ratio used in computation options 1 and 3.}
+#'   \item{UserParam$WeightEstimatedHR}{Weight assigned to the estimated hazard ratio in computation option 3.}
+#'   \item{UserParam$WeightTargetHR}{Weight assigned to the target hazard ratio in computation option 3.}
 #' }
 #'
 #' @return A list containing:

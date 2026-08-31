@@ -9,12 +9,12 @@
 #' @param TreatmentID A vector of treatment ids, 0 = Treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East Horizon. The list must contain:
-#'   \itemize{
-#'     \item \code{dMeanFollowUpCtrl} – Mean at follow-up for the control group.
-#'     \item \code{dMeanFollowUpExp} – Mean at follow-up for the experimental group.
-#'     \item \code{dStdDevFollowUpCtrl} – Standard deviation at follow-up for the control group.
-#'     \item \code{dStdDevFollowUpExp} – Standard deviation at follow-up for the experimental group.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#'   \describe{
+#'     \item{UserParam$dMeanFollowUpCtrl}{Mean at follow-up for the control group.}
+#'     \item{UserParam$dMeanFollowUpExp}{Mean at follow-up for the experimental group.}
+#'     \item{UserParam$dStdDevFollowUpCtrl}{Standard deviation at follow-up for the control group.}
+#'     \item{UserParam$dStdDevFollowUpExp}{Standard deviation at follow-up for the experimental group.}
 #'   }
 #' @return A named list containing the numeric `Response` vector and integer `ErrorCode`.
 ######################################################################################################################## .

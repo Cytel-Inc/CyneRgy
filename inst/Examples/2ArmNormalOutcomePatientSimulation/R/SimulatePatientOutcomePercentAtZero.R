@@ -7,10 +7,12 @@
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
-#' If UseParam is supplied, the list must contain the following named elements:
-#'  UserParam$dProbOfZeroOutcomeCtrl - A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
-#'  UserParam$dProbOfZeroOutcomeExp - A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' If UserParam is supplied, the list must contain the following named elements:
+#' \describe{
+#'   \item{UserParam$dProbOfZeroOutcomeCtrl}{Probability in (0, 1) that a control patient has an outcome of 0.}
+#'   \item{UserParam$dProbOfZeroOutcomeExp}{Probability in (0, 1) that an experimental-treatment patient has an outcome of 0.}
+#' }
 #' @description
 #' In this example, the continuous outcome is a patient's change from baseline. For this function, 20% of patients are believed to have no change due to treatment.
 #' As such, this function simulations patient outcome where, on average, 20% will have a value of 0 for the outcome and 80%, on average, will have their value
