@@ -30,7 +30,7 @@ To try this example, create a new project in East Horizon using the following co
 
 # Introduction
 
-The following examples illustrate how to customize the dropout distribution in East Horizon or East using R functions. Patients may drop out of a trial for various reasons, including safety concerns, treatment burden, or non-trial-related factors. In some cases, dropout rates can reach 30%, particularly if the drug has adverse side effects. Incorporating dropout probabilities or hazard rates is crucial during data generation and can significantly impact subsequent analysis. In all examples, we assume a trial design consisting of a control group and an experimental treatment.
+The following examples illustrate how to customize the dropout distribution in East Horizon  using R functions. Patients may drop out of a trial for various reasons, including safety concerns, treatment burden, or non-trial-related factors. In some cases, dropout rates can reach 30%, particularly if the drug has adverse side effects. Incorporating dropout probabilities or hazard rates is crucial during data generation and can significantly impact subsequent analysis. In all examples, we assume a trial design consisting of a control group and an experimental treatment.
 
 Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 

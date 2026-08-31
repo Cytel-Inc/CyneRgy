@@ -5,12 +5,12 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #'                  If UserParam is supplied, the list must contain the following named elements:
 #'                  UserParam$dLowerLimit - A value (0,1) that specifes the lower limit for the confidence interval.
 #'                  UserParam$dUpperLimit - A value (0,1) that specifies the upper limit for the confidence interval.
 #'                  UserParam$dConfLevel - A value (0,1) that specifies the confidence level for the prop.test function in base R.
-#' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East as an input.
+#' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon as an input.
 #'              This example does NOT include a futility rule.
 #'
 #' @return After the blanks are completed, a named list containing `TestStat`, `ErrorCode`, and `Decision`.
@@ -27,14 +27,14 @@ AnalyzeUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo, UserPara
         UserParam <- list( UserParam$dLowerLimit = 0.1, UserParam$dConfLevel = 0.8, UserParam$dUpperLimit = 0.2 )
     }
 
-    # Retrieve necessary information from the objects East sent
+    # Retrieve necessary information from the objects East Horizon sent
     nQtyOfLooks          <- LookInfo$NumLooks
     nLookIndex           <- LookInfo$CurrLookIndex
     nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
 
     nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
 
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 
@@ -59,11 +59,11 @@ AnalyzeUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo, UserPara
         if( nLookIndex == nQtyOfLooks )
         {
             # The final analysis was reached and a Go decision could not be made, thus a No Go decision is made
-            nDecision <- 3 # East code for futility
+            nDecision <- 3 # Futility
         }
         # At the IA check the No Go since a Go decision was not made
         else if( dUpperLimitCI < UserParam$dUpperLimit )
-            _______ <- 3 # East code for futility
+            _______ <- 3 # Futility
 
     }
 

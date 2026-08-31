@@ -11,7 +11,7 @@
 #' @param PrdTime Vector of times used to specify dropout parameters.
 #' @param DropParam 2-D array of parameters used to generate dropout times. Number of rows = Number of Dropout Period . Number of Columns = Number of Arms including Control/Placebo.
 #'  In this  example a Dropout Parameter will have only 1 row (Number of periods = 1) and 2 columns (one each for control and experimental arm)
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. It is an optional parameter.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL. It is an optional parameter.
 #' @return A list that contains:
 #' \describe{
 #'     \item{ErrorCode (Optional)}{An integer value:  ErrorCode = 0 --> No Error

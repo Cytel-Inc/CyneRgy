@@ -9,7 +9,7 @@
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East or East Horizon. The list must contain:
+#' @param UserParam A list of user defined parameters in East Horizon. The list must contain:
 #'   \itemize{
 #'     \item \code{dMeanBaselineCtrl} – Mean baseline outcome for the control group.
 #'     \item \code{dMeanBaselineExp} –Mean baseline outcome for the experimental group.
@@ -22,7 +22,7 @@
 SimulatePatientOutcome <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam )
 {
     # Initialize variable
-    nError <- 0 # East code for no errors occurred
+    nError <- 0 # No errors occurred
     vPatientOutcome <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
     vMeanBaseline   <- c( UserParam$dMeanBaselineCtrl, UserParam$dMeanBaselineExp )
     vStdDevBaseline <- c( UserParam$dStdDevBaselineCtrl, UserParam$dStdDevBaselineExp )
@@ -31,7 +31,7 @@ SimulatePatientOutcome <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdD
     # Loop over the patients and simulate the outcome according to the treatment they received
     for( nPatIndx in 1:NumSub )
     {
-        nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
+        nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
         # Simulate from a normal distribution and round to nearest integer
         outcome1 <- round( rnorm( 1, vMeanBaseline[ nTreatmentID ], vStdDevBaseline[ nTreatmentID ] ) )

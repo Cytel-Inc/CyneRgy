@@ -6,7 +6,7 @@
 #' @param NumPrd Integer. Number of time periods that are provided.
 #' @param PrdStart Vector of Numerics. The start time for each enrollment periods. PrdStart[ 1 ] = 0
 #' @param AccrRate Vector of Numerics. The accrual rate in each enrollment period.
-#' @param UserParam A list of user defined parameters that may be provided in East or East Horizon.
+#' @param UserParam A list of user defined parameters that may be provided in East Horizon.
 #' @return A list containing the arrival times (ArrivalTime) and error code (ErrorCode)
 #' @description
 #' This template can be used as a starting point for developing custom functionality when the patient arrives in the trial.
@@ -25,7 +25,7 @@
 
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
-        # are applied to have the same functionality as East, see the first example
+        # are applied to have the same functionality as East Horizon, see the first example
 
         # EXAMPLE - Set the default if needed
         # UserParam <- list( dRate = 0.5 )

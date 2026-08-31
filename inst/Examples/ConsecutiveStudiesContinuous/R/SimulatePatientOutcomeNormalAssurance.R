@@ -7,7 +7,7 @@
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
 #' If UseParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'      \item{UserParam$dWeight1}{Probability of sampiling from part 1}
@@ -37,13 +37,13 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
     vMean            <- c( vMean, vMean[ 1 ] + dTreatmentEffect )
 
     # Step 3 - Initialize variable ####
-    nError           <- 0 # East code for no errors occurred
+    nError           <- 0 # No errors occurred
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
 
     # Step 4 - Loop over the patients and simulate the outcome according to the treatment they received ####
     for( nPatIndx in 1:NumSub )
     {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
+        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
         # Make any adjustments to the code as needed, example simulating from for a normal distribution
         vPatientOutcome[ nPatIndx ] <- rnorm( 1, vMean[ nTreatmentID ], vStdDev[ nTreatmentID ] )
@@ -54,11 +54,11 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
         nError <- -100
 
     # Step 6 - Create any variables that are returned that need to be included in the output
-    # Note: Need to return the true delta, and East expects it to be a vector.
+    # Note: Need to return the true delta, and East Horizon expects it to be a vector.
     TrueDelta <- rep( vMean[ 2 ], length( vPatientOutcome ) )
 
     # Step 7 - Build the return object, add other variables to the list as needed
-    #       Add the vTrueDeta so it can easily be output by saving the East summary stats.
+    #       Add the vTrueDeta so it can easily be output by saving the East Horizon summary stats.
     lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ), vTrueDelta = as.double( TrueDelta ), Delta = as.double( TrueDelta ) )
 
     return( lReturn )
@@ -72,7 +72,7 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
 #' @description Read the next experimental mean from the global `vPrior` vector, advance `nSimIndex`, and generate normal outcomes by arm.
 #' @return A named list containing `Response`, `ErrorCode`, `vTrueDelta`, and `Delta` vectors.
 SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
@@ -88,13 +88,13 @@ SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, Arriva
     vStdDev     <- c( UserParam$dSDCtrl, UserParam$dSDExp )
 
     # Step 3 - Initialize variable ####
-    nError           <- 0 # East code for no errors occurred
+    nError           <- 0 # No errors occurred
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
 
     # Step 4 - Loop over the patients and simulate the outcome according to the treatment they received ####
     for( nPatIndx in 1:NumSub )
     {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
+        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
         # Make any adjustments to the code as needed, example simulating from for a normal distribution
         vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], vStdDev[ nTreatmentID ] )

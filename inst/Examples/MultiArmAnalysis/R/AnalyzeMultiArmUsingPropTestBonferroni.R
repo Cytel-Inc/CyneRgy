@@ -122,7 +122,7 @@
 
 AnalyzeMultiArmUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # Step 1: Retrieve necessary information from the objects East sent ####
+    # Step 1: Retrieve necessary information from the objects East Horizon sent ####
     if( !is.null( LookInfo ) )
     {
         nQtyOfLooks              <- LookInfo$NumLooks
@@ -143,7 +143,7 @@ AnalyzeMultiArmUsingPropTestBonferroni <- function( SimData, DesignParam, LookIn
     }
 
     vIsTrtPresent                <- DesignParam$IsArmPresent
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome              <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment            <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

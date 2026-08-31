@@ -11,7 +11,7 @@
 #' It can be used for various reasons, such as:
 #'    Setting seed for R environment
 #'    Loading packages
-#' @note Do not use install.package or attempt to install new R packages in Solara as this will fail. Please contact help to install libraries.
+#' @note Do not use install.package or attempt to install new R packages in East Horizon as this will fail. Please contact help to install libraries.
 #' @return An integer as follows:
 #'           0 – No Error
 #'           Positive Integer – Nonfatal Error – Particular Simulation will be aborted but Next Simulation will be performed.

@@ -16,7 +16,7 @@
 #' @param StdDevControl Control Standard Deviations for all visits
 #' @param StdDevTrt Treatment Standard Deviations for all visits
 #' @param CorrMat Correlation Matrix between all visits
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. It is an optional parameter.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL. It is an optional parameter.
 
 #' @return A named list containing `Response`, one response vector per visit named `Response1` through `ResponseNumVisit`, and integer `ErrorCode`.
 ######################################################################################################################## .
@@ -51,7 +51,7 @@ GenRespDiffOfMeansRepMeasures      <- function( NumSub, NumVisit, ArrivalTime, T
   # Get outcomes for experimental group
   mOutcomes[ TreatmentID == 1, ]   <- mExp
 
-  # Build the return list   East expects a Response variable in the return so just make it the first type ####
+  # Build the return list; East Horizon expects a Response variable in the return so just make it the first type ####
   lReturn <- list( Response = as.double( mOutcomes[ , 1 ] ), ErrorCode = as.integer( 0 ) )
 
   # Add all the types to the list

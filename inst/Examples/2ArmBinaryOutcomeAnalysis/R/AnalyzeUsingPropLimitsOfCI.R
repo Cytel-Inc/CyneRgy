@@ -21,7 +21,7 @@
 #'                   - **Efficacy and Futility:**
 #'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
 #'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon. UserParam must be supplied, the list must contain the following named elements:
+#' @param UserParam A list of user defined parameters in East Horizon. UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
 #'   \item{UserParam$dLowerLimit}{A value (0,1) that specifics the lower limit, eg  Minimum Acceptable Value (MAV).}
 #'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg Target Value (TV).}
@@ -78,7 +78,7 @@
 
 AnalyzeUsingPropLimitsOfCI<- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         # Group sequential design
@@ -110,7 +110,7 @@ AnalyzeUsingPropLimitsOfCI<- function( SimData, DesignParam, LookInfo = NULL, Us
                     Delta     = as.double( 0 ) ) )
     }
 
-    # Create the vector of simulated data for this IA - East sends all of the simulated data ####
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data ####
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

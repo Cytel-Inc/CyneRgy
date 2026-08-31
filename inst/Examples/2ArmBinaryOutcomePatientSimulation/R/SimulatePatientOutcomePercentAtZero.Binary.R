@@ -7,7 +7,7 @@
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in simulating from a non-mixture distribution.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in simulating from a non-mixture distribution.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dProbOfTreatmentResistantCtrl}{A value in (0, 1) that defines the probability a patient is treatment resistant the control (ctrl) treatment.}
@@ -35,13 +35,13 @@ SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalT
     #Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
     vProbabilityOfTreatmentResistant <- c( UserParam$dProbOfTreatmentResistantCtrl, UserParam$dProbOfTreatmentResistantExp )    # By default, 0% of patients are treatment resistant
 
-    nError           <- 0 # East code for no errors occurred
+    nError           <- 0 # No errors occurred
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
 
     # Loop over the patients and simulate the outcome according to the treatment they
     for( nPatIndx in 1:NumSub )
     {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
+        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
         # Need to check the probability of a 0 outcome to make sure it is in the range (0, 1) and if not simulate the outcome accordingly
         if( vProbabilityOfTreatmentResistant[ nTreatmentID ] > 0 & vProbabilityOfTreatmentResistant[ nTreatmentID ] < 1 ) # Probability is valid, so need to simulate if the patient is a 0 response

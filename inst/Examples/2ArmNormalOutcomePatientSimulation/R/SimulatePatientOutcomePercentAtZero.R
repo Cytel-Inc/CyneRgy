@@ -7,14 +7,14 @@
 #' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param Mean A vector of length = 2 with the means of the two treatments.
 #' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
 #' If UseParam is supplied, the list must contain the following named elements:
 #'  UserParam$dProbOfZeroOutcomeCtrl - A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
 #'  UserParam$dProbOfZeroOutcomeExp - A value in (0, 1) that defines the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
 #' @description
 #' In this example, the continuous outcome is a patient's change from baseline. For this function, 20% of patients are believed to have no change due to treatment.
 #' As such, this function simulations patient outcome where, on average, 20% will have a value of 0 for the outcome and 80%, on average, will have their value
-#' simulated from a normal distribution with the mean and standard deviation as sent from East.
+#' simulated from a normal distribution with the mean and standard deviation as sent from East Horizon.
 #' @return A named list containing numeric vector `Response` and integer `ErrorCode`.
 ######################################################################################################################## .
 SimulatePatientOutcomePercentAtZero <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
@@ -29,13 +29,13 @@ SimulatePatientOutcomePercentAtZero <- function( NumSub, ArrivalTime, TreatmentI
     #Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
     vProbabilityOfZeroOutcome <- c( UserParam$dProbOfZeroOutcomeCtrl, UserParam$dProbOfZeroOutcomeExp )    # For this example, 20% of patients do not respond to treatment and thus have no change from baseline.
 
-    nError           <- 0 # East code for no errors occurred
+    nError           <- 0 # No errors occurred
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
 
     # Loop over the patients and simulate the outcome according to the treatment they
     for( nPatIndx in 1:NumSub )
     {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
+        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
         # Need to check the probability of a 0 outcome to make sure it is in the range (0, 1) and if not simulate the outcome accordingly
         if( vProbabilityOfZeroOutcome[ nTreatmentID ] > 0 & vProbabilityOfZeroOutcome[ nTreatmentID ] < 1 ) # Probability is valid, so need to simulate if the patient is a 0 response

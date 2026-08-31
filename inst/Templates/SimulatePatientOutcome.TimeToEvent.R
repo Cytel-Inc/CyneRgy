@@ -21,8 +21,8 @@
 #'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
-#' @param UserParam A list of user defined parameters in East. You must have a default = NULL, as in this example.
-#' If UseParam are supplied in East or Solara, they will be an element in the list, eg UserParam$ParameterName.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example.
+#' If UseParam are supplied in East Horizon, they will be an element in the list, eg UserParam$ParameterName.
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{
@@ -52,7 +52,7 @@
 
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
-        # are applied to have the same functionality as East, see the first example.
+        # are applied to have the same functionality as East Horizon, see the first example.
 
         # EXAMPLE - Set the default if needed
         # UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
@@ -60,7 +60,7 @@
 
     # Step 3 - Simulate the patient data and store in vPatientOutcome ####
 
-    # Example 1 of using the parameters East/East Horizon Explore sent - If you don't need this block of code you may delete it.
+    # Example 1 of using the parameters East Horizon Explore sent - If you don't need this block of code you may delete it.
     if( SurvMethod == 1 ) # Hazard rates
     {
         # Simulate patient data using the hazard rates
@@ -81,7 +81,7 @@
     # vTrueRates <- c( 1/UserParam$dMeanCtrl, 1/UserParam$dMeanExp )
     # for( nPatIndx in 1:NumSub )
     # {
-    #     nTreatmentID                 <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East/Solara has the treatments as 0, 1 so need to add 1 to get a vector index
+    #     nTreatmentID                 <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
     #     vPatientOutcome[ nPatIndx ]  <- rexp( 1, vTrueRates[ nTreatmentID ] )
     # }
     # End of example block

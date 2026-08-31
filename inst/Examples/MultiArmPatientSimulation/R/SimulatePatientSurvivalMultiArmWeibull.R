@@ -51,7 +51,7 @@ SimulatePatientSurvivalMultiArmWeibull <- function( NumSub, NumArm, ArrivalTime,
 
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
-        # are applied to have the same functionality as East, see the first example
+        # are applied to have the same functionality as East Horizon, see the first example
 
         # EXMAPLE - Set the default if needed
         UserParam <- list( dShapeCtrl = 1, dShapeExp1 = 12, dShapeExp2 = 12,
@@ -64,7 +64,7 @@ SimulatePatientSurvivalMultiArmWeibull <- function( NumSub, NumArm, ArrivalTime,
 
     # Simulate the patient survival times based on the treatment
     # For the Hazard Rate input with 1 piece, this is just simulating from an exponential distribution as an example and results will match
-    # East if you used the build hazard option.
+    # East Horizon if you used the build hazard option.
     for( nPatIndx in 1:NumSub )
     {
         nPatientTreatment     <- vTreatmentID[ nPatIndx ]

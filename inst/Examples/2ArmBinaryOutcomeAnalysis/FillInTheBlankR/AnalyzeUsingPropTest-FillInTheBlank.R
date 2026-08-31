@@ -5,8 +5,8 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
-#' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East as an input.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon as an input.
 #'              This example does NOT include a futility rule.
 #'
 #' @return After the blanks are completed, a named list containing `TestStat`, `ErrorCode`, and `Decision`.
@@ -18,12 +18,12 @@ AnalyzeUsingPropTest <- function( SimData, DesignParam, LookInfo, UserParam = NU
     # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
     # The fully worked examples are provided in the corresponding example R files.
 
-    # Retrieve necessary information from the objects East sent
+    # Retrieve necessary information from the objects East Horizon sent
     nLookIndex           <- LookInfo$CurrLookIndex
     nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
     nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
 
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

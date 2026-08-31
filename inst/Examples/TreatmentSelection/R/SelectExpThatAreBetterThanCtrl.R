@@ -8,7 +8,7 @@
 #' @param SimData Dataframe which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing parameters for the current analysis look.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #' @return A list containing `TreatmentID`, the selected experimental-arm indexes;
 #'   `AllocRatio`, their allocation ratios relative to control; and integer `ErrorCode`.
 ######################################################################################################################## .

@@ -5,7 +5,7 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #' @description
 #' This function is used for the MAMS binary design and will perform treatment selection at the interim analysis (IA).
 #' The example R code below will guide you through what needs to be done. Step 1, Step 2, Step 3, and Step 4 comments are added below
@@ -43,7 +43,7 @@
 
 {{FUNCTION_NAME}}  <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
 {
-    # Pulling the important information from the simulated data, SimData, sent from East
+    # Pulling the important information from the simulated data, SimData, sent from East Horizon
     vTreatmentID    <- SimData$TreatmentID  # TreatmentIDs are 0, 1,..., number of experimental treatments
     vPatientOutcome <- SimData$Response     # Response = 0 or 1
 
@@ -53,7 +53,7 @@
 
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues.   Also, if there is a default value for the parameters you may want to set them here.  Default values usually
-        # are applied to have the same functionality as East, see the first example
+        # are applied to have the same functionality as East Horizon, see the first example
 
         # EXAMPLE - Set the default if needed
         # UserParam <- list( )

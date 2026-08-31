@@ -5,9 +5,9 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #' @description Use the t.test() function in the base package to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
-#'              The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule.
+#'              The test statistic is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
 #' @return A named list containing `TestStat`, `Decision`, and `ErrorCode`.
 #' @details
 #' ## CyneRgy Decision Helpers
@@ -44,7 +44,7 @@
 
 AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         nLookIndex           <- LookInfo$CurrLookIndex
@@ -60,7 +60,7 @@ AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, User
         nQtyOfPatsInAnalysis <- nrow( SimData )
         nTailType            <- DesignParam$TailType
     }
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

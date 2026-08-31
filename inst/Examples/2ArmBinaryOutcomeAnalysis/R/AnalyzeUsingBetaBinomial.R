@@ -22,7 +22,7 @@
 #'                   - **Efficacy and Futility:**
 #'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
 #'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon.
+#' @param UserParam A list of user defined parameters in East Horizon.
 #'                  UserParam must be supplied and contain the following named elements:
 #'  \describe{
 #'      \item{UserParam$dAlphaCtrl}{Prior alpha parameter for control treatment.  Equivalent to the prior number of treatment successes.}
@@ -85,7 +85,7 @@
 
 AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         # Group sequential design
@@ -117,7 +117,7 @@ AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, Use
                     Delta     = as.double( 0 ) ) )
     }
 
-    # Step 2 - Create the vector of simulated data for this IA - East sends all of the simulated data ####
+    # Step 2 - Create the vector of simulated data for this IA - East Horizon sends all of the simulated data ####
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

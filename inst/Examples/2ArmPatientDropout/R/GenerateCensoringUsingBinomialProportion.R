@@ -6,7 +6,7 @@
 #'
 #' @param NumSub The integer value specifying the number of patients or subjects in the trial. The numeric value of the argument value is sent in when called.
 #' @param ProbDrop A Dropout probability for both the arms. The numeric value is sent to the .
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. It is an optional parameter.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL. It is an optional parameter.
 #'
 #' @return A list that contains:
 #' \describe{

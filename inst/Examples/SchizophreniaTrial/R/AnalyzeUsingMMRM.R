@@ -20,7 +20,7 @@
 #'          \item{Alpha}{1-sided Type I Error}
 #'        }
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #'
 #' @return A list containing the following elements:
 #'         \describe{

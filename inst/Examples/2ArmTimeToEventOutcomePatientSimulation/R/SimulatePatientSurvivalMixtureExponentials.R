@@ -21,7 +21,7 @@
 #'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #'  If UserParam is supplied it must contain the following
 #'  \describe{
 #'       \item{UserParam$QtyOfSubgroups}{The quantity of patient subgroups. For each subgroup II = 1,2..,QtyOfSubgroups,
@@ -36,7 +36,7 @@
 #' @description
 #'  This function simulates patient data from a mixture of Exponential distributions. The mixture is based on patient subgroups.  For each,
 #'  subgroup you specify the median time-to-event for the control and experimental treatments as well as the probability a patient belongs in a specific group.
-#'  The required function signature for integration with East includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
+#'  The required function signature for integration with East Horizon includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 #'  and only the parameters in UserParam are utilized.
 #' @return A named list containing `SurvivalTime`, simulated `Subgroup` assignments, and integer `ErrorCode`.
 ######################################################################################################################## .

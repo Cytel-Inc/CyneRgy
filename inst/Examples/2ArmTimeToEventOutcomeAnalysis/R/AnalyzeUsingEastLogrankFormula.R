@@ -4,7 +4,7 @@
 #' @title Compute the statistic using formulas Q.242 and Q.243 in the East manual.
 #' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
 #' @description Use the formulas Q.242 and Q.243 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
-#'              The test statistic is compared to the lower boundary computed and sent by East as an input. This example does NOT include a futility rule.
+#'              The test statistic is compared to the lower boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient.
 #'        It will have headers indicating the names of the columns. These names will be same as those used in
 #'        Data Generation. User should access the variables using headers, for example, SimData$ArrivalTime,
@@ -62,7 +62,7 @@
 
 AnalyzeUsingEastLogrankFormula <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         # Look info was provided so use it

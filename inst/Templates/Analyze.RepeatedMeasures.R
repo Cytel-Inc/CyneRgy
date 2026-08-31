@@ -143,7 +143,7 @@
      bFAEfficacyCheck <- TRUE
 
      # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
-     # Retrieve necessary information from the objects East sent. You may not need all the variables ####
+     # Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
      if( !is.null( LookInfo ) )
      {
          nQtyOfLooks          <- LookInfo$NumLooks

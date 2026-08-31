@@ -21,9 +21,9 @@
 #'                   - **Efficacy and Futility:**
 #'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
 #'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. For this example, user defined parameters are not included.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL. For this example, user defined parameters are not included.
 #' @description Use the formula 28.2 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
-#'              The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule.
+#'              The test statistic is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
 #' @return A named list containing `TestStat`, `ErrorCode`, `Decision`, and `Delta`.
 #' @details
 #' ## CyneRgy Decision Helpers
@@ -60,7 +60,7 @@
 
 AnalyzeUsingEastManualFormula<- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         nLookIndex           <- LookInfo$CurrLookIndex
@@ -77,7 +77,7 @@ AnalyzeUsingEastManualFormula<- function( SimData, DesignParam, LookInfo = NULL,
         nTailType            <- DesignParam$TailType
     }
 
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

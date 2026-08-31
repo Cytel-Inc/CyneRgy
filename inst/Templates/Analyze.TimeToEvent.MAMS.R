@@ -11,7 +11,7 @@
 #'        \item{SurvivalTime}{Observed or simulated survival time for each patient}
 #'        }
 #'
-#' @param DesignParam A list containing design parameters supplied from East or East Horizon.
+#' @param DesignParam A list containing design parameters supplied from East Horizon.
 #'        Common parameters include:
 #'        \describe{
 #'        \item{Alpha}{One-sided significance level}
@@ -31,7 +31,7 @@
 #'        \item{EffBdry}{Efficacy boundaries for each look}
 #'        }
 #'
-#' @param UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default of NULL, as in this example.
 #'        If UserParam are supplied, they will be available as elements in the list UserParam.
 #'
 #' @return The function must return a list in the return statement of the function. The information below lists

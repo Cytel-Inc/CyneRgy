@@ -23,7 +23,7 @@
 #'                   - **Efficacy and Futility:**
 #'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
 #'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. For this example, user defined parameters are not included.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL. For this example, user defined parameters are not included.
 #' @return A named list containing `TestStat`, `ErrorCode`, `Decision`, `Delta`, `TrueDelta`,
 #' `TrueProbabilityControl`, and `TrueProbabilityExperimental`.
 #' @details
@@ -61,7 +61,7 @@
 
 AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         nLookIndex           <- LookInfo$CurrLookIndex
@@ -78,7 +78,7 @@ AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo = NULL
         nTailType            <- DesignParam$TailType
     }
 
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

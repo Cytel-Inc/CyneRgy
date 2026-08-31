@@ -5,9 +5,9 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL. For this example, user defined parameters are not included.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL. For this example, user defined parameters are not included.
 #' @description Use the formula 28.2 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
-#'              The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule.
+#'              The test statistic is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
 #' @return After the blanks are completed, a named list containing `TestStat`, `ErrorCode`, and `Decision`.
 ######################################################################################################################## .
 
@@ -17,12 +17,12 @@ AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo, UserP
     # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
     # The fully worked examples are provided in the corresponding example R files.
 
-    # Retrieve necessary information from the objects East sent
+    # Retrieve necessary information from the objects East Horizon sent
     nLookIndex           <- LookInfo$CurrLookIndex
     nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
     nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
 
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

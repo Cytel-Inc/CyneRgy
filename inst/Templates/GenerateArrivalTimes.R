@@ -6,7 +6,7 @@
 #' @param NumPrd Number of time periods that are provided.
 #' @param PrdStart Vector with start of a time interval
 #' @param AccrRate the accrual rate in each period.
-#' @param UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default of NULL, as in this example.
 #' If UseParam are supplied, they will be an element in the list, UserParam.
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
@@ -39,7 +39,7 @@
 
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
-        # are applied to have the same functionality as East, see the first example
+        # are applied to have the same functionality as East Horizon, see the first example
 
         # EXMAPLE - Set the default if needed
         # UserParam <- list( dRate = 0.5 )

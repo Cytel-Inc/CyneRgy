@@ -154,7 +154,7 @@ A single analysis is conducted once 50% of patients have experienced the event o
 ```{r  echo=FALSE,  warning=FALSE, include = FALSE}
 ######################################################################################################################## .
 # Example 3 Post Process                                                                                               ####
-# This file provides functions and R Code example to post process the East output for useful graphs and numeric values ####
+# This file provides functions and R Code example to post process the East Horizon output for useful graphs and numeric values ####
 # 
 ######################################################################################################################## .
 library(readr)

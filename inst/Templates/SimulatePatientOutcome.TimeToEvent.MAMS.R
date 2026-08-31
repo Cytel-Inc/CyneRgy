@@ -34,7 +34,7 @@
 #'        \item{Method 3}{Median survival times by treatment arm}
 #'        }
 #'
-#' @param UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default of NULL, as in this example.
 #'        If UserParam are supplied, they will be available as elements in the list UserParam.
 #'
 #' @return The function must return a list in the return statement of the function. The information below lists

@@ -21,8 +21,8 @@
 #'                   - **Efficacy and Futility:**
 #'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
 #'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
-#' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East as an input.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon as an input.
 #'              This example does NOT include a futility rule.
 #'
 #' @return A named list containing `TestStat`, `ErrorCode`, and `Decision`.
@@ -61,7 +61,7 @@
 
 AnalyzeUsingPropTest<- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if( !is.null( LookInfo ) )
     {
         nQtyOfLooks          <- LookInfo$NumLooks
@@ -78,7 +78,7 @@ AnalyzeUsingPropTest<- function( SimData, DesignParam, LookInfo = NULL, UserPara
         nTailType            <- DesignParam$TailType
     }
 
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 

@@ -5,7 +5,7 @@
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #'                  If UserParam is supplied, the list must contain the following named elements:
 #'                  UserParam$dAlphaS
 #'                  UserParam$dBetaS
@@ -38,14 +38,14 @@ AnalyzeUsingBayesAnalysisWithFutility <- function( SimData, DesignParam, LookInf
                    dUpperCutoffEfficacy = 0.975, dLowerCutoffForFutility = 0.1 )
     }
 
-    # Pull important information from the input parameters that were sent from East
+    # Pull important information from the input parameters that were sent from East Horizon
     nQtyOfLooks          <- LookInfo$NumLooks
     nLookIndex           <- LookInfo$CurrLookIndex
     nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
 
     nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
 
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 
@@ -61,7 +61,7 @@ AnalyzeUsingBayesAnalysisWithFutility <- function( SimData, DesignParam, LookInf
     # Perform the desired analysis - for this case a Bayesian analysis.  If Posterior Probability is > Cutoff --> Efficacy ####
     # The function PerformAnalysisBetaBinomial is provided below in this file.
     lRet                 <- PerformAnalysisBetaBinomial( vOutcomesS, vOutcomesE, UserParam$dAlphaS, UserParam$dBetaS, UserParam$dAlphaE, UserParam$dBetaE )
-    nDecision            <- ifelse( lRet$dPostProb > ____________, 2, 0 ) # Above the cutoff --> Efficacy (2 is East code for efficacy)
+    nDecision            <- ifelse( lRet$dPostProb > ____________, 2, 0 ) # Above the cutoff --> Efficacy
 
     if( nDecision == 0 )
     {
@@ -69,11 +69,11 @@ AnalyzeUsingBayesAnalysisWithFutility <- function( SimData, DesignParam, LookInf
         # We are at the FA, efficacy decision was not made yet so the decision is futility
         if( nLookIndex == nQtyOfLooks )
         {
-            nDecision <- 3 # East code for futility
+            nDecision <- 3 # Futility
         }
         else if( lRet$dPostProb < ______________ ) # We are at the FA, efficacy decision was not made yet so the decision is futility
         {
-            nDecision <- 3 # East code for futility
+            nDecision <- 3 # Futility
         }
 
     }

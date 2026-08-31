@@ -32,7 +32,7 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
 
     if( missing( LookInfo ) == FALSE && !is.null( LookInfo ) )
     {
-        # Step 1 - If this is the IA then subset the data to include only those for the first look. East sends all simulated data
+        # Step 1 - If this is the IA then subset the data to include only those for the first look. East Horizon sends all simulated data
 
         if( LookInfo$CurrLookIndex == 1 )
         {

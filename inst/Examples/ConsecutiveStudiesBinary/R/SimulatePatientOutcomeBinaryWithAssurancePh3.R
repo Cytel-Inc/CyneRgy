@@ -37,7 +37,7 @@ SimulatePatientOutcomeBinaryWithAssurancePh3 <- function( NumSub, NumArm, Arriva
   # Loop over the patients and simulate the outcome according to the treatment they
   for( nPatIndx in 1:NumSub )
   {
-    nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
+    nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
     vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, vTrueProb[ nTreatmentID ] )
   }
 

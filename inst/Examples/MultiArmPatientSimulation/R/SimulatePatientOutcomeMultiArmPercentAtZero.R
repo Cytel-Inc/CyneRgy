@@ -47,7 +47,7 @@ SimulatePatientOutcomeMultiArmPercentAtZero <- function( NumSub, NumArms, Arriva
                                     UserParam$dProbOfZeroOutcomeExp1,
                                     UserParam$dProbOfZeroOutcomeExp2 )    # For this example, 20% of patients do not respond to treatments and thus have no change from baseline.
 
-    nError           <- 0 # East code for no errors occurred
+    nError           <- 0 # No errors occurred
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
 
     # Loop over the patients and simulate the outcome according to the treatment they

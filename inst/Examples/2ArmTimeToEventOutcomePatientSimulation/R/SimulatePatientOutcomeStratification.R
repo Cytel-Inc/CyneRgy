@@ -54,7 +54,7 @@
 #'
 #' }
 #'
-#' @param UserParam A list of user-defined parameters in East/East Horizon (not used in this function).
+#' @param UserParam A list of user-defined parameters in East Horizon (not used in this function).
 #' The default is NULL.
 #'
 #'

@@ -7,7 +7,7 @@
 #' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
 #' @param TreatmentID A vector of treatment ids, 0 = Treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
 #' @param PropResp A vector of expected proportions of response for each arm
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
 #' If UserParam is supplied, the list must contain the following named elements:
 #'  UserParam$dCtrlBetaParam1 -  First parameter in the Beta distribution for the control (ctrl) treatment.
 #'  UserParam$dCtrlBetaParam2 - Second parameter in the Beta distribution for the control (ctrl) treatment.
@@ -39,12 +39,12 @@ SimulatePatientOutcomePercentAtZeroBetaDist.Binary <- function( NumSub, NumArm, 
         vProbabilityOfZeroOutcome     <- c( dProbabilityofZeroOutcomeCtrl, dProbabilityofZeroOutcomeExp )
     }
 
-    nError           <- 0 # East code for no errors occurred
+    nError           <- 0 # No errors occurred
     vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
 
     for( nPatIndx in 1:NumSub )
     {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
+        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
         # Need to check the probability of a 0 outcome to make sure it is in the range (0, 1) and if not simulate the outcome accordingly
         if( vProbabilityOfZeroOutcome[ nTreatmentID ] > 0 & vProbabilityOfZeroOutcome[ nTreatmentID ] < 1 ) # Probability is valid, so need to simulate if the patient is a 0 response

@@ -155,7 +155,7 @@ For a visual guide of where to find the option, refer to the screenshot below:
 
 # Input Variables
 
-When creating a custom R script, you can optionally use certain variables provided by East Horizon's or East's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
+When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
 
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
@@ -167,7 +167,7 @@ When creating a custom R script, you can optionally use certain variables provid
 |**RegionStart**|Array of Numeric|Vector of length equal to the number of regions, indicating the start times for each geography. Only applicable if `Type = 1` (Regional).|
 |**EnrollmentCapPcnt**|Array of Numeric|Vector of length equal to the number of regions, indicating the enrollment caps (%) for each geography. Only applicable if `Type = 1` (Regional).|
 |**AccrRate**|Vector of Numeric|Vector of length `NumPrd` (if `Type = 0`, Global) or length equal to the number of regions (if `Type = 1`, Regional), indicating the accrual rate for each accrual period or each geography.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in East Horizon's or East's interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in East Horizon's interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 
