@@ -69,8 +69,8 @@ SimulatePatientSurvivalMixtureExponentials <- function( NumSub, NumArm, ArrivalT
     #     Median = ln(2)/rate
     #     rate   = ln(2)/Median
 
-    vRateCtrl <- log( 2 )/vMedianTTECtrl
-    vRateExp  <- log( 2 )/vMedianTTEExp
+    vRateCtrl <- log( 2 ) / vMedianTTECtrl
+    vRateExp  <- log( 2 ) / vMedianTTEExp
 
     mRates    <- rbind( vRateCtrl, vRateExp )  # Now mRates has the rates for Ctrl in row 1, Exp in row 2 and the columns are the groups
 

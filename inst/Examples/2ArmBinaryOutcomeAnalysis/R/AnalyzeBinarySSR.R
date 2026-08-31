@@ -92,12 +92,15 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     ## Step 1 — Data Preparation and Analysis Time Computation
     ###########################################################
 
-    if( !is.null( LookInfo ) ) {
+    if( !is.null( LookInfo ) )
+    {
         nQtyOfLooks       <- LookInfo$NumLooks
         nLookIndex        <- LookInfo$CurrLookIndex
         vCumCompleters    <- LookInfo$InfoFrac * DesignParam$MaxCompleters
         nQtyOfCompleters  <- vCumCompleters[ nLookIndex ]
-    } else {
+    }
+    else
+    {
         nQtyOfLooks      <- 1
         nLookIndex       <- 1
         nQtyOfCompleters <- DesignParam$MaxCompleters
@@ -143,11 +146,14 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     nTotalResp <- nCtrlResp + nExpResp
     dPooledPi  <- ifelse( nTotal > 0, nTotalResp / nTotal, NA )
 
-    dSE <- sqrt( dPooledPi * ( 1 - dPooledPi ) * ( 1/nCtrl + 1/nExp ) )
+    dSE <- sqrt( dPooledPi * ( 1 - dPooledPi ) * ( 1 / nCtrl + 1 / nExp ) )
 
-    if( !is.na( dSE ) && dSE > 0 && !is.na( dDelta ) ) {
+    if( !is.na( dSE ) && dSE > 0 && !is.na( dDelta ) )
+    {
         dTestStatistic <- dDelta / dSE
-    } else {
+    }
+    else
+    {
         dTestStatistic <- NA
         nError <- 1
     }
@@ -158,15 +164,18 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
 
     dOrigCp <- NA
 
-    if( !is.na( dTestStatistic ) ) {
+    if( !is.na( dTestStatistic ) )
+    {
 
         # Z-critical
-        if( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) ) {
+        if( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) )
+        {
             dZCrit <- LookInfo$EffBdry[ nLookIndex ]
         }
 
         # Information fraction
-        if( !is.null( LookInfo ) ) {
+        if( !is.null( LookInfo ) )
+        {
             dTau <- LookInfo$InfoFrac[ nLookIndex ]
         }
 
@@ -179,27 +188,38 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     ## Step 4 — Re-estimated Completers Computation
     ###########################################################
 
-    if( AdaptInfo$SSRFuncScale == 0 ) {
+    if( AdaptInfo$SSRFuncScale == 0 )
+    {
 
-        if( is.na( dOrigCp ) ) {
+        if( is.na( dOrigCp ) )
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
 
-        } else if( dOrigCp > AdaptInfo$PromZoneMin &&
-                   dOrigCp < AdaptInfo$PromZoneMax ) {
+        }
+        else if( dOrigCp > AdaptInfo$PromZoneMin &&
+                   dOrigCp < AdaptInfo$PromZoneMax )
+        {
 
             nReEstCompleters <- DesignParam$MaxCompleters *
                                 AdaptInfo$MaxSSMultInp$MaxSSMult
 
-        } else {
+        }
+        else
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
         }
 
-    } else if( AdaptInfo$SSRFuncScale == 1 ) {
+    }
+    else if( AdaptInfo$SSRFuncScale == 1 )
+    {
 
-        if( is.na( dOrigCp ) ) {
+        if( is.na( dOrigCp ) )
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
 
-        } else {
+        }
+        else
+        {
             vStepLowerBound <- AdaptInfo$MaxSSMultInp$From
             vStepUpperBound <- AdaptInfo$MaxSSMultInp$To
             vStepMultiplier <- AdaptInfo$MaxSSMultInp$MaxSSMult
@@ -207,9 +227,12 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
             nIdx <- which( dOrigCp > vStepLowerBound &
                           dOrigCp <= vStepUpperBound )
 
-            if( length( nIdx ) == 0 ) {
+            if( length( nIdx ) == 0 )
+            {
                 nReEstCompleters <- DesignParam$MaxCompleters
-            } else {
+            }
+            else
+            {
                 nReEstCompleters <- DesignParam$MaxCompleters *
                                     vStepMultiplier[ nIdx ]
             }
@@ -220,11 +243,14 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     ## Step 5 — Decision Computation
     ###########################################################
 
-    if( !is.na( dTestStatistic ) ) {
+    if( !is.na( dTestStatistic ) )
+    {
 
-        if( !is.null( LookInfo ) ) {
+        if( !is.null( LookInfo ) )
+        {
 
-            if( !is.null( LookInfo$EffBdry ) ) {
+            if( !is.null( LookInfo$EffBdry ) )
+            {
                 dEffBdry <- LookInfo$EffBdry[ nLookIndex ]
 
                 nDecision <- ifelse(
@@ -234,8 +260,11 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
                 )
             }
 
-        } else {
-            if( !is.null( DesignParam$CriticalPoint ) ) {
+        }
+        else
+        {
+            if( !is.null( DesignParam$CriticalPoint ) )
+            {
                 nDecision <- ifelse(
                     dTestStatistic > DesignParam$CriticalPoint,
                     2, 0
@@ -244,7 +273,8 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
         }
 
         # Futility rule at final look
-        if( nDecision == 0 && nLookIndex == nQtyOfLooks ) {
+        if( nDecision == 0 && nLookIndex == nQtyOfLooks )
+        {
             nDecision <- 3
         }
     }

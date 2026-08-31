@@ -5,19 +5,19 @@
 #' Selects experimental arms whose posterior probability of exceeding a historical
 #' response rate is above a user-defined threshold, with a best-arm fallback.
 #' @author Sydney Ringold, J. Kyle Wathen
-#' @param SimData Dataframe which consists of data generated in current simulation
+#' @param SimData Data frame which consists of data generated in current simulation
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing parameters for the current analysis look.
 #' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #'  If UserParam is supplied, the list must contain the following named element:
 #'  \describe{
-#'  \item {UserParam$dPriorAlpha} {A value (0,1) that defines the prior alpha parameter of the beta distribution.
+#'  \item{UserParam$dPriorAlpha}{A value (0, 1) that defines the prior alpha parameter of the beta distribution.
 #'                          If this value is not specified, the default is 0.2.}
-#'  \item {UserParam$dPriorBeta} {A value (0,1) that specifies the prior beta parameter of the beta distribution.
+#'  \item{UserParam$dPriorBeta}{A value (0, 1) that specifies the prior beta parameter of the beta distribution.
 #'                              If this value is not specified, the default is 0.8.}
-#'  \item {UserParam$dHistoricResponseRate} { A value (0,1) that specifies the historic response rate.
+#'  \item{UserParam$dHistoricResponseRate}{A value (0, 1) that specifies the historic response rate.
 #'                                  If this value is not specified, the default is 0.2.}
-#'  \item {UserParam$dMinPosteriorProbability} {A value (0,1) that specifies the posterior probability needed of being greater than the historic response rate for an experimental treatment to be selected.
+#'  \item{UserParam$dMinPosteriorProbability}{A value (0, 1) that specifies the posterior probability needed of being greater than the historic response rate for an experimental treatment to be selected.
 #'                              If this value is not specified, the default is 0.5.}
 #'           }
 #' @return A list containing `TreatmentID`, the selected experimental-arm indexes;
@@ -38,7 +38,7 @@ SelectExpUsingBayesianRule <- function( SimData, DesignParam, LookInfo, UserPara
 
     if( is.null( UserParam ) )
     {
-        UserParam <- list( dPriorAlpha=0.2, dPriorBeta=0.8, dHistoricResponseRate=0.2, dMinPosteriorProbability = 0.5 )
+        UserParam <- list( dPriorAlpha = 0.2, dPriorBeta = 0.8, dHistoricResponseRate = 0.2, dMinPosteriorProbability = 0.5 )
     }
 
     #### Determine the posterior parameters based on SimData and the prior parameters ####

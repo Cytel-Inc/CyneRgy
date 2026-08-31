@@ -10,15 +10,15 @@
 ######################################################################################################################## .
 ComputeHazardWeibull <- function( vTime, dShape, dScale )
 {
-    vHaz <- ( dShape/dScale ) * ( vTime/dScale )^( dShape-1 )
-    return ( vHaz )
+    vHaz <- ( dShape / dScale ) * ( vTime / dScale ) ^ ( dShape - 1 )
+    return( vHaz )
 }
 
 # ComputeScaleGivenShapeMedian computes the Weibull scale parameter corresponding to a supplied shape and median.
 # It accepts `dShape` and `dMedian` and returns the Weibull scale parameter.
 ComputeScaleGivenShapeMedian <- function( dShape, dMedian )
 {
-    dScale <- dMedian/exp( log( -log( 0.5 ) )/dShape )
+    dScale <- dMedian / exp( log( -log( 0.5 ) ) / dShape )
     return( dScale )
 }
 
@@ -44,8 +44,8 @@ dScaleE
 vHazardE    <- ComputeHazardWeibull( vTime, dShapeE, dScaleE )
 vDataE      <- rweibull( nQtyPats, dShapeE, dScaleE )
 
-plot( vTime, vHazardS, ype = 'l', xlab = "Time (Months)", ylab="Hazard", main ="Hazard: Standard of Care (Solid), Experimental (Dashed)" )
-lines( vTime, vHazardE, lty =2 )
+plot( vTime, vHazardS, ype = 'l', xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
+lines( vTime, vHazardE, lty = 2 )
 #
 #
 # print( paste( "Parameters for S: Shape = ", round( dShapeS, 3), ", Scale= ", round( dScaleS, 3 )) )
@@ -76,8 +76,8 @@ dScaleE
 vHazardE    <- ComputeHazardWeibull( vTime, dShapeE, dScaleE )
 vDataE      <- rweibull( nQtyPats, dShapeE, dScaleE )
 
-plot( vTime, vHazardS, ype = 'l', xlab = "Time (Months)", ylab="Hazard", main ="Hazard: Standard of Care (Solid), Experimental (Dashed)" )
-lines( vTime, vHazardE, lty =2 )
+plot( vTime, vHazardS, ype = 'l', xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
+lines( vTime, vHazardE, lty = 2 )
 #
 #
 # print( paste( "Parameters for S: Shape = ", round( dShapeS, 3), ", Scale= ", round( dScaleS, 3 )) )
@@ -108,8 +108,8 @@ dScaleE
 vHazardE    <- ComputeHazardWeibull( vTime, dShapeE, dScaleE )
 vDataE      <- rweibull( nQtyPats, dShapeE, dScaleE )
 
-plot( vTime, vHazardS, ype = 'l', xlab = "Time (Months)", ylab="Hazard", main ="Hazard: Standard of Care (Solid), Experimental (Dashed)" )
-lines( vTime, vHazardE, lty =2 )
+plot( vTime, vHazardS, ype = 'l', xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
+lines( vTime, vHazardE, lty = 2 )
 
 # print( paste( "Parameters for S: Shape = ", round( dShapeS, 3), ", Scale= ", round( dScaleS, 3 )) )
 # print( paste( "Parameters for E: Shape = ", round( dShapeE, 3), ", Scale= ", round( dScaleE, 3 )) )

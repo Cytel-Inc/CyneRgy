@@ -57,7 +57,7 @@ SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, Arriv
 
     # Step 3: Compute the hazard on experimental given the true hazard on control and the computed true hazard ratio ####
 
-    dRateCtrl        <- 1.0/UserParam$dMeanTTECtrl
+    dRateCtrl        <- 1.0 / UserParam$dMeanTTECtrl
     dRateExp         <- dTrueHazardRatio * dRateCtrl
 
     vRates      <- c( dRateCtrl, dRateExp )
@@ -78,7 +78,7 @@ LoadData <- function()
   # it will only contain the IAs that occur.  Therefore, we must find the last analysis for each simulated trial.
   dfEastHorExp <- readr::read_csv( "Inputs/Ph2_results.csv" )
 
-  # Build a dataframe with only 1 row per simulated trial with the last analysis.  The last analysis is the analysis (IA or FA) that makes a futility or efficacy decision.
+  # Build a data frame with only 1 row per simulated trial with the last analysis.  The last analysis is the analysis (IA or FA) that makes a futility or efficacy decision.
   dfLastAnalysisResults <- dplyr::ungroup(
     dplyr::slice_max(
       dplyr::group_by( dfEastHorExp, SimIndex ),
@@ -86,7 +86,7 @@ LoadData <- function()
     )
   )
 
-  # Step 2 - The Ph3 is only conducted when the Ph2 is successful (Efficacy) so create a dataframe of the simulated trials that are successful
+  # Step 2 - The Ph3 is only conducted when the Ph2 is successful (Efficacy) so create a data frame of the simulated trials that are successful
   # Select trials that are successful so we can build posterior of true delta when a Go decision is made
   dfConditionalPostOnPh2Success <- dplyr::select(
     dfLastAnalysisResults[ dfLastAnalysisResults$Decision == "Efficacy", ],

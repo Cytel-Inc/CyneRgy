@@ -91,8 +91,8 @@
     # Use appropriate error handling and modify the
     # error appropriately in each of the methods.
 
-    Response[[EndpointName[[1 ] ] ] ] <- vPatientOutcomeEP1
-    Response[[EndpointName[[2 ] ] ] ] <- vPatientOutcomeEP2
+    Response[[ EndpointName[[ 1 ] ] ] ] <- vPatientOutcomeEP1
+    Response[[ EndpointName[[ 2 ] ] ] ] <- vPatientOutcomeEP2
 
     return( list( Response = as.list( Response ), ErrorCode = as.integer( nError ) ) )
 }

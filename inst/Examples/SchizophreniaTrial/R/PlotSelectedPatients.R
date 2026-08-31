@@ -5,7 +5,7 @@
 #' Generates a plot of response trajectories for selected patients across visits,
 #' with color-coded points indicating treatment assignment.
 #' @author Jacob Wathen
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient. This dataframe contains
+#' @param SimData Data frame with subject data generated in current simulation with one row per patient. This data frame contains
 #' response variables (`Response1`, `Response2`, ..., `ResponseN`) and arrival times (`ArrTimeVisit1`, ..., `ArrTimeVisitN`),
 #' where N is the number of visits, as well as a `TreatmentID` column.
 #' @param vPatientIDs Integer vector. IDs of patients to include in the plot.

@@ -248,7 +248,8 @@ SimulateDualMultiStateTTE <- function( nQtyOfPatients, dMedianPFS, dMedianOS, dP
         {
             vPFS <- c( vPFS, vTimeToProgression[ iPat ] )
             vOS  <- c( vOS, vTimeToProgression[ iPat ] + vTimeFromProgressionToDeath[ iPat ] )
-        } else
+        }
+        else
         {
             vPFS <- c( vPFS, vTimeToDeath[ iPat ] )
             vOS  <- c( vOS, vTimeToDeath[ iPat ] )
@@ -291,9 +292,11 @@ ComputeMedianProgToDeath <- function( dMedianPFS, dMedianOS, dProbDeathB4Prog )
     dMedianProgToDeath <- NA
 
     f <- function( x, dMedianPFS ){ return( ComputeMedianOS( dMedianPFS, x, dProbDeathB4Prog ) - dMedianOS ) }
-    tryCatch( {
+            tryCatch(
+            {
         dMedianProgToDeath <- uniroot( f, lower = 0.01, upper = dMedianOS, dMedianPFS = dMedianPFS )$root
-    }, error = function( e ){
+    }, error = function( e )
+    {
         dMedianProgToDeath <- NA
         return( dMedianProgToDeath )
     } )

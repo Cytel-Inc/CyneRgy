@@ -15,16 +15,14 @@
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
 #' @param UserParam Optional list of user-defined parameters in East Horizon. If \code{NULL}, default values are used.
 #' The list may contain the following named elements:
-#'        \describe
-#'        {
+#'        \describe{
 #'         \item{bReturnLogTrueHazard}{Logical (True / False) indicating whether the returned hazard ratio should be transformed using
 #'               the natural logarithm. Default is \code{FALSE}.}
 #'         \item{bReturnNAForNoGoTrials}{Logical (True / False) indicating whether the hazard ratio should be returned as \code{NA} when
 #'               the trial does not meet the efficacy criterion. Default is \code{FALSE}.}
 #'        }
 #' @return A named list containing elements as described below.
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{TestStat}{Z statistic from the Cox proportional hazards model}
 #'          \item{Decision}{Required value. Integer Value with the following meaning:
 #'                          \describe{
@@ -38,7 +36,7 @@
 #'          \item{ErrorCode}{Decision codes:
 #'                          \describe{
 #'                             \item{ErrorCode = 0}{No Error}
-#'                             \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                             \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                             \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                           }
 #'                           }

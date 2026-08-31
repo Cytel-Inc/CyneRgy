@@ -1,5 +1,5 @@
 ######################################################################################################################## .
-#  Last Modified Date: 24/09/2025
+# Last Modified Date: 24/09/2025
 #' @name GetDEPDecisionsFSD
 #' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
 #' @title Computing Decisions for DEP Fixed Sample design.
@@ -22,7 +22,7 @@
 #'                            Only applicable for Group Sequential Design. Supported data types are lists, and scalar and vector of type numeric, integer and character.}
 #'                  \item{ErrorCode}{Optional integer value \describe{
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }}
 #'             }

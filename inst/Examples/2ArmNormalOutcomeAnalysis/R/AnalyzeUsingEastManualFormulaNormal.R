@@ -82,10 +82,10 @@ AnalyzeUsingEastManualFormulaNormal <- function( SimData, DesignParam, LookInfo 
     nQtyOfPatsOnS        <- length( vOutcomesS )
 
     # Equation from Appendix Q - 3.3 in East manual for the estimate of Pooled Std. Deviation
-    dStdDevPooled        <- sqrt( ( ( nQtyOfPatsOnE - 1 ) * dStdDevOfResponsesOnE ^ 2 + ( nQtyOfPatsOnS - 1 ) * dStdDevOfResponsesOnS ^ 2 )/( nQtyOfPatsOnE + nQtyOfPatsOnS - 2 ) )
+    dStdDevPooled        <- sqrt( ( ( nQtyOfPatsOnE - 1 ) * dStdDevOfResponsesOnE ^ 2 + ( nQtyOfPatsOnS - 1 ) * dStdDevOfResponsesOnS ^ 2 ) / ( nQtyOfPatsOnE + nQtyOfPatsOnS - 2 ) )
 
     # Equation from Appendix Q - 3.3 in East manual
-    dZj                  <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS )/( dStdDevPooled * sqrt( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ) )
+    dZj                  <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS ) / ( dStdDevPooled * sqrt( 1 / nQtyOfPatsOnE + 1 / nQtyOfPatsOnS ) )
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
 
     # Generate decision using GetDecisionString and GetDecision helpers

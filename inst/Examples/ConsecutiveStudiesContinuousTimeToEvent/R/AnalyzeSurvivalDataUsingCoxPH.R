@@ -4,7 +4,7 @@
 #' @description Administratively censor simulated survival data at the current analysis time, fit a Cox model, and
 #' return the test statistic, decision, p-value, and configured true hazard-ratio output.
 #' @author J. Kyle Wathen, Laurent Spiess, Gabriel Potvin
-#' @param SimData Dataframe which consists of data generated in current simulation.
+#' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
 #' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.

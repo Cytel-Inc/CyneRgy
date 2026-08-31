@@ -111,7 +111,7 @@ ConvertRatio <- function( AllocRatio, Tolerance = 1e-8, MaxDenominator = 100 )
     nNumerator   <- unname( dFraction[ "nNumerator" ] )    # treatment
     nDenominator <- unname( dFraction[ "nDenominator" ] )  # control
 
-    return ( c( as.integer( nDenominator ), as.integer( nNumerator ) ) )
+    return( c( as.integer( nDenominator ), as.integer( nNumerator ) ) )
 }
 
 # Approximate a positive real number x by a fraction p/q using continued fraction expansion
@@ -132,12 +132,13 @@ FractionApproximation <- function( AllocRatio, Tolerance = 1e-8, MaxDenominator 
 
     dValue <- AllocRatio
 
-    while( TRUE ) {
+    while( TRUE )
+    {
         dFractionPart <- dValue - floor( dValue ) # decimal places
         if( dFractionPart == 0 ) break   # if integer -> break
 
-        dValue <- 1 / dFractionPart #update as we are now dealing with the inverse of the fraction part (and will do for the other iterations of the while loop if needed)
-        dRoundedDownValue <- floor ( dValue )
+        dValue <- 1 / dFractionPart # Update as we are now dealing with the inverse of the fraction part (and will do for the other iterations of the while loop if needed)
+        dRoundedDownValue <- floor( dValue )
 
         nNumerator2   <- dRoundedDownValue * nNumerator1 + nNumerator0
         nDenominator2 <- dRoundedDownValue * nDenominator1 + nDenominator0

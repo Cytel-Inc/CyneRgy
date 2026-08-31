@@ -162,15 +162,16 @@ ProbExpGreaterCtrlBeta <- function( vOutcomesCtrl, vOutcomesExp, dAlphaCtrl, dBe
     vPiCtrl    <- rbeta( 10000, dAlphaCtrl, dBetaCtrl )
     vPiExp     <- rbeta( 10000, dAlphaExp, dBetaExp )
     dPostProb  <- ifelse( vPiExp > vPiCtrl, 1, 0 )
-    dPostProb  <- sum( dPostProb )/length( dPostProb )
+    dPostProb  <- sum( dPostProb ) / length( dPostProb )
 
     # Compute Delta: mean( Pi_E ) - mean( Pi_C )
-    dDelta     <- ( dAlphaExp/( dAlphaExp + dBetaExp ) ) - ( dAlphaCtrl/( dAlphaCtrl +  dBetaCtrl ) )
+    dDelta     <- ( dAlphaExp / ( dAlphaExp + dBetaExp ) ) - ( dAlphaCtrl / ( dAlphaCtrl + dBetaCtrl ) )
     return( list( dPostProb = dPostProb, dDelta = dDelta ) )
 }
 
 # Function to compute Bayesian predictive probability of success
-ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams ) {
+ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams )
+{
     # Compute the posterior parameters based on observed data
     posteriorAlphaS <- priorAlphaS + sum( dataS )
     posteriorBetaS  <- priorBetaS + length( dataS ) - sum( dataS )
@@ -187,7 +188,8 @@ ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dat
     successfulTrials <- 0
 
     # Simulate the remaining trials and compute the predictive probability
-    for( i in 1:nSimulations ) {
+    for( i in 1:nSimulations )
+    {
         # Sample response rates from posterior distributions
         posteriorRateS <- rbeta( 1, posteriorAlphaS, posteriorBetaS )
         posteriorRateE <- rbeta( 1, posteriorAlphaE, posteriorBetaE )
@@ -204,7 +206,8 @@ ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dat
         result <- ProbSGreaterEBeta( combinedDataS, combinedDataE, lAnalysisParams )
 
         # Check if the result meets the cutoff for success
-        if( result$dPostProb <= finalBoundary ) {
+        if( result$dPostProb <= finalBoundary )
+        {
             successfulTrials <- successfulTrials + 1
         }
     }

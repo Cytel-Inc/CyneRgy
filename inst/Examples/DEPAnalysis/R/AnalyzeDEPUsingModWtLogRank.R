@@ -1,6 +1,6 @@
 ######################################################################################################################## .
-#  Last Modified Date: 22/09/2025
-#
+# Last Modified Date: 22/09/2025
+#'
 #' @name AnalyzeDEPUsingModWtLogRank
 #' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
 #' @title Compute the modestly weighted log rank test statistic.
@@ -120,7 +120,7 @@
 #'                  \item{TestStat}{Required value. Test statistic on Z-scale.}
 #'                  \item{ErrorCode}{Optional integer value \describe{
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }}
 #'                  \item{HR}{Required numeric value - Estimate of Hazard Ratio for the corresponding Endpoint. Only applicable for time-to-event data.}
@@ -143,7 +143,7 @@ AnalyzeDEPUsingModWtLogRank <- function( SimData, DesignParam, LookInfo = NULL, 
     }
 
     AnalysisTime    <- ComputeDEPAnalysisTime( SimData, DesignParam, LookInfo )
-    SimDataForAnlys <- SimData[ SimData$ArrivalTime <= AnalysisTime, ]             #Slicing the data to be used for analysis
+    SimDataForAnlys <- SimData[ SimData$ArrivalTime <= AnalysisTime, ]             # Slicing the data to be used for analysis
 
     # Compute the Observed Time variable for the analysis
     if( anlysEPID == 1 )
@@ -163,7 +163,7 @@ AnalyzeDEPUsingModWtLogRank <- function( SimData, DesignParam, LookInfo = NULL, 
     SimDataForAnlys <- SimDataForAnlys[ order( SimDataForAnlys$ObservedTime ), ]
 
     # Compute Observed HR
-    coxModel                  <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ TreatmentID, data=SimDataForAnlys )
+    coxModel                  <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ TreatmentID, data = SimDataForAnlys )
     dTrueHR                   <- exp( coxModel$coefficients )
 
     SimDataForAnlys$EventOnTreatment  <- ifelse( SimDataForAnlys$TreatmentID == 1, SimDataForAnlys$Event, 0 )
@@ -203,16 +203,16 @@ AnalyzeDEPUsingModWtLogRank <- function( SimData, DesignParam, LookInfo = NULL, 
 
             # Weight for modestly weighted log-rank test
             weight <- ifelse( SimDataForAnlys$ObservedTime[ nSubject ] <= UserParam[[ DesignParam$EndpointName[[ anlysEPID ] ] ] ]$delay,
-                              weight * 1 / ( 1 - nEvents/nSubjectsAtRisk ), weight )
+                                 weight * 1 / ( 1 - nEvents / nSubjectsAtRisk ), weight )
 
             dNum <- dNum + weight * ( nEventsOnTreatment - nSubjectsAtRiskTreatment * nEvents / nSubjectsAtRisk )
 
             if( nSubjectsAtRisk != 1 )
             {
-                dDen <- dDen + weight^2 * (
+                dDen <- dDen + weight ^ 2 * (
                     nSubjectsAtRiskTreatment * nSubjectsAtRiskControl *
                         ( nSubjectsAtRisk - nEvents ) * nEvents /
-                        ( ( nSubjectsAtRisk - 1 ) * nSubjectsAtRisk^2 )
+                        ( ( nSubjectsAtRisk - 1 ) * nSubjectsAtRisk ^ 2 )
                 )
             }
 
@@ -295,13 +295,13 @@ ComputeDEPAnalysisTime <- function( SimData, DesignParam, LookInfo = NULL )
     }
   }
 
-  else                        #FSD design
+  else                        # FSD design
   {
     nQtyOfLooks  <- 1
     nLookIndex   <- 1
 
     # nQtyOfTargets will be planned events/completers for the Endpoint on which end of the trial is defined.
-    if( DesignParam$PlanEndTrial == 2 || DesignParam$PlanEndTrial == 1 )  #Full info on Endpoint 1 or Both Endpoints
+            if( DesignParam$PlanEndTrial == 2 || DesignParam$PlanEndTrial == 1 )  # Full info on Endpoint 1 or Both Endpoints
     {
       nQtyOfTargets   <- ifelse( DesignParam$EndpointType[ 1 ] == 1,
                                  DesignParam$MaxCompleters[[ DesignParam$EndpointName[ 1 ] ] ],
@@ -313,7 +313,7 @@ ComputeDEPAnalysisTime <- function( SimData, DesignParam, LookInfo = NULL )
                                  SimDataEP1$ClndrRespTime[ DesignParam$SampleSize ] )
 
     }
-    if( DesignParam$PlanEndTrial == 3 || DesignParam$PlanEndTrial == 1 )  #Full info on Endpoint 2 or Both Endpoints
+            if( DesignParam$PlanEndTrial == 3 || DesignParam$PlanEndTrial == 1 )  # Full info on Endpoint 2 or Both Endpoints
     {
       nQtyOfTargets   <- ifelse( DesignParam$EndpointType[ 2 ] == 1,
                                  DesignParam$MaxCompleters[[ DesignParam$EndpointName[ 2 ] ] ],

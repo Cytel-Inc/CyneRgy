@@ -90,12 +90,15 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     ###########################################################
     ## Step 1 — Data Preparation and Analysis Time Computation
     ###########################################################
-    if( !is.null( LookInfo ) ) {
+    if( !is.null( LookInfo ) )
+    {
         nQtyOfLooks      <- LookInfo$NumLooks
         nLookIndex       <- LookInfo$CurrLookIndex
         vCumCompleters   <- LookInfo$InfoFrac * DesignParam$MaxCompleters
         nQtyOfCompleters <- vCumCompleters[ nLookIndex ]
-    } else {
+    }
+    else
+    {
         nQtyOfLooks      <- 1
         nLookIndex       <- 1
         nQtyOfCompleters <- DesignParam$MaxCompleters
@@ -129,11 +132,14 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     vTrt  <- vOutcome[ vTreat == 1 ]
 
     dDelta <- mean( vTr ) - mean( vCtrl )
-    dSE    <- sqrt( var( vTr )/length( vTr ) + var( vCtrl )/length( vCtrl ) )
+    dSE    <- sqrt( var( vTr ) / length( vTr ) + var( vCtrl ) / length( vCtrl ) )
 
-    if( !is.na( dDelta ) && !is.na( dSE ) && dSE > 0 ) {
+    if( !is.na( dDelta ) && !is.na( dSE ) && dSE > 0 )
+    {
         dTestStatistic <- dDelta / dSE
-    } else {
+    }
+    else
+    {
         dTestStatistic <- NA
     }
 
@@ -142,15 +148,18 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     ###########################################################
     dOrigCp <- NA
 
-    if( !is.na( dTestStatistic ) ) {
+    if( !is.na( dTestStatistic ) )
+    {
 
         # Z-crit
-        if( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) ) {
+        if( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) )
+        {
             dZcrit <- LookInfo$EffBdry[ nLookIndex ]
         }
 
         # Info fraction
-        if( !is.null( LookInfo ) ) {
+        if( !is.null( LookInfo ) )
+        {
             dTau <- LookInfo$InfoFrac[ nLookIndex ]
         }
 
@@ -162,21 +171,32 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     ###########################################################
     ## Step 4 — Re-estimated Completers Computation
     ###########################################################
-    if( AdaptInfo$SSRFuncScale == 0 ) {
+    if( AdaptInfo$SSRFuncScale == 0 )
+    {
         ### Continuous
-        if( is.na( dOrigCp ) ) {
+        if( is.na( dOrigCp ) )
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
-        } else if( dOrigCp > AdaptInfo$PromZoneMin && dOrigCp < AdaptInfo$PromZoneMax ) {
+        }
+        else if( dOrigCp > AdaptInfo$PromZoneMin && dOrigCp < AdaptInfo$PromZoneMax )
+        {
             nReEstCompleters <- DesignParam$MaxCompleters * AdaptInfo$MaxSSMultInp$MaxSSMult
-        } else {
+        }
+        else
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
         }
 
-    } else if( AdaptInfo$SSRFuncScale == 1 ) {
+    }
+    else if( AdaptInfo$SSRFuncScale == 1 )
+    {
         ### Step Function
-        if( is.na( dOrigCp ) ) {
+        if( is.na( dOrigCp ) )
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
-        } else {
+        }
+        else
+        {
 
             vStepLowerBound <- AdaptInfo$MaxSSMultInp$From
             vStepUpperBound <- AdaptInfo$MaxSSMultInp$To
@@ -185,9 +205,12 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
             ## Find which interval dOrigCp falls into
             vIdx <- which( dOrigCp > vStepLowerBound & dOrigCp <= vStepUpperBound )
 
-            if( length( vIdx ) == 0 ) {
+            if( length( vIdx ) == 0 )
+            {
                 nReEstCompleters <- DesignParam$MaxCompleters
-            } else {
+            }
+            else
+            {
                 nReEstCompleters <- DesignParam$MaxCompleters * vStepMultiplier[ vIdx ]
             }
         }
@@ -196,20 +219,27 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     ###########################################################
     ## Step 5 — Decision Computation
     ###########################################################
-    if( !is.na( dTestStatistic ) ) {
-        if( !is.null( LookInfo ) ) {
-            if( !is.null( LookInfo$EffBdry ) ) {
+    if( !is.na( dTestStatistic ) )
+    {
+        if( !is.null( LookInfo ) )
+        {
+            if( !is.null( LookInfo$EffBdry ) )
+            {
                 dEffBdry <- LookInfo$EffBdry[ nLookIndex ]
                 nDecision <- ifelse( is.nan( dEffBdry ) | is.na( dEffBdry ), 0,
                                     ifelse( dTestStatistic > dEffBdry, 2, 0 ) )
             }
-        } else {
-            if( !is.null( DesignParam$CriticalPoint ) ) {
+        }
+        else
+        {
+            if( !is.null( DesignParam$CriticalPoint ) )
+            {
                 nDecision <- ifelse( dTestStatistic > DesignParam$CriticalPoint, 2, 0 )
             }
         }
         # If no efficacy, check for futility at final look
-        if( nDecision == 0 && nLookIndex == nQtyOfLooks ) {
+        if( nDecision == 0 && nLookIndex == nQtyOfLooks )
+        {
             nDecision <- 3
         }
     }

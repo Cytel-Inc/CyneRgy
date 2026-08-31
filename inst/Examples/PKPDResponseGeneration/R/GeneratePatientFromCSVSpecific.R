@@ -70,9 +70,11 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, TreatmentID, Input
     # Cache CSV across calls if available
     if( !exists( "gdfPatients", envir = .GlobalEnv ) )
     {
-        dfPatients <- tryCatch( {
+        dfPatients <- tryCatch(
+        {
             read.csv( strCSVPath, check.names = FALSE, stringsAsFactors = FALSE )
-        }, error = function( e ) {
+        }, error = function( e )
+        {
             NULL
         } )
         gdfPatients <<- dfPatients
@@ -98,10 +100,10 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, TreatmentID, Input
     }
 
     # Coerce Treatment column strictly to integer 0/1
-    vTrt <- suppressWarnings( as.integer( dfPatients[["Treatment" ] ] ) )
+    vTrt <- suppressWarnings( as.integer( dfPatients[[ "Treatment" ] ] ) )
     vKeep <- !is.na( vTr ) & vTrt %in% c( 0, 1 )
     dfPatients <- dfPatients[ vKeep, , drop = FALSE ]
-    dfPatients[["Treatment" ] ] <- vTrt[ vKeep ]
+    dfPatients[[ "Treatment" ] ] <- vTrt[ vKeep ]
 
     # Validate and coerce Visit columns (Visit1..VisitK)
     vVisitCols <- paste0( "Visit ", seq_len( NumVisit ) )
@@ -116,15 +118,15 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, TreatmentID, Input
     {
         xChr <- as.character( dfPatients[[ strCol ] ] )
         xChr[ xChr %in% c( "", "NA", "NaN", "na", "null", "N/A" ) ] <- NA_character_
-        dfPatients[[strCol ] ] <- suppressWarnings( as.double( xChr ) )
+        dfPatients[[ strCol ] ] <- suppressWarnings( as.double( xChr ) )
     }
 
     # Determine how many patients needed for each arm
     nNeedCtl <- sum( as.integer( TreatmentID ) == 0 )
     nNeedTrt <- sum( as.integer( TreatmentID ) == 1 )
 
-    vIdxCtrl <- which( dfPatients[["Treatment" ] ] == 0 )
-    vIdxTrt  <- which( dfPatients[["Treatment" ] ] == 1 )
+    vIdxCtrl <- which( dfPatients[[ "Treatment" ] ] == 0 )
+    vIdxTrt  <- which( dfPatients[[ "Treatment" ] ] == 1 )
 
     if( length( vIdxCtrl ) < nNeedCtl || length( vIdxTrt ) < nNeedTrt )
     {

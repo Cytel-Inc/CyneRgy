@@ -61,7 +61,7 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
         vParameters <- c( dAbsorptionRate =  dAbsorptionRate, dEliminationRate =  dEliminationRate )
 
         # Solve ODE for each visit time
-        vConcentration <- numeric( NumVisit ) #prepare a vector (NumVisit length) to store concentrations at each visit
+        vConcentration <- numeric( NumVisit ) # Prepare a vector (NumVisit length) to store concentrations at each visit
 
         for( nVisitIndx in 1:NumVisit )
         {
@@ -84,7 +84,7 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
 
         # Store concentration for each visit
         for( nVisitIndx in 1:NumVisit )
-            {
+        {
             strVisitName <- paste0( "Response", nVisitIndx )
 
             if( !is.null( lRetval[[ strVisitName ] ] ) )
@@ -106,7 +106,8 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
 # Define helper ODE function for one-compartment model with first-order absorption
 OneCompartmentModelPK <- function( ime, state, parameters )
 {
-    with( as.list( c( state, parameters ) ), {
+    with( as.list( c( state, parameters ) ),
+    {
 
         dA1 <- - dAbsorptionRate * A1  # Change in drug amount in absorption compartment
         dA2 <- ( dAbsorptionRate * A1 -  dEliminationRate * A2 )  # Change in drug concentration in central compartment

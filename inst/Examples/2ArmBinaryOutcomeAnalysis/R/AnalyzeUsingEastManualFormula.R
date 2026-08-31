@@ -92,13 +92,13 @@ AnalyzeUsingEastManualFormula<- function( SimData, DesignParam, LookInfo = NULL,
     nQtyOfPatsOnS        <- length( vOutcomesS )
 
     # Compute the estimates in equation 28.2 from the East user manual
-    dPiHatExperimental   <- nQtyOfResponsesOnE/nQtyOfPatsOnE
-    dPiHatControl        <- nQtyOfResponsesOnS/nQtyOfPatsOnS
+    dPiHatExperimental   <- nQtyOfResponsesOnE / nQtyOfPatsOnE
+    dPiHatControl        <- nQtyOfResponsesOnS / nQtyOfPatsOnS
 
-    dPiHatj              <- ( nQtyOfResponsesOnE +  nQtyOfResponsesOnS )/( nQtyOfPatsOnE + nQtyOfPatsOnS )
+    dPiHatj              <- ( nQtyOfResponsesOnE + nQtyOfResponsesOnS ) / ( nQtyOfPatsOnE + nQtyOfPatsOnS )
 
     # Equation 28.2 in East manual
-    dZj                  <- ( dPiHatExperimental - dPiHatControl )/sqrt( dPiHatj*( 1- dPiHatj ) * ( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS ) )
+    dZj                  <- ( dPiHatExperimental - dPiHatControl ) / sqrt( dPiHatj * ( 1 - dPiHatj ) * ( 1 / nQtyOfPatsOnE + 1 / nQtyOfPatsOnS ) )
     dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
 
     # Generate decision using GetDecisionString and GetDecision helpers

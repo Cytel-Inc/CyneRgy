@@ -10,11 +10,13 @@
 #' This function is used for the MAMS binary design and will perform treatment selection at the interim analysis (IA).
 #' The example R code below will guide you through what needs to be done. Step 1, Step 2, Step 3, and Step 4 comments are added below
 #' to help you find the most likely places to add your new R code.
-#' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
-#' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#'                                      ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
-#'                                      ErrorCode < 0 --> Fatal error, no further simulation will be attempted
+#' @return A list containing:
+#'   \describe{
+#'     \item{TreatmentID}{Vector of experimental treatment IDs selected and carried forward.}
+#'     \item{AllocRatio}{Vector of allocation ratios for the selected experimental treatments.}
+#'     \item{ErrorCode}{Integer status code: 0 indicates no error, a positive value aborts the current simulation,
+#'       and a negative value prevents further simulations.}
+#'   }
 #' @note The length of TreatmentID and AllocRatio must be the same.
 #' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio

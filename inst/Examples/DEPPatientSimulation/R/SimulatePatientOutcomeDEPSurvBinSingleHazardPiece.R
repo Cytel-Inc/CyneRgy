@@ -92,7 +92,7 @@ SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, A
       mChol <- chol( mCor )
 
       # Generating (NumSub * 2) standard normal responses
-      mZ <- matrix( rnorm( NumSub*2, 0, 1 ), ncol = 2 )
+      mZ <- matrix( rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
 
       # Intermediate matrix
       mNormResp <- mZ %*% mChol

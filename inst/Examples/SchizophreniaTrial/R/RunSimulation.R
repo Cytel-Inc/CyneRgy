@@ -68,7 +68,7 @@ lGeneratedData <- GenerateMMRMResponses( NumSub        = nNumSub,
 
 # Step 4: Prepare Data for Analysis
 # Data generation function returns responses in the form of a list. However, the analysis functions
-# require a dataframe which contains the Responses, as well as Arrival Times and Treatment IDs.
+# Require a data frame that contains the responses, arrival times, and treatment IDs.
 SimData <- data.frame( ArrivalTime   = vArrivalTime,
                        TreatmentID   = vTreatmentID,
                        Response1     = lGeneratedData$Response1,
@@ -129,7 +129,8 @@ lLoopPlotPatients <- list( )
 # Step 3: Run simulations in a loop
 dStartTime <- Sys.time( )
 
-for( iRep in 1:nQtyReps ){
+for( iRep in 1:nQtyReps )
+{
 
     vArrivalTime <- sort( runif( nNumSub, 0, 36 ) )
 
@@ -155,11 +156,11 @@ for( iRep in 1:nQtyReps ){
 
     lLoopSimData[[ iRep ] ] <- SimData
 
-    DesignParam <- list( SampleSize = nNumSub, Alpha = 0.025, NumVisit = length( vVisitTime ), TailType =0 )
+            DesignParam <- list( SampleSize = nNumSub, Alpha = 0.025, NumVisit = length( vVisitTime ), TailType = 0 )
     LookInfoIA  <- list( NumLooks = 2, CurrLookIndex = 1, CumCompleters = c( nNumSub / 2, nNumSub ),
-                         InterimVisit = 2, IncludePipeline = 0, RejType=2 )
+                              InterimVisit = 2, IncludePipeline = 0, RejType = 2 )
     LookInfoFA  <- list( NumLooks = 2, CurrLookIndex = 2, CumCompleters = c( nNumSub / 2, nNumSub ),
-                         InterimVisit = 2, IncludePipeline = 0, RejType=2 )
+                              InterimVisit = 2, IncludePipeline = 0, RejType = 2 )
 
     # Analysis for IA  using 2 methods
     lAnalysisIA <- AnalyzeUsingMMRM( SimData, DesignParam, LookInfoIA, UserParam = NULL )

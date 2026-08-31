@@ -74,7 +74,7 @@
 #'          \item{ErrorCode}{Status code indicating success or error type:
 #'              \describe{
 #'                \item{ErrorCode = 0}{No Error}
-#'                \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                \item{ErrorCode = -1}{Missing required UserParam (`Stage1NumCompleters` or `TargetNumPFSEvents`)}
 #'                \item{ErrorCode = -2}{LookInfo not NULL (adaptive designs not supported)}
 #'                \item{ErrorCode = -3}{Insufficient patients for Stage 1 analysis}
@@ -343,7 +343,7 @@ SelectArmAndAnalyzePFSTwoStages <- function( SimData, DesignParam, LookInfo = NU
                 if( nSubjectsAtRisk != 1 )
                 {
                     # Equation Q.243 in East Manual
-                    dDen <- dDen + nSubjectsAtRiskTreatment * nSubjectsAtRiskControl * ( nSubjectsAtRisk - nEvents ) * nEvents / ( ( nSubjectsAtRisk - 1 ) * nSubjectsAtRisk^2 )
+                    dDen <- dDen + nSubjectsAtRiskTreatment * nSubjectsAtRiskControl * ( nSubjectsAtRisk - nEvents ) * nEvents / ( ( nSubjectsAtRisk - 1 ) * nSubjectsAtRisk ^ 2 )
                 }
                 # Update the count of subjects at risk before the next iteration
                 nSubjectsAtRiskTreatment <- nSubjectsAtRiskTreatment - nEventsOnTreatment

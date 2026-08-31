@@ -23,11 +23,11 @@
 #'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
 #' @param UserParam A list of user defined parameters in East Horizon. UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifics the lower limit, eg  Minimum Acceptable Value (MAV).}
+#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifies the lower limit, eg  Minimum Acceptable Value (MAV).}
 #'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg Target Value (TV).}
 #'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the prop.test function in base R.}
 #' }
-#' @description  In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made.
+#' @description In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made.
 #'               If a Go decision is not made, then if is is unlikely that the treatment difference is above the Target Value (TV) a No Go decision is made.
 #'               In this example, the prop.test from base R is utilized to analyze the data and compute at user-specified confidence interval (dConfLevel).
 #'               The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV.

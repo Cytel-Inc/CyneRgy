@@ -9,7 +9,8 @@
 
 testthat::context( "ChildPsychology" )
 
-testthat::test_that( "Test- ChildPsychology", {
+testthat::test_that( "Test- ChildPsychology",
+{
     nQtyOfPatientsPerArm <- 250
     NumSub               <- 2 * nQtyOfPatientsPerArm
 
@@ -22,7 +23,8 @@ testthat::test_that( "Test- ChildPsychology", {
         {
             ChildPsychology( NumSub, TreatmentID, Mean, StdDev, UserParam = NULL )
         },
-        error = function( e ) {
+        error = function( e )
+        {
             NULL
         }
     )
@@ -38,7 +40,8 @@ testthat::test_that( "Test- ChildPsychology", {
         {
             ChildPsychology( NumSub, TreatmentID, Mean, StdDev, UserParam )
         },
-        error = function( e ) {
+        error = function( e )
+        {
             NULL
         }
     )
@@ -52,7 +55,8 @@ testthat::test_that( "Test- ChildPsychology", {
         {
             ChildPsychology( NumSub, TreatmentID, Mean, StdDev )
         },
-        error = function( e ) {
+        error = function( e )
+        {
             NULL
         }
     )

@@ -1,6 +1,6 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
-#
+#'
 #' @name {{FUNCTION_NAME}}
 #'
 #' @title Analyze Dual Endpoints
@@ -118,7 +118,7 @@
 #'                  \item{TestStat}{Required value. Test statistic on Z-scale.}
 #'                  \item{ErrorCode}{Optional integer value \describe{
 #'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
+#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }}
 #'                  \item{HR}{Required numeric value - Estimate of Hazard Ratio for the corresponding Endpoint. Only applicable for time-to-event data.}
@@ -139,7 +139,7 @@
 
     bGSD <- ifelse( is.null( LookInfo ), FALSE, TRUE )                              # Is the trial using Group sequential Design?
     syncEPID <- ifelse( bGSD, LookInfo$SyncInterim, DesignParam$PlanEndTrial )    # Endpoint ID to be used for look positioning
-    syncEPType <- DesignParam$EndpointType[[syncEPID ] ]                          # Endpoint type of the endpoint used for look positioning
+    syncEPType <- DesignParam$EndpointType[[ syncEPID ] ]                          # Endpoint type of the endpoint used for look positioning
 
     if( bGSD )               # Group Sequential Design
     {

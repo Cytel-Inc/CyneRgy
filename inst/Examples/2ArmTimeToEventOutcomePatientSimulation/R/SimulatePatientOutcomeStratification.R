@@ -110,7 +110,8 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
           {
             if( vS[ nArmIdx ] > 0 && vS[ nArmIdx ] < 1 && dSurvTime > 0 )
               vHazardRates[ nArmIdx ] <- -log( vS[ nArmIdx ] ) / dSurvTime
-            else {
+            else
+            {
               vHazardRates[ nArmIdx ] <- NA
               nError <- 1
             }
@@ -127,7 +128,8 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
           {
             if( vMedian[ nArmIdx ] > 0 )
               vHazardRates[ nArmIdx ] <- log( 2 ) / vMedian[ nArmIdx ]
-            else {
+            else
+            {
               vHazardRates[ nArmIdx ] <- NA
               nError <- 1
             }

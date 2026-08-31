@@ -48,14 +48,14 @@
 #'                                     }
 #'                                     }
 #'             }
-#' @description
+#' @details
 #' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.
 #' However, you may choose to ignore the parameters SurvMethod, NumPrd, PrdTime, and SurvParam if the patient simulator
 #' you are creating only requires use of parameters the user will add to UserParam
 #' The function returns one generated survival time per subject.
 ######################################################################################################################## .
 
-GenSurvTime <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
+{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
     # TO DO : Modify this function appropriately
     nError <- 0

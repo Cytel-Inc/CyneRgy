@@ -88,7 +88,7 @@ SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, 
       mChol <- chol( mCor )
 
       # Generating (NumSub * 2) standard normal responses
-      mZ <- matrix( rnorm( NumSub*2, 0, 1 ), ncol = 2 )
+      mZ <- matrix( rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
 
       # Intermediate matrix
       mNormResp <- mZ %*% mChol
@@ -97,8 +97,8 @@ SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, 
       for( nSubjID in 1:NumSub )
       {
         #browser()
-        vPatientOutcomeEP1[ nSubjID ] <- ( - log( pnorm( mNormResp[ nSubjID, 1 ] ) )/ SurvParam[[ 1 ] ][ 1, TreatmentID[ nSubjID ] + 1 ] )
-        vPatientOutcomeEP2[ nSubjID ] <- ( - log( pnorm( mNormResp[ nSubjID, 2 ] ) )/ SurvParam[[ 2 ] ][ 1, TreatmentID[ nSubjID ] + 1 ] )
+        vPatientOutcomeEP1[ nSubjID ] <- ( -log( pnorm( mNormResp[ nSubjID, 1 ] ) ) / SurvParam[[ 1 ] ][ 1, TreatmentID[ nSubjID ] + 1 ] )
+        vPatientOutcomeEP2[ nSubjID ] <- ( -log( pnorm( mNormResp[ nSubjID, 2 ] ) ) / SurvParam[[ 2 ] ][ 1, TreatmentID[ nSubjID ] + 1 ] )
       }
       if( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
           length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ) )

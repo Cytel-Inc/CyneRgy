@@ -50,7 +50,7 @@ RandomizationSubjectsUsingUniformDistribution <- function( NumSub, NumArms, Allo
 
     for( i in 1:NumSub )
     {
-        u[ i ]               <- runif( 1, 0, 1 )          #generate a random number from U(0, 1)
+        u[ i ]               <- runif( 1, 0, 1 )          # Generate a random number from U(0, 1)
 
         # Here 0 means subject is allotted to control arm, 1 means subject is allotted to treatment arm.
         # CDF of Uniform (0, 1) is given as F(x) = x. We make use of this CDF to allocate the subjects randomly on either arms.
@@ -70,7 +70,7 @@ RandomizationSubjectsUsingUniformDistribution <- function( NumSub, NumArms, Allo
 
     # The following chunk of code is to make sure that allotment of patients is exactly the same as per the allocation ratio (expected patients on each arm) provided.
 
-    if( sum( retval ) != vSampleSizeArmWise[ 2 ] )               #if observed allotment is not the same as expected allotment
+    if( sum( retval ) != vSampleSizeArmWise[ 2 ] )               # If observed allotment is not the same as expected allotment
     {
         if( sum( retval ) > vSampleSizeArmWise[ 2 ] )            # if observed patients on treatment arm > expected patients on treatment arm
         {

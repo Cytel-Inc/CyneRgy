@@ -14,8 +14,7 @@
 #' @param Mean Numeric. Not used directly in this function.
 #' @param StdDev Numeric. Not used directly in this function.
 #' @param UserParam List. Contains treatment-specific means for each outcome:
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{MeanOutcome1Ctrl}{Mean of outcome 1 for control group}
 #'          \item{MeanOutcome1Trt} {Mean of outcome 1 for treatment group}
 #'          \item{MeanOutcome2Ctrl}{Mean of outcome 2 for control group}
@@ -25,8 +24,7 @@
 #'        }
 #'
 #' @return A list containing:
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1}
 #'          \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2}
 #'          \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}

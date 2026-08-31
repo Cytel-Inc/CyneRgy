@@ -19,8 +19,7 @@
 #' @param UserParam Optional list. Additional user-defined parameters (currently unused).
 
 #' @return A list containing:
-#'       \describe
-#'       {
+#'       \describe{
 #'         \item \code{Response1}, \code{Response2}, ..., \code{ResponseN}: Simulated response vectors for each visit.
 #'         \item \code{ErrorCode}: Integer error code (0 = success, -1 = input dimension mismatch).
 #'       }

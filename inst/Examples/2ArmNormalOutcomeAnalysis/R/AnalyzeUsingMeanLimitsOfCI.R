@@ -7,11 +7,11 @@
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
 #' @param UserParam A list of user defined parameters in East Horizon. UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dMAV}{A value (-Inf, Inf) that specifics the Minimum Acceptable Value (MAV).}
+#'   \item{UserParam$dMAV}{A value (-Inf, Inf) that specifies the Minimum Acceptable Value (MAV).}
 #'   \item{UserParam$dTV}{A value (-Inf, Inf) that specifies the Target Value (TV).}
 #'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the t.test() function in base R library.}
 #' }
-#' @description  In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above
+#' @description In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above
 #'               the Minimum Acceptable Value (MAV) then a Go decision is made.
 #'               If a Go decision is not made, then if is is unlikely that the treatment difference is above the Target Value (TV) a No-Go decision is made.
 #'               In this example, the t.test() from base package in R is utilized to analyze the data and compute at user-specified confidence interval using UserParam$dConfLevel.

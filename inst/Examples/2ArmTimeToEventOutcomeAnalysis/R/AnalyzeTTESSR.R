@@ -93,12 +93,15 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     ## Step 1 — Data Preparation and Analysis Time Computation
     ###########################################################
 
-    if( !is.null( LookInfo ) ) {
+    if( !is.null( LookInfo ) )
+    {
         nQtyOfLooks   <- LookInfo$NumLooks
         nLookIndex    <- LookInfo$CurrLookIndex
         vCumEvents    <- LookInfo$InfoFrac * DesignParam$MaxEvents
         nQtyOfEvents  <- vCumEvents[ nLookIndex ]
-    } else {
+    }
+    else
+    {
         nQtyOfLooks   <- 1
         nLookIndex    <- 1
         nQtyOfEvents  <- DesignParam$MaxEvents
@@ -135,7 +138,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     dExpectedControl   <- nAtRiskControl * nTotalEvents / nTotalAtRisk
 
     dVarianceTreatment <- ( nAtRiskTreatment * nAtRiskControl * nTotalEvents * ( nTotalAtRisk - nTotalEvents ) ) /
-                          ( nTotalAtRisk^2 * ( nTotalAtRisk - 1 ) )
+                        ( nTotalAtRisk ^ 2 * ( nTotalAtRisk - 1 ) )
 
     dTestStatistic <- ( nEventsTreatment - dExpectedTreatment ) / sqrt( dVarianceTreatment )
 
@@ -147,11 +150,14 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     ###########################################################
     dOrigCp <- NA
 
-    if( !is.na( dTestStatistic ) ) {
-        if( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) ) {
+    if( !is.na( dTestStatistic ) )
+    {
+        if( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) )
+        {
             dZCrit <- LookInfo$EffBdry[ nLookIndex ]
         }
-        if( !is.null( LookInfo ) ) {
+        if( !is.null( LookInfo ) )
+        {
             dTau <- LookInfo$InfoFrac[ nLookIndex ]
         }
         dOrigCp <- 1 - pnorm( ( dZCrit - dTestStatistic * sqrt( dTau ) ) / sqrt( 1 - dTau + 1e-12 ) )
@@ -160,25 +166,39 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     ###########################################################
     ## Step 4 — Re-estimated Events Computation
     ###########################################################
-    if( AdaptInfo$SSRFuncScale == 0 ) {
-        if( is.na( dOrigCp ) ) {
-            nReEstEvents <- DesignParam$MaxEvents
-        } else if( dOrigCp > AdaptInfo$PromZoneMin && dOrigCp < AdaptInfo$PromZoneMax ) {
-            nReEstEvents <- DesignParam$MaxEvents * AdaptInfo$MaxSSMultInp$MaxEventsMult
-        } else {
+    if( AdaptInfo$SSRFuncScale == 0 )
+    {
+        if( is.na( dOrigCp ) )
+        {
             nReEstEvents <- DesignParam$MaxEvents
         }
-    } else if( AdaptInfo$SSRFuncScale == 1 ) {
-        if( is.na( dOrigCp ) ) {
+        else if( dOrigCp > AdaptInfo$PromZoneMin && dOrigCp < AdaptInfo$PromZoneMax )
+        {
+            nReEstEvents <- DesignParam$MaxEvents * AdaptInfo$MaxSSMultInp$MaxEventsMult
+        }
+        else
+        {
             nReEstEvents <- DesignParam$MaxEvents
-        } else {
+        }
+    }
+    else if( AdaptInfo$SSRFuncScale == 1 )
+    {
+        if( is.na( dOrigCp ) )
+        {
+            nReEstEvents <- DesignParam$MaxEvents
+        }
+        else
+        {
             vStepLowerBound <- AdaptInfo$MaxSSMultInp$From
             vStepUpperBound <- AdaptInfo$MaxSSMultInp$To
             vStepMultiplier <- AdaptInfo$MaxSSMultInp$MaxEventsMult
             nIdx <- which( dOrigCp > vStepLowerBound & dOrigCp <= vStepUpperBound )
-            if( length( nIdx ) == 0 ) {
+            if( length( nIdx ) == 0 )
+            {
                 nReEstEvents <- DesignParam$MaxEvents
-            } else {
+            }
+            else
+            {
                 nReEstEvents <- DesignParam$MaxEvents * vStepMultiplier[ nIdx ]
             }
         }
@@ -187,19 +207,26 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     ###########################################################
     ## Step 5 — Decision Computation
     ###########################################################
-    if( !is.na( dTestStatistic ) ) {
-        if( !is.null( LookInfo ) ) {
-            if( !is.null( LookInfo$EffBdry ) ) {
+    if( !is.na( dTestStatistic ) )
+    {
+        if( !is.null( LookInfo ) )
+        {
+            if( !is.null( LookInfo$EffBdry ) )
+            {
                 dEffBdry <- LookInfo$EffBdry[ nLookIndex ]
                 nDecision <- ifelse( is.nan( dEffBdry ) | is.na( dEffBdry ), 0,
                                     ifelse( dTestStatistic > dEffBdry, 2, 0 ) )
             }
-        } else {
-            if( !is.null( DesignParam$CriticalPoint ) ) {
+        }
+        else
+        {
+            if( !is.null( DesignParam$CriticalPoint ) )
+            {
                 nDecision <- ifelse( dTestStatistic > DesignParam$CriticalPoint, 2, 0 )
             }
         }
-        if( nDecision == 0 && nLookIndex == nQtyOfLooks ) {
+        if( nDecision == 0 && nLookIndex == nQtyOfLooks )
+        {
             nDecision <- 3
         }
     }

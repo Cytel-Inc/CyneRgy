@@ -7,16 +7,14 @@
 #' @author Jacob Wathen
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient. It will have headers indicating the names of the
 #' columns. These names will be same as those used in Data Generation. For analysis the most relevant variables are:
-#'        \describe
-#'        {
-#'          \item{ArrivalTime}{Numeric vector respresenting patient arrival times}
+#'        \describe{
+#'          \item{ArrivalTime}{Numeric vector representing patient arrival times}
 #'          \item{TreatmentID}{Integer vector (0 = control, 1 = treatment)}
 #'          \item{Response[X]}{Numeric vector representing response for visit X, where X = 1, 2, 3, 4, 5}
 #'         }
 #' @param DesignParam List which consists of Design and Simulation Parameters which user may need to compute
 #' test statistic and perform test. For analysis the most relevant variable is:
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{Alpha}{1-sided Type I Error}
 #'        }
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
@@ -32,8 +30,8 @@
 #'                             \item{3}{Futility boundary crossed.}
 #'                             \item{4}{Equivalence boundary crossed.}
 #'                           }}
-#'         \item {PrimDelta}{Estimated treatment effect from the MMRM model at the final visit.}
-#'         \item {p.value} {p-value for the analysis}
+#'         \item{PrimDelta}{Estimated treatment effect from the MMRM model at the final visit.}
+#'         \item{p.value}{P-value for the analysis.}
 #'         \item{ErrorCode}{Optional integer value \describe{
 #'                                     \item{ErrorCode = 0}{No Error}
 #'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
@@ -109,7 +107,8 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
 
     dfNoBaselineAnalysisData$Visit <- relevel( dfNoBaselineAnalysisData$Visit, ref = strLastVisit )
 
-    mmrmModel <- tryCatch( {
+    mmrmModel <- tryCatch(
+    {
         nlme::lme( Response ~ Baseline + TreatmentID * Visit,
                random      = ~ 1 | Id,
                correlation = nlme::corCompSymm( form = ~ 1 | Id ),

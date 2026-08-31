@@ -17,7 +17,7 @@
 GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {
     # Error = 0 --> No Error;
-    # Error > 0 --> Non Fatal Error Particular Simulation will be aborted but Next Simulation will be performed
+    # Error > 0 --> Nonfatal error; the current simulation will be aborted, but the next simulation will run
     # Error < 0 --> Fatal Error - No further simulation will be attempted. We suggest that user should classify error in these categories depending on the context.
     # Step 1 - Initialize the return variables or other variables needed ####
     nError               <- 0

@@ -42,7 +42,7 @@ SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo
         vPValue[ nIndex - 1 ]   <- chisq.test( tabAnalysisData )$p.value
 
         # Error checking - If the data had no patient responses, the p-value may not be able to be computed.
-        if( is.nan( vPValue[ nIndex - 1 ] ))
+        if( is.nan( vPValue[ nIndex - 1 ] ) )
         {
             # The Chi Squared Test did not calculate a p-value, which can occur if no patients respond, so make the p-value 1
             vPValue[ nIndex - 1 ] <- 1

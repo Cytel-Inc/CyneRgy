@@ -48,7 +48,7 @@
     {
         strCensorIndName <- paste0( "CensorInd", i )
         CensorInd        <- rep( 1, NumSub )
-        retval[[strCensorIndName ] ] <- as.integer( CensorInd )
+        retval[[ strCensorIndName ] ] <- as.integer( CensorInd )
     }
 
     # Initializing DropOutTime and DropoutVisitID to Inf

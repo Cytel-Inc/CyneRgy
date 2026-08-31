@@ -9,8 +9,7 @@
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient.
 #'        It will have headers indicating the names of the columns. These names will be same as those used in
 #'        Data Generation. For analysis the most relevant variables are:
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1}
 #'          \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2}
 #'          \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}
@@ -18,16 +17,14 @@
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user may need to compute
 #'        test statistic and perform test. For analysis the most relevant variable is:
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{Alpha}{1-sided Type I Error}
 #'        }
 #' @param LookInfo List. Not used in this function.
 #' @param UserParam List. Not used in this function.
 #'
 #' @return A named list containing:
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{Decision}{Placeholder value (always 1)}
 #'          \item{DecisionOutcome[X]}{Binary decisions (1 = significant, 0 = not significant) for endpoint X, where X = 1, 2, 3}
 #'          \item{PValueOutcome[X]} {p-value for endpoint X, where X = 1, 2, 3}

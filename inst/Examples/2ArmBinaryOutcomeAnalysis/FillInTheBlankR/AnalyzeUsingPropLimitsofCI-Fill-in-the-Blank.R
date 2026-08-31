@@ -7,7 +7,7 @@
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
 #' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
 #'                  If UserParam is supplied, the list must contain the following named elements:
-#'                  UserParam$dLowerLimit - A value (0,1) that specifes the lower limit for the confidence interval.
+#'                  UserParam$dLowerLimit - A value (0,1) that specifies the lower limit for the confidence interval.
 #'                  UserParam$dUpperLimit - A value (0,1) that specifies the upper limit for the confidence interval.
 #'                  UserParam$dConfLevel - A value (0,1) that specifies the confidence level for the prop.test function in base R.
 #' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon as an input.

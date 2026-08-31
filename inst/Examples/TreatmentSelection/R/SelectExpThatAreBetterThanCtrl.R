@@ -5,7 +5,7 @@
 #' Selects every experimental arm with an observed response rate above control.
 #' If no arm meets that rule, selects the experimental arm with the highest rate.
 #' @author Sydney Ringold, J. Kyle Wathen
-#' @param SimData Dataframe which consists of data generated in current simulation.
+#' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing parameters for the current analysis look.
 #' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
@@ -21,7 +21,7 @@ SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo, User
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
 
     # Compute the response probability as # of responses/(  # of treatment failures + # of responses )
-    vProbabilityResponse                <- as.vector( tabResults[ , 2 ]/( tabResults[ , 1 ] + tabResults[ , 2 ] ) )
+    vProbabilityResponse                <- as.vector( tabResults[ , 2 ] / ( tabResults[ , 1 ] + tabResults[ , 2 ] ) )
 
     # Create a variable with the probability of response on control to be used in decision making
     dProbabilityOfResponseOnControl     <- vProbabilityResponse[ 1 ]

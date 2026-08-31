@@ -107,70 +107,83 @@ AnalyzeStratification<- function( SimData, DesignParam, LookInfo = NULL, UserPar
     SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime
     SimData              <- SimData[ order( SimData$TimeOfEvent ), ]
     dTimeOfAnalysis      <- SimData[ nQtyOfEvents, ]$TimeOfEvent
-    SimData              <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis , ]
+    SimData              <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ]
     SimData$Event        <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )
     SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
 
-    dtime <- SimData$ObservedTime
-    nstatus <- SimData$Event
-    ntreatment <- SimData$TreatmentID
+    vObservedTime <- SimData$ObservedTime
+    vEvent        <- SimData$Event
+    vTreatmentID  <- SimData$TreatmentID
 
     # Determine which stratification factors to use
-    if( !all( is.na( DesignParam$TestStratFactors ) ) ) {
-      strat_factors <- DesignParam$TestStratFactors
-    } else {
-      # For Design, as TestStratFactors is NA
-      strat_factors <- names( DesignParam$StratFactors )
+    if( !all( is.na( DesignParam$TestStratFactors ) ) )
+    {
+        vStratFactors <- DesignParam$TestStratFactors
+    }
+    else
+    {
+        # For Design, as TestStratFactors is NA
+        vStratFactors <- names( DesignParam$StratFactors )
     }
 
-# Convert each stratification column to factor
-for( fac in strat_factors ) {
-  SimData[[fac ] ] <- factor( SimData[[fac ] ], levels = unique( SimData[[fac ] ] ) )
-}
+    # Convert each stratification column to a factor
+    for( strFactor in vStratFactors )
+    {
+        SimData[[ strFactor ] ] <- factor( SimData[[ strFactor ] ],
+                                           levels = unique( SimData[[ strFactor ] ] ) )
+    }
 
-  # Construct the formula for strata dynamically
-    strata_formula <- stats::as.formula(
-      paste0(
-        "survival::Surv(dtime, nstatus) ~ ntreatment + ",
-        paste0( "survival::strata(`", strat_factors, "`)", collapse = " + " )
-      )
+    # Construct the formula for strata dynamically
+    fStrataFormula <- stats::as.formula(
+        paste0(
+            "survival::Surv(vObservedTime, vEvent) ~ vTreatmentID + ",
+            paste0( "survival::strata(`", vStratFactors, "`)", collapse = " + " )
+        )
     )
 
     # Perform stratified log-rank test
-    dfit <- survival::survdiff( strata_formula, data = SimData )
-    dTestStatistic <- sqrt( dfit$chisq )
+    cSurvDiff      <- survival::survdiff( fStrataFormula, data = SimData )
+    dTestStatistic <- sqrt( cSurvDiff$chisq )
 
     # Compute Hazard Ratio (HR)
-    dcox_fit <- survival::coxph( strata_formula, data = SimData )
-    dhr <- exp( coef( dcox_fit ) )
+    cCoxFit <- survival::coxph( fStrataFormula, data = SimData )
+    dHR     <- exp( coef( cCoxFit ) )
 
-    dTestStatistic <- ifelse( unname( dhr ) < 1, dTestStatistic * -1, dTestStatistic )
+    dTestStatistic <- ifelse( unname( dHR ) < 1, dTestStatistic * -1, dTestStatistic )
 
     # Decision logic based on boundaries
-    if( !is.na( dTestStatistic ) ) {
-      if( !is.null( LookInfo ) ) {
-        # Use efficacy boundary from LookInfo if available
-        if( !is.null( LookInfo$EffBdry ) ) {
-          dEffBdry <- LookInfo$EffBdry[ nLookIndex ]
-          nDecision <- ifelse( is.nan( dEffBdry ) | is.na( dEffBdry ), 0,
-                              ifelse( dTestStatistic > dEffBdry, 2, 0 ) )
+    if( !is.na( dTestStatistic ) )
+    {
+        if( !is.null( LookInfo ) )
+        {
+            # Use efficacy boundary from LookInfo if available
+            if( !is.null( LookInfo$EffBdry ) )
+            {
+                dEffBdry  <- LookInfo$EffBdry[ nLookIndex ]
+                nDecision <- ifelse( is.nan( dEffBdry ) | is.na( dEffBdry ), 0,
+                                     ifelse( dTestStatistic > dEffBdry, 2, 0 ) )
+            }
         }
-      } else {
-        # Use fixed design boundary
-        if( !is.null( DesignParam$CriticalPoint ) ) {
-          nDecision <- ifelse( dTestStatistic > DesignParam$CriticalPoint, 2, 0 )
+        else
+        {
+            # Use fixed design boundary
+            if( !is.null( DesignParam$CriticalPoint ) )
+            {
+                nDecision <- ifelse( dTestStatistic > DesignParam$CriticalPoint, 2, 0 )
+            }
         }
-      }
-      # If no efficacy, check for futility at final look
-      if( nDecision == 0 && nLookIndex == nQtyOfLooks ) {
-        nDecision <- 3
-      }
+
+        # If no efficacy, check for futility at final look
+        if( nDecision == 0 && nLookIndex == nQtyOfLooks )
+        {
+            nDecision <- 3
+        }
     }
 
-    lRet <- list( TestStat = as.double( dTestStatistic ),
+    lRet <- list( TestStat     = as.double( dTestStatistic ),
                  AnalysisTime = as.double( dTimeOfAnalysis ),
-                 HR = as.double( dhr ),
-                 Decision  = as.integer( nDecision ),
-                 ErrorCode = as.integer( nError ) )
+                 HR           = as.double( dHR ),
+                 Decision     = as.integer( nDecision ),
+                 ErrorCode    = as.integer( nError ) )
     return( lRet )
 }

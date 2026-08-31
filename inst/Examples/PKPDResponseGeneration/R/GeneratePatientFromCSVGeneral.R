@@ -72,9 +72,11 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputm
     # Cache CSV across calls if available
     if( !exists( "gdfPatients" ) )
     {
-        dfPatients <- tryCatch( {
+        dfPatients <- tryCatch(
+        {
             read.csv( strCSVPath, check.names = FALSE, stringsAsFactors = FALSE )
-        }, error = function( e ) {
+        }, error = function( e )
+        {
             NULL
         } )
 
@@ -238,8 +240,14 @@ CoerceGroup01 <- function( x )
         if( v == 1 ) return( 1 )
     }
     str <- tolower( trimws( as.character( x ) ) )
-    if( str %in% c( "0", "c", "ctl", "control", "placebo", "cntl" ) )  return( 0 )
-    if( str %in% c( "1", "t", "trt", "treatment", "active" ) )         return( 1 )
+    if( str %in% c( "0", "c", "ctl", "control", "placebo", "cntl" ) )
+    {
+        return( 0 )
+    }
+    if( str %in% c( "1", "t", "trt", "treatment", "active" ) )
+    {
+        return( 1 )
+    }
 
     return( NA_integer_ )
 }

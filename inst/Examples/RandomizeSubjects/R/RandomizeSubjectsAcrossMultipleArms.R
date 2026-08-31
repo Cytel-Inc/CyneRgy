@@ -50,7 +50,8 @@ RandomizeSubjectsAcrossMultipleArms <- function( NumSub, NumArms, AllocRatio, Us
     nRemaining                      <- NumSub - sum( nTargetSampleSize )
 
     # Allocate remaining subjects based on the fractional parts of the ideal allocation
-    if( nRemaining > 0 ) {
+    if( nRemaining > 0 )
+    {
         # Calculate fractional parts
         vFractionalParts            <- ( NumSub * vAllocFraction ) - nTargetSampleSize
 
@@ -58,7 +59,8 @@ RandomizeSubjectsAcrossMultipleArms <- function( NumSub, NumArms, AllocRatio, Us
         vArmOrder                   <- order( vFractionalParts, decreasing = TRUE )
 
         # Allocate remaining subjects to arms with highest fractional parts
-        for( i in 1:nRemaining ) {
+        for( i in 1:nRemaining )
+        {
             nTargetSampleSize[ vArmOrder[ i ] ] <- nTargetSampleSize[ vArmOrder[ i ] ] + 1
         }
     }

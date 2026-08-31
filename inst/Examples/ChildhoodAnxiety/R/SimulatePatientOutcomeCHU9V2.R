@@ -1,5 +1,5 @@
 ######################################################################################################################## .
-#  Last Modified Date: 02/10/2026
+# Last Modified Date: 02/10/2026
 #' @name SimulatePatientOutcome
 #' @title Function to simulate patient data with specified mean and standard deviation for each arm
 #' @description Simulate bounded integer baseline and follow-up CHU-9 values and return their difference as the response.

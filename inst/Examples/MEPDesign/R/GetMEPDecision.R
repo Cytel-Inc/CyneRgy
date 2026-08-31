@@ -154,7 +154,7 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, Design
                 # Get HR or Delta from DataSummary based on endpoint type
                 if( nEPType == 2 )
                 {
-                    observedValue <- DataSummary[[strEPName ] ]$HR
+                    observedValue <- DataSummary[[ strEPName ] ]$HR
                     # Declare futility if HR > threshold
                     if( !is.nan( observedValue ) && observedValue > futThreshold )
                     {
@@ -163,7 +163,7 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, Design
                 }
                 else
                 {
-                    observedValue <- DataSummary[[strEPName ] ]$Delta
+                    observedValue <- DataSummary[[ strEPName ] ]$Delta
                     # Declare futility if Delta < threshold
                     if( !is.nan( observedValue ) && observedValue < futThreshold )
                     {

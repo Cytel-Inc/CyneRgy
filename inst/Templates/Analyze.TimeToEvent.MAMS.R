@@ -81,7 +81,9 @@
         nLookIndex              <- LookInfo$CurrLookIndex
         vEfficacyBoundary       <- LookInfo$EffBdry[ nLookIndex ]
 
-    } else {
+    }
+    else
+    {
 
         # Example fixed sample setup
         nQtyOfLooks             <- 1

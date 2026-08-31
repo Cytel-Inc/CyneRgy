@@ -12,16 +12,14 @@
 #' @param SimData Data frame with subject data generated in current simulation with one row per patient.
 #'        It will have headers indicating the names of the columns. These names will be same as those used in
 #'        Data Generation. For analysis the most relevant variables are:
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{PatientOutcome[X]}{Numeric vector representing results for endpoint X, where X = 1, 2, 3}
 #'          \item{Covariate[Y]}{Binary vector representing results for covariate Y, where Y = 1, 2}
 #'          \item{TreatmentID}{Integer vector (0 = control, 1 = treatment)}
 #'        }
 #' @param DesignParam R List which consists of Design and Simulation Parameters which user may need to compute
 #'        test statistic and perform test. For analysis the most relevant variable is:
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{Alpha}{1-sided Type I Error. Note it will be internally converted to two-sided (i.e., 2 × Alpha) for ANCOVA.}
 #'        }
 #' @param LookInfo List. Not used in this function.
@@ -29,8 +27,7 @@
 #'
 #' @return A named list containing elements as described below. Note that the return list expands dynamically depending on the
 #' number of endpoints (X) and covariates (Y).
-#'        \describe
-#'        {
+#'        \describe{
 #'          \item{Decision}{Placeholder value (always 1)}
 #'          \item{SampleSizeCtrl}{Number of patients in the control group}
 #'          \item{SampleSizeTrt}{Number of patients in the treatment group}

@@ -84,7 +84,7 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
         # Loop to simulate the remainder of the trial using the sampled vPiC and vPiE
         # At the end of the study run the analysis using the current patients and the future patients.
         nQtyFuturePatients <- LookInfo$CumCompleters[ 2 ] - LookInfo$CumCompleters[ 1 ]
-        nQtyFuturePatientsPerArm <- nQtyFuturePatients/2
+        nQtyFuturePatientsPerArm <- nQtyFuturePatients / 2
         for( i in 1:nQtyRepsPP )
         {
             # Futility Check - Step 1, simulate the remaining patients in the trial ####
@@ -140,7 +140,7 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
             #    nQtyFutility <- nQtyFutility + 1
         }
 
-        dProbStopAtEnd <- nQtyFutility/nQtyRepsPP
+        dProbStopAtEnd <- nQtyFutility / nQtyRepsPP
         if( dProbStopAtEnd > UserParam$dPUFutility ) # Futility
             nDecision <- 3
         else
@@ -204,17 +204,17 @@ ComputePosteriorParametersNormal <- function( vCtrlData, vExpData, dSigma, dPrio
     dObsMeanCtrl  <- mean( vCtrlData )
     nQtyPatsCtrl  <- length( vCtrlData )
     # Posterior precision = 1/variance
-    dPostPrecCtrl <- ( 1/dPriorStdDevCtrl^2 + nQtyPatsCtrl/dSigma^2 )
-    dPostMeanCtrl <- ( dPriorMeanCtrl/dPriorStdDevCtrl^2 + dObsMeanCtrl*nQtyPatsCtrl/dSigma^2 )/dPostPrecCtrl
-    dPostVarCtrl  <- 1/dPostPrecCtrl
+    dPostPrecCtrl <- ( 1 / dPriorStdDevCtrl ^ 2 + nQtyPatsCtrl / dSigma ^ 2 )
+    dPostMeanCtrl <- ( dPriorMeanCtrl / dPriorStdDevCtrl ^ 2 + dObsMeanCtrl * nQtyPatsCtrl / dSigma ^ 2 ) / dPostPrecCtrl
+    dPostVarCtrl  <- 1 / dPostPrecCtrl
 
     # Compute the posterior parameters for the Exp treatment
     dObsMeanExp  <- mean( vExpData )
     nQtyPatsExp  <- length( vExpData )
     # Posterior precision = 1/variance
-    dPostPrecExp <- ( 1/dPriorStdDevExp^2 + nQtyPatsExp/dSigma^2 )
-    dPostMeanExp <- ( dPriorMeanExp/dPriorStdDevExp^2 + dObsMeanExp*nQtyPatsExp/dSigma^2 )/dPostPrecExp
-    dPostVarExp  <- 1/dPostPrecExp
+    dPostPrecExp <- ( 1 / dPriorStdDevExp ^ 2 + nQtyPatsExp / dSigma ^ 2 )
+    dPostMeanExp <- ( dPriorMeanExp / dPriorStdDevExp ^ 2 + dObsMeanExp * nQtyPatsExp / dSigma ^ 2 ) / dPostPrecExp
+    dPostVarExp  <- 1 / dPostPrecExp
 
     lPostParams <- list( dPostMeanCtrl = dPostMeanCtrl,
                          dPostVarCtrl  = dPostVarCtrl,

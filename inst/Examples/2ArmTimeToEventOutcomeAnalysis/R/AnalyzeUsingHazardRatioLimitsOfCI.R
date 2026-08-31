@@ -7,11 +7,11 @@
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
 #' @param UserParam A list of user defined parameters in East Horizon. UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dMAV}{A value (0, Inf) that specifics the lower limit, eg  Minimum Acceptable Value (MAV). }
+#'   \item{UserParam$dMAV}{A value (0, Inf) that specifies the lower limit, eg  Minimum Acceptable Value (MAV). }
 #'   \item{UserParam$dTV}{A value (0 Inf) that specifies the upper limit for the confidence interval, eg Target Value (TV).}
 #'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the t.test() function in base R library.}
 #' }
-#' @description  In this simplified example of upper and lower confidence boundary designs, if it is likely that the HR (Hazard Ratio) is below the Minimum Acceptable Value (MAV) then a Go decision is made.
+#' @description In this simplified example of upper and lower confidence boundary designs, if it is likely that the HR (Hazard Ratio) is below the Minimum Acceptable Value (MAV) then a Go decision is made.
 #'               If a Go decision is not made, then if it is unlikely that the Hazard ratio is below the Target Value (TV) a No Go decision is made.
 #'               In this example, the coxph() from survival package in R is utilized to analyze the data and compute estimate of log HR and Std error of log HR.
 #'               The team would like to make a Go decision if there is at least a 90% chance that HR is below than the MAV.
@@ -81,7 +81,8 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function( SimData, DesignParam, LookInfo = 
         dEffBdry             <- LookInfo$EffBdryLower[ nLookIndex ]
         nRejType             <- LookInfo$RejType
         nTailType            <- DesignParam$TailType
-    }else
+    }
+    else
     {   # Look info is not provided for fixed sample designs so fetch the information appropriately
         nQtyOfLooks          <- 1
         nLookIndex           <- 1
@@ -114,7 +115,7 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function( SimData, DesignParam, LookInfo = 
     # Log HR follows Normal distribution with mean = observed log HR on line no 83 and Std error given on line no 84
     # Critical value for Z test is given as,
     dAlpha                   <- 1 - UserParam$dConfLevel
-    dZalpha                  <- qnorm( 1 - dAlpha/2 )
+    dZalpha                  <- qnorm( 1 - dAlpha / 2 )
 
     # Confidence Interval for log HR is given as,
 

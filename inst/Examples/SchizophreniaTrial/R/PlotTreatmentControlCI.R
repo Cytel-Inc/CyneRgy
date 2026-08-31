@@ -5,7 +5,7 @@
 #' Compares mean responses between treatment and control groups across visits,
 #' including 95 percent confidence intervals.
 #' @author Jacob Wathen
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient. This dataframe contains
+#' @param SimData Data frame with subject data generated in current simulation with one row per patient. This data frame contains
 #' response variables (`Response1`, `Response2`, ..., `ResponseN`) and arrival times (`ArrTimeVisit1`, ..., `ArrTimeVisitN`),
 #' where N is the number of visits, as well as a `TreatmentID` column.
 #' @return A `ggplot` object showing group means and 95 percent confidence intervals.

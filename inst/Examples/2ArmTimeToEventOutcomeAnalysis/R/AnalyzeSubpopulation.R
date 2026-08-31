@@ -143,179 +143,199 @@
 
 AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-  nError <- 0
-  dTimeOfAnalysis <- 0
+    nError          <- 0
+    dTimeOfAnalysis <- 0
 
-  # Step 1: Determine number of events for analysis
-  if( !is.null( LookInfo ) ) {
-    nQtyOfLooks  <- LookInfo$NumLooks
-    nLookIndex   <- LookInfo$CurrLookIndex
-    vCumEvents    <- LookInfo$CumEvents
-    nQtyOfEvents <- vCumEvents[ nLookIndex ]
-  } else {
-    nQtyOfLooks  <- 1
-    nLookIndex   <- 1
-    nQtyOfEvents <- DesignParam$MaxEvents
-  }
-
-  # Step 2: Prepare analysis dataset
-  SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime
-  SimData              <- SimData[ order( SimData$TimeOfEvent ), ]
-  dTimeOfAnalysis      <- SimData[ nQtyOfEvents, ]$TimeOfEvent
-  SimData              <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ]
-  SimData$Event        <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )
-  SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis,
-                                 dTimeOfAnalysis - SimData$ArrivalTime,
-                                 SimData$TimeOfEvent - SimData$ArrivalTime )
-
-  # Step 3: Reading populations Inputs
-  nNumSubPops <- DesignParam$NumSubPops
-  PopNames   <- DesignParam$SubpopName
-  SubPops    <- DesignParam$SubPops
-  dPropAlpha  <- DesignParam$PropAlpha
-
-  # Step 4: Create population filters
-  PopFilters <- list()
-  PopFilters[["Full Population" ] ] <- rep( TRUE, nrow( SimData ) )
-
-  if( nNumSubPops > 0 ) {
-    for( subpop_name in names( SubPops ) ) {
-      subpop_filter <- rep( TRUE, nrow( SimData ) )
-      for( factor_name in names( SubPops[[subpop_name ] ] ) ) {
-        allowed_values <- SubPops[[subpop_name ] ][[factor_name ] ]
-        subpop_filter <- subpop_filter & ( SimData[[factor_name ] ] %in% allowed_values )
-      }
-      PopFilters[[subpop_name ] ] <- subpop_filter
+    # Step 1: Determine number of events for analysis
+    if( !is.null( LookInfo ) )
+    {
+        nQtyOfLooks  <- LookInfo$NumLooks
+        nLookIndex   <- LookInfo$CurrLookIndex
+        vCumEvents   <- LookInfo$CumEvents
+        nQtyOfEvents <- vCumEvents[ nLookIndex ]
     }
-  }
-
-  # Step 5: Determine all possible factors across all subpops
-  all_factors <- unique( unlist( lapply( SubPops, names ) ) )
-  for( fac in all_factors ) {
-    if( fac %in% names( SimData ) ) {
-      SimData[[fac ] ] <- factor( SimData[[fac ] ], levels = unique( SimData[[fac ] ] ) )
-    }
-  }
-
-  # Step 6: Initialize output lists
-  dTestStatistic <- list()
-  dHR <- list()
-  nDecision <- list()
-
-  vtestStats_vec <- c()
-  vpopOrder <- c()
-
-  # Step 7: Compute test stats and collect populations
-  for( pop_name in names( PopFilters ) ) {
-
-    subset_data <- SimData[ PopFilters[[pop_name ] ], ]
-
-    if( nrow( subset_data ) > 0 ) {
-
-      # Identify strat factors
-      if( pop_name == "Full Population" ) {
-        current_strat_factors <- all_factors
-      } else {
-        current_strat_factors <- names( SubPops[[pop_name ] ] )
-      }
-      current_strat_factors <- current_strat_factors[ current_strat_factors %in% names( subset_data ) ]
-
-      # Build survival formula
-       if( length( current_strat_factors ) > 0 ) {
-      strata_formula <- stats::as.formula(
-  paste0(
-    "survival::Surv(ObservedTime, Event) ~ TreatmentID + ",
-    paste0( "survival::strata(`", current_strat_factors, "`)", collapse = " + " )
-  )
-)
-
-      } else {
-        strata_formula <- survival::Surv( ObservedTime, Event ) ~ TreatmentID
-      }
-
-      # HR
-      dcox_fit <- survival::coxph( strata_formula, data = subset_data )
-      dhr <- exp( coef( dcox_fit ) )
-
-      # Log-rank test
-      dfit <- survival::survdiff( strata_formula, data = subset_data )
-      test_stat <- sqrt( dfit$chisq )
-      test_stat <- ifelse( unname( dhr ) < 1, test_stat * -1, test_stat )
-
-      # Store outputs in named lists
-      dTestStatistic[[pop_name ] ] <- as.double( test_stat )
-      dHR[[pop_name ] ] <- as.double( dhr )
-
-      # Store test stats for GMCP
-      vtestStats_vec <- c( vtestStats_vec, test_stat )
-      vpopOrder <- c( vpopOrder, pop_name )
-
-    } else {
-      # Missing population
-      dTestStatistic[[pop_name ] ] <- NA
-      dHR[[pop_name ] ] <- NA
-      vtestStats_vec <- c( vtestStats_vec, NA )
-      vpopOrder <- c( vpopOrder, pop_name )
-    }
-  }
-
-  # Step 8: Compute GMCP decisions
-  gmcp_result <- compute_gMCPDecisions(
-    testStats = vtestStats_vec,
-    tailType  = DesignParam$TailType,
-    alpha     = DesignParam$Alpha,
-    weights   = DesignParam$PropAlpha,
-    tpm       = DesignParam$TransitionMatrix
-  )
-
-  # Step 9: Map GMCP decisions to population and store in named list
-  for( i in seq_along( vpopOrder ) ) {
-
-    pop_name <- vpopOrder[ i ]
-
-    gmcp_flag <- gmcp_result$decisionFlag[ i ]   # 0 = no reject, 1 = reject
-
-    if( gmcp_flag == 1 ) {
-      final_decision <- 2
-    } else {
-      final_decision <- if( nLookIndex == nQtyOfLooks ) 3 else 0
+    else
+    {
+        nQtyOfLooks  <- 1
+        nLookIndex   <- 1
+        nQtyOfEvents <- DesignParam$MaxEvents
     }
 
-    nDecision[[pop_name ] ] <- as.integer( final_decision )
-  }
+    # Step 2: Prepare analysis dataset
+    SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime
+    SimData              <- SimData[ order( SimData$TimeOfEvent ), ]
+    dTimeOfAnalysis      <- SimData[ nQtyOfEvents, ]$TimeOfEvent
+    SimData              <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ]
+    SimData$Event        <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )
+    SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis,
+                                    dTimeOfAnalysis - SimData$ArrivalTime,
+                                    SimData$TimeOfEvent - SimData$ArrivalTime )
 
-  # Step 10: Return results
-  # The return line must remain unchanged
-  lRet <- list(
-    Decision = as.list( nDecision ),
-    TestStat = as.list( dTestStatistic ),
-    dHR = as.list( dHR ),
-    AnalysisTime = as.double( dTimeOfAnalysis ),
-    ErrorCode = as.integer( nError )
-  )
+    # Step 3: Read population inputs
+    nNumSubPops <- DesignParam$NumSubPops
+    vPopNames   <- DesignParam$SubpopName
+    lSubPops    <- DesignParam$SubPops
+    vPropAlpha  <- DesignParam$PropAlpha
 
-  return( lRet )
+    # Step 4: Create population filters
+    lPopFilters <- list()
+    lPopFilters[[ "Full Population" ] ] <- rep( TRUE, nrow( SimData ) )
+
+    if( nNumSubPops > 0 )
+    {
+        for( strSubpopName in names( lSubPops ) )
+        {
+            vSubpopFilter <- rep( TRUE, nrow( SimData ) )
+            for( strFactorName in names( lSubPops[[ strSubpopName ] ] ) )
+            {
+                vAllowedValues <- lSubPops[[ strSubpopName ] ][[ strFactorName ] ]
+                vSubpopFilter  <- vSubpopFilter & ( SimData[[ strFactorName ] ] %in% vAllowedValues )
+            }
+            lPopFilters[[ strSubpopName ] ] <- vSubpopFilter
+        }
+    }
+
+    # Step 5: Determine all possible factors across all subpopulations
+    vAllFactors <- unique( unlist( lapply( lSubPops, names ) ) )
+    for( strFactor in vAllFactors )
+    {
+        if( strFactor %in% names( SimData ) )
+        {
+            SimData[[ strFactor ] ] <- factor( SimData[[ strFactor ] ],
+                                               levels = unique( SimData[[ strFactor ] ] ) )
+        }
+    }
+
+    # Step 6: Initialize output lists
+    lTestStatistics <- list()
+    lHazardRatios   <- list()
+    lDecisions      <- list()
+    vTestStats      <- c()
+    vPopOrder       <- c()
+
+    # Step 7: Compute test statistics and collect populations
+    for( strPopName in names( lPopFilters ) )
+    {
+        dfSubsetData <- SimData[ lPopFilters[[ strPopName ] ], ]
+
+        if( nrow( dfSubsetData ) > 0 )
+        {
+            # Identify stratification factors
+            if( strPopName == "Full Population" )
+            {
+                vCurrentStratFactors <- vAllFactors
+            }
+            else
+            {
+                vCurrentStratFactors <- names( lSubPops[[ strPopName ] ] )
+            }
+            vCurrentStratFactors <- vCurrentStratFactors[ vCurrentStratFactors %in% names( dfSubsetData ) ]
+
+            # Build survival formula
+            if( length( vCurrentStratFactors ) > 0 )
+            {
+                fStrataFormula <- stats::as.formula(
+                    paste0(
+                        "survival::Surv(ObservedTime, Event) ~ TreatmentID + ",
+                        paste0( "survival::strata(`", vCurrentStratFactors, "`)", collapse = " + " )
+                    )
+                )
+            }
+            else
+            {
+                fStrataFormula <- survival::Surv( ObservedTime, Event ) ~ TreatmentID
+            }
+
+            # Estimate the hazard ratio
+            cCoxFit <- survival::coxph( fStrataFormula, data = dfSubsetData )
+            dHR     <- exp( coef( cCoxFit ) )
+
+            # Run the log-rank test
+            cSurvDiff <- survival::survdiff( fStrataFormula, data = dfSubsetData )
+            dTestStat <- sqrt( cSurvDiff$chisq )
+            dTestStat <- ifelse( unname( dHR ) < 1, dTestStat * -1, dTestStat )
+
+            # Store outputs in named lists
+            lTestStatistics[[ strPopName ] ] <- as.double( dTestStat )
+            lHazardRatios[[ strPopName ] ]   <- as.double( dHR )
+            vTestStats <- c( vTestStats, dTestStat )
+            vPopOrder  <- c( vPopOrder, strPopName )
+        }
+        else
+        {
+            lTestStatistics[[ strPopName ] ] <- NA
+            lHazardRatios[[ strPopName ] ]   <- NA
+            vTestStats <- c( vTestStats, NA )
+            vPopOrder  <- c( vPopOrder, strPopName )
+        }
+    }
+
+    # Step 8: Compute GMCP decisions
+    lGMCPResult <- ComputeGMCPDecisions(
+        vTestStats  = vTestStats,
+        nTailType   = DesignParam$TailType,
+        dAlpha      = DesignParam$Alpha,
+        vWeights    = DesignParam$PropAlpha,
+        mTransition = DesignParam$TransitionMatrix
+    )
+
+    # Step 9: Map GMCP decisions to populations and store them in a named list
+    for( iPop in seq_along( vPopOrder ) )
+    {
+        strPopName <- vPopOrder[ iPop ]
+        nGMCPFlag  <- lGMCPResult$decisionFlag[ iPop ]
+
+        if( nGMCPFlag == 1 )
+        {
+            nFinalDecision <- 2
+        }
+        else if( nLookIndex == nQtyOfLooks )
+        {
+            nFinalDecision <- 3
+        }
+        else
+        {
+            nFinalDecision <- 0
+        }
+
+        lDecisions[[ strPopName ] ] <- as.integer( nFinalDecision )
+    }
+
+    # Step 10: Return results
+    lRet <- list( Decision     = as.list( lDecisions ),
+                  TestStat     = as.list( lTestStatistics ),
+                  dHR          = as.list( lHazardRatios ),
+                  AnalysisTime = as.double( dTimeOfAnalysis ),
+                  ErrorCode    = as.integer( nError ) )
+
+    return( lRet )
 }
 
-compute_gMCPDecisions <- function( testStats, tailType, alpha, weights, tpm ) {
-  isTestStatMissing <- is.nan( testStats ) | is.na( testStats );
-  if( any( isTestStatMissing ) ) {
-    testStats[ which( isTestStatMissing == TRUE ) ] <- ifelse( tailType == "Left-Tail", Inf, -Inf )
-  }
+ComputeGMCPDecisions <- function( vTestStats, nTailType, dAlpha, vWeights, mTransition )
+{
+    bTestStatMissing <- is.nan( vTestStats ) | is.na( vTestStats )
+    if( any( bTestStatMissing ) )
+    {
+        vTestStats[ which( bTestStatMissing == TRUE ) ] <- ifelse( nTailType == "Left-Tail", Inf, -Inf )
+    }
 
-  #Computing raw p-values
-  if( tailType == 0 ) {
-    raw.p.values <- pnorm( q=testStats, lower.tail=TRUE )
-  } else {
-    raw.p.values <- pnorm( q=testStats, lower.tail=FALSE )
-  }
+    # Compute raw p-values
+    if( nTailType == 0 )
+    {
+        vRawPValues <- stats::pnorm( q = vTestStats, lower.tail = TRUE )
+    }
+    else
+    {
+        vRawPValues <- stats::pnorm( q = vTestStats, lower.tail = FALSE )
+    }
 
-  #Creating graph object
-  graph <- gMCPLite::matrix2graph( m=tpm, weights = weights )
+    # Create the graph object and apply the gMCP procedure
+    cGraph  <- gMCPLite::matrix2graph( m = mTransition, weights = vWeights )
+    cOutput <- gMCPLite::gMCP( graph = cGraph, pvalues = vRawPValues,
+                               est = "Bonferroni", alpha = dAlpha )
 
-  #Applying gMCP procedure
-  output <- gMCPLite::gMCP( graph=graph, pvalues = raw.p.values, est="Bonferroni", alpha = alpha )
-
-  return( list( raw.p.values=raw.p.values, adj.p.values=output@adjPValues,
-              decisionFlag= as.numeric( output@rejected ) ) ) #While returning output, converting logical decison flags to numeric
+    lRet <- list( raw.p.values = vRawPValues,
+                  adj.p.values = cOutput@adjPValues,
+                  decisionFlag = as.numeric( cOutput@rejected ) )
+    return( lRet )
 }

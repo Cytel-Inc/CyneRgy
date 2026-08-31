@@ -5,7 +5,7 @@
 #' Compares each experimental arm with control using a chi-squared test and selects
 #' arms below the user-defined p-value threshold, with a smallest-p-value fallback.
 #' @author Sydney Ringold, J. Kyle Wathen
-#' @param SimData Dataframe which consists of data generated in current simulation
+#' @param SimData Data frame which consists of data generated in current simulation
 #' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
 #' @param LookInfo List containing parameters for the current analysis look.
 #' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.

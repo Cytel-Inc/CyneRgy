@@ -57,7 +57,8 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     dDose             <- UserParam$Dose             # Dose administered
 
     # Check if all required Emax parameters are provided
-    if( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) ) {
+    if( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) )
+    {
         nError <- -1 # Fatal error if required parameters are missing
         lRetval$ErrorCode <- as.integer( nError )
         return( lRetval )
@@ -119,7 +120,7 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
         vParameters <- c( dAbsorptionRate =  dAbsorptionRate, dEliminationRate =  dEliminationRate )
 
         # Solve ODE for each visit time
-        vConcentration <- numeric( NumVisit ) #prepare a vector (NumVisit length) to store concentrations at each visit
+        vConcentration <- numeric( NumVisit ) # Prepare a vector (NumVisit length) to store concentrations at each visit
 
         for( nVisitIndx in 1:NumVisit )
         {
@@ -164,7 +165,8 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
 # Helper ODE function for one-compartment model with first-order absorption ####
 OneCompartmentModelPK <- function( ime, state, parameters )
 {
-    with( as.list( c( state, parameters ) ), {
+    with( as.list( c( state, parameters ) ),
+    {
 
         dA1 <- - dAbsorptionRate * A1  # Change in drug amount in absorption compartment
         dA2 <- ( dAbsorptionRate * A1 -  dEliminationRate * A2 )  # Change in drug concentration in central compartment
