@@ -4,6 +4,8 @@
 #   Last Modified Date: 2025/10/29
 ####################################################################################################
 
+utils::globalVariables( c( "fill", "label", "textSize", "x", "xend", "xmax", "xmin", "y", "yend", "ymax", "ymin" ) )
+
 #' @name PlotExampleFlowchart
 #' @title Generate a Flowchart for a CyneRgy Example
 #'
@@ -67,10 +69,6 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
                                  bShowTreatmentSelection = FALSE,
                                  bShowMultiplicityAdjustment = FALSE,
                                  bShowDesign = FALSE) {
-    library(ggplot2)
-    library(grid)
-    library(stringr)
-    
     # Set max characters per line and title size depending on number of used points
     nUsed <- length(lIntPoints)
     nMaxCharsPerLine <- ifelse(nUsed == 1, 40, 30)
@@ -199,8 +197,8 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
         dfArrows <- data.frame(
             x = (dfColumns$xmin[vIdx] + dfColumns$xmax[vIdx]) / 2,
             xend = (dfColumns$xmin[vIdx] + dfColumns$xmax[vIdx]) / 2,
-            y = head(dfFlowchart$ymin, -1),
-            yend = tail(dfFlowchart$ymax, -1)
+            y = utils::head(dfFlowchart$ymin, -1),
+            yend = utils::tail(dfFlowchart$ymax, -1)
         )
         
         lFlowcharts[[strPoint]] <- list(boxes = dfFlowchart, arrows = dfArrows)
@@ -234,40 +232,40 @@ PlotExampleFlowchart <- function(lIntPoints = list(),
     
     # Build ggplot
     p <- ggplot2::ggplot() +
-        geom_rect(data = dfColumns,
-                  aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+        ggplot2::geom_rect(data = dfColumns,
+                  ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
                   color = dfColumns$border) +
-        scale_fill_identity() +
-        geom_text(data = dfColumns,
-                  aes(x = (xmin + xmax)/2, y = ymax + 0.7, label = label, size = textSize),
+        ggplot2::scale_fill_identity() +
+        ggplot2::geom_text(data = dfColumns,
+                  ggplot2::aes(x = (xmin + xmax)/2, y = ymax + 0.7, label = label, size = textSize),
                   vjust = 1) +
-        scale_size_identity()
+        ggplot2::scale_size_identity()
     
     # Flowchart boxes and arrows
     for (fc in lFlowcharts) {
         p <- p +
-            geom_rect(data = fc$boxes,
-                      aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            ggplot2::geom_rect(data = fc$boxes,
+                      ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
                       color = "black") +
-            geom_text(data = fc$boxes,
-                      aes(x = (xmin + xmax)/2, y = (ymin + ymax)/2, label = label),
+            ggplot2::geom_text(data = fc$boxes,
+                      ggplot2::aes(x = (xmin + xmax)/2, y = (ymin + ymax)/2, label = label),
                       size = 2.5) +
-            geom_curve(data = fc$arrows,
-                       aes(x = x, y = y, xend = xend, yend = yend),
-                       curvature = 0, arrow = arrow(length = unit(0.15, "cm")),
+            ggplot2::geom_curve(data = fc$arrows,
+                       ggplot2::aes(x = x, y = y, xend = xend, yend = yend),
+                       curvature = 0, arrow = grid::arrow(length = grid::unit(0.15, "cm")),
                        color = "black")
     }
     
     # Legend
     p <- p +
-        geom_rect(data = dfLegend,
-                  aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+        ggplot2::geom_rect(data = dfLegend,
+                  ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
                   color = "black") +
-        geom_text(data = dfLegend,
-                  aes(x = (xmin + xmax)/2, y = ymin - 0.1, label = label),
+        ggplot2::geom_text(data = dfLegend,
+                  ggplot2::aes(x = (xmin + xmax)/2, y = ymin - 0.1, label = label),
                   size = 2.5, vjust = 1) +
-        theme_void() +
-        theme(panel.background = element_rect(fill = 'white', colour = 'white'))
+        ggplot2::theme_void() +
+        ggplot2::theme(panel.background = ggplot2::element_rect(fill = 'white', colour = 'white'))
     
     return(p)
 }

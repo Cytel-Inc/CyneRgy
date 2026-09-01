@@ -19,7 +19,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
 |**NumVisit**|Integer|Number of visits.|
-|**ArrivalTime**|Vector of Numeric|Optional. Vector of length `NumSub`, indicating the arrival time for each subject.|
+|**ArrivalTime**|Vector of Numeric|Vector of length `NumSub`, indicating the arrival time for each subject.|
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**Inputmethod**|Integer|Two options:<br>– `0`: The mean and SD values represent actual values.<br>– `1`: They represent an expected change from baseline at each visit rather than the true means.|
 |**VisitTime**|Vector of Numeric|Vector of length `NumVisit`, indicating the visit times.|
@@ -52,9 +52,9 @@ Note: Additional custom variables can be included as members of the output list.
 
 # Minimal Template
 
-Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. Optional parameters such as `ArrivalTime` may be omitted. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
+Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
-A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.RepeatedMeasures.R) 
+A detailed template with step-by-step explanations is available here: [SimulatePatientOutcome.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/SimulatePatientOutcome.RepeatedMeasures.R)
 
 ```
 GenerateResponse <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
@@ -62,18 +62,18 @@ GenerateResponse <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputm
   nError        	<- 0 # Error handling (no error)
   vOutResponse  	<- c()
   lReturn           <- list()
-  
-  # Add code to simulate the patient data as desired.  
+
+  # Add code to simulate the patient data as desired.
   # Example of how to create the return list with Response1, Response2, ..., ResponseNumVisit.
   # Store the generated continuous response values in a vector called vOutResponse for each subject.
   # Store the response vector in a list called lReturn for each visit.
   for(i in 1:NumVisit)
   {
       strVisitName              <- paste0( "Response", i ) # Response1, Response2, ..., ResponseNumVisit
-      vOutResponse              <- rep( 0, NumSub )  # Initializing response array to 0	
+      vOutResponse              <- rep( 0, NumSub )  # Initializing response array to 0
       lReturn[[ strVisitName ]] <- as.double( vOutResponse )
   }
-    
+
   lReturn$ErrorCode <- as.integer( nError )
   return( lReturn )
 }
@@ -85,4 +85,4 @@ Explore the following example for more context:
 
 1. [**2-Arm, Normal Outcome, Repeated Measures - Patient Simulation**](2ArmNormalRepeatedMeasuresResponseGeneration.html)
     - [GenerateResponseDiffOfMeansRepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/R/GenerateResponseDiffOfMeansRepeatedMeasures.R)
-    
+

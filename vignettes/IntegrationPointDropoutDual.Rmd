@@ -19,7 +19,7 @@ When creating a custom R script, you can optionally use specific variables provi
 |**TreatmentID**|Vector of Integer|Vector of length `NumSub`, indicating the allocation of subjects to arms. Index `0` represents placebo/control. For example, `[0, 0, 1]` indicates three subjects: two in the control group and one experimental. |
 |**DropMethod**|Integer|Selected input method for dropout parameters from the East Horizon dropdown list:<br>– `1`: Dropout hazard rate.<br>– `2`: Probability of dropout.|
 |**NumPrd**|Integer|Number of dropout periods in the trial. Equals to 1 if `DropMethod = 2`.|
-|**PrdTime**|Vector of Numeric|Vector or length `NumPrd`, indicating the times for dropout parameters. Depends on `DropMethod`:<br>– If `DropMethod = 1`: Starting times of dropout periods.<br>– If `DropMethod = 2`: Times at which the probabilities of dropout are specified.|
+|**PrdTime**|Vector of Numeric|Vector of length `NumPrd`, indicating the times for dropout parameters. Depends on `DropMethod`:<br>– If `DropMethod = 1`: Starting times of dropout periods.<br>– If `DropMethod = 2`: Times at which the probabilities of dropout are specified.|
 |**DropParam**|Matrix|Size: `NumPrd` rows $\times$ `NumArm` columns. Dropout parameters dependent on `DropMethod`:<br>– If `DropMethod = 1`: Specifies dropout hazard rates per arm per period. `DropParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period.<br>– If `SurvMethod = 2`: Specifies cumulative probabilities of dropout per arm per period. `SurvParam[i, j]` represents the probability of dropout for the `jth` arm in the `ith` period.|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointDropout.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
@@ -44,21 +44,21 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as this one, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
-A detailed template with step-by-step explanations is available here: [Dropout.Survival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R) 
+A detailed template with step-by-step explanations is available here: [Dropout.Survival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.Survival.R)
 
 ```
 GenDropTimes <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
-  vDropoutTime     	<- rep( Inf, NumSub ) # Initializing dropout times vector to Inf (all patients are completers)	
-  
+  vDropoutTime     	<- rep( Inf, NumSub ) # Initializing dropout times vector to Inf (all patients are completers)
+
   # Write the actual code here.
   # Store the generated dropout times in a vector called vDropoutTime
 
   return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nError ) ) )
 }
 ```
-Explore the example below for more context. Note that the example illustrates a single-endpoint setup; however, the same configuration applies to dual-endpoint projects. 
+Explore the example below for more context. Note that the example illustrates a single-endpoint setup; however, the same configuration applies to dual-endpoint projects.
 
 1. [**2-Arm, Single Endpoint - Simulate Patient Dropout**](2ArmPatientDropout.html)
     - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)

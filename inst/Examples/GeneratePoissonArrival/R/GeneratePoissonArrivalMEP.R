@@ -1,28 +1,29 @@
+######################################################################################################################## .
 #' @name GeneratePoissonArrivalMEP
-#' @title Generate patient arrival time according to a Poisson process.
-#' @param NumPat Integer. The number of participants that need to be simulated
-#' @param NumPrd Integer. Number of time periods that are provided.
-#' @param PrdStart Vector of numerics. The start time for each enrollment periods. PrdStart[ 1 ] = 0
-#' @param AccrRate Vector of Numerics. The accrual rate in each enrollment period.
-#' @param UserParam A list of user defined parameters that may be provided in East or East Horizon.
-#' The user may supplies rates names dRate1, dRate2, ...., dRateX to represent the per unit time accrual rate where the maximum dRateX is used after the ramp-up.
-#'    \describe{
-#'      \item{dRate1}{The rate in the first unit of time}
-#'      \item{dRate2}{The rate in the first second of time}
-#'    }
-#' @return A list containing the arrival times (ArrivalTime) and error code (ErrorCode)
-#' @description
-#' This function allows for patient arrival time in the clinical trial according to a Poisson process.  If the UserParam is provided then PrdStart and AccrRate are ignored.
-#' If the UserParam is supplied, a ramp-up in accrual is obtained by
-#' supplying more than one Rate parameter. The rate is per unit time and the Rate with the largest index will be used after the ramp up.
-#' If UserParam is not supplied, then PrdStart, AccrRate are used to simulate arrival times according to a Poisson process.
-GeneratePoissonArrivalMEP  <- function(NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+#' @title Generate Multi-Endpoint Patient Arrival Times Using a Poisson Process
+#' @description Generates patient arrival times using period-specific Poisson accrual rates. When `UserParam` is
+#' supplied, its named rates override `PrdStart` and `AccrRate` and provide a ramp-up schedule.
+#' @author J. Kyle Wathen
+#' @param NumPat Integer number of patients in the trial.
+#' @param NumPrd Integer number of accrual periods.
+#' @param PrdStart Numeric vector of length `NumPrd`, indicating the start time of each accrual period; `PrdStart[ 1 ] = 0`.
+#' @param AccrRate Numeric vector of length `NumPrd`, indicating the accrual rate in each period.
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#'   \describe{
+#'     \item{UserParam$dRate1, ..., UserParam$dRateN}{Poisson accrual rate for each successive one-unit period. The final rate continues after period `N`.}
+#'   }
+#'   When `UserParam` is `NULL`, the function uses `PrdStart` and `AccrRate`.
+#' @return A list containing `ArrivalTime`, a numeric vector of length `NumPat`; `nQtyOfRates`, an integer vector
+#' reporting the number of rates; and `ErrorCode`, an integer status code where 0 indicates success.
+######################################################################################################################## .
+
+GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {
     # Error = 0 --> No Error;
-    # Error > 0 --> Non Fatal Error Particular Simulation will be aborted but Next Simulation will be performed
+    # Error > 0 --> Nonfatal error; the current simulation will be aborted, but the next simulation will run
     # Error < 0 --> Fatal Error - No further simulation will be attempted. We suggest that user should classify error in these categories depending on the context.
     # Step 1 - Initialize the return variables or other variables needed ####
-    Error 	            <- 0
+    nError               <- 0
     vPatientArrivalTime <- c() # Note, as you simulate the patient data put in in this vector so it can be returned
 
     # Step 2 - Validate custom variable input and set defaults ####
@@ -33,29 +34,34 @@ GeneratePoissonArrivalMEP  <- function(NumPat, NumPrd, PrdStart, AccrRate, UserP
         vPeriodStartTime <- PrdStart
         vRates           <- AccrRate
         nQtyOfRates      <- length( vRates )
-
-
     }
     else
     {
         # Step 2.2 - Pull the rates of and create a vector ####
         nQtyOfRates      <- length( UserParam )
         vRates           <- rep( NA, nQtyOfRates )
-        vPeriodStartTime <- 0:(nQtyOfRates - 1)
+        vPeriodStartTime <- 0:( nQtyOfRates - 1 )
         for( i in 1:nQtyOfRates )
         {
-            vRates[ i ] <- UserParam[[ paste0( "dRate", i ) ]]
+            vRates[ i ] <- UserParam[[ paste0( "dRate", i ) ] ]
         }
     }
 
-    vPeriodWidth <- c( diff( vPeriodStartTime ), 1)   # The 1 will assume to simulate 1 unit of time after the periods run out
+    vPeriodWidth <- c( diff( vPeriodStartTime ), 1 )
     # Step 3 - Loop over the patients and simulate the patient arrival times in the trial ####
 
-    nTimeIndex        <- 1
+    nTimeIndex <- 1
     while( length( vPatientArrivalTime ) < NumPat )
     {
-        vPatientArrivalTime <- c( vPatientArrivalTime, SimulateAccrualTimesWithConstantRate( vRates[ nTimeIndex ], vPeriodStartTime[ nTimeIndex ], vPeriodWidth[ nTimeIndex ] ) )
-        nTimeIndex  <- nTimeIndex + 1
+        vPatientArrivalTime <- c(
+            vPatientArrivalTime,
+            SimulateAccrualTimesWithConstantRate(
+                vRates[ nTimeIndex ],
+                vPeriodStartTime[ nTimeIndex ],
+                vPeriodWidth[ nTimeIndex ]
+            )
+        )
+        nTimeIndex <- nTimeIndex + 1
         if( nTimeIndex > nQtyOfRates )
         {
             nTimeIndex <- nQtyOfRates
@@ -63,27 +69,24 @@ GeneratePoissonArrivalMEP  <- function(NumPat, NumPrd, PrdStart, AccrRate, UserP
         }
     }
 
-    # If the last rep generated too many arrival times, subset to only what we need.
-    vPatientArrivalTime <- vPatientArrivalTime[ 1:NumPat]
+    # If the last replication generated too many arrival times, retain only those needed.
+    vPatientArrivalTime <- vPatientArrivalTime[ 1:NumPat ]
 
-
-
-
-	return(list(ArrivalTime = as.double(vPatientArrivalTime), nQtyOfRates=rep(nQtyOfRates,NumPat), ErrorCode =as.integer(Error)))
+    return( list(
+        ArrivalTime = as.double( vPatientArrivalTime ),
+        nQtyOfRates = rep( nQtyOfRates, NumPat ),
+        ErrorCode = as.integer( nError )
+    ) )
 }
 
-
-
-SimulateAccrualTimesWithConstantRate <- function( dPatsPerUnitTime , dPeriodStartTime, dQtyOfUnitsOfTime = 1  )
+SimulateAccrualTimesWithConstantRate <- function( dPatsPerUnitTime, dPeriodStartTime, dQtyOfUnitsOfTime = 1 )
 {
-    nMaxQtyPatsInThisTimeUnit <- qpois(0.9999,dPatsPerUnitTime)+10
-    vIntraArrivalTime         <- rexp( dQtyOfUnitsOfTime * nMaxQtyPatsInThisTimeUnit, dPatsPerUnitTime)
+    nMaxQtyPatsInThisTimeUnit <- qpois( 0.9999, dPatsPerUnitTime ) + 10
+    vIntraArrivalTime <- rexp( dQtyOfUnitsOfTime * nMaxQtyPatsInThisTimeUnit, dPatsPerUnitTime )
 
     vTimes <- cumsum( vIntraArrivalTime )
     vTimes <- vTimes[ vTimes < dQtyOfUnitsOfTime ]
     vTimes <- vTimes + dPeriodStartTime
+
     return( vTimes )
-
 }
-
-

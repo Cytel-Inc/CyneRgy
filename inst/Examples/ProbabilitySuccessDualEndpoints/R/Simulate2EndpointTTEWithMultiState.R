@@ -1,25 +1,23 @@
 ######################################################################################################################## .
-#  Last Modified Date: 02/18/2026
 #' @name Simulate2EndpointTTEWithMultiState
 #' @title Simulate Trial Data for Two Time-to-Event Endpoints Using a Multi-State Model
-#' 
 #' @description
-#' This function generates simulated trial data for two time-to-event (TTE) endpoints, progression-free survival (PFS) 
-#' and overall survival (OS), using a multi-state model. The simulation utilizes input parameters such as the number 
+#' This function generates simulated trial data for two time-to-event (TTE) endpoints, progression-free survival (PFS)
+#' and overall survival (OS), using a multi-state model. The simulation utilizes input parameters such as the number
 #' of subjects, number of arms, and user-defined survival parameters.
-#' 
-#' @param NumSub The number of subjects to simulate for the trial. A single numeric value, e.g., 250.
-#' @param NumArm The number of arms in the trial, a single numeric value. For a two-arm trial, this will be 2.
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
-#' @param TreatmentID A vector of treatment IDs, where 0 corresponds to control and 1 corresponds to experimental. 
+#' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #'                    The length of this vector must equal NumSub.
 #' @param SurvMethod A numeric value specifying the survival method:
 #'                   \describe{
 #'                       \item{1}{Hazard Rate}
-#'                       \item{2}{Cumulative % Survival}
+#'                       \item{2}{Cumulative \% Survival}
 #'                       \item{3}{Medians}
 #'                   }
-#' @param NumPrd The number of time periods that are provided. 
+#' @param NumPrd The number of time periods that are provided.
 #' @param PrdTime A vector defining the time periods:
 #'                \describe{
 #'                    \item{If SurvMethod = 1}{Start times of hazard pieces.}
@@ -32,7 +30,7 @@
 #'                      \item{If SurvMethod = 2}{A NumPrd x NumArm array specifying cumulative survival percentages for each arm and time period.}
 #'                      \item{If SurvMethod = 3}{A 1x2 array specifying median survival times for each arm (control in column 1, experimental in column 2).}
 #'                  }
-#' @param UserParam A list of user-defined parameters. Can contain the following named elements:
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  \describe{
 #'                      \item{UserParam$dMedianPFS0}{Median time to PFS event for the control group.}
 #'                      \item{UserParam$dMedianPFS1}{Median time to PFS event for the treatment group.}
@@ -54,7 +52,7 @@
 #'                      \item{UserParam$dProbOfDeathBeforeProgression1Param1}{Alpha parameter for probability of death before PFS for the treatment group.}
 #'                      \item{UserParam$dProbOfDeathBeforeProgression1Param2}{Beta parameter for probability of death before PFS for the treatment group.}
 #'                  }
-#' 
+#'
 #' @return A list containing the following elements:
 #'         \describe{
 #'             \item{SurvivalTime}{A vector of simulated PFS times for each subject.}
@@ -68,34 +66,33 @@
 #'             }
 ######################################################################################################################## .
 
-Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, TreatmentID,  
+Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
                                                 SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
     # Step 1 - Initialize the return variables or other variables needed ####
-    Error 	        <- 0
+    nError          <- 0
 
     # Step 2 - Validate custom variable input and set defaults ####
     if( is.null( UserParam ) )
     {
         # Return fatal error if no user param
-        return( list( ErrorCode     = as.integer( -1 ), 
+        return( list( ErrorCode     = as.integer( -1 ),
                       SurvivalTime  = as.integer( 0 ),
                       OS            = as.double( 0 ) ) )
     }
-    
+
     # Step 3 - Simulate the patient data ####
     # There are two Options:
     vValuesOption1 <- unlist( UserParam[ c( "dMedianPFS0", "dMedianOS0", "dProbOfDeathBeforeProgression0",
                                             "dMedianPFS1", "dMedianOS1", "dProbOfDeathBeforeProgression1"
     ) ], use.names = FALSE )
-    
+
     vValuesOption2 <- unlist( UserParam[ c( "dMedianPFS0PriorShape", "dMedianPFS0PriorRate", "dProbOfDeathBeforeProgression0Param1",
                                             "dMedianOS0PriorShape", "dMedianOS0PriorRate", "dProbOfDeathBeforeProgression0Param2",
                                             "dMedianPFS1PriorShape", "dMedianPFS1PriorRate", "dProbOfDeathBeforeProgression1Param1",
                                             "dMedianOS1PriorShape", "dMedianOS1PriorRate", "dProbOfDeathBeforeProgression1Param2"
     ) ], use.names = FALSE )
-    
-    
+
     # Option 1: directly input the median times and probabilities of death before progression. In this case, vValuesOption1 are used and vValuesOption2 ignored.
     if( length( vValuesOption1 ) == 6 && !( all( vValuesOption1 == 0 ) ) )
     {
@@ -103,68 +100,67 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
         dMedianPFS0 <- UserParam$dMedianPFS0
         dMedianOS0  <- UserParam$dMedianOS0
         dProbOfDeathBeforeProgression0 <- UserParam$dProbOfDeathBeforeProgression0
-        
+
         dMedianPFS1 <- UserParam$dMedianPFS1
         dMedianOS1  <- UserParam$dMedianOS1
         dProbOfDeathBeforeProgression1 <- UserParam$dProbOfDeathBeforeProgression1
-        
+
         vPatsPerArm   <- table( TreatmentID )
         dfControlPats <- SimulateDualMultiStateTTE( vPatsPerArm[ 1 ], dMedianPFS0, dMedianOS0, dProbOfDeathBeforeProgression0 )
         dfExpPats     <- SimulateDualMultiStateTTE( vPatsPerArm[ 2 ], dMedianPFS1, dMedianOS1, dProbOfDeathBeforeProgression1 )
-        
+
     }
-    # Option 2: customize how patient data is simulated by building a more realistic model for both PFS and OS outcomes 
+    # Option 2: customize how patient data is simulated by building a more realistic model for both PFS and OS outcomes
     # using prior distributions. In this case, vValuesOption2 are used and vValuesOption1 are ignored.
-    
+
     else if( length( vValuesOption2 ) == 12 && !( all( vValuesOption2 == 0 ) ) )
     {
         vPatsPerArm   <- table( TreatmentID )
-        
-        # First need to sample the prior for control 
+
+        # First need to sample the prior for control
         dfControlPats <-  data.frame( vPFS = NA, vOS = NA )
         nAttempt2     <- 1
-        while( any( is.na( dfControlPats$vPFS ) ) & nAttempt2 <= 100 ) 
+        while( any( is.na( dfControlPats$vPFS ) ) & nAttempt2 <= 100 )
         {
             dMedianOS0  <- 1
             dMedianPFS0 <- 2
-            nAttempt    <- 1 
+            nAttempt    <- 1
             while( dMedianOS0 < dMedianPFS0 & nAttempt <= 100 )
             {
                 dMedianPFS0 <- rgamma( 1, UserParam$dMedianPFS0PriorShape, UserParam$dMedianPFS0PriorRate )
                 dMedianOS0  <- rgamma( 1, UserParam$dMedianOS0PriorShape, UserParam$dMedianOS0PriorRate )
-                dProbOfDeathBeforeProgression0 <- rbeta( 1,  UserParam$dProbOfDeathBeforeProgression0Param1,  UserParam$dProbOfDeathBeforeProgression0Param2 )
-                
+                dProbOfDeathBeforeProgression0 <- rbeta( 1, UserParam$dProbOfDeathBeforeProgression0Param1, UserParam$dProbOfDeathBeforeProgression0Param2 )
+
                 nAttempt <- nAttempt + 1
             }
             if( nAttempt > 100 )
             {
                 # Error could not sample a OS that is greater than PFS median
-                Error <- 1  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
-                return(  list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
-                               OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
-                               ErrorCode = as.integer( Error ) ) )
+                nError <- 1  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+                return( list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ),
+                               OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ),
+                               ErrorCode = as.integer( nError ) ) )
             }
-            
-            
+
             dfControlPats <- SimulateDualMultiStateTTE( vPatsPerArm[ 1 ], dMedianPFS0, dMedianOS0, dProbOfDeathBeforeProgression0 )
-            nAttempt2     <- nAttempt2 + 1 
+            nAttempt2     <- nAttempt2 + 1
         }
-        
+
         if( nAttempt2 > 100 )
         {
             # Error could not sample a OS that is greater than PFS median
-            Error <- 2  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
-            return( list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
-                          OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
-                          ErrorCode = as.integer( Error ) ) )
+            nError <- 2  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+            return( list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ),
+                          OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ),
+                          ErrorCode = as.integer( nError ) ) )
         }
-        
-        # Sample median PFS, OS and prob  from the experimental arm 
+
+        # Sample median PFS, OS and prob  from the experimental arm
         dfExpPats     <-  data.frame( vPFS = NA, vOS = NA )
         nAttempt2     <- 1
-        while( any( is.na(dfExpPats$vPFS ) ) & nAttempt2 <= 100 ) 
+        while( any( is.na( dfExpPats$vPFS ) ) & nAttempt2 <= 100 )
         {
-            dMedianOS1  <- 1 
+            dMedianOS1  <- 1
             dMedianPFS1 <- 2
             nAttempt    <- 1
             while( dMedianOS1 < dMedianPFS1 & nAttempt <= 100 )
@@ -174,154 +170,111 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
                 dProbOfDeathBeforeProgression1 <- rbeta( 1, UserParam$dProbOfDeathBeforeProgression1Param1, UserParam$dProbOfDeathBeforeProgression1Param2 )
                 nAttempt <- nAttempt + 1
             }
-            
+
             if( nAttempt > 100 )
             {
                 # Error could not sample a OS that is greater than PFS median
-                Error <- 3  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
-                return(  list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
-                               OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
-                               ErrorCode = as.integer( Error ) ) )
+                nError <- 3  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+                return( list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ),
+                               OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ),
+                               ErrorCode = as.integer( nError ) ) )
             }
-            
+
             dfExpPats     <- SimulateDualMultiStateTTE( vPatsPerArm[ 2 ], dMedianPFS1, dMedianOS1, dProbOfDeathBeforeProgression1 )
-            
-            nAttempt2     <- nAttempt2 + 1 
+
+            nAttempt2     <- nAttempt2 + 1
         }
-        
+
         if( nAttempt2 > 100 )
         {
             # Error could not sample a OS that is greater than PFS median
-            Error <- 4  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
-            return(list( SurvivalTime = as.double(rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ]) ), 
-                         OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ), 
-                         ErrorCode = as.integer( Error ) ) )
+            nError <- 4  # Non-fatal error throw this set out, but if this happens a lot then the user should reconsider the parameters
+            return( list( SurvivalTime = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ),
+                         OS = as.double( rep( 1, vPatsPerArm[ 1 ] + vPatsPerArm[ 2 ] ) ),
+                         ErrorCode = as.integer( nError ) ) )
         }
-    } 
-    else 
+    }
+    else
     {
         # Return fatal error if UserParam variables are partially present for either option or all are zeros.
-        return( list( ErrorCode     = as.integer( -2 ), 
+        return( list( ErrorCode     = as.integer( -2 ),
                       SurvivalTime  = as.integer( 0 ),
-                      OS            = as.double( 0 ) ) ) 
-        
+                      OS            = as.double( 0 ) ) )
+
     }
-    
+
     vPFS          <- rep( NA, NumSub )
     vOS           <- rep( NA, NumSub )
-    
+
     vPFS[ TreatmentID == 0 ] <- dfControlPats$vPFS
     vPFS[ TreatmentID == 1 ] <- dfExpPats$vPFS
-    
+
     vOS[ TreatmentID == 0 ] <- dfControlPats$vOS
     vOS[ TreatmentID == 1 ] <- dfExpPats$vOS
-    
-    return( list( SurvivalTime = as.double( vPFS ), OS = as.double( vOS ), ErrorCode = as.integer( Error ) ) )
+
+    return( list( SurvivalTime = as.double( vPFS ), OS = as.double( vOS ), ErrorCode = as.integer( nError ) ) )
 }
 
-
-######################################################################################################################## .
-# Additional helper functions ####
-######################################################################################################################## .
-
-
-#################################################################################################### .
-#' @name SimulateDualMultiStateTTE
-#' @title Simulate Dual Multi-State Time-to-Event Data
-#' 
-#' @description
-#' This function simulates progression-free survival (PFS) and overall survival (OS) using a multi-state model. 
-#' Patients can transition between states: progression-free, progression, and death. It uses exponential distributions 
-#' to model time-to-event transitions based on specified median survival times and probabilities of death before progression.
-#' 
-#' @param nQtyOfPatients Number of patients to simulate.
-#' @param dMedianPFS Median time for progression-free survival (PFS). PFS includes patients who progress and patients who die before progression.
-#' @param dMedianOS Median time for overall survival (OS).
-#' @param dProbOfDeathBeforeProgression Probability that a patient dies before the progression event is observed.
-#' @return A data frame containing two columns:
-#'         \describe{
-#'             \item{vPFS}{Simulated progression-free survival times.}
-#'             \item{vOS}{Simulated overall survival times.}
-#'         }
-#################################################################################################### .
+# Simulate dual multi-state time-to-event data ####
 
 SimulateDualMultiStateTTE <- function( nQtyOfPatients, dMedianPFS, dMedianOS, dProbOfDeathBeforeProgression )
 {
     # Get alphas using ComputeAlphasForMultiStateModel function
     lAlphas <- ComputeAlphasForMultiStateModel( dMedianPFS, dMedianOS, dProbOfDeathBeforeProgression )
-    
+
     if( lAlphas$Error == -1 )
     {
         dfRet <- data.frame( vPFS = NA, vOS = NA )
         return( dfRet )
     }
-    
+
     dAlpha01 <- lAlphas$dRateTimeToProgression
     dAlpha02 <- lAlphas$dRateTimeToDeath
     dAlpha12 <- lAlphas$dRateTimeFromProgressionToDeath
-    
+
     # Generate time to progression (X1) using alpha1
     vTimeToProgression <- rexp( nQtyOfPatients, dAlpha01 )
     # Generate time to death (X2) using alpha2
     vTimeToDeath <- rexp( nQtyOfPatients, dAlpha02 )
     # Generate time from progression to death (X3) using alpha12
     vTimeFromProgressionToDeath <- rexp( nQtyOfPatients, dAlpha12 )
-    
+
     # Initialize vectors to capture PFS and OS
     vPFS <- c()
     vOS  <- c()
     for( iPat in 1:nQtyOfPatients )
     {
-        if ( vTimeToProgression[ iPat ] < vTimeToDeath[ iPat ] )
+        if( vTimeToProgression[ iPat ] < vTimeToDeath[ iPat ] )
         {
             vPFS <- c( vPFS, vTimeToProgression[ iPat ] )
             vOS  <- c( vOS, vTimeToProgression[ iPat ] + vTimeFromProgressionToDeath[ iPat ] )
-        } else
+        }
+        else
         {
             vPFS <- c( vPFS, vTimeToDeath[ iPat ] )
             vOS  <- c( vOS, vTimeToDeath[ iPat ] )
         }
     }
-    
+
     dfRet <- data.frame( vPFS, vOS )
     return( dfRet )
 }
 
-
-#################################################################################################### .
-#' @name ComputeAlphasForMultiStateModel
-#' @title Compute Transition Rates for Multi-State Model
-#' 
-#' @description
-#' This function calculates transition rates (alphas) for a multi-state model based on input parameters. 
-#' The model transitions include time to progression, time to death, and time from progression to death. 
-#' The rates are derived from median survival times and the probability of death before progression.
-#' 
-#' @param dMedianPFS Median time for progression-free survival (PFS).
-#' @param dMedianOS Median time for overall survival (OS).
-#' @param dProbOfDeathBeforeProgression Probability that a patient dies before the progression event is observed.
-#' @return A list containing:
-#'         \describe{
-#'             \item{dAlpha01}{Rate for time to progression.}
-#'             \item{dAlpha02}{Rate for time to death without progression.}
-#'             \item{dAlpha12}{Rate for time from progression to death.}
-#'             \item{Error}{Error code, where 0 indicates success and -1 indicates failure.}
-#'         }
-#################################################################################################### .
+# Compute transition rates for the multi-state model ####
 
 ComputeAlphasForMultiStateModel <- function( dMedianPFS, dMedianOS, dProbOfDeathBeforeProgression )
 {
     dMedianProgToDeath <- ComputeMedianProgToDeath( dMedianPFS, dMedianOS, dProbOfDeathBeforeProgression )
-    
+
     if( is.na( dMedianProgToDeath ) )
     {
         return( list( Error = -1 ) )
     }
     dOneMinusPDivP     <- ( ( 1 - dProbOfDeathBeforeProgression ) / dProbOfDeathBeforeProgression )
-    dAlpha02           <- log( 2 ) / ( dMedianPFS * (dOneMinusPDivP + 1 ) )
+    dAlpha02           <- log( 2 ) / ( dMedianPFS * ( dOneMinusPDivP + 1 ) )
     dAlpha01           <- dOneMinusPDivP * dAlpha02
     dAlpha12           <- log( 2 ) / dMedianProgToDeath
-    
+
     lRet <- list( dAlpha01 = dAlpha01,
                   dAlpha02 = dAlpha02,
                   dAlpha12 = dAlpha12,
@@ -332,62 +285,36 @@ ComputeAlphasForMultiStateModel <- function( dMedianPFS, dMedianOS, dProbOfDeath
     return( lRet )   # Use an explicit return
 }
 
-
-#################################################################################################### .
-#' @name ComputeMedianProgToDeath
-#' @title Compute Median Time from Progression to Death
-#' 
-#' @description
-#' This function computes the median time from progression to death in a multi-state model. 
-#' It uses input parameters such as median progression-free survival (PFS), median overall survival (OS), 
-#' and the probability of death before progression to derive the median progression-to-death survival time.
-#' 
-#' @param dMedianPFS Median time for progression-free survival (PFS).
-#' @param dMedianOS Median time for overall survival (OS).
-#' @param dProbDeathB4Prog Probability of death before progression.
-#' @return Numeric value representing the median progression-to-death time. Returns `NA` if computation fails.
-#################################################################################################### .
+# Compute median time from progression to death ####
 
 ComputeMedianProgToDeath <- function( dMedianPFS, dMedianOS, dProbDeathB4Prog )
 {
     dMedianProgToDeath <- NA
-    
-    f <- function( x, dMedianPFS ){ return( ComputeMedianOS( dMedianPFS, x, dProbDeathB4Prog ) - dMedianOS) }
-    tryCatch({
+
+    f <- function( x, dMedianPFS ){ return( ComputeMedianOS( dMedianPFS, x, dProbDeathB4Prog ) - dMedianOS ) }
+            tryCatch(
+            {
         dMedianProgToDeath <- uniroot( f, lower = 0.01, upper = dMedianOS, dMedianPFS = dMedianPFS )$root
-    }, error = function(e){
+    }, error = function( e )
+    {
         dMedianProgToDeath <- NA
         return( dMedianProgToDeath )
-    })
-    
+    } )
+
     return( dMedianProgToDeath )
 }
 
-
-#################################################################################################### .
-#' @name ComputeMedianOS
-#' @title Compute Median Overall Survival Using Simulated Data
-#' 
-#' @description
-#' This function simulates progression-free survival (PFS) and overall survival (OS) times for a large number of patients. 
-#' It calculates the median overall survival based on these simulations. The function uses specified median PFS, median 
-#' progression-to-death times, and the probability of death before progression to simulate survival times.
-#' 
-#' @param dMedianPFS Median time for progression-free survival (PFS).
-#' @param dMedianProgToDeath Median time from progression to death.
-#' @param dProbDeathB4Prog Probability of death before progression.
-#' @return Numeric value representing the median overall survival (OS).
-#################################################################################################### .
+# Compute median overall survival using simulated data ####
 
 ComputeMedianOS <- function( dMedianPFS, dMedianProgToDeath, dProbDeathB4Prog )
 {
     n <- 10000
-    
+
     vPFS <- rexp( n, log( 2 ) / dMedianPFS )
     vOS  <- vPFS  + rexp( n, log( 2 ) / dMedianProgToDeath )
-    vDeathB4Prog <- rbinom( n, 1,  dProbDeathB4Prog )
+    vDeathB4Prog <- rbinom( n, 1, dProbDeathB4Prog )
     vOS <- ifelse( vDeathB4Prog == 1, vPFS, vOS )
-    
+
     dMedianOS <- median( vOS )
     return( dMedianOS )
 }

@@ -23,16 +23,14 @@ Important: **ArrivalTime** is a new required parameter. Existing R scripts must 
 
 # Introduction
 
-The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes assumed to follow a normal distribution.
+The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes assumed to follow a normal distribution.
 
-Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "2ArmNormalOutcomePatientSimulation" )
 ```
 
-Running the command above will load the RStudio project in RStudio. 
-
-**East Workbook**: [2ArmNormalOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj)
+**East Workbook**: [2ArmNormalOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.cywx)
 
 **RStudio Project File**: [2ArmNormalOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj)
 
@@ -41,8 +39,6 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 1.  [SimulatePatientOutcomePercentAtZero.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZero.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients have a null response. The code in Example 1 can be used when the proportion of patients with null response is a fixed value.   
 
 1.  [SimulatePatientOutcomePercentAtZeroBetaDist.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/SimulatePatientOutcomePercentAtZeroBetaDist.R) - This file provides an example R function to simulate patient data from a mixture distribution where a proportion of patients have a null response. This approach assumes that the probability of null response is unknown and must first be drawn from a Beta distribution.    
-
-1. [TestingAndExploration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/TestingAndExploration.R) - This file provides an example of loading East output and calling the R functions in in Example 1 from within R. The intent of this file is to help users call and test the function in Example 1.
 
 In addition, if you would like to experiment with these examples without looking at the complete solution, you can find fill-in-the-blank-type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomePatientSimulation/FillInTheBlankR).  
 
@@ -81,18 +77,18 @@ CyneRgy::PlotExampleFlowchart(
 
 ## Example 1.1 - All Patients Respond
 
-Assume that all patients will respond to treatment. A binomial distribution is used to determine whether a patient is a responder or a non-responder. If the patient is a responder, their outcome is simulated from a normal distribution using the mean and standard deviation specified in East Horizon or East and sent to R. In this example, the probability of a patient being a non-responder is set to zero. Refer to the table below for the values of the user-defined parameters used in this example.
+Assume that all patients will respond to treatment. A binomial distribution is used to determine whether a patient is a responder or a non-responder. If the patient is a responder, their outcome is simulated from a normal distribution using the mean and standard deviation specified in East Horizon  and sent to R. In this example, the probability of a patient being a non-responder is set to zero. Refer to the table below for the values of the user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
 |---|---|
 |**dProbOfZeroOutcomeCtrl**|0.0|
 |**dProbOfZeroOutcomeExp**|0.0|
 
-This demonstrates that using the R function with a non-responder probability of zero produces the same results as simulating the data directly with the default engine of East Horizon or East.
+This demonstrates that using the R function with a non-responder probability of zero produces the same results as simulating the data directly with the default engine of East Horizon .
 
 ## Example 1.2 - 20% of Non-Responders
 
-Now, assume that, on average, 20% of patients will not respond to treatment. A binomial distribution is used to determine whether a patient is a non-responder. If the patient is a responder, their outcome is simulated from a normal distribution using the mean and standard deviation specified in East or East Horizon and sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
+Now, assume that, on average, 20% of patients will not respond to treatment. A binomial distribution is used to determine whether a patient is a non-responder. If the patient is a responder, their outcome is simulated from a normal distribution using the mean and standard deviation specified in East Horizon and sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
 |---|---|

@@ -1,100 +1,115 @@
 ######################################################################################################################## .
-#' Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.  
-#' @param SimData Dataframe which consists of data generated in current simulation.
-#' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
-#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
+#' @name SelectExpThatAreBetterThanCtrl
+#' @title Select Treatments with Response Rates Above Control
 #' @description
-#'  At the interim analysis, select any treatment with a response rate that is higher than control for stage 2.
-#'  If none of the treatments have a higher response rate than control, select the treatment with the largest probability of response.
-#'  In the second stage, the randomization ratio will be 1:1 (experimental:control).
-#' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
-#' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-#' @note The length of TreatmentID and AllocRatio must be the same.
-#' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
-#' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
-#' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
-#' @note You must return at LEAST one treatment and one allocation ratio
-#' @examples  
-#'       # Example Output Object:
-#'       # Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
-#'       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
-#'       vAllocationRatio    <- c( 2, 2 )
-#'       nErrorCode          <- 0
-#'       lReturn             <- list( TreatmentID = vSelectedTreatments, 
-#'                                    AllocRatio  = vAllocationRatio,
-#'                                    ErrorCode   = nErrorCode )
-#'       return( lReturn )
-#'       
-#'       #Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-#'       vSelectedTreatments <- c( 1, 2 )  # Experimental 2 will receive twice as many as Experimental 1 or Control. 
-#'       vAllocationRatio    <- c( 1, 2 )
-#'       nErrorCode          <- 0
-#'       lReturn             <- list( TreatmentID = vSelectedTreatments, 
-#'                                    AllocRatio  = vAllocationRatio,
-#'                                    ErrorCode   = nErrorCode )
-#'       return( lReturn )
+#' Selects every experimental arm with an observed response rate above control.
+#' If no arm meets that rule, selects the experimental arm with the highest rate.
+#' @author Sydney Ringold, J. Kyle Wathen
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
+#'        \describe{
+#'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}
+#'          \item{TreatmentID}{An integer value specifying the index of arms to which subjects are allocated (one arm index per subject). Index for control is 0}
+#'          \item{Response}{An integer value where 1 indicates response and 0 indicates no response.}
+#'          \item{CensorInd}{An integer value indicating whether the subject was censored or not.}
+#'        }
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
+#'      \describe{
+#'          \item{SampleSize}{Integer. Sample size of the trial}
+#'          \item{Alpha}{Numeric. Type I Error}
+#'          \item{TrialType}{Integer. Type of the Trial. Values are Superiority: 0}
+#'          \item{TestType}{Integer. Values are One side: 0}
+#'          \item{TailType}{Integer. Values are Left Tailed: 0, Right Tailed: 1}
+#'          \item{InitialAllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size. Length = number of treatment arms.}
+#'          \item{VarType}{Integer. Variance Type. Values are Pooled: 0, Unpooled: 1}
+#'          \item{TestID}{Integer. Test ID. Values are Difference of Proportions: 303}
+#'          \item{MultAdjMethod}{Integer. Multiple Comparison Procedure. Values are Bonferroni: 0, Weighted Bonferroni: 2, Hochberg's Step Up: 4, Fixed Sequence: 6, Fallback: 7}
+#'          \item{NumTreatments}{Integer. Number of Treatment arms}
+#'          \item{AlphaProp}{Vector of Proportions of Alpha for each treatment arm}
+#'          \item{TestSeq}{Vector of integer Test Sequence for each comparison which corresponds to each treatment arm.}
+#'          \item{MaxCompleters}{Integer. Maximum Number of Completers.}
+#'          \item{CriticalPoint}{Numeric. Critical Value for a fixed sample design.}
+#'          \item{RespLag}{Numeric. Follow up duration.}
+#'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of treatment arms. Values are - Dropped in the interim: 0, Still present in the trial: 1}
+#'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of treatment arms.}
 #'
-#' @export
+#'      }
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
+#'                 \describe{
+#'                      \item{NumLooks}{An integer value with the number of looks in the study.}
+#'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1.}
+#'                      \item{CumCompleters}{Vector of Cumulative number of completer for all non time-to-event studies. Length = Number of looks.}
+#'                      \item{InfoFrac}{Vector of numeric Information fraction. Length = Number of looks.}
+#'                      \item{CumAlpha}{Vector of numeric Cumulative alpha spent, one sided tests. Length = Number of looks.}
+#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
+#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
+#'                      \item{EffBdryScale}{Integer. Efficacy boundary scale. Possible values are: Z Scale: 0}
+#'                      \item{EffBdry}{Vector of numeric efficacy boundaries, one sided tests. Length = Number of looks.}
+#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible value are: Delta Scale: 2}
+#'                      \item{FutBdry}{Vector of numeric futility boundaries, one sided tests. Length = Number of looks.}
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{RejType}{Integer. Rejection Type. Values are: 1 Sided Efficacy Upper: 0, 1 Sided Futility Upper: 1, 1 Sided Efficacy Lower: 2, 1 Sided Futility Lower: 3, 1 Sided Efficacy Upper Futility Lower: 4, 1 Sided Efficacy Lower Futility Upper: 5}
+#'                 }
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' @return A list containing `TreatmentID`, the selected experimental-arm indexes;
+#'   `AllocRatio`, their allocation ratios relative to control; and integer `ErrorCode`.
 ######################################################################################################################## .
 
-SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo, UserParam=NULL)
+SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
 {
     # Calculate the number of responders and treatment failures for each treatment
-    
+
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
-    
+
     # Compute the response probability as # of responses/(  # of treatment failures + # of responses )
-    vProbabilityResponse                <- as.vector( tabResults[,2]/(tabResults[,1] + tabResults[,2] ) )
-    
+    vProbabilityResponse                <- as.vector( tabResults[ , 2 ] / ( tabResults[ , 1 ] + tabResults[ , 2 ] ) )
+
     # Create a variable with the probability of response on control to be used in decision making
-    dProbabilityOfResponseOnControl     <- vProbabilityResponse[ 1 ]     
+    dProbabilityOfResponseOnControl     <- vProbabilityResponse[ 1 ]
     # Create vector with only the estimated probability of response on experimentals
-    vProbabilityResponseOnExperimental  <- vProbabilityResponse[ c(2:length(vProbabilityResponse)) ]     
-    
+    vProbabilityResponseOnExperimental  <- vProbabilityResponse[ c( 2:length( vProbabilityResponse ) ) ]
+
     # Note: vProbabilityResponseOnExperimental now contains only the response rates for the experimental treatments
-    
+
     # Selection Rule: Any treatment with a response rate that is higher than control is selected for stage 2
     vReturnTreatmentID <- c()
     # Note: Start with row 2, which is experimental treatment 1
-    for( nIndex in 1:length( vProbabilityResponseOnExperimental ) )  
+    for( nIndex in 1:length( vProbabilityResponseOnExperimental ) )
     {
         # If the response rate > response rate on control, add the treatment ID to the list
-        if( vProbabilityResponseOnExperimental[ nIndex ] > dProbabilityOfResponseOnControl )   
-            vReturnTreatmentID <- c( vReturnTreatmentID, nIndex  )    
-        
+        if( vProbabilityResponseOnExperimental[ nIndex ] > dProbabilityOfResponseOnControl )
+            vReturnTreatmentID <- c( vReturnTreatmentID, nIndex )
+
     }
-    
-    # If none of the experimental treatments had a response rate greater than control, select the treatment with the largest response rate 
-    if( length( vReturnTreatmentID ) == 0)
+
+    # If none of the experimental treatments had a response rate greater than control, select the treatment with the largest response rate
+    if( length( vReturnTreatmentID ) == 0 )
     {
-        vReturnTreatmentID <-  which.max( vProbabilityResponseOnExperimental  )
+        vReturnTreatmentID <-  which.max( vProbabilityResponseOnExperimental )
     }
-    
-    # We want all treatments to have a randomization ratio of 1 
-    # The allocation will put twice as many on the treatment with the highest number of responses, 
+
+    # We want all treatments to have a randomization ratio of 1
+    # The allocation will put twice as many on the treatment with the highest number of responses,
     # eg. the Treatment vReturnTreatmentID[ 1 ] will receive twice as many patients as vReturnTreatmentID[ 2 ]
-    vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ))    
-    
-    
+    vAllocationRatio   <- rep( 1, length( vReturnTreatmentID ) )
+
     # Treatment vReturnTreatmentID[ 1 ] will have a ratio of 2, vReturnTreatmentID[ 2 ] a ratio of 1, and control is always 1
-    
-    nErrrorCode <- 0
+
+    nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
-    if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
+    if( length( vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
-        #  Fatal error because the R code is incorrect 
-        nErrrorCode <- -1  
+        #  Fatal error because the R code is incorrect
+        nErrorCode <- -1
     }
-    
+
     lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ) ,
                      AllocRatio  = as.double( vAllocationRatio ),
-                     ErrorCode   = as.integer( nErrrorCode ) )
-    
+                     ErrorCode   = as.integer( nErrorCode ) )
+
     return( lReturn )
-    
+
 }

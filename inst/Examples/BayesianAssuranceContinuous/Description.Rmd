@@ -33,12 +33,10 @@ The scenarios covered are as follows:
 1. Fixed sample design using a mixture of normal distributions to compute Bayesian assurance.
 2. Group sequential design, expanding on Example 1, with an interim analysis for futility based on Bayesian predictive probability.
 
-Once CyneRgy is installed, you can load this example in RStudio with the following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 ```{r, eval=FALSE}
 CyneRgy::RunExample( "BayesianAssuranceContinuous" )
 ```
-
-Running the command above will load the RStudio project in RStudio. 
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/BayesianAssuranceContinuous/R) you will find the R files used in the examples:
 
@@ -193,7 +191,7 @@ Refer to the table below for the definitions and values of the user-defined para
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 library(readr)
 ######################################################################################################################## .
-# Read in the output from East and compute the assurance and probability of a stop ####
+# Read in the output from East Horizon and compute the assurance and probability of a stop ####
 ######################################################################################################################## .
 library(readr)
 
@@ -314,7 +312,7 @@ Refer to the table below for the definitions and values of the user-defined para
 library(tidyverse)
 ######################################################################################################################## .
 # Example 2 Post Process                                                                                               ####
-# This file provides functions and R Code example to post process the East output for useful graphs and numeric values ####
+# This file provides functions and R Code example to post process the East Horizon output for useful graphs and numeric values ####
 # 
 ######################################################################################################################## .
 

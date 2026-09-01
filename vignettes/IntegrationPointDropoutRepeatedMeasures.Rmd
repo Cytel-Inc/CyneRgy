@@ -71,7 +71,7 @@ Note: Additional custom variables can be included as members of the output list.
 
 Your R script could contain a function such as these ones, with a name of your choice. All input variables must be declared, even if they are not used in the script. We recommend always declaring `UserParam` as a default `NULL` value in the function arguments, as this will ensure that the same function will work regardless of whether the user has specified any custom parameters in East Horizon.
 
-A detailed template with step-by-step explanations is available here: [Dropout.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.RepeatedMeasures.R) 
+A detailed template with step-by-step explanations is available here: [Dropout.RepeatedMeasures.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Templates/Dropout.RepeatedMeasures.R)
 
 ## Minimal Template for Option 1
 
@@ -80,11 +80,11 @@ GenDropTimes <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
                           DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
-  vDropoutTime     	<- rep( Inf, NumSub ) # Initializing dropout times vector to Inf (all patients are completers)	
-  
+  vDropoutTime     	<- rep( Inf, NumSub ) # Initializing dropout times vector to Inf (all patients are completers)
+
   # Write the actual code here.
   # Store the generated dropout times in a vector called vDropoutTime.
-  
+
   return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nError ) ) )
 }
 ```
@@ -96,12 +96,12 @@ GenDropVisitID <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
                             DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
-  vDropoutVisitID   <- rep( 1, NumSub ) # Initializing dropout visit IDs vector to 1 (all patients drop out after first visit)	
-  
+  vDropoutVisitID   <- rep( 1, NumSub ) # Initializing dropout visit IDs vector to 1 (all patients drop out after first visit)
+
   # Write the actual code here.
   # Store the generated dropout visit IDs in a vector called vDropoutVisitID.
-  
-  return( list( DropoutVisitID = as.double( vDropoutVisitID ), ErrorCode = as.integer( nError ) ) )
+
+  return( list( DropoutVisitID = as.integer( vDropoutVisitID ), ErrorCode = as.integer( nError ) ) )
 }
 ```
 
@@ -114,18 +114,18 @@ GenCensorInd <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
   nError        	<- 0 # Error handling (no error)
   vCensorInd    	<- c()
   lReturn           <- list()
-  
-  # Add code to simulate the dropout data as desired. 
+
+  # Add code to simulate the dropout data as desired.
   # Example of how to create the return list with CensorInd1, CensorInd2, ..., CensorIndNumVisit.
   # Store the generated censor indicator values in a vector called vCensorInd for each subject.
   # Store the response vector in a list called lReturn for each visit.
   for(i in 1:NumVisit)
   {
     strCensorIndName              <- paste0( "CensorInd", i ) # CensorInd1, CensorInd2, ..., CensorIndNumVisit
-    vCensorInd                    <- rep( 1, NumSub ) # Initializing censor array to 1 (all patients are completers)	
+    vCensorInd                    <- rep( 1, NumSub ) # Initializing censor array to 1 (all patients are completers)
     lReturn[[ strCensorIndName ]] <- as.integer( vCensorInd )
   }
-  
+
   lReturn$ErrorCode <- as.integer( nError )
   return( lReturn )
 }

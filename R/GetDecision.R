@@ -1,309 +1,85 @@
 #################################################################################################### .
 #   Program/Function Name: GetDecision
 #   Author: J. Kyle Wathen
-#   Description: This function takes a string for the desired decision, design and look info and return the correct decision value. 
-#   Change History:
-#   Last Modified Date: 08/21/2024
+#   Description: Convert a decision label into the value expected by the analysis integration point.
 #################################################################################################### .
 #' @name GetDecision
-#' @title Determine Decision Based on Decision String, Design and Look Information
-#' 
-#' @description This function takes a string indicating the desired decision ("Efficacy", "Futility", or "Continue"), design parameters, and look information, and returns the appropriate decision value. 
-#' If `LookInfo` is not NULL, the function uses `LookInfo$RejType` to help determine the design type:
+#' @title Convert a Decision Label to an Integration Decision Value
 #'
-#' - **LookInfo$RejType Codes**:
-#'   - *Efficacy Only*:
-#'     - 1-Sided Efficacy Upper = 0
-#'     - 1-Sided Efficacy Lower = 2
-#'   - *Futility Only*:
-#'     - 1-Sided Futility Upper = 1
-#'     - 1-Sided Futility Lower = 3
-#'   - *Efficacy and Futility*:
-#'     - 1-Sided Efficacy Upper & Futility Lower = 4
-#'     - 1-Sided Efficacy Lower & Futility Upper = 5
-#'   - *Additional Scenarios Not in East Horizon Explore*:
-#'     - 2-Sided Efficacy Only = 6
-#'     - 2-Sided Futility Only = 7
-#'     - 2-Sided Efficacy & Futility = 8
-#'     - Equivalence = 9
+#' @description Converts `"Efficacy"`, `"Futility"`, or `"Continue"` into the integer decision value expected by the analysis
+#' integration point. The result depends on the tail direction, the boundaries enabled by `LookInfo$RejType`, and whether the current
+#' look is interim or final.
 #'
-#' The function also uses `DesignParam$TailType` to determine tail direction:
-#' - 0: Left-tailed
-#' - 1: Right-tailed
+#' Supported `LookInfo$RejType` values are:
 #'
-#' Based on the design type and tail direction, the function evaluates the decision and returns the corresponding integer decision value. Errors are raised for invalid input combinations.
+#' - `0` or `2`: efficacy boundary only.
+#' - `1` or `3`: futility boundary only.
+#' - `4` or `5`: efficacy and futility boundaries.
 #'
-#' @param strDecision A string indicating the desired decision: "Efficacy", "Futility", or "Continue".
-#' @param DesignParam A list containing design parameters sent from East Horizon Explore to the R integration for analysis.
-#' @param LookInfo A list containing look information sent from East Horizon Explore to the R integration for analysis.
+#' A fixed design is represented by `LookInfo = NULL` and is treated as an efficacy-only final analysis.
+#'
+#' @param strDecision Character string equal to `"Efficacy"`, `"Futility"`, or `"Continue"`.
+#' @param DesignParam List containing `TailType`, where `0` is left-tailed and `1` is right-tailed.
+#' @param LookInfo Optional list containing `RejType`, `CurrLookIndex`, and `NumLooks`.
+#'
+#' @return Integer decision value: `0` for no boundary crossed, `1` for lower efficacy, `2` for upper efficacy, or `3` for futility.
+#'
 #' @export
 #################################################################################################### .
-GetDecision <- function( strDecision, DesignParam, LookInfo )
+
+GetDecision <- function( strDecision, DesignParam, LookInfo = NULL )
 {
-    nReturnDecision <- -1   # This is an error 
-    strDesignType   <- NA
-    strDirection    <- ""
-    
-    # Step 1 - Determine the  direction
-    if( DesignParam$TailType == 0 )
-    {
-        strDirection <- "Left"
-    }
-    else if(  DesignParam$TailType == 1 )
-    {
-        strDirection <- "Right"
-    }
-    
-    # Step 2 - determine the design type so we know what decision to return ####
-    
+    vValidDecisions <- c( "Efficacy", "Futility", "Continue" )
+    if( length( strDecision ) != 1 || !strDecision %in% vValidDecisions )
+        stop( "strDecision must be 'Efficacy', 'Futility', or 'Continue'.", call. = FALSE )
+
+    if( is.null( DesignParam$TailType ) || length( DesignParam$TailType ) != 1 || !DesignParam$TailType %in% c( 0, 1 ) )
+        stop( "DesignParam$TailType must be 0 for left-tailed or 1 for right-tailed.", call. = FALSE )
+
+    nEfficacyDecision <- if( DesignParam$TailType == 0 ) 1 else 2
+
     if( is.null( LookInfo ) )
     {
-        # No LookInfo so this is a fixed design --> EfficacyOnly
         strDesignType    <- "EfficacyOnly"
         bInterimAnalysis <- FALSE
-  
     }
-    else if( LookInfo$RejType == 1 | LookInfo$RejType == 3 )
+    else
     {
-        # There is a futility boundary but no efficacy boundary
-        strDesignType    <- "FutilityOnly"
-        bInterimAnalysis <- LookInfo$CurrLookIndex < LookInfo$NumLooks 
+        vRequiredLookInfo <- c( "RejType", "CurrLookIndex", "NumLooks" )
+        vMissingLookInfo  <- vRequiredLookInfo[ !vRequiredLookInfo %in% names( LookInfo ) ]
+        if( length( vMissingLookInfo ) > 0 )
+            stop( "LookInfo is missing: ", paste( vMissingLookInfo, collapse = ", " ), call. = FALSE )
+        if( length( LookInfo$RejType ) != 1 || !LookInfo$RejType %in% 0:5 )
+            stop( "LookInfo$RejType must be an integer from 0 through 5.", call. = FALSE )
+        if( length( LookInfo$CurrLookIndex ) != 1 || length( LookInfo$NumLooks ) != 1 ||
+            LookInfo$CurrLookIndex < 1 || LookInfo$NumLooks < 1 || LookInfo$CurrLookIndex > LookInfo$NumLooks )
+            stop( "LookInfo$CurrLookIndex must be between 1 and LookInfo$NumLooks.", call. = FALSE )
+
+        if( LookInfo$RejType %in% c( 0, 2 ) )
+            strDesignType <- "EfficacyOnly"
+        else if( LookInfo$RejType %in% c( 1, 3 ) )
+            strDesignType <- "FutilityOnly"
+        else
+            strDesignType <- "EfficacyFutility"
+
+        bInterimAnalysis <- LookInfo$CurrLookIndex < LookInfo$NumLooks
     }
-    else if( LookInfo$RejType == 0 | LookInfo$RejType == 2 )
-    {
-        # There is an efficacy boundary but no futility boundary
-        strDesignType    <- "EfficacyOnly"
-        bInterimAnalysis <- LookInfo$CurrLookIndex < LookInfo$NumLooks 
-    }
-    else if( LookInfo$RejType == 4 | LookInfo$RejType == 5 )
-    {
-        # There is an efficacy boundary and futility boundary
-        strDesignType    <- "EfficacyFutility"
-        bInterimAnalysis <- LookInfo$CurrLookIndex < LookInfo$NumLooks 
-    }
-    
-    
-    # Can we use the DesignParam and LookInfo to define the design type and IA/FA?  -  Assuming we can suppose strDesignType = "FutilityOnly", "EfficacyOnly" or "EfficacyFutiity"
-    
-    if( strDirection == "Right" )
-    {
-        if( strDesignType == "FutilityOnly" )
-        {
-            if( bInterimAnalysis )
-            {
-                if( strDecision == "Futility" )
-                { 
-                    nReturnDecision <- 3
-                }
-                else if( strDecision == "Continue" )
-                {
-                    nReturnDecision <- 0
-                }
-                else if( strDecision == "Efficacy" )
-                {
-                    stop( "CyneRgy::GetDecision - Efficacy check is not enabled at this look. Therefore, 'EFficacy' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Futility'." )
-                }
-                
-            }
-            else # It is a futility only design at the final analysis
-            {
-                if( strDecision == "Futility" )
-                { 
-                    nReturnDecision <- 3
-                }
-                else if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 0
-                }
-                else if( strDecision == "Continue" )
-                {
-                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
-                }
-                
-            }
-            
-        }
-        else if( strDesignType == "EfficacyOnly" )
-        {
-            if( bInterimAnalysis )
-            {
-                if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 2
-                }
-                else if( strDecision == "Continue"  )
-                {
-                    nReturnDecision <- 0
-                }
-                else if( strDecision == "Futility" )
-                {
-                    stop( "CyneRgy::GetDecision - Futility check is not enabled at this look. Therefore, 'Futility' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Efficacy'." ) 
-                }
-            }
-            else
-            {
-                if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 2
-                }
-                else if( strDecision == "Futility" )
-                {
-                    nReturnDecision <- 0
-                }
-                else if( strDecision == "Continue" )
-                {
-                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
-                }
-                
-            }
-        }    
-        else if( strDesignType == "EfficacyFutility" )
-        {
-            
-            if( bInterimAnalysis )
-            {
-                if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 2
-                }
-                else if( strDecision == "Futility" )
-                {
-                    nReturnDecision <- 3
-                }
-                else if( strDecision == "Continue" )
-                {
-                    nReturnDecision <- 0
-                }
-            }
-            else
-            {
-                if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 2
-                }
-                else if( strDecision == "Futility" )
-                {
-                    nReturnDecision <- 3
-                }
-                else if( strDecision == "Continue")
-                {
-                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
-                }
-                
-            }
-        }
-    }
-    else if( strDirection == "Left" )
-    {
-        
-        if( strDesignType == "FutilityOnly" )
-        {
-            if( bInterimAnalysis )
-            {
-                if( strDecision == "Futility" )
-                { 
-                    nReturnDecision <- 3
-                }
-                else if( strDecision == "Continue" )
-                {
-                    nReturnDecision <- 0
-                }
-                else if( strDecision == "Efficacy" )
-                {
-                    stop( "CyneRgy::GetDecision - EFficacy check is not enabled at this look. Therefore, 'Efficacy' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Futility'." )
-                }
-                
-            }
-            else # It is a futility only design at the final analysis
-            {
-                if( strDecision == "Futility" )
-                { 
-                    nReturnDecision <- 3
-                }
-                else if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 0
-                }
-                else if( strDecision == "Continue" )
-                {
-                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
-                }
-                
-            }
-            
-        }
-        else if( strDesignType == "EfficacyOnly" )
-        {
-            if( bInterimAnalysis )
-            {
-                if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 1
-                }
-                else if( strDecision == "Continue" )
-                {
-                    nReturnDecision <- 0
-                }
-                else if( strDecision == "Futility" )
-                {
-                    stop( "CyneRgy::GetDecision - Futility check is not enabled at this look. Therefore, 'Futility' is not a valid value for strDecision at this look. Please use either 'Continue' or 'Efficacy'." )
-                }
-            }
-            else
-            {
-                if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 1
-                }
-                else if( strDecision == "Futility" )
-                {
-                    nReturnDecision <- 0
-                }
-                else if( strDecision == "Continue" )
-                {
-                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
-                }
-                
-            }
-        }    
-        else if( strDesignType == "EfficacyFutility" )
-        {
-            
-            if( bInterimAnalysis )
-            {
-                if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 1
-                }
-                else if( strDecision == "Futility" )
-                {
-                    nReturnDecision <- 3
-                }
-                else if( strDecision == "Continue" )
-                {
-                    nReturnDecision <- 0
-                }
-            }
-            else
-            {
-                if( strDecision == "Efficacy" )
-                {
-                    nReturnDecision <- 1
-                }
-                else if( strDecision == "Futility" )
-                {
-                    nReturnDecision <- 3
-                }
-                else if( strDecision == "Continue" )
-                {
-                    stop( "CyneRgy::GetDecision - 'Continue' is not a valid value for strDecision at the last look. Please use either 'Efficacy' or 'Futility'." )
-                }
-                
-            }
-        }
-        
-    }
-    
-    
+
+    if( bInterimAnalysis && strDesignType == "EfficacyOnly" && strDecision == "Futility" )
+        stop( "Futility is not enabled at this interim look. Use 'Continue' or 'Efficacy'.", call. = FALSE )
+    if( bInterimAnalysis && strDesignType == "FutilityOnly" && strDecision == "Efficacy" )
+        stop( "Efficacy is not enabled at this interim look. Use 'Continue' or 'Futility'.", call. = FALSE )
+    if( !bInterimAnalysis && strDecision == "Continue" )
+        stop( "Continue is not valid at the final look. Use 'Efficacy' or 'Futility'.", call. = FALSE )
+
+    if( strDecision == "Continue" )
+        nReturnDecision <- 0
+    else if( strDecision == "Futility" && strDesignType != "EfficacyOnly" )
+        nReturnDecision <- 3
+    else if( strDecision == "Efficacy" && strDesignType != "FutilityOnly" )
+        nReturnDecision <- nEfficacyDecision
+    else
+        nReturnDecision <- 0
+
     return( as.integer( nReturnDecision ) )
 }

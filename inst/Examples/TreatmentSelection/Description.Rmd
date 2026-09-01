@@ -22,16 +22,14 @@ To try this example, create a new project in East Horizon using the following co
 
 # Introduction
 
-The following examples illustrate how to integrate new treatment selection capabilities into East Horizon or East using R functions in the context of a multi-arm trial. In each example, the trial design includes a standard-of-care control arm and three experimental treatment arms. The design includes one interim analysis (IA) and one final analysis (FA).
+The following examples illustrate how to integrate new treatment selection capabilities into East Horizon using R functions in the context of a multi-arm trial. In each example, the trial design includes a standard-of-care control arm and three experimental treatment arms. The design includes one interim analysis (IA) and one final analysis (FA).
 
 At the IA, one or more experimental treatments are selected to continue into stage 2 of the trial. If the trial is not stopped early for efficacy or futility, the control arm and the selected treatments proceed to the final stage. These examples showcase different approaches for selecting treatments to carry forward into stage 2.
 
-Once CyneRgy is installed, you can load this example in R Studio with the following commands:
-```{r , eval=FALSE}
-CyneRgy::RunExample("TreatmentSelection")
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
+```{r, eval=FALSE}
+CyneRgy::RunExample( "TreatmentSelection" )
 ```
-
-Running the command above will load the RStudio project in RStudio. 
 
 **East Workbook**: [TreatmentSelection.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.cywx)
 

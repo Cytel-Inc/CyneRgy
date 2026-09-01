@@ -102,12 +102,12 @@ For the **Multiple Looks - Combining P-Values (MAMS)** tests, the option will be
 
 # Input Variables
 
-When creating a custom R script, you can optionally use certain variables provided by East Horizon's or East's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
+When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
 
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|----------|---------------------------------------------------------------------------------|
 |**Seed**|Integer|Randomization seed set by the engine.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in East Horizon's or East's interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in East Horizon's interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 
@@ -128,7 +128,7 @@ Init <- function( Seed = NULL, UserParam = NULL )
 {
   # Do something, for example set the seed
   set.seed( 42 )
-  # If you want the user to set the seed using East Horizon's or East's interface, you could use set.seed( UserParam$seed ) 
+  # If you want the user to set the seed using East Horizon's interface, you could use set.seed( UserParam$seed ) 
   
   # Error handling (no error)
   nError <- 0
