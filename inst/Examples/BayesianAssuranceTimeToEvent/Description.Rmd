@@ -37,7 +37,7 @@ Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any
 CyneRgy::RunExample( "BayesianAssuranceTimeToEvent" )
 ```
 
-In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/BayesianAssuranceContinuous/R) you will find the R files used in the examples:
+In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/BayesianAssuranceTimeToEvent/R) you will find the R files used in the examples:
 
 1. [SimulatePatientSurvivalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/SimulatePatientSurvivalAssurance.R) - Functions to simulate patient outcomes under a time-to-event distribution informed by a bi-modal prior.
 2. [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/BayesianAssuranceTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R) - Implements Bayesian analysis of simulated outcomes using Cox proportional hazards model.
