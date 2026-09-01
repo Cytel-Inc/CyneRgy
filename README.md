@@ -18,11 +18,14 @@ For a quick start, visit the [Getting Started](https://cytel-inc.github.io/CyneR
 
 A variety of examples highlighting how R scripts integrate with Cytel's simulation tools can be found in [`inst/Examples`](inst/Examples). Please see the [Examples Outline](https://cytel-inc.github.io/CyneRgy/articles/ExampleOutline.html) for the complete list and descriptions. Each example includes a description and R scripts; some also include supporting files, practice scripts, and an optional RStudio project.
 
-After installing CyneRgy, list or open an example with:
+After installing CyneRgy, you can list or open examples. For example:
 
 ```r
-CyneRgy::RunExample()
-CyneRgy::RunExample( "TreatmentSelection" )
+CyneRgy::RunExample()                                # Lists all available examples
+CyneRgy::RunExample("TreatmentSelection")            # Opens the example project/folder in your IDE
+CyneRgy::RunExample("GeneratePoissonArrival")
+CyneRgy::RunExample("2ArmPatientDropout")
+CyneRgy::RunExample("TreatmentSelection", strDirectory = getwd())   # Copy to a specific folder
 ```
 
 `RunExample()` creates a writable copy when needed, then opens the description and R scripts in the active supported IDE. Use `strDirectory` to choose the copy location.
@@ -32,6 +35,25 @@ Templates are available in the [Templates directory](inst/Templates), and explor
 # Functions
 
 The package exports selected common functions for trial operations and binary, continuous, repeated-measures, time-to-event, DEP, and MEP endpoints. It also provides `RunExample()`, `CreateCyneRgyFunction()`, `CreateCyneRgyExample()`, and `CombineAllRFiles()` for working with examples and integration scripts. See the [function reference](https://cytel-inc.github.io/CyneRgy/reference/index.html) for details.
+
+Common functions can be called directly with `CyneRgy::FunctionName()`. A few examples:
+
+```r
+# Arrival
+CyneRgy::GeneratePoissonArrival( NumSub = 20, NumPrd = 1, PrdStart = 0, AccrRate = 10 )
+
+# Randomization
+CyneRgy::RandomizationSubjectsUsingUniformDistribution( NumSub = 20, NumArms = 2, AllocRatio = 1 )
+
+# Dropout
+CyneRgy::GenerateCensoringUsingBinomialProportion( NumSub = 20, ProbDrop = 0.1 )
+
+# Binary endpoint analysis
+CyneRgy::AnalyzeUsingPropTest(
+    SimData     = data.frame( Response = c( 1, 0, 1, 1, 0, 0, 1, 0 ), TreatmentID = c( 0, 0, 0, 0, 1, 1, 1, 1 ) ),
+    DesignParam = list( TailType = 1, CriticalPoint = 1.96 )
+)
+```
 
 # Installation
 
