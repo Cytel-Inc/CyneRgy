@@ -59,3 +59,28 @@ GenerateDropoutTimeForSurvival <- function( NumSub, NumArm, TreatmentID, DropMet
               NumPrd = NumPrd, PrdTime = PrdTime, DropParam = DropParam, UserParam = UserParam )
     ) )
 }
+
+
+#' @name GenerateCensoringUsingBinomialProportion
+#' @title Generate Dropout Indicators
+#'
+#' @description Calls the implementation from the common `2ArmPatientDropout` example. Generates an independent censoring
+#' indicator for each subject using one dropout probability. A value of `1` indicates a completer and `0` indicates a dropout.
+#'
+#' @param NumSub Integer number of subjects.
+#' @param ProbDrop Numeric dropout probability shared by both arms.
+#' @param UserParam Optional list of user-defined parameters.
+#'
+#' @return A list in the format required by the dropout integration point.
+#' @export
+
+GenerateCensoringUsingBinomialProportion <- function( NumSub, ProbDrop, UserParam = NULL )
+{
+    if( NumSub < 1 || length( ProbDrop ) != 1 || !is.finite( ProbDrop ) || ProbDrop < 0 || ProbDrop > 1 )
+        stop( "NumSub must be positive and ProbDrop must be between 0 and 1.", call. = FALSE )
+
+    return( .CallCommonExampleFunction(
+        "2ArmPatientDropout", "GenerateCensoringUsingBinomialProportion.R", "GenerateCensoringUsingBinomialProportion",
+        list( NumSub = NumSub, ProbDrop = ProbDrop, UserParam = UserParam )
+    ) )
+}
