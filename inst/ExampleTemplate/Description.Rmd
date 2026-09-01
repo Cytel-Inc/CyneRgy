@@ -16,17 +16,6 @@ output:
     toc_depth: '5'
 ---
 
-# Opening this example
-
-From the example folder, open the example in the active supported IDE with:
-
-```r
-CyneRgy::RunExample( "." )
-```
-
-RStudio opens `{{EXAMPLE_NAME}}.Rproj`. VS Code opens the example folder, `Description.Rmd`, and every R script under `R/`.
-The R scripts do not require an RStudio project.
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library( CyneRgy )
