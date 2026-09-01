@@ -27,16 +27,14 @@
 #'   \item Dropout can be incorporated.
 #' }
 #'
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient.
-#'        It will have headers indicating the names of the columns. These names will be the same as those used in
-#'        Data Generation. For analysis the most relevant variables are:
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{Numeric vector of subject arrival times}
 #'          \item{TreatmentID}{Integer vector indicating treatment assignment for each subject (0 = control, 1...n = treatment arms)}
 #'          \item{Response}{Integer vector of binary response outcomes}
 #'          \item{PFSNonCens}{Numeric vector of PFS times relative to patient enrollment}
 #'        }
-#' @param DesignParam A list containing design and simulation parameters required to compute test statistics and perform testing. Key elements include:
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'        \describe{
 #'          \item{Alpha}{Type I error rate (significance level).}
 #'          \item{TestType}{Type of test:
@@ -53,7 +51,10 @@
 #'          \item{NumTreatments}{Number of treatment arms (excluding control)}
 #'          \item{CriticalPoint}{Critical value for testing (e.g., 1.96)}
 #'        }
-#' @param LookInfo List with interim analysis information, or NULL for fixed design. **Currently only fixed design is supported**, adaptive designs not yet implemented.
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
+#'   \describe{
+#'     \item{Fixed-sample support}{This example supports only fixed-sample designs, so `LookInfo` must be `NULL`.}
+#'   }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'        \describe{
 #'          \item{UserParam$Stage1NumCompleters}{Number of patients included in the Stage 1 arm-selection analysis.}

@@ -5,19 +5,19 @@
 #' Simulates multivariate normal repeated-measures responses for control and
 #' treatment subjects.
 #' @author Jacob Wathen
-#' @param NumSub Integer. Number of subjects to simulate.
-#' @param NumVisit Integer. Number of visits.
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
-#' @param TreatmentID Integer vector of length `NumSub`. Treatment assignment for each subject (for two arm confirmatory: 0 = control, 1 = treatment).
-#' @param Inputmethod  Character. Placeholder for input method (currently not used).
-#' @param VisitTime Numeric vector. Visit times (currently not used).
-#' @param MeanControl Numeric vector of length `NumVisit`. Mean response values for control group.
-#' @param MeanTrt Numeric vector of length `NumVisit`. Standard deviations for treatment group.
-#' @param StdDevControl Numeric vector of length `NumVisit`. Standard deviations for control group.
-#' @param StdDevTrt Numeric vector of length `NumVisit`. Standard deviations for treatment group.
-#' @param CorrMat Correlation matrix between all visits.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumVisit Integer number of visits.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline. Not used by this example.
+#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times. Not used by this example.
+#' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
+#' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm mean responses by visit.
+#' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit.
+#' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
+#' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-
+#'
 #' @return A list containing:
 #'       \describe{
 #'         \item \code{Response1}, \code{Response2}, ..., \code{ResponseN}: Simulated response vectors for each visit.

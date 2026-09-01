@@ -3,22 +3,22 @@
 #' @title Generate Dropout Times for Repeated Measures
 #' @author Shubham Lahoti
 #' @description This function generates dropout time for a Repeated Measures design with Dropout method on East Horizon as 'Cumulative Probability of Dropout by Time'.
-#' @param NumSub Mandatory. The integer value specifying the number of patients or subjects in the trial. The numeric value of the argument value is sent in when called.
-#' @param NumArm Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
-#' @param TreatmentID Vector specifying indexes of arms to which subjects are allocated (one arm index per subject). Index for placebo / control is 0.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param DropMethod Input method for specifying dropout parameters.
 #'           \describe{
 #'           \item{Repeated Measures}{1 - Cumulative Probability of Dropout by Visit. 2 - Cumulative Probability of Dropout by Time}
 #'           }
-#' @param NumVisit Mandatory for Repeated Measures. Integer indicating number of visits.
-#' @param VisitTime Mandatory for Repeated Measures. Vector containing numeric visit times for each visit.
-#' @param ByTime Mandatory for Repeated Measures. Vector containing numeric by time for dropouts.
-#' @param DropParamControl Mandatory for Repeated Measures. Vector containing numeric parameters used to generate dropout times for Control arm.
-#' @param DropParamTrt Mandatory for Repeated Measures. Vector containing numeric parameters used to generate dropout times for Treatment arm.
+#' @param NumVisit Integer number of visits.
+#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
+#' @param ByTime Numeric vector of length `NumVisit` when `DropMethod = 1`, or a numeric scalar when `DropMethod = 2`. For method 1, values equal `VisitTime`.
+#' @param DropParamControl Control-arm dropout parameters: a numeric vector of length `NumVisit` when `DropMethod = 1`, or a numeric scalar when `DropMethod = 2`.
+#' @param DropParamTrt Treatment-arm dropout parameters: a numeric vector of length `NumVisit` when `DropMethod = 1`, or a numeric scalar when `DropMethod = 2`.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                    User should access the variables using names, for example UserParam$Var1 and not order.
 #'                    These variables can be of the following types: Integer, Numeric, or Character
-
+#'
 #' @return A named list containing numeric vector `DropOutTime` and integer `ErrorCode`.
 ######################################################################################################################## .
 GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )

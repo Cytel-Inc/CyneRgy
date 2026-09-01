@@ -3,18 +3,14 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Simulate Stratified Time-to-Event Patient Outcomes
 #' @description Simulate time-to-event outcomes using stratum-by-arm survival parameters.
-#' @param NumSub Integer number of subjects to simulate.
-#' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2.
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
-#' @param StratumID A vector of stratum ids, 1 = stratum 1, 2 = strata 2..... length( StratumID ) = NumSub
-#' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param StratumID Integer vector of length `NumSub`, indicating each subject's 1-based stratum ID.
+#' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative \% survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided.
-#' @param PrdTime \describe{
-#'      \item{If SurvMethod = 1}{PrdTime is a vector of starting times of hazard pieces.}
-#'      \item{If SurvMethod = 2}{Times at which the cumulative % survivals are specified.}
-#'      \item{If SurvMethod = 3}{Period time is 0 by default}
-#'      }
+#' @param PrdTime Numeric matrix with one row per stratum and `NumArm` columns, indicating the times used to specify stratum-by-arm survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
 #' @param SurvParam \describe{Depends on the table in the Response Generation tab.
 #'    A 2-D array of parameters to generate the survival times, defined by stratum and arm.
 #'
@@ -24,9 +20,9 @@
 #'    Arms are in columns, with column 1 as control and column 2 as experimental.}
 #'
 #'    \item{If SurvMethod = 2}{SurvParam is an array (NumStratum rows, NumArm columns)
-#'    that specifies stratum-by-arm cumulative % survival values
+#'    that specifies stratum-by-arm cumulative \% survival values
 #'    (one value per arm per stratum).
-#'    Thus, SurvParam[i, j] specifies the cumulative % survival
+#'    Thus, SurvParam[i, j] specifies the cumulative \% survival
 #'    for the i-th stratum and j-th arm.}
 #'
 #'    \item{If SurvMethod = 3}{SurvParam is an array (NumStratum rows, NumArm columns)

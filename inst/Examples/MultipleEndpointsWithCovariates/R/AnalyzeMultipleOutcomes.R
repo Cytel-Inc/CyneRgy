@@ -6,21 +6,21 @@
 #' treatment and control groups using a one-sided t-test assuming equal variances.
 #' @author Julija Saltane
 #'
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient.
-#'        It will have headers indicating the names of the columns. These names will be same as those used in
-#'        Data Generation. For analysis the most relevant variables are:
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1}
 #'          \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2}
 #'          \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}
 #'          \item{TreatmentID}{Integer vector (0 = control, 1 = treatment)}
 #'        }
-#' @param DesignParam R List which consists of Design and Simulation Parameters which user may need to compute
-#'        test statistic and perform test. For analysis the most relevant variable is:
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'        \describe{
 #'          \item{Alpha}{1-sided Type I Error}
 #'        }
-#' @param LookInfo List. Not used in this function.
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
+#'   \describe{
+#'     \item{Fixed-sample support}{This example does not use multiple-look information; `LookInfo` should be `NULL`.}
+#'   }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return A named list containing:

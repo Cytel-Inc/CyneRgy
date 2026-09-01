@@ -162,7 +162,7 @@ When creating a custom R script, you can optionally use certain variables provid
 |**NumSub** or **NumPat**|Integer|Number of subjects in the trial. Is called NumPat for `Study Objective = Two Arm Confirmatory - Multiple Endpoints`.|
 |**Type**|Integer|Enrollment type specified by the user:<br>– `0`: Global<br>– `1`: Regional.|
 |**NumPrd**|Integer|Number of accrual periods in the trial. Only applicable if `Type = 0` (Global).|
-|**PrdStart**|Vector of Numeric|Vector of length `NumPrd`, indicating the start time of each period, with `PrdStarr[ 1 ] = 0`. Only applicable if `Type = 0` (Global).|
+|**PrdStart**|Vector of Numeric|Vector of length `NumPrd`, indicating the start time of each period, with `PrdStart[ 1 ] = 0`. Only applicable if `Type = 0` (Global).|
 |**RegionName**|Array of Character|Vector of length equal to the number of regions, indicating the geography/region names. Only applicable if `Type = 1` (Regional).|
 |**RegionStart**|Array of Numeric|Vector of length equal to the number of regions, indicating the start times for each geography. Only applicable if `Type = 1` (Regional).|
 |**EnrollmentCapPcnt**|Array of Numeric|Vector of length equal to the number of regions, indicating the enrollment caps (%) for each geography. Only applicable if `Type = 1` (Regional).|
@@ -199,7 +199,7 @@ GenArrTimes <- function( NumSub, Type = 0, NumPrd, PrdStart, AccrRate, UserParam
 {
   nError        	    <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumSub ) # Initializing arrival time array to 0
-  
+
   # Write the actual code here.
   # Store the generated arrival times in a vector called vPatientArrivalTime.
 
@@ -214,7 +214,7 @@ GenArrTimes <- function( NumPat, Type = 0, NumPrd, PrdStart, AccrRate, UserParam
 {
   nError        	    <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumPat ) # Initializing arrival time array to 0
-  
+
   # Write the actual code here.
   # Store the generated arrival times in a vector called vPatientArrivalTime.
 
@@ -229,7 +229,7 @@ GenArrTimes <- function( NumSub, Type = 1, RegionName, EnrollmentCapPcnt, AccrRa
 {
   nError        	    <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumSub ) # Initializing arrival time array to 0
-  
+
   # Write the actual code here.
   # Store the generated arrival times in a vector called vPatientArrivalTime.
 
@@ -244,7 +244,7 @@ GenArrTimes <- function( NumPat, Type = 1, RegionName, EnrollmentCapPcnt, AccrRa
 {
   nError        	    <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumPat ) # Initializing arrival time array to 0
-  
+
   # Write the actual code here.
   # Store the generated arrival times in a vector called vPatientArrivalTime.
 

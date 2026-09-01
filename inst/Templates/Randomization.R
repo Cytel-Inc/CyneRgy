@@ -3,13 +3,13 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Randomize Subjects to Treatment Arms
 #' @description Generate treatment assignments using allocation ratios relative to the control arm.
-#' @param NumSub Mandatory. The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#' @param NumArms Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
-#' @param AllocRatio Mandatory. Vector containing the expected allocation ratios - relative to the control arm - for the treatment arms. Length of vector = (Number of arms - 1)
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param AllocRatio Mandatory numeric vector of experimental-to-control allocation ratios with length `NumArms - 1`.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                    User should access the variables using names, for example UserParam$Var1 and not order.
 #'                    These variables can be of the following types: Integer, Numeric, or Character
-
+#'
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{

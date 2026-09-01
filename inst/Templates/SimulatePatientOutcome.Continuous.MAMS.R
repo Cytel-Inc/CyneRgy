@@ -2,12 +2,12 @@
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @title Simulate Multi-Arm Continuous Patient Outcomes
-#' @param NumSub Integer number of subjects to simulate.
-#' @param NumArms Integer number of trial arms, including control.
-#' @param ArrivalTime Numeric vector of subject arrival times with length `NumSub`.
-#' @param TreatmentID Integer vector of arm assignments with length `NumSub`; 0 denotes control and 1 through `NumArms - 1` denote treatment arms.
-#' @param Mean A vector of length = NumArms with the means of all arms
-#' @param StdDev A vector of length = NumArms with the standard deviations of each arm
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Mean Numeric vector of arm-specific outcome means.
+#' @param StdDev Numeric vector of arm-specific outcome standard deviations.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam values are supplied, they will be elements of the list.
 #' @return The function must return a list in the return statement of the function. The information below lists

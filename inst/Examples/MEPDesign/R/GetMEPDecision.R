@@ -7,7 +7,7 @@
 #' and trial continuation based on user-defined criteria.
 #' @author Anoop Singh Rawat, Gabriel Potvin
 #'
-#' @param SimData Data frame containing the full simulation data for all patients with the following columns:
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'   \itemize{
 #'     \item SimID: Integer. Simulation ID
 #'     \item PatId: Integer. Patient ID identifying a unique patient in a given simulation
@@ -19,7 +19,7 @@
 #'     \item CalRespT.EPNAME: Numeric. Response time on calendar scale for this endpoint. Same as 'Response + ArrivalTime'. EPNAME is the user specified endpoint name
 #'     \item DropoutID.EPNAME: Integer. Whether the patient dropped out before responding to the endpoint. 1 - dropout; 0 - no dropout. EPNAME is the user specified endpoint name
 #'   }
-#' @param AnalysisData Data frame containing the subset of patient data available at the current analysis look
+#' @param AnalysisData Subset of `SimData` containing patient data available at the current analysis look. For fixed-sample designs, it contains data for the single look.
 #' @param DataSummary List containing summary statistics for each endpoint, including:
 #'   \itemize{
 #'     \item AvgFollowupTime: Mean follow-up time
@@ -33,7 +33,7 @@
 #'     \item Events/Completers: Total number of events (TTE) or completers (non-TTE)
 #'     \item Events0/1/Completers0/1: Events/completers by treatment group
 #'   }
-#' @param LookInfo List containing information about the current analysis look:
+#' @param LookInfo List of parameters for the current analysis look. For fixed-sample designs, it contains information for the single look. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
 #'   \itemize{
 #'     \item AnalysisTime: Numeric. Current analysis time
 #'     \item LookNum: Integer. Current look number
@@ -52,7 +52,7 @@
 #'     \item EfficacyBoundaryPScale: Numeric vector. Final set of efficacy boundaries on p-value scale used for testing each endpoint by native engine. NaN where boundaries were not calculated. Value order matches EndpointName order
 #'     \item EPStatus: Integer vector. Status of each endpoint. 0=Success, 1=Insufficient Information, 2=Excessive Information, 3=Computational Error
 #'   }
-#' @param DesignParam List containing trial design parameters:
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'   \itemize{
 #'     \item TotalLooks: Integer. Total number of planned looks
 #'     \item EndpointName: Character vector. Names of endpoints
@@ -93,7 +93,7 @@
 #'         \item MustWinEPs: Integer vector. Flag indicating which endpoints must be won for trial success (must match EndpointName order). 0=Not required, 1=Must win
 #'       }
 #'   }
-#' @param OutList Optional list containing persistent data returned by the previous look. Defaults to `NULL`.
+#' @param OutList List returned by the previous look. Relevant only for group-sequential designs and `NULL` at the first look.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return A list containing:

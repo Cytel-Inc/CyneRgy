@@ -3,17 +3,14 @@
 #' @title Generate Correlated Multi-Endpoint Patient Responses
 #' @description Generates correlated continuous, binary, and time-to-event responses for a multiple-endpoint trial.
 #' @author Anoop Singh Rawat, Gabriel Potvin
-#' @param NumPat Integer. Number of patients in the trial.
-#' @param NumArms Integer. Number of arms in the trial, including control.
-#' @param TreatmentID Integer vector containing each patient's treatment assignment, with 0 denoting control.
-#' @param ArrivalTime Numeric vector containing patient arrival times.
-#' @param EndpointType Integer vector containing endpoint types: 0 for continuous, 1 for binary, and 2 for
-#' time-to-event.
-#' @param EndpointName Character vector containing endpoint names.
-#' @param RespParams Named list of response parameters for each endpoint. Continuous entries contain `Control` and
-#' `Treatment` mean/standard-deviation pairs; binary entries contain control and treatment probabilities; and
-#' time-to-event entries contain `SurvMethod`, its time parameters, `Control`, and `HR`.
-#' @param Correlation Numeric correlation matrix with one row and column per endpoint.
+#' @param NumPat Integer number of patients in the trial.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param TreatmentID Integer vector of length `NumPat`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumPat`, indicating the arrival time for each subject.
+#' @param EndpointType Integer vector identifying each endpoint as continuous (0), binary (1), or time-to-event (2).
+#' @param EndpointName Character vector naming the endpoints in `EndpointType` order.
+#' @param RespParams List of endpoint-specific generation parameters. Continuous entries contain arm means and standard deviations; binary entries contain arm response probabilities; time-to-event entries contain the survival method, periods, control parameters, and hazard ratios.
+#' @param Correlation Numeric correlation-coefficient matrix with one row and column per endpoint and ones on the diagonal.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing `Response`, a named list of response vectors in `EndpointName` order, and `ErrorCode`,
 #' an integer status code where 0 indicates success.

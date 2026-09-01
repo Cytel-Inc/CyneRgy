@@ -13,11 +13,11 @@
 #' Note: this function can be extended to simulate any number of endpoints and covariates.
 #' @author Julija Saltane
 #'
-#' @param NumSub Integer. Number of subjects to simulate.
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
-#' @param TreatmentID Integer vector of length `NumSub`. Treatment assignment for each subject (for two arm confirmatory: 0 = control, 1 = treatment).
-#' @param Mean Numeric. Not used directly in this function.
-#' @param StdDev Numeric. Not used directly in this function.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Mean Numeric vector of arm-specific outcome means. Not used by this example.
+#' @param StdDev Numeric vector of arm-specific outcome standard deviations. Not used by this example.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'        \describe{
 #'          \item{UserParam$MeanOutcome1Ctrl}{Mean of outcome 1 for the control group.}

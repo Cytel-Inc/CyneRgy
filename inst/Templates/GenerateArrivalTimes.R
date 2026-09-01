@@ -2,10 +2,10 @@
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @title Generate Patient Arrival Times
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param NumPrd Number of time periods that are provided.
-#' @param PrdStart Vector with start of a time interval
-#' @param AccrRate the accrual rate in each period.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumPrd Integer number of accrual periods.
+#' @param PrdStart Numeric vector of length `NumPrd`, indicating the start time of each accrual period; `PrdStart[ 1 ] = 0`.
+#' @param AccrRate Numeric vector of length `NumPrd`, indicating the accrual rate in each period.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam values are supplied, they will be elements of the list.
 #' @return The function must return a list in the return statement of the function. The information below lists

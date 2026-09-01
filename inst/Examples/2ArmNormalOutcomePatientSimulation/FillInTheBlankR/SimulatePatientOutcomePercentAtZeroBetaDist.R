@@ -2,17 +2,19 @@
 #' @name SimulatePatientOutcomePercentAtZeroBetaDist
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0 where the probability of a 0 is drawn from a Beta distribution.
 #' @author J. Kyle Wathen
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
-#' @param Mean A vector of length = 2 with the means of the two treatments.
-#' @param StdDev A vector of length = 2 with the standard deviations of each treatment
+#' @param NumSub Integer number of subjects in the trial.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Mean Numeric vector of arm-specific outcome means.
+#' @param StdDev Numeric vector of arm-specific outcome standard deviations.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam is supplied, the list must contain the following named elements:
-#'  UserParam$dCtrlBetaParam1 -  First parameter in the Beta distribution for the control (ctrl) treatment.
-#'  UserParam$dCtrlBetaParam2 - Second parameter in the Beta distribution for the control (ctrl) treatment.
-#'  UserParam$dExpBetaParam1 - First parameter in the Beta distribution for the experimental (exp) treatment.
-#'  UserParam$dExpBetaParam2 - Second parameter in the Beta distribution for the experimental (exp) treatment.
+#' \describe{
+#'   \item{UserParam$dCtrlBetaParam1}{First Beta-distribution parameter for the control probability of an outcome of 0.}
+#'   \item{UserParam$dCtrlBetaParam2}{Second Beta-distribution parameter for the control probability of an outcome of 0.}
+#'   \item{UserParam$dExpBetaParam1}{First Beta-distribution parameter for the experimental probability of an outcome of 0.}
+#'   \item{UserParam$dExpBetaParam2}{Second Beta-distribution parameter for the experimental probability of an outcome of 0.}
+#' }
 #' @description
 #' The function assumes that the probability a patient has a zero response is random and follows a Beta( a, b ) distribution.
 #' Each distribution must provide 2 parameters for the beta distribution and the probability of 0 outcome is selected from the corresponding Beta distribution.

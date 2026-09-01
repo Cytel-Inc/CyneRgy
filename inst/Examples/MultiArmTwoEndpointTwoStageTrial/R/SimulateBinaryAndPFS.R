@@ -5,11 +5,11 @@
 #' for a multi-arm clinical trial.
 #' @author Julija Saltane, J. Kyle Wathen
 #'
-#' @param NumSub Integer. Total number of subjects to simulate.
-#' @param NumArm Integer. Total number of arms including control.
-#' @param ArrivalTime Numeric vector of subject arrival times.
-#' @param TreatmentID Integer vector indicating treatment assignment for each subject (0 = control, 1...n = treatment arms).
-#' @param PropResp Numeric vector of response probabilities for each arm. Length must equal `NumArm`.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param PropResp Numeric vector of length `NumArm`, containing response probabilities for control followed by each experimental arm.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'        \describe{
 #'          \item{UserParam$MedianSurvCtrl}{Median PFS time for the control arm. Defaults to 12.}

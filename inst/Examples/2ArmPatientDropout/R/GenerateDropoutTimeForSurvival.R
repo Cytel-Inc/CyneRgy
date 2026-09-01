@@ -3,13 +3,13 @@
 #' @title Generate Dropout Times for a Survival Design
 #' @author Shubham Lahoti
 #' @description The following function generates dropout time for 2-arm survival design.
-#' @param NumSub The number of patients or subjects that need to be simulated, integer value.
-#' @param NumArm The number of arms in the trial including experimental and control, integer value.
-#' @param TreatmentID Vector specifying indexes of arms to which subjects are allocated (one arm index per subject). Index for placebo / control is 0.
-#' @param DropMethod Input method for specifying dropout parameters. 1 - Dropout Hazard rates and 2 - Probability of dropout.
-#' @param NumPrd Number of dropout periods. In this example we fix NumPrd = 1
-#' @param PrdTime Vector of times used to specify dropout parameters.
-#' @param DropParam 2-D array of parameters used to generate dropout times. Number of rows = Number of Dropout Period . Number of Columns = Number of Arms including Control/Placebo.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param DropMethod Integer input method: 1 for dropout hazard rates or 2 for cumulative dropout probabilities.
+#' @param NumPrd Integer number of dropout periods. This example uses one period.
+#' @param PrdTime Numeric vector containing the start time of each dropout period.
+#' @param DropParam Numeric matrix with `NumPrd` rows and `NumArm` columns. For `DropMethod = 1`, entries are dropout hazard rates by period and arm; for `DropMethod = 2`, entries are cumulative dropout probabilities by period and arm.
 #'  In this  example a Dropout Parameter will have only 1 row (Number of periods = 1) and 2 columns (one each for control and experimental arm)
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list that contains:

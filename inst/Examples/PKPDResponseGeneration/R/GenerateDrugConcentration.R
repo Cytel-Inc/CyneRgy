@@ -4,17 +4,17 @@
 #' @description
 #' Use a one-compartment PK model with first-order absorption to simulate plasma concentrations for patients.
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#' @param NumSub Integer. Number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#' @param NumVisit Integer. Number of Visits
-#' @param TreatmentID Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
-#' @param Inputmethod There were two options: 0 - the mean and SD values represent actual values.
-#'                                            1 - values represent an expected change from baseline at each visit rather than the true means.
-#' @param VisitTime Numeric. Visit Times
-#' @param MeanControl Numeric. Control Mean for all visits
-#' @param MeanTrt Numeric. Treatment Mean for all visits
-#' @param StdDevControl Numeric. Control Standard Deviations for all visits
-#' @param StdDevTrt Numeric. Treatment Standard Deviations for all visits
-#' @param CorrMat Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumVisit Integer number of visits.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject. Required for integration but not used by this example.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline. Not used by this example.
+#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
+#' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
+#' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit.
+#' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit.
+#' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
+#' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' \describe{
 #'   \item{UserParam$AbsorptionRate}{First-order absorption rate constant.}
@@ -34,7 +34,7 @@
 #'                  \item{Response<NumVisit>}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}
 ######################################################################################################################## .
 
-GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
+GenerateDrugConcentration <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
     # Initialize error code and return list
     nError  <- 0

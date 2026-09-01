@@ -20,8 +20,8 @@ When creating a custom R script, you can optionally use specific variables provi
 |**EndpointType**|Vector of Integer|Vector of length equal to the number of endpoints, indicating the endpoint types:<br>– `0`: Continuous.<br>– `1`: Binary.<br>– `2`: Time-to-Event.|
 |**EndpointName**|Vector of Character|Vector of length equal to the number of endpoints, indicating the endpoint names.|
 |**RespParams**|List|List containing list of parameters of length equal to the number of endpoints:<br>- For `Endpoint = TTE`, list with `SurvMethod` and method-specific parameters.<br>&nbsp;&nbsp;&nbsp;&nbsp;- For `SurvMethod = 1`: Hazard rate method. Use `NumPiece`, `StartAtTime`, `HR`, `Control` (hazard rates, can be vectors for piecewise).<br>&nbsp;&nbsp;&nbsp;&nbsp;- For `SurvMethod = 2`: Cumulative % survival method. Use `ByTime`, `HR`, `Control` (% survival at `ByTime`).<br>&nbsp;&nbsp;&nbsp;&nbsp;- For `SurvMethod = 3`: Median survival time method. Use `HR`, `Control` (median survival time).<br>- For `Endpoint = Binary`, list with `Treatment` and `Control` (treatment and control probabilities).<br>- For `Endpoint = Continuous`, list with `Treatment` and `Control` (treatment and control lists, first element is the mean and second element is the standard deviation).|
-|**Correlation**|Matrix of Integer|Correlation matrix of size equal to the number of endpoints times the number of endpoints:<br>– `5`: Very strong positive.<br>– `4`: Strong positive.<br>– `3`: Moderate positive.<br>– `2`: Weak positive.<br>– `1`: Very weak positive.<br>– `0`: Uncorrelated.<br>– `-1`: Very weak negative.<br>– `-2`: Weak negative.<br>– `-3`: Moderate negative.<br>– `-4`: Strong negative.<br>– `-5`: Very strong negative.|
-| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. | 
+|**Correlation**|Matrix of Integer|Correlation-strength matrix with one row and column per endpoint:<br>– `5`: Very strong positive.<br>– `4`: Strong positive.<br>– `3`: Moderate positive.<br>– `2`: Weak positive.<br>– `1`: Very weak positive.<br>– `0`: Uncorrelated.<br>– `-1`: Very weak negative.<br>– `-2`: Weak negative.<br>– `-3`: Moderate negative.<br>– `-4`: Strong negative.<br>– `-5`: Very strong negative.|
+| **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 
@@ -52,18 +52,18 @@ A detailed template with step-by-step explanations is available here: [SimulateP
 GenerateResponse <- function( NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
-  
+
   lResponse          <- list()
-  
+
   # Initialize responses
-  vPatientOutcomeEP1  <- rep( 0, NumPat )  
+  vPatientOutcomeEP1  <- rep( 0, NumPat )
   vPatientOutcomeEP2  <- rep( 0, NumPat )
-  vPatientOutcomeEP3  <- rep( 0, NumPat )  
+  vPatientOutcomeEP3  <- rep( 0, NumPat )
   vPatientOutcomeEP4  <- rep( 0, NumPat )
   vPatientOutcomeEP5  <- rep( 0, NumPat )
-  
+
   # Write the actual code here.
-  
+
   lResponse[[EndpointName[[1]]]] <- vPatientOutcomeEP1
   lResponse[[EndpointName[[2]]]] <- vPatientOutcomeEP2
   lResponse[[EndpointName[[3]]]] <- vPatientOutcomeEP3
@@ -80,4 +80,3 @@ Explore the following example for more context:
 
 1. [**Multiple Endpoints - Patient Simulation**](MEPPatientSimulation.html)
     - [GenerateMEPResponse.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MEPPatientSimulation/R/GenerateMEPResponse.R)
-    

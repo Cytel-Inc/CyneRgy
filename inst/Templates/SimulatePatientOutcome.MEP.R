@@ -3,14 +3,14 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Simulate Multiple-Endpoint Patient Outcomes
 #' @description Simulate continuous, binary, or time-to-event responses for each configured endpoint.
-#' @param NumPat Integer number of patients to simulate.
-#' @param NumArms Integer number of trial arms, including control.
-#' @param TreatmentID Integer vector of arm assignments with length `NumPat`; 0 denotes control.
-#' @param ArrivalTime Numeric vector of patient arrival times with length `NumPat`.
+#' @param NumPat Integer number of patients in the trial.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param TreatmentID Integer vector of length `NumPat`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumPat`, indicating the arrival time for each subject.
 #' @param EndpointType Integer vector identifying each endpoint as continuous (0), binary (1), or time-to-event (2).
 #' @param EndpointName Character vector naming the endpoints in `EndpointType` order.
 #' @param RespParams List of endpoint-specific generation parameters. Continuous entries contain arm means and standard deviations; binary entries contain arm response probabilities; time-to-event entries contain the survival method, periods, control parameters, and hazard ratios.
-#' @param Correlation Numeric endpoint correlation matrix with one row and column per endpoint.
+#' @param Correlation Numeric correlation-coefficient matrix with one row and column per endpoint and ones on the diagonal.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing `Response`, a named list of response vectors by endpoint, and optional integer `ErrorCode`.
 ######################################################################################################################## .

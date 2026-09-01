@@ -12,9 +12,9 @@
 #' 3) Generate a Binary vector where nC = Control sample size and nT = Treatment sample size using sample() functionality available in R.
 #'
 #' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
-#' @param NumSub The number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#' @param NumArms The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine. Only NumArms == 2 is supported.
-#' @param AllocRatio The ratio of the experimental group sample size (nt) to control group sample size (nc) i.e. (nt/nc). The argument value is passed from Engine.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms. This example supports exactly two arms.
+#' @param AllocRatio Positive numeric scalar giving the experimental-to-control allocation ratio (`nt/nc`).
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return A list with the following components:

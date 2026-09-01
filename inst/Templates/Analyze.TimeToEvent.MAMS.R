@@ -3,16 +3,14 @@
 
 #' @name {{FUNCTION_NAME}}
 #' @title Analyze Multi-Arm Time-to-Event Outcomes
-#' @param SimData A data frame containing simulated patient level data.
-#'        Required variables in the data frame include:
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'        \item{ArrivalTime}{Patient enrollment time, numeric vector}
 #'        \item{TreatmentID}{Treatment assignment where 0 = control and 1,2,... represent treatment arms}
 #'        \item{SurvivalTime}{Observed or simulated survival time for each patient}
 #'        }
 #'
-#' @param DesignParam A list containing design parameters supplied from East Horizon.
-#'        Common parameters include:
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'        \describe{
 #'        \item{Alpha}{One-sided significance level}
 #'        \item{TailType}{Tail direction, 1 = upper tail, 0 = lower tail}
@@ -22,13 +20,23 @@
 #'        \item{IsArmPresent}{Vector indicating which treatment arms remain active}
 #'        }
 #'
-#' @param LookInfo Optional list containing interim analysis information.
-#'        If supplied, common elements include:
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
 #'        \describe{
 #'        \item{NumLooks}{Total number of analyses}
 #'        \item{CurrLookIndex}{Current analysis index}
-#'        \item{InfoFrac}{Information fraction for each look}
-#'        \item{EffBdry}{Efficacy boundaries for each look}
+#'        \item{CumEvents}{Vector containing the cumulative number of events for each look.}
+#'        \item{InfoFrac}{Vector of information fractions for each look.}
+#'        \item{LookTime}{Look time on the calendar scale.}
+#'        \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
+#'        \item{EffBdryScale}{Efficacy boundary scale: 0 for Z scale or 1 for adjusted p-value scale.}
+#'        \item{EffBdry}{Efficacy boundaries for one-sided tests.}
+#'        \item{EffBdryUpper}{Upper efficacy boundaries where applicable.}
+#'        \item{EffBdryLower}{Lower efficacy boundaries where applicable.}
+#'        \item{FutBdryScale}{Futility boundary scale: 1 for adjusted p-value, 2 for Delta, or 6 for hazard ratio.}
+#'        \item{FutBdry}{Futility boundaries for one-sided tests.}
+#'        \item{FutBdryUpper}{Upper futility boundaries where applicable.}
+#'        \item{FutBdryLower}{Lower futility boundaries where applicable.}
+#'        \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'        }
 #'
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.

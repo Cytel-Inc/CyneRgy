@@ -114,6 +114,7 @@ UserParam <- list(
 lEmaxOut <- GenerateResponseEmaxModel(
     NumSub        = NumSub,
     NumVisit      = NumVisit,
+    ArrivalTime   = rep( 0, NumSub ),
     TreatmentID   = TreatmentID,
     Inputmethod   = 0,
     VisitTime     = VisitTime,

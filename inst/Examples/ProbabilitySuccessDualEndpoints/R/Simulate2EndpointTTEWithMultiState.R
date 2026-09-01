@@ -6,15 +6,15 @@
 #' and overall survival (OS), using a multi-state model. The simulation utilizes input parameters such as the number
 #' of subjects, number of arms, and user-defined survival parameters.
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#' @param NumSub The number of subjects to simulate for the trial. A single numeric value, e.g., 250.
-#' @param NumArm The number of arms in the trial, a single numeric value. For a two-arm trial, this will be 2.
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
-#' @param TreatmentID A vector of treatment IDs, where 0 corresponds to control and 1 corresponds to experimental.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #'                    The length of this vector must equal NumSub.
 #' @param SurvMethod A numeric value specifying the survival method:
 #'                   \describe{
 #'                       \item{1}{Hazard Rate}
-#'                       \item{2}{Cumulative % Survival}
+#'                       \item{2}{Cumulative \% Survival}
 #'                       \item{3}{Medians}
 #'                   }
 #' @param NumPrd The number of time periods that are provided.

@@ -3,8 +3,16 @@
 #' @title Analyze Repeated Measures Using nlme
 #' @description Reshapes simulated repeated-measures responses, fits a generalized least-squares model, and extracts the treatment test statistic.
 #' @author Shubham Lahoti
-#' @param SimData Data frame containing treatment assignments and visit-specific response columns.
-#' @param DesignParam List containing `SampleSize` and `NumVisit` for the simulated design.
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
+#'   \describe{
+#'     \item{TreatmentID}{Treatment assignment, where 0 represents control and 1 represents experimental treatment.}
+#'     \item{Response1, ..., ResponseNumVisit}{Repeated-measures response at each visit.}
+#'   }
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
+#'   \describe{
+#'     \item{SampleSize}{Total number of subjects in the trial.}
+#'     \item{NumVisit}{Number of repeated-measures visits.}
+#'   }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A named list containing `TestStat`, `PrimDelta`, `SecDelta`, and `ErrorCode`.
 ######################################################################################################################## .

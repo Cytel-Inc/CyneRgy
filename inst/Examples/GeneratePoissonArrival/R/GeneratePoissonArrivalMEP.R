@@ -4,10 +4,10 @@
 #' @description Generates patient arrival times using period-specific Poisson accrual rates. When `UserParam` is
 #' supplied, its named rates override `PrdStart` and `AccrRate` and provide a ramp-up schedule.
 #' @author J. Kyle Wathen
-#' @param NumPat Integer. Number of patients to simulate.
-#' @param NumPrd Integer. Number of accrual periods.
-#' @param PrdStart Numeric vector containing the start time of each accrual period. The first value must be 0.
-#' @param AccrRate Numeric vector containing the accrual rate for each period.
+#' @param NumPat Integer number of patients in the trial.
+#' @param NumPrd Integer number of accrual periods.
+#' @param PrdStart Numeric vector of length `NumPrd`, indicating the start time of each accrual period; `PrdStart[ 1 ] = 0`.
+#' @param AccrRate Numeric vector of length `NumPrd`, indicating the accrual rate in each period.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'   \describe{
 #'     \item{UserParam$dRate1, ..., UserParam$dRateN}{Poisson accrual rate for each successive one-unit period. The final rate continues after period `N`.}

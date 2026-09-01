@@ -6,23 +6,18 @@
 #' ASSUMPTION
 #' The look positioning is based on target events on Full Population
 #'
-#' @param SimData
-#' A data frame containing the simulated patient-level data for the current simulation iteration.
-#' Includes at least the following variables:
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #' \itemize{
-#'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
-#'   \item{Response}{— The observed endpoint for continuous outcome}
-#'   \item{TreatmentID}{— 0 = Control, 1 = Treatment}
+#'   \item{ArrivalTime}{Calendar time at which the subject entered the trial.}
+#'   \item{SurvivalTime}{Time-to-event outcome measured from subject arrival.}
+#'   \item{TreatmentID}{Treatment assignment, where 0 is control and 1 is experimental treatment.}
 #' }
 #'
-#' @param DesignParam
-#' A list containing the design and simulation parameters required for analysis. Includes:
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #' \itemize{
-#'   \item{MaxCompleters}{— Maximum number of completers for the study}
-#'   \item{RespLag}{— Response lag from arrival time to measurement}
-#'   \item{CriticalPoint}{— Single-look efficacy boundary (if LookInfo = NULL)}
+#'   \item{MaxEvents}{Maximum number of events for a fixed-sample analysis.}
 #'
-#'   %% Stratification parameters
+#'   Stratification parameters:
 #'   \item{NumStratFactors}{— Number of stratification factors used in the analysis}
 #'   \item{TestStratFactors}{— Subset of stratification factors to be used specifically for testing (may include \code{NA})}
 #'   \item{StratFactors}{— A list of stratification factor levels, where each element corresponds
@@ -34,7 +29,7 @@
 #'         }}
 #' }
 #'
-#' %% Subpopulation Analysis Parameters
+#' Subpopulation analysis parameters:
 #'   \item{NumSubPops}{— Number of predefined subpopulations included in the analysis}
 #'
 #'   \item{SubpopName}{— A vector of subpopulation names or identifiers
@@ -63,18 +58,29 @@
 #'            \item{\code{SP2}}{— Transition matrix for Subpopulation 2}
 #'            \item{\code{SP3}}{— Transition matrix for Subpopulation 3}
 #'         }}
-#' }
 #'
-#' @param LookInfo
-#' A list containing group sequential design information for multi-look trials.
-#' For group sequential designs, it includes:
-#' \itemize{
-#'   \item{NumLooks}{— Total number of interim analyses}
-#'   \item{CurrLookIndex}{— Current look index}
-#'   \item{InfoFrac}{— Information fraction at each look}
-#'   \item{EffBdry}{— Efficacy boundary at each look}
-#' }
-#'
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
+#'                 \describe{
+#'                      \item{NumLooks}{An integer value with the number of looks in the study}
+#'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
+#'                      \item{CumEvents}{Vector containing the cumulative number of events for each look.}
+#'                      \item{InfoFrac}{Information fraction}
+#'                      \item{LookTime}{Look time on the calendar scale.}
+#'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
+#'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
+#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
+#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
+#'                      \item{EffBdryScale}{Efficacy boundary scale. Possible values are: Z Scale: 0, p-Value Scale: 1}
+#'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
+#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryScale}{Futility boundary scale: Z scale = 0, p-value scale = 1, Delta scale = 2, conditional-power scale = 3, or hazard-ratio scale = 6.}
+#'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
+#'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
+#'                 }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' A list of user-defined parameters in East Horizon.  Default = NULL.
 #'
@@ -138,7 +144,6 @@
 #' }
 #'
 #' @return A named list containing population-specific `Decision`, `TestStat`, and `dHR` lists, numeric `AnalysisTime`, and integer `ErrorCode`.
-#' }
 ######################################################################################################################## .
 
 AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )

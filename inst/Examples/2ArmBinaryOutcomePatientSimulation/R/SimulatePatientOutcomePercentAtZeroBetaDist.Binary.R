@@ -2,11 +2,11 @@
 #' @name SimulatePatientOutcomePercentAtZeroBetaDist.Binary
 #' @title Simulate patient outcomes from a binary distribution with a percent of patients having an outcome of 0 where the probability of a 0 is drawn from a Beta distribution.
 #' @author J. Kyle Wathen
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param NumArm The number of arms in the trial including experimental and control, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = Treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
-#' @param PropResp A vector of expected proportions of response for each arm
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param PropResp Numeric vector of length `NumArm`, containing response probabilities for control followed by each experimental arm.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{

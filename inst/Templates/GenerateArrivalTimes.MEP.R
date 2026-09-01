@@ -2,10 +2,10 @@
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @title Generate Multiple-Endpoint Patient Arrival Times
-#' @param NumPat Integer. The number of participants that need to be simulated
-#' @param NumPrd Integer. Number of time periods that are provided.
-#' @param PrdStart Vector of Numerics. The start time for each enrollment periods. PrdStart[ 1 ] = 0
-#' @param AccrRate Vector of Numerics. The accrual rate in each enrollment period.
+#' @param NumPat Integer number of patients in the trial.
+#' @param NumPrd Integer number of accrual periods.
+#' @param PrdStart Numeric vector of length `NumPrd`, indicating the start time of each accrual period; `PrdStart[ 1 ] = 0`.
+#' @param AccrRate Numeric vector of length `NumPrd`, indicating the accrual rate in each period.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing the arrival times (ArrivalTime) and error code (ErrorCode)
 #' @description

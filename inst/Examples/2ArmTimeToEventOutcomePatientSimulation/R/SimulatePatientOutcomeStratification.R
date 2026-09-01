@@ -2,14 +2,14 @@
 #' @name SimulatePatientOutcomeStratification
 #' @title Simulate patient outcomes using stratification
 #' @author Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin
-#' @param NumSub The total number of subjects in the trial. A single numeric value, e.g., 250.
+#' @param NumSub Integer number of subjects in the trial.
 #'
-#' @param NumArm The number of arms in the trial (single numeric value).
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #' For a two-arm trial this will be 2.
 #'
-#' @param ArrivalTime A vector of subject arrival times. (Not used in this function but required for integration.)
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject. Required for integration but not used by this example.
 #'
-#' @param TreatmentID A vector of treatment IDs assigned to subjects.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' TreatmentID uses 0-based indexing internally:
 #' \itemize{
 #'   \item{0 = Arm 1 (control)}
@@ -17,7 +17,7 @@
 #' }
 #' Length of TreatmentID must equal NumSub.
 #'
-#' @param StratumID A vector indicating the stratum for each subject.
+#' @param StratumID Integer vector of length `NumSub`, indicating each subject's 1-based stratum ID.
 #' Subjects sharing the same value belong to the same stratum.
 #'
 #' @param SurvMethod This value is pulled from the Input Method drop-down list.
@@ -30,12 +30,7 @@
 #'
 #' @param NumPrd Number of time periods provided in the survival parameter table.
 #'
-#' @param PrdTime
-#' \describe{
-#'   \item{If SurvMethod = 1}{PrdTime is a vector of starting times of hazard pieces.}
-#'   \item{If SurvMethod = 2}{Times at which cumulative % survivals are specified.}
-#'   \item{If SurvMethod = 3}{Period time is 0 by default.}
-#' }
+#' @param PrdTime Numeric matrix with one row per stratum and `NumArm` columns, indicating the times used to specify stratum-by-arm survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
 #'
 #' @param SurvParam
 #' A 2-D array providing survival parameters per stratum.
@@ -46,8 +41,8 @@
 #'   \item{If SurvMethod = 1}{SurvParam stores hazard rates (one per arm per stratum).
 #'   SurvParam[i, j] = hazard rate for stratum *i* and arm *j*.}
 #'
-#'   \item{If SurvMethod = 2}{SurvParam stores cumulative % survival values per arm.
-#'   SurvParam[i, j] = cumulative % survival for stratum *i* and arm *j*.}
+#'   \item{If SurvMethod = 2}{SurvParam stores cumulative \% survival values per arm.
+#'   SurvParam[i, j] = cumulative \% survival for stratum *i* and arm *j*.}
 #'
 #'   \item{If SurvMethod = 3}{SurvParam stores median survival times per arm.
 #'   SurvParam[i, j] = median survival time for stratum *i* and arm *j*.}
@@ -62,7 +57,7 @@
 #' This function generates patient survival times across multiple strata based on the
 #' parameters specified in the Response Generation table.
 #'
-#' For each stratum, the corresponding survival parameters (hazard rates, cumulative % survival, or medians)
+#' For each stratum, the corresponding survival parameters (hazard rates, cumulative \% survival, or medians)
 #' are converted into hazard rates. Then patient-level survival times are simulated using an
 #' Exponential distribution:
 #' \deqn{ T \sim \text{Exponential}(\lambda) }

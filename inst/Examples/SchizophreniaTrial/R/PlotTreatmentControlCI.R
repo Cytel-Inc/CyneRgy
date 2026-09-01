@@ -1,13 +1,16 @@
 ######################################################################################################################## .
 #' @name PlotTreatmentControlCI
-#' @title Plot Treatment vs Control Mean Responses with 95% Confidence Interval
+#' @title Plot Treatment vs Control Mean Responses with 95\% Confidence Interval
 #' @description
 #' Compares mean responses between treatment and control groups across visits,
 #' including 95 percent confidence intervals.
 #' @author Jacob Wathen
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient. This data frame contains
-#' response variables (`Response1`, `Response2`, ..., `ResponseN`) and arrival times (`ArrTimeVisit1`, ..., `ArrTimeVisitN`),
-#' where N is the number of visits, as well as a `TreatmentID` column.
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
+#'   \describe{
+#'     \item{TreatmentID}{Treatment assignment, where 0 represents control and 1 represents experimental treatment.}
+#'     \item{Response1, ..., ResponseNumVisit}{Subject response at each visit.}
+#'     \item{ArrTimeVisit1, ..., ArrTimeVisitNumVisit}{Visit times relative to subject arrival.}
+#'   }
 #' @return A `ggplot` object showing group means and 95 percent confidence intervals.
 ######################################################################################################################## .
 

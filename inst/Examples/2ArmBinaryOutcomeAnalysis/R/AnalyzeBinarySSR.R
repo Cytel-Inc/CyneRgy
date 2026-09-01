@@ -3,41 +3,60 @@
 #' @title Analyze a Binary Outcome with Sample Size Re-Estimation
 #' @author J. Kyle Wathen and Gabriel Potvin
 #'
-#' @param SimData
-#' A data frame containing the simulated patient-level data for the current simulation iteration.
-#' Includes at least the following variables:
-#' \itemize{
-#'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
-#'   \item{Response}{— The observed endpoint for binary outcome}
-#'   \item{TreatmentID}{— 0 = Control, 1 = Treatment}
-#' }
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
+#'        \describe{
+#'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}
+#'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
+#'          \item{Response}{An integer value where 1 indicates response and 0 indicates no response.}
+#'          \item{CensorIndOrg}{An integer value indicating whether the subject was censored or not.}
+#'        }
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
+#'      \describe{
+#'          \item{SampleSize}{Sample size of the trial}
+#'          \item{Alpha}{Type I Error}
+#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2}
+#'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
+#'          \item{LowerAlpha}{Lower Type I error. Present for Left Tailed and Two Sided Asymmetric Tests }
+#'          \item{UpperAlpha}{Upper Type I error. Present for Right Tailed and Two Sided Asymmetric Tests }
+#'          \item{MaxCompleters}{Maximum Number of Completers}
+#'          \item{FollowUpType}{Follow-up type: 0 for until the end of the study, or 1 for a fixed period.}
+#'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms. }
+#'          \item{CriticalPoint}{Critical Value. Present in Fixed Sample designs only }
+#'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
+#'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
+#'          \item{RespLag}{Follow up duration}
+#'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials.}
 #'
-#' @param DesignParam
-#' A list containing the design and simulation parameters required for analysis. Includes:
-#' \itemize{
-#'   \item{MaxCompleters}{— Maximum number of completers for the study}
-#'   \item{RespLag}{— Response lag from arrival time to measurement}
-#'   \item{CriticalPoint}{— Single-look efficacy boundary (if LookInfo = NULL)}
-#' }
-#'
-#' @param LookInfo
-#' A list containing group sequential design information for multi-look trials.
-#' For group sequential designs, it includes
-#' \itemize{
-#'   \item{NumLooks}{— Total number of interim analyses}
-#'   \item{CurrLookIndex}{— Current look index}
-#'   \item{InfoFrac}{— Information fraction at each look}
-#'   \item{EffBdry}{— Efficacy boundary at each look}
-#' }
-#'
-#' @param AdaptInfo
-#' A list containing sample-size re-estimation parameters, including:
-#' \itemize{
-#'   \item{SSRFuncScale}{— 0 = continuous rule, 1 = step function}
-#'   \item{PromZoneMin}{— Lower bound of promising zone (for continuous SSR)}
-#'   \item{PromZoneMax}{— Upper bound of promising zone}
-#'   \item{MaxSSMultInp}{— List containing \code{From}, \code{To}, \code{MaxSSMult} for step rules}
-#' }
+#'      }
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
+#'                 \describe{
+#'                      \item{NumLooks}{An integer value with the number of looks in the study}
+#'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
+#'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
+#'                      \item{InfoFrac}{Information fraction}
+#'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
+#'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
+#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
+#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
+#'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible values are: Z Scale: 0, p-Value Scale: 1}
+#'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
+#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryScale}{Futility boundary scale. Possible value are: Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
+#'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
+#'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
+#'                 }
+#' @param AdaptInfo List containing sample-size re-estimation parameters:
+#'   \describe{
+#'     \item{SSRFuncScale}{Rule type: 0 for a continuous rule or 1 for a step-function rule.}
+#'     \item{PromZoneMin}{Lower bound of the promising zone for continuous SSR.}
+#'     \item{PromZoneMax}{Upper bound of the promising zone.}
+#'     \item{MaxSSMult}{Maximum sample-size multiplier.}
+#'     \item{MaxSSMultInp}{List containing `From`, `To`, and `MaxSSMult` values for step-function rules.}
+#'   }
 #'
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' A list of user-defined parameters in East Horizon. Default = NULL.

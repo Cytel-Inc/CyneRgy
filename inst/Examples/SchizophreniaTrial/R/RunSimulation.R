@@ -56,6 +56,7 @@ vArrivalTime <- sort( runif( nNumSub, 0, 36 ) )
 # Step 3: Generate Response Data
 lGeneratedData <- GenerateMMRMResponses( NumSub        = nNumSub,
                                          NumVisit      = nNumVisit,
+                                         ArrivalTime   = vArrivalTime,
                                          TreatmentID   = vTreatmentID,
                                          Inputmethod   = nInputmethod,
                                          VisitTime     = vVisitTime,
@@ -137,7 +138,7 @@ for( iRep in 1:nQtyReps )
     # if the Treatment assignment should be different for each simulation
     # vTreatmentID <- sample( c( rep( 0, nNumSub / 2 ), rep( 1, nNumSub / 2 ) ) )
 
-    lGeneratedData <- GenerateMMRMResponses( nNumSub, nNumVisit, vTreatmentID, nInputmethod, vVisitTime,
+    lGeneratedData <- GenerateMMRMResponses( nNumSub, nNumVisit, vArrivalTime, vTreatmentID, nInputmethod, vVisitTime,
                                              vMeanControl, vMeanTrt, vStdDevControl, vStdDevTrt, mCorrMat,
                                              lUserParamDataGen )
 

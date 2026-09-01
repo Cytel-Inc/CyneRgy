@@ -2,9 +2,9 @@
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #' @title Simulate Continuous Patient Outcomes
-#' @param NumSub Integer number of subjects to simulate.
-#' @param ArrivalTime Numeric vector of subject arrival times with length `NumSub`.
-#' @param TreatmentID Integer vector of arm assignments with length `NumSub`; 0 denotes control.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param Mean Numeric vector of arm-specific outcome means.
 #' @param StdDev Numeric vector of arm-specific outcome standard deviations.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.

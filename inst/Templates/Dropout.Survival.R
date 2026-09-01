@@ -3,16 +3,13 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Generate Time-to-Event Dropout Times
 #' @description Generate subject-level dropout times from arm-specific hazard rates or dropout probabilities.
-#' @param NumSub Mandatory. The integer value specifying the number of patients or subjects in the trial. The numeric value of the argument value is sent in when called.
-#' @param NumArm Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
-#' @param TreatmentID Vector specifying indexes of arms to which subjects are allocated (one arm index per subject). Index for placebo / control is 0. Mandatory for Time To Event and Repeated measures designs.
-#' @param DropMethod Input method for specifying dropout parameters. Mandatory for Time to Event and Repeated measures designs.
-#'           \describe{
-#'           \item{Time to Event}{2 - Probability of dropouts}
-#'            }
-#' @param NumPrd The integer value specifying number of dropout periods. Mandatory for Time to Event endpoint
-#' @param PrdTime Vector of numeric time values used to specify dropout parameters. Mandatory for Time to Event endpoint
-#' @param DropParam A 2D array of parameters used to generate dropout times. Mandatory for Time to Event endpoint
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param DropMethod Integer input method: 1 for dropout hazard rates or 2 for cumulative dropout probabilities.
+#' @param NumPrd Integer number of dropout periods. Mandatory for time-to-event endpoints.
+#' @param PrdTime Numeric vector containing the start time of each dropout period.
+#' @param DropParam Numeric matrix with `NumPrd` rows and `NumArm` columns. For `DropMethod = 1`, entries are dropout hazard rates by period and arm; for `DropMethod = 2`, entries are cumulative dropout probabilities by period and arm.
 #'           \describe{
 #'           \item{Number of rows = Number of Dropout periods.}
 #'           \item{Number of columns = Number of arms including control/placebo.}
@@ -20,7 +17,7 @@
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                    User should access the variables using names, for example UserParam$Var1 and not order.
 #'                    These variables can be of the following types: Integer, Numeric, or Character
-
+#'
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{

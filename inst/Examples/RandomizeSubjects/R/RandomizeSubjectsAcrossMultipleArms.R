@@ -5,9 +5,9 @@
 #' Randomly assigns subjects across control and multiple experimental arms while
 #' matching integer target sizes derived from the requested allocation ratios.
 #' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
-#' @param NumSub Mandatory integer number of subjects passed by the engine.
-#' @param NumArms Mandatory integer number of trial arms, including control.
-#' @param AllocRatio Mandatory vector of experimental-to-control allocation ratios
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param AllocRatio Mandatory numeric vector of experimental-to-control allocation ratios with length `NumArms - 1`.
 #'   with length `NumArms - 1`.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                    User should access the variables using names, for example UserParam$Var1 and not order.

@@ -5,8 +5,7 @@
 #' Analyzes progression-free and overall survival at the current look and returns
 #' the PFS test statistic, endpoint summaries, and a combined efficacy decision.
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#' @param SimData A data frame containing subject-level data generated during the simulation. Each row corresponds to a patient,
-#'                and the columns include relevant variables such as arrival time, treatment assignment, survival time, and dropout time. Key columns include:
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'                \describe{
 #'                  \item{ArrivalTime}{Numeric value representing the time the patient entered the trial.}
 #'                  \item{TreatmentID}{Integer value where 0 indicates control treatment and 1 experimental treatment.}
@@ -14,7 +13,7 @@
 #'                  \item{DropOutTime}{Numeric value for the dropout time for the patient in a time-to-event trial.}
 #'                  \item{OS}{Numeric value for overall survival time for the patient.}
 #'                }
-#' @param DesignParam A list containing design and simulation parameters required to compute test statistics and perform testing. Key elements include:
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'                    \describe{
 #'                      \item{SampleSize}{Total sample size of the trial.}
 #'                      \item{Alpha}{Type I error rate (significance level).}
@@ -38,11 +37,14 @@
 #'                                             \item{1}{Follow-up for a fixed period.}
 #'                                           }}
 #'                    }
-#' @param LookInfo A list containing input parameters related to multiple looks in group sequential designs. Key elements include:
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
 #'                 \describe{
 #'                   \item{NumLooks}{Integer value indicating the total number of looks in the study.}
 #'                   \item{CurrLookIndex}{Integer value for the current look index, starting from 1.}
-#'                   \item{InfoFrac}{Information fraction at the current look.}
+#'                   \item{CumEvents}{Vector containing cumulative event counts for each look.}
+#'                   \item{InfoFrac}{Vector containing information fractions for each look.}
+#'                   \item{LookTime}{Look time on the calendar scale.}
+#'                   \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
 #'                   \item{CumAlpha}{Cumulative alpha spent at the current look (one-sided tests).}
 #'                   \item{EffBdryScale}{Scale for efficacy boundaries:
 #'                                       \describe{
@@ -62,6 +64,8 @@
 #'                   \item{FutBdry}{Vector of futility boundaries for one-sided tests.}
 #'                   \item{FutBdryUpper}{Vector of upper futility boundaries for two-sided tests.}
 #'                   \item{FutBdryLower}{Vector of lower futility boundaries for two-sided tests.}
+#'                   \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design effect or 1 for estimated effect.}
+#'                   \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  \describe{

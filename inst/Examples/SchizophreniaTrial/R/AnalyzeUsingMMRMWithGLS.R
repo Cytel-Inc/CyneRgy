@@ -5,19 +5,40 @@
 #' Fits a mixed model for repeated measures using generalized least squares and
 #' returns the treatment effect estimate, p-value, and East Horizon decision.
 #' @author Jacob Wathen
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient. It will have headers indicating the names of the
-#' columns. These names will be same as those used in Data Generation. For analysis the most relevant variables are:
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{Numeric vector representing patient arrival times}
 #'          \item{TreatmentID}{Integer vector (0 = control, 1 = treatment)}
 #'          \item{Response[X]}{Numeric vector representing response for visit X, where X = 1, 2, 3, 4, 5}
 #'         }
-#' @param DesignParam List which consists of Design and Simulation Parameters which user may need to compute
-#' test statistic and perform test. For analysis the most relevant variable is:
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'        \describe{
 #'          \item{Alpha}{1-sided Type I Error}
 #'        }
-#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
+#'                 \describe{
+#'                      \item{NumLooks}{An integer value with the number of looks in the study}
+#'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
+#'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
+#'                      \item{InfoFrac}{Information fraction}
+#'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
+#'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
+#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
+#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
+#'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible values are: Z Scale: 0, p-Value Scale: 1}
+#'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
+#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryScale}{Futility boundary scale. Possible value are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
+#'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
+#'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
+#'                      \item{InterimVisit}{1 based index of the visit which is driving the interims}
+#'                      \item{FutContrast}{The contrast based on which futility boundaries are being computed. 0- Primary, 1-Secondary}
+#'                      \item{IncludePipeline}{Flag indicating whether to include pipeline subjects in the interim or not. 0- Don't include. 1- Include}
+#'                 }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return A list containing the following elements:

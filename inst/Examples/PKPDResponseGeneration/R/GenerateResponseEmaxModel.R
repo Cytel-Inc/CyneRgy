@@ -4,16 +4,17 @@
 #' @description
 #' Generate drug concentrations per subject per visit, then applies the Emax equation to convert per-visit plasma concentrations into treatment responses using the Emax PD model.
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#' @param NumSub Mandatory integer number of subjects passed by the engine.
-#' @param NumVisit Mandatory integer number of visits.
-#' @param TreatmentID Mandatory vector of arm indexes, where control is `0`.
-#' @param Inputmethod Mandatory input method indicator; `0` denotes actual mean and standard deviation values.
-#' @param VisitTime Mandatory numeric vector of visit times.
-#' @param MeanControl Mandatory numeric vector of control means by visit.
-#' @param MeanTrt Mandatory numeric vector of treatment means by visit.
-#' @param StdDevControl Mandatory numeric vector of control standard deviations by visit.
-#' @param StdDevTrt Mandatory numeric vector of treatment standard deviations by visit.
-#' @param CorrMat Mandatory numeric correlation matrix between visits.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumVisit Integer number of visits.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject. Required for integration but not used by this example.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline. Not used by this example.
+#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
+#' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
+#' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit.
+#' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit.
+#' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
+#' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' Note: UserParam values should be referenced in the main function before
 #' being passed to helper functions. Passing UserParam directly to a helper
@@ -25,7 +26,7 @@
 #'   \item{UserParam$Dose}{Administered dose.}
 #'   \item{UserParam$E0}{Baseline effect in the Emax model.}
 #'   \item{UserParam$Emax}{Maximum drug effect.}
-#'   \item{UserParam$EC50}{Concentration producing 50% of the maximum effect.}
+#'   \item{UserParam$EC50}{Concentration producing 50\% of the maximum effect.}
 #' }
 #'
 #' @return The function must return a list in the return statement of the function. The information below lists
@@ -40,7 +41,7 @@
 #'                  \item{Response<NumVisit>}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}
 ######################################################################################################################## .
 
-GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
+GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
     nError <- 0
     lRetval <- list()
@@ -65,7 +66,8 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     }
 
     # Call PK function to get concentration responses for treatment group
-    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose )
+    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime,
+                                            MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam )
 
     # Simulate response for each patient
     for( nPatIndx in 1:NumSub )

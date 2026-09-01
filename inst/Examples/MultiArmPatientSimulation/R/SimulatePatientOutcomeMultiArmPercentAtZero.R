@@ -4,12 +4,12 @@
 #' @description Simulates continuous normal outcomes while allowing arm-specific probabilities that a patient's
 #' outcome is fixed at zero.
 #' @author Gabriel Potvin and Anoop Singh Rawat
-#' @param NumSub Integer. The number of subjects that need to be simulated.
-#' @param NumArms Integer. The number of arms in the trial, including the placebo/control.
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
-#' @param TreatmentID A vector specifying the arm index for each subject. The index for the placebo/control arm is 0.
-#' @param Mean A vector with means for all the arms.
-#' @param StdDev A vector with the standard deviations of each arm.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Mean Numeric vector of arm-specific outcome means.
+#' @param StdDev Numeric vector of arm-specific outcome standard deviations.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{

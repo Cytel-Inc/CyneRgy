@@ -5,9 +5,12 @@
 #' Generates a plot of response trajectories for selected patients across visits,
 #' with color-coded points indicating treatment assignment.
 #' @author Jacob Wathen
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient. This data frame contains
-#' response variables (`Response1`, `Response2`, ..., `ResponseN`) and arrival times (`ArrTimeVisit1`, ..., `ArrTimeVisitN`),
-#' where N is the number of visits, as well as a `TreatmentID` column.
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
+#'   \describe{
+#'     \item{TreatmentID}{Treatment assignment, where 0 represents control and 1 represents experimental treatment.}
+#'     \item{Response1, ..., ResponseNumVisit}{Subject response at each visit.}
+#'     \item{ArrTimeVisit1, ..., ArrTimeVisitNumVisit}{Visit times relative to subject arrival.}
+#'   }
 #' @param vPatientIDs Integer vector. IDs of patients to include in the plot.
 #' @return A `ggplot` object displaying individual patient response trajectories across visits.
 ######################################################################################################################## .

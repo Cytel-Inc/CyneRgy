@@ -4,14 +4,14 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Simulate Multi-Arm Time-to-Event Patient Outcomes
 #'
-#' @param NumSub Integer number of subjects to simulate.
+#' @param NumSub Integer number of subjects in the trial.
 #'
-#' @param NumArm The number of arms in the trial including placebo/control, integer value
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #'
-#' @param ArrivalTime Arrival times of the subjects, numeric vector,
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #'        length(ArrivalTime) = NumSub
 #'
-#' @param TreatmentID A vector of treatment ids,
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #'        0 = control, 1,2,...,NumArm-1 for treatment arms.
 #'        length(TreatmentID) = NumSub
 #'
@@ -24,7 +24,7 @@
 #'
 #' @param NumPrd Number of survival periods, integer value
 #'
-#' @param PrdTime Numeric vector containing survival period boundary times
+#' @param PrdTime Numeric matrix with `NumPrd` rows and `NumArm` columns, indicating the times used to specify survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
 #'
 #' @param SurvParam Matrix containing survival parameters for each period and treatment arm.
 #'        Interpretation depends on SurvMethod:

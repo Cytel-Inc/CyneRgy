@@ -11,20 +11,20 @@
 #' Step 2: Transform the sample to be correlated (on normal scale) as per the specified input.
 #' Step 3: Convert the normal responses to the TTE (exponential) responses by using corresponding endpoints hazard input.
 #'
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param NumArm The number of arms in the trial including experimental and control, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param EndpointType A vector of endpoint type for each endpoint, 0 (Continuous), 1 (Binary), 2 (TTE). length( EndpointType ) = number of endpoints.
 #' @param EndpointName A vector of endpoint names for each endpoint, length( EndpointType ) = number of endpoints.
 #' The parameters SurvMethod, NumPrd, PrdTime, SurvParam, and PropResp are lists containing two elements -- first corresponds to the first endpoint and second to second.
 #' Below are the details of elements within the respective parameters.
-#' @param SurvMethod A list containing the input methods for each endpoint. TTE endpoint has values 1 (Hazard Rates), 2 (Cumulative % Survivals), 3 (Median Survival Times). Non-TTE endpoints have value NA.
+#' @param SurvMethod A list containing the input methods for each endpoint. TTE endpoint has values 1 (Hazard Rates), 2 (Cumulative \% Survivals), 3 (Median Survival Times). Non-TTE endpoints have value NA.
 #' @param NumPrd A list containing the number of time periods specified for each endpoint. For TTE endpoints, this represents the number of time intervals for which hazard rates or survival percentages are defined. For non-TTE endpoints, this value is set to NA.
 #' @param PrdTime \describe{
 #'      A list where each element is a vector of period times for TTE endpoints, dependent on the corresponding SurvMethod value. For non-TTE endpoints, this value is set to NA.
 #'      \item{If SurvMethod is 1 (Hazard Rates)}{Element is a vector specifying the starting times of each hazard piece. The number of elements equals NumPrd.}
-#'      \item{If SurvMethod is 2 (Cumulative % Survivals)}{Element is a vector specifying the time points at which the cumulative survival percentages are defined. The number of elements equals NumPrd.}
+#'      \item{If SurvMethod is 2 (Cumulative \% Survivals)}{Element is a vector specifying the time points at which the cumulative survival percentages are defined. The number of elements equals NumPrd.}
 #'      \item{If SurvMethod is 3 (Median Survival Times)}{Element is 0 by default as no time periods need to be defined.}
 #'      }
 #' @param SurvParam \describe{
@@ -33,23 +33,25 @@
 #'    Element [i, j] specifies the hazard rate in the i-th time period for the j-th arm.
 #'    Arms are arranged in columns: column 1 is control arm, column 2 is experimental arm.
 #'    Time periods are arranged in rows: row 1 is time period 1, row 2 is time period 2, etc.}
-#'    \item{If SurvMethod is 2 (Cumulative % Survivals)}{The element is an array (NumPrd rows, NumArm columns) that specifies arm-specific cumulative survival percentages.
+#'    \item{If SurvMethod is 2 (Cumulative \% Survivals)}{The element is an array (NumPrd rows, NumArm columns) that specifies arm-specific cumulative survival percentages.
 #'    Element [i, j] specifies the cumulative survival percentage at the i-th time point for the j-th arm.}
 #'    \item{If SurvMethod is 3 (Median Survival Times)}{The element is a 1 x NumArm array specifying the median survival time for each arm.
 #'    Column 1 is control arm, column 2 is experimental arm.}
 #'  }
-#' @param Correlation \describe{Correlation between two endpoints as mentioned below,}
-#'    \item{0} {Uncorrelated}
-#'    \item{1} {Very Weak Positive}
-#'    \item{2} {Weak Positive}
-#'    \item{3} {Moderate Positive}
-#'    \item{4} {Strong Positive}
-#'    \item{5} {Very Strong Positive}
-#'    \item{-1} {Very Weak Negative}
-#'    \item{-2} {Weak Negative}
-#'    \item{-3} {Moderate Negative}
-#'    \item{-4} {Strong Negative}
-#'    \item{-5} {Very Strong Negative}
+#' @param Correlation Qualitative endpoint-correlation code:
+#'    \describe{
+#'      \item{0}{Uncorrelated}
+#'      \item{1}{Very weak positive}
+#'      \item{2}{Weak positive}
+#'      \item{3}{Moderate positive}
+#'      \item{4}{Strong positive}
+#'      \item{5}{Very strong positive}
+#'      \item{-1}{Very weak negative}
+#'      \item{-2}{Weak negative}
+#'      \item{-3}{Moderate negative}
+#'      \item{-4}{Strong negative}
+#'      \item{-5}{Very strong negative}
+#'    }
 #' @param PropResp Optional binary response probabilities retained for compatibility with the dual-endpoint response interface. This survival-survival example does not use the value.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' If UserParam are supplied in East Horizon, they will be an element in the list, eg UserParam$ParameterName.
@@ -63,9 +65,10 @@
 #'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
 #'                                     }
 #'                                     }
+#'             }
 ######################################################################################################################## .
 
-SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime = NULL, TreatmentID,
+SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
                                                                 EndpointType, EndpointName, Correlation, SurvMethod,
                                                                 NumPrd, PrdTime, SurvParam, PropResp = NULL,
                                                                 UserParam = NULL )

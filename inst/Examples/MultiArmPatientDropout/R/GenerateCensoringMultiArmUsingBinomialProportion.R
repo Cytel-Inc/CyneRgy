@@ -3,10 +3,10 @@
 #' @title Generate Multi-Arm Censoring Indicators
 #' @description Generates a censoring indicator for each subject using the dropout probability for the subject's arm.
 #' @author Gabriel Potvin and Anoop Singh Rawat
-#' @param NumSub Integer. Number of subjects in the trial.
+#' @param NumSub Integer number of subjects in the trial.
 #' @param ProbDrop Numeric vector containing the dropout probability for each arm.
-#' @param NumArm Integer. Number of arms in the trial, including control.
-#' @param TreatmentID Integer vector of length `NumSub` containing arm indices, with 0 denoting control.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @return A list containing `CensorInd`, an integer vector of length `NumSub` where 0 denotes dropout and 1 denotes
 #' completion, and `ErrorCode`, an integer status code where 0 indicates success.

@@ -2,23 +2,19 @@
 #' @name SimulatePatientSurvivalAssurance
 #' @title Simulate Time-To-Event Data for Assurance
 #' @author J. Kyle Wathen and Laurent Spiess
-#' @param NumSub The number of patient times to generate for the trial.  This is a single numeric value, e.g., 250.
-#' @param NumArm  The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2.
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2, length( TreatmentID ) = NumSub
-#' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative \% survival), 3 (Medians)
 #' @param NumPrd Number of time periods that are provided.
-#' @param PrdTime \describe{
-#'      \item{If SurvMethod = 1}{PrdTime is a vector of starting times of hazard pieces.}
-#'      \item{If SurvMethod = 2}{Times at which the cumulative % survivals are specified.}
-#'      \item{If SurvMethod = 3}{Period time is 0 by default}
-#'      }
+#' @param PrdTime Numeric matrix with `NumPrd` rows and `NumArm` columns, indicating the times used to specify survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
 #' @param SurvParam \describe{Depends on the table in the Response Generation tab. 2‐D array of parameters to generate the survival times
 #'    \item{If SurvMethod is 1}{SurvParam is an array (NumPrd rows, NumArm columns) that specifies arm by arm hazard rates (one rate per arm per piece).
 #'    Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
 #'    Arms are in columns with column 1 is control, column 2 is experimental
 #'    Time periods are in rows, row 1 is time period 1, row 2 is time period 2...}
-#'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum % Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum % Survivals in ith period for jth arm.}
+#'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum \% Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum \% Survivals in ith period for jth arm.}
 #'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
 #'  }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
@@ -36,8 +32,8 @@
 #' @description
 #' The analysis is assumed to be a cox proportional hazard model where a Go decision is made if the p-value $\leq$ 0.025.
 #' For assurance, a bi-modal prior on the Log(HR) is used.   The components of the prior are:
-#' Weight: 25% on $N( 0, 0.02 )$
-#' Weight: 75% on $Beta( 2, 2)$, rescaled between -0.4 and 0.
+#' Weight: 25\% on $N( 0, 0.02 )$
+#' Weight: 75\% on $Beta( 2, 2)$, rescaled between -0.4 and 0.
 #' @return A named list containing `SurvivalTime`, `ErrorCode`, and the subject-level `TrueHR` vector.
 ######################################################################################################################## .
 

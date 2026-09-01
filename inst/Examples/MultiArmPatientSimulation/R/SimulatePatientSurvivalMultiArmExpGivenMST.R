@@ -6,10 +6,10 @@
 #' parameterizations for multi-arm clinical trial simulations.
 #' @author Gabriel Potvin and Anoop Singh Rawat
 #'
-#' @param NumSub Integer. Total number of subjects.
-#' @param NumArm Integer. Number of treatment arms including control.
-#' @param ArrivalTime Numeric vector containing patient arrival times.
-#' @param TreatmentID Integer vector indicating treatment assignment for each patient.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #'        Control arm must be indexed as 0.
 #' @param SurvMethod This example supports SurvMethod = 3, i.e. Median Survival Times.
 #' @param NumPrd Integer specifying the number of survival periods.

@@ -9,16 +9,17 @@
 #' requirements, see GeneratePatientFromCSVSpecific.R.
 #'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#' @param NumSub The number of subjects to simulate, integer value.
-#' @param NumVisit The number of visits, integer value.
-#' @param TreatmentID A vector of treatment IDs. `0 = control`, `1 = treatment`. The length of `TreatmentID` must equal `NumSub`.
-#' @param Inputmethod Method for specifying input parameters (passed from East Horizon, not used in this function).
-#' @param VisitTime Numeric vector of visit times (passed from East Horizon, not used in this function).
-#' @param MeanControl Numeric vector of control means for all visits (passed from East Horizon, not used in this function).
-#' @param MeanTrt Numeric vector of treatment means for all visits (passed from East Horizon, not used in this function).
-#' @param StdDevControl Numeric vector of control standard deviations for all visits (passed from East Horizon, not used in this function).
-#' @param StdDevTrt Numeric vector of treatment standard deviations for all visits (passed from East Horizon, not used in this function).
-#' @param CorrMat Correlation matrix between all visits (passed from East Horizon, not used in this function).
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumVisit Integer number of visits.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject. Required for integration but not used by this example.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline. Not used by this example.
+#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times. Passed from East Horizon but not used by this example.
+#' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit. Not used by this example.
+#' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit. Not used by this example.
+#' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit. Not used by this example.
+#' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit. Not used by this example.
+#' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits. Not used by this example.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'   \describe{
 #'      \item{`UserParam$InputFileName`}{The name of the CSV file in the Inputs folder (e.g., "SimPatientDataAlt.csv").}
@@ -53,7 +54,7 @@
 #'                      }}
 ######################################################################################################################## .
 
-GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
+GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
     # Initialize return variables and error code
     nError  <- 0

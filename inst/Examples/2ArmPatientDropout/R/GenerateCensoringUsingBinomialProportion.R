@@ -4,8 +4,8 @@
 #' @author Shubham Lahoti
 #' @description Generate censoring indicator ( CensorInd ) for 2 arm designs with Normal and Binomial Endpoint using a single dropout probability.
 #'
-#' @param NumSub The integer value specifying the number of patients or subjects in the trial. The numeric value of the argument value is sent in when called.
-#' @param ProbDrop A Dropout probability for both the arms. The numeric value is sent to the .
+#' @param NumSub Integer number of subjects in the trial.
+#' @param ProbDrop Numeric dropout probability applied to both arms.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
 #' @return A list that contains:

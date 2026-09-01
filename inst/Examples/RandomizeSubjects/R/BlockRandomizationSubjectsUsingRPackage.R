@@ -23,9 +23,9 @@
 #' @section Library Prerequisite:
 #' Requires the `randomizeR` package for block randomization.
 #'
-#' @param NumSub Integer. Total number of subjects to randomize. The value must be divisible by the sum of converted integer allocation ratio, as well as equal to the sum of the block sizes specified in `UserParam`.
-#' @param NumArms Integer. Number of arms. Must be exactly 2 (only two-arm designs are supported).
-#' @param AllocRatio Numeric. Ratio of experimental to control group sample size (nt/nc). Must be a positive value.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms. This example supports exactly two arms.
+#' @param AllocRatio Positive numeric scalar giving the experimental-to-control allocation ratio (`nt/nc`).
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'   \describe{
 #'     \item{UserParam$BlockSize1, ..., UserParam$BlockSizeN}{Ordered positive integer block sizes. Their sum must equal `NumSub`, and each must be a multiple of the sum of the converted integer allocation ratio.}
