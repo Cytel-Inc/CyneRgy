@@ -68,6 +68,9 @@ reference:
       contents:
           - GeneratePoissonArrival
           - RandomizationSubjectsUsingUniformDistribution
+          - RandomizationSubjectsUsingSampleFunctionInR
+          - BlockRandomizationSubjectsUsingRPackage
+          - RandomizeSubjectsAcrossMultipleArms
           - GenerateCensoringUsingBinomialProportion
     - title: Binary endpoints
       contents:
