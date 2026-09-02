@@ -1,20 +1,24 @@
+######################################################################################################################## .
 #' Analyze using a Bayesian Normal model
 #' @param SimData Data frame which consists of data generated in current simulation.
 #' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
 #' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL.
-#' If UseParam is supplied, the list must contain the following named elements:
+#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
+#' Note: UserParam values should be referenced in the main function before
+#' being passed to helper functions. Passing UserParam directly to a helper
+#' may prevent East Horizon from automatically populating the required parameters.
+#' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dPriorMeanCtrl}{Prior mean for control (Ctrl) used in analysis.}
 #'    \item{UserParam$dPriorStdDevCtrl}{Prior standard deviation for control (Ctrl) used in analysis}
 #'    \item{UserParam$dPriorMeanExp}{Prior mean for experimental (Exp) used in analysis.}
 #'    \item{UserParam$dPriorStdDevExp}{Prior standard deviation for experimental (Exp) used in analysis}
-#'    \item{UserParam$dSigma}{The known sampling variance.  Note, make sure this is the same as the sampling varaince in East.}
+#'    \item{UserParam$dSigma}{The known sampling variance.  Note, make sure this is the same as the sampling varaince in East Horizon.}
 #'    \item{UserParam$dMAV}{Minimum Acceptable Value (MAV)}
 #'    \item{UserParam$dPU}{A value in [0, 1] that specifies the upper cuttoff for efficacy.  If posterior probability is greater than PU a Go decision is made.}
 #'    \item{UserParam$dPUFutility}{A value in [0, 1] that specifies the threshold probability of futility stopping. If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early for futility.}
 #'    }
-#' @export
+######################################################################################################################## .
 
 AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
 {
@@ -27,17 +31,31 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
         if(  LookInfo$CurrLookIndex == 1 )
         {
             bInterimAnalysis <- TRUE
-            SimData <- SimData[1:LookInfo$CumCompleters[ LookInfo$CurrLookIndex ], ]
+            SimData <- SimData[ 1:LookInfo$CumCompleters[ LookInfo$CurrLookIndex ], ]
         }
         
     }
     # Set default values
-    Error 	         <- 0
+    nError 	         <- 0
     nDecision 	     <- 0
 
-    lPostParams <- ComputePosteriorParametersNormal( SimData$Response[ SimData$TreatmentID == 0 ],
-                                                     SimData$Response[ SimData$TreatmentID == 1 ],
-                                                     UserParam )
+    # Extract UserParam values so East Horizon can identify required parameters; passing UserParam directly to a helper
+    # may prevent East Horizon from automatically populating the required parameters.
+    dPriorMeanCtrl <- UserParam$dPriorMeanCtrl
+    dPriorStdDevCtrl <- UserParam$dPriorStdDevCtrl
+    dPriorMeanExp <- UserParam$dPriorMeanExp
+    dPriorStdDevExp <- UserParam$dPriorStdDevExp
+    dSigma <- UserParam$dSigma
+
+    lPostParams <- ComputePosteriorParametersNormal(
+        SimData$Response[ SimData$TreatmentID == 0 ],
+        SimData$Response[ SimData$TreatmentID == 1 ],
+        dPriorMeanCtrl,
+        dPriorStdDevCtrl,
+        dPriorMeanExp,
+        dPriorStdDevExp,
+        dSigma
+    )
     
     # Step 2 - Compute the posterior parameters for each treatment - Need to update the prior 
 
@@ -66,11 +84,19 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
         {
             # Futility Check - Step 1, simulate the remaining patients in the trial ####
             # Simulate the future data based on post samples and combine with current data at the interim.
-            vExpPats  <- c( vCurrentExpPats,  rnorm( nQtyFuturePatientsPerArm, vPostMeanExp[ i ],  UserParam$dSigma ) )
-            vCtrlPats <- c( vCurrentCtrlPats, rnorm( nQtyFuturePatientsPerArm, vPostMeanCtrl[ i ], UserParam$dSigma ))
+            vExpPats  <- c( vCurrentExpPats, rnorm( nQtyFuturePatientsPerArm, vPostMeanExp[ i ], dSigma ) )
+            vCtrlPats <- c( vCurrentCtrlPats, rnorm( nQtyFuturePatientsPerArm, vPostMeanCtrl[ i ], dSigma ) )
             
             # Futility Check - Step 2, Compute the posterior parameters for this trial ####
-            lPostParamsAtTrialEnd <- ComputePosteriorParametersNormal( vCtrlPats, vExpPats, UserParam )
+            lPostParamsAtTrialEnd <- ComputePosteriorParametersNormal(
+                vCtrlPats,
+                vExpPats,
+                dSigma,
+                dPriorStdDevCtrl,
+                dPriorStdDevExp,
+                dPriorMeanCtrl,
+                dPriorMeanExp
+            )
             
             # Futility Check - Step 3 - Final Analysis, of this trial, need to sample the posterior distribution of each treatment ####
             vMeanCtrl<- rnorm( 10000, lPostParamsAtTrialEnd$dPostMeanCtrl, sqrt( lPostParamsAtTrialEnd$dPostVarCtrl ) ) 
@@ -90,7 +116,7 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
                 vMeanExp  <- c( vMeanExp, rnorm( 40000, lPostParamsAtTrialEnd$dPostMeanExp,  sqrt( lPostParamsAtTrialEnd$dPostVarExp ) ) )
                 
                 dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ))
-                if( dPostProbGrt < UserParam$dPU)
+                if( dPostProbGrt < UserParam$dPU )
                     nQtyFutility <- nQtyFutility + 1
             }
             else if( dPostProbGrt <  UserParam$dPU - 0.1 )
@@ -106,11 +132,9 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
             # ttest       <- t.test( vExpPats, vStdPats, conf.level = 0.6 )
             # dLowerLimit <- ttest$conf.int[1]
             #if( dLowerLimit < 0.8 )  # This would be a No Go
-            #    nQtyFutility <- nQtyFutility + 1
-            
-            
-            
+            #    nQtyFutility <- nQtyFutility + 1   
         }
+        
         dProbStopAtEnd <- nQtyFutility/nQtyRepsPP 
         if( dProbStopAtEnd > UserParam$dPUFutility ) # Futility
             nDecision <- 3
@@ -127,7 +151,7 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
         
         # Compute the posterior probability that the treatment effect is above 0.8
         # dPostProbGrt = Pr( pi_E - pi_C > 0.8 | Data )      
-        dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ))
+        dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ) )
         
         # Step 4 - If the posterior probability is greater than 80% --> Go Decision, otherwise No Go Decision (eg futility)
         if( dPostProbGrt > UserParam$dPU )
@@ -138,48 +162,51 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
 
     # Note: the SimData$vTrueDelta vector was added to the SimData via the return in the SimulatePateintOutcomeNormalAssurance
     
-    lReturn <- list(Decision = as.integer(nDecision),
-                    ErrorCode = as.integer(Error), 
+    lReturn <- list(Decision = as.integer( nDecision ),
+                    ErrorCode = as.integer( nError ), 
                     PostProb = dPostProbGrt, 
-                    Delta      = as.double(  SimData$vTrueDelta[1] ),               # This is needed for true value plots in Solara
-                    dTrueDelta = as.double( SimData$vTrueDelta[1]),
+                    Delta      = as.double( SimData$vTrueDelta[ 1 ] ), # This is needed for true value plots in East Horizon
+                    dTrueDelta = as.double( SimData$vTrueDelta[ 1 ] ),
                     dCtrlPostMean = as.double( lPostParams$dPostMeanCtrl ),
                     dCtrlPostVar = as.double( lPostParams$dPostVarCtrl ),
                     dExpPostMean = as.double(  lPostParams$dPostMeanExp ),
                     dExpPostVar = as.double( lPostParams$dPostVarExp  ),
-                    dObsMeanCtrl = as.double( mean(  SimData$Response[ SimData$TreatmentID == 0 ])),
-                    dObsMeanExp = as.double( mean(  SimData$Response[ SimData$TreatmentID == 1 ])),
-                    dSimMeanCtrl = as.double(SimData$dSimMeanCtrl[1]),
-                    dSimMeanExp = as.double( SimData$dSimMeanExp[1]))
+                    dObsMeanCtrl = as.double( mean( SimData$Response[ SimData$TreatmentID == 0 ] ) ),
+                    dObsMeanExp = as.double( mean( SimData$Response[ SimData$TreatmentID == 1 ] ) ),
+                    dSimMeanCtrl = as.double( SimData$dSimMeanCtrl[ 1 ] ),
+                    dSimMeanExp = as.double( SimData$dSimMeanExp[ 1 ] ) )
 
-    
     return( lReturn )
 }
 
 
 ######################################################################################################################## .
 # Helper function to compute the posterior parameters ####
-#' @param vCtrlData  Vector of data for the Control treatment
+#' @param vCtrlData Vector of data for the Control treatment
 #' @param vExpData Vector of data for the experimental treatment
-#' @param UserParam The list of parameters sent from East
+#' @param dPriorMeanCtrl Prior mean for control
+#' @param dPriorStdDevCtrl Prior standard deviation for control
+#' @param dPriorMeanExp Prior mean for experimental
+#' @param dPriorStdDevExp Prior standard deviation for experimental
+#' @param dSigma Known sampling variance
+#' Note: Passing UserParam directly to a helper may prevent East Horizon from automatically populating the required parameters.
 ######################################################################################################################## .
-ComputePosteriorParametersNormal <- function( vCtrlData, vExpData, UserParam )
+ComputePosteriorParametersNormal <- function( vCtrlData, vExpData, dPriorMeanCtrl, dPriorStdDevCtrl, dPriorMeanExp, dPriorStdDevExp, dSigma )
 {
- 
     # Compute the posterior parameters for the Std treatment   
     dObsMeanCtrl  <- mean( vCtrlData )
     nQtyPatsCtrl  <- length( vCtrlData )
     # Posterior precision = 1/variance 
-    dPostPrecCtrl <- ( 1/UserParam$dPriorStdDevCtrl^2 + nQtyPatsCtrl/UserParam$dSigma^2 )
-    dPostMeanCtrl <- ( UserParam$dPriorMeanCtrl/UserParam$dPriorStdDevCtrl^2 + dObsMeanCtrl*nQtyPatsCtrl/UserParam$dSigma^2 )/dPostPrecCtrl
+    dPostPrecCtrl <- ( 1/dPriorStdDevCtrl^2 + nQtyPatsCtrl/dSigma^2 )
+    dPostMeanCtrl <- ( dPriorMeanCtrl/dPriorStdDevCtrl^2 + dObsMeanCtrl*nQtyPatsCtrl/dSigma^2 )/dPostPrecCtrl
     dPostVarCtrl  <- 1/dPostPrecCtrl
     
     # Compute the posterior parameters for the Exp treatment
     dObsMeanExp  <- mean( vExpData )  
     nQtyPatsExp  <- length( vExpData )  
     # Posterior precision = 1/variance 
-    dPostPrecExp <- ( 1/UserParam$dPriorStdDevExp^2 + nQtyPatsExp/UserParam$dSigma^2 )
-    dPostMeanExp <- ( UserParam$dPriorMeanExp/UserParam$dPriorStdDevExp^2 + dObsMeanExp*nQtyPatsExp/UserParam$dSigma^2 )/dPostPrecExp
+    dPostPrecExp <- ( 1/dPriorStdDevExp^2 + nQtyPatsExp/dSigma^2 )
+    dPostMeanExp <- ( dPriorMeanExp/dPriorStdDevExp^2 + dObsMeanExp*nQtyPatsExp/dSigma^2 )/dPostPrecExp
     dPostVarExp  <- 1/dPostPrecExp
     
     lPostParams <- list( dPostMeanCtrl = dPostMeanCtrl,
