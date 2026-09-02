@@ -1,127 +1,103 @@
 #################################################################################################### .
 #   Program/Function Name: CreateCyneRgyExample
 #   Author: Subhajit Sengupta
-#   Description: This function will create a new example directory with necessary files using the desired CyneRgy template.
-#   Change History:
-#   Last Modified Date: 03/18/2024
+#   Description: Create a starter example folder from a CyneRgy integration-point template.
 #################################################################################################### .
 #' @name CreateCyneRgyExample
-#' @title Create a New CyneRgy Example Using Templates
+#' @title Create a CyneRgy Example Folder
 #'
-#' @description This function creates a new directory containing the necessary files 
-#' for the desired CyneRgy template. The directory can be used in connection with Cytel-R integration.
-#' 
-#' @param strFunctionType The type of CyneRgy template to use. Must be a valid template name.
-#' @param strNewExampleName A string representing the name of the new example directory. Defaults to an empty string.
-#' @param strDirectory The directory path where the example will be created. If not provided, the current working directory is used.
-#' 
-#' @return Creates the specified example directory and files within the provided or default directory path.
+#' @description Creates an example folder containing `Description.Rmd`, an `R` directory with a selected integration-point
+#' template, and a matching RStudio project by default. The R scripts do not depend on the project file.
+#'
+#' @param strFunctionType Character string naming the integration-point template to use.
+#' @param strNewExampleName Character string naming the new example folder and starter function.
+#' @param strDirectory Existing parent directory where the example should be created. Defaults to the current working directory.
+#' @param bCreateProject Logical value indicating whether to include an RStudio project file. Defaults to `TRUE`.
+#' @param bOpen Logical value indicating whether to open the new example in the active IDE. Defaults to `interactive()`.
+#'
+#' @return Invisibly returns the created example path. When called without `strFunctionType`, invisibly returns the available template names.
+#'
+#' @examplesIf interactive()
+#' CreateCyneRgyExample()
+#' CreateCyneRgyExample( "Analyze.Binary", "MyBinaryAnalysis" )
+#' CreateCyneRgyExample( "Analyze.Binary", "MyBinaryFolder", bCreateProject = FALSE )
+#'
 #' @export
 #################################################################################################### .
 
-CreateCyneRgyExample <- function( strFunctionType, strNewExampleName = "", strDirectory = NA )
+CreateCyneRgyExample <- function( strFunctionType = "", strNewExampleName = "", strDirectory = NA,
+                                  bCreateProject = TRUE, bOpen = interactive() )
 {
-    strNewFileExt  <- ".R"
-    
-    if( strNewExampleName == "" ){
-        stop( "You need to provide an example name" )
-    }else{
-        strNewDirName <- strNewExampleName    
-    }
-    
-    strPackage <- "CyneRgy"
-    
-    # Exiting template names, remove extensions
-    vValidExamples         <- tools::file_path_sans_ext(list.files( system.file( "Templates", package = strPackage ) ) )
-    vValidExamplesFullPath <- list.files( system.file( "Templates", package = strPackage ), full.names = TRUE ) 
-    
-    validExamplesMsg <-
-        paste0(
-            "Valid values for strFunctionType are: '",
-            paste( vValidExamples, collapse = "', '" ),
-            "'" )
-    
-    
-    # Check if strFunctionType is a valid example
-    if ( missing( strFunctionType ) || !nzchar( strFunctionType ) || !( strFunctionType %in% vValidExamples ) ) 
+    strPackage          <- "CyneRgy"
+    vTemplateFiles      <- list.files( system.file( "Templates", package = strPackage ), full.names = TRUE )
+    vValidFunctionTypes <- tools::file_path_sans_ext( basename( vTemplateFiles ) )
+
+    if( length( strFunctionType ) == 1 && !is.na( strFunctionType ) && !nzchar( strFunctionType ) )
     {
-        print( paste0( 
-            'Please run `CreateCyneRgyExample()` with a valid strFunctionType argument name.',
-            validExamplesMsg ) )
-        return()
+        message( "Available CyneRgy templates:\n", paste0( "- ", vValidFunctionTypes, collapse = "\n" ) )
+        return( invisible( vValidFunctionTypes ) )
     }
-    
-    # Find the full path of the selected example
-    strSelectedExample <- vValidExamplesFullPath[ which( vValidExamples == strFunctionType ) ]
-    
-    # Check if the file already exists in the destination directory
-    #if (!is.na(strDirectory) && file.exists(file.path(strDirectory, basename(strSelectedExample)))) {
-    #    stop("File already exists in the destination directory.")
-    #}
-    
-    if ( !is.na( strDirectory ) && dir.exists( file.path( strDirectory, strNewDirName ) ) ) {
-        stop( "Directory already exists in the destination directory." )
-    }
-    
-    # Determine the destination directory
-    if ( is.na( strDirectory ) ) {
-        strDirectory <- getwd()  # Use the current working directory if not specified
-    }
-    
-    strTopDirPath <- paste0( strDirectory, "/" )
-    # ExampleTemplate directory path
-    exampleTemplateDirPath <- system.file( "ExampleTemplate", package = strPackage )
-    # Copy the file to the destination directory
-    bSuccess <- file.copy( exampleTemplateDirPath, strTopDirPath, recursive=TRUE )
-    
-    #strNewDirName = ifelse(strNewDirName == "", basename(strSelectedExample), strNewFileName)
-    
-    if( bSuccess )
+
+    if( length( strFunctionType ) != 1 || is.na( strFunctionType ) || !strFunctionType %in% vValidFunctionTypes )
+        stop( "Unknown CyneRgy template: '", paste( strFunctionType, collapse = "', '" ),
+              "'. Call CreateCyneRgyExample() to list the available templates.", call. = FALSE )
+    if( length( strNewExampleName ) != 1 || is.na( strNewExampleName ) || !nzchar( strNewExampleName ) )
+        stop( "strNewExampleName is required.", call. = FALSE )
+    if( grepl( "[/\\\\]", strNewExampleName ) )
+        stop( "strNewExampleName must be a folder name, not a path.", call. = FALSE )
+
+    if( length( strDirectory ) != 1 || is.na( strDirectory ) )
+        strDirectory <- getwd()
+    if( !dir.exists( strDirectory ) )
+        stop( "strDirectory does not exist: ", strDirectory, call. = FALSE )
+
+    strDirectory      <- normalizePath( strDirectory, winslash = "/", mustWork = TRUE )
+    strNewExamplePath <- file.path( strDirectory, strNewExampleName )
+    if( file.exists( strNewExamplePath ) )
+        stop( "The destination already exists: ", strNewExamplePath, call. = FALSE )
+
+    if( !dir.create( strNewExamplePath ) )
+        stop( "The example directory could not be created: ", strNewExamplePath, call. = FALSE )
+
+    bCreationComplete <- FALSE
+    on.exit( if( !bCreationComplete ) unlink( strNewExamplePath, recursive = TRUE ), add = TRUE )
+
+    strExampleTemplatePath <- system.file( "ExampleTemplate", package = strPackage )
+    vExampleTemplateFiles  <- list.files( strExampleTemplatePath, all.files = TRUE, no.. = TRUE, full.names = TRUE )
+    if( length( vExampleTemplateFiles ) > 0 && !all( file.copy( vExampleTemplateFiles, strNewExamplePath, recursive = TRUE ) ) )
+        stop( "The example template could not be copied.", call. = FALSE )
+
+    strRDirectory <- file.path( strNewExamplePath, "R" )
+    if( !dir.create( strRDirectory ) )
+        stop( "The example R directory could not be created.", call. = FALSE )
+
+    strSelectedTemplate <- vTemplateFiles[ match( strFunctionType, vValidFunctionTypes ) ]
+    strRCodeFileName    <- file.path( strRDirectory, paste0( strNewExampleName, ".R" ) )
+    if( !file.copy( strSelectedTemplate, strRCodeFileName ) )
+        stop( "The selected function template could not be copied.", call. = FALSE )
+
+    strProjectTemplate <- file.path( strNewExamplePath, "Example.Rproj" )
+    if( isTRUE( bCreateProject ) )
     {
-        strToPath <- paste0( strTopDirPath, strNewDirName )
-        bSuccess  <- file.rename( from = paste0( strTopDirPath,"ExampleTemplate" ), to = strToPath )
-        
-        #Note: GitHub does not add blank directories and since the R directory is blank we need to add it here
-        if( bSuccess )
-            dir.create( paste0( strToPath, "/R") )
-    }else{
-        stop( "Directory creation problem!" )
+        strProjectFile <- file.path( strNewExamplePath, paste0( strNewExampleName, ".Rproj" ) )
+        if( !file.rename( strProjectTemplate, strProjectFile ) )
+            stop( "The RStudio project file could not be created.", call. = FALSE )
     }
-    
-    if( bSuccess ){
-        strRCodeFileName <- paste0( strTopDirPath, strNewDirName, "/", "R", "/", strNewDirName, strNewFileExt )
-        bSuccess         <- file.copy( strSelectedExample, strRCodeFileName )
-    }else{
-        stop( "File copy problem inside R folder!" )
+    else if( file.exists( strProjectTemplate ) )
+    {
+        unlink( strProjectTemplate )
     }
-    
-    if(bSuccess){
-        strRmdFileNameFrom <- paste0( strTopDirPath, strNewDirName, "/", "Description.Rmd" )
-        strRmdFileNameTo   <- paste0( strTopDirPath, strNewDirName, "/", strNewDirName, ".Rmd" )
-        file.rename( from = strRmdFileNameFrom, to = strRmdFileNameTo )
-        
-        strRprojFileNameFrom <- paste0( strTopDirPath, strNewDirName, "/", "Example.Rproj" )
-        strRprojFileNameTo   <- paste0( strTopDirPath, strNewDirName, "/", strNewDirName, ".Rproj" )
-        file.rename( from = strRprojFileNameFrom, to = strRprojFileNameTo )
-    }else{
-       stop( "Renaming problem!" ) 
-    }
-    
-    # Print a message indicating success
-    cat( "Directory copied successfully to:", strTopDirPath, "\n" )
-    
-    strToday           <- format( Sys.Date(), format="%m/%d/%Y" )
-    
-    # Update the tags in the file that was copied  
-    vTags    <- c( "FUNCTION_NAME",  "CREATION_DATE" )
-    vReplace <- c( strNewDirName, strToday )
+
+    vTags    <- c( "FUNCTION_NAME", "CREATION_DATE" )
+    vReplace <- c( strNewExampleName, format( Sys.Date(), format = "%m/%d/%Y" ) )
     ReplaceTagsInFile( strRCodeFileName, vTags, vReplace )
-    
-    
-    # Update the tags in the file that was copied  
-    vTags    <- c( "EXAMPLE_NAME" )
-    vReplace <- c( strNewDirName )
-    ReplaceTagsInFile( strRmdFileNameTo, vTags, vReplace )
-    
-    cat( "Example created!" )
+    ReplaceTagsInFile( file.path( strNewExamplePath, "Description.Rmd" ), "EXAMPLE_NAME", strNewExampleName )
+
+    bCreationComplete <- TRUE
+    strNewExamplePath <- normalizePath( strNewExamplePath, winslash = "/", mustWork = TRUE )
+    message( "Created CyneRgy example: ", strNewExamplePath )
+    if( isTRUE( bOpen ) )
+        RunExample( strNewExamplePath )
+
+    return( invisible( strNewExamplePath ) )
 }
