@@ -1,6 +1,8 @@
 #################################################################################################### .
-#   Description: Common two-arm time-to-event endpoint functions.
+#   Description: Common two-arm time-to-event endpoint simulation and analysis functions.
 #################################################################################################### .
+
+
 #' @name SimulatePatientSurvivalWeibull
 #' @title Simulate Two-Arm Weibull Survival Outcomes
 #'
@@ -18,7 +20,6 @@
 #'
 #' @return A list in the format required by the response integration point.
 #' @export
-#################################################################################################### .
 
 SimulatePatientSurvivalWeibull <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod,
                                              NumPrd, PrdTime, SurvParam, UserParam = NULL )

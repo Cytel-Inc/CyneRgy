@@ -1,6 +1,8 @@
 #################################################################################################### .
 #   Description: Common patient arrival functions.
 #################################################################################################### .
+
+
 #' @name GeneratePoissonArrival
 #' @title Generate Patient Arrival Times
 #'
@@ -16,7 +18,6 @@
 #'
 #' @return A list in the format required by the arrival integration point.
 #' @export
-#################################################################################################### .
 
 GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {

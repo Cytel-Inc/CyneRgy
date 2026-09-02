@@ -1,6 +1,8 @@
 #################################################################################################### .
-#   Description: Common two-arm continuous endpoint functions.
+#   Description: Common two-arm continuous endpoint simulation and analysis functions.
 #################################################################################################### .
+
+
 #' @name SimulatePatientOutcomePercentAtZero
 #' @title Simulate Two-Arm Continuous Outcomes
 #'
@@ -16,7 +18,6 @@
 #'
 #' @return A list in the format required by the corresponding integration point.
 #' @export
-#################################################################################################### .
 
 SimulatePatientOutcomePercentAtZero <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {

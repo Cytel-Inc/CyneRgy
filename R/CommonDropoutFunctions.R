@@ -1,8 +1,10 @@
 #################################################################################################### .
-#   Description: Common repeated-measures and survival dropout functions.
+#   Description: Common dropout functions for binary, continuous, repeated measures, and time-to-event endpoints.
 #################################################################################################### .
+
+
 #' @name GenerateDropoutTimeForRM
-#' @title Generate Dropout Times for Repeated-Measures Outcomes
+#' @title Generate Dropout Times for Repeated Measures Outcomes
 #'
 #' @description Calls the implementation from the common `2ArmPatientDropout` example.
 #'
@@ -19,7 +21,6 @@
 #'
 #' @return A list in the format required by the dropout integration point.
 #' @export
-#################################################################################################### .
 
 GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime,
                                       DropParamControl, DropParamTrt, UserParam = NULL )
@@ -62,10 +63,11 @@ GenerateDropoutTimeForSurvival <- function( NumSub, NumArm, TreatmentID, DropMet
 
 
 #' @name GenerateCensoringUsingBinomialProportion
-#' @title Generate Dropout Indicators
+#' @title Generate Dropout Indicators for Binary or Continuous Outcomes
 #'
 #' @description Calls the implementation from the common `2ArmPatientDropout` example. Generates an independent censoring
-#' indicator for each subject using one dropout probability. A value of `1` indicates a completer and `0` indicates a dropout.
+#' indicator for each subject in binary or continuous outcome designs using one dropout probability. A value of `1` indicates
+#' a completer and `0` indicates a dropout.
 #'
 #' @param NumSub Integer number of subjects.
 #' @param ProbDrop Numeric dropout probability shared by both arms.

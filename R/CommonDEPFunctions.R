@@ -1,6 +1,8 @@
 #################################################################################################### .
 #   Description: Common dual-endpoint simulation, analysis, and decision functions.
 #################################################################################################### .
+
+
 #' @name AnalyzeDEPUsingFisherExact
 #' @title Analyze Survival and Binary Dual Endpoints
 #'
@@ -13,7 +15,6 @@
 #'
 #' @return A list in the format required by the DEP analysis integration point.
 #' @export
-#################################################################################################### .
 
 AnalyzeDEPUsingFisherExact <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
