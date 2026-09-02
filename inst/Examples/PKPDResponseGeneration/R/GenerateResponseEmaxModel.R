@@ -50,12 +50,12 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     mResponses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
     
     # Define the Emax model parameters from UserParam 
-    E0                <- UserParam$E0               # Baseline effect
-    Emax              <- UserParam$Emax             # Maximum effect
-    EC50              <- UserParam$EC50             # Concentration at 50% of Emax
     dAbsorptionRate   <- UserParam$AbsorptionRate   # Absorption rate constant
     dEliminationRate  <- UserParam$EliminationRate  # Elimination rate constant
     dDose             <- UserParam$Dose             # Dose administered
+    E0                <- UserParam$E0               # Baseline effec
+    Emax              <- UserParam$Emax             # Maximum effect
+    EC50              <- UserParam$EC50             # Concentration at 50% of Emax
 
     # Check if all required Emax parameters are provided
     if ( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose )) {
