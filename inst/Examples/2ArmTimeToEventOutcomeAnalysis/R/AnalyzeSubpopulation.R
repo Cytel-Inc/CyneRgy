@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name AnalyzeSubpopulation
 #' @title Analyze Stratified Time-to-Event Subpopulations
-#' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
+#' @author Anoop Singh Rawat and Shubham Lahoti
 #'
 #' ASSUMPTION
 #' The look positioning is based on target events on Full Population

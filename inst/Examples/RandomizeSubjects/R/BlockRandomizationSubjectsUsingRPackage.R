@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name BlockRandomizationSubjectsUsingRPackage
 #' @title Permuted Block Randomization for Two-Armed Trials
-#' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
+#' @author Shubham Lahoti and Anoop Singh Rawat
 #' @description
 #' Randomly assigns subjects to two arms using permuted block randomization so
 #' that the requested allocation ratio is maintained within each block.

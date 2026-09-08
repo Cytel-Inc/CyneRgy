@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeBinaryWithAssurancePh3
 #' @title Simulate binary patient outcomes using Phase 2 posterior distribution
-#' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
+#' @author Valeria A. G. Mazzanti, J. Kyle Wathen, Gabriel Potvin
 #'
 #' @description Generate patient outcomes for a binary response trial while incorporating uncertainty about the true
 #' response rates by sampling them from the posterior distribution obtained from Phase 2.

@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingPropLimitsOfCI
 #' @title Analyze using a simplified limits of confidence interval design
-#' @author J. Kyle Wathen and Gabriel Potvin
+#' @author J. Kyle Wathen
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}

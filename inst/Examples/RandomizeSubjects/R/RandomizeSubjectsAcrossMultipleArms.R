@@ -4,7 +4,7 @@
 #' @description
 #' Randomly assigns subjects across control and multiple experimental arms while
 #' matching integer target sizes derived from the requested allocation ratios.
-#' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
+#' @author Shubham Lahoti and Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param AllocRatio Mandatory numeric vector of experimental-to-control allocation ratios with length `NumArms - 1`.

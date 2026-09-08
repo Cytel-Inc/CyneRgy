@@ -4,7 +4,7 @@
 #' @description
 #' Sets the simulation seed and loads `randomizeR` so later block-randomization
 #' callbacks can call the package during the simulation.
-#' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
+#' @author Shubham Lahoti and Anoop Singh Rawat
 #' @param Seed Integer randomization seed supplied by the engine.
 #' @return Integer error code `0` after initialization completes.
 ######################################################################################################################## .

@@ -3,7 +3,7 @@
 #' @title Analyze continuous outcomes using Bayesian normal models
 #' @description Compute posterior normal parameters and apply interim predictive-probability or final
 #' posterior-probability decision rules for a two-arm continuous-outcome trial.
-#' @author J. Kyle Wathen, Laurent Spiess, Gabriel Potvin
+#' @author J. Kyle Wathen and Laurent Spiess
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
@@ -51,9 +51,7 @@
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#' Note: UserParam values should be referenced in the main function before
-#' being passed to helper functions. Passing UserParam directly to a helper
-#' may prevent East Horizon from automatically populating the required parameters.
+#' Note: UserParam values should be referenced in the main function before being passed to helper functions. Passing UserParam directly to a helper may prevent East Horizon from automatically populating the required parameters.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dPriorMeanCtrl}{Prior mean for control (Ctrl) used in analysis.}
@@ -85,7 +83,7 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
 
     }
     # Set default values
-    nError              <- 0
+    nError             <- 0
     nDecision          <- 0
 
     # Extract UserParam values so East Horizon can identify required parameters; passing UserParam directly to a helper
@@ -227,11 +225,12 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
     return( lReturn )
 }
 
+######################################################################################################################## .
 # Helper function to compute the posterior parameters ####
 #' @name ComputePosteriorParametersNormal
 #' @title Compute normal posterior parameters
 #' @description Compute posterior means and variances for control and experimental arms under independent normal priors.
-#' @author J. Kyle Wathen, Laurent Spiess, Gabriel Potvin
+#' @author J. Kyle Wathen and Laurent Spiess
 #' @param vCtrlData Vector of data for the Control treatment
 #' @param vExpData Vector of data for the experimental treatment
 #' @param dPriorMeanCtrl Prior mean for control
@@ -241,6 +240,7 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
 #' @param dSigma Known sampling variance
 #' Note: Passing UserParam directly to a helper may prevent East Horizon from automatically populating the required parameters.
 #' @return A named list containing posterior means and variances for the control and experimental arms.
+######################################################################################################################## .
 ComputePosteriorParametersNormal <- function( vCtrlData, vExpData, dPriorMeanCtrl, dPriorStdDevCtrl, dPriorMeanExp, dPriorStdDevExp, dSigma )
 {
     # Compute the posterior parameters for the Std treatment

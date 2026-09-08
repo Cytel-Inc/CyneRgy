@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeStratification
 #' @title Simulate patient outcomes using stratification
-#' @author Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin
+#' @author Valeria A. G. Mazzanti and J. Kyle Wathen
 #' @param NumSub Integer number of subjects in the trial.
 #'
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.

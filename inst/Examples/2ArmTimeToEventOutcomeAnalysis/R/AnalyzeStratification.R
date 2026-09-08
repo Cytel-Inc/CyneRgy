@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name AnalyzeStratification
 #' @title Analyze a Stratified Time-to-Event Outcome
-#' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
+#' @author Anoop Singh Rawat and Shubham Lahoti
 #'
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #' \itemize{

@@ -2,7 +2,7 @@
 #' @name Loadsurvival
 #' @title Initialize the survival Package
 #' @description Sets the simulation seed and loads survival for time-to-event analysis callbacks.
-#' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
+#' @author Anoop Singh Rawat and Shubham Lahoti
 #' @param Seed Integer randomization seed supplied by the engine.
 #' @return Integer error code `0` after initialization.
 ######################################################################################################################## .

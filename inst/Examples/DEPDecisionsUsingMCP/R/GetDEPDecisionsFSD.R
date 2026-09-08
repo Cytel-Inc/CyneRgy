@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 # Last Modified Date: 24/09/2025
 #' @name GetDEPDecisionsFSD
-#' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
+#' @author Anoop Singh Rawat and Pradip Maske
 #' @title Computing Decisions for DEP Fixed Sample design.
 #'
 #' @description Compute decisions for DEP given test statistic and total Alpha using Bonferroni multiplicity adjustment method.

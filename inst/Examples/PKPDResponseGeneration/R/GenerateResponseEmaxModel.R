@@ -16,9 +16,7 @@
 #' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
 #' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#' Note: UserParam values should be referenced in the main function before
-#' being passed to helper functions. Passing UserParam directly to a helper
-#' may prevent East Horizon from automatically populating the required parameters.
+#' Note: UserParam values should be referenced in the main function before being passed to helper functions. Passing UserParam directly to a helper may prevent East Horizon from automatically populating the required parameters.
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'   \item{UserParam$AbsorptionRate}{First-order absorption rate constant.}
@@ -101,6 +99,7 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
     return( lRetval )
 
 }
+
 ######################################################################################################################## .
 # Helper function for PK model generating concentration ####
 #' @param NumSub Number of subjects

@@ -2,7 +2,7 @@
 # Last Modified Date: 22/09/2025
 #'
 #' @name AnalyzeDEPUsingModWtLogRank
-#' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
+#' @author Anoop Singh Rawat and Pradip Maske
 #' @title Compute the modestly weighted log rank test statistic.
 #'
 #' @description Compute modestly weighted log rank test statistic given simulation data.

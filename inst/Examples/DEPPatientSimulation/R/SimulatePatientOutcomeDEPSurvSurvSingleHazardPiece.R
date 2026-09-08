@@ -1,6 +1,6 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece
-#' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
+#' @author Anoop Singh Rawat and Pradip Maske
 #' @title Simulate patient outcomes for Survival-Survival Dual Endpoint design using single piece hazard rates as inputs.
 #'
 #' @description

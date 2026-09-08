@@ -34,7 +34,7 @@ SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, Arriv
       if( !exists( "gvPrior" ) )
       {
         # Load prior obtained from Phase 2
-        gvPrior     <<- LoadData()
+        gvPrior    <<- LoadData()
         gnIndex    <<- 1
       }
 

@@ -3,7 +3,7 @@
 #' @title Analyze continuous outcome for multi-arm design using the t.test function in base R.
 #' @description Performs arm-wise two-sample t-tests against control and applies a Bonferroni adjustment across the
 #' treatment arms present at the current analysis.
-#' @author Gabriel Potvin and Anoop Singh Rawat
+#' @author Anoop Singh Rawat
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}

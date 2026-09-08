@@ -3,7 +3,7 @@
 #' @title Generate Multi-Arm Time-to-Event Dropout Times
 #' @description Generates subject-level dropout times for a multi-arm time-to-event trial from arm-specific hazard
 #' rates or dropout probabilities.
-#' @author Gabriel Potvin and Anoop Singh Rawat
+#' @author Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.

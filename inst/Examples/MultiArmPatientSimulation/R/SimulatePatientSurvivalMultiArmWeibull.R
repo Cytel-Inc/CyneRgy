@@ -4,7 +4,7 @@
 #' @description Simulates patient survival times from arm-specific Weibull distributions supplied through
 #' `UserParam`. The integration-point arguments `SurvMethod`, `NumPrd`, `PrdTime`, and `SurvParam` are retained but
 #' are not used by this example.
-#' @author Gabriel Potvin and Anoop Singh Rawat
+#' @author Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.

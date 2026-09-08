@@ -3,7 +3,7 @@
 #' @title Compute the statistic using formula 28.2 in the East manual.
 #' @description Use formula 28.2 from the East manual to compute a binary-response test statistic and compare it with
 #' the efficacy boundary supplied by East Horizon. This example does not implement a futility rule.
-#' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
+#' @author Valeria A. G. Mazzanti, J. Kyle Wathen, Gabriel Potvin
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}

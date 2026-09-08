@@ -4,7 +4,7 @@
 #' @description
 #' Generates patient-level survival times under several survival distribution
 #' parameterizations for multi-arm clinical trial simulations.
-#' @author Gabriel Potvin and Anoop Singh Rawat
+#' @author Anoop Singh Rawat
 #'
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.

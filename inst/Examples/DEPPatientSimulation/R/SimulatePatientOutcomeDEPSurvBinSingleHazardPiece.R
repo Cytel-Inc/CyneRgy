@@ -1,6 +1,6 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeDEPSurvBinSingleHazardPiece
-#' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
+#' @author Anoop Singh Rawat and Pradip Maske
 #' @title Simulate survival-binary dual-endpoint patient outcomes using a single hazard piece
 #'
 #' @description

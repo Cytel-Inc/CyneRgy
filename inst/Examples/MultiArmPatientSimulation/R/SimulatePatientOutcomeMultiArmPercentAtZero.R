@@ -3,7 +3,7 @@
 #' @title Simulate Multi-Arm Continuous Outcomes with a Point Mass at Zero
 #' @description Simulates continuous normal outcomes while allowing arm-specific probabilities that a patient's
 #' outcome is fixed at zero.
-#' @author Gabriel Potvin and Anoop Singh Rawat
+#' @author Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.

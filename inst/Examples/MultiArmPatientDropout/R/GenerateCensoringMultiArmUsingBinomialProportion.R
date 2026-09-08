@@ -2,7 +2,7 @@
 #' @name GenerateCensoringMultiArmUsingBinomialProportion
 #' @title Generate Multi-Arm Censoring Indicators
 #' @description Generates a censoring indicator for each subject using the dropout probability for the subject's arm.
-#' @author Gabriel Potvin and Anoop Singh Rawat
+#' @author Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param ProbDrop Numeric vector containing the dropout probability for each arm.
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.

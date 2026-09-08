@@ -11,7 +11,7 @@
 #' 3) If u <= p then allot the subject to Control arm else allot the subject to treatment arm.
 #' 4) Make sure that Total sample size = Sample size on control + Sample size on treatment arm
 #'
-#' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
+#' @author Shubham Lahoti and Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms. This example supports exactly two arms.
 #' @param AllocRatio Positive numeric scalar giving the experimental-to-control allocation ratio (`nt/nc`).

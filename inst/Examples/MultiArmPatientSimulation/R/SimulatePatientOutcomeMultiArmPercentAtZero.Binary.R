@@ -3,7 +3,7 @@
 #' @title Simulate Multi-Arm Binary Outcomes with Treatment Resistance
 #' @description Simulates binary responses while allowing arm-specific probabilities that a patient is treatment
 #' resistant and therefore cannot respond.
-#' @author Gabriel Potvin and Anoop Singh Rawat
+#' @author Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.

@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name AnalyzeNormalSSR
 #' @title Analyze a Continuous Outcome with Sample Size Re-Estimation
-#' @author Shubham Lahoti, J. Kyle Wathen, and Gabriel Potvin
+#' @author Shubham Lahoti and J. Kyle Wathen
 #'
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{

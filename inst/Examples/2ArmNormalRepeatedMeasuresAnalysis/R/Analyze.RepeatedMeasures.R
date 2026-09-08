@@ -2,7 +2,7 @@
 #' @name Analyze.RepeatedMeasures
 #' @title Analyze Repeated Measures with a Mixed Model
 #' @description Fits a generalized least-squares repeated-measures model, applies the current analysis boundary, and returns the resulting decision and contrast estimates.
-#' @author Gabriel Potvin and Anoop Singh Rawat
+#' @author Anoop Singh Rawat
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}

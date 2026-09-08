@@ -2,7 +2,7 @@
 #' AnalyzeUsingEastLogrankFormula
 #' @name AnalyzeUsingEastLogrankFormula
 #' @title Compute the statistic using formulas Q.242 and Q.243 in the East manual.
-#' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
+#' @author Anoop Singh Rawat and Shubham Lahoti
 #' @description Use the formulas Q.242 and Q.243 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
 #'              The test statistic is compared to the lower boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.

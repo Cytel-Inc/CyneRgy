@@ -11,7 +11,7 @@
 #' 2) Compute Expected Sample size (rounded) for Control and treatment arms using Allocation Fraction and Total sample size.
 #' 3) Generate a Binary vector where nC = Control sample size and nT = Treatment sample size using sample() functionality available in R.
 #'
-#' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
+#' @author Shubham Lahoti and Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms. This example supports exactly two arms.
 #' @param AllocRatio Positive numeric scalar giving the experimental-to-control allocation ratio (`nt/nc`).

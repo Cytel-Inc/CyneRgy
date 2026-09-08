@@ -3,7 +3,7 @@
 #' @title Analyze continuous outcome for dose finding design using Fixed Sequence Pairwise t-test.
 #' @description Apply fixed-sequence pairwise tests, interim futility rules, isotonic treatment-effect estimates,
 #' and proof-of-concept checks to a continuous dose-finding trial.
-#' @author Sayantan Biswas, Pradip Maske, Gabriel Potvin
+#' @author Sayantan Biswas and Pradip Maske
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}
@@ -270,6 +270,7 @@ ComputeAnalysisTime <- function( dRespLag, vArrivalTime, vCumCompleters, nCurrLo
   return( dEstAnalysisTime )
 }
 
+######################################################################################################################## .
 # HELPER FUNCTION: Isotonic Regression via PAVA ####
 # Computes isotonic regression to enforce monotonicity on values using
 # the Pool Adjacent Violators Algorithm (PAVA).
@@ -280,6 +281,7 @@ ComputeAnalysisTime <- function( dRespLag, vArrivalTime, vCumCompleters, nCurrLo
 #
 # Output:
 # numeric vector of isotonic values (same length as input)
+######################################################################################################################## .
 ComputeIsotonicDeltas <- function( vValues, nTailType )
 {
   n <- length( vValues )
@@ -328,6 +330,7 @@ ComputeIsotonicDeltas <- function( vValues, nTailType )
   return( vResult )
 }
 
+######################################################################################################################## .
 # HELPER FUNCTION: Fixed Sequence Pairwise Test #####
 # Example : MCP_Method = Fixed Sequence
 #
@@ -339,6 +342,7 @@ ComputeIsotonicDeltas <- function( vValues, nTailType )
 #   Vector of adjusted P values
 #   global adjusted P-value
 #   Decision
+######################################################################################################################## .
 ApplyFixedSeqPairwiseTest <- function( vRawPValues, vDoseSequence, dAlpha )
 {
   # Input validation

@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingEastManualFormula
 #' @title Compute the statistic using formula 28.2 in the East manual.
-#' @author J. Kyle Wathen and Gabriel Potvin
+#' @author J. Kyle Wathen
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
 #'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}

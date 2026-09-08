@@ -2,7 +2,7 @@
 #' @name ComputeHazardWeibull
 #' @title Compute a Weibull Hazard
 #' @description Computes Weibull hazards for the supplied times. This support file also defines a scale-from-median helper and runs illustrative Weibull calculations and plots when sourced.
-#' @author Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin
+#' @author Valeria A. G. Mazzanti and J. Kyle Wathen
 #' @param vTime A vector of times to compute the hazard of the Weibull distribution
 #' @param dShape The shape of the Weibull distribution, see rweibull
 #' @param dScale The scale of the Weibull distribution, see rweibull

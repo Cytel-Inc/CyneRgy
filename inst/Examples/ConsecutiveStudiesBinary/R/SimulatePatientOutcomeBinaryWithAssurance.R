@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeBinaryWithAssurance
 #' @title Simulate binary patient outcomes using a Beta distribution prior
-#' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
+#' @author Valeria A. G. Mazzanti, J. Kyle Wathen, Gabriel Potvin
 #'
 #' @description Generate patient outcomes for a binary response trial while incorporating uncertainty about the true
 #' response rates by sampling them from a Beta distribution prior.

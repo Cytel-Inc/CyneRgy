@@ -5,7 +5,7 @@
 #' This function allows users to implement custom decision-making logic for the MEP engine.
 #' It is called at each analysis look to make decisions about endpoint efficacy, futility
 #' and trial continuation based on user-defined criteria.
-#' @author Anoop Singh Rawat, Gabriel Potvin
+#' @author Anoop Singh Rawat
 #'
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'   \itemize{

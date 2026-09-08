@@ -2,7 +2,7 @@
 #' @name ProbExpGreaterCtrlBeta
 #' @title Compute a Beta-Binomial Posterior Probability
 #' @description Computes the posterior probability that the experimental response probability exceeds the control response probability by Monte Carlo sampling from beta posteriors.
-#' @author J. Kyle Wathen and Gabriel Potvin
+#' @author J. Kyle Wathen
 #' @param vOutcomesS Binary outcomes observed on the control arm.
 #' @param vOutcomesE Binary outcomes observed on the experimental arm.
 #' @param dAlphaS Alpha parameter of the beta prior for the control arm.

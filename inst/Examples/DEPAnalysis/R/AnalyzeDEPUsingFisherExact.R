@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 # Last Modified Date: 22/09/2025
 #' @name AnalyzeDEPUsingFisherExact
-#' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
+#' @author Anoop Singh Rawat and Pradip Maske
 #' @title Fisher exact test for binary endpoint.
 #'
 #' @description Compute the Fisher exact test for binary endpoint given simulation data.

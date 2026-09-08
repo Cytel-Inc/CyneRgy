@@ -2,7 +2,7 @@
 #' @name GenerateMEPResponse
 #' @title Generate Correlated Multi-Endpoint Patient Responses
 #' @description Generates correlated continuous, binary, and time-to-event responses for a multiple-endpoint trial.
-#' @author Anoop Singh Rawat, Gabriel Potvin
+#' @author Anoop Singh Rawat
 #' @param NumPat Integer number of patients in the trial.
 #' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param TreatmentID Integer vector of length `NumPat`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
