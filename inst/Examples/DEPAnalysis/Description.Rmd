@@ -31,6 +31,12 @@ To try this example, create a new project in East Horizon using the following co
 
 The following examples illustrate how to integrate new *analysis* capabilities into East Horizon using R functions in the context of 2-arm clinical trials with dual endpoints. These functions can be customized to support complex evaluation rules, correlated outcomes, and flexible statistical designs.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
+
+```r
+CyneRgy::RunExample( "DEPAnalysis" )
+```
+
 **Note:** Each script in this example is designed to be applied to an **individual endpoint** within a Dual Endpoint (DEP) design, rather than to both endpoints simultaneously.
 
 The first example illustrates how to perform a **modestly weighted log-rank test** on a **time-to-event (TTE)** endpoint, while the second example demonstrates how to perform a **Fisher's Exact Test** on a **binary endpoint**. Together, they show how to independently analyze different endpoint types within East Horizon's dual-endpoint analytical framework.

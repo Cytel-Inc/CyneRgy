@@ -24,6 +24,12 @@ To try this example, create a new project in East Horizon using the following co
 
 The following examples illustrate how to integrate new patient outcome simulation (*response*) capabilities into East Horizon using R functions in the context of 2-arm clinical trials with dual endpoints. The first example shows how to simulate correlated dual time-to-event (TTE) endpoints.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
+
+```r
+CyneRgy::RunExample( "DEPPatientSimulation" )
+```
+
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DEPOutcomePatientSimulation/R) you will find the following R files:
 
 1. [SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/DEPPatientSimulation/R/SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece.R) - Contains the implementation for simulating correlated TTE outcomes under a single-piece hazard assumption for both endpoints.

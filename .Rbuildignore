@@ -1,2 +1,10 @@
 ^\.Rproj\.user$
-^.*\.Rproj$
+^CyneRgy\.Rproj$
+^docs$
+^vignettes$
+^\.lintr$
+^Sandbox$
+^_pkgdown\.yml$
+^pkgdown$
+^registry\.json$
+^logo\.png$

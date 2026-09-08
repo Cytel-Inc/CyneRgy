@@ -60,6 +60,70 @@ navbar:
         
         github:
               icon: fa-github fa-lg
+              aria-label: GitHub
               href: https://github.com/Cytel-Inc/CyneRgy
+
+reference:
+    - title: Shared trial operations
+      contents:
+          - GeneratePoissonArrival
+          - RandomizationSubjectsUsingUniformDistribution
+          - RandomizationSubjectsUsingSampleFunctionInR
+          - BlockRandomizationSubjectsUsingRPackage
+          - RandomizeSubjectsAcrossMultipleArms
+          - GenerateCensoringUsingBinomialProportion
+    - title: Binary endpoints
+      contents:
+          - SimulatePatientOutcomePercentAtZero.Binary
+          - SimulatePatientOutcomePercentAtZeroBetaDist.Binary
+          - AnalyzeUsingPropTest
+          - AnalyzeUsingPropLimitsOfCI
+          - AnalyzeUsingEastManualFormula
+          - AnalyzeUsingBetaBinomial
+    - title: Continuous endpoints
+      contents:
+          - SimulatePatientOutcomePercentAtZero
+          - SimulatePatientOutcomePercentAtZeroBetaDist
+          - AnalyzeUsingTTestNormal
+          - AnalyzeUsingMeanLimitsOfCI
+          - AnalyzeUsingEastManualFormulaNormal
+    - title: Repeated-measures endpoints
+      contents:
+          - GenRespDiffOfMeansRepMeasures
+          - GenerateDropoutTimeForRM
+          - Analyze.RepeatedMeasures
+    - title: Time-to-event endpoints
+      contents:
+          - SimulatePatientSurvivalWeibull
+          - SimulatePatientSurvivalMixtureExponentials
+          - GenerateDropoutTimeForSurvival
+          - AnalyzeUsingSurvivalPackage
+          - AnalyzeUsingHazardRatioLimitsOfCI
+          - AnalyzeUsingEastLogrankFormula
+    - title: Dual endpoints
+      contents:
+          - SimulatePatientOutcomeDEPSurvBinSingleHazardPiece
+          - SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece
+          - AnalyzeDEPUsingFisherExact
+          - AnalyzeDEPUsingModWtLogRank
+          - GetDEPDecisionsFSD
+    - title: Multiple endpoints
+      contents:
+          - GeneratePoissonArrivalMEP
+          - GenerateMEPResponse
+          - GetMEPDecision
+    - title: Examples and templates
+      contents:
+          - RunExample
+          - CreateCyneRgyFunction
+          - CreateCyneRgyExample
+    - title: Integration helpers
+      contents:
+          - CombineAllRFiles
+          - GetDecisionString
+          - GetDecision
+    - title: Documentation helpers
+      contents:
+          - PlotExampleFlowchart
 deploy:
   install_metadata: true
