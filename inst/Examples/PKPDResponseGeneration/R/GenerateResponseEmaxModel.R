@@ -101,6 +101,7 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
     return( lRetval )
 
 }
+######################################################################################################################## .
 # Helper function for PK model generating concentration ####
 #' @param NumSub Number of subjects
 #' @param NumVisit Number of visits
@@ -115,6 +116,7 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 #' @param dAbsorptionRate Absorption rate constant
 #' @param dEliminationRate Elimination rate constant
 #' @param dDose Dose administered
+######################################################################################################################## .
 GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose )
 {
     # Initialize error code and return list
@@ -178,10 +180,12 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
     return( lRetval )
 }
 
+######################################################################################################################## .
 # Helper ODE function for one-compartment model with first-order absorption ####
 #' @param time Time variable for ODE solver
 #' @param state State variables (A1: amount in absorption compartment, A2: concentration in central compartment)
 #' @param parameters Parameters for the ODE (dAbsorptionRate, dEliminationRate)
+######################################################################################################################## .
 OneCompartmentModelPK <- function( ime, state, parameters )
 {
     with( as.list( c( state, parameters ) ),
