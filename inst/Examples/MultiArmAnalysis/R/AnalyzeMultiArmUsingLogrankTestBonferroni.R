@@ -58,15 +58,7 @@
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{
-#'                  \item{Decision}{Vector of Integers or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if Decision is returned. Values have the following meaning:
-#'                                  \describe{
-#'                                    \item{Decision = NA}{When the arm is dropped in a previous look}
-#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
-#'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
-#'                                    \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
-#'                                    \item{Decision = 3}{when the Futility Boundary Crossed}
-#'                                    }
-#'                                    }
+#'                  \item{Decision}{An integer vector with one value per treatment arm, generated using `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`. `NA` indicates an arm dropped at a previous look; 0 indicates that no boundary was crossed; 1 indicates that the lower efficacy boundary was crossed; 2 indicates that the upper efficacy boundary was crossed; and 3 indicates that the futility boundary was crossed.}
 #'                  \item{AdjPVal}{p-Value adjusted for MCP adjustment. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if AdjPVal is returned and if there is no Futility Boundary.}
 #'                  \item{RawPVal}{p-Value computed from test statistics. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if RawPVal is returned and if there is no Futility Boundary.}
 #'                  \item{TestStat}{Value of appropriate test statistic on Wald (Z) scale regardless of the efficacy or futility boundary scale for each treatment arm. Vector of numerics or `NA` values having length equal to the number of treatment arms. Arms dropped at a previous look should be `NA`.}

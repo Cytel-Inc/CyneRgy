@@ -35,16 +35,17 @@
 #' @return A list with the following components:
 #'   \describe{
 #'     \item{TreatmentID}{Integer vector. Treatment assignment for each subject (0 = Control, 1 = Treatment).}
-#'     \item{ErrorCode}{Integer status code:
-#'                      \itemize{
-#'                              \item 0  : Success
-#'                              \item -1 : Invalid number of arms
-#'                              \item -2 : Missing UserParam
-#'                              \item -3 : Incorrect block naming format
-#'                              \item -4 : Non-integer block size detected
-#'                              \item -5 : Block sizes do not sum to NumSub
-#'                              \item -6 : Block size incompatible with allocation ratio
-#'     }}
+#'     \item{ErrorCode}{An integer value:
+#'       \describe{
+#'         \item{ErrorCode = 0}{No error.}
+#'         \item{ErrorCode = -1}{The design does not have exactly two arms.}
+#'         \item{ErrorCode = -2}{Block sizes were not supplied in `UserParam`.}
+#'         \item{ErrorCode = -3}{The block-size names are not `BlockSize1`, ..., `BlockSizeN`.}
+#'         \item{ErrorCode = -4}{At least one block size is not an integer.}
+#'         \item{ErrorCode = -5}{The block sizes do not sum to `NumSub`.}
+#'         \item{ErrorCode = -6}{At least one block size is not a multiple of the total allocation ratio.}
+#'       }
+#'       Positive values indicate a nonfatal error and abort the current simulation, but subsequent simulations continue; negative values indicate a fatal error and stop further simulation.}
 #'  }
 ######################################################################################################################## .
 

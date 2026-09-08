@@ -66,7 +66,7 @@
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #' \describe{
-#'   \item{Decision}{An integer value indicating the outcome of the analysis:
+#'   \item{Decision}{An integer decision generated using `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`: 0 indicates that no boundary was crossed; 1 indicates that the lower efficacy boundary was crossed; 2 indicates that the upper efficacy boundary was crossed; 3 indicates that the futility boundary was crossed; and 4 indicates that the equivalence boundary was crossed.
 #'     \itemize{
 #'       \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
 #'       \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
@@ -83,6 +83,14 @@
 #'       \item{>0}{— Non-fatal error (current iteration aborted)}
 #'       \item{<0}{— Fatal error (simulation terminated)}
 #'     }}
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' This analysis uses `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to convert the efficacy and final futility
+#' conditions into the decision code returned to East Horizon Explore.
+#' When these helpers are used, `DesignParam$TailType` and the relevant
+#' `LookInfo` boundary fields must be supplied by the integration engine.
 #' }
 ######################################################################################################################## .
 
@@ -161,30 +169,17 @@ AnalyzeStratification <- function( SimData, DesignParam, LookInfo = NULL, UserPa
     # Decision logic based on boundaries
     if( !is.na( dTestStatistic ) )
     {
+        dEffBdry <- DesignParam$CriticalPoint
         if( !is.null( LookInfo ) )
-        {
-            # Use efficacy boundary from LookInfo if available
-            if( !is.null( LookInfo$EffBdry ) )
-            {
-                dEffBdry  <- LookInfo$EffBdry[ nLookIndex ]
-                nDecision <- ifelse( is.nan( dEffBdry ) | is.na( dEffBdry ), 0,
-                                     ifelse( dTestStatistic > dEffBdry, 2, 0 ) )
-            }
-        }
-        else
-        {
-            # Use fixed design boundary
-            if( !is.null( DesignParam$CriticalPoint ) )
-            {
-                nDecision <- ifelse( dTestStatistic > DesignParam$CriticalPoint, 2, 0 )
-            }
-        }
+            dEffBdry <- LookInfo$EffBdry[ nLookIndex ]
 
-        # If no efficacy, check for futility at final look
-        if( nDecision == 0 && nLookIndex == nQtyOfLooks )
-        {
-            nDecision <- 3
-        }
+        bEfficacyCondition <- FALSE
+        if( !is.null( dEffBdry ) && !is.na( dEffBdry ) )
+            bEfficacyCondition <- dTestStatistic > dEffBdry
+        strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                                   bIAEfficacyCondition = bEfficacyCondition,
+                                                   bFAEfficacyCondition = bEfficacyCondition )
+        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     }
 
     lRet <- list( TestStat     = as.double( dTestStatistic ),

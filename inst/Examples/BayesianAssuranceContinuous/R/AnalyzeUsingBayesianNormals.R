@@ -63,8 +63,18 @@
 #'    \item{UserParam$dPU}{A value in [0, 1] that specifies the upper cuttoff for efficacy.  If posterior probability is greater than PU a Go decision is made.}
 #'    \item{UserParam$dPUFutility}{A value in [0, 1] that specifies the threshold probability of futility stopping. If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early for futility.}
 #'    }
-#' @return A named list containing the decision, error code, posterior probability, true treatment effect,
-#' posterior parameters, observed arm means, and simulated arm means.
+#' @return A list that contains:
+#' \describe{
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{PostProb}{A numeric scalar containing the posterior probability that the treatment effect exceeds the minimum acceptable value.}
+#'     \item{Delta}{A numeric scalar containing the true treatment effect used for the simulation.}
+#'     \item{dTrueDelta}{A numeric scalar containing the true treatment effect used for the simulation.}
+#'     \item{dCtrlPostMean}{A numeric scalar containing the posterior mean for the control arm.}
+#'     \item{dCtrlPostVar}{A numeric scalar containing the posterior variance for the control arm.}
+#'     \item{dExpPostMean}{A numeric scalar containing the posterior mean for the experimental arm.}
+#'     \item{dExpPostVar}{A numeric scalar containing the posterior variance for the experimental arm.}
+#' }
 ######################################################################################################################## .
 
 AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )

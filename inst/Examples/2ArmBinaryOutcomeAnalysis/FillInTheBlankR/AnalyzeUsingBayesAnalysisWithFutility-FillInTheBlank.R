@@ -63,7 +63,18 @@
 #'              The prior for the prediction and the analysis do NOT need to be the same.
 #'              This function requires more info in the glDesign than the previous AnalyzeUsingBetaBinomBayesianModel
 #'
-#' @return After the blanks are completed, a named list containing `TestStat`, `ErrorCode`, and `Decision`.
+#' @return After the blanks are completed, a list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the analysis test statistic.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#' }
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' This analysis uses `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to convert the efficacy and futility
+#' conditions into the decision code returned to East Horizon Explore.
 #'@note In this example we assume a Bayesian model and use posterior probabilities for decision making
 #' If user variables are not specified, the example uses beta priors defined in the function.
 ######################################################################################################################## .
@@ -106,22 +117,11 @@ AnalyzeUsingBayesAnalysisWithFutility <- function( SimData, DesignParam, LookInf
     # Perform the desired analysis - for this case a Bayesian analysis.  If Posterior Probability is > Cutoff --> Efficacy ####
     # The function PerformAnalysisBetaBinomial is provided below in this file.
     lRet                 <- PerformAnalysisBetaBinomial( vOutcomesS, vOutcomesE, UserParam$dAlphaS, UserParam$dBetaS, UserParam$dAlphaE, UserParam$dBetaE )
-    nDecision            <- ifelse( lRet$dPostProb > ____________, 2, 0 ) # Above the cutoff --> Efficacy
-
-    if( nDecision == 0 )
-    {
-        # Did not hit efficacy, so check futility
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks )
-        {
-            nDecision <- 3 # Futility
-        }
-        else if( lRet$dPostProb < ______________ ) # We are at the FA, efficacy decision was not made yet so the decision is futility
-        {
-            nDecision <- 3 # Futility
-        }
-
-    }
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bIAEfficacyCondition = lRet$dPostProb > ____________,
+                                               bIAFutilityCondition = lRet$dPostProb < ______________,
+                                               bFAEfficacyCondition = lRet$dPostProb > ____________ )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     nError <- 0
     # retval <- 0

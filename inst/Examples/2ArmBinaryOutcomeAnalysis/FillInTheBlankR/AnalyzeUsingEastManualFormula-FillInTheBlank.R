@@ -51,7 +51,18 @@
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @description Use the formula 28.2 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
 #'              The test statistic is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
-#' @return After the blanks are completed, a named list containing `TestStat`, `ErrorCode`, and `Decision`.
+#' @return After the blanks are completed, a list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the analysis test statistic.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#' }
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' This analysis uses `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to convert the efficacy condition into the
+#' decision code returned to East Horizon Explore.
 ######################################################################################################################## .
 
 AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
@@ -62,6 +73,7 @@ AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo, UserP
 
     # Retrieve necessary information from the objects East Horizon sent
     nLookIndex           <- LookInfo$CurrLookIndex
+    nQtyOfLooks          <- LookInfo$NumLooks
     nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
     nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
 
@@ -88,14 +100,11 @@ AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo, UserP
     # Equation 28.2 in East manual
     dZj                  <- ( dPiHatExperimental - dPiHatControl ) / sqrt( dPiHatj * ( 1 - dPiHatj ) * ( 1 / nQtyOfPatsOnE + 1 / nQtyOfPatsOnS ) )
 
-    # A decision of 2 means success, 0 means continue the trial
-    nDecision            <- ifelse( dZj > LookInfo$EffBdryUpper[ nLookIndex ], 2, 0 )
-
-    if( nDecision == 0 )
-    {
-        # For this example, there is NO futility check but this is left for consistency with other examples
-
-    }
+    # Generate the decision using the shared CyneRgy helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bIAEfficacyCondition = dZj > LookInfo$EffBdryUpper[ nLookIndex ],
+                                               bFAEfficacyCondition = dZj > LookInfo$EffBdryUpper[ nLookIndex ] )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     nError <- 0
 

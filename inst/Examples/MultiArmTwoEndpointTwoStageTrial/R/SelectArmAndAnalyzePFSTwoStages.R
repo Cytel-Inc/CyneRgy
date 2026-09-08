@@ -70,19 +70,18 @@
 #'                          Vector length equals `NumTreatments` per engine requirements. Only the element corresponding to the selected arm contains the actual test statistic;
 #'                          all other elements are zero and should be disregarded. For example, if arm 2 is selected at Stage 1, `TestStat2` contains the log-rank statistic while
 #'                          `TestStat1` is zero.}
-#'          \item{Decision}{Integer vector of efficacy decisions. Only the selected arm's element is non-zero; others are zero and should be disregarded. For example, if arm 2 is selected,
-#'                          only `Decision2` contains the decision value. Engine requirement mandates vector length equals `NumTreatments`.}
-#'          \item{ErrorCode}{Status code indicating success or error type:
+#'          \item{Decision}{An integer vector with one value per treatment arm, generated using `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`. Only the selected arm's element contains a decision; all other elements are zero and should be disregarded.}
+#'          \item{ErrorCode}{An integer value:
 #'              \describe{
-#'                \item{ErrorCode = 0}{No Error}
-#'                \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                \item{ErrorCode = -1}{Missing required UserParam (`Stage1NumCompleters` or `TargetNumPFSEvents`)}
-#'                \item{ErrorCode = -2}{LookInfo not NULL (adaptive designs not supported)}
-#'                \item{ErrorCode = -3}{Insufficient patients for Stage 1 analysis}
-#'                \item{ErrorCode = -4}{No valid treatment arm deltas computed}
-#'                \item{ErrorCode = -5}{Insufficient patients for Stage 2 analysis}
-#'                \item{ErrorCode = -6}{Test statistic denominator is zero}
-#'              }}
+#'                \item{ErrorCode = 0}{No error.}
+#'                \item{ErrorCode = -1}{A required user parameter is missing, `LookInfo` is not supported, or the treatment-arm configuration is invalid.}
+#'                \item{ErrorCode = -2}{`LookInfo` is not `NULL`; adaptive designs are not supported by this example.}
+#'                \item{ErrorCode = -3}{There are insufficient patients for the Stage 1 analysis.}
+#'                \item{ErrorCode = -4}{No valid treatment-arm deltas could be computed.}
+#'                \item{ErrorCode = -5}{There are insufficient patients for the Stage 2 analysis.}
+#'                \item{ErrorCode = -6}{The test-statistic denominator is zero.}
+#'              }
+#'              Positive values indicate a nonfatal error and abort the current simulation, but subsequent simulations continue; negative values indicate a fatal error and stop further simulation.}
 #'          \item{NumPatientInStage_i}{Number of patients in stage i (i = 1 for arm selection stage,
 #'                          i = 2 for PFS analysis stage). Both values populated; other indices are zero.}
 #'          \item{NumCompleters_i}{Number of completers (all patients in Stage 1, and additional patients in Stage 2).

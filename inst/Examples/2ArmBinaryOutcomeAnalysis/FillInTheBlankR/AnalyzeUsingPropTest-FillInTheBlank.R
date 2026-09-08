@@ -52,7 +52,18 @@
 #' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon as an input.
 #'              This example does NOT include a futility rule.
 #'
-#' @return After the blanks are completed, a named list containing `TestStat`, `ErrorCode`, and `Decision`.
+#' @return After the blanks are completed, a list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the analysis test statistic.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#' }
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' This analysis uses `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to convert the efficacy condition into the
+#' decision code returned to East Horizon Explore.
 ######################################################################################################################## .
 
 AnalyzeUsingPropTest <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
@@ -63,6 +74,7 @@ AnalyzeUsingPropTest <- function( SimData, DesignParam, LookInfo, UserParam = NU
 
     # Retrieve necessary information from the objects East Horizon sent
     nLookIndex           <- LookInfo$CurrLookIndex
+    nQtyOfLooks          <- LookInfo$NumLooks
     nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
     nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
 
@@ -79,13 +91,11 @@ AnalyzeUsingPropTest <- function( SimData, DesignParam, LookInfo, UserParam = NU
     lAnalysisResult      <- prop.test( mData, alternative = "greater", correct = FALSE )
     dPValue              <- lAnalysisResult$p.value
     dZValue              <- qnorm( 1 - ______ )
-    nDecision            <- ifelse( dZValue > LookInfo$EffBdryUpper[ nLookIndex ], 2, 0 ) # A decision of 2 means success, 0 means continue the trial
-
-    if( nDecision == 0 )
-    {
-        # if needed, check futility
-
-    }
+    # Generate the decision using the shared CyneRgy helpers
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bIAEfficacyCondition = dZValue > LookInfo$EffBdryUpper[ nLookIndex ],
+                                               bFAEfficacyCondition = dZValue > LookInfo$EffBdryUpper[ nLookIndex ] )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     nError <- 0
 

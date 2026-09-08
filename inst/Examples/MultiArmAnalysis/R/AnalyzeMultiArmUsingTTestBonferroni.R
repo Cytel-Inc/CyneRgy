@@ -56,30 +56,16 @@
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'                  User should access the variables using names, for example UserParam$Var1 and not order.
 #'                  These variables can be of the following types: Integer, Numeric, or Character
-#' @return The function must return a list in the return statement of the function. The information below lists
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'             \describe{
-#'                  \item{Decision}{Vector of Integers or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if Decision is returned. Values have the following meaning:
-#'                                  \describe{
-#'                                    \item{Decision = NA}{When the arm is dropped in a previous look}
-#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
-#'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
-#'                                    \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
-#'                                    \item{Decision = 3}{when the Futility Boundary Crossed}
-#'                                    }
-#'                                    }
-#'                  \item{AdjPVal}{p-Value adjusted for MCP adjustment. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if AdjPVal is returned and if there is no Futility Boundary.}
-#'                  \item{RawPVal}{p-Value computed from test statistics. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if RawPVal is returned and if there is no Futility Boundary.}
-#'                  \item{TestStat}{Value of appropriate test statistic on Wald (Z) scale regardless of the efficacy or futility boundary scale for each treatment arm. Vector of numerics or `NA` values having length equal to the number of treatment arms. Arms dropped at a previous look should be `NA`.}
-#'                  \item{Delta}{Estimate of Delta (Difference from Control) for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. Required if Decision is not returned AND Futility Boundary scale is Delta.}
-#'                  \item{AnalysisTime} {Optional Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user. }
-#'                  \item{ErrorCode}{Integer. Optional value \describe{
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
-#'                      }
+#' @return A list that contains:
+#' \describe{
+#'     \item{Decision}{An integer vector with one value per treatment arm, generated using `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`. `NA` indicates an arm dropped at a previous look; 0 indicates that no boundary was crossed; 1 indicates that the lower efficacy boundary was crossed; 2 indicates that the upper efficacy boundary was crossed; and 3 indicates that the futility boundary was crossed.}
+#'     \item{AdjPVal}{Optional numeric vector of adjusted p-values, with one value per treatment arm. Arms dropped at a previous look are `NA`.}
+#'     \item{RawPVal}{Optional numeric vector of unadjusted p-values, with one value per treatment arm. Arms dropped at a previous look are `NA`.}
+#'     \item{TestStat}{Optional numeric vector of test statistics on the Wald (Z) scale, with one value per treatment arm. Arms dropped at a previous look are `NA`.}
+#'     \item{Delta}{Optional numeric vector of estimated treatment effects relative to control, with one value per treatment arm. Arms dropped at a previous look are `NA`. Required when the futility boundary is on the Delta scale and `Decision` is not returned.}
+#'     \item{AnalysisTime}{Optional numeric analysis time. For interim analyses this is the look time; for the final analysis this is the study duration.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

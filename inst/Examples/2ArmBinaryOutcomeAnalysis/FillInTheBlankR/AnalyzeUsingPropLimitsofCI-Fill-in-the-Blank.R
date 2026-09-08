@@ -58,7 +58,18 @@
 #' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon as an input.
 #'              This example does NOT include a futility rule.
 #'
-#' @return After the blanks are completed, a named list containing `TestStat`, `ErrorCode`, and `Decision`.
+#' @return After the blanks are completed, a list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the analysis test statistic.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#' }
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' This analysis uses `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to convert the efficacy and futility
+#' conditions into the decision code returned to East Horizon Explore.
 ######################################################################################################################## .
 
 AnalyzeUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
@@ -91,26 +102,12 @@ AnalyzeUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo, UserPara
     mData                <- cbind( table( _______ ), table( vOutcomesE ) )
     lAnalysisResult      <- prop.test( mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel )
     dLowerLimitCI        <- lAnalysisResult$conf.int[ 1 ]
-    # A decision of 2 means success, 0 means continue the trial
-    nDecision            <- ifelse( dLowerLimitCI > ______, 2, 0 )
-
-    if( nDecision == 0 )
-    {
-        # Check futility
-        _______        <- lAnalysisResult$conf.int[ 2 ]
-
-        # Did not hit a Go decision, so check No Go
-        # We are at the FA, efficacy decision was not made yet so the decision is futility
-        if( nLookIndex == nQtyOfLooks )
-        {
-            # The final analysis was reached and a Go decision could not be made, thus a No Go decision is made
-            nDecision <- 3 # Futility
-        }
-        # At the IA check the No Go since a Go decision was not made
-        else if( dUpperLimitCI < UserParam$dUpperLimit )
-            _______ <- 3 # Futility
-
-    }
+    dUpperLimitCI <- lAnalysisResult$conf.int[ 2 ]
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                               bIAEfficacyCondition = dLowerLimitCI > ______,
+                                               bIAFutilityCondition = dUpperLimitCI < UserParam$dUpperLimit,
+                                               bFAEfficacyCondition = dLowerLimitCI > ______ )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     nError <- 0
 
