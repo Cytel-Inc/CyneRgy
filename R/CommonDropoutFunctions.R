@@ -1,8 +1,10 @@
 #################################################################################################### .
-#   Description: Common repeated-measures and survival dropout functions.
+#   Description: Common dropout functions for binary, continuous, repeated measures, and time-to-event endpoints.
 #################################################################################################### .
+
+
 #' @name GenerateDropoutTimeForRM
-#' @title Generate Dropout Times for Repeated-Measures Outcomes
+#' @title Generate Dropout Times for Repeated Measures Outcomes
 #'
 #' @description Calls the implementation from the common `2ArmPatientDropout` example.
 #'
@@ -19,7 +21,6 @@
 #'
 #' @return A list in the format required by the dropout integration point.
 #' @export
-#################################################################################################### .
 
 GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime,
                                       DropParamControl, DropParamTrt, UserParam = NULL )
@@ -57,5 +58,31 @@ GenerateDropoutTimeForSurvival <- function( NumSub, NumArm, TreatmentID, DropMet
         "2ArmPatientDropout", "GenerateDropoutTimeForSurvival.R", "GenerateDropoutTimeForSurvival",
         list( NumSub = NumSub, NumArm = NumArm, TreatmentID = TreatmentID, DropMethod = DropMethod,
               NumPrd = NumPrd, PrdTime = PrdTime, DropParam = DropParam, UserParam = UserParam )
+    ) )
+}
+
+
+#' @name GenerateCensoringUsingBinomialProportion
+#' @title Generate Dropout Indicators for Binary or Continuous Outcomes
+#'
+#' @description Calls the implementation from the common `2ArmPatientDropout` example. Generates an independent censoring
+#' indicator for each subject in binary or continuous outcome designs using one dropout probability. A value of `1` indicates
+#' a completer and `0` indicates a dropout.
+#'
+#' @param NumSub Integer number of subjects.
+#' @param ProbDrop Numeric dropout probability shared by both arms.
+#' @param UserParam Optional list of user-defined parameters.
+#'
+#' @return A list in the format required by the dropout integration point.
+#' @export
+
+GenerateCensoringUsingBinomialProportion <- function( NumSub, ProbDrop, UserParam = NULL )
+{
+    if( NumSub < 1 || length( ProbDrop ) != 1 || !is.finite( ProbDrop ) || ProbDrop < 0 || ProbDrop > 1 )
+        stop( "NumSub must be positive and ProbDrop must be between 0 and 1.", call. = FALSE )
+
+    return( .CallCommonExampleFunction(
+        "2ArmPatientDropout", "GenerateCensoringUsingBinomialProportion.R", "GenerateCensoringUsingBinomialProportion",
+        list( NumSub = NumSub, ProbDrop = ProbDrop, UserParam = UserParam )
     ) )
 }

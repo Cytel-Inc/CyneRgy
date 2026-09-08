@@ -1,6 +1,8 @@
 #################################################################################################### .
-#   Description: Common two-arm binary endpoint functions.
+#   Description: Common two-arm binary endpoint simulation and analysis functions.
 #################################################################################################### .
+
+
 #' @name SimulatePatientOutcomePercentAtZero.Binary
 #' @title Simulate Binary Patient Outcomes
 #'
@@ -15,7 +17,6 @@
 #'
 #' @return A list in the format required by the response integration point.
 #' @export
-#################################################################################################### .
 
 SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
                                                          PropResp, UserParam = NULL )

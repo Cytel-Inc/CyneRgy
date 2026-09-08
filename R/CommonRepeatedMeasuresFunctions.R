@@ -1,8 +1,10 @@
 #################################################################################################### .
-#   Description: Common repeated-measures response and analysis functions.
+#   Description: Common two-arm repeated measures simulation and analysis functions.
 #################################################################################################### .
+
+
 #' @name GenRespDiffOfMeansRepMeasures
-#' @title Generate Repeated-Measures Responses
+#' @title Generate Repeated Measures Responses
 #'
 #' @description Calls the response-generation implementation from the common
 #' `2ArmNormalRepeatedMeasuresResponseGeneration` example. This function requires the suggested `MASS` package.
@@ -22,7 +24,6 @@
 #'
 #' @return A list in the format required by the response integration point.
 #' @export
-#################################################################################################### .
 
 GenRespDiffOfMeansRepMeasures <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime,
                                             MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat,
@@ -40,12 +41,12 @@ GenRespDiffOfMeansRepMeasures <- function( NumSub, NumVisit, ArrivalTime, Treatm
 
 
 #' @name Analyze.RepeatedMeasures
-#' @title Analyze Repeated-Measures Outcomes
+#' @title Analyze Repeated Measures Outcomes
 #'
-#' @description Calls the GLS repeated-measures implementation from the common `2ArmNormalRepeatedMeasuresAnalysis` example.
+#' @description Calls the GLS repeated measures implementation from the common `2ArmNormalRepeatedMeasuresAnalysis` example.
 #' This function requires the suggested `nlme` package. Multi-look analyses also require the suggested `rpact` package.
 #'
-#' @param SimData Data frame containing the simulated repeated-measures data.
+#' @param SimData Data frame containing the simulated repeated measures data.
 #' @param DesignParam List of design and simulation parameters.
 #' @param LookInfo Optional list describing the current analysis look.
 #' @param UserParam Optional list of user-defined parameters.

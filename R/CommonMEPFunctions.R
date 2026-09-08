@@ -1,6 +1,8 @@
 #################################################################################################### .
-#   Description: Common multiple-endpoint arrival, response, and decision functions.
+#   Description: Common multiple-endpoint arrival, simulation, and decision functions.
 #################################################################################################### .
+
+
 #' @name GeneratePoissonArrivalMEP
 #' @title Generate Patient Arrival Times for an MEP Design
 #'
@@ -14,7 +16,6 @@
 #'
 #' @return A list in the format required by the arrival integration point.
 #' @export
-#################################################################################################### .
 
 GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {

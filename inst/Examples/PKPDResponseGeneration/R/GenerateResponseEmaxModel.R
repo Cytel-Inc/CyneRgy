@@ -50,12 +50,12 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
     mResponses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
 
     # Define the Emax model parameters from UserParam
-    E0                <- UserParam$E0               # Baseline effect
-    Emax              <- UserParam$Emax             # Maximum effect
-    EC50              <- UserParam$EC50             # Concentration at 50% of Emax
     dAbsorptionRate   <- UserParam$AbsorptionRate   # Absorption rate constant
     dEliminationRate  <- UserParam$EliminationRate  # Elimination rate constant
     dDose             <- UserParam$Dose             # Dose administered
+    E0                <- UserParam$E0               # Baseline effect
+    Emax              <- UserParam$Emax             # Maximum effect
+    EC50              <- UserParam$EC50             # Concentration at 50% of Emax
 
     # Check if all required Emax parameters are provided
     if( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) )
@@ -66,8 +66,9 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
     }
 
     # Call PK function to get concentration responses for treatment group
-    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime,
-                                            MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam )
+    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime,
+                                            MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat,
+                                            dAbsorptionRate, dEliminationRate, dDose )
 
     # Simulate response for each patient
     for( nPatIndx in 1:NumSub )
@@ -101,6 +102,19 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 
 }
 # Helper function for PK model generating concentration ####
+#' @param NumSub Number of subjects
+#' @param NumVisit Number of visits
+#' @param TreatmentID Vector of treatment IDs for each subject
+#' @param Inputmethod Method of input (0 for actual values)
+#' @param VisitTime Vector of visit times
+#' @param MeanControl Vector of mean control values for each visit
+#' @param MeanTrt Vector of mean treatment values for each visit
+#' @param StdDevControl Vector of standard deviations for control group for each visit
+#' @param StdDevTrt Vector of standard deviations for treatment group for each visit
+#' @param CorrMat Correlation matrix between visits
+#' @param dAbsorptionRate Absorption rate constant
+#' @param dEliminationRate Elimination rate constant
+#' @param dDose Dose administered
 GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose )
 {
     # Initialize error code and return list
@@ -165,6 +179,9 @@ GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmetho
 }
 
 # Helper ODE function for one-compartment model with first-order absorption ####
+#' @param time Time variable for ODE solver
+#' @param state State variables (A1: amount in absorption compartment, A2: concentration in central compartment)
+#' @param parameters Parameters for the ODE (dAbsorptionRate, dEliminationRate)
 OneCompartmentModelPK <- function( ime, state, parameters )
 {
     with( as.list( c( state, parameters ) ),

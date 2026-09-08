@@ -90,20 +90,20 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
 
     # Extract UserParam values so East Horizon can identify required parameters; passing UserParam directly to a helper
     # may prevent East Horizon from automatically populating the required parameters.
-    dSigma           <- UserParam$dSigma
-    dPriorStdDevExp  <- UserParam$dPriorStdDevExp
+    dPriorMeanCtrl   <- UserParam$dPriorMeanCtrl
     dPriorStdDevCtrl <- UserParam$dPriorStdDevCtrl
     dPriorMeanExp    <- UserParam$dPriorMeanExp
-    dPriorMeanCtrl   <- UserParam$dPriorMeanCtrl
+    dPriorStdDevExp  <- UserParam$dPriorStdDevExp
+    dSigma           <- UserParam$dSigma
 
     lPostParams <- ComputePosteriorParametersNormal(
         SimData$Response[ SimData$TreatmentID == 0 ],
         SimData$Response[ SimData$TreatmentID == 1 ],
-        dSigma,
-        dPriorStdDevCtrl,
-        dPriorStdDevExp,
         dPriorMeanCtrl,
-        dPriorMeanExp
+        dPriorStdDevCtrl,
+        dPriorMeanExp,
+        dPriorStdDevExp,
+        dSigma
     )
 
     # Step 2 - Compute the posterior parameters for each treatment - Need to update the prior
@@ -139,11 +139,11 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
             lPostParamsAtTrialEnd <- ComputePosteriorParametersNormal(
                 vCtrlPats,
                 vExpPats,
-                dSigma,
-                dPriorStdDevCtrl,
-                dPriorStdDevExp,
                 dPriorMeanCtrl,
-                dPriorMeanExp
+                dPriorStdDevCtrl,
+                dPriorMeanExp,
+                dPriorStdDevExp,
+                dSigma
             )
 
             # Futility Check - Step 3 - Final Analysis, of this trial, need to sample the posterior distribution of each treatment ####
@@ -234,14 +234,14 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
 #' @author J. Kyle Wathen and Laurent Spiess
 #' @param vCtrlData Vector of data for the Control treatment
 #' @param vExpData Vector of data for the experimental treatment
-#' @param dSigma Known sampling variance
-#' @param dPriorStdDevCtrl Prior standard deviation for control
-#' @param dPriorStdDevExp Prior standard deviation for experimental
 #' @param dPriorMeanCtrl Prior mean for control
+#' @param dPriorStdDevCtrl Prior standard deviation for control
 #' @param dPriorMeanExp Prior mean for experimental
+#' @param dPriorStdDevExp Prior standard deviation for experimental
+#' @param dSigma Known sampling variance
 #' Note: Passing UserParam directly to a helper may prevent East Horizon from automatically populating the required parameters.
 #' @return A named list containing posterior means and variances for the control and experimental arms.
-ComputePosteriorParametersNormal <- function( vCtrlData, vExpData, dSigma, dPriorStdDevCtrl, dPriorStdDevExp, dPriorMeanCtrl, dPriorMeanExp )
+ComputePosteriorParametersNormal <- function( vCtrlData, vExpData, dPriorMeanCtrl, dPriorStdDevCtrl, dPriorMeanExp, dPriorStdDevExp, dSigma )
 {
     # Compute the posterior parameters for the Std treatment
     dObsMeanCtrl  <- mean( vCtrlData )
