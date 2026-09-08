@@ -30,7 +30,7 @@ To try this example, create a new project in East Horizon using the following co
 
 # Introduction
 
-The following examples illustrate how to integrate new analysis capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes modeled as binary data. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
+The following examples illustrate how to integrate new analysis capabilities into East Horizon using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes modeled as binary data. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
 
 Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 ```{r, eval=FALSE}
@@ -73,7 +73,7 @@ Where:
 - $n_{tj}$ and $n_{cj}$ are the numbers of patients at the jth interim look in the treatment and control groups, respectively.
 - $\hat{\pi}_{j} = \frac{n_{tj} \cdot \hat{\pi}_{tj} + n_{cj} \cdot \hat{\pi}_{cj}}{n_{tj} + n_{cj}}$ is the pooled response rate estimate.
 
-The objective is to demonstrate a straightforward way to modify both the analysis and decision-making process. The computed test statistic is compared to the efficacy boundary provided by East Horizon or East as input. This example does not include a futility rule and does not use any user-defined parameters.
+The objective is to demonstrate a straightforward way to modify both the analysis and decision-making process. The computed test statistic is compared to the efficacy boundary provided by East Horizon as input. This example does not include a futility rule and does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -96,7 +96,7 @@ CyneRgy::PlotExampleFlowchart(
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R" class="alert-link">AnalyzeUsingPropTest.R</a></p>
 </div>
 
-This example utilizes the base R `prop.test()` function to perform the interim and final analyses. The p-value is used to compute the Z-statistic, which is compared against the efficacy boundary provided by East Horizon or East. Like Example 1, this example does not include a futility rule and does not use any user-defined parameters.
+This example utilizes the base R `prop.test()` function to perform the interim and final analyses. The p-value is used to compute the Z-statistic, which is compared against the efficacy boundary provided by East Horizon . Like Example 1, this example does not include a futility rule and does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -124,7 +124,7 @@ In many Phase II trials, Go/No-Go decisions are made based on whether a treatmen
 - **Minimum Acceptable Value (MAV)**: The smallest treatment effect considered meaningful.
 - **Target Value (TV)**: A highly desirable treatment effect based on clinical or strategic considerations.
 
-This example demonstrates how to approximate probabilistic decision-making using frequentist confidence intervals (CIs), ignoring the boundaries provided by East Horizon or East in favor of a CI-based logic. We use the function `prop.test()` from base R to analyze the data and compute the desired confidence intervals. If the treatment difference is likely to exceed the MAV, a Go decision is made. If not, and it is unlikely to exceed the TV, a No-Go decision is made. Specifically:
+This example demonstrates how to approximate probabilistic decision-making using frequentist confidence intervals (CIs), ignoring the boundaries provided by East Horizon in favor of a CI-based logic. We use the function `prop.test()` from base R to analyze the data and compute the desired confidence intervals. If the treatment difference is likely to exceed the MAV, a Go decision is made. If not, and it is unlikely to exceed the TV, a No-Go decision is made. Specifically:
 
 **At Interim Analysis**
 
@@ -146,7 +146,7 @@ Refer to the table below for the definitions of the user-defined parameters used
 |**dTV**|Target Value: the desired treatment effect that would represent a strong clinical benefit or strategic advantage.|
 |**dConfLevel**|Confidence Level: the level of confidence used to construct the confidence interval for Go/No-Go decision-making (e.g., 0.80 for an 80% CI).|
 
-**Note:** In this example, the boundary information that is computed in East Horizon or East is ignored. User-defined parameters and the function `prop.test()` from base R are used to analyze the data and compute the desired confidence intervals.
+**Note:** In this example, the boundary information that is computed in East Horizon is ignored. User-defined parameters and the function `prop.test()` from base R are used to analyze the data and compute the desired confidence intervals.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 

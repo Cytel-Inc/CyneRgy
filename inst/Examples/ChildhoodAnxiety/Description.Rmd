@@ -144,7 +144,7 @@ The second card has a **dMeanFollowUpExp** value of 19, the third card has 18, a
 This approach, however, was not only labor-intensive but also presented challenges in terms of data filtering. Specifically, it was difficult to extract and display the desired information from these scenarios. The process of setting up the scenarios and then filtering the results to show what we wanted was cumbersome and inefficient.  See Figure 4 for the initial setup.  
 
 **Figure 4**: Initial input in East Horizon 
-![East Horizion R code Development](ChildhoodAnxiety_files/Approach1.jpg)
+![East Horizon Horizion R code Development](ChildhoodAnxiety_files/Approach1.jpg)
 
 # Improved R Code
 

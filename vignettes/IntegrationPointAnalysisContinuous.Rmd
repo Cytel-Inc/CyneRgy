@@ -185,7 +185,7 @@ Detailed templates with step-by-step explanations are available here: [Analyze.C
 PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library( CyneRgy )
-    nError        	    <- 0 # Error handling (no error)
+    nError        	 <- 0 # Error handling (no error)
     
     # This is an example using GetDecisionString and GetDecision.
     
@@ -216,7 +216,7 @@ PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library( CyneRgy )
-    nError        	    <- 0 # Error handling (no error)
+    nError        	 <- 0 # Error handling (no error)
     
     # This is an example using GetDecisionString and GetDecision.
     

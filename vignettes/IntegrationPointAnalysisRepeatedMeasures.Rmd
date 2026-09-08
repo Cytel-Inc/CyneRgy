@@ -86,7 +86,7 @@ Your R script could contain a function such as these ones, with a name of your c
 PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library( CyneRgy )
-    nError        	    <- 0 # Error handling (no error)
+    nError        	 <- 0 # Error handling (no error)
     
     # This is an example using GetDecisionString and GetDecision.
     
@@ -116,7 +116,7 @@ PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = 
 PerformDecision <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library( CyneRgy )
-    nError        	    <- 0 # Error handling (no error)
+    nError        	 <- 0 # Error handling (no error)
     
     # This is an example using GetDecisionString and GetDecision.
     

@@ -54,7 +54,7 @@ A detailed template with step-by-step explanations is available here: [SimulateP
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
   
   # Write the actual code here.
@@ -69,7 +69,7 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, FollowUpDur, PropResp, OneMinusROP = NULL, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
   
   # Write the actual code here.

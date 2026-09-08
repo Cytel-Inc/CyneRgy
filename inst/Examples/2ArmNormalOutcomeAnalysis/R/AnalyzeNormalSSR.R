@@ -1,46 +1,68 @@
+######################################################################################################################## .
 #' @name AnalyzeNormalSSR
+#' @title Analyze a Continuous Outcome with Sample Size Re-Estimation
+#' @author Shubham Lahoti and J. Kyle Wathen
 #'
-#' @param SimData 
-#' A data frame containing the simulated patient-level data for the current simulation iteration.  
-#' Includes the following variables:
-#' \itemize{
-#'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
-#'   \item{Response}{— The observed endpoint for continuous outcome}
-#'   \item{TreatmentID}{— 0 = Control, 1 = Treatment}
-#' }
+#' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
+#'        \describe{
+#'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
+#'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
+#'          \item{Response}{A numeric value indicating the response.}
+#'          \item{CensorIndOrg}{An integer value indicating whether the subject was censored or not.}
+#'        }
+#' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
+#'      \describe{
+#'          \item{SampleSize}{Sample size of the trial}
+#'          \item{Alpha}{Type I Error}
+#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2}
+#'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
+#'          \item{LowerAlpha}{Lower Type I error. Present for Left Tailed and Two Sided Asymmetric Tests }
+#'          \item{UpperAlpha}{Upper Type I error. Present for Right Tailed and Two Sided Asymmetric Tests }
+#'          \item{MaxCompleters}{Maximum Number of Completers}
+#'          \item{FollowUpType}{Follow-up type: 0 for until the end of the study, or 1 for a fixed period.}
+#'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms. }
+#'          \item{CriticalPoint}{Critical Value. Present in Fixed Sample designs only }
+#'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
+#'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
+#'          \item{FollowUpDur}{Follow up duration}
+#'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials.}
 #'
-#' @param DesignParam 
-#' A list containing the design and simulation parameters required for analysis. Includes:
-#' \itemize{
-#'   \item{MaxCompleters}{— Maximum number of completers for the study}
-#'   \item{RespLag}{— Response lag from arrival time to measurement}
-#'   \item{CriticalPoint}{— Single-look efficacy boundary (if LookInfo = NULL)}
-#' }
+#'      }
+#' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
+#'                 \describe{
+#'                      \item{NumLooks}{An integer value with the number of looks in the study}
+#'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
+#'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
+#'                      \item{InfoFrac}{Information fraction}
+#'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
+#'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
+#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
+#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
+#'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible values are: Z Scale: 0, p-Value Scale: 1}
+#'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
+#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryScale}{Futility boundary scale. Possible value are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
+#'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
+#'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
+#'                 }
+#' @param AdaptInfo List containing sample-size re-estimation parameters:
+#'   \describe{
+#'     \item{SSRFuncScale}{Rule type: 0 for a continuous rule or 1 for a step-function rule.}
+#'     \item{PromZoneMin}{Lower bound of the promising zone for continuous SSR.}
+#'     \item{PromZoneMax}{Upper bound of the promising zone.}
+#'     \item{MaxSSMult}{Maximum sample-size multiplier.}
+#'     \item{MaxSSMultInp}{List containing `From`, `To`, and `MaxSSMult` values for step-function rules.}
+#'   }
 #'
-#' @param LookInfo 
-#' A list containing group sequential design information for multi-look trials.  
-#' For group sequential designs, it includes:
-#' \itemize{
-#'   \item{NumLooks}{— Total number of interim analyses}
-#'   \item{CurrLookIndex}{— Current look index}
-#'   \item{InfoFrac}{— Information fraction at each look}
-#'   \item{EffBdry}{— Efficacy boundary at each look}
-#' }
-#'
-#' @param AdaptInfo 
-#' A list containing sample-size re-estimation parameters, including:
-#' \itemize{
-#'   \item{SSRFuncScale}{— 0 = continuous rule, 1 = step function}
-#'   \item{PromZoneMin}{— Lower bound of promising zone (for continuous SSR)}
-#'   \item{PromZoneMax}{— Upper bound of promising zone}
-#'   \item{MaxSSMultInp}{— List containing \code{From}, \code{To}, \code{MaxSSMult} for step rules}
-#' }
-#'
-#' @param UserParam 
+#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' A list of user-defined parameters in East Horizon. Default = NULL.
 #'
 #' @description
-#' Implements continuous-outcome analysis with conditional power–based sample size re-estimation (SSR).  
+#' Implements continuous-outcome analysis with conditional power–based sample size re-estimation (SSR).
 #' The function:
 #' \enumerate{
 #'   \item Prepares observed data up to the interim analysis time
@@ -50,10 +72,10 @@
 #'   \item Generates a decision at the current look (efficacy, continue, or futility at final look)
 #' }
 #'
-#' @return The function must return a list in the return statement of the function. The information below lists 
+#' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #' \describe{
-#'   \item{Decision}{**Required.** Integer value indicating the outcome of the analysis.
+#'   \item{Decision}{An integer decision generated using `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`: 0 indicates that no boundary was crossed; 1 indicates that the lower efficacy boundary was crossed; 2 indicates that the upper efficacy boundary was crossed; 3 indicates that the futility boundary was crossed; and 4 indicates that the equivalence boundary was crossed.
 #'     \itemize{
 #'       \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
 #'       \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
@@ -66,46 +88,52 @@
 #'   \item{Delta}{**Optional.** Numeric value representing the observed **mean difference**:
 #'     \deqn{\Delta = \text{mean(Treatment)} - \text{mean(Control)}}}
 #'   \item{AnalysisTime}{**Optional.** Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.}
-#'   \item{ErrorCode}{**Optional.** Integer code representing execution status:
-#'     \itemize{
-#'       \item{0}{— No error}
-#'       \item{>0}{— Non-fatal error (current iteration aborted)}
-#'       \item{<0}{— Fatal error (simulation terminated)}
-#'     }}
+#'   \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #' }
-#' @export
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' This analysis uses `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to convert the efficacy and final futility
+#' conditions into the decision code returned to East Horizon Explore.
+#' When these helpers are used, `DesignParam$TailType` and the relevant
+#' `LookInfo` boundary fields must be supplied by the integration engine.
+######################################################################################################################## .
 
-AnalyzeNormalSSR <- function(SimData, DesignParam, LookInfo = NULL, AdaptInfo = NULL, UserParam = NULL)
+AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NULL, UserParam = NULL )
 {
-    nError <- 0
-    nDecision <- 0
+    nError         <- 0
+    nDecision      <- 0
     dTestStatistic <- 0
-    dDelta <- NA
-    dSE <- NA
-    dAnalysisTime <- 0
+    dDelta         <- NA
+    dSE            <- NA
+    dAnalysisTime  <- 0
 
     ###########################################################
     ## Step 1 — Data Preparation and Analysis Time Computation
     ###########################################################
-    if (!is.null(LookInfo)) {
+    if( !is.null( LookInfo ) )
+    {
         nQtyOfLooks      <- LookInfo$NumLooks
         nLookIndex       <- LookInfo$CurrLookIndex
         vCumCompleters   <- LookInfo$InfoFrac * DesignParam$MaxCompleters
-        nQtyOfCompleters <- vCumCompleters[nLookIndex]
-    } else {
+        nQtyOfCompleters <- vCumCompleters[ nLookIndex ]
+    }
+    else
+    {
         nQtyOfLooks      <- 1
         nLookIndex       <- 1
         nQtyOfCompleters <- DesignParam$MaxCompleters
     }
 
     SimData$CalendarResponseTime <- SimData$ArrivalTime + DesignParam$RespLag
-    SimData <- SimData[order(SimData$CalendarResponseTime), ]
+    SimData <- SimData[ order( SimData$CalendarResponseTime ), ]
 
-    dAnalysisTime <- SimData[nQtyOfCompleters, ]$CalendarResponseTime
+    dAnalysisTime <- SimData[ nQtyOfCompleters, ]$CalendarResponseTime
 
-    SimData <- SimData[SimData$ArrivalTime <= dAnalysisTime, ]
+    SimData <- SimData[ SimData$ArrivalTime <= dAnalysisTime, ]
 
-    SimData$Completers <- ifelse(SimData$CalendarResponseTime > dAnalysisTime, 0, 1)
+    SimData$Completers <- ifelse( SimData$CalendarResponseTime > dAnalysisTime, 0, 1 )
 
     SimData$ObservedTime <- ifelse(
         SimData$CalendarResponseTime > dAnalysisTime,
@@ -113,8 +141,8 @@ AnalyzeNormalSSR <- function(SimData, DesignParam, LookInfo = NULL, AdaptInfo = 
         SimData$CalendarResponseTime - SimData$ArrivalTime
     )
 
-    SimData <- SimData[order(SimData$ObservedTime), ]
-    SimDataCurrLook <- subset(SimData, SimData$ArrivalTime <= dAnalysisTime + 1e-4)
+    SimData <- SimData[ order( SimData$ObservedTime ), ]
+    SimDataCurrLook <- subset( SimData, SimData$ArrivalTime <= dAnalysisTime + 1e-4 )
 
     ###########################################################
     ## Step 2 — Test Statistic And Delta Computation
@@ -122,15 +150,18 @@ AnalyzeNormalSSR <- function(SimData, DesignParam, LookInfo = NULL, AdaptInfo = 
     vOutcome <- SimDataCurrLook$Response
     vTreat   <- SimDataCurrLook$TreatmentID
 
-    vCtrl <- vOutcome[vTreat == 0]
-    vTrt  <- vOutcome[vTreat == 1]
+    vCtrl <- vOutcome[ vTreat == 0 ]
+    vTrt  <- vOutcome[ vTreat == 1 ]
 
-    dDelta <- mean(vTrt) - mean(vCtrl)
-    dSE    <- sqrt(var(vTrt)/length(vTrt) + var(vCtrl)/length(vCtrl))
+    dDelta <- mean( vTr ) - mean( vCtrl )
+    dSE    <- sqrt( var( vTr ) / length( vTr ) + var( vCtrl ) / length( vCtrl ) )
 
-    if (!is.na(dDelta) && !is.na(dSE) && dSE > 0) {
+    if( !is.na( dDelta ) && !is.na( dSE ) && dSE > 0 )
+    {
         dTestStatistic <- dDelta / dSE
-    } else {
+    }
+    else
+    {
         dTestStatistic <- NA
     }
 
@@ -139,53 +170,70 @@ AnalyzeNormalSSR <- function(SimData, DesignParam, LookInfo = NULL, AdaptInfo = 
     ###########################################################
     dOrigCp <- NA
 
-    if (!is.na(dTestStatistic)) {
+    if( !is.na( dTestStatistic ) )
+    {
 
         # Z-crit
-        if (!is.null(LookInfo) && !is.null(LookInfo$EffBdry)) {
-            dZcrit <- LookInfo$EffBdry[nLookIndex]
+        if( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) )
+        {
+            dZcrit <- LookInfo$EffBdry[ nLookIndex ]
         }
 
         # Info fraction
-        if (!is.null(LookInfo)) {
-            dTau <- LookInfo$InfoFrac[nLookIndex]
+        if( !is.null( LookInfo ) )
+        {
+            dTau <- LookInfo$InfoFrac[ nLookIndex ]
         }
 
         # Conditional power
-        dOrigCp <- 1 - pnorm((dZcrit - dTestStatistic * sqrt(dTau)) /
-                             sqrt(1 - dTau + 1e-12))
+        dOrigCp <- 1 - pnorm( ( dZcrit - dTestStatistic * sqrt( dTau ) ) /
+                             sqrt( 1 - dTau + 1e-12 ) )
     }
 
     ###########################################################
     ## Step 4 — Re-estimated Completers Computation
     ###########################################################
-    if (AdaptInfo$SSRFuncScale == 0) {
+    if( AdaptInfo$SSRFuncScale == 0 )
+    {
         ### Continuous
-        if (is.na(dOrigCp)) {
+        if( is.na( dOrigCp ) )
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
-        } else if (dOrigCp > AdaptInfo$PromZoneMin && dOrigCp < AdaptInfo$PromZoneMax) {
+        }
+        else if( dOrigCp > AdaptInfo$PromZoneMin && dOrigCp < AdaptInfo$PromZoneMax )
+        {
             nReEstCompleters <- DesignParam$MaxCompleters * AdaptInfo$MaxSSMultInp$MaxSSMult
-        } else {
+        }
+        else
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
         }
 
-    } else if (AdaptInfo$SSRFuncScale == 1) {
+    }
+    else if( AdaptInfo$SSRFuncScale == 1 )
+    {
         ### Step Function
-        if (is.na(dOrigCp)) {
+        if( is.na( dOrigCp ) )
+        {
             nReEstCompleters <- DesignParam$MaxCompleters
-        } else {
+        }
+        else
+        {
 
             vStepLowerBound <- AdaptInfo$MaxSSMultInp$From
             vStepUpperBound <- AdaptInfo$MaxSSMultInp$To
             vStepMultiplier <- AdaptInfo$MaxSSMultInp$MaxSSMult
-            
-            ## Find which interval dOrigCp falls into
-            vIdx <- which(dOrigCp > vStepLowerBound & dOrigCp <= vStepUpperBound)
 
-            if (length(vIdx) == 0) {
+            ## Find which interval dOrigCp falls into
+            vIdx <- which( dOrigCp > vStepLowerBound & dOrigCp <= vStepUpperBound )
+
+            if( length( vIdx ) == 0 )
+            {
                 nReEstCompleters <- DesignParam$MaxCompleters
-            } else {
-                nReEstCompleters <- DesignParam$MaxCompleters * vStepMultiplier[vIdx]
+            }
+            else
+            {
+                nReEstCompleters <- DesignParam$MaxCompleters * vStepMultiplier[ vIdx ]
             }
         }
     }
@@ -193,33 +241,30 @@ AnalyzeNormalSSR <- function(SimData, DesignParam, LookInfo = NULL, AdaptInfo = 
     ###########################################################
     ## Step 5 — Decision Computation
     ###########################################################
-    if(!is.na(dTestStatistic)) {
-        if(!is.null(LookInfo)) {
-            if(!is.null(LookInfo$EffBdry)) {
-                dEffBdry <- LookInfo$EffBdry[nLookIndex]
-                nDecision <- ifelse(is.nan(dEffBdry) | is.na(dEffBdry), 0,
-                                    ifelse(dTestStatistic > dEffBdry, 2, 0))
-            } 
-        } else {
-            if(!is.null(DesignParam$CriticalPoint)) {
-                nDecision <- ifelse(dTestStatistic > DesignParam$CriticalPoint, 2, 0)
-            }
-        }
-        # If no efficacy, check for futility at final look
-        if(nDecision == 0 && nLookIndex == nQtyOfLooks) {
-            nDecision <- 3
-        }
+    if( !is.na( dTestStatistic ) )
+    {
+        dEffBdry <- DesignParam$CriticalPoint
+        if( !is.null( LookInfo ) )
+            dEffBdry <- LookInfo$EffBdry[ nLookIndex ]
+
+        bEfficacyCondition <- FALSE
+        if( !is.null( dEffBdry ) && !is.na( dEffBdry ) )
+            bEfficacyCondition <- dTestStatistic > dEffBdry
+        strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                                                   bIAEfficacyCondition = bEfficacyCondition,
+                                                   bFAEfficacyCondition = bEfficacyCondition )
+        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     }
 
     ###########################################################
     ## Step 6 — Return Output
     ###########################################################
-    return(list(
-        Decision         = as.integer(nDecision),
-        TestStat         = as.double(dTestStatistic),
-        ReEstCompleters  = as.integer(nReEstCompleters),
-        Delta            = as.double(dDelta),
-        AnalysisTime     = as.double(dAnalysisTime),
-        ErrorCode        = as.integer(nError)
-    ))
+    return( list(
+        Decision         = as.integer( nDecision ),
+        TestStat         = as.double( dTestStatistic ),
+        ReEstCompleters  = as.integer( nReEstCompleters ),
+        Delta            = as.double( dDelta ),
+        AnalysisTime     = as.double( dAnalysisTime ),
+        ErrorCode        = as.integer( nError )
+    ) )
 }

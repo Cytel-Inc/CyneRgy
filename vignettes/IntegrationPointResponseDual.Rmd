@@ -61,7 +61,7 @@ A detailed template with step-by-step explanations is available here: [SimulateP
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, EndpointType, EndpointName, SurvMethod, NumPrd, PrdTime, SurvParam, Correlation, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   
   Response          <- list()
   Response[[EndpointName[[1]]]] <- rep( 0, NumSub ) # Initializing survival times array of the first endpoint to 0
@@ -79,7 +79,7 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, Endpoint
 ```
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, EndpointType, EndpointName, SurvMethod, NumPrd, PrdTime, SurvParam, PropResp, Correlation, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   
   Response          <- list()
   Response[[EndpointName[[1]]]] <- rep( 0, NumSub ) # Initializing response array of the first endpoint to 0
