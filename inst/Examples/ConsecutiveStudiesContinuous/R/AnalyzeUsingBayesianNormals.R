@@ -209,18 +209,18 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
     # Note: the SimData$vTrueDelta vector was added to the SimData via the return in the SimulatePateintOutcomeNormalAssurance
 
     lReturn <- list( Decision = as.integer( nDecision ),
-                    ErrorCode = as.integer( nError ),
-                    PostProb = dPostProbGrt,
-                    Delta      = as.double( SimData$vTrueDelta[ 1 ] ), # This is needed for true value plots in East Horizon
-                    dTrueDelta = as.double( SimData$vTrueDelta[ 1 ] ),
-                    dCtrlPostMean = as.double( lPostParams$dPostMeanCtrl ),
-                    dCtrlPostVar = as.double( lPostParams$dPostVarCtrl ),
-                    dExpPostMean = as.double( lPostParams$dPostMeanExp ),
-                    dExpPostVar = as.double( lPostParams$dPostVarExp ),
-                    dObsMeanCtrl = as.double( mean( SimData$Response[ SimData$TreatmentID == 0 ] ) ),
-                    dObsMeanExp = as.double( mean( SimData$Response[ SimData$TreatmentID == 1 ] ) ),
-                    dSimMeanCtrl = as.double( SimData$dSimMeanCtrl[ 1 ] ),
-                    dSimMeanExp = as.double( SimData$dSimMeanExp[ 1 ] ) )
+                     ErrorCode = as.integer( nError ),
+                     PostProb = dPostProbGrt,
+                     Delta      = as.double( SimData$vTrueDelta[ 1 ] ), # This is needed for true value plots in East Horizon
+                     dTrueDelta = as.double( SimData$vTrueDelta[ 1 ] ),
+                     dCtrlPostMean = as.double( lPostParams$dPostMeanCtrl ),
+                     dCtrlPostVar = as.double( lPostParams$dPostVarCtrl ),
+                     dExpPostMean = as.double( lPostParams$dPostMeanExp ),
+                     dExpPostVar = as.double( lPostParams$dPostVarExp ),
+                     dObsMeanCtrl = as.double( mean( SimData$Response[ SimData$TreatmentID == 0 ] ) ),
+                     dObsMeanExp = as.double( mean( SimData$Response[ SimData$TreatmentID == 1 ] ) ),
+                     dSimMeanCtrl = as.double( SimData$dSimMeanCtrl[ 1 ] ),
+                     dSimMeanExp = as.double( SimData$dSimMeanExp[ 1 ] ) )
 
     return( lReturn )
 }

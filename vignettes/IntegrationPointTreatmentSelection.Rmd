@@ -191,7 +191,7 @@ A detailed template with step-by-step explanations is available here: [Treatment
 ```
 SelectTreatment <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-  nError        	    <- 0 # Error handling (no error)
+  nError        	      <- 0 # Error handling (no error)
   
   # Example
   vSelectedTreatments 	<- c( 1, 2 )  # Experimental 1 and 2 are carried forward

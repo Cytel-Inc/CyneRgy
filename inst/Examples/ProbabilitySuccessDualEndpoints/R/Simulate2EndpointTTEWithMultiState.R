@@ -70,7 +70,7 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
                                                 SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
     # Step 1 - Initialize the return variables or other variables needed ####
-    nError          <- 0
+    nError <- 0
 
     # Step 2 - Validate custom variable input and set defaults ####
     if( is.null( UserParam ) )

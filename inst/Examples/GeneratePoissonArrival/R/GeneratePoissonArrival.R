@@ -20,7 +20,7 @@
 GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {
     # Step 1 - Initialize the return variables or other variables needed ####
-    nError               <- 0
+    nError              <- 0
     vPatientArrivalTime <- c()
 
     # Step 2 - Validate custom variable input and set defaults ####

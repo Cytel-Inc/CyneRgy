@@ -130,13 +130,13 @@
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, TestStat = NULL, OutList = NULL, UserParam = NULL )
 {
-    EndpointName  <- DesignParam$EndpointName
-    lDecision <- list()
+    EndpointName                      <- DesignParam$EndpointName
+    lDecision                         <- list()
     lDecision[ EndpointName[[ 1 ] ] ] <- lDecision[ EndpointName[[ 2 ] ] ] <- 0
-    nError          <- 0
-    Retval          <- 0
-    OutList         <- list()
-    OutList$OutVal  <- Retval
+    nError                            <- 0
+    Retval                            <- 0
+    OutList                           <- list()
+    OutList$OutVal                    <- Retval
 
     # Write logic to implement a particular multiplicity adjustment method and update Decisions
 

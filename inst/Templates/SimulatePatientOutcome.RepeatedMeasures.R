@@ -35,7 +35,7 @@
 {{FUNCTION_NAME}} <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
     # TO DO : Modify this function appropriately
-    nError      <- 0
+    nError       <- 0
     vOutResponse <- c()
     retval       <- list()
 

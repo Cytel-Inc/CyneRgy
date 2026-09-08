@@ -113,7 +113,7 @@
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    nError               <- 0
+    nError                   <- 0
 
     # If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxCompleters
     # Retrieve necessary information from the R objects. You may not need all the variables

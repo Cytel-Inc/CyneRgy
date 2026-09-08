@@ -187,7 +187,7 @@ AnalyzeMultiArmUsingTTestBonferroni <- function( SimData, DesignParam, LookInfo 
     #     }
     # }
 
-    nError                          <- 0
+    nError <- 0
 
     return( list( Decision  = as.integer( vDecision ),
                   ErrorCode = as.integer( nError ) ) )

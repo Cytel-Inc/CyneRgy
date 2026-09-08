@@ -70,7 +70,7 @@
 #'               Otherwise, continue to the next analysis.
 #'               At the Final Analysis: If LL > UserParam$dMAV  then a Go decision is made, otherwise, a No-Go decision is made
 #' @return A named list containing `TestStat`, `ErrorCode`, `Decision`, and `Delta`.
-#'@note This function is only applicable to the case where MAV <= TV.
+#' @note This function is only applicable to the case where MAV <= TV.
 #'       In this example, the boundary information that is computed and sent from East Horizon is ignored in order to implement this decision approach.
 #' @details
 #' ## CyneRgy Decision Helpers
@@ -161,7 +161,7 @@ AnalyzeUsingMeanLimitsOfCI <- function( SimData, DesignParam, LookInfo = NULL, U
                                                bFAEfficacyCondition = dLowerLimitCI > UserParam$dMAV )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
-    nError     <- 0
+    nError    <- 0
 
     return( list( TestStat  = as.double( dLowerLimitCI ),
                 ErrorCode = as.integer( nError ),

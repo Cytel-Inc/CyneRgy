@@ -87,12 +87,12 @@
 ######################################################################################################################## .
 
 ## AnalyzeStratification() : Returning Test Stat, HR and Analysis Time and Decision
-AnalyzeStratification<- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzeStratification <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
 
-    nError <- 0
-    nDecision <- 0
-    dTestStatistic <- 0
+    nError          <- 0
+    nDecision       <- 0
+    dTestStatistic  <- 0
     dTimeOfAnalysis <- 0
 
     # Determine number of events for analysis
@@ -100,7 +100,7 @@ AnalyzeStratification<- function( SimData, DesignParam, LookInfo = NULL, UserPar
     {
         nQtyOfLooks  <- LookInfo$NumLooks
         nLookIndex   <- LookInfo$CurrLookIndex
-        vCumEvents    <- LookInfo$CumEvents
+        vCumEvents   <- LookInfo$CumEvents
         nQtyOfEvents <- vCumEvents[ nLookIndex ]
     }
     else

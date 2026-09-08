@@ -250,7 +250,9 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
                 ErrorCode    = as.integer( nErrorCode ) ) )
 }
 
+######################################################################################################################## .
 # HELPER FUNCTION: Analysis Time Computation ####
+######################################################################################################################## .
 ComputeAnalysisTime <- function( dRespLag, vArrivalTime, vCumCompleters, nCurrLookIndex )
 {
   dRespLag            <- ifelse( !is.null( dRespLag ), dRespLag, 0 )

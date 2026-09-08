@@ -51,7 +51,7 @@ A detailed template with step-by-step explanations is available here: [SimulateP
 ```
 GenerateResponse <- function( NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
 
   lResponse          <- list()
 

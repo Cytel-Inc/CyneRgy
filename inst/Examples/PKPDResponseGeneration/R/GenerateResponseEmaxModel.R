@@ -41,7 +41,7 @@
 
 GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
 {
-    nError <- 0
+    nError  <- 0
     lRetval <- list()
 
     # Initialize simulated response matrix

@@ -29,7 +29,7 @@ SimulatePatientOutcomeBinaryWithAssurance <- function( NumSub, NumArm, ArrivalTi
     # If the user did not specify the user parameters, but still called this function: error
     if( is.null( UserParam ) )
     {
-        nError <- 100
+        nError  <- 100
         lReturn <- list( Response = as.double( rep( NA, NumSub ) ), ErrorCode = as.integer( nError ) )
         return( lReturn )
     }

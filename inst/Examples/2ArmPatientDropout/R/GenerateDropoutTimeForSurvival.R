@@ -23,13 +23,13 @@
 GenerateDropoutTimeForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
 {
 
-  nError          <- 0
+  nError                     <- 0
 
   # Initializing Censor Dropout Times to Inf
   # This effectively means that all the patients have dropped out at an infinite time,
   # i.e., effectively they haven't dropped out at all, meaning that they all are completers
 
-  vDropoutTime                  <- rep( Inf, NumSub )
+  vDropoutTime               <- rep( Inf, NumSub )
 
   #Identify the patients from Control and Experimental arm
   vIndexControl              <- which( TreatmentID == 0 )

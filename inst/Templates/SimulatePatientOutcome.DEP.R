@@ -68,8 +68,8 @@
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, EndpointType, EndpointName, Correlation, SurvMethod = NULL, NumPrd = NULL, PrdTime = NULL, SurvParam = NULL, PropResp = NULL, UserParam = NULL )
 {
-        # Step 1 - Initialize the return variables or other variables needed ####
-        nError              <- 0
+    # Step 1 - Initialize the return variables or other variables needed ####
+    nError              <- 0
     vPatientOutcomeEP1  <- rep( 0, NumSub )
     vPatientOutcomeEP2  <- rep( 0, NumSub )
     Response            <- list()

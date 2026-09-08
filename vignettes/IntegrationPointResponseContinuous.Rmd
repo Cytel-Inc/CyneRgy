@@ -53,7 +53,7 @@ Detailed templates with step-by-step explanations are available here: [SimulateP
 ```
 GenerateResponse <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
   
   # Write the actual code here.
@@ -68,7 +68,7 @@ GenerateResponse <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, Us
 ```
 GenerateResponse <- function( NumSub, NumArms, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   vPatientOutcome 	<- rep( 0, NumSub ) # Initializing response array to 0	
   
   # Write the actual code here.

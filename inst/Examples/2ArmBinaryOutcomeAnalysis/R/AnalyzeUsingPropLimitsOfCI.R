@@ -158,7 +158,7 @@ AnalyzeUsingPropLimitsOfCI<- function( SimData, DesignParam, LookInfo = NULL, Us
                                                bFAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
-    nError     <- 0
+    nError    <- 0
 
     return( list( TestStat  = as.double( dLowerLimitCI ),
                 ErrorCode = as.integer( nError ),

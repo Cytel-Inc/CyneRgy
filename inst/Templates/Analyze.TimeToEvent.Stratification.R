@@ -91,8 +91,8 @@
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     # TO DO: Modify this function appropriately
-    nError         <- 0
-    retval         <- 0
+    nError          <- 0
+    retval          <- 0
     EstAnalysisTime <- 0
     # Write the actual code here.
     # Compute test statistic value and store the decision

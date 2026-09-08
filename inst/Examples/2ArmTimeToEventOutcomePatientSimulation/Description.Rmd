@@ -86,7 +86,7 @@ Assume that the difference in risk of death for patients in the control arm comp
 |**dScaleCtrl**|17.31|
 |**dScaleExp**|23.08|
 
-The scale parameters are calculated based on the median survival time for each arm. This example demonstrates that using the R function with these parameters produces the same results as simulating the data directly in East Horizon  without an R function.
+The scale parameters are calculated based on the median survival time for each arm. This example demonstrates that using the R function with these parameters produces the same results as simulating the data directly in East Horizon without an R function.
 
 ```{r echo = FALSE, warning=FALSE, message = FALSE}
 # Constant Hazard Example ###
@@ -126,7 +126,7 @@ plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazar
 
 ## Example 1.2 – Increasing Hazards
 
-This function assumes that the hazard of death or disease progression increases over time in both arms, but at different rates: the control arm's hazard increases more slowly than that of the experimental arm. The time to death or progression is simulated using a Weibull distribution, with shape and scale parameters specified for each arm in East Horizon  and then sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
+This function assumes that the hazard of death or disease progression increases over time in both arms, but at different rates: the control arm's hazard increases more slowly than that of the experimental arm. The time to death or progression is simulated using a Weibull distribution, with shape and scale parameters specified for each arm in East Horizon and then sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
 |---|---|
@@ -164,7 +164,7 @@ plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazar
 
 ## Example 1.3 – Decreasing Hazards
 
-This example is similar to the previous one, but here the function assumes that hazards decrease over time in both arms. However, the control arm's hazard decreases at a slower rate than that of the experimental arm. The time to death or progression is simulated using a Weibull distribution, with shape and scale parameters specified for each arm in East Horizon  and then sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
+This example is similar to the previous one, but here the function assumes that hazards decrease over time in both arms. However, the control arm's hazard decreases at a slower rate than that of the experimental arm. The time to death or progression is simulated using a Weibull distribution, with shape and scale parameters specified for each arm in East Horizon and then sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
 |---|---|

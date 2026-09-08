@@ -127,7 +127,7 @@ AnalyzeUsingPropTest<- function( SimData, DesignParam, LookInfo = NULL, UserPara
                                                bFAEfficacyCondition = dZValue > dBoundary )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
-    nError     <- 0
+    nError    <- 0
 
     return( list( TestStat = as.double( dZValue ), ErrorCode = as.integer( nError ), Decision = as.integer( nDecision ) ) )
 }

@@ -49,7 +49,7 @@ A detailed template with step-by-step explanations is available here: [Dropout.S
 ```
 GenDropTimes <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   vDropoutTime     	<- rep( Inf, NumSub ) # Initializing dropout times vector to Inf (all patients are completers)
 
   # Write the actual code here.

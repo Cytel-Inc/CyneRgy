@@ -77,7 +77,7 @@ CyneRgy::PlotExampleFlowchart(
 
 ## Example 1.1 - All Patients Respond
 
-Assume that all patients will respond to treatment. A binomial distribution is used to determine whether a patient is a responder or a non-responder. If the patient is a responder, their outcome is simulated from a normal distribution using the mean and standard deviation specified in East Horizon  and sent to R. In this example, the probability of a patient being a non-responder is set to zero. Refer to the table below for the values of the user-defined parameters used in this example.
+Assume that all patients will respond to treatment. A binomial distribution is used to determine whether a patient is a responder or a non-responder. If the patient is a responder, their outcome is simulated from a normal distribution using the mean and standard deviation specified in East Horizon and sent to R. In this example, the probability of a patient being a non-responder is set to zero. Refer to the table below for the values of the user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
 |---|---|

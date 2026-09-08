@@ -33,7 +33,7 @@
 {{FUNCTION_NAME}} <- function( NumSub, ProbDrop, NumArm, TreatmentID, UserParam = NULL )
 {
 
-    nError                <- 0
+    nError              <- 0
 
     vCensoringIndicator <- numeric( NumSub )
     for( i in 1:NumSub )

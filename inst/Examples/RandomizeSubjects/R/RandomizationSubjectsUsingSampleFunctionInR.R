@@ -29,7 +29,7 @@
 
 RandomizationSubjectsUsingSampleFunctionInR <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
 {
-    nError                          <- 0
+    nError                        <- 0
 
     # Allocation ratio on control and treatment arm
     vAllocRatio                   <- c( 1, AllocRatio )

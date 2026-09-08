@@ -113,7 +113,7 @@
 
 AnalzyeTTEWithConditinalPowerFutility <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-  nError             <- 0
+  nError            <- 0
   nDecision         <- 0
   dTestStatistic    <- 0
   nLookIndex        <- 1

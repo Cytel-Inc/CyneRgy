@@ -79,7 +79,7 @@ A detailed template with step-by-step explanations is available here: [Dropout.R
 GenDropTimes <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
                           DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   vDropoutTime     	<- rep( Inf, NumSub ) # Initializing dropout times vector to Inf (all patients are completers)
 
   # Write the actual code here.
@@ -95,7 +95,7 @@ GenDropTimes <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
 GenDropVisitID <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
                             DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
 {
-  nError        	<- 0 # Error handling (no error)
+  nError        	  <- 0 # Error handling (no error)
   vDropoutVisitID   <- rep( 1, NumSub ) # Initializing dropout visit IDs vector to 1 (all patients drop out after first visit)
 
   # Write the actual code here.
@@ -113,7 +113,7 @@ GenCensorInd <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
 {
   nError        	<- 0 # Error handling (no error)
   vCensorInd    	<- c()
-  lReturn           <- list()
+  lReturn         <- list()
 
   # Add code to simulate the dropout data as desired.
   # Example of how to create the return list with CensorInd1, CensorInd2, ..., CensorIndNumVisit.

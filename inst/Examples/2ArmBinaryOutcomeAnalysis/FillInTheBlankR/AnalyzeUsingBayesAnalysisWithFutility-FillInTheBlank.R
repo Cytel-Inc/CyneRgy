@@ -123,7 +123,7 @@ AnalyzeUsingBayesAnalysisWithFutility <- function( SimData, DesignParam, LookInf
 
     }
 
-    nError     <- 0
+    nError <- 0
     # retval <- 0
 
     return( list( ______ = as.double( lRet$dPostProb ), ErrorCode = as.integer( nError ), Decision = as.integer( nDecision ) ) )

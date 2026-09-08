@@ -162,7 +162,7 @@ AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, Use
                                                bFAEfficacyCondition = lRet$dPostProb > UserParam$dUpperCutoffEfficacy )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
-    nError     <- 0
+    nError    <- 0
 
     return( list( TestStat = as.double( lRet$dPostProb ), ErrorCode = as.integer( nError ), Decision = as.integer( nDecision ), Delta = as.double( lRet$dDelta ) ) )
 }

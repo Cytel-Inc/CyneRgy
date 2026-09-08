@@ -88,7 +88,7 @@ With:
 
 $$\text{Den}_i = \frac{n_{i,t} \cdot n_{i,c} \cdot (n_i - d_i) \cdot d_i}{n_i^2 \cdot (n_i - 1)}$$
 
-The objective is to demonstrate a straightforward way to modify both the analysis and decision-making process. The computed test statistic is compared to the efficacy boundary provided by East Horizon  as input. This example does not include a futility rule and does not use any user-defined parameters.
+The objective is to demonstrate a straightforward way to modify both the analysis and decision-making process. The computed test statistic is compared to the efficacy boundary provided by East Horizon as input. This example does not include a futility rule and does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -140,7 +140,7 @@ In many Phase II trials, Go/No-Go decisions are made based on whether a treatmen
 - **Minimum Acceptable Value (MAV)**: The smallest treatment effect (e.g., hazard ratio) considered meaningful.
 - **Target Value (TV)**: A highly desirable treatment effect based on clinical or strategic considerations.
 
-This example demonstrates how to approximate probabilistic decision-making using frequentist confidence intervals (CIs), ignoring the boundaries provided by East Horizon  in favor of a CI-based logic. If the hazard ratio is likely to be below the MAV, a Go decision is made. If not, and it is unlikely to be below the TV, a No-Go decision is made.
+This example demonstrates how to approximate probabilistic decision-making using frequentist confidence intervals (CIs), ignoring the boundaries provided by East Horizon in favor of a CI-based logic. If the hazard ratio is likely to be below the MAV, a Go decision is made. If not, and it is unlikely to be below the TV, a No-Go decision is made.
 
 We use the Cox proportional hazards model via the `survival::coxph()` function to estimate the log hazard ratio (log HR) and its standard error. Based on these estimates, frequentist CIs are constructed to inform decision-making. Specifically:
 
@@ -164,7 +164,7 @@ Refer to the table below for the definitions of the user-defined parameters used
 |**dTV**|Target Value: the desired treatment effect that would represent a strong clinical benefit or strategic advantage.|
 |**dConfLevel**|Confidence Level: the level of confidence used to construct the confidence interval for Go/No-Go decision-making (e.g., 0.80 for an 80% CI).|
 
-**Note:** In this example, the boundary information that is computed in East Horizon  is ignored. User-defined parameters and the Cox model are used to analyze the data and compute the desired confidence intervals.
+**Note:** In this example, the boundary information that is computed in East Horizon is ignored. User-defined parameters and the Cox model are used to analyze the data and compute the desired confidence intervals.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 

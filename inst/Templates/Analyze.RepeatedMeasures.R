@@ -132,7 +132,7 @@
      nDecision        <- 0
      dPrimDeltaEst    <- 0
      dSecDeltaEst     <- 0
-    bIAEfficacyCheck <- TRUE
+    bIAEfficacyCheck  <- TRUE
      bIAFutilityCheck <- FALSE
      bFAEfficacyCheck <- TRUE
 

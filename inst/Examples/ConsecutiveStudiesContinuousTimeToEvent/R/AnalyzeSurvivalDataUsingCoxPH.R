@@ -58,8 +58,8 @@
 ######################################################################################################################## .
 AnalyzeSurvivalDataUsingCoxPH <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    nError <- 0
-    nLookIndex           <- 1
+    nError     <- 0
+    nLookIndex <- 1
 
     if( !is.null( LookInfo ) )
     {
@@ -69,7 +69,7 @@ AnalyzeSurvivalDataUsingCoxPH <- function( SimData, DesignParam, LookInfo = NULL
     }
     else
     {
-        nQtyOfEvents         <- DesignParam$MaxEvents
+        nQtyOfEvents <- DesignParam$MaxEvents
     }
 
     if( is.null( UserParam ) )

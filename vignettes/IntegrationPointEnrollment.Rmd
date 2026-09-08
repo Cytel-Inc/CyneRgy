@@ -197,7 +197,7 @@ Detailed templates with step-by-step explanations are available here: [GenerateA
 ```
 GenArrTimes <- function( NumSub, Type = 0, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {
-  nError        	    <- 0 # Error handling (no error)
+  nError        	      <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumSub ) # Initializing arrival time array to 0
 
   # Write the actual code here.
@@ -212,7 +212,7 @@ GenArrTimes <- function( NumSub, Type = 0, NumPrd, PrdStart, AccrRate, UserParam
 ```
 GenArrTimes <- function( NumPat, Type = 0, NumPrd, PrdStart, AccrRate, UserParam = NULL )
 {
-  nError        	    <- 0 # Error handling (no error)
+  nError        	      <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumPat ) # Initializing arrival time array to 0
 
   # Write the actual code here.
@@ -227,7 +227,7 @@ GenArrTimes <- function( NumPat, Type = 0, NumPrd, PrdStart, AccrRate, UserParam
 ```
 GenArrTimes <- function( NumSub, Type = 1, RegionName, EnrollmentCapPcnt, AccrRate, UserParam = NULL )
 {
-  nError        	    <- 0 # Error handling (no error)
+  nError        	      <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumSub ) # Initializing arrival time array to 0
 
   # Write the actual code here.
@@ -242,7 +242,7 @@ GenArrTimes <- function( NumSub, Type = 1, RegionName, EnrollmentCapPcnt, AccrRa
 ```
 GenArrTimes <- function( NumPat, Type = 1, RegionName, EnrollmentCapPcnt, AccrRate, UserParam = NULL )
 {
-  nError        	    <- 0 # Error handling (no error)
+  nError        	      <- 0 # Error handling (no error)
   vPatientArrivalTime 	<- rep( 0, NumPat ) # Initializing arrival time array to 0
 
   # Write the actual code here.

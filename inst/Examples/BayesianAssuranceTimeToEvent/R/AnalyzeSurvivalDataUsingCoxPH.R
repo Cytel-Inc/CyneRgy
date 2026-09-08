@@ -91,7 +91,7 @@
 
 AnalyzeSurvivalDataUsingCoxPH <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    nError      <- 0
+    nError     <- 0
     nLookIndex <- 1
 
     if( !is.null( LookInfo ) )

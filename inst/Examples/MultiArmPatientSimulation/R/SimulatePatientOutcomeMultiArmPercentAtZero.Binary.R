@@ -53,8 +53,8 @@ SimulatePatientOutcomeMultiArmPercentAtZero.Binary <- function( NumSub, NumArm, 
     # Loop over the patients and simulate the outcome according to the treatment they
     for( nPatIndx in 1:NumSub )
     {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # Convert to 1-based index
-        probResist                  <- vProbabilityOfTreatmentResistant[ nTreatmentID ]
+        nTreatmentID            <- TreatmentID[ nPatIndx ] + 1 # Convert to 1-based index
+        probResist              <- vProbabilityOfTreatmentResistant[ nTreatmentID ]
 
         # Determine if patient is treatment resistant
         if( probResist > 0 & probResist < 1 )

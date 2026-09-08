@@ -171,7 +171,7 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function( SimData, DesignParam, LookInfo = 
                                                bFAEfficacyCondition = dUpperLimitCI < log( UserParam$dMAV ) )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
-    nError <- 0
+    nError    <- 0
 
     return( list( HazardRatio  = as.double( exp( dLogHR ) ),
                   ErrorCode = as.integer( nError ),

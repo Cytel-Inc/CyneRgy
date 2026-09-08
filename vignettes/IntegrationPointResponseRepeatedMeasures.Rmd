@@ -61,7 +61,7 @@ GenerateResponse <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputm
 {
   nError        	<- 0 # Error handling (no error)
   vOutResponse  	<- c()
-  lReturn           <- list()
+  lReturn         <- list()
 
   # Add code to simulate the patient data as desired.
   # Example of how to create the return list with Response1, Response2, ..., ResponseNumVisit.

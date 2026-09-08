@@ -99,12 +99,12 @@
 
 AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NULL, UserParam = NULL )
 {
-    nError <- 0
-    nDecision <- 0
+    nError         <- 0
+    nDecision      <- 0
     dTestStatistic <- 0
-    dDelta <- NA
-    dSE <- NA
-    dAnalysisTime <- 0
+    dDelta         <- NA
+    dSE            <- NA
+    dAnalysisTime  <- 0
 
     ###########################################################
     ## Step 1 — Data Preparation and Analysis Time Computation

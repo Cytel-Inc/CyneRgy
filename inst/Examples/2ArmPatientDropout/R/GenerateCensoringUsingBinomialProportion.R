@@ -19,7 +19,7 @@
 GenerateCensoringUsingBinomialProportion <- function( NumSub, ProbDrop, UserParam = NULL )
 {
 
-    nError                <- 0
+    nError              <- 0
 
     vCensoringIndicator <- rbinom( n = NumSub, size = 1, prob = 1 - ProbDrop )
 

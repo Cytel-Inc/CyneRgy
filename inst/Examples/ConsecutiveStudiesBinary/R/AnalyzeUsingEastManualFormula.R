@@ -139,10 +139,10 @@ AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo = NULL
 
     # Return TrueDelta, TrueProbabilityControl, TrueProbabilityExperimental
     return( list( TestStat  = as.double( dZj ),
-                ErrorCode = as.integer( nError ),
-                Decision  = as.integer( nDecision ),
-                Delta     = as.double( dPiHatExperimental - dPiHatControl ),
-                TrueDelta = as.double( SimData$TrueProbabilityExperimental[ 1 ] - SimData$TrueProbabilityControl[ 1 ] ),
-                TrueProbabilityControl = as.double( SimData$TrueProbabilityControl[ 1 ] ),
-                TrueProbabilityExperimental = as.double( SimData$TrueProbabilityExperimental[ 1 ] ) ) )
+                  ErrorCode = as.integer( nError ),
+                  Decision  = as.integer( nDecision ),
+                  Delta     = as.double( dPiHatExperimental - dPiHatControl ),
+                  TrueDelta = as.double( SimData$TrueProbabilityExperimental[ 1 ] - SimData$TrueProbabilityControl[ 1 ] ),
+                  TrueProbabilityControl = as.double( SimData$TrueProbabilityControl[ 1 ] ),
+                  TrueProbabilityExperimental = as.double( SimData$TrueProbabilityExperimental[ 1 ] ) ) )
 }

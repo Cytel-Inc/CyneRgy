@@ -50,7 +50,7 @@
 
 BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
 {
-    nError        <- 0
+    nError      <- 0
 
     # Convert the allocation ratio
     vAllocRatio <- ConvertRatio( AllocRatio )

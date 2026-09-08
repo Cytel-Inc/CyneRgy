@@ -23,7 +23,7 @@ GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserP
     # Error > 0 --> Nonfatal error; the current simulation will be aborted, but the next simulation will run
     # Error < 0 --> Fatal Error - No further simulation will be attempted. We suggest that user should classify error in these categories depending on the context.
     # Step 1 - Initialize the return variables or other variables needed ####
-    nError               <- 0
+    nError              <- 0
     vPatientArrivalTime <- c() # Note, as you simulate the patient data put in in this vector so it can be returned
 
     # Step 2 - Validate custom variable input and set defaults ####

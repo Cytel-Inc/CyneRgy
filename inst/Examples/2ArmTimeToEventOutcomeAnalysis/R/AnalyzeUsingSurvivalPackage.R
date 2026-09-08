@@ -135,13 +135,13 @@ AnalyzeUsingSurvivalPackage <- function( SimData, DesignParam, LookInfo = NULL, 
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
                                                bIAEfficacyCondition = dTS <  dEffBdry,
                                                bFAEfficacyCondition = dTS <  dEffBdry )
-    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+    nDecision   <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
-    nError                   <- 0
+    nError      <- 0
 
-    lRet                     <- list( TestStat = as.double( dTS ),
-                                     Decision  = as.integer( nDecision ),
-                                     ErrorCode = as.integer( nError ),
-                                     HazardRatio = as.double( dTrueHR ) )
+    lRet        <- list( TestStat = as.double( dTS ),
+                         Decision  = as.integer( nDecision ),
+                         ErrorCode = as.integer( nError ),
+                         HazardRatio = as.double( dTrueHR ) )
     return( lRet )
 }
