@@ -72,11 +72,7 @@
 #'                  \item{TestStat}{Value of appropriate test statistic on Wald (Z) scale regardless of the efficacy or futility boundary scale for each treatment arm. Vector of numerics or `NA` values having length equal to the number of treatment arms. Arms dropped at a previous look should be `NA`.}
 #'                  \item{Delta}{Estimate of Delta (Difference from Control) for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. Required if Decision is not returned AND Futility Boundary scale is Delta.}
 #'                  \item{AnalysisTime} {Optional Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user. }
-#'                  \item{ErrorCode}{Integer. Optional value \describe{
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
+#'                  \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'                                     }
 #'                      }
 #' @details

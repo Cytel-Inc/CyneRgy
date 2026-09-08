@@ -75,7 +75,13 @@
 #'              of a Bayesian design, you should set dLowerCutoffForFutility = 0
 #'              when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.
 #'              When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed.
-#' @return A named list containing posterior probability `TestStat`, integer `ErrorCode`, integer `Decision`, and estimated response difference `Delta`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the posterior probability that the experimental response rate is greater than the control response rate.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#'     \item{Delta}{A numeric scalar containing the estimated difference between the experimental and control response rates.}
+#' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

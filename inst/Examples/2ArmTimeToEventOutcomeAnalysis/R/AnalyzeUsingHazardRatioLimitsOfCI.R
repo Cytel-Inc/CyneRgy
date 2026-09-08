@@ -75,7 +75,12 @@
 #'  At the Final Analysis: If UL < UserParam$dMAV  then a Go decision is made, otherwise, a No Go decision is made.
 #'
 #'
-#' @return A named list containing `HazardRatio`, `ErrorCode`, and `Decision`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{HazardRatio}{A numeric scalar containing the observed hazard ratio for experimental relative to control.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#' }
 #'@note In this example, the boundary information that is computed and sent from East Horizon is ignored in order to implement this decision approach.
 #' @details
 #' ## CyneRgy Decision Helpers

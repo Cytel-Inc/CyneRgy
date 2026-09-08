@@ -38,6 +38,7 @@
 #'          \item{DecisionOutcome[X]Covariate[Y]}{Binary decisions (1 = significant, 0 = not significant) for endpoint X for covariate Y}
 #'          \item{PValueOutcome[X]Trt}{p-value for endpoint X for treatment}
 #'          \item{PValueOutcome[X]Covariate[Y]} {p-value for endpoint X for covariate Y}
+#'          \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'        }
 #' @examples
 #'
@@ -119,6 +120,7 @@ AnalyzeMultipleOutcomesCovariatesStratRandomization <- function( SimData, Design
 
     # Return the analysis results, sample sizes of each group and means of outcomes
     lReturn <- list( Decision       = as.integer( 1 ),
+                     ErrorCode     = as.integer( 0 ),
                      SampleSizeCtrl = as.integer( nSampleSizeCtrl ),
                      SampleSizeTrt  = as.integer( nSampleSizeTrt ) )
 

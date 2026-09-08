@@ -42,7 +42,7 @@
 #'          \item{Covariate2}{Binary vector of simulated values for covariate 2}
 #'          \item{PatientTreatmentID} {Vector of integer values where 0 indicates assignment to control group and 1 - to treatment group }
 #'          \item{Response}{Placeholder, always a numeric vector of zeros (reserved for compatibility with other functions)}
-#'          \item{ErrorCode}{Integer. 0 if successful, 1 if `UserParam` is NULL}
+#'          \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation. In this function, ErrorCode = 1 indicates that `UserParam` is `NULL`.}
 #'        }
 #'
 #' @examples

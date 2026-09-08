@@ -59,11 +59,7 @@
 #'                  \item{POCStatus}{Overall Proof of Concept status. Integer scalar (0 or 1). 1 = PoC threshold crossed overall, 0 = not crossed. Determined by highest dose arm. Optional - Dose Finding only.}
 #'                  \item{AnalysisTime}{Optional Numeric scalar. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis.}
 #'                  \item{OutList}{List or NULL. Pass-through list to next look for multi-look tracking. Optional.}
-#'                  \item{ErrorCode}{Integer. Optional value \describe{
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
+#'                  \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'                                     }
 #'                      }
 #' @details This function implements Fixed Sequence Pairwise testing for dose-finding studies with continuous endpoints.

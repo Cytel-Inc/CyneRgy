@@ -29,7 +29,7 @@
 #'          \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2}
 #'          \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}
 #'          \item{Response}{Placeholder, always a numeric vector of zeros (reserved for compatibility with other functions)}
-#'          \item{ErrorCode}{Integer. 0 if successful, 1 if `UserParam` is NULL}
+#'          \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation. In this function, ErrorCode = 1 indicates that `UserParam` is `NULL`.}
 #'        }
 #'
 #' @examples

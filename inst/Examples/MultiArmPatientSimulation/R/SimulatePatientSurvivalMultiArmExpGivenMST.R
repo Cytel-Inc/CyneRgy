@@ -20,7 +20,7 @@
 #' @return List containing:
 #'         \describe{
 #'           \item{SurvivalTime}{Numeric vector of generated survival times.}
-#'           \item{ErrorCode}{Integer error code. 0 indicates success and -100 indicates invalid output generation.}
+#'           \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation. In this function, ErrorCode = -100 indicates invalid output generation.}
 #'         }
 ######################################################################################################################## .
 

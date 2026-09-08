@@ -32,6 +32,7 @@
 #'          \item{SampleSizeTrt}{Number of patients in the treatment group}
 #'          \item{MeanOutcome[X]Ctrl}{Mean outcome for the control group for endpoint X, where X = 1, 2, 3}
 #'          \item{MeanOutcome[X]Trt}{Mean outcome for the treatment group for endpoint X, where X = 1, 2, 3}
+#'          \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'        }
 #' @examples
 #'
@@ -61,41 +62,40 @@
 
 AnalyzeMultipleOutcomes <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-
     # Extract Type I error
     dAlpha <- DesignParam$Alpha
 
-  # Create a vector of simulated data generated in 'Response' card
+    # Create a vector of simulated data generated in 'Response' card
     vPatientOutcomes <- as.list( SimData[ , grep( "PatientOutcome", names( SimData ) ) ] )
 
-  # Create a vector of treatment assignments
+    # Create a vector of treatment assignments
     vTreatmentID <- SimData$TreatmentID
 
-  # Determine the number of patients in each group
+    # Determine the number of patients in each group
     nSampleSizeCtrl <- sum( vTreatmentID == 0 )
     nSampleSizeTrt <- sum( vTreatmentID == 1 )
 
-  # Determine the number of endpoints
+    # Determine the number of endpoints
     nQtyOfEndpoints <- length( vPatientOutcomes )
 
-  # Initialize vectors to store results for each endpoint
+    # Initialize vectors to store results for each endpoint
     vPValue <- rep( NA, nQtyOfEndpoints )
     vDecision <- rep( NA, nQtyOfEndpoints )
 
     vMeanOutcomeCtrl <- rep( NA, nQtyOfEndpoints )
     vMeanOutcomeTrt <- rep( NA, nQtyOfEndpoints )
 
-  # Run t-test for each endpoint
+    # Run t-test for each endpoint
     for( i in 1:nQtyOfEndpoints )
     {
         vPatientOutcomeCtrl <- vPatientOutcomes[[ i ] ][ vTreatmentID == 0 ]
         vPatientOutcomeTrt <- vPatientOutcomes[[ i ] ][ vTreatmentID == 1 ]
 
-      vMeanOutcomeCtrl[ i ] <- mean( vPatientOutcomeCtrl )
-      vMeanOutcomeTrt[ i ] <- mean( vPatientOutcomeTrt )
+        vMeanOutcomeCtrl[ i ] <- mean( vPatientOutcomeCtrl )
+        vMeanOutcomeTrt[ i ] <- mean( vPatientOutcomeTrt )
 
-      lAnalysisResult <- t.test( vPatientOutcomeTrt, vPatientOutcomeCtrl, alternative = "greater",
-              var.equal = TRUE )
+        lAnalysisResult <- t.test( vPatientOutcomeTrt, vPatientOutcomeCtrl, alternative = "greater",
+            var.equal = TRUE )
 
         vPValue[ i ] <- lAnalysisResult$p.value
         vDecision[ i ] <- as.integer( vPValue[ i ] <= dAlpha )
@@ -103,20 +103,21 @@ AnalyzeMultipleOutcomes <- function( SimData, DesignParam, LookInfo = NULL, User
 
   # Return the analysis results, sample sizes of each group and means of outcomes
     lReturn <- list( Decision         = as.integer( 1 ),
-             DecisionOutcome1 = as.integer( vDecision[ 1 ] ),
-             DecisionOutcome2 = as.integer( vDecision[ 2 ] ),
-             DecisionOutcome3 = as.integer( vDecision[ 3 ] ),
-             PValueOutcome1   = as.double( vPValue[ 1 ] ),
-             PValueOutcome2   = as.double( vPValue[ 2 ] ),
-             PValueOutcome3   = as.double( vPValue[ 3 ] ),
-             SampleSizeCtrl   = as.integer( nSampleSizeCtrl ),
-             SampleSizeTrt    = as.integer( nSampleSizeTrt ),
-             MeanOutcome1Ctrl = as.double( vMeanOutcomeCtrl[ 1 ] ),
-             MeanOutcome1Trt  = as.double( vMeanOutcomeTrt[ 1 ] ),
-             MeanOutcome2Ctrl = as.double( vMeanOutcomeCtrl[ 2 ] ),
-             MeanOutcome2Trt  = as.double( vMeanOutcomeTrt[ 2 ] ),
-             MeanOutcome3Ctrl = as.double( vMeanOutcomeCtrl[ 3 ] ),
-             MeanOutcome3Trt  = as.double( vMeanOutcomeTrt[ 3 ] ) )
+                     ErrorCode        = as.integer( 0 ),
+                     DecisionOutcome1 = as.integer( vDecision[ 1 ] ),
+                     DecisionOutcome2 = as.integer( vDecision[ 2 ] ),
+                     DecisionOutcome3 = as.integer( vDecision[ 3 ] ),
+                     PValueOutcome1   = as.double( vPValue[ 1 ] ),
+                     PValueOutcome2   = as.double( vPValue[ 2 ] ),
+                     PValueOutcome3   = as.double( vPValue[ 3 ] ),
+                     SampleSizeCtrl   = as.integer( nSampleSizeCtrl ),
+                     SampleSizeTrt    = as.integer( nSampleSizeTrt ),
+                     MeanOutcome1Ctrl = as.double( vMeanOutcomeCtrl[ 1 ] ),
+                     MeanOutcome1Trt  = as.double( vMeanOutcomeTrt[ 1 ] ),
+                     MeanOutcome2Ctrl = as.double( vMeanOutcomeCtrl[ 2 ] ),
+                     MeanOutcome2Trt  = as.double( vMeanOutcomeTrt[ 2 ] ),
+                     MeanOutcome3Ctrl = as.double( vMeanOutcomeCtrl[ 3 ] ),
+                     MeanOutcome3Trt  = as.double( vMeanOutcomeTrt[ 3 ] ) )
 
     return( lReturn )
 }

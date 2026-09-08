@@ -57,12 +57,7 @@
 #'         \describe{
 #'             \item{SurvivalTime}{A vector of simulated PFS times for each subject.}
 #'             \item{OS}{A vector of simulated OS times for each subject.}
-#'             \item{ErrorCode}{Optional integer value:
-#'                      \describe{
-#'                        \item{0}{No error.}
-#'                        \item{> 0}{Non-fatal error; current simulation is aborted but subsequent simulations continue.}
-#'                        \item{< 0}{Fatal error; no further simulations are attempted.}
-#'                      }}
+#'             \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'             }
 ######################################################################################################################## .
 

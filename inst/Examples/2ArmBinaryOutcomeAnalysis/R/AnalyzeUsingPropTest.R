@@ -52,7 +52,12 @@
 #' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon as an input.
 #'              This example does NOT include a futility rule.
 #'
-#' @return A named list containing `TestStat`, `ErrorCode`, and `Decision`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the two-sample proportion test statistic on the Z scale.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

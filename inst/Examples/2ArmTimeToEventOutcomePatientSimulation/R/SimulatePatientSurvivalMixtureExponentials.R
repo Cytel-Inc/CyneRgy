@@ -30,7 +30,12 @@
 #'  subgroup you specify the median time-to-event for the control and experimental treatments as well as the probability a patient belongs in a specific group.
 #'  The required function signature for integration with East Horizon includes the SurvMethod, NumPrd, PrdTime and SurvParam which are ignored in this function
 #'  and only the parameters in UserParam are utilized.
-#' @return A named list containing `SurvivalTime`, simulated `Subgroup` assignments, and integer `ErrorCode`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{SurvivalTime}{A numeric vector of length `NumSub` containing the simulated survival times.}
+#'     \item{Subgroup}{An integer vector of length `NumSub` containing the simulated subgroup assignments.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 
 SimulatePatientSurvivalMixtureExponentials <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )

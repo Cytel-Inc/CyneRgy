@@ -54,7 +54,12 @@
 #'              The test statistic is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
 #'              Two sample Z test for Normal distribution. Number of Looks > 1.
 #'
-#' @return A named list containing `TestStat`, `ErrorCode`, and `Decision`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the two-sample test statistic on the Z scale.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

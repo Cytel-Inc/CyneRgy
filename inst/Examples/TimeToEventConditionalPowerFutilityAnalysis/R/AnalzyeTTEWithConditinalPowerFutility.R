@@ -72,10 +72,7 @@
 #'       2 = Upper efficacy boundary crossed,
 #'       3 = Futility boundary crossed,
 #'       4 = Equivalence boundary crossed.}
-#'     \item{ErrorCode}{Integer. Error status:
-#'       0 = No error,
-#'       >0 = Nonfatal error (current simulation aborted, others continue),
-#'       <0 = Fatal error (all simulations aborted).}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'     \item{dConditionalPower}{Numeric. The conditional power at the current analysis (–1 if not computed).}
 #'   }
 #' @details

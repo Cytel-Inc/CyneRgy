@@ -20,10 +20,7 @@
 #' @return A list with the following components:
 #'   \describe{
 #'     \item{TreatmentID}{Integer vector. Treatment assignment for each subject (0 = Control, 1 = Treatment).}
-#'     \item{ErrorCode}{Integer. Error code: 0 = No error;
-#'                                          >0 = Non-fatal error (current simulation aborted, next simulations will run);
-#'                                          <0 = Fatal error (no further simulation attempted).
-#'     }
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'   }
 ######################################################################################################################## .
 

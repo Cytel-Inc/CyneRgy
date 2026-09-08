@@ -115,11 +115,7 @@
 #'                  \item{Decision}{Required value. A list of decisions on both endpoints: 0 - No Boundary Crossed, 1 - Lower Efficacy Boundary Crossed, 2 - Upper Efficacy Boundary Crossed, 4 - Futility Boundary Crossed.}
 #'                  \item{Outlist}{Optional list of quantities to pass to the next look. This will be available as inputs to this function in the next look.
 #'                            Only applicable for Group Sequential Design. Supported data types are lists, and scalar and vector of type numeric, integer and character.}
-#'                  \item{ErrorCode}{Optional integer value \describe{
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }}
+#'                  \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'             }
 #'
 #'

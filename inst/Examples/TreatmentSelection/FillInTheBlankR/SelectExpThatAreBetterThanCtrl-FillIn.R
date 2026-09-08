@@ -52,8 +52,12 @@
 #'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
 #'                      \item{RejType}{Integer. Rejection Type. Values are: 1 Sided Efficacy Upper: 0, 1 Sided Futility Upper: 1, 1 Sided Efficacy Lower: 2, 1 Sided Futility Lower: 3, 1 Sided Efficacy Upper Futility Lower: 4, 1 Sided Efficacy Lower Futility Upper: 5}
 #'                 }
-#' @return A list containing `TreatmentID`, the selected experimental-arm indexes;
-#'   `AllocRatio`, their allocation ratios relative to control; and integer `ErrorCode`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TreatmentID}{An integer vector containing the selected experimental-arm indexes.}
+#'     \item{AllocRatio}{A numeric vector containing the allocation ratio for each selected experimental arm relative to control.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 
 SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo )

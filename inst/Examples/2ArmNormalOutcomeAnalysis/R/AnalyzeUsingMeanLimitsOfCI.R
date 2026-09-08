@@ -69,7 +69,13 @@
 #'                  if UL < UserParam$dTV --> No-Go
 #'               Otherwise, continue to the next analysis.
 #'               At the Final Analysis: If LL > UserParam$dMAV  then a Go decision is made, otherwise, a No-Go decision is made
-#' @return A named list containing `TestStat`, `ErrorCode`, `Decision`, and `Delta`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the lower confidence limit for the difference in means.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#'     \item{Delta}{A numeric scalar containing the estimated experimental mean minus the control mean.}
+#' }
 #' @note This function is only applicable to the case where MAV <= TV.
 #'       In this example, the boundary information that is computed and sent from East Horizon is ignored in order to implement this decision approach.
 #' @details

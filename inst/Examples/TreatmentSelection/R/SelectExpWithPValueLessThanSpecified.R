@@ -58,8 +58,12 @@
 #'  \item{UserParam$dMaxPValue}{A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance.
 #'       Any treatment with less than the specified p-value will be advanced to the second stage}
 #'           }
-#' @return A list containing `TreatmentID`, the selected experimental-arm indexes;
-#'   `AllocRatio`, their allocation ratios relative to control; and integer `ErrorCode`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TreatmentID}{An integer vector containing the selected experimental-arm indexes.}
+#'     \item{AllocRatio}{A numeric vector containing the allocation ratio for each selected experimental arm relative to control.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 
 SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo, UserParam = NULL )

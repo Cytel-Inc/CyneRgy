@@ -20,12 +20,7 @@
 #'         \describe{
 #'          \item{Response}{Integer vector of binary response outcomes}
 #'          \item{PFSNonCens}{Numeric vector of PFS times relative to patient enrollment}
-#'          \item{ErrorCode}{Status code indicating success or error type:
-#'              \describe{
-#'                \item{ErrorCode = 0}{No Error}
-#'                \item{ErrorCode = -1}{Hazard ratio parameters (HR1...HRn) are missing or not consecutive}
-#'                \item{ErrorCode = -2}{NA or invalid values encountered in simulation output}
-#'              }}
+#'          \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation. In this function, ErrorCode = -1 indicates missing or nonconsecutive hazard-ratio parameters, and ErrorCode = -2 indicates invalid values in the simulation output.}
 #'         }
 ######################################################################################################################## .
 

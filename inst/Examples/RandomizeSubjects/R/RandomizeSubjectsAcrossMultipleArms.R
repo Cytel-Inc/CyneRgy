@@ -22,12 +22,7 @@
 #'                                    \item{TreatmentID = n}{ Subject allotted to Experimental arm n where n >=1 }
 #'                                    }
 #'                                    }
-#'                  \item{ErrorCode}{Optional integer value \describe{
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
+#'                  \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'                      }
 #'
 ######################################################################################################################## .

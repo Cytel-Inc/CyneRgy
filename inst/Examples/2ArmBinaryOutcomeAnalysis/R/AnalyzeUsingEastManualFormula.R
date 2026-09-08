@@ -51,7 +51,13 @@
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @description Use the formula 28.2 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
 #'              The test statistic is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
-#' @return A named list containing `TestStat`, `ErrorCode`, `Decision`, and `Delta`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the Wald test statistic on the Z scale.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#'     \item{Delta}{A numeric scalar containing the estimated experimental response rate minus the control response rate.}
+#' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

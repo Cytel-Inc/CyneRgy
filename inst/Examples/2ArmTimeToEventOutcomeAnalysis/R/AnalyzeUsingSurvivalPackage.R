@@ -50,7 +50,13 @@
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #' @description Use the survival package to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
 #'              The test statistic is compared to the lower boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
-#' @return A named list containing `TestStat`, `Decision`, `ErrorCode`, and `HazardRatio`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the survival-analysis test statistic.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{HazardRatio}{A numeric scalar containing the observed hazard ratio for experimental relative to control.}
+#' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

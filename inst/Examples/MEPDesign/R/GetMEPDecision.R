@@ -107,7 +107,7 @@
 #'     \item StdErr: Vector of Standard errors (optional)
 #'     \item PropPld: Vector of pooled proportion (optional)
 #'     \item SDPld: Vector of pooled standard deviation (optional)
-#'     \item ErrorCode: Error code if any errors occurred (optional)
+#'     \item ErrorCode: An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.
 #'   }
 #' @examples
 #' # Example implementation for a trial with an arbitrary number of endpoints. Check for Futility only where Efficacy is checked
@@ -211,7 +211,8 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, Design
         }
     }
 
-    lRet <- list( Decision = Decision )
+    lRet <- list( Decision = Decision,
+                  ErrorCode = as.integer( 0 ) )
 
     return( lRet )
 }

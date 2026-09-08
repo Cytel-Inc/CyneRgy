@@ -68,7 +68,13 @@
 #'                  if UL < UserParam$dUpperLimit --> No Go
 #'               Otherwise, continue to the next analysis.
 #'               At the Final Analysis: If LL > UserParam$dLowerLimit  then a Go decision is made, otherwise, a No Go decision is made
-#' @return A named list containing `TestStat`, `ErrorCode`, `Decision`, and `Delta`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the lower confidence limit for the difference in response rates.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#'     \item{Delta}{A numeric scalar containing the estimated experimental response rate minus the control response rate.}
+#' }
 #'@note In this example, the boundary information that is computed and sent from East Horizon is ignored in order to implement this decision approach.
 #' @details
 #' ## CyneRgy Decision Helpers

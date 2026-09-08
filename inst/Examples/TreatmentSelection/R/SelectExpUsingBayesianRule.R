@@ -64,8 +64,12 @@
 #'  \item{UserParam$dMinPosteriorProbability}{A value (0, 1) that specifies the posterior probability needed of being greater than the historic response rate for an experimental treatment to be selected.
 #'                              If this value is not specified, the default is 0.5.}
 #'           }
-#' @return A list containing `TreatmentID`, the selected experimental-arm indexes;
-#'   `AllocRatio`, their allocation ratios relative to control; and integer `ErrorCode`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TreatmentID}{An integer vector containing the selected experimental-arm indexes.}
+#'     \item{AllocRatio}{A numeric vector containing the allocation ratio for each selected experimental arm relative to control.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 
 SelectExpUsingBayesianRule <- function( SimData, DesignParam, LookInfo, UserParam = NULL )

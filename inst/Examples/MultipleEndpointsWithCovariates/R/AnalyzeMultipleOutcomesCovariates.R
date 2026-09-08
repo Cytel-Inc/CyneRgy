@@ -25,19 +25,19 @@
 #'   }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
 #'
-#' @return A named list containing elements as described below. Note that the return list expands dynamically depending on the
-#' number of endpoints (X) and covariates (Y).
-#'        \describe{
-#'          \item{Decision}{Placeholder value (always 1)}
-#'          \item{SampleSizeCtrl}{Number of patients in the control group}
-#'          \item{SampleSizeTrt}{Number of patients in the treatment group}
-#'          \item{MeanOutcome[X]Ctrl}{Mean outcome for the control group for endpoint X}
-#'          \item{MeanOutcome[X]Trt}{Mean outcome for the treatment group for endpoint X}
-#'          \item{DecisionOutcome[X]Trt}{Binary decisions (1 = significant, 0 = not significant) for treatment effect for endpoint X}
-#'          \item{DecisionOutcome[X]Covariate[Y]}{Binary decisions (1 = significant, 0 = not significant) for endpoint X for covariate Y}
-#'          \item{PValueOutcome[X]Trt}{p-value for endpoint X for treatment}
-#'          \item{PValueOutcome[X]Covariate[Y]} {p-value for endpoint X for covariate Y}
-#'        }
+#' @return A list that contains:
+#' \describe{
+#'     \item{Decision}{An integer scalar placeholder with value 1.}
+#'     \item{SampleSizeCtrl}{An integer scalar containing the number of patients assigned to control.}
+#'     \item{SampleSizeTrt}{An integer scalar containing the number of patients assigned to treatment.}
+#'     \item{MeanOutcome[X]Ctrl}{A numeric scalar containing the mean of endpoint X in the control group, for each endpoint X.}
+#'     \item{MeanOutcome[X]Trt}{A numeric scalar containing the mean of endpoint X in the treatment group, for each endpoint X.}
+#'     \item{DecisionOutcome[X]Trt}{An integer decision for the treatment effect on endpoint X: 1 indicates significance and 0 indicates non-significance.}
+#'     \item{DecisionOutcome[X]Covariate[Y]}{An integer decision for covariate Y on endpoint X: 1 indicates significance and 0 indicates non-significance.}
+#'     \item{PValueOutcome[X]Trt}{A numeric p-value for the treatment effect on endpoint X.}
+#'     \item{PValueOutcome[X]Covariate[Y]}{A numeric p-value for covariate Y on endpoint X.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 #'
 #' @examples
 #'
@@ -101,7 +101,7 @@ AnalyzeMultipleOutcomesCovariates <- function( SimData, DesignParam, LookInfo = 
     {
         # Compute group means
         vMeanOutcomeCtrl[ i ]  <- mean( lPatientOutcomes[[ i ] ][ vTreatmentID == 0 ] )
-        vMeanOutcomeTrt[ i ] <- mean( lPatientOutcomes[[ i ] ][ vTreatmentID == 1 ] )
+        vMeanOutcomeTrt[ i ]   <- mean( lPatientOutcomes[[ i ] ][ vTreatmentID == 1 ] )
 
         # Build formula dynamically: outcome ~ TreatmentID + Covariate 1 + Covariate 2
         strPartOfFormula <- paste( c( "vTreatmentID", paste0( "lCovariates[[ ", seq_len( nQtyOfCovariates ), " ]]" ) ),
@@ -118,6 +118,7 @@ AnalyzeMultipleOutcomesCovariates <- function( SimData, DesignParam, LookInfo = 
 
     # Return the analysis results, sample sizes of each group and means of outcomes
     lReturn <- list( Decision       = as.integer( 1 ),
+                     ErrorCode      = as.integer( 0 ),
                      SampleSizeCtrl = as.integer( nSampleSizeCtrl ),
                      SampleSizeTrt  = as.integer( nSampleSizeTrt ) )
 

@@ -19,7 +19,11 @@
 #'                    User should access the variables using names, for example UserParam$Var1 and not order.
 #'                    These variables can be of the following types: Integer, Numeric, or Character
 #'
-#' @return A named list containing numeric vector `DropOutTime` and integer `ErrorCode`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{DropOutTime}{A numeric vector of length `NumSub` containing dropout times. `Inf` indicates no dropout.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
 {

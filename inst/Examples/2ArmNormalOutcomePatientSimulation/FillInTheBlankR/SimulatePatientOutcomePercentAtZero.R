@@ -17,7 +17,11 @@
 #' In this example, the continuous outcome is a patient's change from baseline.   For this function, 20\% of patients are believed to have no change due to treatment.
 #' As such, this function simulations patient outcome where, on average, 20\% will have a value of 0 for the outcome and 80\%, on average, will have their value
 #' simulated from a normal distribution with the mean and standard deviation as sent from East Horizon.
-#' @return After the blanks are completed, a named list containing numeric vector `Response` and integer `ErrorCode`.
+#' @return After the blanks are completed, a list that contains:
+#' \describe{
+#'     \item{Response}{A numeric vector of simulated patient outcomes with length `NumSub`.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 SimulatePatientOutcomePercentAtZero <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {

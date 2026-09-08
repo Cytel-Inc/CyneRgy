@@ -23,7 +23,11 @@
 #'  UserParam$dProbOfTreatmentResistantExp
 #'  Step 2: If the value in Step 1, indicating the patient is treatment resistant then their outcome is set to 0, otherwise the simulate their
 #'  outcome from a binomial distribution using the response probabilities provided in PropRest.
-#' @return A named list containing `Response`, a binary vector of length `NumSub`, and integer `ErrorCode`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{Response}{A binary numeric vector of length `NumSub`, containing one simulated outcome per subject.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
 {

@@ -21,7 +21,11 @@
 #' The probability of 0 outcome on the control treatment is sampled from a Beta( UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 ) distribution.
 #' The probability of 0 outcome on the experimental treatment is sampled from a Beta( UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution.
 #' The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.
-#' @return After the blanks are completed, a named list containing numeric vector `Response` and integer `ErrorCode`.
+#' @return After the blanks are completed, a list that contains:
+#' \describe{
+#'     \item{Response}{A numeric vector of simulated patient outcomes with length `NumSub`.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 SimulatePatientOutcomePercentAtZeroBetaDist <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, ________________________ )
 {

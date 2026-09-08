@@ -14,7 +14,13 @@
 #'     \item{NumVisit}{Number of repeated-measures visits.}
 #'   }
 #' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#' @return A named list containing `TestStat`, `PrimDelta`, `SecDelta`, and `ErrorCode`.
+#' @return A list that contains:
+#' \describe{
+#'     \item{TestStat}{A numeric scalar containing the analysis test statistic.}
+#'     \item{PrimDelta}{A numeric scalar containing the estimated primary endpoint treatment effect.}
+#'     \item{SecDelta}{A numeric scalar containing the estimated secondary endpoint treatment effect.}
+#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 
 MMRMAna <- function( SimData, DesignParam, UserParam = NULL )

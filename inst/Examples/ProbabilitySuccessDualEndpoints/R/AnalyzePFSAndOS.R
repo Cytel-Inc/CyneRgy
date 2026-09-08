@@ -87,7 +87,7 @@
 #'           \item{dEffBdry}{Efficacy boundary value for the current look.}
 #'           \item{HazardRatioCutoffIA}{Hazard ratio threshold for interim analysis.}
 #'           \item{HazardRatioCutoffFA}{Hazard ratio threshold for final analysis.}
-#'           \item{ErrorCode}{Integer error code; `0` indicates no error.}
+#'           \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'           \item{HazardRatio}{PFS hazard ratio supplied for observed-hazard-ratio output.}
 #'         }
 #' @details
