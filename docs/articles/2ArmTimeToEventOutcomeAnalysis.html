@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Anoop Singh
 Rawat, Shubham Lahoti, and Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>2ArmTimeToEventOutcomeAnalysis.Rmd</code></div>
@@ -162,12 +162,10 @@ patient outcomes modeled as time-to-event data. The design includes two
 interim analyses (IA) and one final analysis (FA). At each IA, an
 analysis is conducted which may lead to early stopping for efficacy or
 futility, depending on the predefined design criteria.</p>
-<p>Once CyneRgy is installed, you can load this example in RStudio with
-the following commands:</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmTimeToEventOutcomeAnalysis"</span> <span class="op">)</span></span></code></pre></div>
-<p>Running the command above will load the RStudio project in
-RStudio.</p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/2ArmTimeToEventOutcomeAnalysis.Rproj" class="external-link">2ArmTimeToEventOutcomeAnalysis.Rproj</a></p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
@@ -245,7 +243,7 @@ is the total number of subjects at risk just before time
 <p><strong>Denominator of Test Statistic:</strong></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Den</mtext><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><msubsup><mi>W</mi><mi>i</mi><mn>2</mn></msubsup><mo>⋅</mo><msub><mtext mathvariant="normal">Den</mtext><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\text{Den} = \sum_{i=1}^MW_i^2 \cdot \text{Den}_i</annotation></semantics></math></p>
 <p>With:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">Den</mtext><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>n</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><msub><mi>n</mi><mrow><mi>i</mi><mo>,</mo><mi>c</mi></mrow></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mi>d</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><msub><mi>d</mi><mi>i</mi></msub></mrow><mrow><msubsup><mi>n</mi><mi>i</mi><mn>2</mn></msubsup><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{Den}_i = \frac{n_{i,t} \cdot n_{i,c} \cdot (n_i - d_i) \cdot d_i}{n_i^2 \cdot (n_i - 1)}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">Den</mtext><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>n</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><msub><mi>n</mi><mrow><mi>i</mi><mo>,</mo><mi>c</mi></mrow></msub><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mi>d</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><msub><mi>d</mi><mi>i</mi></msub></mrow><mrow><msubsup><mi>n</mi><mi>i</mi><mn>2</mn></msubsup><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{Den}_i = \frac{n_{i,t} \cdot n_{i,c} \cdot (n_i - d_i) \cdot d_i}{n_i^2 \cdot (n_i - 1)}</annotation></semantics></math></p>
 <p>The objective is to demonstrate a straightforward way to modify both
 the analysis and decision-making process. The computed test statistic is
 compared to the efficacy boundary provided by East Horizon or East as
@@ -313,10 +311,10 @@ CIs are constructed to inform decision-making. Specifically:</p>
 <li>Let LL and UL be the lower and upper limits of the confidence
 interval for the log HR.</li>
 <li>If
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>L</mi><mo>&lt;</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">MAV</mtext><mo stretchy="true" form="postfix">)</mo></mrow><mo>→</mo><mtext mathvariant="normal">Go</mtext></mrow><annotation encoding="application/x-tex">UL &lt; \log(\text{MAV}) \rightarrow \text{Go}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>L</mi><mo>&lt;</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">MAV</mtext><mo stretchy="false" form="postfix">)</mo><mo>→</mo><mtext mathvariant="normal">Go</mtext></mrow><annotation encoding="application/x-tex">UL &lt; \log(\text{MAV}) \rightarrow \text{Go}</annotation></semantics></math>
 </li>
 <li>If
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mi>L</mi><mo>&gt;</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">TV</mtext><mo stretchy="true" form="postfix">)</mo></mrow><mo>→</mo><mtext mathvariant="normal">No-Go</mtext></mrow><annotation encoding="application/x-tex">LL &gt; \log(\text{TV}) \rightarrow \text{No-Go}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mi>L</mi><mo>&gt;</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">TV</mtext><mo stretchy="false" form="postfix">)</mo><mo>→</mo><mtext mathvariant="normal">No-Go</mtext></mrow><annotation encoding="application/x-tex">LL &gt; \log(\text{TV}) \rightarrow \text{No-Go}</annotation></semantics></math>
 </li>
 <li>Otherwise
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
@@ -325,7 +323,7 @@ Continue to the next analysis</li>
 <p><strong>At Final Analysis</strong></p>
 <ul>
 <li>If
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>L</mi><mo>&lt;</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">MAV</mtext><mo stretchy="true" form="postfix">)</mo></mrow><mo>→</mo><mtext mathvariant="normal">Go</mtext></mrow><annotation encoding="application/x-tex">UL &lt; \log(\text{MAV}) \rightarrow \text{Go}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mi>L</mi><mo>&lt;</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">MAV</mtext><mo stretchy="false" form="postfix">)</mo><mo>→</mo><mtext mathvariant="normal">Go</mtext></mrow><annotation encoding="application/x-tex">UL &lt; \log(\text{MAV}) \rightarrow \text{Go}</annotation></semantics></math>
 </li>
 <li>Otherwise
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
@@ -394,13 +392,13 @@ target cumulative number of events implied by the current information
 fraction. Survival data are censored at this analysis time, and a
 log-rank–style standardized Z-statistic is computed based on the
 observed and expected number of events in the treatment arm:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><msub><mi>O</mi><mi>T</mi></msub><mo>−</mo><msub><mi>E</mi><mi>T</mi></msub></mrow><msqrt><mrow><mtext mathvariant="normal">Var</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>O</mi><mi>T</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">Z = \frac{O_T - E_T}{\sqrt{ \text{Var}(O_T) }}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><msub><mi>O</mi><mi>T</mi></msub><mo>−</mo><msub><mi>E</mi><mi>T</mi></msub></mrow><msqrt><mrow><mtext mathvariant="normal">Var</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>O</mi><mi>T</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">Z = \frac{O_T - E_T}{\sqrt{ \text{Var}(O_T) }}</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>O</mi><mi>T</mi></msub><annotation encoding="application/x-tex">O_T</annotation></semantics></math>
 is the observed number of events in the treatment arm,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>E</mi><mi>T</mi></msub><annotation encoding="application/x-tex">E_T</annotation></semantics></math>
 is the expected number of events under the null hypothesis, and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Var</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>O</mi><mi>T</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\text{Var}(O_T)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Var</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>O</mi><mi>T</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{Var}(O_T)</annotation></semantics></math>
 is the corresponding variance. Under the proportional hazards
 assumption, this statistic is asymptotically standard normal.</p>
 <p>In addition, a Cox proportional hazards model is fit to the observed
@@ -585,7 +583,7 @@ outlining the general steps performed by the R code.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

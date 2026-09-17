@@ -1,71 +1,43 @@
-# Determine Decision Based on Decision String, Design and Look Information
+# Convert a Decision Label to an Integration Decision Value
 
-This function takes a string indicating the desired decision
-("Efficacy", "Futility", or "Continue"), design parameters, and look
-information, and returns the appropriate decision value. If `LookInfo`
-is not NULL, the function uses `LookInfo$RejType` to help determine the
-design type:
+Converts `"Efficacy"`, `"Futility"`, or `"Continue"` into the integer
+decision value expected by the analysis integration point. The result
+depends on the tail direction, the boundaries enabled by
+`LookInfo$RejType`, and whether the current look is interim or final.
 
-- **LookInfo\$RejType Codes**:
+Supported `LookInfo$RejType` values are:
 
-  - *Efficacy Only*:
+- `0` or `2`: efficacy boundary only.
 
-    - 1-Sided Efficacy Upper = 0
+- `1` or `3`: futility boundary only.
 
-    - 1-Sided Efficacy Lower = 2
+- `4` or `5`: efficacy and futility boundaries.
 
-  - *Futility Only*:
-
-    - 1-Sided Futility Upper = 1
-
-    - 1-Sided Futility Lower = 3
-
-  - *Efficacy and Futility*:
-
-    - 1-Sided Efficacy Upper & Futility Lower = 4
-
-    - 1-Sided Efficacy Lower & Futility Upper = 5
-
-  - *Additional Scenarios Not in East Horizon Explore*:
-
-    - 2-Sided Efficacy Only = 6
-
-    - 2-Sided Futility Only = 7
-
-    - 2-Sided Efficacy & Futility = 8
-
-    - Equivalence = 9
-
-The function also uses `DesignParam$TailType` to determine tail
-direction:
-
-- 0: Left-tailed
-
-- 1: Right-tailed
-
-Based on the design type and tail direction, the function evaluates the
-decision and returns the corresponding integer decision value. Errors
-are raised for invalid input combinations.
+A fixed design is represented by `LookInfo = NULL` and is treated as an
+efficacy-only final analysis.
 
 ## Usage
 
 ``` r
-GetDecision(strDecision, DesignParam, LookInfo)
+GetDecision(strDecision, DesignParam, LookInfo = NULL)
 ```
 
 ## Arguments
 
 - strDecision:
 
-  A string indicating the desired decision: "Efficacy", "Futility", or
-  "Continue".
+  Character string equal to `"Efficacy"`, `"Futility"`, or `"Continue"`.
 
 - DesignParam:
 
-  A list containing design parameters sent from East Horizon Explore to
-  the R integration for analysis.
+  List containing `TailType`, where `0` is left-tailed and `1` is
+  right-tailed.
 
 - LookInfo:
 
-  A list containing look information sent from East Horizon Explore to
-  the R integration for analysis.
+  Optional list containing `RejType`, `CurrLookIndex`, and `NumLooks`.
+
+## Value
+
+Integer decision value: `0` for no boundary crossed, `1` for lower
+efficacy, `2` for upper efficacy, or `3` for futility.

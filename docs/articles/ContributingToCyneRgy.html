@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>ContributingToCyneRgy.Rmd</code></div>
@@ -97,15 +97,11 @@ Wathen</h4>
 
     
     
-<div class="section level2">
-<h2 id="contributing-to-cynergy">Contributing to CyneRgy<a class="anchor" aria-label="anchor" href="#contributing-to-cynergy"></a>
-</h2>
 <p>If you would like to contribute to CyneRgy there are multiple avenues
 to get involved.</p>
 <p>You can submit an issue, report a bug, or add your own functionality
 and examples for others to learn from. To add examples, please follow
 the instructions below.</p>
-</div>
 <div class="section level2">
 <h2 id="style-guide">Style Guide<a class="anchor" aria-label="anchor" href="#style-guide"></a>
 </h2>
@@ -125,11 +121,11 @@ an issue.</p>
 <li>If an issue does not exist in the CyneRgy repository, then please
 add one and use it to create a new branch for development. If an issue
 already exists, then create a branch for development.</li>
-<li>You can start a new example with the function
-CyneRgy::CreateCyneRgyExample.</li>
-<li>Once the example is complete, copy the example folder to the
-inst/Examples directory of CyneRgy.<br>
-</li>
+<li>Start a new example with
+<code><a href="../reference/CreateCyneRgyExample.html">CyneRgy::CreateCyneRgyExample()</a></code>.</li>
+<li>Place the completed example in <code>inst/Examples</code>; keep its
+example-specific functions there rather than in the package-level
+<code>R</code> directory.</li>
 <li>Use Git to add the files to the repository.<br>
 </li>
 <li>Update the vignettes/ExampleOutline.Rmd file to include a brief
@@ -141,16 +137,20 @@ Dev branch.</li>
 <p>Please note that all branches are merged into Dev. Dev is used to
 combine all branches, then a branch is created for building the package
 website and reviewed for documentation and completeness. Once this is
-done, the Dev branch is merged into Main via a Pull Request and the
-example is then included on the website as well as in the package when
-it is installed from GitHub.</p>
+done, the Dev branch is merged into Main via a Pull Request from the
+repository owner, and the example is then included on the website as
+well as in the package when it is installed from GitHub.</p>
 </div>
 <div class="section level2">
 <h2 id="package-development">Package Development<a class="anchor" aria-label="anchor" href="#package-development"></a>
 </h2>
-<p>This document is intended to help with development of this package.
-In this document you can find packages that are helpful, example code
-snippets and function calls that were made to create new functions.</p>
+<p>This document is intended to help with development of this
+package.</p>
+<p>After changing package code or documentation, run
+<code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code>, <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code>,
+<code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code>, and <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code>.
+Include the relevant generated files under <code>man/</code> and
+<code>docs/</code> in the pull request.</p>
 <div class="section level3">
 <h3 id="helpful-packages">Helpful packages<a class="anchor" aria-label="anchor" href="#helpful-packages"></a>
 </h3>
@@ -204,11 +204,11 @@ Useful Git tutorial.</li>
 <h3 id="helpful-code-snippets">Helpful Code Snippets<a class="anchor" aria-label="anchor" href="#helpful-code-snippets"></a>
 </h3>
 <p>If you need help please ask Kyle Wathen or another team member.</p>
-<p>Add code snippet by Clicking Tools → Global Options → Code → Edit
-Snippets. In the Snippets menu choose R. When creating new snippets the
-keyword “snippet” should start in column 1 and the snippets should be
-indented. To insert a snippet in RStudio, type the snippet name, or
-partial name, and click tab.</p>
+<p>Add a code snippet by selecting Tools → Global Options → Code → Edit
+Snippets. In the Snippets menu, choose R. When creating new snippets,
+the keyword “snippet” should start in column 1 and the snippets should
+be indented. To insert a snippet in RStudio, type the snippet name, or
+partial name, and press Tab.</p>
 <p>Snippet to insert a new comment (newcom) will insert a commented code
 block.</p>
 <pre><code>snippet newcom
@@ -237,7 +237,7 @@ block.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

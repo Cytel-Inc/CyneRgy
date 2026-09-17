@@ -7,10 +7,8 @@ create custom adaptive clinical trial designs and enhance your
 simulation capabilities, without requiring you to develop an entire R
 code base.
 
-The CyneRgy R package demonstrates the synergy between R and Cytel’s
-products such as East Horizon, providing tools, documentation,
-templates, and examples. It also offers a streamlined R experience in
-RStudio, simplifying the creation of new custom scripts.
+CyneRgy provides documentation, templates, examples, and R functions for
+integrating R with Cytel products such as East Horizon.
 
 Important (January 2026): **ArrivalTime** is a new required parameter
 for the Response integration point. Existing R scripts must be updated
@@ -30,21 +28,28 @@ expected, and links to related templates and examples.
 
 # Examples and Templates
 
-A variety of examples highlighting how R scripts can seamlessly
-integrate with Cytel’s simulation tools can be found in this package.
-Please see [Examples
+A variety of examples highlighting how R scripts integrate with Cytel’s
+simulation tools can be found in
+[`inst/Examples`](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples).
+Please see the [Examples
 Outline](https://Cytel-Inc.github.io/CyneRgy/articles/ExampleOutline.md)
-for a complete list of examples and their descriptions.
+for the complete list and descriptions. Each example includes a
+description and R scripts; some also include supporting files, practice
+scripts, and an optional RStudio project.
 
-[Each example
-directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples)
-provides:
+After installing CyneRgy, you can list or open examples. For example:
 
-- An **RStudio project file** for setup.  
-- A **Description file** detailing the example.  
-- An **R folder** which contains the example R scripts.  
-- A **FillInTheBlankR folder** which contains practice scripts with
-  sections removed for hands-on learning.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(``)``                                ``# Lists all available examples`\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(``"TreatmentSelection"``)``            ``# Opens the example project/folder in your IDE`\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(``"GeneratePoissonArrival"``)`\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(``"2ArmPatientDropout"``)`\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(``"TreatmentSelection"``, strDirectory ``=`` `[`getwd`](https://rdrr.io/r/base/getwd.html)`(``)``)``   ``# Copy to a specific folder`
+
+[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)
+creates a writable copy when needed, then opens the description and R
+scripts in the active supported IDE. Use `strDirectory` to choose the
+copy location.
 
 Templates are available in the [Templates
 directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Templates),
@@ -54,10 +59,36 @@ that Sandbox examples are incomplete and untested.
 
 # Functions
 
-The CyneRgy package also provides many built-in functions to facilitate
-the creation of your custom R scripts. For a complete list of available
-functions, see
-[References](https://Cytel-Inc.github.io/CyneRgy/reference/index.md).
+The package exports selected common functions for trial operations and
+binary, continuous, repeated-measures, time-to-event, DEP, and MEP
+endpoints. It also provides
+[`RunExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md),
+[`CreateCyneRgyFunction()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyFunction.md),
+[`CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md),
+and
+[`CombineAllRFiles()`](https://Cytel-Inc.github.io/CyneRgy/reference/CombineAllRFiles.md)
+for working with examples and integration scripts. See the [function
+reference](https://Cytel-Inc.github.io/CyneRgy/reference/index.md) for
+details.
+
+Common functions can be called directly with `CyneRgy::FunctionName()`.
+A few examples:
+
+\
+`# Arrival`\
+`CyneRgy``::`[`GeneratePoissonArrival`](https://Cytel-Inc.github.io/CyneRgy/reference/GeneratePoissonArrival.md)`(`` NumSub ``=`` ``20``, NumPrd ``=`` ``1``, PrdStart ``=`` ``0``, AccrRate ``=`` ``10`` ``)`\
+\
+`# Randomization`\
+`CyneRgy``::`[`RandomizationSubjectsUsingUniformDistribution`](https://Cytel-Inc.github.io/CyneRgy/reference/RandomizationSubjectsUsingUniformDistribution.md)`(`` NumSub ``=`` ``20``, NumArms ``=`` ``2``, AllocRatio ``=`` ``1`` ``)`\
+\
+`# Dropout`\
+`CyneRgy``::`[`GenerateCensoringUsingBinomialProportion`](https://Cytel-Inc.github.io/CyneRgy/reference/GenerateCensoringUsingBinomialProportion.md)`(`` NumSub ``=`` ``20``, ProbDrop ``=`` ``0.1`` ``)`\
+\
+`# Binary endpoint analysis`\
+`CyneRgy``::`[`AnalyzeUsingPropTest`](https://Cytel-Inc.github.io/CyneRgy/reference/AnalyzeUsingPropTest.md)`(`\
+`    SimData     ``=`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`` Response ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`` ``1``, ``0``, ``1``, ``1``, ``0``, ``0``, ``1``, ``0`` ``)``, TreatmentID ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`` ``0``, ``0``, ``0``, ``0``, ``1``, ``1``, ``1``, ``1`` ``)`` ``)``,`\
+`    DesignParam ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`` TailType ``=`` ``1``, CriticalPoint ``=`` ``1.96`` ``)`\
+`)`
 
 # Installation
 
@@ -65,7 +96,10 @@ Currently, this package is not officially released and is not available
 on CRAN. However, it may be installed directly from GitHub using the
 [remotes package](https://remotes.r-lib.org/) with the following code:
 
-    remotes::install_github( "Cytel-Inc/CyneRgy@main" )
+\
+`remotes``::`[`install_github`](https://remotes.r-lib.org/reference/install_github.html)`(`` ``"Cytel-Inc/CyneRgy@main"`` ``)`
 
-You must have the remotes package to use the above command. To launch
-the examples, you will also need to have the rstudioapi package.
+You must have the `remotes` package to use the command above. The
+optional `rstudioapi` package provides the best opening experience in
+RStudio and Positron; it is not required to list, locate, or copy
+examples.

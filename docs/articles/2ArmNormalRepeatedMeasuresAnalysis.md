@@ -26,6 +26,12 @@ same endpoint are collected from each subject over time. This design
 provides insights into how responses evolve across visits and allows for
 within-subject correlation modeling.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmNormalRepeatedMeasuresAnalysis"`` ``)`
+
 In this example, we demonstrate how to integrate a **custom
 repeated-measures analysis** into East Horizon through R integration.
 The example focuses on a two-arm (treatment vs. control) continuous

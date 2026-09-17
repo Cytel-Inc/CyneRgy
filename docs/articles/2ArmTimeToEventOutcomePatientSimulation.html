@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Valeria A. G.
 Mazzanti, J. Kyle Wathen, and Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>2ArmTimeToEventOutcomePatientSimulation.Rmd</code></div>
@@ -150,12 +150,10 @@ East using R functions in the context of a two-arm trial. In each
 example, the trial design includes a standard-of-care control arm and an
 experimental treatment arm, with patient outcomes modeled as
 time-to-event data.</p>
-<p>Once CyneRgy is installed, you can load this example in RStudio with
-the following commands:</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmTimeToEventOutcomePatientSimulation"</span> <span class="op">)</span></span></code></pre></div>
-<p>Running the command above will load the RStudio project in
-RStudio.</p>
 <p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.cywx" class="external-link">2ArmTimeToEventOutcomePatientSimulation.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.Rproj" class="external-link">2ArmTimeToEventOutcomePatientSimulation.Rproj</a></p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/R" class="external-link">R
@@ -357,22 +355,22 @@ approach.</p>
 and a scale parameter
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>,
 with a probability density function (PDF) given by:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>α</mi></msup></mrow></msup></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>α</mi></msup></mrow></msup></mrow><annotation encoding="application/x-tex">
 f(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
 </annotation></semantics></math></p>
 <p>Its corresponding hazard function is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mi>α</mi><mi>σ</mi></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mi>x</mi><mi>σ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">
 h(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1}
 </annotation></semantics></math></p>
 <p>The Exponential distribution in R is parameterized by a rate
 parameter
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>,
 with a PDF given by:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>λ</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi><mi>x</mi></mrow></msup></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>λ</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi><mi>x</mi></mrow></msup></mrow><annotation encoding="application/x-tex">
 f(x) = \lambda e^{-\lambda x}
 </annotation></semantics></math></p>
 <p>Its hazard function remains constant:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">
 h(x) = \lambda
 </annotation></semantics></math></p>
 <p>We can see that the Exponential distribution is a special case of the
@@ -692,7 +690,7 @@ cumulative survival value at the specified time point is converted into
 a constant hazard rate for each stratum and arm.</li>
 <li>If <code>SurvMethod = 3</code> (<em>Median Survival Times</em>), the
 median survival time is converted into a hazard rate using
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mfrac><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mtext mathvariant="normal">Median</mtext></mfrac></mrow><annotation encoding="application/x-tex">\lambda = \frac{\log(2)}{\text{Median}}</annotation></semantics></math>.</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mfrac><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><mtext mathvariant="normal">Median</mtext></mfrac></mrow><annotation encoding="application/x-tex">\lambda = \frac{\log(2)}{\text{Median}}</annotation></semantics></math>.</li>
 </ul>
 <p>The stratum ID (<code>StratumID</code>) input parameter is a vector
 indicating the stratum assignment for each subject. Subjects sharing the
@@ -713,7 +711,7 @@ outlining the general steps performed by the R code.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

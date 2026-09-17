@@ -9,8 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Contributing to CyneRgy
-
 If you would like to contribute to CyneRgy there are multiple avenues to get involved. 
 
 You can submit an issue, report a bug, or add your own functionality and examples for others to learn from. To add examples, please follow the instructions below.

@@ -62,3 +62,7 @@ Explore the following examples for more context:
 1.  [**2-Arm, Single Endpoint - Simulate Patient
     Dropout**](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmPatientDropout.md)
     - [GenerateDropoutTimeForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/R/GenerateDropoutTimeForSurvival.R)
+      \<!– 2. [**Multiple Arm, Time-to-Event Outcome - Simulate Patient
+      Dropout**](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmPatientDropout.md)
+    - [GenerateDropoutTimeMultiArmForSurvival.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmPatientDropout/R/GenerateDropoutTimeMultiArmForSurvival.R)
+      –\>

@@ -26,14 +26,11 @@ The following example illustrates how to integrate new patient outcome
 simulation (*response*) capabilities into East Horizon or East using R
 functions in the context of a two-arm trial with repeated measures.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "2ArmNormalRepeatedMeasuresResponseGeneration" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmNormalRepeatedMeasuresResponseGeneration"`` ``)`
 
 **RStudio Project File**:
 [2ArmNormalRepeatedMeasuresResponseGeneration.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalRepeatedMeasuresResponseGeneration/2ArmNormalRepeatedMeasuresResponseGeneration.Rproj)

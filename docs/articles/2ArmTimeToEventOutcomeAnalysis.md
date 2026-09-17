@@ -35,14 +35,11 @@ interim analyses (IA) and one final analysis (FA). At each IA, an
 analysis is conducted which may lead to early stopping for efficacy or
 futility, depending on the predefined design criteria.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "2ArmTimeToEventOutcomeAnalysis" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmTimeToEventOutcomeAnalysis"`` ``)`
 
 **RStudio Project File**:
 [2ArmTimeToEventOutcomeAnalysis.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/2ArmTimeToEventOutcomeAnalysis.Rproj)
