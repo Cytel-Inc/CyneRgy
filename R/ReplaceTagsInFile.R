@@ -8,9 +8,9 @@
 #' @name ReplaceTagsInFile
 #' @title Replace Tags in a File
 #'
-#' @description This function replaces {{tags}} in template files with corresponding values.
+#' @description This function replaces named double-brace tags in template files with corresponding values.
 #'
-#' @param strFileName The name of the file to use as input. Tags, defined by {{tags}}, will be replaced with the corresponding values.
+#' @param strFileName The name of the file to use as input. Named double-brace tags will be replaced with the corresponding values.
 #' @param vTags A vector of tag names, e.g., FUNCTION_NAME, VARIABLE_NAME, that will be replaced with the values in vReplace.
 #' @param vReplace A vector of values to replace the tags with.
 #' @return A logical value (TRUE/FALSE) indicating whether the function was successful.
@@ -21,27 +21,30 @@
 #' strFileName <- "MyTemplate.R" # A file that contains {{FUNCTION_NAME}} and {{CREATION_DATE}}
 #' ReplaceTagsInFile(strFileName, vTags, vReplace)
 #' }
-#' @export
+#' @keywords internal
 #################################################################################################### .
 
 ReplaceTagsInFile <- function( strFileName, vTags, vReplace )
 {
+    if( length( vTags ) != length( vReplace ) )
+        stop( "vTags and vReplace must have the same length.", call. = FALSE )
+
     bFileExists     <- file.exists( strFileName )
     if( bFileExists )
     {
         strInput <- readLines( strFileName )
         lData    <- list()
         nQtyTags <- length( vTags )
-        for( iTag in 1:nQtyTags )
+        for( iTag in seq_len( nQtyTags ) )
         {
             lData[[vTags[ iTag ]]] <- vReplace[ iTag ]
         }
-        
+
         strRet  <- WhiskerKeepUnrender( strInput, lData )
         writeLines( strRet, con = strFileName )
-        
+
     }
-    
+
     return( bFileExists )
-    
+
 }

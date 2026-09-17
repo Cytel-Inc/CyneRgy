@@ -35,8 +35,8 @@ appropriately.
 The **Mixed Model for Repeated Measures (MMRM)** is widely used because
 it provides opportunity to:
 
-- Adjusts for baseline and visit effects,  
-- Accounts for correlation between repeated observations,  
+- Adjusts for baseline and visit effects,\
+- Accounts for correlation between repeated observations,\
 - Avoids simplistic imputation approaches such as LOCF (Last Observation
   Carried Forward).
 
@@ -44,7 +44,7 @@ This example has two goals:
 
 1.  **East Horizon R Integration Scripts** - Create the R scripts for
     analyzing data employing an MMRM approach and simulating trial
-    data.  
+    data.\
 2.  **Compare MMRM to Native East Horizon Analysis** - Compare the
     difference of means analysis approach in East Horizon to MMRM
     analysis in the hopes of understanding potential gains from using an
@@ -57,14 +57,11 @@ not native to East Horizon.
 
 ### Required Files
 
-Before running anything in East Horizon, load the Schizophrenia example
-by installing CyneRgy and running this command into RStudio:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "SchizophreniaTrial" )
-```
-
-Running this code above will load the RStudio project.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"SchizophreniaTrial"`` ``)`
 
 **RStudio Project File**:
 [SchizophreniaTrial.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/SchizophreniaTrial/SchizophreniaTrial.Rproj)
@@ -125,7 +122,7 @@ CI](SchizophreniaTrial_files/TrialPlot.png)
 
 **Figure 1**: An example plot of the trial data with a 95% CI
 
-  
+\
 
 ![Figure 2: An example plot of individual patient
 trajectories](SchizophreniaTrial_files/PatientPlot.png)
@@ -163,7 +160,7 @@ The project setup should look like the following.
 
 **Project Setup**
 
-  
+\
 Once you create Project, you then need to create an input set using the
 **Explore** option.
 
@@ -184,7 +181,7 @@ Your design card for the fixed design should look something like this:
 
 **MMRM Fixed Sample**
 
-  
+\
 To add a group sequential option, you can duplicate the card so that the
 sample sizes are retained. Switch the Statistical Design to **Group
 Sequential**. The card should look like:
@@ -220,32 +217,32 @@ publication](SchizophreniaTrial_files/PublicationResponse.png)
 
 **Response Card using data from the publication**
 
-  
+\
 
 ![Null Case Card](SchizophreniaTrial_files/NullResponse.png)
 
 **Null Case Card**
 
-  
+\
 
 ![Card with mean difference 4](SchizophreniaTrial_files/MeanDiff4.png)
 
 **Card with mean difference 4**
 
-  
+\
 
 ![Card with mean difference
 8](SchizophreniaTrial_files/Diff8Response.png)
 
 **Card with mean difference 8**
 
-  
+\
 
 ![Card with SD 10](SchizophreniaTrial_files/StdDev10.png)
 
 **Card with SD 10**
 
-  
+\
 
 ![Card with SD 20](SchizophreniaTrial_files/StdDev20.png)
 
@@ -300,7 +297,7 @@ Results](SchizophreniaTrial_files/PublicationResults.png)
 
 **Figure 3**: Simulation for Publication Results
 
-  
+\
 
 - **Sensitivity**: Power changed as standard deviation and mean
   difference were varied (Std. Dev ↑ → power ↓; Std. Dev ↓ → power ↑).
@@ -316,14 +313,14 @@ Results](SchizophreniaTrial_files/MeanDiff4_8Results.png)
 
 **Figure 4**: Difference of Means Results
 
-  
+\
 
 ![Figure 5: Standard Deviation
 Results](SchizophreniaTrial_files/SD10_20Results.png)
 
 **Figure 5**: Standard Deviation Results
 
-  
+\
 
 - **Null behavior (MMRM)**: Type I error was observed between 2.1 and
   3.6%, close to nominal 2.5%.
@@ -348,7 +345,7 @@ Results](SchizophreniaTrial_files/SD10_20Results.png)
 
 ![](SchizophreniaTrial_files/SelectDesign.png)
 
-  
+\
 
 - **Sensitivity Analysis**: The reason for including the difference of
   means cards and the standard deviation cards was to illustrate how

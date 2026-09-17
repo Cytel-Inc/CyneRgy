@@ -29,14 +29,11 @@ efficacy or futility, the control arm and the selected treatments
 proceed to the final stage. These examples showcase different approaches
 for selecting treatments to carry forward into stage 2.
 
-Once CyneRgy is installed, you can load this example in R Studio with
-the following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample("TreatmentSelection")
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"TreatmentSelection"`` ``)`
 
 **East Workbook**:
 [TreatmentSelection.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.cywx)

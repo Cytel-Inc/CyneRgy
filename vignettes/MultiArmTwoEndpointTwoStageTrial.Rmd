@@ -1,0 +1,11 @@
+---
+title: 'Multiple-Arm Two-Stage Design with Dual Endpoints for a Seamless Phase II/III Trial'
+author: "Julija Saltane,  J. Kyle Wathen"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+    word_document: default
+    html_document: default
+---
+    
+```{r child = '../inst/Examples/MultiArmTwoEndpointTwoStageTrial/Description.Rmd'}
+```

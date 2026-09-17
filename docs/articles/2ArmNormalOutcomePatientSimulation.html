@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>2ArmNormalOutcomePatientSimulation.Rmd</code></div>
@@ -146,13 +146,11 @@ East using R functions in the context of a two-arm trial. In each
 example, the trial design includes a standard-of-care control arm and an
 experimental treatment arm, with patient outcomes assumed to follow a
 normal distribution.</p>
-<p>Once CyneRgy is installed, you can load this example in RStudio with
-the following commands:</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmNormalOutcomePatientSimulation"</span> <span class="op">)</span></span></code></pre></div>
-<p>Running the command above will load the RStudio project in
-RStudio.</p>
-<p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj" class="external-link">2ArmNormalOutcomePatientSimulation.cywx</a></p>
+<p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.cywx" class="external-link">2ArmNormalOutcomePatientSimulation.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj" class="external-link">2ArmNormalOutcomePatientSimulation.Rproj</a></p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
@@ -366,7 +364,7 @@ outlining the general steps performed by the R code.</p>
 <h3 id="example-2-1---20-40-95-ci-of-non-responders">Example 2.1 - 20%-40% (95% CI) of Non-Responders<a class="anchor" aria-label="anchor" href="#example-2-1---20-40-95-ci-of-non-responders"></a>
 </h3>
 <p>For this example, independent
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Beta</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>23.1</mn><mo>,</mo><mn>55.2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\text{Beta} ( 23.1, 55.2 )</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Beta</mtext><mo stretchy="false" form="prefix">(</mo><mn>23.1</mn><mo>,</mo><mn>55.2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{Beta} ( 23.1, 55.2 )</annotation></semantics></math>
 distributions are used, which have a 95% credible interval of (0.2,
 0.4). The function first simulates the probability of non-response for
 both the control and experimental arms using these Beta distributions.
@@ -410,10 +408,10 @@ if needed.</p>
 non-response by 10% on average compared to the control. Specifically,
 assume that the probability of non-response in the control group follows
 a
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Beta</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>23.1</mn><mo>,</mo><mn>55.2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\text{Beta} ( 23.1, 55.2 )</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Beta</mtext><mo stretchy="false" form="prefix">(</mo><mn>23.1</mn><mo>,</mo><mn>55.2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{Beta} ( 23.1, 55.2 )</annotation></semantics></math>
 distribution, with a 95% credible interval of (0.2, 0.4). For the
 experimental treatment, assume the probability of non-response follows a
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Beta</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>10.8</mn><mo>,</mo><mn>46.3</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\text{Beta} ( 10.8, 46.3 )</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Beta</mtext><mo stretchy="false" form="prefix">(</mo><mn>10.8</mn><mo>,</mo><mn>46.3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{Beta} ( 10.8, 46.3 )</annotation></semantics></math>
 distribution, with a 95% credible interval of (0.1, 0.3). Refer to the
 table below for the values of the user-defined parameters used in this
 example.</p>
@@ -454,7 +452,7 @@ example.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

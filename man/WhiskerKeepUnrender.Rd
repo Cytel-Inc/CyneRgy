@@ -23,3 +23,4 @@ missing tags using their unrendered form, then calling \code{whisker.render()}.
 \seealso{
 \code{\link{AddUnrenderToList}}, \code{\link[whisker]{whisker.render}}
 }
+\keyword{internal}

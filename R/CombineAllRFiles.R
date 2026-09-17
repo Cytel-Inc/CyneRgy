@@ -1,7 +1,7 @@
 #################################################################################################### .
 #   Program/Function Name: CombineAllRFiles
 #   Author: Author Name J. Kyle Wathen and Subhajit Sengupta
-#   Description: This function is used to combine all .R files in a directory into a single file for use in Cytel products. 
+#   Description: This function is used to combine all .R files in a directory into a single file for use in Cytel products.
 #   Change History:
 #   Last Modified Date: 04/26/2024
 #################################################################################################### .
@@ -10,98 +10,81 @@
 #'
 #' @description
 #' This function combines the contents of all R files in a specified directory into one file.
-#' It also replaces any sequence of one or more `#` characters with a single `#`.
+#' Files are combined in alphabetical order and the output file itself is automatically excluded when it is located in the input directory.
 #'
 #' @param strOutFileName The name of the output file. If not provided, the function will return the combined content.
 #' @param strDirectory The directory where the R files are located. Defaults to the current working directory.
-#' @param strFileNameToIgnore The name of any file to be ignored during the combination process. Defaults to NA.
+#' @param strFileNameToIgnore The name, or part of the name, of any file to ignore. Defaults to `NA`.
 #'
 #' @return A list containing the following elements:
 #'   \item{nQtyCombinedFiles}{The number of files combined.}
 #'   \item{strCombinedContents}{The combined content of all the R files (only if strOutFileName is NA).}
 #'   \item{strReturn}{A string summarizing the operation, including the names of the combined files.}
-#'   
+#'
 #' @examples
 #' \dontrun{
-#'   result <- CombineAllRFiles(strOutFileName = "combined.R", strDirectory = "/path/to/your/directory")
-#'   print(result$strReturn)
+#'   result <- CombineAllRFiles(
+#'       strOutFileName = "combined.R",
+#'       strDirectory = "/path/to/your/directory"
+#'   )
+#'   print( result$strReturn )
 #' }
 #'
 #' @seealso \code{\link[base]{list.files}}, \code{\link[base]{file}}, \code{\link[base]{readLines}}, \code{\link[base]{writeLines}}
 #' @export
 #################################################################################################### .
 
-CombineAllRFiles <- function( strOutFileName = NA, strDirectory = "", strFileNameToIgnore = NA ) {
-    bReturnContents <- FALSE 
-    if( is.na( strOutFileName ) ) {
-        bReturnContents <- TRUE 
-    }
-    
-    # Get the list of files in the specified directory
-    vFileList <- list.files( path = strDirectory, pattern = "\\.R$|\\.r$", full.names = TRUE )
-    
-    # Create or open the output file
-    strCombinedContents <- ""
-    if( !bReturnContents )
-         outputStream <- file( strOutFileName, open = "w" )
-    
-    # Vector to store the names of the combined files
-    vCombineFiles <- c()
-    
-    # Loop through each file in the directory
-    iFileCount <- 0
-    for ( strFileName in vFileList ) 
+CombineAllRFiles <- function( strOutFileName = NA, strDirectory = "", strFileNameToIgnore = NA )
+{
+    bReturnContents <- length( strOutFileName ) == 1 && is.na( strOutFileName )
+    if( !nzchar( strDirectory ) )
+        strDirectory <- getwd()
+
+    if( !dir.exists( strDirectory ) )
     {
-        # Skip the file if its name contains strFileNameToIgnore
-        if ( !is.na( strFileNameToIgnore ) && grepl( strFileNameToIgnore, strFileName ) ) 
-        {
-            next
-        }
-        
-        iFileCount <- iFileCount + 1 
-        # Read the content of the current file
-        strFileContent       <- readLines( strFileName, warn = FALSE )
-        strFileTimeStamp     <- file.info( strFileName )$mtime
-        strFormatedTimeStamp <- format( strFileTimeStamp, "%Y-%m-%d %H:%M:%S" )
-        
-        # Insert a comment with file name and timestamp
-        strComment     <- paste( "\n" )
-        strComment     <- paste0( strComment, "##################################################################################### #\n" )
-        strComment     <- paste0( strComment, "# File ", iFileCount , ": ", basename( strFileName ), " Timestamp: ", strFormatedTimeStamp, " ####\n" ) 
-        strComment     <- paste0( strComment, "##################################################################################### #\n\n" )
-        
-        strFileContent <- c( strComment, strFileContent )
-        
-        # Write the content to the output file or a append to the other input read in
-        if( !bReturnContents )
-            writeLines( strFileContent, outputStream )
-        else {
-            strCombinedContents <- paste( paste0( strFileContent, collapse= "\n" ), strCombinedContents, collapse = "\n" )
-        }
-        
-        # Add the name of the combined file to the vector
-        vCombineFiles <- c( vCombineFiles, basename( strFileName ) )
+        lReturn <- list( nQtyCombinedFiles = 0L )
+        if( bReturnContents )
+            lReturn$strCombinedContents <- ""
+        lReturn$strReturn <- "0 files combined: the input directory does not exist."
+        return( lReturn )
     }
-    
-    lReturn <- list( nQtyCombinedFiles = iFileCount )
-    
-    # Close the output file
+
+    strDirectory <- normalizePath( strDirectory, winslash = "/", mustWork = TRUE )
+    vFileList    <- sort( list.files( path = strDirectory, pattern = "\\.[Rr]$", full.names = TRUE ) )
+
     if( !bReturnContents )
-        close( outputStream )
-    else {
-        # Remove all "\n" and replace any duplicate white spaces with a single white space
-        strCombinedContents <- gsub( "\n", " ", strCombinedContents )
-        strCombinedContents <- gsub( "\\s+", " ", strCombinedContents )
-        
-        # Remove any duplicate '#' characters
-        strCombinedContents <- gsub( "#+", "#", strCombinedContents )
-        
-        lReturn$strCombinedContents <- strCombinedContents
+    {
+        if( length( strOutFileName ) != 1 || !nzchar( strOutFileName ) )
+            stop( "strOutFileName must be a single file name or NA.", call. = FALSE )
+        strOutputPath <- normalizePath( strOutFileName, winslash = "/", mustWork = FALSE )
+        vInputPaths   <- normalizePath( vFileList, winslash = "/", mustWork = TRUE )
+        vFileList     <- vFileList[ vInputPaths != strOutputPath ]
     }
-    
-    # Print the names of the combined files
-    lReturn$strReturn <- paste( paste( iFileCount, "Files combined successfully:\n" ), paste( vCombineFiles, collapse = "\n" ), "\n" )
-    
+
+    if( length( strFileNameToIgnore ) == 1 && !is.na( strFileNameToIgnore ) )
+        vFileList <- vFileList[ !grepl( strFileNameToIgnore, basename( vFileList ), fixed = TRUE ) ]
+
+    vCombinedLines <- character()
+    vCombineFiles  <- basename( vFileList )
+    for( nFileIndex in seq_along( vFileList ) )
+    {
+        strFileName          <- vFileList[ nFileIndex ]
+        strFormattedTimeStamp <- format( file.info( strFileName )$mtime, "%Y-%m-%d %H:%M:%S" )
+        vHeader              <- c( "", "##################################################################################### #",
+                                   paste0( "# File ", nFileIndex, ": ", basename( strFileName ), " Timestamp: ", strFormattedTimeStamp, " ####" ),
+                                   "##################################################################################### #", "" )
+        vCombinedLines       <- c( vCombinedLines, vHeader, readLines( strFileName, warn = FALSE ) )
+    }
+
+    if( bReturnContents )
+        lReturn <- list( nQtyCombinedFiles = length( vFileList ), strCombinedContents = paste( vCombinedLines, collapse = "\n" ) )
+    else
+    {
+        writeLines( vCombinedLines, strOutFileName )
+        lReturn <- list( nQtyCombinedFiles = length( vFileList ) )
+    }
+
+    lReturn$strReturn <- paste0( length( vFileList ), " files combined successfully:\n", paste( vCombineFiles, collapse = "\n" ) )
     return( lReturn )
 }
 

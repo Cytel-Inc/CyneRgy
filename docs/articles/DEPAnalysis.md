@@ -29,6 +29,12 @@ clinical trials with dual endpoints. These functions can be customized
 to support complex evaluation rules, correlated outcomes, and flexible
 statistical designs.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"DEPAnalysis"`` ``)`
+
 **Note:** Each script in this example is designed to be applied to an
 **individual endpoint** within a Dual Endpoint (DEP) design, rather than
 to both endpoints simultaneously.

@@ -5,15 +5,7 @@
 AnalyzeSurvivalDataUsingCoxPH <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
     library( survival )
-    Error <- 0 
-    # Example of saving parameters (EAST ONLY)
-    # setwd( "C:\\AssuranceNormal\\ExampleArgumentsFromEast\\Example3")
-    # setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    # saveRDS( SimData, "SimData.Rds")
-    # saveRDS( DesignParam, "DesignParam.Rds" )
-    # saveRDS( LookInfo, "LookInfo.Rds" )
-    # saveRDS( UserParam, "UserParam.Rds" )
-    
+    Error <- 0   
     nLookIndex           <- 1 
     
     if( !is.null( LookInfo ) )

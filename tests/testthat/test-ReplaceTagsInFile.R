@@ -1,19 +1,9 @@
-#################################################################################################### .
-#   Program/Function Name:
-#   Author: Author Name
-#   Description: Test file for ReplaceTagsInFile
-#   Change History:
-#   Last Modified Date: 12/21/2023
-#################################################################################################### .
+test_that( "ReplaceTagsInFile replaces known tags and preserves unknown tags on every line", {
+    strFile <- tempfile( fileext = ".R" )
+    on.exit( unlink( strFile ), add = TRUE )
+    writeLines( c( "{{KNOWN}}", "{{UNKNOWN}}" ), strFile )
 
-
-context( "ReplaceTagsInFile")
-
-test_that("Test- ReplaceTagsInFile", {
-    # Example test that will fail
-    # nRet         <- 1
-    # nExpectedRet <- 10
-
-
-    # expect_equal( nRet, nExpectedRet, info = "The test failed...", label ="Test for ..." )
-})
+    expect_true( CyneRgy:::ReplaceTagsInFile( strFile, "KNOWN", "value" ) )
+    expect_equal( readLines( strFile, warn = FALSE ), c( "value", "{{UNKNOWN}}" ) )
+    expect_error( CyneRgy:::ReplaceTagsInFile( strFile, c( "A", "B" ), "value" ), "same length" )
+} )

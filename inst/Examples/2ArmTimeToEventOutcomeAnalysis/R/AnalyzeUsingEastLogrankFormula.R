@@ -50,17 +50,37 @@
 #'                  \item{Delta}{HazardRatio}{Optional numeric value. 
 #'                                            Used in Solara for creating the observed hazard ratio graph. 
 #'                                            Only applicable for time-to-event data.}
-#'                                            
-
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
+#' @details
+#' ## CyneRgy Decision Helpers
 #'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
+#' The analysis may use `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to determine the decision returned to
+#' East Horizon Explore.
 #'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
+#' When these helpers are used, the following input fields are required
+#' and MUST be included when generating sample/test data:
+#'
+#' DesignParam:
+#'   - TailType: Integer indicating the direction of the statistical test.
+#'       0 = Left-tailed
+#'       1 = Right-tailed
+#'
+#' LookInfo (for group sequential designs, NULL for fixed designs):
+#' When not NULL, must contain the following fields:
+#'   - NumLooks: Total number of looks.
+#'   - CurrLookIndex: Current look index, starting at 1.
+#'   - RejType: Integer identifying which stopping boundaries are enabled.
+#'       0 = 1-Sided Efficacy Upper
+#'       1 = 1-Sided Futility Upper
+#'       2 = 1-Sided Efficacy Lower
+#'       3 = 1-Sided Futility Lower
+#'       4 = 1-Sided Efficacy Upper and Futility Lower
+#'       5 = 1-Sided Efficacy Lower and Futility Upper
+#'       6 = 2-Sided Efficacy Only (not used in East Horizon Explore)
+#'       7 = 2-Sided Futility Only (not used in East Horizon Explore)
+#'       8 = 2-Sided Efficacy and Futility (not used in East Horizon Explore)
+#'       9 = Equivalence (not used in East Horizon Explore)
+#'       
 ######################################################################################################################## .
 
 AnalyzeUsingEastLogrankFormula <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )

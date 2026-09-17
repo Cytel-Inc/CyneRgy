@@ -36,6 +36,12 @@ be created, after which simulations can be run based on its computation.
 During the simulation, the futility evaluation from the original design
 is replaced by the custom futility logic implemented in the R script.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"TimeToEventConditionalPowerFutilityAnalysis"`` ``)`
+
 ### Why do we need R Integration for this example?
 
 East Horizon: Design’s built-in analysis algorithms do not natively
@@ -104,7 +110,6 @@ We then perform the Logrank test, which compares survival between
 treatment and control arms. The test statistic ($`Z`$) is computed as:
 
 ``` math
-
 Z = \sqrt{\chi^2} \cdot \operatorname{sign}(O_2 - E_2)
 ```
 
@@ -117,7 +122,6 @@ where:
 The corresponding $`p`$-value ($`p`$) is:
 
 ``` math
-
 p = 1 - F_{\chi^2_1}(\chi^2)
 ```
 
@@ -128,7 +132,6 @@ We also compute the standard error of log hazard ratio
 ($`\text{se}_{\ln HR}`$) as:
 
 ``` math
-
 \text{se}_{\ln HR} = \frac{1}{\sqrt{n \cdot r (1-r)}}
 ```
 
@@ -144,7 +147,6 @@ of ultimately crossing the efficacy boundary given the interim results,
 is calculated as:
 
 ``` math
-
 CP = \Phi \left(
   z_\alpha \sqrt{1 + \frac{n_1}{n_2 - n_1}}
   - Z \sqrt{\frac{n_1}{n_2 - n_1}}
@@ -166,14 +168,12 @@ where:
 The futility decision rule at the interim analysis is:
 
 ``` math
-
 \text{If } CP < \theta_{\text{futility}} \rightarrow \text{stop for futility.}
 ```
 
 The decision rule at the final analysis is:
 
 ``` math
-
 \begin{cases}
     \text{If } Z \leq z_\alpha \rightarrow \text{stop for efficacy.} \\
     \text{If } Z > z_\alpha \rightarrow \text{stop for futility.}
@@ -210,7 +210,6 @@ For this option, the conditional power is computed using an **estimated
 hazard ratio** derived from interim data:
 
 ``` math
-
 HR^* = \widehat{HR} = \exp\big( Z \cdot \text{se}_{\ln HR} \big)
 ```
 
@@ -240,7 +239,6 @@ hazard ratio** that combines the estimated hazard ratio from interim
 data with a user-specified target hazard ratio:
 
 ``` math
-
 HR^* = HR_w = w_{\text{est}} \cdot \widehat{HR} + w_{\text{target}} \cdot HR_{\text{target}}
 ```
 

@@ -23,3 +23,5 @@ library( CyneRgy )
 
 # Introduction
 Please describe your example and put details of that.
+
+{{PROJECT_FILE_SECTION}}

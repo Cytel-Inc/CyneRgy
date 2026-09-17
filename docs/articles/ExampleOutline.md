@@ -21,7 +21,7 @@ EndpointsAny OutcomeRepeated Measures
 
 This example demonstrates how to add the ability to generate patient
 arrival times according to a Poisson process with a ramp-up by
-customizing the Enrollment integration point of East Horizon.  
+customizing the Enrollment integration point of East Horizon.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/GeneratePoissonArrival.md)
 
@@ -70,7 +70,7 @@ EndpointContinuousSSR
 This example demonstrates two ways to customize the patient outcome
 simulation in East Horizon for a two-arm trial with a continuous
 outcome: using a mixture distribution, with or without the mixture
-proportion sampled from a Beta distribution.  
+proportion sampled from a Beta distribution.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmNormalOutcomePatientSimulation.md)
 
@@ -130,7 +130,7 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/MEPPatientSimulation.md)
 
 This example covers a specific situation where the patient data
 simulation needs to be customized to match what is expected in a
-clinical trial in childhood anxiety.  
+clinical trial in childhood anxiety.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/ChildhoodAnxiety.md)
 
@@ -271,7 +271,7 @@ to achieve a more complex design option.
 
 This example demonstrates the computation of Bayesian assurance, or
 probability of success, using a mixture of normal distribution priors
-featuring a two-arm trial with continuous outcome.  
+featuring a two-arm trial with continuous outcome.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/BayesianAssuranceContinuous.md)
 
@@ -279,7 +279,7 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/BayesianAssuranceContinuo
 
 This example demonstrates the computation of Bayesian assurance, or
 probability of success, using a bi-modal distribution prior featuring a
-two-arm trial with time-to-event outcome.  
+two-arm trial with time-to-event outcome.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/BayesianAssuranceTimeToEvent.md)
 
@@ -290,7 +290,7 @@ success in consecutive studies. It features a sequential design
 involving a Phase 2 trial followed by a Phase 3 trial, both with a
 binary outcome Phase 2 results are saved and then used as the prior for
 Phase 3, allowing Phase 3 patient outcomes to be generated conditional
-on Phase 2 success.  
+on Phase 2 success.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/ConsecutiveStudiesBinary.md)
 
@@ -300,7 +300,7 @@ This example demonstrates the computation of Bayesian assurance, or
 probability of success, in consecutive studies: a Phase 2 trial followed
 by a Phase 3 trial, both with continuous outcome. The objective is to
 understand how conducting a Phase 2 study can reduce the risk associated
-with the Phase 3 trial.  
+with the Phase 3 trial.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/ConsecutiveStudiesContinuous.md)
 
@@ -313,7 +313,7 @@ continuous outcome followed by a Phase 3 trial with time-to-event
 outcome. The objective is to understand how conducting a Phase 2 study
 can reduce the risk associated with the Phase 3 trial. This example also
 includes a step to load the Phase 2 output and extract the true
-treatment differences.  
+treatment differences.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/ConsecutiveStudiesContinuousTimeToEvent.md)
 
@@ -322,7 +322,7 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/ConsecutiveStudiesContinu
 This example demonstrates how to compute the probability of success of a
 trial and extend East Horizon’s single-endpoint framework to handle dual
 endpoints (Progression-Free Survival and Overall Survival) using custom
-R scripts for the Analysis and Response integration points.  
+R scripts for the Analysis and Response integration points.\
 [Click here to view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/ProbabilitySuccessDualEndpoints.md)
 
@@ -336,6 +336,18 @@ t-test, multiple endpoints with covariates using ANCOVA, and multiple
 endpoints with covariates and stratified randomization. [Click here to
 view the full
 example.](https://Cytel-Inc.github.io/CyneRgy/articles/MultipleEndpointsWithCovariates.md)
+
+**Multiple-Arm Two-Stage Design with Dual Endpoints** Multiple ArmSingle
+EndpointBinaryTTE
+
+This example demonstrates how to implement a two-stage design for a
+seamless Phase II/III design. In Stage 1, treatment selection is
+performed using a binary outcome endpoint, while the final efficacy
+analysis in Stage 2 is based on Progression-Free Survival (PFS).
+Importantly, the final analysis incorporates all available PFS data from
+both Stage 1 and Stage 2 for the selected treatment arm and the control
+arm. [Click here to view the full
+example.](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmTwoEndpointTwoStageTrial.md)
 
 **Schizophrenia Trial (MMRM Analysis)** 2-ArmSingle EndpointRepeated
 Measures

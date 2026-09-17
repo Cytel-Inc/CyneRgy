@@ -15,15 +15,6 @@
 #' simulated from a normal distribution with the mean and standard deviation as sent from East. 
 SimulatePatientOutcomePercentAtZero <- function(NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL)
 {
-    # Note: It can be helpful to save to the parameters that East sent.
-    # The next two lines show how you could save the UserParam variable to an Rds file
-    # setwd( "C:/EastRWebinar/Webinar1/2ArmNormalOutcomePatientSimulation/ExampleEastOutput/" )
-    # saveRDS( NumSub, "NumSub.Rds" )
-    # saveRDS( TreatmentID, "TreatmentID.Rds" )
-    # saveRDS( Mean, "Mean.Rds" )
-    # saveRDS( StdDev, "StdDev.Rds" )
-    # saveRDS( UserParam, "UserParam.Rds" )
-    
     # If the user did not specify the user parameters, but still called this function then the probability
     # of a 0 outcome is 0 for both treatments
     if( is.null( UserParam ) )

@@ -30,14 +30,11 @@ functions in the context of a two-arm trial. In each example, the trial
 design includes a standard-of-care control arm and an experimental
 treatment arm, with patient outcomes modeled as binary data.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "2ArmBinaryOutcomePatientSimulation" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmBinaryOutcomePatientSimulation"`` ``)`
 
 **East Workbook**:
 [2ArmBinaryOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/2ArmBinaryOutcomePatientSimulation.cywx)

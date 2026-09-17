@@ -30,6 +30,12 @@ points of East Horizon. It features a sequential trial program involving
 a Phase 2 trial followed by a Phase 3 trial, both with the same binary
 endpoint.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"ConsecutiveStudiesBinary"`` ``)`
+
 We show how Phase 2 results are simulated, saved, and then used as the
 prior data for Phase 3, allowing the Phase 3 patient outcomes to be
 generated only conditional on the Phase 2 trial’s success. This approach
@@ -388,12 +394,10 @@ For each arm, the true response probability is drawn from a Beta
 distribution:
 
 ``` math
-
 \pi_\text{ctrl} \sim \text{Beta}(\alpha_\text{ctrl}, \beta_\text{ctrl})
 ```
 
 ``` math
-
 \pi_\text{exp} \sim \text{Beta}(\alpha_\text{exp}, \beta_\text{exp})
 ```
 
@@ -423,7 +427,6 @@ Then, each patient’s binary outcome is drawn from a Bernoulli
 distribution:
 
 ``` math
-
 Y_i \sim \text{Bernoulli}(\pi_j)
 ```
 

@@ -3,7 +3,7 @@
 #' @title Render Template While Preserving Unmatched Tags
 #'
 #' @description
-#' This function is used internally. 
+#' This function is used internally.
 #' It renders a template string using the `whisker` package, but preserves any tags (`{{tag}}`)
 #' that do not have a matching key in the provided list. It does so by first augmenting the list with any
 #' missing tags using their unrendered form, then calling `whisker.render()`.
@@ -14,13 +14,13 @@
 #' @return A rendered string with all known tags replaced, and unknown tags kept as `{{tag}}`.
 #'
 #' @seealso \code{\link{AddUnrenderToList}}, \code{\link[whisker]{whisker.render}}
-#' @export
+#' @keywords internal
 #################################################################################################### .
 
 
-WhiskerKeepUnrender <- function(sTemplate, lList)
+WhiskerKeepUnrender <- function( sTemplate, lList )
 {
-    lExList  <- AddUnrenderToList(sTemplate, lList)
-    sRes     <- whisker::whisker.render(sTemplate, lExList)
-    return (sRes)
+    lExpandedList <- AddUnrenderToList( sTemplate, lList )
+    strResult     <- whisker::whisker.render( sTemplate, lExpandedList )
+    return( strResult )
 }

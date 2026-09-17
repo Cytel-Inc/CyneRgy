@@ -106,6 +106,9 @@
   Dropout](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmPatientDropout.md):
 - [Multiple Arm, Patient
   Simulation](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmPatientSimulation.md):
+- [Multiple-Arm Two-Stage Design with Dual Endpoints for a Seamless
+  Phase II/III
+  Trial](https://Cytel-Inc.github.io/CyneRgy/articles/MultiArmTwoEndpointTwoStageTrial.md):
 - [Multiple Endpoints With Covariates and Stratified
   Randomization](https://Cytel-Inc.github.io/CyneRgy/articles/MultipleEndpointsWithCovariates.md):
 - [Getting

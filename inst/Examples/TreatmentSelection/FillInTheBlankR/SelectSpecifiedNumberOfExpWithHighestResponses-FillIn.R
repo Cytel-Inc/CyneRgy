@@ -28,14 +28,7 @@
 #' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
 #' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
 #' @note You must return at LEAST one treatment and one allocation ratio
-
-
-#TODO(Kyle)-does the following format work for examples/ helpful hints?
-#TODO(Kyle)-This script is written to have a user-specified number of treatment arms advanced and user-specified allocation ratios to the arms...code currently is set to work with two arms advanced
-#should we add a note explaining that if more than 2 trts are selected, there needs to be more user-specified allocation ratio variables
-
-
-
+#' 
 #'@examples  Example Output Object:
 #'       Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
 #'       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
@@ -55,16 +48,6 @@
 #'                                    ErrorCode   = nErrorCode )
 #'       return( lReturn )
 #'
-#'@note Helpful Hints:
-#'       There is often info that East sends to R that are not shown in a given example.  It can be very helpful to save the input 
-#'       objects and then load them into your R session and inspect them.  This can be done with the following R code in your function.
-#'
-#'       saveRDS( SimData,     "SimData.Rds")
-#'       saveRDS( DesignParam, "DesignParam.Rds" )
-#'       saveRDS( LookInfo,    "LookInfo.Rds" )
-#'
-#'       The above code will save each of the input objects to a file so they may be examined within R.
-
 ######################################################################################################################## .
 
 
@@ -73,13 +56,6 @@ SelectSpecifiedNumberOfExpWithHighestResponses  <- function(SimData, DesignParam
     # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
     # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
     # The fully worked examples are provided in the corresponding example R files. 
-    
-    #Input objects can be saved through the following lines:
-    #setwd( "[ENTERED THE DESIRED LOCATION TO SAVE THE FILE]" )
-    #saveRDS( SimData, "SimData.Rds")
-    #saveRDS( DesignParam, "DesignParam.Rds" )
-    #saveRDS( LookInfo, "LookInfo.Rds" )
-    
     
     if( is.null( UserParam ) )
     {

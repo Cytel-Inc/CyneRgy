@@ -37,14 +37,11 @@ using the **Two Arm Confirmatory** study objective and the
 **Continuous** endpoint, and then create an input set using the
 **Explore** task.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "ChildhoodAnxiety" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"ChildhoodAnxiety"`` ``)`
 
 **RStudio Project File**:
 [ChildhoodAnxiety.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildhoodAnxiety.Rproj)
@@ -63,7 +60,7 @@ following R files:
 3.  [SimulatePatientOutcomeCHU9.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9.R) -
     This file contains the R code for patient simulation. This version
     of the file utilizes the UserParam variable in a way that required
-    many scenario cards to be setup in East Horizon Explore.  
+    many scenario cards to be setup in East Horizon Explore.\
 4.  [SimulatePatientOutcomeCHU9V2.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/R/SimulatePatientOutcomeCHU9V2.R) -
     This file contains the R code for patient simulation. This version
     of the function utilizes an improved approach to make better use of

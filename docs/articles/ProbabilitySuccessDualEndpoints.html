@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin,
 Valeria A. G. Mazzanti, J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>ProbabilitySuccessDualEndpoints.Rmd</code></div>
@@ -154,6 +154,10 @@ framework to handle dual endpoints through custom R scripts for the
 <strong>Progression Free Survival (PFS)</strong> and <strong>Overall
 Survival (OS)</strong> as endpoints, however, this could be extended to
 other types of endpoints by modifying the R code.</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"ProbabilitySuccessDualEndpoints"</span> <span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="why-do-we-need-r-integration-for-this-example">Why do we need R Integration for this example?<a class="anchor" aria-label="anchor" href="#why-do-we-need-r-integration-for-this-example"></a>
 </h3>
@@ -591,29 +595,29 @@ Transition rate from Progression to Death.</li>
 </ol>
 <p>From Meller et al. [1], the probability of progression before death
 is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mfrac><msub><mi>α</mi><mn>01</mn></msub><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> q = \frac{\alpha_{01}}{\alpha_{01} + \alpha_{02}} \ \ \ \ \ (1) </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mfrac><msub><mi>α</mi><mn>01</mn></msub><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex"> q = \frac{\alpha_{01}}{\alpha_{01} + \alpha_{02}} \ \ \ \ \ (1) </annotation></semantics></math></p>
 <p>Where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">q = 1 - p</annotation></semantics></math>,
 with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
 being the probability of Death before Progression.</p>
 <p>Using this relationship:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>01</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>q</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mi>q</mi></mfrac><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>⋅</mo><mi>p</mi></mrow><mi>q</mi></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> \alpha_{02} = \frac{\alpha_{01}(1-q)}{q} =  \frac{\alpha_{01} \cdot p}{q} \ \ \ \ \ (2) </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>01</mn></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>q</mi><mo stretchy="false" form="postfix">)</mo></mrow><mi>q</mi></mfrac><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>⋅</mo><mi>p</mi></mrow><mi>q</mi></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex"> \alpha_{02} = \frac{\alpha_{01}(1-q)}{q} =  \frac{\alpha_{01} \cdot p}{q} \ \ \ \ \ (2) </annotation></semantics></math></p>
 <p>Or equivalently:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mi>q</mi></mrow><mi>p</mi></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>3</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} \ \ \ \ \ (3) </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>=</mo><mfrac><mrow><msub><mi>α</mi><mn>02</mn></msub><mo>⋅</mo><mi>q</mi></mrow><mi>p</mi></mfrac><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex"> \alpha_{01} = \frac{\alpha_{02} \cdot q}{p} \ \ \ \ \ (3) </annotation></semantics></math></p>
 <p>Progression-Free Survival (PFS) is treated as the minimum of two
 competing times:</p>
 <ul>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>01</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">X_1 \sim \text{Exp}(\alpha_{01})</annotation></semantics></math>:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>α</mi><mn>01</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X_1 \sim \text{Exp}(\alpha_{01})</annotation></semantics></math>:
 Time from Initial to Progression.</li>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>2</mn></msub><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>02</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">X_2 \sim \text{Exp}(\alpha_{02})</annotation></semantics></math>:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>2</mn></msub><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>α</mi><mn>02</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X_2 \sim \text{Exp}(\alpha_{02})</annotation></semantics></math>:
 Time from Initial to Death without Progression.</li>
 </ul>
 <p>Using the property of the minimum of two exponential random variables
 [2]:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mo>min</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> Z = \min(X_1, X_2) \sim \text{Exp}(\alpha_{01} + \alpha_{02}) </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex"> Z = \min(X_1, X_2) \sim \text{Exp}(\alpha_{01} + \alpha_{02}) </annotation></semantics></math></p>
 <p>The mean of an exponential distribution is given by:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mfrac><mn>1</mn><mrow><msub><mi>α</mi><mn>01</mn></msub><mo>+</mo><msub><mi>α</mi><mn>02</mn></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex"> M = \frac{1}{\alpha_{01} + \alpha_{02}} </annotation></semantics></math></p>
 <p>Substituting
@@ -648,10 +652,10 @@ is calculated, it can be plugged into (3) to obtain
 where:
 <ul>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>01</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">X_1 \sim \text{Exp}(\alpha_{01})</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>α</mi><mn>01</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X_1 \sim \text{Exp}(\alpha_{01})</annotation></semantics></math>
 (time to progression),</li>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>3</mn></msub><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>12</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">X_3 \sim \text{Exp}(\alpha_{12})</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>3</mn></msub><mo>∼</mo><mtext mathvariant="normal">Exp</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>α</mi><mn>12</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">X_3 \sim \text{Exp}(\alpha_{12})</annotation></semantics></math>
 (time from progression to death).</li>
 </ul>
 </li>
@@ -1423,7 +1427,7 @@ combination of Response scenario (columns) and Analysis option
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

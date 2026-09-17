@@ -35,6 +35,12 @@ example uses **Progression Free Survival (PFS)** and **Overall Survival
 (OS)** as endpoints, however, this could be extended to other types of
 endpoints by modifying the R code.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"ProbabilitySuccessDualEndpoints"`` ``)`
+
 ### Why do we need R Integration for this example?
 
 To compute the Probability of Success of a trial, users need to simulate
@@ -70,8 +76,8 @@ you will find the following R files:
       event,
   2.  The rate at which events occur from trial start to a death, and
   3.  The probability that death takes place before a progression
-      event.  
-        
+      event.\
+      \
 
   As there may be uncertainty around each of these assumed parameters,
   the function simulates each of them based on prior distributions
@@ -98,8 +104,8 @@ you will find the following R files:
   2.  **Positive trend observed for OS**: OS data shows a positive trend
       in the difference between the control and treatment arms – the
       positive trend is defined by a user-specified threshold for the
-      Hazard Ratio observation.  
-        
+      Hazard Ratio observation.\
+      \
 
   *The success criteria can be changed to compute the probability of
   success for varying success criteria. The lines in the code that need
@@ -225,12 +231,12 @@ information about these variables and example values.
 Enter your desired **mean** and **variance** to calculate the **shape**
 and **rate** parameters for the Gamma distribution:
 
-Mean:  
-Variance:  
+Mean:\
+Variance:\
 
 Calculate
 
-  
+\
 
 **Shape:** -
 

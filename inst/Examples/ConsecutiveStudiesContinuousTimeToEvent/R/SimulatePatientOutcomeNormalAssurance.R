@@ -21,17 +21,6 @@
 
 SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
-    
-    # Note: Example of how you could save the parameters in East. Do NOT setwd in Solara
-     #setwd( "C:/AssuranceNormal/ExampleArgumentsFromEast/Example2" )
-    # #if( !file.exists( "SimData.Rds" ) )
-    # #{
-        # saveRDS( NumSub,     "NumSub.Rds" )
-        # saveRDS( TreatmentID, "TreatmentID.Rds" )
-        # saveRDS( StdDev, "StdDev.Rds" )
-        # saveRDS( UserParam,   "UserParam.Rds" )
-    # #}
-    
     # Step 1 - Setup the vectors so we can sample which component of the mixture prior to use ####
     vStdDev     <- c( UserParam$dSDCtrl, UserParam$dSDExp )
     vMean       <- c( UserParam$dMeanCtrl )                     #Note: only need control mean as we will sample experimental mean
