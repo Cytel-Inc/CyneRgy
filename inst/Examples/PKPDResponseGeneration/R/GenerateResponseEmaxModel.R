@@ -6,7 +6,7 @@
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumVisit Integer number of visits.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject. Required for integration but not used by this example.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline. Not used by this example.
 #' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
@@ -15,9 +15,9 @@
 #' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit.
 #' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
 #' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#' Note: UserParam values should be referenced in the main function before being passed to helper functions. Passing UserParam directly to a helper may prevent East Horizon from automatically populating the required parameters.
-#' If UserParam is supplied, the list must contain the following named elements:
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
+#' 
+#' In this example, UserParam must contain the following named elements:
 #' \describe{
 #'   \item{UserParam$AbsorptionRate}{First-order absorption rate constant.}
 #'   \item{UserParam$EliminationRate}{First-order elimination rate constant.}

@@ -37,7 +37,7 @@
 #'                 \describe{
 #'                      \item{NumLooks}{An integer value with the number of looks in the study}
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
-#'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
+#'                      \item{CumCompleters}{Cumulative number of completers for all non-time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
 #'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
@@ -47,7 +47,7 @@
 #'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
 #'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
 #'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
-#'                      \item{FutBdryScale}{Futility boundary scale. Possible value are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
+#'                      \item{FutBdryScale}{Futility boundary scale. Possible values are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
 #'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
 #'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
 #'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
@@ -57,9 +57,7 @@
 #'                      \item{FutContrast}{The contrast based on which futility boundaries are being computed. 0- Primary, 1-Secondary}
 #'                      \item{IncludePipeline}{Flag indicating whether to include pipeline subjects in the interim or not. 0- Don't include. 1- Include}
 #'                 }
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#'                  User should access the variables using names, for example UserParam$Var1 and not order.
-#'                  These variables can be of the following types: Integer, Numeric, or Character
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{

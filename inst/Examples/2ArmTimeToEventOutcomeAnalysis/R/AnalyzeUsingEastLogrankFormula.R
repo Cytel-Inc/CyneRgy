@@ -50,9 +50,8 @@
 #'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#'                  User should access the variables using names, for example UserParam$Var1 and not order.
-#'                  These variables can be of the following types: Integer, Numeric, or Character
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
+
 #' @return A list that contains:
 #' \describe{
 #'     \item{TestStat}{A numeric scalar containing the log-rank test statistic.}

@@ -13,9 +13,9 @@
 #'
 #' @author Shubham Lahoti and Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
-#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms. This example supports exactly two arms.
+#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param AllocRatio Positive numeric scalar giving the experimental-to-control allocation ratio (`nt/nc`).
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
 #' @return A list with the following components:
 #'   \describe{

@@ -103,7 +103,7 @@
 #'                     \item{BindingType}{Integer list with binding type for each endpoint. Access using endpoint names,
 #'                           e.g., BindingType["Endpoint 1"] or BindingType["Endpoint 2"]. Values: 0 - Non Binding}
 #'                   }
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' @param TestStat List of test statistics for both the endpoints. These test statistics will be on the Z-scale. Access using the actual endpoint names specified by the user,
 #'                            e.g., TestStat[EndpointName[1]] or TestStat[EndpointName[2]]
 #' @param OutList List of outputs that was returned by the user in the previous look. Only relevant for Group Sequential Design and set to NULL for first look.

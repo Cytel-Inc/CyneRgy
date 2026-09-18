@@ -10,27 +10,17 @@
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#'                    The length of this vector must equal NumSub.
-#' @param SurvMethod A numeric value specifying the survival method:
-#'                   \describe{
-#'                       \item{1}{Hazard Rate}
-#'                       \item{2}{Cumulative \% Survival}
-#'                       \item{3}{Medians}
-#'                   }
-#' @param NumPrd The number of time periods that are provided.
-#' @param PrdTime A vector defining the time periods:
-#'                \describe{
-#'                    \item{If SurvMethod = 1}{Start times of hazard pieces.}
-#'                    \item{If SurvMethod = 2}{Times at which cumulative survival percentages are specified.}
-#'                    \item{If SurvMethod = 3}{Defaults to 0.}
-#'                }
-#' @param SurvParam A 2-D array of survival parameters:
-#'                  \describe{
-#'                      \item{If SurvMethod = 1}{A NumPrd x NumArm array specifying hazard rates for each arm and time period.}
-#'                      \item{If SurvMethod = 2}{A NumPrd x NumArm array specifying cumulative survival percentages for each arm and time period.}
-#'                      \item{If SurvMethod = 3}{A 1x2 array specifying median survival times for each arm (control in column 1, experimental in column 2).}
-#'                  }
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' @param SurvMethod Integer survival-generation method: 1 for hazard rates, 2 for cumulative survival probabilities, or 3 for median survival times.
+#' @param NumPrd Integer number of survival periods.
+#' @param PrdTime Numeric matrix with `NumPrd` rows and `NumArm` columns, indicating the times used to specify survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
+#' @param SurvParam Numeric matrix with `NumPrd` rows and `NumArm` columns containing arm-specific survival parameters.
+#'   \describe{
+#'     \item{SurvMethod = 1}{Hazard rates for each period and arm. Entry `[i, j]` is the hazard rate in period `i` for arm `j`.}
+#'     \item{SurvMethod = 2}{Cumulative survival probabilities for each period and arm. Entry `[i, j]` is the cumulative survival probability in period `i` for arm `j`.}
+#'     \item{SurvMethod = 3}{One row of median survival times, with one value per arm.}
+#'   }
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
+#' In this example, UserParam must contain the following named elements:
 #'                  \describe{
 #'                      \item{UserParam$dMedianPFS0}{Median time to PFS event for the control group.}
 #'                      \item{UserParam$dMedianPFS1}{Median time to PFS event for the treatment group.}

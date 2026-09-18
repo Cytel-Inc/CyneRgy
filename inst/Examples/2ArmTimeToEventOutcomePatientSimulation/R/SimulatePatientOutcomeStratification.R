@@ -3,56 +3,34 @@
 #' @title Simulate patient outcomes using stratification
 #' @author Valeria A. G. Mazzanti and J. Kyle Wathen
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
-#' For a two-arm trial this will be 2.
-#'
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject. Required for integration but not used by this example.
-#'
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' TreatmentID uses 0-based indexing internally:
-#' \itemize{
-#'   \item{0 = Arm 1 (control)}
-#'   \item{1 = Arm 2 (experimental)}
-#' }
-#' Length of TreatmentID must equal NumSub.
-#'
 #' @param StratumID Integer vector of length `NumSub`, indicating each subject's 1-based stratum ID.
-#' Subjects sharing the same value belong to the same stratum.
-#'
-#' @param SurvMethod This value is pulled from the Input Method drop-down list.
-#' Allowed values:
-#' \itemize{
-#'   \item{1 = Hazard Rates (direct)}
-#'   \item{2 = Cumulative \% Survival}
-#'   \item{3 = Median Survival Times}
-#' }
-#'
-#' @param NumPrd Number of time periods provided in the survival parameter table.
-#'
+#' @param SurvMethod Integer survival-generation method: 1 for hazard rates, 2 for cumulative survival probabilities, or 3 for median survival times.
+#' @param NumPrd Integer number of survival periods.
 #' @param PrdTime Numeric matrix with one row per stratum and `NumArm` columns, indicating the times used to specify stratum-by-arm survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
+#' @param SurvParam \describe{Depends on the table in the Response Generation tab.
+#'    A 2-D array of parameters to generate the survival times, defined by stratum and arm.
 #'
-#' @param SurvParam
-#' A 2-D array providing survival parameters per stratum.
-#' Each row corresponds to **one stratum**, and each column corresponds to an arm:
+#'    \item{If SurvMethod = 1}{SurvParam is an array (NumStratum rows, NumArm columns)
+#'    that specifies stratum-by-arm hazard rates (one rate per arm per stratum).
+#'    Thus, SurvParam[i, j] specifies the hazard rate for the i-th stratum and j-th arm.
+#'    Arms are in columns, with column 1 as control and column 2 as experimental.}
 #'
-#' \describe{
+#'    \item{If SurvMethod = 2}{SurvParam is an array (NumStratum rows, NumArm columns)
+#'    that specifies stratum-by-arm cumulative \% survival values
+#'    (one value per arm per stratum).
+#'    Thus, SurvParam[i, j] specifies the cumulative \% survival
+#'    for the i-th stratum and j-th arm.}
 #'
-#'   \item{If SurvMethod = 1}{SurvParam stores hazard rates (one per arm per stratum).
-#'   SurvParam[i, j] = hazard rate for stratum *i* and arm *j*.}
-#'
-#'   \item{If SurvMethod = 2}{SurvParam stores cumulative \% survival values per arm.
-#'   SurvParam[i, j] = cumulative \% survival for stratum *i* and arm *j*.}
-#'
-#'   \item{If SurvMethod = 3}{SurvParam stores median survival times per arm.
-#'   SurvParam[i, j] = median survival time for stratum *i* and arm *j*.}
-#'
+#'    \item{If SurvMethod = 3}{SurvParam is an array (NumStratum rows, NumArm columns)
+#'    that specifies stratum-by-arm median survival times.
+#'    Thus, SurvParam[i, j] specifies the median survival time
+#'    for the i-th stratum and j-th arm.
+#'    Column 1 is control and column 2 is experimental.}
 #' }
-#'
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#' The default is NULL.
-#'
-#'
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' @description
 #' This function generates patient survival times across multiple strata based on the
 #' parameters specified in the Response Generation table.

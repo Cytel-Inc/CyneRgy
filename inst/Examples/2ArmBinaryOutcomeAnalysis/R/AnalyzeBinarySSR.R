@@ -32,7 +32,7 @@
 #'                 \describe{
 #'                      \item{NumLooks}{An integer value with the number of looks in the study}
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
-#'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
+#'                      \item{CumCompleters}{Cumulative number of completers for all non-time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
 #'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
@@ -42,7 +42,7 @@
 #'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
 #'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
 #'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
-#'                      \item{FutBdryScale}{Futility boundary scale. Possible value are: Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
+#'                      \item{FutBdryScale}{Futility boundary scale. Possible values are: Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
 #'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
 #'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
 #'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
@@ -58,8 +58,7 @@
 #'     \item{MaxSSMultInp}{List containing `From`, `To`, and `MaxSSMult` values for step-function rules.}
 #'   }
 #'
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#' A list of user-defined parameters in East Horizon. Default = NULL.
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
 #' @description
 #' Implements binary-outcome analysis with conditional power–based sample size re-estimation (SSR).

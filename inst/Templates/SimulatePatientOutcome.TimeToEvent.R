@@ -6,22 +6,16 @@
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative \% survival), 3 (Medians)
-#' @param NumPrd Number of time periods that are provided.
+#' @param SurvMethod Integer survival-generation method: 1 for hazard rates, 2 for cumulative survival probabilities, or 3 for median survival times.
+#' @param NumPrd Integer number of survival periods.
 #' @param PrdTime Numeric matrix with `NumPrd` rows and `NumArm` columns, indicating the times used to specify survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
-#' @param SurvParam \describe{Depends on the table in the Response Generation tab. 2‐D array of parameters to generate the survival times
-#'    \item{If SurvMethod is 1}{SurvParam is an array (NumPrd rows, NumArm columns) that specifies arm by arm hazard rates (one rate per arm per piece).
-#'    Thus SurvParam [i, j] specifies hazard rate in ith period for jth arm.
-#'    Arms are in columns with column 1 is control, column 2 is experimental
-#'    Time periods are in rows, row 1 is time period 1, row 2 is time period 2...}
-#'    \item{If SurvMethod is 2}{SurvParam is an array (NumPrd rows,NumArm columns) specifies arm by arm the Cum \% Survivals (one value per arm per piece). Thus, SurvParam [i, j] specifies Cum \% Survivals in ith period for jth arm.}
-#'    \item{If SurvMethod is 3}{SurvParam will be a 1 x 2 array with median survival times on each arms. Column 1 is control, column 2 is experimental }
-#'  }
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' @param SurvParam Numeric matrix with `NumPrd` rows and `NumArm` columns containing arm-specific survival parameters.
 #'   \describe{
-#'     \item{UserParam$dMeanCtrl}{Optional mean time to event for control when adapting the template to a mean-based exponential model.}
-#'     \item{UserParam$dMeanExp}{Optional mean time to event for experimental treatment when adapting the template to a mean-based exponential model.}
+#'     \item{SurvMethod = 1}{Hazard rates for each period and arm. Entry `[i, j]` is the hazard rate in period `i` for arm `j`.}
+#'     \item{SurvMethod = 2}{Cumulative survival probabilities for each period and arm. Entry `[i, j]` is the cumulative survival probability in period `i` for arm `j`.}
+#'     \item{SurvMethod = 3}{One row of median survival times, with one value per arm.}
 #'   }
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{
@@ -59,7 +53,7 @@
 
     # Step 3 - Simulate the patient data and store in vPatientOutcome ####
 
-    # Example 1 of using the parameters East Horizon Explore sent - If you don't need this block of code you may delete it.
+    # Example 1 - using the parameters East Horizon Explore sent. If you don't need this block of code you may delete it.
     if( SurvMethod == 1 ) # Hazard rates
     {
         # Simulate patient data using the hazard rates
@@ -74,7 +68,6 @@
     {
         # Simulate patient data using median survival times
     }
-    # End of example block
 
     # Example 2 - Loop over the patient vector and simulate from an Exponential distribution, as an example
     # vTrueRates <- c( 1/UserParam$dMeanCtrl, 1/UserParam$dMeanExp )
@@ -83,7 +76,6 @@
     #     nTreatmentID                 <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
     #     vPatientOutcome[ nPatIndx ]  <- rexp( 1, vTrueRates[ nTreatmentID ] )
     # }
-    # End of example block
 
     # Use appropriate error handling and modify the
     # error appropriately in each of the methods.

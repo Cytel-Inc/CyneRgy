@@ -10,7 +10,8 @@
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param PropResp Numeric vector of length `NumArm`, containing response probabilities for control followed by each experimental arm.
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
+#' In this example, UserParam must contain the following named elements:
 #'        \describe{
 #'          \item{UserParam$MedianSurvCtrl}{Median PFS time for the control arm. Defaults to 12.}
 #'          \item{UserParam$HR1, UserParam$HR2, ..., UserParam$HR(NumArm - 1)}{Treatment-to-control hazard ratio for each experimental arm. Each value defaults to 0.7.}

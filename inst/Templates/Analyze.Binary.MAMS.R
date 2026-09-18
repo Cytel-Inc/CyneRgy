@@ -35,7 +35,7 @@
 #'                 \describe{
 #'                      \item{NumLooks}{An integer value with the number of looks in the study.}
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1.}
-#'                      \item{CumCompleters}{Vector of Cumulative number of completer for all non time-to-event studies. Length = Number of looks.}
+#'                      \item{CumCompleters}{Vector of Cumulative number of completers for all non-time-to-event studies. Length = Number of looks.}
 #'                      \item{InfoFrac}{Vector of numeric Information fraction. Length = Number of looks.}
 #'                      \item{CumAlpha}{Vector of numeric Cumulative alpha spent, one sided tests. Length = Number of looks.}
 #'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
@@ -44,16 +44,14 @@
 #'                      \item{EffBdry}{Vector of numeric efficacy boundaries, one sided tests. Length = Number of looks.}
 #'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
 #'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
-#'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible value are: Delta Scale: 2}
+#'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible values are: Delta Scale: 2}
 #'                      \item{FutBdry}{Vector of numeric futility boundaries, one sided tests. Length = Number of looks.}
 #'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
 #'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
 #'                      \item{RejType}{Integer. Rejection Type. Values are: 1 Sided Efficacy Upper: 0, 1 Sided Futility Upper: 1, 1 Sided Efficacy Lower: 2, 1 Sided Futility Lower: 3, 1 Sided Efficacy Upper Futility Lower: 4, 1 Sided Efficacy Lower Futility Upper: 5}
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#'                  User should access the variables using names, for example UserParam$Var1 and not order.
-#'                  These variables can be of the following types: Integer, Numeric, or Character
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{

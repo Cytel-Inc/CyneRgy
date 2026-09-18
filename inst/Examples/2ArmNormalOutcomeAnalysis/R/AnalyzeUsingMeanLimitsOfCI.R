@@ -31,7 +31,7 @@
 #'                 \describe{
 #'                      \item{NumLooks}{An integer value with the number of looks in the study}
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
-#'                      \item{CumCompleters}{Cumulative number of completer for all non time-to-event studies.}
+#'                      \item{CumCompleters}{Cumulative number of completers for all non-time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
 #'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
@@ -41,23 +41,24 @@
 #'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
 #'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
 #'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
-#'                      \item{FutBdryScale}{Futility boundary scale. Possible value are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
+#'                      \item{FutBdryScale}{Futility boundary scale. Possible values are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
 #'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
 #'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
 #'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
 #'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#' \describe{
-#'   \item{UserParam$dMAV}{A value (-Inf, Inf) that specifies the Minimum Acceptable Value (MAV).}
-#'   \item{UserParam$dTV}{A value (-Inf, Inf) that specifies the Target Value (TV).}
-#'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the t.test() function in base R library.}
-#' }
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
+#'                  In this example, UserParam must contain the following named elements:
+#'                  \describe{
+#'                    \item{UserParam$dMAV}{A value (-Inf, Inf) that specifies the Minimum Acceptable Value (MAV).}
+#'                    \item{UserParam$dTV}{A value (-Inf, Inf) that specifies the Target Value (TV).}
+#'                    \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the t.test() function in base R library.}
+#'                  }
 #' @description In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above
 #'               the Minimum Acceptable Value (MAV) then a Go decision is made.
-#'               If a Go decision is not made, then if is is unlikely that the treatment difference is above the Target Value (TV) a No-Go decision is made.
-#'               In this example, the t.test() from base package in R is utilized to analyze the data and compute at user-specified confidence interval using UserParam$dConfLevel.
+#'               If a Go decision is not made, then if it is unlikely that the treatment difference is above the Target Value (TV) a No-Go decision is made.
+#'               In this example, the t.test() from base package in R is utilized to analyze the data and compute a user-specified confidence interval using UserParam$dConfLevel.
 #'               The team would like to make a Go decision if there is at least a 90\% chance that the difference in treatment is greater than the MAV.
 #'               If a Go decision is not made, then a No-Go decision is made if there is less than a 10\% chance the difference is greater than the TV.
 #'               Using a frequentist CI an approximation to this design can be done by the logic described below.

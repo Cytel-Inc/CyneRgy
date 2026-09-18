@@ -7,7 +7,8 @@
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param Mean Numeric vector of arm-specific outcome means.
 #' @param StdDev Numeric vector of arm-specific outcome standard deviations.
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
+#' In this example, UserParam must contain the following named elements:
 #' \describe{
 #'      \item{UserParam$dWeight1}{Mixture weight for the first treatment-effect prior.}
 #'      \item{UserParam$dWeight2}{Mixture weight for the second treatment-effect prior.}
@@ -66,12 +67,13 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
 #' @name SimulatePatientOutcomeNormalAssuranceUsingPriorInput
 #' @title Simulate normal outcomes using stored prior input
 #' @author J. Kyle Wathen and Laurent Spiess
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
-#' @param Mean A vector of length = 2 with the means of the two treatments.
-#' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL resulting in ignoring the percent of patients at 0.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Mean Numeric vector of arm-specific outcome means.
+#' @param StdDev Numeric vector of arm-specific outcome standard deviations.
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
+#' This helper ignores the percent of patients at 0 when `UserParam` is `NULL`.
 #' @description Read the next experimental mean from the global `vPrior` vector, advance `nSimIndex`, and generate normal outcomes by arm.
 #' @return A named list containing `Response`, `ErrorCode`, `vTrueDelta`, and `Delta` vectors.
 SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )

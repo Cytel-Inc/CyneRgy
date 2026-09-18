@@ -1,28 +1,28 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomePercentAtZero.Binary
-#' @title Simulate patient outcomes from a binary distribution with a percent of patients are treatment resistant.
+#' @title Simulate Binary Outcomes with Treatment-Resistant Patients
 #' @author J. Kyle Wathen
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param PropResp Numeric vector of length `NumArm`, containing response probabilities for control followed by each experimental arm.
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
-#' If UserParam is supplied, the list must contain the following named elements:
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
+#' In this example, UserParam must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dProbOfTreatmentResistantCtrl}{A value in (0, 1) that defines the probability a patient is treatment resistant the control (ctrl) treatment.}
 #'    \item{UserParam$dProbOfTreatmentResistantExp}{A value in (0, 1) that defines the probability a patient is treatment resistant experimental (exp) treatment.}
 #' }
 #' @description
-#' In this example, the binary outcome is a patient's response to treatment (0 non-response  or 1 response).
+#' In this example, the binary outcome is a patient's response to treatment (0 non-response or 1 response).
 #' For this function, a percent of patients are believed to be treatment resistant,
 #' meaning the patient will not respond to any treatment and their outcome is always a 0.
 #'
-#' The steps to simulating patient data in this example follows a two-step procedure.
+#' The process for simulating patient data in this example follows two steps.
 #'  Step 1: Determine if the patient is treatment resistant by simulating a binary variable with the probability of success defined by UserParam$dProbOfTreatmentResistantCtrl or
 #'  UserParam$dProbOfTreatmentResistantExp
 #'  Step 2: If the value in Step 1, indicating the patient is treatment resistant then their outcome is set to 0, otherwise the simulate their
-#'  outcome from a binomial distribution using the response probabilities provided in PropRest.
+#'  outcome from a binomial distribution using the response probabilities provided in PropResp.
 #' @return A list that contains:
 #' \describe{
 #'     \item{Response}{A binary numeric vector of length `NumSub`, containing one simulated outcome per subject.}
@@ -55,7 +55,7 @@ SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalT
         else                        # if the probability of a 0 >= 1 --> Don't need to simulate from the binary distribution as all patients in the treatment are a 0
             nTreatmentResistant <- 1
 
-        # If nTreatmentResistant == 1 then the patient outcome is a a 0 and we don't need to simulate it.
+        # If nTreatmentResistant == 1 then the patient outcome is a 0 and we don't need to simulate it.
 
         if( nTreatmentResistant == 0 )  # The patient responded, so we need to simulate their outcome from a binary distribution
             vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ] )

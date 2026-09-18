@@ -11,7 +11,7 @@
 #' @param PrdTime Numeric vector containing the start time of each dropout period.
 #' @param DropParam Numeric matrix with `NumPrd` rows and `NumArm` columns. For `DropMethod = 1`, entries are dropout hazard rates by period and arm; for `DropMethod = 2`, entries are cumulative dropout probabilities by period and arm.
 #'  In this  example a Dropout Parameter will have only 1 row (Number of periods = 1) and 2 columns (one each for control and experimental arm)
-#' @param UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example. If UserParam values are supplied in East Horizon, they will be elements of the list, e.g., UserParam$ParameterName.
+#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' @return A list that contains:
 #' \describe{
 #'     \item{ErrorCode (Optional)}{An integer value:  ErrorCode = 0 --> No Error
