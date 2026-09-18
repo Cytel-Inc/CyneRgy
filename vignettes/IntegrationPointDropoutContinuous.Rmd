@@ -47,13 +47,13 @@ Detailed templates with step-by-step explanations are available here: [Dropout.B
 ```
 GenCensorInd <- function( NumSub, ProbDrop, UserParam = NULL )
 {
-  nError        	    <- 0 # Error handling (no error)
+  nError        	      <- 0 # Error handling (no error)
   vCensoringIndicator 	<- rep( 1, NumSub ) # Initializing vector to 1 (all patients are completers)	
   
   # Write the actual code here.
   # Store the generated censor indicator values in a vector called vCensoringIndicator
 
-  return( list( CensorInd = as.integer( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+  return( list( CensorInd = as.integer( vCensoringIndicator ), ErrorCode = as.integer( nError ) ) )
 }
 ```
 
@@ -62,13 +62,13 @@ GenCensorInd <- function( NumSub, ProbDrop, UserParam = NULL )
 ```
 GenCensorInd <- function( NumSub, NumArm, ProbDrop, TreatmentID, UserParam = NULL )
 {
-  nError        	    <- 0 # Error handling (no error)
+  nError        	      <- 0 # Error handling (no error)
   vCensoringIndicator 	<- rep( 1, NumSub ) # Initializing vector to 1 (all patients are completers)	
   
   # Write the actual code here.
   # Store the generated censor indicator values in a vector called vCensoringIndicator
 
-  return( list( CensorInd = as.integer( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+  return( list( CensorInd = as.integer( vCensoringIndicator ), ErrorCode = as.integer( nError ) ) )
 }
 ```
 
