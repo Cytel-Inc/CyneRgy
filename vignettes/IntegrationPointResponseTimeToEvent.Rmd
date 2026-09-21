@@ -24,8 +24,8 @@ When creating a custom R script, you can optionally use specific variables provi
 |**StratumID**|Vector of Integer|Vector of length `NumSub`, indicating the stratum index to which each subject is allocated. Only required when `Stratification` is turned on.|
 |**SurvMethod**|Integer|Selected input method for survival analysis from the East Horizon dropdown list:<br>– `1`: Hazard rate.<br>– `2`: Cumulative % survival rates.<br>– `3`: Median survival times.|
 |**NumPrd**|Integer|Number of periods in the trial. Fixed to 1 for `Study Objective = Multiple Arm Confirmatory` and when `Stratification` is turned on.|
-|**PrdTime**|Matrix of Numeric|2D array of size `NumPrd x NumArm`, indicating the times used to specify survival parameters. If `Stratification` is turned on, the size is `Number of Strata x NumArm`. Equals to NA for the control arm. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Starting time of hazard pieces for each period or factor.<br>– If `SurvMethod = 2`: Time at which the cumulative % survival is specified for each period or factor.<br>– If `SurvMethod = 3`: Defaults to 0.|
-|**SurvParam**|Matrix of List|2D array of size `NumPrd x NumArm`, indicating the survival parameters. If `Stratification` is turned on, the size is `Number of Strata x NumArm`. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Specifies hazard rates per arm per period or stratum. `SurvParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period or factor<br>– If `SurvMethod = 2`: Specifies cumulative % survival rates per arm per period or factor. `SurvParam[i, j]` represents the cumulative % survival for the `jth` arm in the `ith` period or factor.<br>– If `SurvMethod = 3`: Contains median survival times for each arm (per stratum if using `Stratification`). Only one row if not using `Stratification`. `SurvMethod[i, j]` represents the median survival time for the `jth` arm (in the `ith` factor, if using `Stratification`).|
+|**PrdTime**|Matrix of Numeric|2D array of size `NumPrd x NumArm`, indicating the times used to specify survival parameters. If `Stratification` is turned on, the size is `Number of Strata x NumArm`. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Starting time of hazard pieces for each period or factor.<br>– If `SurvMethod = 2`: Time at which the cumulative % survival is specified for each period or factor.<br>– If `SurvMethod = 3`: Defaults to 0.|
+|**SurvParam**|Matrix of List|2D array of size `NumPrd x NumArm`, indicating the survival parameters. If `Stratification` is turned on, the size is `Number of Strata x NumArm`. Depends on `SurvMethod`:<br>– If `SurvMethod = 1`: Specifies hazard rates per arm per period or stratum. `SurvParam[i, j]` represents the hazard rate for the `jth` arm in the `ith` period or factor<br>– If `SurvMethod = 2`: Specifies cumulative % survival rates per arm per period or factor. `SurvParam[i, j]` represents the cumulative % survival for the `jth` arm in the `ith` period or factor.<br>– If `SurvMethod = 3`: Contains median survival times for each arm (per stratum if using `Stratification`). Only one row if not using `Stratification`. `SurvParam[i, j]` represents the median survival time for the `jth` arm (in the `ith` factor, if using `Stratification`).|
 | **UserParam**  | List     | Contains all user-defined parameters specified in the East Horizon interface (refer to the [Instructions](IntegrationPointResponse.html#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
@@ -57,8 +57,8 @@ Detailed templates with step-by-step explanations are available here: [SimulateP
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
-  vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
-  
+  vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0
+
   # Write the actual code here.
   # Store the generated survival time values in a vector called vSurvTime.
 
@@ -72,8 +72,8 @@ GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMeth
 GenerateResponse <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
 {
   nError        	<- 0 # Error handling (no error)
-  vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0	
-  
+  vSurvTime     	<- rep( 0, NumSub ) # Initializing survival times array to 0
+
   # Write the actual code here.
   # Store the generated survival time values in a vector called vSurvTime.
 

@@ -2,7 +2,7 @@
 # Parameter Description 
 # NumSub - The number of patient times to generate for the trial.  This is a single numeric value, eg 250.
 # NumArm - The number of arms in the trial, a single numeric value.  For a two arm trial, this will be 2. 
-# The SurvParam depends on input in East. In the simulation window on the Response Generation tab 
+# The SurvParam depends on input in East Horizon. In the simulation window on the Response Generation tab 
 # SurvMethod - This values is pulled from the Input Method drop-down list. This will be 1 (Hazard Rate), 2 (Cumulative % survival), 3 (Medians)
 # NumPrd - Number of time periods that are provided.  [QUESTION: Is this just the number of rows in SurvParam]
 # PrdTime: 
@@ -22,7 +22,7 @@
 #               However, if this cannot be done then which ever options are not provided should cause an error so it is clear that something was not as expected. 
 SimulatePatientSurvivalExp <- function(NumSub, NumArm, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam) 
 {
-    # The SurvParam depends on input in East. EAST sends the table found in the Simulation->Response Generation tab 
+    # The SurvParam depends on input in East Horizon. East Horizon sends the table found in the Simulation->Response Generation tab 
     if(SurvMethod == 1)   # Hazard Rates
     {
         ErrorCode <- ERROR1
