@@ -97,16 +97,16 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 
 ######################################################################################################################## .
 # Helper function for PK model generating concentration ####
-#' @param NumSub Number of subjects
-#' @param NumVisit Number of visits
-#' @param TreatmentID Vector of treatment IDs for each subject
-#' @param Inputmethod Method of input (0 for actual values)
-#' @param VisitTime Vector of visit times
-#' @param MeanControl Vector of mean control values for each visit
-#' @param MeanTrt Vector of mean treatment values for each visit
-#' @param StdDevControl Vector of standard deviations for control group for each visit
-#' @param StdDevTrt Vector of standard deviations for treatment group for each visit
-#' @param CorrMat Correlation matrix between visits
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumVisit Integer number of visits.
+#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
+#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline.
+#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
+#' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
+#' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit.
+#' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit.
+#' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
+#' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
 #' @param dAbsorptionRate Absorption rate constant
 #' @param dEliminationRate Elimination rate constant
 #' @param dDose Dose administered

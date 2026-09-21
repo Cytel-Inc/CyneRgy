@@ -24,7 +24,7 @@
 #'          \item{CriticalPoint}{Critical Value. Present in Fixed Sample designs only }
 #'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
 #'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
-#'          \item{RespLag}{Follow up duration}
+#'          \item{RespLag}{Numeric follow-up duration in time units.}
 #'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials.}
 #'
 #'      }
@@ -35,17 +35,17 @@
 #'                      \item{CumCompleters}{Cumulative number of completers for all non-time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
-#'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
-#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
-#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
-#'                      \item{EffBdryScale}{Efficacy boundary scale.  Possible values are: Z Scale: 0, p-Value Scale: 1}
-#'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
-#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
-#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
-#'                      \item{FutBdryScale}{Futility boundary scale. Possible values are:  Z Scale: 0, p-Value Scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
-#'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
-#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
-#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{CumAlpha}{Numeric vector of cumulative alpha spent at each look; present only for one-sided tests.}
+#'                      \item{CumAlphaUpper}{Numeric vector of cumulative upper-tail alpha spent at each look; present only for right-tailed and two-sided tests.}
+#'                      \item{CumAlphaLower}{Numeric vector of cumulative lower-tail alpha spent at each look; present only for left-tailed and two-sided tests.}
+#'                      \item{EffBdryScale}{Efficacy boundary scale. Possible values are: Z Scale: 0, p-value scale: 1}
+#'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one-sided tests only }
+#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right-tailed and two-sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left-tailed and two-sided tests only }
+#'                      \item{FutBdryScale}{Futility boundary scale. Possible values are: Z Scale: 0, p-value scale: 1, Delta Scale: 2, Conditional Power Scale: 3}
+#'                      \item{FutBdry}{Vector of futility boundaries. Present in one-sided tests only }
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left-tailed and two-sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right-tailed and two-sided tests only }
 #'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }

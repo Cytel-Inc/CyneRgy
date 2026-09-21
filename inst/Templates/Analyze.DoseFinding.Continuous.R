@@ -18,7 +18,7 @@
 #'          \item{VarType}{Integer. Variance Type. Values are Equal/Pooled: 4, Unequal/Welch: 5}
 #'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of treatment arms. Values are - Dropped in the interim: 0, Still present in the trial: 1}
 #'          \item{MultAdjMethod}{Integer. Multiple Comparison Procedure. Values are Fixed Sequence Pairwise: 8}
-#'          \item{RespLag}{Numeric. Follow up duration (optional)}
+#'          \item{RespLag}{Optional numeric follow-up duration in time units.}
 #'          \item{MaxCompleters}{Integer. Maximum Number of Completers.}
 #'      }
 #' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
@@ -50,7 +50,7 @@
 #'                                    \item{Decision = 3}{when the Futility Boundary Crossed}
 #'                                    }
 #'                                    }
-#'                  \item{RawPVal}{p-Value computed from test statistics. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if RawPVal is returned and if there is no Futility Boundary.}
+#'                  \item{RawPVal}{p-value computed from test statistics. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if RawPVal is returned and if there is no Futility Boundary.}
 #'                  \item{TestStat}{Value of appropriate Test Statistic on Wald (Z) scale for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. All other outputs become optional if TestStat is returned and if there is no Futility Boundary.}
 #'                  \item{Delta}{Estimate of Delta (Difference from Control) for each Treatment Arm. Vector of Numerics or 'NA's having length the same as number of treatment arms. Arms dropped in a previous look should have value 'NA'. Optional value. Required if Decision is not returned AND Futility Boundary scale is Delta or Isotonic Delta.}
 #'                  \item{POCStatusArm}{Per-arm Proof of Concept status. Vector of Integers (0 or 1) having length the same as number of treatment arms. 1 = PoC threshold crossed for this arm, 0 = not crossed. Optional - Dose Finding only.}

@@ -73,7 +73,8 @@ GenerateMEPResponse <- function( NumPat, NumArms, TreatmentID, ArrivalTime, Endp
 #' @return A list in the format required by the MEP design integration point.
 #' @export
 
-GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam )
+GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam,
+                            OutList = NULL, UserParam = NULL )
 {
     return( .CallCommonExampleFunction(
         "MEPDesign", "GetMEPDecision.R", "GetMEPDecision",

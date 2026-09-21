@@ -91,7 +91,7 @@ GetDEPDecisionsFSD <- function( SimData, DesignParam, LookInfo = NULL, TestStat,
 #' @return A list in the format required by the DEP response integration point.
 #' @export
 
-SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime = NULL, TreatmentID,
+SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
                                                                EndpointType, EndpointName, Correlation, SurvMethod,
                                                                NumPrd, PrdTime, SurvParam, PropResp = NULL,
                                                                UserParam = NULL )
@@ -116,7 +116,7 @@ SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, A
 #' @return A list in the format required by the DEP response integration point.
 #' @export
 
-SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime = NULL, TreatmentID,
+SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
                                                                 EndpointType, EndpointName, Correlation, SurvMethod,
                                                                 NumPrd, PrdTime, SurvParam, PropResp = NULL,
                                                                 UserParam = NULL )

@@ -10,7 +10,7 @@
 #'          \item{TreatmentID}{An integer value specifying the index of arms to which subjects are allocated (one arm index per subject). Index for control is 0}
 #'          \item{SurvivalTime}{Numeric value for the survival time or time-to-event for the patient, note this is not the time in the trial
 #'                               that the patient experiences the event.}
-#'          \item{DropOutTime}{Numeric value for the dropout time for the patient in a time to event trial.}
+#'          \item{DropOutTime}{Numeric value for the dropout time for the patient in a time-to-event trial.}
 #'        }
 #' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'      \describe{
@@ -30,7 +30,7 @@
 #'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of treatment arms.}
 #'          \item{MaxEvents}{Integer. Maximum Events.}
 #'          \item{FollowUpType}{Integer. Follow up Type. Values are Until end of the study: 0, For fixed period: 1}
-#'          \item{FollowUpDur}{Numeric. Follow up duration.}
+#'          \item{FollowUpDur}{Numeric follow-up duration in time units.}
 #'
 #'      }
 #' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.

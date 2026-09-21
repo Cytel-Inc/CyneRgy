@@ -22,4 +22,6 @@ library( CyneRgy )
 ```
 
 # Introduction
+{{PROJECT_FILE}}
+
 Please describe your example and put details of that.

@@ -27,7 +27,7 @@
 #'          \item{TestSeq}{Vector of integer Test Sequence for each comparison which corresponds to each treatment arm.}
 #'          \item{MaxCompleters}{Integer. Maximum Number of Completers.}
 #'          \item{CriticalPoint}{Numeric. Critical Value for a fixed sample design.}
-#'          \item{RespLag}{Numeric. Follow up duration.}
+#'          \item{RespLag}{Numeric follow-up duration in time units.}
 #'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of treatment arms. Values are - Dropped in the interim: 0, Still present in the trial: 1}
 #'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of treatment arms.}
 #'          \item{TestStatType}{Integer. Test Statistic Type. Values are t-Test: 4}
@@ -39,17 +39,17 @@
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1.}
 #'                      \item{CumCompleters}{Vector of Cumulative number of completers for all non-time-to-event studies. Length = Number of looks.}
 #'                      \item{InfoFrac}{Vector of numeric Information fraction. Length = Number of looks.}
-#'                      \item{CumAlpha}{Vector of numeric Cumulative alpha spent, one sided tests. Length = Number of looks.}
-#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
-#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
+#'                      \item{CumAlpha}{Numeric vector of cumulative alpha spent at each look; present only for one-sided tests.}
+#'                      \item{CumAlphaUpper}{Numeric vector of cumulative upper-tail alpha spent at each look; present only for right-tailed and two-sided tests.}
+#'                      \item{CumAlphaLower}{Numeric vector of cumulative lower-tail alpha spent at each look; present only for left-tailed and two-sided tests.}
 #'                      \item{EffBdryScale}{Integer. Efficacy boundary scale. Possible values are: Z Scale: 0}
-#'                      \item{EffBdry}{Vector of numeric efficacy boundaries, one sided tests. Length = Number of looks.}
-#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
-#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
+#'                      \item{EffBdry}{Vector of numeric efficacy boundaries, one-sided tests. Length = Number of looks.}
+#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right-tailed and two-sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left-tailed and two-sided tests only }
 #'                      \item{FutBdryScale}{Integer. Futility boundary scale. Possible values are: Delta Scale: 2}
-#'                      \item{FutBdry}{Vector of numeric futility boundaries, one sided tests. Length = Number of looks.}
-#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
-#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{FutBdry}{Vector of numeric futility boundaries, one-sided tests. Length = Number of looks.}
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left-tailed and two-sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right-tailed and two-sided tests only }
 #'                      \item{RejType}{Integer. Rejection Type. Values are: 1 Sided Efficacy Upper: 0, 1 Sided Futility Upper: 1, 1 Sided Efficacy Lower: 2, 1 Sided Futility Lower: 3, 1 Sided Efficacy Upper Futility Lower: 4, 1 Sided Efficacy Lower Futility Upper: 5}
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }

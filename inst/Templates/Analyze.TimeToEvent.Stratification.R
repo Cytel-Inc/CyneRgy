@@ -9,7 +9,7 @@
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
 #'          \item{SurvivalTime}{Numeric value for the survival time or time-to-event for the patient, note this is not the time in the trial
 #'                               that the patient experiences the event.}
-#'          \item{DropOutTime}{Numeric value for the dropout time for the patient in a time to event trial.}
+#'          \item{DropOutTime}{Numeric value for the dropout time for the patient in a time-to-event trial.}
 #'        }
 #' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'      \describe{
@@ -22,7 +22,7 @@
 #'          \item{CriticalPoint}{Critical Value. Present in Fixed Sample designs only }
 #'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
 #'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
-#'          \item{MaxEvents}{Maximum Events in a time to event based trial}
+#'          \item{MaxEvents}{Maximum number of events in a time-to-event trial.}
 #'          \item{FollowUpType}{For survival tests, Follow Up Type. Possible values are: Until End of Study: 0, For fixed period: 1}
 #'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms }
 #'          Stratification parameters:
@@ -44,17 +44,17 @@
 #'                      \item{InfoFrac}{Information fraction}
 #'                      \item{LookTime}{Look time on the calendar scale.}
 #'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
-#'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
-#'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
-#'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
-#'                      \item{EffBdryScale}{Efficacy boundary scale. Possible values are: Z Scale: 0, p-Value Scale: 1}
-#'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one sided tests only }
-#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right tailed and two sided tests only }
-#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left tailed and two sided tests only }
+#'                      \item{CumAlpha}{Numeric vector of cumulative alpha spent at each look; present only for one-sided tests.}
+#'                      \item{CumAlphaUpper}{Numeric vector of cumulative upper-tail alpha spent at each look; present only for right-tailed and two-sided tests.}
+#'                      \item{CumAlphaLower}{Numeric vector of cumulative lower-tail alpha spent at each look; present only for left-tailed and two-sided tests.}
+#'                      \item{EffBdryScale}{Efficacy boundary scale. Possible values are: Z Scale: 0, p-value scale: 1}
+#'                      \item{EffBdry}{Vector of efficacy boundaries. Present in one-sided tests only }
+#'                      \item{EffBdryUpper}{Vector of upper efficacy boundaries. Present in right-tailed and two-sided tests only }
+#'                      \item{EffBdryLower}{Vector of lower efficacy boundary. Present in left-tailed and two-sided tests only }
 #'                      \item{FutBdryScale}{Futility boundary scale: Z scale = 0, p-value scale = 1, Delta scale = 2, conditional-power scale = 3, or hazard-ratio scale = 6.}
-#'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
-#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
-#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{FutBdry}{Vector of futility boundaries. Present in one-sided tests only }
+#'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left-tailed and two-sided tests only }
+#'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right-tailed and two-sided tests only }
 #'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }
