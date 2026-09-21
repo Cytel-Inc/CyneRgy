@@ -28,10 +28,10 @@
 #'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
 #'          \item{NumVisit}{Integer number of visits in a Design}
 #'          \item{VisitTime}{Numeric vector containing visit times}
-#'          \item{VisitStatus}{Integer vector indicating the visit selection status. 0 - Visit selected for analysis. 1 - Otherwise}
+#'          \item{VisitStatus}{Integer vector of length `NumVisit` indicating the visit selection status. 0 - Not selected for analysis; 1 - Selected for analysis.}
 #'          \item{PrimContrastCoeff}{Numeric vector containing Primary Contrast Coefficient per visit}
 #'          \item{SecContrastCoeff}{Numeric vector containing Secondary Contrast Coefficient per visit}
-#'          \item{DropImpt}{Integer value for Dropout imputation method. 1 indicates None, 0 indicates LOCF}
+#'          \item{DropImp}{Integer value indicating the dropout imputation method. 0 - None; 1 - Last observation carried forward (LOCF).}
 #'      }
 #' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
 #'                 \describe{
@@ -63,7 +63,7 @@
 #'             \describe{
 #'                  \item{Decision}{Required value. Integer Value with the following meaning:
 #'                                  \describe{
-#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
+#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
 #'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
 #'                                    \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
 #'                                    \item{Decision = 3}{when the Futility Boundary Crossed}

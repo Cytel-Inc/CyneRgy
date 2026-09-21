@@ -5,33 +5,33 @@
 #' @author Anoop Singh Rawat
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
-#'          \item{ArrivalTime}{ A numeric value with the time the patient arrived in the trial}
+#'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}
 #'          \item{ArrTimeVisit[VisitID]}{A numeric value with the time the patient arrived in the trial for the [VisitID]th visit.}
 #'          \item{TreatmentID}{An integer value where 0 indicates control treatment and 1 experimental treatment.}
-#'          \item{Response[VisitID]}{Numeric value for the response from the patient at the [VisitID]th visit. }
+#'          \item{Response[VisitID]}{Numeric value for the response from the patient at the [VisitID]th visit.}
 #'          \item{CensorInd[VisitID]}{A binary (0-1) value where 1 indicates that the patient was censored at the [VisitID]th visit.}
-#'          \item{DropoutVisitID}{An integer value which indicates the ID of the visit where the patient was censored. }
+#'          \item{DropoutVisitID}{An integer value which indicates the ID of the visit where the patient was censored.}
 #'        }
 #' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
 #'      \describe{
 #'          \item{SampleSize}{Sample size of the trial}
 #'          \item{Alpha}{Type I Error}
-#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2 }
+#'          \item{TestType}{Values are One side: 0; Two Sided: 1, Two Sided, Asymmetric: 2}
 #'          \item{TailType}{Values are Left Tailed: 0, Right Tailed: 1}
 #'          \item{LowerAlpha}{Lower Type I error. Present for Left Tailed and Two Sided Asymmetric Tests }
 #'          \item{UpperAlpha}{Upper Type I error. Present for Right Tailed and Two Sided Asymmetric Tests }
 #'          \item{MaxCompleters}{Maximum Completers for a Continuous ep design}
-#'          \item{ResponseLag}{Fixed Followup time between first visit and Final visit }
-#'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms }
-#'          \item{CriticalPoint}{Critical Value. Present in Fixed Sample designs only }
+#'          \item{ResponseLag}{Fixed Followup time between first visit and Final visit}
+#'          \item{AllocInfo}{Vector of ratios of treatment sample sizes to control sample size. Length = Number of treatment arms}
+#'          \item{CriticalPoint}{Z Critical value for a given Alpha}
 #'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
 #'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
 #'          \item{NumVisit}{Integer number of visits in a Design}
 #'          \item{VisitTime}{Numeric vector containing visit times}
-#'          \item{VisitStatus}{Integer vector indicating the visit selection status. 0 - Visit selected for analysis. 1 - Otherwise }
-#'          \item{PrimContrastCoeff}{Numeric vector containing Primary Contrast Coefficient per visit }
-#'          \item{SecContrastCoeff}{Numeric vector containing Secondary Contrast Coefficient per visit }
-#'          \item{DropImpt}{Integer value for Dropout imputation method. 1 indicates None, 0 indicates LOCF }
+#'          \item{VisitStatus}{Integer vector of length `NumVisit` indicating the visit selection status. 0 - Not selected for analysis; 1 - Selected for analysis.}
+#'          \item{PrimContrastCoeff}{Numeric vector containing Primary Contrast Coefficient per visit}
+#'          \item{SecContrastCoeff}{Numeric vector containing Secondary Contrast Coefficient per visit}
+#'          \item{DropImp}{Integer value indicating the dropout imputation method. 0 - None; 1 - Last observation carried forward (LOCF).}
 #'      }
 #' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
 #'                 \describe{
@@ -39,6 +39,7 @@
 #'                      \item{CurrLookIndex}{An integer value with the current index look, starting from 1}
 #'                      \item{CumCompleters}{Cumulative number of completers for all non-time-to-event studies.}
 #'                      \item{InfoFrac}{Information fraction}
+#'                      \item{RejType}{Rejection type identifying the enabled efficacy and futility boundaries.}
 #'                      \item{CumAlpha}{Cumulative alpha spent. Present in one sided tests only }
 #'                      \item{CumAlphaUpper}{Upper cum. alpha spent. Present in right tailed and two sided tests only }
 #'                      \item{CumAlphaLower}{Lower cum. alpha spent. Present in left tailed and two sided tests only }
@@ -50,6 +51,8 @@
 #'                      \item{FutBdry}{Vector of futility boundaries. Present in one sided tests only }
 #'                      \item{FutBdryUpper}{Vector of upper futility boundaries. Present in left tailed and two sided tests only }
 #'                      \item{FutBdryLower}{Vector of lower futility boundaries. Present in right tailed and two sided tests only }
+#'                      \item{CPDeltaOption}{Conditional-power treatment-effect option: 0 for design Delta or 1 for estimated Delta.}
+#'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                      \item{InterimVisit}{1 based index of the visit which is driving the interims}
 #'                      \item{FutContrast}{The contrast based on which futility boundaries are being computed. 0- Primary, 1-Secondary}
 #'                      \item{IncludePipeline}{Flag indicating whether to include pipeline subjects in the interim or not. 0- Don't include. 1- Include}

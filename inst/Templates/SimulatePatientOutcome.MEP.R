@@ -12,7 +12,12 @@
 #' @param RespParams List of endpoint-specific generation parameters. Continuous entries contain arm means and standard deviations; binary entries contain arm response probabilities; time-to-event entries contain the survival method, periods, control parameters, and hazard ratios.
 #' @param Correlation Numeric correlation-coefficient matrix with one row and column per endpoint and ones on the diagonal.
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' @return A list containing `Response`, a named list of response vectors by endpoint, and optional integer `ErrorCode`.
+#' @return A list containing:
+#'   \describe{
+#'     \item{Response}{Required named list in `EndpointName` order, containing one numeric response or survival-time vector of length `NumPat` per endpoint.}
+#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
+#'   }
+#' Additional custom outputs may be included and become columns available through `SimData` at later integration points.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL )
@@ -53,5 +58,5 @@
     Response[[ EndpointName[[ 4 ] ] ] ] <- vPatientOutcomeEP4
     Response[[ EndpointName[[ 5 ] ] ] ] <- vPatientOutcomeEP5
 
-    return( list( Response = Response, ErrorCode = nError ) )
+    return( list( Response = Response, ErrorCode = as.integer( nError ) ) )
 }

@@ -24,7 +24,7 @@
 #'          \item{CriticalPoint}{Critical Value. Present in Fixed Sample designs only }
 #'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
 #'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
-#'          \item{FollowUpDur}{Follow up duration}
+#'          \item{RespLag}{Follow up duration}
 #'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials.}
 #'
 #'      }
@@ -63,7 +63,7 @@
 #'             \describe{
 #'                  \item{Decision}{Optional value. Integer Value with the following meaning:
 #'                                  \describe{
-#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
+#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
 #'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
 #'                                    \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
 #'                                    \item{Decision = 3}{when the Futility Boundary Crossed}

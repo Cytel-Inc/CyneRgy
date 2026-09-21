@@ -5,20 +5,33 @@
 #' @title Analyze Multi-Arm Time-to-Event Outcomes
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
-#'        \item{ArrivalTime}{Patient enrollment time, numeric vector}
-#'        \item{TreatmentID}{Treatment assignment where 0 = control and 1,2,... represent treatment arms}
-#'        \item{SurvivalTime}{Observed or simulated survival time for each patient}
+#'          \item{ArrivalTime}{A numeric value with the time the patient arrived in the trial}
+#'          \item{TreatmentID}{An integer value specifying the index of arms to which subjects are allocated (one arm index per subject). Index for control is 0}
+#'          \item{SurvivalTime}{Numeric value for the survival time or time-to-event for the patient, note this is not the time in the trial
+#'                               that the patient experiences the event.}
+#'          \item{DropOutTime}{Numeric value for the dropout time for the patient in a time to event trial.}
 #'        }
 #'
 #' @param DesignParam List of design and simulation parameters needed to compute test statistics and perform testing. Access elements by name, for example `DesignParam$Alpha`, rather than by position.
-#'        \describe{
-#'        \item{Alpha}{One-sided significance level}
-#'        \item{TailType}{Tail direction, 1 = upper tail, 0 = lower tail}
-#'        \item{NumTreatments}{Number of treatment arms excluding control}
-#'        \item{MaxEvents}{Maximum number of events required for analysis}
-#'        \item{CriticalPoint}{Critical boundary for fixed sample designs}
-#'        \item{IsArmPresent}{Vector indicating which treatment arms remain active}
-#'        }
+#'      \describe{
+#'          \item{SampleSize}{Integer. Sample size of the trial}
+#'          \item{Alpha}{Numeric. Type I Error}
+#'          \item{TrialType}{Integer. Type of the Trial. Values are Superiority: 0}
+#'          \item{TestType}{Integer. Values are One side: 0}
+#'          \item{TailType}{Integer. Values are Left Tailed: 0, Right Tailed: 1}
+#'          \item{InitialAllocInfo}{Vector of the ratios of the treatment group sample sizes to control group sample size. Length = number of treatment arms.}
+#'          \item{TestID}{Integer identifier for the configured time-to-event test.}
+#'          \item{MultAdjMethod}{Integer. Multiple Comparison Procedure. Values are Bonferroni: 0, Weighted Bonferroni: 2, Hochberg's Step Up: 4, Fixed Sequence: 6, Fallback: 7}
+#'          \item{NumTreatments}{Integer. Number of Treatment arms}
+#'          \item{AlphaProp}{Vector of Proportions of Alpha for each treatment arm}
+#'          \item{TestSeq}{Vector of integer Test Sequence for each comparison which corresponds to each treatment arm.}
+#'          \item{CriticalPoint}{Numeric. Critical Value for a fixed sample design.}
+#'          \item{IsArmPresent}{Vector of integer flags indicating whether an arm is still present in the trial or was dropped in the interim. Length = number of treatment arms. Values are - Dropped in the interim: 0, Still present in the trial: 1}
+#'          \item{UpdatedAllocInfo}{Vector of ratios of the treatment group sample sizes to control group sample size which may have been updated during treatment selection. Length = number of treatment arms.}
+#'          \item{MaxEvents}{Integer. Maximum Events.}
+#'          \item{FollowUpType}{Integer. Follow up Type. Values are Until end of the study: 0, For fixed period: 1}
+#'          \item{FollowUpDur}{Numeric. Follow up duration.}
+#'      }
 #'
 #' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
 #'        \describe{
@@ -41,26 +54,17 @@
 #'
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' @return The function must return a list in the return statement of the function. The information below lists
-#'         elements of the list, if the element is required or optional and a description of the return values if needed.
-#'         \describe{
-#'         \item{Decision}{Required integer vector containing decision for each treatment arm
-#'                         \describe{
-#'                         \item{0}{Continue trial}
-#'                         \item{2}{Reject null hypothesis / efficacy success}
-#'                         \item{3}{Futility at final analysis}
-#'                         }
-#'                         }
-#'         \item{HR}{Required numeric vector containing observed hazard ratios for each treatment arm versus control}
-#'         \item{AnalysisTime}{Required numeric value containing the calendar time of the current analysis}
-#'         \item{ErrorCode}{Optional integer value
-#'                         \describe{
-#'                         \item{ErrorCode = 0}{No Error}
-#'                         \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                         \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                         }
-#'                         }
-#'         }
+#' @return A list containing `ErrorCode` and one or more of the following analysis outputs:
+#'   \describe{
+#'     \item{Decision}{Optional integer vector of length `DesignParam$NumTreatments`; `NA` indicates an arm dropped previously, 0 indicates no boundary crossed, 1 indicates lower efficacy, 2 indicates upper efficacy, and 3 indicates futility.}
+#'     \item{TestStat}{Optional numeric vector of Wald (Z)-scale test statistics, one per treatment arm. Required with `RawPVal` for Dunnett multiplicity adjustments.}
+#'     \item{AdjPVal}{Optional numeric vector of multiplicity-adjusted p-values, one per treatment arm.}
+#'     \item{RawPVal}{Optional numeric vector of unadjusted p-values, one per treatment arm.}
+#'     \item{Delta}{Optional numeric vector of treatment-effect estimates. Required when the futility boundary uses the Delta scale.}
+#'     \item{HR}{Optional numeric vector of hazard-ratio estimates. Required when the futility boundary uses the hazard-ratio scale.}
+#'     \item{AnalysisTime}{Optional numeric estimate of analysis time; the look time at an interim analysis or study duration at the final analysis.}
+#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
+#'   }
 #'
 #' @description Analyze simulated time-to-event outcomes for a multiple-arm confirmatory design at the current look.
 #'

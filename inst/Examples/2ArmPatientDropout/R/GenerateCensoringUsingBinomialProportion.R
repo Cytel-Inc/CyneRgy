@@ -5,16 +5,14 @@
 #' @description Generate censoring indicator ( CensorInd ) for 2 arm designs with Normal and Binomial Endpoint using a single dropout probability.
 #'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param ProbDrop Numeric dropout probability applied to both arms.
+#' @param ProbDrop Required numeric scalar specifying the dropout probability applied to all arms.
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' @return A list that contains:
-#' \describe{
-#'     \item{ErrorCode (Optional)}{An integer value:  ErrorCode = 0 --> No Error
-#'                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
-#'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.}
-#'     \item{CensorInd (Mandatory)}{A vector of length NumSub of censor indicator values with 0 for patients that dropout eg non-completer, 1 for no dropout, eg completer. }
-#' }
+#' @return A list containing:
+#'   \describe{
+#'     \item{CensorInd}{Required integer vector of length `NumSub`; 0 indicates dropout or non-completion and 1 indicates completion.}
+#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
+#'   }
 ######################################################################################################################## .
 GenerateCensoringUsingBinomialProportion <- function( NumSub, ProbDrop, UserParam = NULL )
 {

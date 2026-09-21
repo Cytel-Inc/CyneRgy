@@ -17,11 +17,13 @@
 #' @param DropParamTrt Treatment-arm dropout parameters: a numeric vector of length `NumVisit` when `DropMethod = 1`, or a numeric scalar when `DropMethod = 2`.
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' @return A list that contains:
-#' \describe{
-#'     \item{DropOutTime}{A numeric vector of length `NumSub` containing dropout times. `Inf` indicates no dropout.}
-#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
-#' }
+#' @return A list containing one of the supported dropout representations and an optional status code:
+#'   \describe{
+#'     \item{CensorInd1, ..., CensorIndNumVisit}{Visit-specific integer vectors of length `NumSub`; 0 indicates dropout and 1 indicates completion. If supplied, no other dropout representation is required.}
+#'     \item{DropoutVisitID}{Integer vector of length `NumSub` containing the 1-based visit after which each subject dropped out. If supplied, `DropOutTime` is optional.}
+#'     \item{DropOutTime}{Numeric vector of length `NumSub` containing dropout times; `Inf` indicates no dropout.}
+#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
+#'   }
 ######################################################################################################################## .
 GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
 {

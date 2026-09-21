@@ -24,7 +24,7 @@
 #'          \item{CriticalPoint}{Critical Value. Present in Fixed Sample designs only }
 #'          \item{UpperCriticalPoint}{Upper Critical Value. Present in Right Tail Fixed Sample designs only }
 #'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
-#'          \item{FollowUpDur}{Follow up duration}
+#'          \item{RespLag}{Follow up duration}
 #'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials.}
 #'
 #'      }

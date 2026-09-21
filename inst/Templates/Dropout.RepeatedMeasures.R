@@ -17,20 +17,13 @@
 #' @param DropParamTrt Treatment-arm dropout parameters: a numeric vector of length `NumVisit` when `DropMethod = 1`, or a numeric scalar when `DropMethod = 2`.
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' @return The function must return a list in the return statement of the function. The information below lists
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'             \describe{
-#'                  \item{ErrorCode}{Optional integer value \describe{
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
-#'                  \item{DropOutTime}{ Applicable for Repeated measures. A numeric array of generated dropout times.}
-#'                  \item{CensorInd[NumVisit]}{Applicable for Repeated Measures design. A set of arrays of censor indicator values for all subjects. Each array corresponds to each visit user has specified.}
-#'                  \item{DropoutVisitID}{Applicable for Repeated Measures design. An array of 1-based Visit ID after which the patient dropped out.}
-#'                      }
-#' The output hierarchy permits censoring indicators, a dropout visit, or a dropout time.
+#' @return A list containing one of the supported dropout representations and an optional status code:
+#'   \describe{
+#'     \item{CensorInd1, ..., CensorIndNumVisit}{Visit-specific integer vectors of length `NumSub`; 0 indicates dropout and 1 indicates completion. If supplied, no other dropout representation is required.}
+#'     \item{DropoutVisitID}{Integer vector of length `NumSub` containing the 1-based visit after which each subject dropped out. If supplied, `DropOutTime` is optional.}
+#'     \item{DropOutTime}{Numeric vector of length `NumSub` containing dropout times; `Inf` indicates no dropout.}
+#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
+#'   }
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,

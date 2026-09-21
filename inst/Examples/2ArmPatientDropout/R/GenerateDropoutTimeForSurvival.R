@@ -7,18 +7,16 @@
 #' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
 #' @param DropMethod Integer input method: 1 for dropout hazard rates or 2 for cumulative dropout probabilities.
-#' @param NumPrd Integer number of dropout periods. This example uses one period.
+#' @param NumPrd Integer number of dropout periods. Mandatory for time-to-event endpoints.
 #' @param PrdTime Numeric vector containing the start time of each dropout period.
 #' @param DropParam Numeric matrix with `NumPrd` rows and `NumArm` columns. For `DropMethod = 1`, entries are dropout hazard rates by period and arm; for `DropMethod = 2`, entries are cumulative dropout probabilities by period and arm.
 #'  In this  example a Dropout Parameter will have only 1 row (Number of periods = 1) and 2 columns (one each for control and experimental arm)
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' @return A list that contains:
-#' \describe{
-#'     \item{ErrorCode (Optional)}{An integer value:  ErrorCode = 0 --> No Error
-#'                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
-#'                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted.}
-#'     \item{DropOutTime (Mandatory)}{A numeric vector of length NumSub representing dropout times. Inf means no dropout. }
-#' }
+#' @return A list containing:
+#'   \describe{
+#'     \item{DropOutTime}{Required numeric vector of length `NumSub` containing dropout times; `Inf` indicates no dropout.}
+#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
+#'   }
 ######################################################################################################################## .
 GenerateDropoutTimeForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
 {

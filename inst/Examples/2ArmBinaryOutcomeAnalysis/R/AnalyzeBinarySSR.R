@@ -76,7 +76,7 @@
 #' \describe{
 #'   \item{Decision}{An integer decision generated using `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`: 0 indicates that no boundary was crossed; 1 indicates that the lower efficacy boundary was crossed; 2 indicates that the upper efficacy boundary was crossed; 3 indicates that the futility boundary was crossed; and 4 indicates that the equivalence boundary was crossed.
 #'     \itemize{
-#'       \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
+#'       \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
 #'       \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
 #'       \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
 #'       \item{Decision = 3}{when the Futility Boundary Crossed}

@@ -40,11 +40,11 @@
 #' Exponential distribution:
 #' \deqn{ T \sim \text{Exponential}(\lambda) }
 #'
-#' @return A list that contains:
-#' \describe{
-#'     \item{SurvivalTime}{A numeric vector of length `NumSub` containing the simulated time-to-event outcomes.}
-#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
-#' }
+#' @return A list containing:
+#'   \describe{
+#'     \item{SurvivalTime}{Required numeric vector of length `NumSub` containing the generated time-to-event outcome for each subject.}
+#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
+#'   }
 ######################################################################################################################## .
 SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
                                                 StratumID, SurvMethod, NumPrd, PrdTime,

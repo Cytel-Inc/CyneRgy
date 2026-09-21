@@ -50,7 +50,7 @@ SimulatePatientSurvivalWeibull <- function( NumSub, NumArm, ArrivalTime, Treatme
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
         # are applied to have the same functionality as East Horizon, see the first example
 
-        # EXMAPLE - Set the default if needed
+        # EXAMPLE - Set the default if needed
         UserParam <- list( dShapeCtrl = 1, dShapeExp = 12, dScaleCtrl = 1, dScaleExp = 12 )
     }
 

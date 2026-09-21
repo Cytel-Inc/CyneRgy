@@ -64,7 +64,7 @@
 #'             \describe{
 #'                  \item{Decision}{Optional value. Integer Value with the following meaning:
 #'                                  \describe{
-#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is  crossed}
+#'                                    \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
 #'                                    \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
 #'                                    \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
 #'                                    \item{Decision = 3}{when the Futility Boundary Crossed}

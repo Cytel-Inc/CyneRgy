@@ -3,7 +3,7 @@
 #' @name {{FUNCTION_NAME}}
 #' @title Initialize the R Simulation Environment
 #'
-#' @param Seed An integer value to set the seed used in generating random numbers in R. Default is NULL.
+#' @param Seed Integer randomization seed supplied by East Horizon to initialize R's random-number generator. It may be `NULL`.
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
 #' @description Performs initialization for all simulations that use R before other user-defined functions execute.
