@@ -3243,7 +3243,7 @@
             "name": "Time-To-Event Weighted Conditional Power Futility Analysis",
             "description": "Customizes TTE analysis using conditional power and Logrank-based futility boundaries.",
             "download_urls": [
-                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R"
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalyzeTTEWithConditionalPowerFutility.R"
             ],
             "website_url": "https://cytel-inc.github.io/CyneRgy/articles/TimeToEventConditionalPowerFutilityAnalysis.html",
             "related_to": {

@@ -3,7 +3,7 @@
 #' @title Generate Sample CSV File with Treatment and Control Patient Data
 #' @description
 #' This helper function creates a CSV file with simulated patient data across multiple visits. It is designed to help users
-#' test the CSV-reading functions (GeneratePatientFromCSVGeneral.R and GeneratePatientFromCSVSpecific>R) by
+#' test the CSV-reading functions (GeneratePatientFromCSVGeneral.R and GeneratePatientFromCSVSpecific.R) by
 #' generating properly formatted sample data. The function simulates treatment and control groups with normally distributed
 #' responses and an optional treatment effect that increases across visits.
 #'

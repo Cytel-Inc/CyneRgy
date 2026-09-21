@@ -1,5 +1,5 @@
 ######################################################################################################################## .
-#' @name AnalzyeTTEWithConditinalPowerFutility
+#' @name AnalyzeTTEWithConditionalPowerFutility
 #' @title Time-To-Event Weighted Conditional Power Futility Analysis
 #' @description
 #' Performs a logrank analysis with conditional-power futility rules using a target
@@ -109,7 +109,7 @@
 #'
 ######################################################################################################################## .
 
-AnalzyeTTEWithConditinalPowerFutility <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
+AnalyzeTTEWithConditionalPowerFutility <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
   nError            <- 0
   nDecision         <- 0
@@ -199,8 +199,7 @@ AnalzyeTTEWithConditinalPowerFutility <- function( SimData, DesignParam, LookInf
     }
     else
     {
-      throw( new( "InvalidParameterError",
-                  message = "Invalid computation option specified in UserParam$nComputationOption" ) )
+      stop( "Invalid computation option specified in UserParam$nComputationOption" )
     }
 
     # Make futility decision based on conditional power
