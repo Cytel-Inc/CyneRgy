@@ -75,7 +75,7 @@
 #' This analysis uses `CyneRgy::GetDecisionString()` and
 #' `CyneRgy::GetDecision()` to convert the efficacy and futility
 #' conditions into the decision code returned to East Horizon Explore.
-#'@note In this example we assume a Bayesian model and use posterior probabilities for decision making
+#' @note In this example we assume a Bayesian model and use posterior probabilities for decision making
 #' If user variables are not specified, the example uses beta priors defined in the function.
 ######################################################################################################################## .
 

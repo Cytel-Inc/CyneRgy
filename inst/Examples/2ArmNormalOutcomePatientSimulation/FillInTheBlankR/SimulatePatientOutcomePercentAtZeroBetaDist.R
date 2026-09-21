@@ -10,20 +10,20 @@
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' In this example, UserParam must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dCtrlBetaParam1}{First Beta-distribution parameter for the control probability of an outcome of 0.}
-#'   \item{UserParam$dCtrlBetaParam2}{Second Beta-distribution parameter for the control probability of an outcome of 0.}
-#'   \item{UserParam$dExpBetaParam1}{First Beta-distribution parameter for the experimental probability of an outcome of 0.}
-#'   \item{UserParam$dExpBetaParam2}{Second Beta-distribution parameter for the experimental probability of an outcome of 0.}
+#'   \item{UserParam$dCtrlBetaParam1}{First parameter in the Beta distribution for the control treatment.}
+#'   \item{UserParam$dCtrlBetaParam2}{Second parameter in the Beta distribution for the control treatment.}
+#'   \item{UserParam$dExpBetaParam1}{First parameter in the Beta distribution for the experimental treatment.}
+#'   \item{UserParam$dExpBetaParam2}{Second parameter in the Beta distribution for the experimental treatment.}
 #' }
 #' @description
 #' The function assumes that the probability a patient has a zero response is random and follows a Beta( a, b ) distribution.
-#' Each distribution must provide 2 parameters for the beta distribution and the probability of 0 outcome is selected from the corresponding Beta distribution.
+#' Each distribution must provide 2 parameters for the Beta distribution and the probability of 0 outcome is selected from the corresponding Beta distribution.
 #' The probability of 0 outcome on the control treatment is sampled from a Beta( UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 ) distribution.
 #' The probability of 0 outcome on the experimental treatment is sampled from a Beta( UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution.
 #' The intent of this option is to incorporate the variability in the unknown, probability of no response, quantity.
-#' @return After the blanks are completed, a list that contains:
+#' @return A list that contains:
 #' \describe{
-#'     \item{Response}{A numeric vector of simulated patient outcomes with length `NumSub`.}
+#'     \item{Response}{A numeric vector of length `NumSub`, containing one simulated outcome per subject.}
 #'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #' }
 ######################################################################################################################## .

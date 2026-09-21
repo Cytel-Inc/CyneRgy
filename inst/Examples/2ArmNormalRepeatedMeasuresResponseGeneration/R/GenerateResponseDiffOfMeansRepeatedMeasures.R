@@ -16,7 +16,11 @@
 #' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' @return A named list containing `Response`, one response vector per visit named `Response1` through `ResponseNumVisit`, and integer `ErrorCode`.
+#' @return A list containing:
+#' \describe{
+#'   \item{Response1, ..., ResponseNumVisit}{Required numeric vectors of length `NumSub`, with one generated response vector for each visit.}
+#'   \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
+#' }
 ######################################################################################################################## .
 
 GenRespDiffOfMeansRepMeasures      <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )

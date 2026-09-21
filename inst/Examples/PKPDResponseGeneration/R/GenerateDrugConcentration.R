@@ -8,7 +8,7 @@
 #' @param NumVisit Integer number of visits.
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline. Not used by this example.
+#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline.
 #' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
 #' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
 #' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit.
@@ -23,11 +23,11 @@
 #'   \item{UserParam$Dose}{Administered dose.}
 #' }
 #'
-#' @return The function must return a list in the return statement of the function. The information below lists
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'                  \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
-#'
-#'                  \item{Response<NumVisit>}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}
+#' @return A list containing:
+#' \describe{
+#'   \item{Response1, ..., ResponseNumVisit}{Required numeric vectors of length `NumSub`, with one generated response vector for each visit.}
+#'   \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#' }
 ######################################################################################################################## .
 
 GenerateDrugConcentration <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )

@@ -113,7 +113,7 @@
 #' # Example implementation for a trial with an arbitrary number of endpoints. Check for Futility only where Efficacy is checked
 ######################################################################################################################## .
 
-GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam = NULL )
+GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList = NULL, UserParam = NULL )
 {
     # Initialize Decision with last look's decisions
     Decision <- LookInfo$LastLookDecision

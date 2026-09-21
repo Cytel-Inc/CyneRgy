@@ -76,7 +76,7 @@
 #'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
 #'     \item{Delta}{A numeric scalar containing the estimated experimental response rate minus the control response rate.}
 #' }
-#'@note In this example, the boundary information that is computed and sent from East Horizon is ignored in order to implement this decision approach.
+#' @note In this example, the boundary information that is computed and sent from East Horizon is ignored in order to implement this decision approach.
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

@@ -20,7 +20,7 @@
 #' @return The function must return a list in the return statement of the function. The information below lists
 #'             elements of the list, if the element is required or optional and a description of the return values if needed.
 #'             \describe{
-#'             \item{Response}{Required numeric value. Contains a vector of generated response for all subjects.}
+#'             \item{Response}{Required numeric vector of length `NumSub`, containing the generated responses for all subjects.}
 #'             \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'                                     }
 #'             }

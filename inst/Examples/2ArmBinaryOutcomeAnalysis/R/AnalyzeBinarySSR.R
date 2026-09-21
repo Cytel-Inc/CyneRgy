@@ -82,7 +82,7 @@
 #'       \item{Decision = 3}{when the Futility Boundary Crossed}
 #'       \item{Decision = 4}{when the Equivalence Boundary Crossed}
 #'     }}
-#'   \item{TestStat}{**Optional.** A numeric (double) value representing the teststatistic}
+#'   \item{TestStat}{**Optional.** A numeric (double) value representing the test statistic.}
 #'   \item{ReEstCompleters}{**Required.** Integer value of the **re-estimated total completers** based on the Sample Size Re-estimation (SSR) rule.}
 #'   \item{Delta}{**Optional.** Numeric value representing the observed **proportion difference**:
 #'     \deqn{\Delta = p_{\text{Exp}} - p_{\text{Ctrl}}}

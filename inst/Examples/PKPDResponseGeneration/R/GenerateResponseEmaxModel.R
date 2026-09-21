@@ -8,7 +8,7 @@
 #' @param NumVisit Integer number of visits.
 #' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
 #' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline. Not used by this example.
+#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline.
 #' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
 #' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
 #' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit.
@@ -16,7 +16,7 @@
 #' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
 #' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' 
+#'
 #' In this example, UserParam must contain the following named elements:
 #' \describe{
 #'   \item{UserParam$AbsorptionRate}{First-order absorption rate constant.}
@@ -29,7 +29,7 @@
 #'
 #' @return A list that contains:
 #' \describe{
-#'     \item{Response1, ..., ResponseNumVisit}{Numeric vectors of length `NumSub`, with one vector for each visit. `Responsej` contains the simulated response at visit j for every subject.}
+#'     \item{Response1, ..., ResponseNumVisit}{Required numeric vectors of length `NumSub`, with one generated response vector for each visit.}
 #'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #' }
 ######################################################################################################################## .

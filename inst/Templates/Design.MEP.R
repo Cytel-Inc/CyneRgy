@@ -114,7 +114,7 @@
 #'
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam = NULL )
+{{FUNCTION_NAME}} <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList = NULL, UserParam = NULL )
 {
 
     # Write the decision generation logic here

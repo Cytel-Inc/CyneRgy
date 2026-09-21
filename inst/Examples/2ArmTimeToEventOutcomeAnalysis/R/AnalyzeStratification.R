@@ -73,7 +73,7 @@
 #'       \item{Decision = 3}{when the Futility Boundary Crossed}
 #'       \item{Decision = 4}{when the Equivalence Boundary Crossed}
 #'     }}
-#'   \item{TestStat}{**Optional.** A numeric (double) value representing the teststatistic}
+#'   \item{TestStat}{**Optional.** A numeric (double) value representing the test statistic.}
 #'   \item{HR}{**Optional.** A double value containing the computed HR.}
 #'   \item{AnalysisTime}{**Optional.** Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.}
 #'   \item{ErrorCode}{**Optional.** An integer value:

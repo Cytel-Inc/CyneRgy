@@ -8,7 +8,6 @@
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
 #' @param AllocRatio Mandatory numeric vector of experimental-to-control allocation ratios with length `NumArms - 1`.
-#'   with length `NumArms - 1`.
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
 #' @return The function must return a list in the return statement of the function. The information below lists

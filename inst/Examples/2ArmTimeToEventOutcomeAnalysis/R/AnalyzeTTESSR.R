@@ -84,7 +84,7 @@
 #'       \item{Decision = 3}{when the Futility Boundary Crossed}
 #'       \item{Decision = 4}{when the Equivalence Boundary Crossed}
 #'     }}
-#'   \item{TestStat}{**Optional.** A numeric (double) value representing the teststatistic}
+#'   \item{TestStat}{**Optional.** A numeric (double) value representing the test statistic.}
 #'   \item{ReEstEvents}{**Required.** Integer value of the **re-estimated events** based on the Sample Size Re-estimation (SSR) rule.}
 #'   \item{HR}{**Optional.** Numeric value representing the observed **hazard ratio**:
 #'     \deqn{HR = \frac{\text{hazard(Treatment)}}{\text{hazard(Control)}}}

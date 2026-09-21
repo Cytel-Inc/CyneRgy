@@ -65,8 +65,3 @@ testthat::test_that( "Test- ChildPsychology",
 
     testthat::expect_equal( lRet3, lExpRet3, info = "Test 3: Return list did not match" )
 } )
-#' @title Test the legacy ChildPsychology callback contract
-
-#' @description Define three testthat checks for the legacy `ChildPsychology` callback with null, supplied, and
-
-#' omitted user parameters. The callback must be available in the test environment before this file is run.
