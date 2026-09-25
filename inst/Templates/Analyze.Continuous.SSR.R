@@ -26,7 +26,6 @@
 #'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
 #'          \item{RespLag}{Numeric follow-up duration in time units.}
 #'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials.}
-#'
 #'      }
 #' @param AdaptInfo List containing sample-size re-estimation parameters:
 #'      \describe{

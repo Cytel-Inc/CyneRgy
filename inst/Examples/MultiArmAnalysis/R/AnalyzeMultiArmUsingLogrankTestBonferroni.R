@@ -31,7 +31,6 @@
 #'          \item{MaxEvents}{Integer. Maximum Events.}
 #'          \item{FollowUpType}{Integer. Follow up Type. Values are Until end of the study: 0, For fixed period: 1}
 #'          \item{FollowUpDur}{Numeric follow-up duration in time units.}
-#'
 #'      }
 #' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
 #'        \describe{

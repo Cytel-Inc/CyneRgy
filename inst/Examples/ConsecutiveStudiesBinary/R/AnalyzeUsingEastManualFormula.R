@@ -27,7 +27,6 @@
 #'          \item{LowerCriticalPoint}{Lower Critical Value. Present in Left Tail Fixed Sample designs only }
 #'          \item{RespLag}{Numeric follow-up duration in time units.}
 #'          \item{TrtEffNull}{Treatment Effect under Null on natural scale. Applicable for Non-inferiority trials.}
-#'
 #'      }
 #' @param LookInfo List of parameters for the current analysis look. It is `NULL` for fixed-sample designs. Access elements by name, for example `LookInfo$NumLooks`, rather than by position.
 #'                 \describe{
