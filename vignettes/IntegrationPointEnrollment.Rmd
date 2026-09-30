@@ -66,10 +66,10 @@ This integration point is available in East Horizon Explore for the following st
 Important: for some tests, you may need to compute the analytical design input set before simulating the design to see the option.
 </details>
 
-## East Horizon
+## East
 
 <details>
-<summary>This integration point is available in East Horizon for the following tests (click to expand/collapse):</summary>
+<summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
 
 |Test|Number of Samples|Endpoint|Availability|
 |-------|-----|-----|--|
@@ -131,7 +131,7 @@ For some tests, the option is available under *Accrual Model*.
 ![](GettingStarted_files/enrollmentDesign2.png)
 </details>
 
-## In East Horizon
+## In East
 
 You can set up an enrollment function by navigating to the **Generate Arrival Times** task of the **User Defined R Function** tab of a **Simulation Input** window, after including the option.
 

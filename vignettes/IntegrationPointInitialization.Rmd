@@ -33,10 +33,10 @@ This integration point is available in East Horizon for the following study obje
 |Two Arm Confirmatory|✅|✅|✅|✅|✅|❌|❌|-|✅|✅|
 |Two Arm Confirmatory - Multiple Endpoints|❌|-|❌|❌|-|-|-|-|-|-|
 
-## East Horizon
+## East
 
 <details>
-<summary>This integration point is available in East Horizon for the following tests (click to expand/collapse):</summary>
+<summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
 
 |Test|Number of Samples|Endpoint|Availability|
 |-------|-----|-----|--|
@@ -74,7 +74,7 @@ For a visual guide of where to find the option, refer to the screenshot below:
 ![](GettingStarted_files/initialization.png)
 </details>
 
-## In East Horizon
+## In East
 
 You can set up an initialization function by navigating to the **Initialize R Environment** task of the **User Defined R Function** tab of a **Simulation Input** window, after including the option. For some tests, the option will be available in the **Treatment Selection** tab.
 
