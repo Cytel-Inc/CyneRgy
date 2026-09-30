@@ -51,31 +51,63 @@
 #' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon as an input.
 #'              This example does NOT include a futility rule.
 #'
-#' @return After the blanks are completed, a list that contains:
+#' @return A list that contains:
 #' \describe{
-#'     \item{TestStat}{A numeric scalar containing the analysis test statistic.}
+#'     \item{TestStat}{A numeric scalar containing the two-sample proportion test statistic on the Z scale.}
 #'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
 #' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'
-#' This analysis uses `CyneRgy::GetDecisionString()` and
-#' `CyneRgy::GetDecision()` to convert the efficacy condition into the
-#' decision code returned to East Horizon Explore.
+#' The analysis may use `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to determine the decision returned to
+#' East Horizon Explore.
+#'
+#' When these helpers are used, the following input fields are required
+#' and MUST be included when generating sample/test data:
+#'
+#' DesignParam:
+#'   - TailType: Integer indicating the direction of the statistical test.
+#'       0 = Left-tailed
+#'       1 = Right-tailed
+#'
+#' LookInfo (for group sequential designs, NULL for fixed designs):
+#' When not NULL, must contain the following fields:
+#'   - NumLooks: Total number of looks.
+#'   - CurrLookIndex: Current look index, starting at 1.
+#'   - RejType: Integer identifying which stopping boundaries are enabled.
+#'       0 = 1-Sided Efficacy Upper
+#'       1 = 1-Sided Futility Upper
+#'       2 = 1-Sided Efficacy Lower
+#'       3 = 1-Sided Futility Lower
+#'       4 = 1-Sided Efficacy Upper and Futility Lower
+#'       5 = 1-Sided Efficacy Lower and Futility Upper
+#'       6 = 2-Sided Efficacy Only (not used in East Horizon Explore)
+#'       7 = 2-Sided Futility Only (not used in East Horizon Explore)
+#'       8 = 2-Sided Efficacy and Futility (not used in East Horizon Explore)
+#'       9 = Equivalence (not used in East Horizon Explore)
+#'
 ######################################################################################################################## .
 
-AnalyzeUsingPropTest <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
+AnalyzeUsingPropTest<- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
-    # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
-    # The fully worked examples are provided in the corresponding example R files.
-
-    # Retrieve necessary information from the objects East Horizon sent
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfLooks          <- LookInfo$NumLooks
-    nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    if( !is.null( LookInfo ) )
+    {
+        nQtyOfLooks          <- LookInfo$NumLooks
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+        nRejType             <- LookInfo$RejType
+        nTailType            <- DesignParam$TailType
+    }
+    else
+    {
+        nQtyOfLooks          <- 1
+        nLookIndex           <- 1
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+        nTailType            <- DesignParam$TailType
+    }
 
     # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
@@ -90,13 +122,16 @@ AnalyzeUsingPropTest <- function( SimData, DesignParam, LookInfo, UserParam = NU
     lAnalysisResult      <- prop.test( mData, alternative = "greater", correct = FALSE )
     dPValue              <- lAnalysisResult$p.value
     dZValue              <- qnorm( 1 - ______ )
-    # Generate the decision using the shared CyneRgy helpers
+    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint,
+                                    LookInfo$EffBdryUpper[ nLookIndex ] )
+
+    # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
-                                               bIAEfficacyCondition = dZValue > LookInfo$EffBdryUpper[ nLookIndex ],
-                                               bFAEfficacyCondition = dZValue > LookInfo$EffBdryUpper[ nLookIndex ] )
+                                               bIAEfficacyCondition = dZValue > dBoundary,
+                                               bFAEfficacyCondition = dZValue > dBoundary )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
-    nError <- 0
+    nError    <- 0
 
     return( list( _______ = as.double( dZValue ), ErrorCode = as.integer( nError ), Decision = as.integer( nDecision ) ) )
 }

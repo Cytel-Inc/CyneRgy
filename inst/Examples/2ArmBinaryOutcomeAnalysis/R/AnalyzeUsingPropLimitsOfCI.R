@@ -50,9 +50,9 @@
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' In this example, UserParam must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifies the lower limit, eg  Minimum Acceptable Value (MAV).}
-#'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg Target Value (TV).}
-#'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the prop.test function in base R.}
+#'   \item{UserParam$dLowerLimit}{Numeric value in [-1, 1] specifying the minimum acceptable treatment difference used with the lower confidence limit.}
+#'   \item{UserParam$dUpperLimit}{Numeric value in [-1, 1] specifying the target treatment difference used with the upper confidence limit.}
+#'   \item{UserParam$dConfLevel}{Numeric value in (0, 1) specifying the confidence level passed to `stats::prop.test()`.}
 #' }
 #' @description In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made.
 #'               If a Go decision is not made, then if it is unlikely that the treatment difference is above the Target Value (TV) a No Go decision is made.

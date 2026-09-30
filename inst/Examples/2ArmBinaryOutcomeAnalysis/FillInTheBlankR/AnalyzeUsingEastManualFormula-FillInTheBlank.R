@@ -48,33 +48,66 @@
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' @description Use the formula 28.2 in the East manual to compute the statistic.  The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
+#' @description Use the formula 28.2 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.
 #'              The test statistic is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility rule.
-#' @return After the blanks are completed, a list that contains:
+#' @return A list that contains:
 #' \describe{
-#'     \item{TestStat}{A numeric scalar containing the analysis test statistic.}
+#'     \item{TestStat}{A numeric scalar containing the Wald test statistic on the Z scale.}
 #'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#'     \item{Delta}{A numeric scalar containing the estimated experimental response rate minus the control response rate.}
 #' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'
-#' This analysis uses `CyneRgy::GetDecisionString()` and
-#' `CyneRgy::GetDecision()` to convert the efficacy condition into the
-#' decision code returned to East Horizon Explore.
+#' The analysis may use `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to determine the decision returned to
+#' East Horizon Explore.
+#'
+#' When these helpers are used, the following input fields are required
+#' and MUST be included when generating sample/test data:
+#'
+#' DesignParam:
+#'   - TailType: Integer indicating the direction of the statistical test.
+#'       0 = Left-tailed
+#'       1 = Right-tailed
+#'
+#' LookInfo (for group sequential designs, NULL for fixed designs):
+#' When not NULL, must contain the following fields:
+#'   - NumLooks: Total number of looks.
+#'   - CurrLookIndex: Current look index, starting at 1.
+#'   - RejType: Integer identifying which stopping boundaries are enabled.
+#'       0 = 1-Sided Efficacy Upper
+#'       1 = 1-Sided Futility Upper
+#'       2 = 1-Sided Efficacy Lower
+#'       3 = 1-Sided Futility Lower
+#'       4 = 1-Sided Efficacy Upper and Futility Lower
+#'       5 = 1-Sided Efficacy Lower and Futility Upper
+#'       6 = 2-Sided Efficacy Only (not used in East Horizon Explore)
+#'       7 = 2-Sided Futility Only (not used in East Horizon Explore)
+#'       8 = 2-Sided Efficacy and Futility (not used in East Horizon Explore)
+#'       9 = Equivalence (not used in East Horizon Explore)
+#'
 ######################################################################################################################## .
 
-AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
+AnalyzeUsingEastManualFormula<- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-    # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
-    # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
-    # The fully worked examples are provided in the corresponding example R files.
-
-    # Retrieve necessary information from the objects East Horizon sent
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfLooks          <- LookInfo$NumLooks
-    nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    if( !is.null( LookInfo ) )
+    {
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfLooks          <- LookInfo$NumLooks
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+        nRejType             <- LookInfo$RejType
+        nTailType            <- DesignParam$TailType
+    }
+    else
+    {
+        nLookIndex           <- 1
+        nQtyOfLooks          <- 1
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+        nTailType            <- DesignParam$TailType
+    }
 
     # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
@@ -98,14 +131,15 @@ AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo, UserP
 
     # Equation 28.2 in East manual
     dZj                  <- ( dPiHatExperimental - dPiHatControl ) / sqrt( dPiHatj * ( 1 - dPiHatj ) * ( 1 / nQtyOfPatsOnE + 1 / nQtyOfPatsOnS ) )
+    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
 
-    # Generate the decision using the shared CyneRgy helpers
+    # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
-                                               bIAEfficacyCondition = dZj > LookInfo$EffBdryUpper[ nLookIndex ],
-                                               bFAEfficacyCondition = dZj > LookInfo$EffBdryUpper[ nLookIndex ] )
+                                               bIAEfficacyCondition = dZj > dBoundary,
+                                               bFAEfficacyCondition = dZj > dBoundary )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     nError <- 0
 
-    return( list( TestStat = as.double( dZj ), ErrorCode = as.integer( nError ), ________ = as.integer( nDecision ) ) )
+    return( list( TestStat = as.double( dZj ), ErrorCode = as.integer( nError ), ________ = as.integer( nDecision ), Delta = as.double( dPiHatExperimental - dPiHatControl ) ) )
 }

@@ -54,14 +54,10 @@
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'  In this example, UserParam must contain the following named elements:
 #'  \describe{
-#'  \item{UserParam$dPriorAlpha}{A value (0, 1) that defines the prior alpha parameter of the beta distribution.
-#'                          If this value is not specified, the default is 0.2.}
-#'  \item{UserParam$dPriorBeta}{A value (0, 1) that specifies the prior beta parameter of the beta distribution.
-#'                              If this value is not specified, the default is 0.8.}
-#'  \item{UserParam$dHistoricResponseRate}{A value (0, 1) that specifies the historic response rate.
-#'                                  If this value is not specified, the default is 0.2.}
-#'  \item{UserParam$dMinPosteriorProbability}{A value (0, 1) that specifies the posterior probability needed of being greater than the historic response rate for an experimental treatment to be selected.
-#'                              If this value is not specified, the default is 0.5.}
+#'  \item{UserParam$dPriorAlpha}{Positive numeric first Beta-prior shape parameter for each experimental response probability. Defaults to 0.2.}
+#'  \item{UserParam$dPriorBeta}{Positive numeric second Beta-prior shape parameter for each experimental response probability. Defaults to 0.8.}
+#'  \item{UserParam$dHistoricResponseRate}{Numeric value in (0, 1) specifying the historical response rate that experimental treatments must exceed. Defaults to 0.2.}
+#'  \item{UserParam$dMinPosteriorProbability}{Numeric value in (0, 1) specifying the minimum posterior probability of exceeding the historical response rate required for selection. Defaults to 0.5.}
 #'           }
 #' @return A list that contains:
 #' \describe{

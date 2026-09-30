@@ -1,6 +1,6 @@
 ######################################################################################################################## .
-#' @name AnalyzeUsingBayesAnalysisWithFutility
-#' @title Analyze for efficacy using a beta prior to compute the posterior probability that experimental is better than standard of care.
+#' @name AnalyzeUsingBetaBinomial
+#' @title Analyze for efficacy using a beta( alpha, beta ) prior to compute the posterior probability that experimental is better than control treatment care.
 #' @author J. Kyle Wathen
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
@@ -48,89 +48,133 @@
 #'                      \item{BindingType}{Futility binding type: 0 for non-binding or 1 for binding.}
 #'                 }
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#'                  In this example, UserParam must contain the following named elements:
-#'                  \describe{
-#'                    \item{UserParam$dAlphaS}{First Beta-prior shape parameter for the standard-of-care response probability.}
-#'                    \item{UserParam$dBetaS}{Second Beta-prior shape parameter for the standard-of-care response probability.}
-#'                    \item{UserParam$dAlphaE}{First Beta-prior shape parameter for the experimental response probability.}
-#'                    \item{UserParam$dBetaE}{Second Beta-prior shape parameter for the experimental response probability.}
-#'                    \item{UserParam$dUpperCutoffEfficacy}{Posterior-probability threshold above which efficacy is declared.}
-#'                    \item{UserParam$dLowerCutoffForFutility}{Predictive-probability threshold below which futility is declared.}
-#'                  }
-#' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than standard of care.
-#'              The futility is based on a Bayesian predictive probability.
-#'              The prior for the prediction and the analysis do NOT need to be the same.
-#'              This function requires more info in the glDesign than the previous AnalyzeUsingBetaBinomBayesianModel
+#'  In this example, UserParam must contain the following named elements:
+#'  \describe{
+#'      \item{UserParam$dAlphaCtrl}{Prior alpha parameter for control treatment. Equivalent to the prior number of treatment successes.}
+#'      \item{UserParam$dBetaCtrl}{Prior beta parameter for control treatment. Equivalent to the prior number of treatment failures.}
+#'      \item{UserParam$dAlphaExp}{Prior alpha parameter for experimental treatment. Equivalent to the prior number of treatment successes.}
+#'      \item{UserParam$dBetaExp}{Prior beta parameter for experimental treatment. Equivalent to the prior number of treatment failures.}
+#'      \item{UserParam$dUpperCutoffEfficacy}{Numeric value in (0, 1) specifying the posterior-probability threshold above which efficacy is declared.}
+#'      \item{UserParam$dLowerCutoffForFutility}{Numeric value in (0, 1) specifying the posterior-probability threshold below which futility is declared.}
+#'  }
+#'  If user variables are not specified then a Beta( 1, 1 ) prior is utilized for both standard of care and experimental.
 #'
-#' @return After the blanks are completed, a list that contains:
+#' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior probability that experimental is better than control treatment.
+#'              The futility is based on posterior probability being less than dLowerCutoffForFutility.
+#'              In this example we assume a Bayesian model and use posterior probabilities for decision making
+#'              If user variables are not specified we assume:
+#'              pi_Ctrl ~ beta( 10, 40 ); to reflect that knowledge that on control treatment 10/50 previous patients responded
+#'              pi_Exp ~ beta( 0.2, 0.8 ); non-informative prior for Experimental to have the same prior mean as S but only 1 prior patient observed
+#'
+#'              At an IA: If Pr( pi_Ctrl > pi_Exp | data ) > 0.95 --> Stop for efficacy.
+#'              Otherwise if  Pr( pi_Ctrl > pi_Exp | data ) < 0.1 --> Stop for futility.
+#'              At an FA: If Pr( pi_Ctrl > pi_Exp | data ) > 0.95 --> Declare efficacy, otherwise, declare futility.
+#'
+#'              When using simulation to obtain the frequentist Operating Characteristic (OC)
+#'              of a Bayesian design, you should set dLowerCutoffForFutility = 0
+#'              when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.
+#'              When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed.
+#' @return A list that contains:
 #' \describe{
-#'     \item{TestStat}{A numeric scalar containing the analysis test statistic.}
+#'     \item{TestStat}{A numeric scalar containing the posterior probability that the experimental response rate is greater than the control response rate.}
 #'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #'     \item{Decision}{An integer decision returned by `CyneRgy::GetDecision()`.}
+#'     \item{Delta}{A numeric scalar containing the estimated difference between the experimental and control response rates.}
 #' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'
-#' This analysis uses `CyneRgy::GetDecisionString()` and
-#' `CyneRgy::GetDecision()` to convert the efficacy and futility
-#' conditions into the decision code returned to East Horizon Explore.
-#' @note In this example we assume a Bayesian model and use posterior probabilities for decision making
-#' If user variables are not specified, the example uses beta priors defined in the function.
+#' The analysis may use `CyneRgy::GetDecisionString()` and
+#' `CyneRgy::GetDecision()` to determine the decision returned to
+#' East Horizon Explore.
+#'
+#' When these helpers are used, the following input fields are required
+#' and MUST be included when generating sample/test data:
+#'
+#' DesignParam:
+#'   - TailType: Integer indicating the direction of the statistical test.
+#'       0 = Left-tailed
+#'       1 = Right-tailed
+#'
+#' LookInfo (for group sequential designs, NULL for fixed designs):
+#' When not NULL, must contain the following fields:
+#'   - NumLooks: Total number of looks.
+#'   - CurrLookIndex: Current look index, starting at 1.
+#'   - RejType: Integer identifying which stopping boundaries are enabled.
+#'       0 = 1-Sided Efficacy Upper
+#'       1 = 1-Sided Futility Upper
+#'       2 = 1-Sided Efficacy Lower
+#'       3 = 1-Sided Futility Lower
+#'       4 = 1-Sided Efficacy Upper and Futility Lower
+#'       5 = 1-Sided Efficacy Lower and Futility Upper
+#'       6 = 2-Sided Efficacy Only (not used in East Horizon Explore)
+#'       7 = 2-Sided Futility Only (not used in East Horizon Explore)
+#'       8 = 2-Sided Efficacy and Futility (not used in East Horizon Explore)
+#'       9 = Equivalence (not used in East Horizon Explore)
+#'
 ######################################################################################################################## .
 
-AnalyzeUsingBayesAnalysisWithFutility <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
+AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
 {
-
-    # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
-    # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
-    # The fully worked examples are provided in the corresponding example R files.
-
-    # The below lines set the values of the parameters if a user does not specify a value
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    if( !is.null( LookInfo ) )
+    {
+        # Group sequential design
+        nLookIndex           <- LookInfo$CurrLookIndex
+        nQtyOfLooks          <- LookInfo$NumLooks
+        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
+        nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
+        nRejType             <- LookInfo$RejType
+        nTailType            <- DesignParam$TailType
+    }
+    else
+    {
+        # Fixed Design
+        nLookIndex           <- 1
+        nQtyOfLooks          <- 1
+        nQtyOfEvents         <- DesignParam$MaxCompleters
+        nQtyOfPatsInAnalysis <- nrow( SimData )
+        nTailType            <- DesignParam$TailType
+    }
 
     if( is.null( UserParam ) )
     {
-        UserParam <- list( dAlphaS = 10, dBetaS = 40, dAlphaE = 0.2, dBetaE = 0.8,
-                   dUpperCutoffEfficacy = 0.975, dLowerCutoffForFutility = 0.1 )
+
+        # FATAL ERROR AS WE DON'T KNOW WHAT THE USER WANTS TO DO.
+        # Creating a FATAL error will avoid misleading results when UserParam is not supplied
+        return( list( TestStat  = as.double( 0 ),
+                    ErrorCode = as.integer( -1 ),
+                    Decision  = as.integer( 0 ),
+                    Delta     = as.double( 0 ) ) )
     }
 
-    # Pull important information from the input parameters that were sent from East Horizon
-    nQtyOfLooks          <- LookInfo$NumLooks
-    nLookIndex           <- LookInfo$CurrLookIndex
-    nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
-
-    nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-
-    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
+    # Step 2 - Create the vector of simulated data for this IA - East Horizon sends all of the simulated data ####
     vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
 
     # Create vectors of data for each treatment
-    vOutcomesS           <- vPatientOutcome[ vPatientTreatment == 0 ]
-    vOutcomesE           <- ___________[ vPatientTreatment == 1 ]
+    vOutcomesCtrl        <- vPatientOutcome[ vPatientTreatment == 0 ]
+    vOutcomesExp         <- ____________[ vPatientTreatment == 1 ]
 
-    # Important Note:
-    # When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should set dLowerCutoffForFutility = 0
-    # when simulating under the null case in order to obtain the false-positive rate of the non-binding futility rule.
-    # When you set dLowerCutoffForFutility > 0, simulation will provide the OC of the binding futility rule because the rule is ALWAYS followed.
-
-    # Perform the desired analysis - for this case a Bayesian analysis.  If Posterior Probability is > Cutoff --> Efficacy ####
+    # Step 3 -Perform the desired analysis - for this case a Bayesian analysis.  If Posterior Probability is > Cutoff --> Efficacy ####
     # The function PerformAnalysisBetaBinomial is provided below in this file.
-    lRet                 <- PerformAnalysisBetaBinomial( vOutcomesS, vOutcomesE, UserParam$dAlphaS, UserParam$dBetaS, UserParam$dAlphaE, UserParam$dBetaE )
+    lRet                 <- ProbExpGreaterCtrlBeta( vOutcomesCtrl, vOutcomesExp, UserParam$dAlphaCtrl, UserParam$dBetaCtrl, UserParam$dAlphaExp, UserParam$dBetaExp )
+
+    # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
-                                               bIAEfficacyCondition = lRet$dPostProb > ____________,
-                                               bIAFutilityCondition = lRet$dPostProb < ______________,
-                                               bFAEfficacyCondition = lRet$dPostProb > ____________ )
+                                               bIAEfficacyCondition = lRet$dPostProb > _____________________________,
+                                               bIAFutilityCondition = lRet$dPostProb <  _________________________________,
+                                               bFAEfficacyCondition = lRet$dPostProb > _____________________________ )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
-    nError <- 0
-    # retval <- 0
+    nError    <- 0
 
-    return( list( ______ = as.double( lRet$dPostProb ), ErrorCode = as.integer( nError ), Decision = as.integer( nDecision ) ) )
+    return( list( ________ = as.double( lRet$dPostProb ), ErrorCode = as.integer( nError ), Decision = as.integer( nDecision ), Delta = as.double( lRet$dDelta ) ) )
 }
 
 # Function for performing statistical analysis using a Beta-Binomial Bayesian model
 
-PerformAnalysisBetaBinomial <- function( vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlphaE, dBetaE )
+ProbExpGreaterCtrlBeta <- function( vOutcomesCtrl, vOutcomesExp, dAlphaCtrl, dBetaCtrl, dAlphaExp, dBetaExp )
 {
     # In the beta-binomial model if we make the assumption that
     # pi ~ Beta( a, b )
@@ -138,20 +182,22 @@ PerformAnalysisBetaBinomial <- function( vOutcomesS, vOutcomesE, dAlphaS, dBetaS
     # pi | data ~ Beta( a + # success, b + # non-successes )
 
     # Compute the posterior parameters for control treatment
-    dAlphaS <- dAlphaS + sum( vOutcomesS )
-    dBetaS  <- dBetaS  + length( vOutcomesS ) - sum( vOutcomesS )
+    dAlphaCtrl  <- dAlphaCtrl + sum( vOutcomesCtrl )
+    dBetaCtrl   <- dBetaCtrl  + length( vOutcomesCtrl ) - sum( vOutcomesCtrl )
 
     # Compute the posterior parameters for Exp treatment
-    dAlphaE  <- dAlphaE + sum( vOutcomesE )
-    dBetaE   <- dBetaE  + length( vOutcomesE ) - sum( vOutcomesE )
+    dAlphaExp   <- dAlphaExp + sum( vOutcomesExp )
+    dBetaExp    <- dBetaExp  + length( vOutcomesExp ) - sum( vOutcomesExp )
 
     # There are much more efficient ways to compute this, but for simplicity, we are just sampling the posteriors
-    vPiCtrl    <- rbeta( 10000, dAlphaS, dBetaS )
-    vPiExp     <- rbeta( 10000, dAlphaE, dBetaE )
+    vPiCtrl    <- rbeta( 10000, dAlphaCtrl, dBetaCtrl )
+    vPiExp     <- rbeta( 10000, dAlphaExp, dBetaExp )
     dPostProb  <- ifelse( vPiExp > vPiCtrl, 1, 0 )
     dPostProb  <- sum( dPostProb ) / length( dPostProb )
 
-    return( list( dPostProb = dPostProb ) )
+    # Compute Delta: mean( Pi_E ) - mean( Pi_C )
+    dDelta     <- ( dAlphaExp / ( dAlphaExp + dBetaExp ) ) - ( dAlphaCtrl / ( dAlphaCtrl + dBetaCtrl ) )
+    return( list( dPostProb = dPostProb, dDelta = dDelta ) )
 }
 
 # Function to compute Bayesian predictive probability of success
@@ -188,7 +234,7 @@ ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dat
         combinedDataE  <- c( dataE, remainingDataE )
 
         # Perform the analysis with combined data to check if the trial is successful
-        result <- PerformAnalysisBetaBinomial( combinedDataS, combinedDataE, lAnalysisParams )
+        result <- ProbSGreaterEBeta( combinedDataS, combinedDataE, lAnalysisParams )
 
         # Check if the result meets the cutoff for success
         if( result$dPostProb <= finalBoundary )

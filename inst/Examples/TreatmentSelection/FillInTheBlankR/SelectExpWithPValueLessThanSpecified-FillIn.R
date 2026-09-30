@@ -2,8 +2,8 @@
 #' @name SelectExpWithPValueLessThanSpecified
 #' @title Select Treatments Using Chi-Squared P-Values
 #' @description
-#' Provides a fill-in exercise for selecting experimental arms below a user-defined
-#' p-value threshold, with a smallest-p-value fallback.
+#' Compares each experimental arm with control using a chi-squared test and selects
+#' arms below the user-defined p-value threshold, with a smallest-p-value fallback.
 #' @author Sydney Ringold, J. Kyle Wathen
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
@@ -52,10 +52,10 @@
 #'                      \item{RejType}{Integer. Rejection Type. Values are: 1 Sided Efficacy Upper: 0, 1 Sided Futility Upper: 1, 1 Sided Efficacy Lower: 2, 1 Sided Futility Lower: 3, 1 Sided Efficacy Upper Futility Lower: 4, 1 Sided Efficacy Lower Futility Upper: 5}
 #'                 }
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' In this example, UserParam must contain the following named elements:
-#'   \describe{
-#'     \item{UserParam$dMaxPValue}{Maximum chi-squared p-value for selecting an experimental treatment to advance. Treatments with smaller p-values are selected.}
-#'   }
+#'  In this example, UserParam must contain the following named elements:
+#'  \describe{
+#'  \item{UserParam$dMaxPValue}{Numeric value in (0, 1) specifying the maximum chi-squared p-value for selecting an experimental treatment to advance. Treatments with smaller p-values are selected.}
+#'           }
 #' @return A list that contains:
 #' \describe{
 #'     \item{TreatmentID}{An integer vector containing the selected experimental-arm indexes.}
@@ -66,10 +66,6 @@
 
 SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
 {
-    # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
-    # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
-    # The fully worked examples are provided in the corresponding example R files.
-
     if( is.null( UserParam ) )
     {
         UserParam <- list( dMaxPValue = 0 )
@@ -100,7 +96,7 @@ SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo
         }
 
         # Step 2 - Create the vector of selected treatments, with p-value < dMaxPValue ####
-        if( vPValue[ nIndex - 1 ] < __________ )
+        if( vPValue[ nIndex - 1 ]  < __________ )
         {
             # Note: the TreatmentID is nIndex - 1
             vReturnTreatmentID <- c( vReturnTreatmentID, nIndex - 1 )
@@ -110,7 +106,7 @@ SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo
     # If none of the experimental treatments had p-value < dMaxPValue, select the treatment with the smallest p-value
     if( length( __________ ) == 0 )
     {
-        __________ <- which.min( vPValue )
+        __________ <-  which.min( vPValue )
     }
 
     # Step 3: Create the allocation ratios for all selected treatments ####
@@ -126,7 +122,7 @@ SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo
         nErrorCode <- -1
     }
 
-    lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ),
+    lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ) ,
                      AllocRatio  = as.double( vAllocationRatio ),
                      ErrorCode   = as.integer( nErrorCode ) )
 

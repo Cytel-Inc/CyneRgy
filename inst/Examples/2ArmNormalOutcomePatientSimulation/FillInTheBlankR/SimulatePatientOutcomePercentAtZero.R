@@ -10,16 +10,16 @@
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' In this example, UserParam must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dProbOfZeroOutcomeCtrl}{Probability that a control patient has an outcome of 0.}
-#'   \item{UserParam$dProbOfZeroOutcomeExp}{Probability that an experimental-treatment patient has an outcome of 0.}
+#'   \item{UserParam$dProbOfZeroOutcomeCtrl}{Probability in (0, 1) that a control patient has an outcome of 0.}
+#'   \item{UserParam$dProbOfZeroOutcomeExp}{Probability in (0, 1) that an experimental-treatment patient has an outcome of 0.}
 #' }
 #' @description
-#' In this example, the continuous outcome is a patient's change from baseline.   For this function, 20\% of patients are believed to have no change due to treatment.
+#' In this example, the continuous outcome is a patient's change from baseline. For this function, 20\% of patients are believed to have no change due to treatment.
 #' As such, this function simulations patient outcome where, on average, 20\% will have a value of 0 for the outcome and 80\%, on average, will have their value
 #' simulated from a normal distribution with the mean and standard deviation as sent from East Horizon.
-#' @return After the blanks are completed, a list that contains:
+#' @return A list that contains:
 #' \describe{
-#'     \item{Response}{A numeric vector of simulated patient outcomes with length `NumSub`.}
+#'     \item{Response}{A numeric vector of length `NumSub`, containing one simulated outcome per subject.}
 #'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
 #' }
 ######################################################################################################################## .
@@ -32,7 +32,7 @@ SimulatePatientOutcomePercentAtZero <- function( NumSub, ArrivalTime, TreatmentI
         UserParam <- list( _____________________ = 0, ___________________ = 0 )
     }
 
-    # Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
+    #Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
     vProbabilityOfZeroOutcome <- c( UserParam$dProbOfZeroOutcomeCtrl, UserParam$dProbOfZeroOutcomeExp )    # For this example, 20% of patients do not respond to treatment and thus have no change from baseline.
 
     nError           <- 0 # No errors occurred
@@ -51,11 +51,11 @@ SimulatePatientOutcomePercentAtZero <- function( NumSub, ArrivalTime, TreatmentI
         else                        # if the probability of a 0 >= 1 --> Don't need to simulate from the normal distribution as all patients in the treatment are a 0
             nResponseIsZero <- 1
 
-        if( ___________________ == 0 ) # The patient responded, so we need to simulate their outcome from a normal distribution with the specified mean and standard deviation
+        if( ___________________ == 0 )  # The patient responded, so we need to simulate their outcome from a normal distribution with the specified mean and standard deviation
             vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ] )
     }
 
-    if( any( is.na( vPatientOutcome ) == TRUE ) )
+    if( any( is.na( vPatientOutcome ) ) )
         nError <- -100
 
     return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )

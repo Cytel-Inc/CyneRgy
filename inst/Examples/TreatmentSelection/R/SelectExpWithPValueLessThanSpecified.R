@@ -54,8 +54,7 @@
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'  In this example, UserParam must contain the following named elements:
 #'  \describe{
-#'  \item{UserParam$dMaxPValue}{A value (0,1) that defines the comparison chi-squared probability for selecting which treatments to advance.
-#'       Any treatment with less than the specified p-value will be advanced to the second stage}
+#'  \item{UserParam$dMaxPValue}{Numeric value in (0, 1) specifying the maximum chi-squared p-value for selecting an experimental treatment to advance. Treatments with smaller p-values are selected.}
 #'           }
 #' @return A list that contains:
 #' \describe{

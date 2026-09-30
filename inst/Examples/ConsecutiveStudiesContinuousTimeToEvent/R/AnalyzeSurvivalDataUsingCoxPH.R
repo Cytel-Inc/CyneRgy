@@ -51,10 +51,12 @@
 #'                 }
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' In this example, UserParam must contain the following named elements:
-#'   \describe{
-#'     \item{UserParam$bReturnLogTrueHazard}{Logical indicating whether to return the natural logarithm of `TrueHR`. Defaults to `FALSE`.}
-#'     \item{UserParam$bReturnNAForNoGoTrials}{Logical indicating whether to return `NA` for trials without an efficacy decision. Defaults to `FALSE`.}
-#'   }
+#'        \describe{
+#'         \item{UserParam$bReturnLogTrueHazard}{Logical indicating whether the returned hazard ratio should be transformed using
+#'               the natural logarithm. Default is \code{FALSE}.}
+#'         \item{UserParam$bReturnNAForNoGoTrials}{Logical indicating whether the hazard ratio should be returned as \code{NA} when
+#'               the trial does not meet the efficacy criterion. Default is \code{FALSE}.}
+#'        }
 #' @return A named list containing `TestStat`, `Decision`, `ErrorCode`, `dPValue`, `HazardRatio`, and `TrueHR`.
 ######################################################################################################################## .
 AnalyzeSurvivalDataUsingCoxPH <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )

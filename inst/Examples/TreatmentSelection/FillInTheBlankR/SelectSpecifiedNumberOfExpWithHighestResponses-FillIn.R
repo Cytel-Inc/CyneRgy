@@ -2,8 +2,8 @@
 #' @name SelectSpecifiedNumberOfExpWithHighestResponses
 #' @title Select a Specified Number of Highest-Response Treatments
 #' @description
-#' Provides a fill-in exercise for selecting the requested number of experimental
-#' arms with the largest response counts and assigning rank-specific allocation ratios.
+#' Selects the requested number of experimental arms with the largest observed
+#' response counts and assigns rank-specific allocation ratios.
 #' @author Sydney Ringold, J. Kyle Wathen
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
@@ -53,10 +53,10 @@
 #'                 }
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' In this example, UserParam must contain the following named elements:
-#'   \describe{
-#'     \item{UserParam$QtyOfArmsToSelect}{Number of experimental arms selected to advance.}
-#'     \item{UserParam$Rank1AllocationRatio, UserParam$Rank2AllocationRatio, ..., UserParam$RankNAllocationRatio}{Allocation ratio relative to control for the arm with response rank 1 through `N`, where `N` is `UserParam$QtyOfArmsToSelect`.}
-#'   }
+#' \describe{
+#' \item{UserParam$QtyOfArmsToSelect}{Number of experimental arms selected to advance. This must match the number of rank-specific allocation values. Defaults to 1.}
+#' \item{UserParam$Rank1AllocationRatio, UserParam$Rank2AllocationRatio, ..., UserParam$RankNAllocationRatio}{Allocation ratio relative to control for the arm with response rank `1` through `N`, where `N` is `UserParam$QtyOfArmsToSelect`. `UserParam$Rank1AllocationRatio` defaults to 2.}
+#'          }
 #' @return A list that contains:
 #' \describe{
 #'     \item{TreatmentID}{An integer vector containing the selected experimental-arm indexes.}
@@ -67,47 +67,49 @@
 
 SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
 {
-    # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
-    # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
-    # The fully worked examples are provided in the corresponding example R files.
-
-    if( is.null( UserParam ) )
+    if( !exists( "UserParam" ) | is.null( UserParam ) )
     {
-        UserParam <- list( maxSelection = 2, highestResponse = 2, nextHighestResponse = 1 )
+        # Default is to select the treatment with highest number of responses and allocation of 2:1 (Experimental:Control)
+        UserParam <- list( QtyOfArmsToSelect = 1, Rank1AllocationRatio = 2 )
     }
-    # Calculate the number of responses per arm and select the highest user-specified number (maxSelection) of arms
+    # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
 
-    # Want to select the top user-specified (maxSelection) number of experimental treatments, so drop control from the sorting
+    # Want to select the top user-specified (QtyOfArmsToSelect) number of experimental treatments, so drop control from the sorting
     # Now, only the experimental treatments are left
     tabResults   <- ______[ -1, ]
 
     # Sort in descending order based on the number of responses (column 2)
     # After the sort, the matrix will have the largest number of responses in the first row and the smallest number of responses in the last row
+    mSortedMatrix      <- tabResults[ order( tabResults[ , 2 ], decreasing =  TRUE ), ]
 
-    mSortedMatrix      <- tabResults[ order( tabResults[ , 2 ], decreasing = TRUE ), ]
-    # Select the user-specified (maxSelection) number of treatments with the largest number of responses
-    vReturnTreatmentID <- as.integer( row.names( mSortedMatrix[ 1:UserParam$max, ] ) )
+    # Select the user-specified (QtyOfArmsToSelect) number of treatments with the largest number of responses
+    vSortedNames       <- row.names( mSortedMatrix )  # Get the names of the treatments in order by number of responses
+    vReturnTreatmentID <- as.integer( ______[ 1:UserParam$QtyOfArmsToSelect ] )  # Select the number of desired treatments.
 
-    # The treatment with the highest number of responses should receive the user-specified highestResponse times as many patients as the next highest.
-    # The allocation will put user-specified highestResponse times as many patients on the treatment with the highest number of responses
-    # eg the treatment vReturnTreatmentID[ 1 ] will receive user-specified highestResponse times as many patients as vReturnTreatmentID[ 2 ]
-    vAllocationRatio   <- c( ______, ______ )
+    # The treatment with the highest number of responses should receive the user-specified Rank1AllocationRatio times as many patients as the next highest.
+    # The allocation will put user-specified Rank1AllocationRatio times as many patients on the treatment with the highest number of responses
+    # eg the treatment vReturnTreatmentID[ 1 ] will receive user-specified Rank1AllocationRatio times as many patients as vReturnTreatmentID[ 2 ]
+    # NOTE: Always pull elements from the list by name rather than assuming a specific order
+    vAllocationRatio <- c()
+    for( iRank in 1:UserParam$QtyOfArmsToSelect )
+    {
+        vAllocationRatio <- c( vAllocationRatio, ______ )
+    }
 
-    # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$highestResponse, vReturnTreatmentID[ 2 ] a ratio of UserParam$nextHighestResponse, and control is always 1
+    # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$Rank1AllocationRatio and
+    # vReturnTreatmentID[ 2 ] a ratio of UserParam$Rank2AllocationRatio, and control is always 1
 
     nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
     if( length( vReturnTreatmentID ) != length( vAllocationRatio ) )
     {
-        # Fatal error because the R code is incorrect
+        #Fatal error because the R code is incorrect
         nErrorCode <- -1
     }
-
     lReturn <- list( ______ = as.integer( vReturnTreatmentID ),
                      AllocRatio  = as.double( vAllocationRatio ),
                      ErrorCode   = as.integer( nErrorCode ) )
-
     return( lReturn )
 
 }

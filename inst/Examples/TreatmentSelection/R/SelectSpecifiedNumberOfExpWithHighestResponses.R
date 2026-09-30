@@ -54,11 +54,9 @@
 #' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #' In this example, UserParam must contain the following named elements:
 #' \describe{
-#' \item{UserParam$QtyOfArmsToSelect}{A value that defines how many treatment arms are chosen to advance.
-#'                          This number must match the number of rank-specific allocation values.}
-#' \item{UserParam$Rank1AllocationRatio, UserParam$Rank2AllocationRatio, ..., UserParam$RankNAllocationRatio}{Allocation ratio relative to control for the arm with response rank `1` through `N`, where `N` is `UserParam$QtyOfArmsToSelect`.}
+#' \item{UserParam$QtyOfArmsToSelect}{Number of experimental arms selected to advance. This must match the number of rank-specific allocation values. Defaults to 1.}
+#' \item{UserParam$Rank1AllocationRatio, UserParam$Rank2AllocationRatio, ..., UserParam$RankNAllocationRatio}{Allocation ratio relative to control for the arm with response rank `1` through `N`, where `N` is `UserParam$QtyOfArmsToSelect`. `UserParam$Rank1AllocationRatio` defaults to 2.}
 #'          }
-#' If `UserParam` is `NULL`, one arm is selected and `UserParam$Rank1AllocationRatio` defaults to 2.
 #' @return A list that contains:
 #' \describe{
 #'     \item{TreatmentID}{An integer vector containing the selected experimental-arm indexes.}

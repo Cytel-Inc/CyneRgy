@@ -54,8 +54,8 @@
 #'      \item{UserParam$dBetaCtrl}{Prior beta parameter for control treatment. Equivalent to the prior number of treatment failures.}
 #'      \item{UserParam$dAlphaExp}{Prior alpha parameter for experimental treatment. Equivalent to the prior number of treatment successes.}
 #'      \item{UserParam$dBetaExp}{Prior beta parameter for experimental treatment. Equivalent to the prior number of treatment failures.}
-#'      \item{UserParam$dUpperCutoffEfficacy}{A value (0,1) that specifies the upper cutoff for the efficacy check. Above this value will declare efficacy.}
-#'      \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility check. Below this value will declare futility.}
+#'      \item{UserParam$dUpperCutoffEfficacy}{Numeric value in (0, 1) specifying the posterior-probability threshold above which efficacy is declared.}
+#'      \item{UserParam$dLowerCutoffForFutility}{Numeric value in (0, 1) specifying the posterior-probability threshold below which futility is declared.}
 #'  }
 #'  If user variables are not specified then a Beta( 1, 1 ) prior is utilized for both standard of care and experimental.
 #'

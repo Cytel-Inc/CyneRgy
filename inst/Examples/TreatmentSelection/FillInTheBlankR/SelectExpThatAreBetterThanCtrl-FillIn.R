@@ -2,8 +2,8 @@
 #' @name SelectExpThatAreBetterThanCtrl
 #' @title Select Treatments with Response Rates Above Control
 #' @description
-#' Provides a fill-in exercise that selects experimental arms with observed response
-#' rates above control, with a highest-response-rate fallback.
+#' Selects every experimental arm with an observed response rate above control.
+#' If no arm meets that rule, selects the experimental arm with the highest rate.
 #' @author Sydney Ringold, J. Kyle Wathen
 #' @param SimData Data frame containing subject data generated in the current simulation, with one row per subject. Access variables by column name; optional outputs from response generation and dropout are also available as columns.
 #'        \describe{
@@ -62,21 +62,18 @@
 
 SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo, UserParam = NULL )
 {
-    # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
-    # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
-    # The fully worked examples are provided in the corresponding example R files.
-
     # Calculate the number of responders and treatment failures for each treatment
 
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
     tabResults   <- table( SimData$TreatmentID, SimData$Response )
 
     # Compute the response probability as # of responses/(  # of treatment failures + # of responses )
-    vProbabilityResponse            <- as.vector( ____________[ , 2 ] / ( tabResults[ , 1 ] + tabResults[ , 2 ] ) )
+    vProbabilityResponse                <- as.vector( ____________[ , 2 ] / ( tabResults[ , 1 ] + tabResults[ , 2 ] ) )
+
     # Create a variable with the probability of response on control to be used in decision making
     dProbabilityOfResponseOnControl     <- ____________[ 1 ]
     # Create vector with only the estimated probability of response on experimentals
-    vProbabilityResponseOnExperimental  <- ____________[ 2:length( vProbabilityResponse ) ]
+    vProbabilityResponseOnExperimental  <- ____________[ c( 2:length( vProbabilityResponse ) ) ]
 
     # Note: vProbabilityResponseOnExperimental now contains only the response rates for the experimental treatments
 
@@ -94,7 +91,7 @@ SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo, User
     # If none of the experimental treatments had a response rate greater than control, select the treatment with the largest response rate
     if( length( ____________ ) == 0 )
     {
-        vReturnTreatmentID <- which.max( vProbabilityResponseOnExperimental )
+        vReturnTreatmentID <-  which.max( vProbabilityResponseOnExperimental )
     }
 
     # We want all treatments to have a randomization ratio of 1
@@ -112,7 +109,7 @@ SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo, User
         nErrorCode <- -1
     }
 
-    lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ),
+    lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ) ,
                      AllocRatio  = as.double( vAllocationRatio ),
                      ErrorCode   = as.integer( nErrorCode ) )
 

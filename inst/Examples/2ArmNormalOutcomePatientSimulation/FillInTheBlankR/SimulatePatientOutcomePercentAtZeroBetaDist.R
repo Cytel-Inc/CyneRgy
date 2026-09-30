@@ -41,7 +41,7 @@ SimulatePatientOutcomePercentAtZeroBetaDist <- function( NumSub, ArrivalTime, Tr
         dProbabilityofZeroOutcomeCtrl <- _______( 1, UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 )
         dProbabilityofZeroOutcomeExp  <- _______( 1, UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 )
 
-        # Create the vProbabilityOfZeroOutcome that is needed below when the patient outcome is simulated
+        #Create the vProbabilityOfZeroOutcome that is needed below when the patient outcome is simulated
         vProbabilityOfZeroOutcome     <- c( dProbabilityofZeroOutcomeCtrl, dProbabilityofZeroOutcomeExp )
     }
 
@@ -60,11 +60,11 @@ SimulatePatientOutcomePercentAtZeroBetaDist <- function( NumSub, ArrivalTime, Tr
         else                        # if the probability of a 0 >= 1 --> Don't need to simulate from the normal distribution as all patients in the treatment are a 0
             nResponseIsZero <- 1
 
-        if( nResponseIsZero == 0 ) # The patient responded, so we need to simulate their outcome from a normal distribution with the specified mean and standard deviation
+        if( nResponseIsZero == 0 )  # The patient responded, so we need to simulate their outcome from a normal distribution with the specified mean and standard deviation
             vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ] )
     }
 
-    if( any( is.na( vPatientOutcome ) == TRUE ) )
+    if( any( is.na( vPatientOutcome ) ) )
         nError <- -100
 
     return( list( Response = as.double( ____________ ), ErrorCode = as.integer( _________________ ) ) )
