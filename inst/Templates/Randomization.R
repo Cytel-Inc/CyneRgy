@@ -1,43 +1,46 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Randomize Subjects to Treatment Arms
-#' @description Generate treatment assignments using allocation ratios relative to the control arm.
+#'
+#' @title Template: Randomize subjects to treatment arms
+#'
+#' @description Randomize subjects to treatment arms. Use this template as a starting point for custom logic.
+#'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
+#'   user-defined inputs through UserParam where that argument is supported.
+#'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
-#' @param AllocRatio Positive numeric scalar giving the experimental-to-control allocation ratio for a two-arm design, or a numeric vector of experimental-to-control allocation ratios with length `NumArms - 1` for a multiple-arm design.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' @return The function must return a list in the return statement of the function. The information below lists
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'             \describe{
-#'                  \item{TreatmentID}{Required value. This is a vector of treatment ID allocation per subject where:
-#'                                  \describe{
-#'                                    \item{TreatmentID = 0}{ Subject allotted to Control arm }
-#'                                    \item{TreatmentID = n}{ Subject allotted to Experimental arm n where n >=1 }
-#'                                    }
-#'                                    }
-#'                  \item{ErrorCode}{Optional integer value \describe{
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
-#'                      }
+#' @param NumArms Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
 #'
+#' @param AllocRatio Numeric vector of experimental-to-control allocation ratios, one element per experimental arm.
+#'   The control allocation is 1, so a ratio of 2 assigns twice as many subjects to that experimental arm as to
+#'   control.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
-{
-
-    nError                        <- 0
+{{FUNCTION_NAME}} <- function( NumSub, NumArms, AllocRatio, UserParam = NULL ) {
+    nErrorCode <- 0
 
     # Allocation ratio on control and treatment arm
-    vAllocRatio                   <- c( 1, AllocRatio )
+    vAllocRatio <- c( 1, AllocRatio )
 
     # Convert the Allocation Ratio to Allocation Fraction for control and treatment arms
-    dAllocFraction                <- c( vAllocRatio[ 1 ] / sum( vAllocRatio ), 1 - vAllocRatio[ 1 ] / sum( vAllocRatio ) )
-    vTreatmentIDs                 <- sample( 0:( NumArms - 1 ), NumSub, prob = dAllocFraction, replace = TRUE )
+    dAllocFraction <- vAllocRatio / sum( vAllocRatio )
+    vTreatmentIDs <- sample( 0:( NumArms - 1 ), NumSub, prob = dAllocFraction, replace = TRUE )
 
-    return( list( TreatmentID = as.integer( vTreatmentIDs ), ErrorCode = as.integer( nError ) ) )
+    return( list( TreatmentID = as.integer( vTreatmentIDs ), ErrorCode = as.integer( nErrorCode ) ) )
 }

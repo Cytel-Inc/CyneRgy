@@ -1,8 +1,10 @@
 ######################################################################################################################## .
 #' @name SimulateMultipleOutcomesCovariatesStratRandomization
+#'
 #' @title Simulate Multiple Independent Outcomes with Covariate Effects and Stratified Randomization
 #'
-#' @description This function simulates three independent normally distributed outcomes for a given number of subjects,
+#' @description This function simulates three independent normally distributed outcomes for a given number of
+#'   subjects,
 #' incorporating covariate effects. This function performs stratified randomization based on the two covariates:
 #'        \itemize{
 #'          \item Covariate 1: binary (e.g., diabetic)
@@ -10,75 +12,86 @@
 #'        }
 #' Covariate effects are incorporated linearly into the outcome generation.
 #' Note: this function can be extended to simulate any number of endpoints and covariates.
+#'
 #' @author Julija Saltane
 #'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' generating new treatment IDs (0 = control, 1 = treatment).
-#' @param Mean Numeric vector of arm-specific outcome means.
-#' @param StdDev Numeric vector of arm-specific outcome standard deviations.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' In this example, UserParam must contain the following named elements:
+#'
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
+#'   in TreatmentID order.
+#'
+#' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
+#'   experimental arms in TreatmentID order.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements:
+#' Contains treatment-specific means and covariate parameters:
 #'        \describe{
-#'          \item{UserParam$MeanOutcome1Ctrl}{Mean of outcome 1 for the control group.}
-#'          \item{UserParam$MeanOutcome1Trt}{Mean of outcome 1 for the treatment group.}
-#'          \item{UserParam$MeanOutcome2Ctrl}{Mean of outcome 2 for the control group.}
-#'          \item{UserParam$MeanOutcome2Trt}{Mean of outcome 2 for the treatment group.}
-#'          \item{UserParam$MeanOutcome3Ctrl}{Mean of outcome 3 for the control group.}
-#'          \item{UserParam$MeanOutcome3Trt}{Mean of outcome 3 for the treatment group.}
-#'          \item{UserParam$Beta1}{Additive effect of covariate 1 on each outcome.}
-#'          \item{UserParam$Beta2}{Additive effect of covariate 2 on each outcome.}
-#'          \item{UserParam$Cov1Prob}{Probability that binary covariate 1 equals 1.}
-#'          \item{UserParam$Cov2Prob}{Probability that binary covariate 2 equals 1.}
-#'          \item{UserParam$AllocRatio}{Treatment-to-control allocation ratio; 1 gives equal allocation and 2 assigns twice as many patients to treatment.}
+#'          \item{MeanOutcome1Ctrl}{Mean of outcome 1 for control group}
+#'          \item{MeanOutcome1Trt}{Mean of outcome 1 for treatment group}
+#'          \item{MeanOutcome2Ctrl}{Mean of outcome 2 for control group}
+#'          \item{MeanOutcome2Trt}{Mean of outcome 2 for treatment group}
+#'          \item{MeanOutcome3Ctrl}{Mean of outcome 3 for control group}
+#'          \item{MeanOutcome3Trt}{Mean of outcome 3 for treatment group}
+#'          \item{Beta1}{Effect size of covariate 1}
+#'          \item{Beta2}{Effect size of covariate 2}
+#'          \item{Cov1Prob}{Probability of covariate 1 being 1}
+#'          \item{Cov2Prob}{Probability of covariate 2 being 1}
+#'          \item{AllocRatio}{Ratio of treatment to control allocation (e.g., 1 for equal allocation, 2 for twice
+#'            as many in treatment)}
 #'        }
 #'
-#' @return A list containing:
-#'        \describe{
-#'          \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1}
-#'          \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2}
-#'          \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}
-#'          \item{Covariate1}{Binary vector of simulated values for covariate 1}
-#'          \item{Covariate2}{Binary vector of simulated values for covariate 2}
-#'          \item{PatientTreatmentID} {Vector of integer values where 0 indicates assignment to control group and 1 - to treatment group }
-#'          \item{Response}{Placeholder, always a numeric vector of zeros (reserved for compatibility with other functions)}
-#'          \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation. In this function, ErrorCode = 1 indicates that `UserParam` is `NULL`.}
-#'        }
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
 #'
-#' @examples
-#' UserParam <- list( MeanOutcome1Ctrl = 10, MeanOutcome1Trt = 12,
-#'                    MeanOutcome2Ctrl = 20, MeanOutcome2Trt = 22,
-#'                    MeanOutcome3Ctrl = 30, MeanOutcome3Trt = 32,
-#'                    Beta1 = 0.1, Beta2 = 2,
-#'                    Cov1Prob = 0.2, Cov2Prob = 0.5,
-#'                    AllocRatio = 1 )
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1}
+#'   \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2}
+#'   \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}
+#'   \item{Covariate1}{Binary vector of simulated values for covariate 1}
+#'   \item{Covariate2}{Binary vector of simulated values for covariate 2}
+#'   \item{PatientTreatmentID}{Vector of integer values where 0 indicates assignment to control group and 1 - to
+#'     treatment group}
+#' }
 #'
-#' NumSub    <- 100
+#' @details Usage of TreatmentID in this example: Integer vector. Not used directly in this function, as stratified
+#'   randomization is performed by the function, generating new treatment IDs (0 = control, 1 = treatment).
 #'
-#' result <- SimulateMultipleOutcomesCovariatesStratRandomization( NumSub = NumSub,
-#'                                                                 ArrivalTime = NULL,
-#'                                                                 TreatmentID = NULL,
-#'                                                                 Mean = NULL,
-#'                                                                 StdDev = NULL,
-#'                                                                 UserParam = UserParam )
+#' Usage of Mean in this example: Numeric. Not used directly in this function.
 #'
+#' Usage of StdDev in this example: Numeric. Not used directly in this function.
+#'
+#' Example-specific error codes: Integer. 0 if successful, 1 if `UserParam` is NULL
 ######################################################################################################################## .
 
-SimulateMultipleOutcomesCovariatesStratRandomization <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
-{
-
+SimulateMultipleOutcomesCovariatesStratRandomization <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
     # Initialize the return variables that will contain results for 3 normal endpoints
-    vPatientOutcome1 <- rep( 0, NumSub )  # First outcome
-    vPatientOutcome2 <- rep( 0, NumSub )  # Second outcome
-    vPatientOutcome3 <- rep( 0, NumSub )  # Third outcome
+    vPatientOutcome1 <- rep( 0, NumSub ) # First outcome
+    vPatientOutcome2 <- rep( 0, NumSub ) # Second outcome
+    vPatientOutcome3 <- rep( 0, NumSub ) # Third outcome
 
     # Validate custom variable input and set defaults
-    nError <- 0
+    nErrorCode <- 0
 
-    if( is.null( UserParam ) )
-    {
-        nError <- 1
+    if ( is.null( UserParam ) ) {
+        nErrorCode <- 1
     }
 
     # Extract means for each outcome and group
@@ -91,56 +104,56 @@ SimulateMultipleOutcomesCovariatesStratRandomization <- function( NumSub, Arriva
     dBeta2 <- UserParam$Beta2
 
     # Simulate the effect of covariates
-    vCovariate1      <- rbinom( NumSub, size = 1, prob = UserParam$Cov1Prob )
-    vCovariate2      <- rbinom( NumSub, size = 1, prob = UserParam$Cov2Prob )
+    vCovariate1 <- stats::rbinom( NumSub, size = 1, prob = UserParam$Cov1Prob )
+    vCovariate2 <- stats::rbinom( NumSub, size = 1, prob = UserParam$Cov2Prob )
     vCovariateEffect <- dBeta1 * vCovariate1 + dBeta2 * vCovariate2
 
     # Create strata
     vCovariate1Groups <- factor( ifelse( vCovariate1 == 0, "Non-Diabetic", "Diabetic" ), levels = c( "Non-Diabetic", "Diabetic" ) )
     vCovariate2Groups <- factor( ifelse( vCovariate2 == 0, "Non-Smoker", "Smoker" ), levels = c( "Non-Smoker", "Smoker" ) )
-    vStrata           <- interaction( vCovariate1Groups, vCovariate2Groups, sep = "_" )
+    vStrata <- interaction( vCovariate1Groups, vCovariate2Groups, sep = "_" )
 
     # Create allocation fraction
-    vAllocRatio    <- c( 1, UserParam$AllocRatio )
+    vAllocRatio <- c( 1, UserParam$AllocRatio )
     vAllocFraction <- c( vAllocRatio[ 1 ] / sum( vAllocRatio ), 1 - vAllocRatio[ 1 ] / sum( vAllocRatio ) )
 
     # Randomize treatment within each stratum
     vTreatmentID <- rep( 0, NumSub )
 
-    for( strStrata in unique( vStrata ) )
-    {
+    for ( strStrata in unique( vStrata ) ) {
         # Determine indeces of patients in that strata
-        vIndex      <- which( vStrata == strStrata )
+        vIndex <- which( vStrata == strStrata )
         nSampleSize <- length( vIndex )
 
         # Calculate allocation fraction for control and treatment group
         nSampleSizeTrt <- nSampleSize - round( nSampleSize * vAllocFraction[ 1 ] )
 
         # Find the indices for treatment group
-        vTreatmentArmIndex                 <- vIndex[ sample( 1:nSampleSize, size = nSampleSizeTrt, replace = FALSE ) ]
+        vTreatmentArmIndex <- vIndex[ sample( 1:nSampleSize, size = nSampleSizeTrt, replace = FALSE ) ]
         vTreatmentID[ vTreatmentArmIndex ] <- 1
     }
 
     # Simulate the patient independent outcome data
-    for( nPatientIndex in 1:NumSub )
-    {
+    for ( nPatientIndex in 1:NumSub ) {
         # Convert 0(Ctrl) -> 1 to 1 (Trt) -> 2 for indexing
         nTreatmentID <- vTreatmentID[ nPatientIndex ] + 1
 
-        vPatientOutcome1[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome1[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
-        vPatientOutcome2[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome2[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
-        vPatientOutcome3[ nPatientIndex ] <- rnorm( 1, mean = vMeansOutcome3[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
+        vPatientOutcome1[ nPatientIndex ] <- stats::rnorm( 1, mean = vMeansOutcome1[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
+        vPatientOutcome2[ nPatientIndex ] <- stats::rnorm( 1, mean = vMeansOutcome2[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
+        vPatientOutcome3[ nPatientIndex ] <- stats::rnorm( 1, mean = vMeansOutcome3[ nTreatmentID ] + vCovariateEffect[ nPatientIndex ], sd = 1 )
     }
 
     # Return the simulated outcomes and error code
-    lReturn <- list( PatientOutcome1    = as.double( vPatientOutcome1 ),
-                     PatientOutcome2    = as.double( vPatientOutcome2 ),
-                     PatientOutcome3    = as.double( vPatientOutcome3 ),
-                     PatientTreatmentID = as.integer( vTreatmentID ),
-                     Covariate1 = as.double( vCovariate1 ),
-                     Covariate2 = as.double( vCovariate2 ),
-                     Response   = as.double( rep( 0, NumSub ) ),
-                     ErrorCode  = as.integer( nError ) )
+    lReturn <- list(
+        PatientOutcome1 = as.double( vPatientOutcome1 ),
+        PatientOutcome2 = as.double( vPatientOutcome2 ),
+        PatientOutcome3 = as.double( vPatientOutcome3 ),
+        PatientTreatmentID = as.integer( vTreatmentID ),
+        Covariate1 = as.double( vCovariate1 ),
+        Covariate2 = as.double( vCovariate2 ),
+        Response = as.double( rep( 0, NumSub ) ),
+        ErrorCode = as.integer( nErrorCode )
+    )
 
     return( lReturn )
 }

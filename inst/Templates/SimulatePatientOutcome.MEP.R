@@ -1,62 +1,80 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Simulate Multiple-Endpoint Patient Outcomes
-#' @description Simulate continuous, binary, or time-to-event responses for each configured endpoint.
-#' @param NumPat Integer number of patients in the trial.
-#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
-#' @param TreatmentID Integer vector of length `NumPat`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param ArrivalTime Numeric vector of length `NumPat`, indicating the arrival time for each subject.
-#' @param EndpointType Integer vector identifying each endpoint as continuous (0), binary (1), or time-to-event (2).
-#' @param EndpointName Character vector naming the endpoints in `EndpointType` order.
-#' @param RespParams List of endpoint-specific generation parameters. Continuous entries contain arm means and standard deviations; binary entries contain arm response probabilities; time-to-event entries contain the survival method, periods, control parameters, and hazard ratios.
-#' @param Correlation Numeric correlation-coefficient matrix with one row and column per endpoint and ones on the diagonal.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' @return A list containing:
-#'   \describe{
-#'     \item{Response}{Required named list in `EndpointName` order, containing one numeric response or survival-time vector of length `NumPat` per endpoint.}
-#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
-#'   }
-#' Additional custom outputs may be included and become columns available through `SimData` at later integration points.
+#'
+#' @title Template: Simulate multiple-endpoint subject responses
+#'
+#' @description Simulate multiple-endpoint subject responses. Use this template as a starting point for custom
+#'   logic. Preserve the engine-supplied argument names and access named list elements by name. Supply additional
+#'   user-defined inputs through UserParam where that argument is supported.
+#'
+#' @param NumPat Integer number of subjects in the trial.
+#'
+#' @param NumArms Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#'
+#' @param EndpointType Integer vector of endpoint types, in EndpointName order: 0 = continuous, 1 = binary, 2 =
+#'   time-to-event.
+#'
+#' @param EndpointName Character vector of endpoint names, in the order specified in East Horizon. Use the actual
+#'   names to access endpoint-specific list elements.
+#'
+#' @param RespParams List of endpoint-specific parameter lists, in EndpointName order.
+#' \describe{
+#'   \item{Continuous (EndpointType = 0)}{Control and Treatment each contain the mean and standard deviation, in
+#'     that order, for example `list( Control = c( Mean = 5, SD = 2 ), Treatment = c( Mean = 10, SD = 2 ) )`.}
+#'   \item{Binary (EndpointType = 1)}{Control and Treatment are response probabilities between 0 and 1, for example
+#'     `list( Control = 0.1, Treatment = 0.5 )`.}
+#'   \item{Time-to-event (EndpointType = 2)}{SurvMethod selects 1 = hazard rates, 2 = cumulative survival
+#'     percentages, or 3 = median survival times. Control contains the method-specific control parameters and HR
+#'     contains treatment-to-control hazard ratios. For method 1, NumPiece is the number of hazard pieces and
+#'     StartAtTime contains their starting times. For method 2, ByTime contains the times at which Control survival
+#'     percentages are specified. Method 3 uses the control median survival time.}
+#' }
+#'
+#' @param Correlation Square matrix of integer correlation categories in EndpointName order. Category 0 =
+#'   uncorrelated; absolute values 1, 2, 3, 4, and 5 indicate very weak, weak, moderate, strong, and very strong
+#'   correlation. Positive values indicate positive correlation; negative values indicate negative correlation.
+#'   This is an engine category matrix, not a numeric Pearson correlation matrix.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Required named list of numeric response vectors, indexed by EndpointName, with one value per
+#'     subject in each vector. Time-to-event responses are measured from enrollment.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' @details The integration-point documentation also lists optional ArrivalRank and Corr outputs but does not
+#'   specify their structure. These templates and examples return Response and ErrorCode; consult the requirements
+#'   of the target East Horizon version before using those optional outputs.
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL )
-{
-    # Step 1 - Initialize the return variables or other variables needed ####
-    nError              <- 0
-    vPatientOutcomeEP1  <- rep( 0, NumPat )
-    vPatientOutcomeEP2  <- rep( 0, NumPat )
-    vPatientOutcomeEP3  <- rep( 0, NumPat )
-    vPatientOutcomeEP4  <- rep( 0, NumPat )
-    vPatientOutcomeEP5  <- rep( 0, NumPat )
-
-    Response            <- list()
-
-    # Step 2 - Validate custom variable input and set defaults ####
-    if( is.null( UserParam ) )
-    {
-
-        # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
-        # take care of any issues.   Also, if there is a default value for the parameters, you may want to set them here.
-
-        # EXAMPLE - Set the default if needed
-        #UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
+{{FUNCTION_NAME}} <- function( NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL ) {
+    # Step 1 - Initialize a response vector for each endpoint ####
+    nErrorCode <- 0
+    lResponse <- list( )
+    for ( nEndpointIndex in seq_along( EndpointName ) ) {
+        lResponse[[ EndpointName[ nEndpointIndex ] ]] <- rep( 0, NumPat )
     }
 
-    # Step 3 - Simulate the patient data and store in Response ####
-    for( nSubjID in 1:NumPat )
-    {
-        # Write code to simulate patient data with a specified correlation.
-    }
+    # Step 2 - Validate custom inputs and set defaults when needed ####
+    # Access additional parameters through UserParam by name.
 
-    # Use appropriate error handling and modify the
-    # Error appropriately in each of the methods
+    # Step 3 - Replace each placeholder vector with simulated endpoint responses ####
+    # Use RespParams and Correlation to generate responses for the requested endpoints.
 
-    Response[[ EndpointName[[ 1 ] ] ] ] <- vPatientOutcomeEP1
-    Response[[ EndpointName[[ 2 ] ] ] ] <- vPatientOutcomeEP2
-    Response[[ EndpointName[[ 3 ] ] ] ] <- vPatientOutcomeEP3
-    Response[[ EndpointName[[ 4 ] ] ] ] <- vPatientOutcomeEP4
-    Response[[ EndpointName[[ 5 ] ] ] ] <- vPatientOutcomeEP5
-
-    return( list( Response = Response, ErrorCode = as.integer( nError ) ) )
+    return( list( Response = lResponse, ErrorCode = as.integer( nErrorCode ) ) )
 }

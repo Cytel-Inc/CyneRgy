@@ -1,192 +1,258 @@
 ######################################################################################################################## .
 #' @name GenerateResponseEmaxModel
+#'
 #' @title Simulate Treatment Effect with Emax Model
-#' @description
-#' Generate drug concentrations per subject per visit, then applies the Emax equation to convert per-visit plasma concentrations into treatment responses using the Emax PD model.
+#'
+#' @description Generate drug concentrations per subject per visit, then apply the Emax equation to convert
+#'   per-visit plasma concentrations into treatment responses using the Emax PD model.
+#'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
+#'
 #' @param NumSub Integer number of subjects in the trial.
+#'
 #' @param NumVisit Integer number of visits.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline.
-#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
-#' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
-#' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit.
-#' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit.
-#' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
-#' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' In this example, UserParam must contain the following named elements:
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
+#'   changes from baseline at each visit. Preserve this engine-supplied spelling.
+#'
+#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#'
+#' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
+#'
+#' @param MeanTrt Numeric vector of experimental-arm mean responses of length NumVisit, ordered by visit.
+#'
+#' @param StdDevControl Numeric vector of control-arm response standard deviations of length NumVisit, ordered by
+#'   visit.
+#'
+#' @param StdDevTrt Numeric vector of experimental-arm response standard deviations of length NumVisit, ordered by
+#'   visit.
+#'
+#' @param CorrMat Numeric correlation matrix between visits, with NumVisit rows and NumVisit columns.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements:
 #' \describe{
-#'   \item{UserParam$AbsorptionRate}{First-order absorption rate constant.}
-#'   \item{UserParam$EliminationRate}{First-order elimination rate constant.}
-#'   \item{UserParam$Dose}{Administered dose.}
-#'   \item{UserParam$E0}{Baseline effect in the Emax model.}
-#'   \item{UserParam$Emax}{Maximum drug effect.}
-#'   \item{UserParam$EC50}{Concentration producing 50\% of the maximum effect.}
+#'   \item{AbsorptionRate}{Required positive numeric first-order absorption rate constant.}
+#'   \item{EliminationRate}{Required positive numeric first-order elimination rate constant.}
+#'   \item{Dose}{Required positive numeric administered dose.}
+#'   \item{E0}{Required numeric baseline pharmacodynamic effect.}
+#'   \item{Emax}{Required numeric maximum pharmacodynamic effect.}
+#'   \item{EC50}{Required positive numeric concentration producing half of Emax.}
 #' }
 #'
-#' @return A list that contains:
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
 #' \describe{
-#'     \item{Response1, ..., ResponseNumVisit}{Required numeric vectors of length `NumSub`, with one generated response vector for each visit.}
-#'     \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
+#'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
+#'     Replace NumVisit by the actual number of visits. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
 #' }
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{Response<NumVisit>}{A set of arrays of response for all subjects. Each array corresponds to each visit
+#'     user has specified}
+#' }
+#'
+#' @details Return each visit response as a separate named list element: Response1, Response2, ...,
+#'   ResponseNumVisit. Optional ArrivalTime may be included in the function signature when calendar arrival times
+#'   are needed; it has the same definition as at the enrollment integration point.
 ######################################################################################################################## .
 
-GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
-{
-    nError  <- 0
-    lRetval <- list()
+GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+    nErrorCode <- 0
+    lRetval <- list( )
 
     # Initialize simulated response matrix
     mResponses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
 
     # Define the Emax model parameters from UserParam
-    dAbsorptionRate   <- UserParam$AbsorptionRate   # Absorption rate constant
-    dEliminationRate  <- UserParam$EliminationRate  # Elimination rate constant
-    dDose             <- UserParam$Dose             # Dose administered
-    E0                <- UserParam$E0               # Baseline effect
-    Emax              <- UserParam$Emax             # Maximum effect
-    EC50              <- UserParam$EC50             # Concentration at 50% of Emax
+    dAbsorptionRate <- UserParam$AbsorptionRate # Absorption rate constant
+    dEliminationRate <- UserParam$EliminationRate # Elimination rate constant
+    dDose <- UserParam$Dose # Dose administered
+    E0 <- UserParam$E0 # Baseline effec
+    Emax <- UserParam$Emax # Maximum effect
+    EC50 <- UserParam$EC50 # Concentration at 50% of Emax
 
     # Check if all required Emax parameters are provided
-    if( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) )
-    {
-        nError <- -1 # Fatal error if required parameters are missing
-        lRetval$ErrorCode <- as.integer( nError )
+    if ( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) ) {
+        nErrorCode <- -1 # Fatal error if required parameters are missing
+        lRetval$ErrorCode <- as.integer( nErrorCode )
         return( lRetval )
     }
 
     # Call PK function to get concentration responses for treatment group
-    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime,
-                                            MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat,
-                                            dAbsorptionRate, dEliminationRate, dDose )
+    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose )
 
     # Simulate response for each patient
-    for( nPatIndx in 1:NumSub )
-    {
-        for( nVisitIndx in 1:NumVisit )
-        {
-            Cp <- lPkResult[[ paste0( "Response", nVisitIndx ) ] ] [ nPatIndx ]
+    for ( nPatIndx in 1:NumSub ) {
+        for ( nVisitIndx in 1:NumVisit ) {
+            Cp <- lPkResult[[ paste0( "Response", nVisitIndx ) ]][ nPatIndx ]
 
             dTreatmentEffect <- E0 + ( Emax * Cp ) / ( EC50 + Cp ) # Calculate Emax
 
-            if( TreatmentID[ nPatIndx ] == 0 )
-            {
-                mResponses[ nPatIndx, nVisitIndx ] <- rnorm( 1, mean = MeanControl[ nVisitIndx ], sd = StdDevControl[ nVisitIndx ] ) # Generates response for control group
-            }
-            else
-            {
-                mResponses[ nPatIndx, nVisitIndx ] <- rnorm( 1, mean = dTreatmentEffect, sd = StdDevTrt[ nVisitIndx ] ) # Generates response for treatment group (Emax model output)
+            if ( TreatmentID[ nPatIndx ] == 0 ) {
+                mResponses[ nPatIndx, nVisitIndx ] <- stats::rnorm( 1, mean = MeanControl[ nVisitIndx ], sd = StdDevControl[ nVisitIndx ] ) # Generates response for control group
+            } else {
+                mResponses[ nPatIndx, nVisitIndx ] <- stats::rnorm( 1, mean = dTreatmentEffect, sd = StdDevTrt[ nVisitIndx ] ) # Generates response for treatment group (Emax model output)
             }
         }
     }
 
     # Add responses to return list
-    for( nVisitIndx in 1:NumVisit )
-    {
-
-        lRetval[[ paste0( "Response", nVisitIndx ) ] ] <- as.double( mResponses[ , nVisitIndx ] )
+    for ( nVisitIndx in 1:NumVisit ) {
+        lRetval[[ paste0( "Response", nVisitIndx ) ]] <- as.double( mResponses[ , nVisitIndx ] )
     }
 
-    lRetval$ErrorCode <- as.integer( nError )
+    lRetval$ErrorCode <- as.integer( nErrorCode )
     return( lRetval )
-
 }
 
-######################################################################################################################## .
-# Helper function for PK model generating concentration ####
-#' @param NumSub Integer number of subjects in the trial.
-#' @param NumVisit Integer number of visits.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline.
-#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
-#' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
-#' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit.
-#' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit.
-#' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
-#' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
-#' @param dAbsorptionRate Absorption rate constant
-#' @param dEliminationRate Elimination rate constant
-#' @param dDose Dose administered
-######################################################################################################################## .
-GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose )
-{
-    # Initialize error code and return list
-    nError  <- 0
-    lRetval <- list()
 
-    if( is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) )
-    {
-        nError <- -1  # Fatal error if required parameters are missing
-        lRetval$ErrorCode <- as.integer( nError )
+######################################################################################################################## .
+#' @name GenerateDrugConcentration
+#'
+#' @title Generate Drug Concentration
+#'
+#' @description Generate visit-level drug concentrations using a one-compartment model with first-order absorption
+#'   and elimination, then add arm-specific normal measurement noise.
+#'
+#' @author Anton Sun, Jacob Wathen, Gabriel Potvin
+#'
+#' @param NumSub Integer number of subjects in the trial.
+#'
+#' @param NumVisit Integer number of visits.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
+#'   changes from baseline at each visit. Preserve this engine-supplied spelling.
+#'
+#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#'
+#' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
+#'
+#' @param MeanTrt Numeric vector of experimental-arm mean responses of length NumVisit, ordered by visit.
+#'
+#' @param StdDevControl Numeric vector of control-arm response standard deviations of length NumVisit, ordered by
+#'   visit.
+#'
+#' @param StdDevTrt Numeric vector of experimental-arm response standard deviations of length NumVisit, ordered by
+#'   visit.
+#'
+#' @param CorrMat Numeric correlation matrix between visits, with NumVisit rows and NumVisit columns.
+#'
+#' @param dAbsorptionRate Positive numeric first-order absorption rate constant.
+#'
+#' @param dEliminationRate Positive numeric first-order elimination rate constant.
+#'
+#' @param dDose Positive numeric administered dose.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
+#'     Replace NumVisit by the actual number of visits. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+######################################################################################################################## .
+
+GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose ) {
+    library( deSolve )
+
+    # Initialize error code and return list
+    nErrorCode <- 0
+    lRetval <- list( )
+
+    if ( is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) ) {
+        nErrorCode <- -1 # Fatal error if required parameters are missing
+        lRetval$ErrorCode <- as.integer( nErrorCode )
         return( lRetval )
     }
 
     # Simulate drug concentration for each subject
-    for( nPatIndx in 1:NumSub )
-    {
+    for ( nPatIndx in 1:NumSub ) {
         # Initial state: A1 = dDose (amount in absorption compartment), A2 = 0 (concentration in central compartment)
         vState <- c( A1 = dDose, A2 = 0 ) # this is a full dose in absorption compartment, none in central
-        vParameters <- c( dAbsorptionRate =  dAbsorptionRate, dEliminationRate =  dEliminationRate )
+        vParameters <- c( dAbsorptionRate = dAbsorptionRate, dEliminationRate = dEliminationRate )
 
         # Solve ODE for each visit time
-        vConcentration <- numeric( NumVisit ) # Prepare a vector (NumVisit length) to store concentrations at each visit
+        dPreviousVisitTime <- 0
+        vConcentration <- numeric( NumVisit ) # prepare a vector (NumVisit length) to store concentrations at each visit
 
-        for( nVisitIndx in 1:NumVisit )
-        {
-            vTime   <- c( 0, VisitTime[ nVisitIndx ] )  # Time points for ODE solver
+        for ( nVisitIndx in 1:NumVisit ) {
+            vTime <- c( dPreviousVisitTime, VisitTime[ nVisitIndx ] ) # Integrate from the preceding visit.
             mResult <- deSolve::ode( y = vState, times = vTime, func = OneCompartmentModelPK, parms = vParameters )
-            vState  <- mResult[ nrow( mResult ), -1 ]  # Update state for next visit
+            vState <- mResult[ nrow( mResult ), -1 ] # Update state for next visit
+            dPreviousVisitTime <- VisitTime[ nVisitIndx ]
 
-            vConcentration[ nVisitIndx ] <- vState[ "A2" ]  # Extract concentration at current visit
+            vConcentration[ nVisitIndx ] <- vState[ "A2" ] # Extract concentration at current visit
         }
 
         # Add noise based on treatment group
-        if( TreatmentID[ nPatIndx ] == 0 )
-        {
-            vConcentration <- vConcentration + rnorm( NumVisit, mean = MeanControl, sd = StdDevControl )
-        }
-        else
-        {
-            vConcentration <- vConcentration + rnorm( NumVisit, mean = MeanTrt, sd = StdDevTrt )
+        if ( TreatmentID[ nPatIndx ] == 0 ) {
+            vConcentration <- vConcentration + stats::rnorm( NumVisit, mean = MeanControl, sd = StdDevControl )
+        } else {
+            vConcentration <- vConcentration + stats::rnorm( NumVisit, mean = MeanTrt, sd = StdDevTrt )
         }
 
         # Store concentration for each visit
-        for( nVisitIndx in 1:NumVisit )
-        {
+        for ( nVisitIndx in 1:NumVisit ) {
             strVisitName <- paste0( "Response", nVisitIndx )
 
-            if( !is.null( lRetval[[ strVisitName ] ] ) )
-            {
-                lRetval[[ strVisitName ] ] <- c( lRetval[[ strVisitName ] ], vConcentration[ nVisitIndx ] )
-            }
-            else
-            {
-                lRetval[[ strVisitName ] ] <- vConcentration[ nVisitIndx ]
+            if ( !is.null( lRetval[[ strVisitName ]] ) ) {
+                lRetval[[ strVisitName ]] <- c( lRetval[[ strVisitName ]], vConcentration[ nVisitIndx ] )
+            } else {
+                lRetval[[ strVisitName ]] <- vConcentration[ nVisitIndx ]
             }
         }
     }
 
     # Set error code and return results
-    lRetval$ErrorCode <- as.integer( nError )
+    lRetval$ErrorCode <- as.integer( nErrorCode )
     return( lRetval )
 }
 
-######################################################################################################################## .
-# Helper ODE function for one-compartment model with first-order absorption ####
-#' @param time Time variable for ODE solver
-#' @param state State variables (A1: amount in absorption compartment, A2: concentration in central compartment)
-#' @param parameters Parameters for the ODE (dAbsorptionRate, dEliminationRate)
-######################################################################################################################## .
-OneCompartmentModelPK <- function( ime, state, parameters )
-{
-    with( as.list( c( state, parameters ) ),
-    {
 
-        dA1 <- - dAbsorptionRate * A1  # Change in drug amount in absorption compartment
-        dA2 <- ( dAbsorptionRate * A1 -  dEliminationRate * A2 )  # Change in drug concentration in central compartment
+######################################################################################################################## .
+#' @name OneCompartmentModelPK
+#'
+#' @title One Compartment Model PK
+#'
+#' @description Compute derivatives for the absorption and central compartments of the one-compartment
+#'   pharmacokinetic model.
+#'
+#' @author Anton Sun, Jacob Wathen, Gabriel Potvin
+#'
+#' @param time Time variable for ODE solver
+#'
+#' @param state State variables (A1: amount in absorption compartment, A2: concentration in central compartment)
+#'
+#' @param parameters Parameters for the ODE (dAbsorptionRate, dEliminationRate)
+#'
+#' @return List containing a numeric vector of derivatives in state order: dA1 for absorption and dA2 for the
+#'   central compartment.
+######################################################################################################################## .
+
+OneCompartmentModelPK <- function( time, state, parameters ) {
+    with( as.list( c( state, parameters ) ), {
+        dA1 <- -dAbsorptionRate * A1 # Change in drug amount in absorption compartment
+        dA2 <- ( dAbsorptionRate * A1 - dEliminationRate * A2 ) # Change in drug concentration in central compartment
 
         return( list( c( dA1, dA2 ) ) )
     } )

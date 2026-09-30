@@ -1,58 +1,96 @@
 ######################################################################################################################## .
-# Last Modified Date: 02/10/2026
 #' @name SimulatePatientOutcome
-#' @title Function to simulate patient data with specified mean and standard deviation for each arm
-#' @description Simulate bounded integer baseline and follow-up CHU-9 values and return their difference as the response.
+#'
+#' @title Simulate bounded childhood anxiety score changes
+#'
+#' @description Generate baseline and follow-up scores for control and experimental arms, round and restrict each
+#'   score to the instrument range 9 to 45, and return the baseline-minus-follow-up change. Positive responses
+#'   indicate improvement.
+#'
 #' @author Audrey Wathen, J. Kyle Wathen
+#'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param Mean Numeric vector of arm-specific outcome means.
-#' @param StdDev Numeric vector of arm-specific outcome standard deviations.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' In this example, UserParam must contain the following named elements:
-#'   \describe{
-#'     \item{UserParam$dMeanBaselineCtrl}{Mean baseline outcome for the control group.}
-#'     \item{UserParam$dMeanBaselineExp}{Mean baseline outcome for the experimental group.}
-#'     \item{UserParam$dStdDevBaselineCtrl}{Standard deviation of baseline outcome for the control group.}
-#'     \item{UserParam$dStdDevBaselineExp}{Standard deviation of baseline outcome for the experimental group.}
+#'
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
+#'   in TreatmentID order.
+#'
+#' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
+#'   experimental arms in TreatmentID order.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements:
+#' \itemize{
+#'     \item \code{dMeanBaselineCtrl} – Mean baseline outcome for the control group.
+#'     \item \code{dMeanBaselineExp} –Mean baseline outcome for the experimental group.
+#'     \item \code{dStdDevBaselineCtrl} – Standard deviation of baseline outcome for the control group.
+#'     \item \code{dStdDevBaselineExp} – Standard deviation of baseline outcome for the experimental group.
 #'   }
-#' @return A named list containing the numeric `Response` vector and integer `ErrorCode`.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' @details UserParam is required for this example. Missing required fields return ErrorCode = -1. Required fields
+#'   are dMeanBaselineCtrl, dMeanBaselineExp, dStdDevBaselineCtrl, dStdDevBaselineExp. The mean fields specify
+#'   arm-specific baseline means; the standard deviation fields specify the corresponding arm-specific standard
+#'   deviations. Responses are baseline minus follow-up, rounded and bounded by the instrument's score range (9 to
+#'   45), so changes lie between -36 and 36.
 ######################################################################################################################## .
 
-SimulatePatientOutcome <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
-{
+SimulatePatientOutcome <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
+    # Required custom parameters define the baseline or follow-up distributions.
+    vRequiredParams <- c( "dMeanBaselineCtrl", "dMeanBaselineExp", "dStdDevBaselineCtrl", "dStdDevBaselineExp" )
+    if ( is.null( UserParam ) || !all( vRequiredParams %in% names( UserParam ) ) ||
+        any( vapply( UserParam[ vRequiredParams ], is.null, logical( 1 ) ) ) ) {
+        return( list( Response = rep( 0, NumSub ), ErrorCode = -1L ) )
+    }
+
     # Initialize variable
-    nError <- 0 # No errors occurred
-    vPatientOutcome <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
-    vMeanBaseline   <- c( UserParam$dMeanBaselineCtrl, UserParam$dMeanBaselineExp )
+    nErrorCode <- 0 # East Horizon code for no errors occurred
+    vPatientOutcome <- rep( 0, NumSub ) # Initialize the subject-level response vector.
+    vMeanBaseline <- c( UserParam$dMeanBaselineCtrl, UserParam$dMeanBaselineExp )
     vStdDevBaseline <- c( UserParam$dStdDevBaselineCtrl, UserParam$dStdDevBaselineExp )
     # Create vector with the standard deviation
 
     # Loop over the patients and simulate the outcome according to the treatment they received
-    for( nPatIndx in 1:NumSub )
-    {
+    for ( nPatIndx in 1:NumSub ) {
         nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
         # Simulate from a normal distribution and round to nearest integer
-        outcome1 <- round( rnorm( 1, vMeanBaseline[ nTreatmentID ], vStdDevBaseline[ nTreatmentID ] ) )
+        outcome1 <- round( stats::rnorm( 1, vMeanBaseline[ nTreatmentID ], vStdDevBaseline[ nTreatmentID ] ) )
 
-        #Fix the next line to use the vector you create above
-        outcome2 <- round( rnorm( 1, vMeanBaseline[ nTreatmentID ] - Mean[ nTreatmentID ], StdDev[ nTreatmentID ] ) )
+        # Generate the follow-up score for this treatment arm.
+        outcome2 <- round( stats::rnorm( 1, vMeanBaseline[ nTreatmentID ] - Mean[ nTreatmentID ], StdDev[ nTreatmentID ] ) )
 
         # Ensure outcome is within specified range
         outcome1 <- max( min( outcome1, 45 ), 9 )
         outcome2 <- max( min( outcome2, 45 ), 9 )
 
-        #Note: Response = Baseline - Followup so a value above 0 means the patient improved.
+        # Note: Response = Baseline - Followup so a value above 0 means the patient improved.
         vPatientOutcome[ nPatIndx ] <- outcome1 - outcome2
     }
 
     # Error Checking
-    if( any( is.na( vPatientOutcome ) ) )
-        nError <- -100
+    if ( any( is.na( vPatientOutcome ) ) ) {
+        nErrorCode <- -100
+    }
 
     # Build the return object, add other variables to the list as needed
-    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) )
+    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nErrorCode ) )
     return( lReturn )
 }

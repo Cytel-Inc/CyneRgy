@@ -1,19 +1,27 @@
 ######################################################################################################################## .
 #' @name LoadRandomizeR
-#' @title Initialize the Randomization Example
-#' @description
-#' Sets the simulation seed and loads `randomizeR` so later block-randomization
-#' callbacks can call the package during the simulation.
-#' @author Shubham Lahoti and Anoop Singh Rawat
-#' @param Seed Integer randomization seed supplied by East Horizon to initialize R's random-number generator. It may be `NULL`.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' @return Integer error code `0` after initialization completes.
+#'
+#' @title Initialize the R simulation environment
+#'
+#' @description For Performing Block randomization in R, a package named "randomizeR" is required to be installed.
+#'
+#' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
+#'
+#' @param Seed Integer random seed supplied by the engine. Setting the seed here affects the R random number
+#'   generator.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' @return Integer execution status: 0 = no error; a positive value aborts the current simulation but allows
+#'   subsequent simulations to run; a negative value is fatal and stops all further simulations.
 ######################################################################################################################## .
 
-LoadRandomizeR <- function( Seed, UserParam = NULL )
-{
-    nError <- 0
+LoadRandomizeR <- function( Seed, UserParam = NULL ) {
+    nErrorCode <- 0
     set.seed( Seed )
     library( randomizeR )
-    return( as.integer( nError ) )
+    return( as.integer( nErrorCode ) )
 }

@@ -1,58 +1,61 @@
 ######################################################################################################################## .
 #' @name RandomizeSubjectsAcrossMultipleArms
+#'
 #' @title Randomize Subjects Across Multiple Arms
-#' @description
-#' Randomly assigns subjects across control and multiple experimental arms while
-#' matching integer target sizes derived from the requested allocation ratios.
-#' @author Shubham Lahoti and Anoop Singh Rawat
+#'
+#' @description The following function randomly allots the subjects on one of the arms
+#'
+#' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
+#'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param NumArms Integer number of arms in the trial, including placebo/control and experimental arms.
-#' @param AllocRatio Mandatory numeric vector of experimental-to-control allocation ratios with length `NumArms - 1`.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' @return The function must return a list in the return statement of the function. The information below lists
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'             \describe{
-#'                  \item{TreatmentID}{Required value. This is a vector of treatment ID allocation per subject where:
-#'                                  \describe{
-#'                                    \item{TreatmentID = 0}{ Subject allotted to Control arm }
-#'                                    \item{TreatmentID = n}{ Subject allotted to Experimental arm n where n >=1 }
-#'                                    }
-#'                                    }
-#'                  \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation.}
-#'                      }
+#' @param NumArms Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
 #'
+#' @param AllocRatio Numeric vector of experimental-to-control allocation ratios, one element per experimental arm.
+#'   The control allocation is 1, so a ratio of 2 assigns twice as many subjects to that experimental arm as to
+#'   control.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
 ######################################################################################################################## .
 
-RandomizeSubjectsAcrossMultipleArms <- function( NumSub, NumArms, AllocRatio, UserParam = NULL )
-{
-
-    nError                          <- 0
+RandomizeSubjectsAcrossMultipleArms <- function( NumSub, NumArms, AllocRatio, UserParam = NULL ) {
+    nErrorCode <- 0
 
     # Allocation ratio on control and treatment arm
-    vAllocRatio                     <- c( 1, AllocRatio ) # First arm (control) has ratio 1
+    vAllocRatio <- c( 1, AllocRatio ) # First arm (control) has ratio 1
 
     # Convert the Allocation Ratio to Allocation Fraction for control and treatment arms
-    vAllocFraction                  <- vAllocRatio / sum( vAllocRatio )
+    vAllocFraction <- vAllocRatio / sum( vAllocRatio )
 
     # Calculate target sample sizes based on allocation ratio
-    nTargetSampleSize               <- floor( NumSub * vAllocFraction )
+    nTargetSampleSize <- floor( NumSub * vAllocFraction )
 
     # Calculate how many subjects are left to allocate
-    nRemaining                      <- NumSub - sum( nTargetSampleSize )
+    nRemaining <- NumSub - sum( nTargetSampleSize )
 
     # Allocate remaining subjects based on the fractional parts of the ideal allocation
-    if( nRemaining > 0 )
-    {
+    if ( nRemaining > 0 ) {
         # Calculate fractional parts
-        vFractionalParts            <- ( NumSub * vAllocFraction ) - nTargetSampleSize
+        vFractionalParts <- ( NumSub * vAllocFraction ) - nTargetSampleSize
 
         # Sort arms by fractional parts (descending) to prioritize allocation
-        vArmOrder                   <- order( vFractionalParts, decreasing = TRUE )
+        vArmOrder <- order( vFractionalParts, decreasing = TRUE )
 
         # Allocate remaining subjects to arms with highest fractional parts
-        for( i in 1:nRemaining )
-        {
+        for ( i in 1:nRemaining ) {
             nTargetSampleSize[ vArmOrder[ i ] ] <- nTargetSampleSize[ vArmOrder[ i ] ] + 1
         }
     }
@@ -61,10 +64,10 @@ RandomizeSubjectsAcrossMultipleArms <- function( NumSub, NumArms, AllocRatio, Us
     vAllTreatmentIDs <- 0:( NumArms - 1 )
 
     # Create a vector with the correct number of each treatment ID
-    vTreatmentIDs    <- rep( vAllTreatmentIDs, times = nTargetSampleSize )
+    vTreatmentIDs <- rep( vAllTreatmentIDs, times = nTargetSampleSize )
 
     # Randomly shuffle the treatment assignments
-    vTreatmentIDs    <- sample( vTreatmentIDs )
+    vTreatmentIDs <- sample( vTreatmentIDs )
 
-    return( list( TreatmentID = as.integer( vTreatmentIDs ), ErrorCode = as.integer( nError ) ) )
+    return( list( TreatmentID = as.integer( vTreatmentIDs ), ErrorCode = as.integer( nErrorCode ) ) )
 }

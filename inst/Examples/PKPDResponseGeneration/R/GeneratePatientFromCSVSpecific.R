@@ -1,31 +1,81 @@
 ######################################################################################################################## .
 #' @name GeneratePatientFromCSVSpecific
+#'
 #' @title Generate Patient Responses from CSV File with Strict Formatting (Faster)
-#' @description
-#' This function reads pre-simulated patient data from a CSV file and returns visit-level responses for trial subjects.
-#' It requires strict CSV formatting (specific column names and treatment identifiers) but runs faster than
-#' GeneratePatientFromCSVGeneral. Use this function when you have control over CSV formatting and want
-#' optimal performance. For more flexible formatting support, see GeneratePatientFromCSVGeneral.R.
+#'
+#' @description This function reads pre-simulated patient data from a CSV file and returns visit-level responses
+#'   for trial subjects. It requires strict CSV formatting (specific column names and treatment identifiers) but
+#'   runs faster than GeneratePatientFromCSVGeneral. Use this function when you have control over CSV formatting
+#'   and want optimal performance. For more flexible formatting support, see GeneratePatientFromCSVGeneral.R.
 #'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
+#'
 #' @param NumSub Integer number of subjects in the trial.
+#'
 #' @param NumVisit Integer number of visits.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param Inputmethod Integer input-method code: 0 for actual means and standard deviations; 1 for change from baseline.
-#' @param VisitTime Numeric vector of length `NumVisit`, indicating the visit times.
-#' @param MeanControl Numeric vector of length `NumVisit`, containing control-arm means by visit.
-#' @param MeanTrt Numeric vector of length `NumVisit`, containing treatment-arm means by visit.
-#' @param StdDevControl Numeric vector of length `NumVisit`, containing control-arm standard deviations by visit.
-#' @param StdDevTrt Numeric vector of length `NumVisit`, containing treatment-arm standard deviations by visit.
-#' @param CorrMat Numeric `NumVisit` by `NumVisit` correlation matrix between visits.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' In this example, UserParam must contain the following named elements:
-#'     \describe{
-#'            \item{`UserParam$InputFileName`}{The name of the CSV file in the Inputs folder (e.g., "SimPatientDataAlt.csv").}
+#'
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
+#'   changes from baseline at each visit. Preserve this engine-supplied spelling.
+#'
+#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#'
+#' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
+#'
+#' @param MeanTrt Numeric vector of experimental-arm mean responses of length NumVisit, ordered by visit.
+#'
+#' @param StdDevControl Numeric vector of control-arm response standard deviations of length NumVisit, ordered by
+#'   visit.
+#'
+#' @param StdDevTrt Numeric vector of experimental-arm response standard deviations of length NumVisit, ordered by
+#'   visit.
+#'
+#' @param CorrMat Numeric correlation matrix between visits, with NumVisit rows and NumVisit columns.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements:
+#' \describe{
+#'            \item{`UserParam$InputFileName`}{The name of the CSV file in the Inputs folder (e.g.,
+#'              "SimPatientDataAlt.csv").}
 #'     }
 #'
-#' @details
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
+#'     Replace NumVisit by the actual number of visits. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{`Response1`, `Response2`, ...}{Numeric vectors of patient responses for each visit.}
+#'   \item{`ErrorCode`}{Integer value:
+#'                      \describe{
+#'                        \item{0}{No error.}
+#'                        \item{-1}{CSV file not found.}
+#'                        \item{-2}{Error reading CSV file.}
+#'                        \item{-3}{Treatment column not found.}
+#'                        \item{-4}{Insufficient visit columns in CSV.}
+#'                        \item{-5}{Insufficient patients in CSV for one or both arms.}
+#'                      }}
+#' }
+#'
+#' @details Return each visit response as a separate named list element: Response1, Response2, ...,
+#'   ResponseNumVisit. Optional ArrivalTime may be included in the function signature when calendar arrival times
+#'   are needed; it has the same definition as at the enrollment integration point.
+#'
 #' The CSV file must contain:
 #' - A **Treatment column (exact name, case-sensitive) with treatment assignments
 #' - Visit columns named exactly "Visit 1", "Visit 2", etc. (with space, case-sensitive)
@@ -37,138 +87,139 @@
 #' Missing Values: "", "NA", "NaN", "na", "null", "N/A" are recognized as missing
 #'
 #' The function caches the CSV data globally (`gdfPatients`) for efficiency across multiple function calls.
-#' Patients are randomly sampled without replacement from each treatment arm, ensuring unique patient
-#' assignments within each simulation replicate.
+#'   Patients are randomly sampled without replacement from each treatment arm, ensuring unique patient assignments
+#'   within each simulation replicate.
 #'
-#' @return A list with the following components:
-#' \describe{
-#' \item{Response1, ..., ResponseNumVisit}{Required numeric vectors of length `NumSub`, with one generated response vector for each visit.}
-#' \item{ErrorCode}{Integer value:
-#'                      \describe{
-#'                        \item{0}{No error.}
-#'                        \item{-1}{CSV file not found.}
-#'                        \item{-2}{Error reading CSV file.}
-#'                        \item{-3}{Treatment column not found.}
-#'                        \item{-4}{Insufficient visit columns in CSV.}
-#'                        \item{-5}{Insufficient patients in CSV for one or both arms.}
-#'                      }}
-#' }
+#' Usage of Inputmethod in this example: Method for specifying input parameters (passed from East Horizon, not used
+#'   in this function).
+#'
+#' Usage of VisitTime in this example: Numeric vector of visit times (passed from East Horizon, not used in this
+#'   function).
+#'
+#' Usage of MeanControl in this example: Numeric vector of control means for all visits (passed from East Horizon,
+#'   not used in this function).
+#'
+#' Usage of MeanTrt in this example: Numeric vector of treatment means for all visits (passed from East Horizon,
+#'   not used in this function).
+#'
+#' Usage of StdDevControl in this example: Numeric vector of control standard deviations for all visits (passed
+#'   from East Horizon, not used in this function).
+#'
+#' Usage of StdDevTrt in this example: Numeric vector of treatment standard deviations for all visits (passed from
+#'   East Horizon, not used in this function).
+#'
+#' Usage of CorrMat in this example: Correlation matrix between all visits (passed from East Horizon, not used in
+#'   this function).
 ######################################################################################################################## .
 
-GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
-{
+GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
     # Initialize return variables and error code
-    nError  <- 0
-    lReturn <- list()
+    nErrorCode <- 0
+    lReturn <- list( )
 
     # Build CSV path and confirm it exists
     strCSVPath <- paste0( "Inputs/", UserParam$InputFileName )
 
-    if( !file.exists( strCSVPath ) )
-    {
-        nError <- -1
-        lReturn$ErrorCode <- as.integer( nError )
+    if ( !file.exists( strCSVPath ) ) {
+        nErrorCode <- -1
+        lReturn$ErrorCode <- as.integer( nErrorCode )
         return( lReturn )
     }
 
     # Cache CSV across calls if available
-    if( !exists( "gdfPatients", envir = .GlobalEnv ) )
-    {
+    if ( !exists( "gdfPatients", envir = .GlobalEnv ) ) {
         dfPatients <- tryCatch(
-        {
-            read.csv( strCSVPath, check.names = FALSE, stringsAsFactors = FALSE )
-        }, error = function( e )
-        {
-            NULL
-        } )
+            {
+                utils::read.csv( strCSVPath, check.names = FALSE, stringsAsFactors = FALSE )
+            },
+            error = function( e ) {
+                NULL
+            }
+        )
         gdfPatients <<- dfPatients
-    }
-    else
-    {
+    } else {
         dfPatients <- get( "gdfPatients", envir = .GlobalEnv )
     }
 
-    if( is.null( dfPatients ) )
-    {
-        nError <- -2
-        lReturn$ErrorCode <- as.integer( nError )
+    if ( is.null( dfPatients ) ) {
+        nErrorCode <- -2
+        lReturn$ErrorCode <- as.integer( nErrorCode )
         return( lReturn )
     }
 
     # Check required Treatment column (strict match)
-    if( !( "Treatment" %in% colnames( dfPatients ) ) )
-    {
-        nError <- -3
-        lReturn$ErrorCode <- as.integer( nError )
+    if ( !( "Treatment" %in% colnames( dfPatients ) ) ) {
+        nErrorCode <- -3
+        lReturn$ErrorCode <- as.integer( nErrorCode )
         return( lReturn )
     }
 
     # Coerce Treatment column strictly to integer 0/1
-    vTrt <- suppressWarnings( as.integer( dfPatients[[ "Treatment" ] ] ) )
-    vKeep <- !is.na( vTr ) & vTrt %in% c( 0, 1 )
+    vTrt <- suppressWarnings( as.integer( dfPatients[[ "Treatment" ]] ) )
+    vKeep <- !is.na( vTrt ) & vTrt %in% c( 0, 1 )
     dfPatients <- dfPatients[ vKeep, , drop = FALSE ]
-    dfPatients[[ "Treatment" ] ] <- vTrt[ vKeep ]
+    dfPatients[[ "Treatment" ]] <- vTrt[ vKeep ]
 
     # Validate and coerce Visit columns (Visit1..VisitK)
     vVisitCols <- paste0( "Visit ", seq_len( NumVisit ) )
-    if( !all( vVisitCols %in% colnames( dfPatients ) ) )
-    {
-        nError <- -4
-        lReturn$ErrorCode <- as.integer( nError )
+    if ( !all( vVisitCols %in% colnames( dfPatients ) ) ) {
+        nErrorCode <- -4
+        lReturn$ErrorCode <- as.integer( nErrorCode )
         return( lReturn )
     }
 
-    for( strCol in vVisitCols )
-    {
-        xChr <- as.character( dfPatients[[ strCol ] ] )
+    for ( strCol in vVisitCols ) {
+        xChr <- as.character( dfPatients[[ strCol ]] )
         xChr[ xChr %in% c( "", "NA", "NaN", "na", "null", "N/A" ) ] <- NA_character_
-        dfPatients[[ strCol ] ] <- suppressWarnings( as.double( xChr ) )
+        dfPatients[[ strCol ]] <- suppressWarnings( as.double( xChr ) )
     }
 
     # Determine how many patients needed for each arm
     nNeedCtl <- sum( as.integer( TreatmentID ) == 0 )
     nNeedTrt <- sum( as.integer( TreatmentID ) == 1 )
 
-    vIdxCtrl <- which( dfPatients[[ "Treatment" ] ] == 0 )
-    vIdxTrt  <- which( dfPatients[[ "Treatment" ] ] == 1 )
+    vIdxCtrl <- which( dfPatients[[ "Treatment" ]] == 0 )
+    vIdxTrt <- which( dfPatients[[ "Treatment" ]] == 1 )
 
-    if( length( vIdxCtrl ) < nNeedCtl || length( vIdxTrt ) < nNeedTrt )
-    {
-        nError <- -5
-        lReturn$ErrorCode <- as.integer( nError )
+    if ( length( vIdxCtrl ) < nNeedCtl || length( vIdxTrt ) < nNeedTrt ) {
+        nErrorCode <- -5
+        lReturn$ErrorCode <- as.integer( nErrorCode )
         return( lReturn )
     }
 
     # Randomly select unique patient rows per treatment arm
-    vTakeCtrl <- if( nNeedCtl > 0 ) sample( vIdxCtrl, nNeedCtl, replace = FALSE ) else integer( 0 )
-    vTakeTrt  <- if( nNeedTrt > 0 ) sample( vIdxTrt, nNeedTrt, replace = FALSE ) else integer( 0 )
+    vTakeCtrl <- if ( nNeedCtl > 0 ) {
+        sample( vIdxCtrl, nNeedCtl, replace = FALSE )
+    } else {
+        integer( 0 )
+    }
+    vTakeTrt <- if ( nNeedTrt > 0 ) {
+        sample( vIdxTrt, nNeedTrt, replace = FALSE )
+    } else {
+        integer( 0 )
+    }
 
     # Map selected patients to subjects by requested treatment order
     vPick <- integer( NumSub )
-    nCtl  <- 0
-    nTrt  <- 0
+    nCtl <- 0
+    nTrt <- 0
 
-    for( iSub in seq_len( NumSub ) )
-    {
-        if( as.integer( TreatmentID[ iSub ] ) == 0 )
-        {
+    for ( iSub in seq_len( NumSub ) ) {
+        if ( as.integer( TreatmentID[ iSub ] ) == 0 ) {
             nCtl <- nCtl + 1
             vPick[ iSub ] <- vTakeCtrl[ nCtl ]
-        }
-        else
-        {
+        } else {
             nTrt <- nTrt + 1
             vPick[ iSub ] <- vTakeTrt[ nTrt ]
         }
     }
 
     # Build Response1..ResponseK values for each subject
-    for( iVisit in seq_len( NumVisit ) )
-    {
-        lReturn[[ paste0( "Response", iVisit ) ] ] <- as.double( dfPatients[ vPick, vVisitCols[ iVisit ] ] )
+    for ( iVisit in seq_len( NumVisit ) ) {
+        lReturn[[ paste0( "Response", iVisit ) ]] <- as.double( dfPatients[ vPick, vVisitCols[ iVisit ] ] )
     }
 
     # Return assembled output with error code
-    lReturn$ErrorCode <- as.integer( nError )
+    lReturn$ErrorCode <- as.integer( nErrorCode )
     return( lReturn )
 }

@@ -1,112 +1,129 @@
 ######################################################################################################################## .
 #' @name SimulateBinaryAndPFS
+#'
 #' @title Simulate Binary Response and Progression-Free Survival (PFS)
-#' @description This function simulates subject-level binary response outcomes and progression-free survival (PFS) times
-#' for a multi-arm clinical trial.
+#'
+#' @description This function simulates subject-level binary response outcomes and progression-free survival (PFS)
+#'   times for a multi-arm clinical trial.
+#'
 #' @author Julija Saltane, J. Kyle Wathen
 #'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param PropResp Numeric vector of length `NumArm`, containing response probabilities for control followed by each experimental arm.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' In this example, UserParam must contain the following named elements:
-#'        \describe{
-#'          \item{UserParam$MedianSurvCtrl}{Median PFS time for the control arm. Defaults to 12.}
-#'          \item{UserParam$HR1, UserParam$HR2, ..., UserParam$HR(NumArm - 1)}{Treatment-to-control hazard ratio for each experimental arm. Each value defaults to 0.7.}
+#'
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#'
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
+#'   experimental arms in TreatmentID order. Each probability is between 0 and 1.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements:
+#' \describe{
+#'          \item{MedianSurvCtrl}{Median survival time for the control arm}
+#'          \item{HR1, HR2, ..., HR(n)}{Hazard ratios for each treatment arm relative to control}
 #'        }
 #'
-#' @return A list with the following components:
-#'         \describe{
-#'          \item{Response}{Integer vector of binary response outcomes}
-#'          \item{PFSNonCens}{Numeric vector of PFS times relative to patient enrollment}
-#'          \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation. In this function, ErrorCode = -1 indicates missing or nonconsecutive hazard-ratio parameters, and ErrorCode = -2 indicates invalid values in the simulation output.}
-#'         }
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{PFSNonCens}{Numeric vector of PFS times relative to patient enrollment}
+#' }
+#'
+#' @details Example-specific error codes:
+#' \describe{
+#'   \item{ErrorCode = -1}{Hazard ratio parameters (HR1...HRn) are missing or not consecutive}
+#'   \item{ErrorCode = -2}{NA or invalid values encountered in simulation output}
+#' }
 ######################################################################################################################## .
 
-SimulateBinaryAndPFS <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
-{
+SimulateBinaryAndPFS <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
     # Step 1. Initialize error code and output vectors
-    nErrorCode     <- 0
+    nErrorCode <- 0
     vBinaryOutcome <- rep( 0, NumSub )
-    vPFSNonCens    <- rep( NA, NumSub )
+    vPFSNonCens <- rep( NA, NumSub )
 
     # Step 2. Ensure all parameters are present for simulation of the PFS data
-    if( is.null( UserParam ) )
-    {
+    if ( is.null( UserParam ) ) {
         UserParam <- list( MedianSurvCtrl = 12 )
-        for( i in 1:( NumArm - 1 ) )
-        {
-            UserParam[[ paste0( "HR", i ) ] ] <- 0.7
+        for ( i in 1:( NumArm - 1 ) ) {
+            UserParam[[ paste0( "HR", i ) ]] <- 0.7
         }
-    }
-    else
-    {
-        if( is.null( UserParam$MedianSurvCtrl ) )
-        {
+    } else {
+        if ( is.null( UserParam$MedianSurvCtrl ) ) {
             UserParam$MedianSurvCtrl <- 12
         }
-        for( i in 1:( NumArm - 1 ) )
-        {
+        for ( i in 1:( NumArm - 1 ) ) {
             HRName <- paste0( "HR", i )
-            if( is.null( UserParam[[ HRName ] ] ) )
-            {
-                UserParam[[ HRName ] ] <- 0.7
+            if ( is.null( UserParam[[ HRName ]] ) ) {
+                UserParam[[ HRName ]] <- 0.7
             }
         }
     }
     # Check that HR1, HR2, ..., HR(n) exist and are consecutive
-    HRNames   <- names( UserParam )[ grepl( "^HR", names( UserParam ) ) ]
+    HRNames <- names( UserParam )[ grepl( "^HR", names( UserParam ) ) ]
     HRNumbers <- sort( as.integer( sub( "^HR", "", HRNames ) ) )
 
-    if( !all( HRNumbers == seq_len( NumArm - 1 ) ) )
-    {
+    if ( !all( HRNumbers == seq_len( NumArm - 1 ) ) ) {
         nErrorCode <- -1
-        return( list( Response = as.double( vBinaryOutcome ),
-                      PFSNonCens = as.double( vPFSNonCens ),
-                      ErrorCode = as.integer( nErrorCode ) ) )
+        return( list(
+            Response = as.double( vBinaryOutcome ),
+            PFSNonCens = as.double( vPFSNonCens ),
+            ErrorCode = as.integer( nErrorCode )
+        ) )
     }
 
     # Step 3. Convert median survival -> exponential rate
-    dRateCtrl   <- log( 2 ) / UserParam$MedianSurvCtrl
-    vRates      <- numeric( NumArm )
+    dRateCtrl <- log( 2 ) / UserParam$MedianSurvCtrl
+    vRates <- numeric( NumArm )
     vRates[ 1 ] <- dRateCtrl
 
-    for( i in 2:NumArm )
-    {
+    for ( i in 2:NumArm ) {
         HRName <- paste0( "HR", i - 1 )
-        vRates[ i ] <- dRateCtrl * UserParam[[ HRName ] ]
+        vRates[ i ] <- dRateCtrl * UserParam[[ HRName ]]
     }
 
     # Step 4. Simulate binary and PFS outcomes for each subject
-    for( nPatIndx in 1:NumSub )
-    {
+    for ( nPatIndx in 1:NumSub ) {
         nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # 1-based index for R, while it's 0-based index in assignments
 
         # Simulate binary response
-        vBinaryOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ] )
+        vBinaryOutcome[ nPatIndx ] <- stats::rbinom( 1, 1, PropResp[ nTreatmentID ] )
 
         # Simulate time-to-event (exponential distribution)
         dRate <- vRates[ nTreatmentID ]
-        if( dRate > 0 )
-        {
-            dEventTime <- rexp( 1, rate = dRate )
-        }
-        else
-        {
+        if ( dRate > 0 ) {
+            dEventTime <- stats::rexp( 1, rate = dRate )
+        } else {
             dEventTime <- Inf
         }
         vPFSNonCens[ nPatIndx ] <- dEventTime
     }
 
     # Check for NA or invalid values
-    if( any( is.na( vBinaryOutcome ) ) || any( is.na( vPFSNonCens ) ) )
-    {
+    if ( any( is.na( vBinaryOutcome ) ) || any( is.na( vPFSNonCens ) ) ) {
         nErrorCode <- -2
     }
 
-    return( list( Response = as.double( vBinaryOutcome ),
-                  PFSNonCens = as.double( vPFSNonCens ),
-                  ErrorCode = as.integer( nErrorCode ) ) )
+    return( list(
+        Response = as.double( vBinaryOutcome ),
+        PFSNonCens = as.double( vPFSNonCens ),
+        ErrorCode = as.integer( nErrorCode )
+    ) )
 }

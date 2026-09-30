@@ -1,27 +1,52 @@
 ######################################################################################################################## .
 #' @name GenerateDropoutTimeMultiArmForSurvival
-#' @title Generate Multi-Arm Time-to-Event Dropout Times
-#' @description Generates subject-level dropout times for a multi-arm time-to-event trial from arm-specific hazard
-#' rates or dropout probabilities.
-#' @author Anoop Singh Rawat
+#'
+#' @title Generate subject dropout times for survival outcomes
+#'
+#' @description The following function generates dropout time for a multi-arm survival design.
+#'
+#' @author Gabriel Potvin and Anoop Singh Rawat
+#'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param DropMethod Integer input method: 1 for dropout hazard rates or 2 for cumulative dropout probabilities.
-#' @param NumPrd Integer number of dropout periods. Mandatory for time-to-event endpoints.
-#' @param PrdTime Numeric vector containing the start time of each dropout period.
-#' @param DropParam Numeric matrix with `NumPrd` rows and `NumArm` columns. For `DropMethod = 1`, entries are dropout hazard rates by period and arm; for `DropMethod = 2`, entries are cumulative dropout probabilities by period and arm.
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' @return A list containing:
-#'   \describe{
-#'     \item{DropOutTime}{Required numeric vector of length `NumSub` containing dropout times; `Inf` indicates no dropout.}
-#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
-#'   }
+#'
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param DropMethod Integer dropout input method: 1 = dropout hazard rates; 2 = cumulative probability of dropout
+#'   by time.
+#'
+#' @param NumPrd Integer number of dropout periods. Equals 1 when DropMethod = 2.
+#'
+#' @param PrdTime Numeric vector of length NumPrd specifying dropout-period starting times when DropMethod = 1, or
+#'   the times at which cumulative dropout probabilities are specified when DropMethod = 2.
+#'
+#' @param DropParam Numeric array of dropout parameters with NumPrd rows and NumArm columns. Column 1 is control;
+#'   subsequent columns are experimental arms. DropParam[i, j] is the dropout hazard rate for period i and arm j
+#'   when DropMethod = 1, or the cumulative probability of dropout by PrdTime[i] when DropMethod = 2.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
+#'     element per subject. Inf indicates no dropout.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' @details The example code implements a single dropout period (NumPrd = 1). For multiple hazard periods, extend
+#'   the generation logic to use the appropriate row of DropParam for each period.
 ######################################################################################################################## .
 
-GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL )
-{
-    nError <- 0
+GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL ) {
+    nErrorCode <- 0
 
     # Initializing Censor Dropout Times to Inf
     # This effectively means that all the patients have dropped out at an infinite time,
@@ -29,40 +54,34 @@ GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID,
 
     vDropoutTime <- rep( Inf, NumSub )
 
-    if( DropMethod == 1 ) # Dropout Hazard Rates
-    {
+    if ( DropMethod == 1 ) { # Dropout Hazard Rates
         # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are the dropout times.
-        for( nArmIndex in seq( 0, NumArm - 1 ) )
-        {
-            if( DropParam[ nArmIndex + 1 ] > 0 ) # generate dropout time only in case of Non - zero dropout probability
-            {
-                    # Identify the patients from various arms
-                    vIndexArm                 <- which( TreatmentID == nArmIndex )
-                    nQtyOfPatientonArm        <- length( vIndexArm )
-                    # Generate dropout time based on arm wise dropout parameters
-                    vDropoutTime[ vIndexArm ] <- rexp( nQtyOfPatientonArm, rate = DropParam[ nArmIndex + 1 ] )
+        for ( nArmIndex in seq( 0, NumArm - 1 ) ) {
+            if ( DropParam[ nArmIndex + 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
+                # Identify the patients from various arms
+                vIndexArm <- which( TreatmentID == nArmIndex )
+                nQtyOfPatientsOnArm <- length( vIndexArm )
+                # Generate dropout time based on arm wise dropout parameters
+                vDropoutTime[ vIndexArm ] <- stats::rexp( nQtyOfPatientsOnArm, rate = DropParam[ nArmIndex + 1 ] )
             }
         }
     }
 
-    if( DropMethod == 2 ) # Probability of Dropout
-    {
+    if ( DropMethod == 2 ) { # Probability of Dropout
         # Conversion of dropout probabilities into Hazard rates
         dExpDropoutRate <- -log( 1 - DropParam ) / PrdTime
 
         # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are the dropout times.
-        for( nArmIndex in seq( 0, NumArm - 1 ) )
-        {
-                if( DropParam[ nArmIndex + 1 ] > 0 ) # generate dropout time only in case of Non - zero dropout probability
-                {
-                        # Identify the patients from various arms
-                        vIndexArm                 <- which( TreatmentID == nArmIndex )
-                        nQtyOfPatientonArm        <- length( vIndexArm )
-                        # Generate dropout time based on arm wise dropout parameters
-                        vDropoutTime[ vIndexArm ] <- rexp( nQtyOfPatientonArm, rate = dExpDropoutRate[ nArmIndex + 1 ] )
-                }
+        for ( nArmIndex in seq( 0, NumArm - 1 ) ) {
+            if ( DropParam[ nArmIndex + 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
+                # Identify the patients from various arms
+                vIndexArm <- which( TreatmentID == nArmIndex )
+                nQtyOfPatientsOnArm <- length( vIndexArm )
+                # Generate dropout time based on arm wise dropout parameters
+                vDropoutTime[ vIndexArm ] <- stats::rexp( nQtyOfPatientsOnArm, rate = dExpDropoutRate[ nArmIndex + 1 ] )
+            }
         }
     }
 
-        return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nError ) ) )
+    return( list( DropOutTime = as.double( vDropoutTime ), ErrorCode = as.integer( nErrorCode ) ) )
 }

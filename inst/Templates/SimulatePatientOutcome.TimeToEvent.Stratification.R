@@ -1,75 +1,83 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Simulate Stratified Time-to-Event Patient Outcomes
-#' @description Simulate time-to-event outcomes using stratum-by-arm survival parameters.
+#'
+#' @title Template: Simulate subject survival times
+#'
+#' @description Simulate subject survival times. Use this template as a starting point for custom logic. Preserve
+#'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
+#'   inputs through UserParam where that argument is supported.
+#'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param StratumID Integer vector of length `NumSub`, indicating each subject's 1-based stratum ID.
-#' @param SurvMethod Integer survival-generation method: 1 for hazard rates, 2 for cumulative survival probabilities, or 3 for median survival times.
-#' @param NumPrd Integer number of survival periods.
-#' @param PrdTime Numeric matrix with one row per stratum and `NumArm` columns, indicating the times used to specify stratum-by-arm survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
-#' @param SurvParam \describe{Depends on the table in the Response Generation tab.
-#'    A 2-D array of parameters to generate the survival times, defined by stratum and arm.
 #'
-#'    \item{If SurvMethod = 1}{SurvParam is an array (NumStratum rows, NumArm columns)
-#'    that specifies stratum-by-arm hazard rates (one rate per arm per stratum).
-#'    Thus, SurvParam[i, j] specifies the hazard rate for the i-th stratum and j-th arm.
-#'    Arms are in columns, with column 1 as control and column 2 as experimental.}
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
 #'
-#'    \item{If SurvMethod = 2}{SurvParam is an array (NumStratum rows, NumArm columns)
-#'    that specifies stratum-by-arm cumulative \% survival values
-#'    (one value per arm per stratum).
-#'    Thus, SurvParam[i, j] specifies the cumulative \% survival
-#'    for the i-th stratum and j-th arm.}
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
 #'
-#'    \item{If SurvMethod = 3}{SurvParam is an array (NumStratum rows, NumArm columns)
-#'    that specifies stratum-by-arm median survival times.
-#'    Thus, SurvParam[i, j] specifies the median survival time
-#'    for the i-th stratum and j-th arm.
-#'    Column 1 is control and column 2 is experimental.}
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param StratumID Integer vector of stratum indices, with one element per subject. Stratum indices start at 1.
+#'   Available when stratification is enabled.
+#'
+#' @param SurvMethod Integer survival input method: 1 = hazard rates; 2 = cumulative survival percentages; 3 =
+#'   median survival times.
+#'
+#' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
+#'   survival generation.
+#'
+#' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
+#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
+#'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
+#'   stratification).
+#'
+#' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
+#'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
+#'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
+#'   SurvMethod = 3. Without stratification, the median-survival method has one row.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements: A list of user defined parameters in East Horizon. You must have a default
+#'   = NULL, as in this example. If UserParam are supplied in East Horizon, they will be an element in the list, eg
+#'   UserParam$ParameterName.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
+#'     enrollment, with one element per subject. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
 #' }
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' @return A list containing:
-#'   \describe{
-#'     \item{SurvivalTime}{Required numeric vector of length `NumSub` containing the generated time-to-event outcome for each subject.}
-#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
-#'   }
-#' @details
-#' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.
-#' However, you may choose to ignore the parameters SurvMethod, NumPrd, PrdTime, and SurvParam if the patient simulator
-#' you are creating only requires use of parameters the user will add to UserParam
-#' The function returns one generated survival time per subject.
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
-{
+{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
     # TO DO : Modify this function appropriately
-    nError <- 0
-    retval     <- c()
+    nErrorCode <- 0
+    retval <- c( )
     # Initialising Response Array to 0
-    for( i in 1:NumSub )
-    {
+    for ( i in 1:NumSub ) {
         retval[ i ] <- 0
     }
-    if( SurvMethod == 1 )   # Hazard Rates
-    {
+    if ( SurvMethod == 1 ) { # Hazard Rates
         # Write the actual code for SurvMethod 1
         # here.
         # Store the generated survival times in an
         # array called retval.
     }
-    if( SurvMethod == 2 )   # Cumulative % Survivals
-    {
+    if ( SurvMethod == 2 ) { # Cumulative % Survivals
         # Write the actual code for SurvMethod 2
         # here.
         # Store the generated survival times in an
         # array called retval.
     }
-    if( SurvMethod == 3 )   # Median Survival Times
-    {
+    if ( SurvMethod == 3 ) { # Median Survival Times
         # Write the actual code for SurvMethod 3
         # here.
         # Store the generated survival times in an
@@ -77,5 +85,5 @@
     }
     # Use appropriate error handling and modify the
     # Error appropriately in each of the methods
-    return( list( SurvivalTime = as.double( retval ), ErrorCode = as.integer( nError ) ) )
+    return( list( SurvivalTime = as.double( retval ), ErrorCode = as.integer( nErrorCode ) ) )
 }

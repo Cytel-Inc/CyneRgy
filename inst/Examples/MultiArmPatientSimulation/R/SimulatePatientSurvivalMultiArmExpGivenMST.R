@@ -1,57 +1,78 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeMultiArmExpGivenMST
+#'
 #' @title Simulate survival outcomes for multi-arm clinical trial simulations given Median Survival Times (MST)
-#' @description
-#' Generates patient-level survival times under several survival distribution
-#' parameterizations for multi-arm clinical trial simulations.
-#' @author Anoop Singh Rawat
+#'
+#' @description Generates patient-level survival times under several survival distribution parameterizations for
+#'   multi-arm clinical trial simulations.
+#'
+#' @author Gabriel Potvin and Anoop Singh Rawat
 #'
 #' @param NumSub Integer number of subjects in the trial.
-#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param SurvMethod Integer survival-generation method: 1 for hazard rates, 2 for cumulative survival probabilities, or 3 for median survival times.
-#' @param NumPrd Integer number of survival periods.
-#' @param PrdTime Numeric matrix with `NumPrd` rows and `NumArm` columns, indicating the times used to specify survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
-#' @param SurvParam Numeric matrix with `NumPrd` rows and `NumArm` columns containing arm-specific survival parameters.
-#'   \describe{
-#'     \item{SurvMethod = 1}{Hazard rates for each period and arm. Entry `[i, j]` is the hazard rate in period `i` for arm `j`.}
-#'     \item{SurvMethod = 2}{Cumulative survival probabilities for each period and arm. Entry `[i, j]` is the cumulative survival probability in period `i` for arm `j`.}
-#'     \item{SurvMethod = 3}{One row of median survival times, with one value per arm.}
-#'   }
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
 #'
-#' @return List containing:
-#'         \describe{
-#'           \item{SurvivalTime}{Numeric vector of generated survival times.}
-#'           \item{ErrorCode}{An integer value: ErrorCode = 0 indicates no error; ErrorCode > 0 indicates a nonfatal error and aborts the current simulation, but subsequent simulations continue; ErrorCode < 0 indicates a fatal error and stops further simulation. In this function, ErrorCode = -100 indicates invalid output generation.}
-#'         }
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#'
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param SurvMethod Integer survival input method: 1 = hazard rates; 2 = cumulative survival percentages; 3 =
+#'   median survival times.
+#'
+#' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
+#'   survival generation.
+#'
+#' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
+#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
+#'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
+#'   stratification).
+#'
+#' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
+#'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
+#'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
+#'   SurvMethod = 3. Without stratification, the median-survival method has one row.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
+#'     enrollment, with one element per subject. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' @details Example-specific error codes: Integer error code. 0 indicates success and -100 indicates invalid output
+#'   generation.
 ######################################################################################################################## .
 
-SimulatePatientOutcomeMultiArmExpGivenMST <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL )
-{
-    nError    <- 0
-    vResponse <- c()
+SimulatePatientOutcomeMultiArmExpGivenMST <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
+    nErrorCode <- 0
+    vResponse <- c( )
 
     # If inputs are Median Survival Times
-    if( SurvMethod == 3 )
-    {
-        vMST        <- as.numeric( SurvParam )
-        vHRates     <- log( 2 ) / vMST
+    if ( SurvMethod == 3 ) {
+        vMST <- as.numeric( SurvParam )
+        vHRates <- log( 2 ) / vMST
 
-        for( nPatID in 1:NumSub )
-        {
-            nArmIndex           <- TreatmentID[ nPatID ] + 1
-            vResponse[ nPatID ] <- rexp( n = 1, rate = vHRates[ nArmIndex ] )
+        for ( nPatID in 1:NumSub ) {
+            nArmIndex <- TreatmentID[ nPatID ] + 1
+            vResponse[ nPatID ] <- stats::rexp( n = 1, rate = vHRates[ nArmIndex ] )
         }
-    }
-    else
-    {
-        nError <- -100
+    } else {
+        nErrorCode <- -100
     }
 
-    if( length( vResponse ) != NumSub || any( is.na( vResponse ) == TRUE ) )
-        nError <- -100
+    if ( length( vResponse ) != NumSub || any( is.na( vResponse ) == TRUE ) ) {
+        nErrorCode <- -100
+    }
 
-    return( list( SurvivalTime = as.double( vResponse ), ErrorCode = as.integer( nError ) ) )
+    return( list( SurvivalTime = as.double( vResponse ), ErrorCode = as.integer( nErrorCode ) ) )
 }

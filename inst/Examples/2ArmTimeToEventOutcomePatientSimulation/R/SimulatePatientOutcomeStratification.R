@@ -1,64 +1,86 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeStratification
+#'
 #' @title Simulate patient outcomes using stratification
-#' @author Valeria A. G. Mazzanti and J. Kyle Wathen
-#' @param NumSub Integer number of subjects in the trial.
-#' @param NumArm Integer number of arms in the trial, including placebo/control and experimental arms.
-#' @param ArrivalTime Numeric vector of length `NumSub`, indicating the arrival time for each subject.
-#' @param TreatmentID Integer vector of length `NumSub`, indicating subject allocation to trial arms. Index `0` represents placebo/control; indices `1` and above represent experimental arms.
-#' @param StratumID Integer vector of length `NumSub`, indicating each subject's 1-based stratum ID.
-#' @param SurvMethod Integer survival-generation method: 1 for hazard rates, 2 for cumulative survival probabilities, or 3 for median survival times.
-#' @param NumPrd Integer number of survival periods.
-#' @param PrdTime Numeric matrix with one row per stratum and `NumArm` columns, indicating the times used to specify stratum-by-arm survival parameters. For `SurvMethod = 1`, entries are hazard-piece start times; for `SurvMethod = 2`, entries are times at which cumulative survival is specified; for `SurvMethod = 3`, entries default to 0.
-#' @param SurvParam \describe{Depends on the table in the Response Generation tab.
-#'    A 2-D array of parameters to generate the survival times, defined by stratum and arm.
 #'
-#'    \item{If SurvMethod = 1}{SurvParam is an array (NumStratum rows, NumArm columns)
-#'    that specifies stratum-by-arm hazard rates (one rate per arm per stratum).
-#'    Thus, SurvParam[i, j] specifies the hazard rate for the i-th stratum and j-th arm.
-#'    Arms are in columns, with column 1 as control and column 2 as experimental.}
-#'
-#'    \item{If SurvMethod = 2}{SurvParam is an array (NumStratum rows, NumArm columns)
-#'    that specifies stratum-by-arm cumulative \% survival values
-#'    (one value per arm per stratum).
-#'    Thus, SurvParam[i, j] specifies the cumulative \% survival
-#'    for the i-th stratum and j-th arm.}
-#'
-#'    \item{If SurvMethod = 3}{SurvParam is an array (NumStratum rows, NumArm columns)
-#'    that specifies stratum-by-arm median survival times.
-#'    Thus, SurvParam[i, j] specifies the median survival time
-#'    for the i-th stratum and j-th arm.
-#'    Column 1 is control and column 2 is experimental.}
-#' }
-#' @param UserParam A list of user-defined parameters in East Horizon. Set the default to NULL, as shown in this example. If values are provided, access them as UserParam$ParameterName. Parameters must be Integer, Numeric, or Character. Do not pass UserParam directly to a helper function, as this may prevent East Horizon from populating the required parameters.
-#' @description
-#' This function generates patient survival times across multiple strata based on the
-#' parameters specified in the Response Generation table.
+#' @description This function generates patient survival times across multiple strata based on the parameters
+#'   specified in the Response Generation table.
 #'
 #' For each stratum, the corresponding survival parameters (hazard rates, cumulative \% survival, or medians)
 #' are converted into hazard rates. Then patient-level survival times are simulated using an
 #' Exponential distribution:
 #' \deqn{ T \sim \text{Exponential}(\lambda) }
 #'
-#' @return A list containing:
-#'   \describe{
-#'     \item{SurvivalTime}{Required numeric vector of length `NumSub` containing the generated time-to-event outcome for each subject.}
-#'     \item{ErrorCode}{Optional integer status code; 0 indicates no error, a positive value aborts the current simulation but allows subsequent simulations, and a negative value stops further simulation.}
-#'   }
+#' @author Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin
+#'
+#' @param NumSub Integer number of subjects in the trial.
+#'
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#'
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#'
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#'
+#' @param StratumID Integer vector of stratum indices, with one element per subject. Stratum indices start at 1.
+#'   Available when stratification is enabled.
+#'
+#' @param SurvMethod Integer survival input method: 1 = hazard rates; 2 = cumulative survival percentages; 3 =
+#'   median survival times.
+#'
+#' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
+#'   survival generation.
+#'
+#' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
+#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
+#'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
+#'   stratification).
+#'
+#' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
+#'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
+#'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
+#'   SurvMethod = 3. Without stratification, the median-survival method has one row.
+#'
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
+#'     enrollment, with one element per subject. Required.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{Response}{Required numeric value. Contains a vector of generated Survival Time for all subjects across
+#'     the strata}
+#' }
+#'
+#' @details Usage of ArrivalTime in this example: A vector of subject arrival times. (Not used in this function but
+#'   required for integration.)
+#'
+#' Usage of UserParam in this example: A list of user-defined parameters in East Horizon (not used in this
+#'   function). The default is NULL.
 ######################################################################################################################## .
+
 SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
-                                                StratumID, SurvMethod, NumPrd, PrdTime,
-                                                SurvParam, UserParam = NULL )
-{
-    nError <- 0
+                                                 StratumID, SurvMethod, NumPrd, PrdTime,
+                                                 SurvParam, UserParam = NULL ) {
+    nErrorCode <- 0
 
     # Initialize vectors
     vSurvResponses <- numeric( 0 )
     vUniqueStrata <- unique( StratumID )
 
     # Loop through strata
-    for( nStratumIdx in seq_along( vUniqueStrata ) )
-    {
+    for ( nStratumIdx in seq_along( vUniqueStrata ) ) {
         nStratumInd <- vUniqueStrata[ nStratumIdx ]
 
         # Number of subjects in this stratum
@@ -68,61 +90,54 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
         vStratumParams <- SurvParam[ nStratumIdx, ]
 
         vPatientOutcome <- rep( 0, nStratumSubjects )
-        vTreatmentIndex <- TreatmentID + 1  # TreatmentID is 0-based
+        vTreatmentIndex <- TreatmentID + 1 # TreatmentID is 0-based
 
         # SurvMethod 1: Hazard Rates
-        if( SurvMethod == 1 )
-        {
-          vHazardRates <- vStratumParams
+        if ( SurvMethod == 1 ) {
+            vHazardRates <- vStratumParams
         }
 
         # SurvMethod 2: Cumulative % Survival
-        if( SurvMethod == 2 )
-        {
-          dSurvTime <- as.numeric( PrdTime[ 1 ] )
-          vS <- vStratumParams / 100
-          vHazardRates <- rep( NA, NumArm )
+        if ( SurvMethod == 2 ) {
+            dSurvTime <- as.numeric( PrdTime[ 1 ] )
+            vS <- vStratumParams / 100
+            vHazardRates <- rep( NA, NumArm )
 
-          for( nArmIdx in 1:NumArm )
-          {
-            if( vS[ nArmIdx ] > 0 && vS[ nArmIdx ] < 1 && dSurvTime > 0 )
-              vHazardRates[ nArmIdx ] <- -log( vS[ nArmIdx ] ) / dSurvTime
-            else
-            {
-              vHazardRates[ nArmIdx ] <- NA
-              nError <- 1
+            for ( nArmIdx in 1:NumArm ) {
+                if ( vS[ nArmIdx ] > 0 && vS[ nArmIdx ] < 1 && dSurvTime > 0 ) {
+                    vHazardRates[ nArmIdx ] <- -log( vS[ nArmIdx ] ) / dSurvTime
+                } else {
+                    vHazardRates[ nArmIdx ] <- NA
+                    nErrorCode <- 1
+                }
             }
-          }
         }
 
         # SurvMethod 3: Median Survival
-        if( SurvMethod == 3 )
-        {
-          vMedian <- vStratumParams
-          vHazardRates <- rep( NA, NumArm )
+        if ( SurvMethod == 3 ) {
+            vMedian <- vStratumParams
+            vHazardRates <- rep( NA, NumArm )
 
-          for( nArmIdx in 1:NumArm )
-          {
-            if( vMedian[ nArmIdx ] > 0 )
-              vHazardRates[ nArmIdx ] <- log( 2 ) / vMedian[ nArmIdx ]
-            else
-            {
-              vHazardRates[ nArmIdx ] <- NA
-              nError <- 1
+            for ( nArmIdx in 1:NumArm ) {
+                if ( vMedian[ nArmIdx ] > 0 ) {
+                    vHazardRates[ nArmIdx ] <- log( 2 ) / vMedian[ nArmIdx ]
+                } else {
+                    vHazardRates[ nArmIdx ] <- NA
+                    nErrorCode <- 1
+                }
             }
-          }
         }
 
         # Generation of Responses
-        for( nPatIndx in 1:nStratumSubjects )
-        {
+        for ( nPatIndx in 1:nStratumSubjects ) {
             nArm <- vTreatmentIndex[ nPatIndx ]
             dRate <- vHazardRates[ nArm ]
 
-            if( !is.na( dRate ) && dRate > 0 )
-                vPatientOutcome[ nPatIndx ] <- rexp( 1, dRate )
-            else
+            if ( !is.na( dRate ) && dRate > 0 ) {
+                vPatientOutcome[ nPatIndx ] <- stats::rexp( 1, dRate )
+            } else {
                 vPatientOutcome[ nPatIndx ] <- NA
+            }
         }
 
         # Append strata-wise responses
@@ -130,11 +145,12 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
     }
 
     # For consistency checks
-    if( length( vSurvResponses ) != NumSub || any( is.na( vSurvResponses ) ) )
-        nError <- -100
+    if ( length( vSurvResponses ) != NumSub || any( is.na( vSurvResponses ) ) ) {
+        nErrorCode <- -100
+    }
 
     return( list(
         SurvivalTime = as.double( vSurvResponses ),
-        ErrorCode = as.integer( nError )
+        ErrorCode = as.integer( nErrorCode )
     ) )
 }

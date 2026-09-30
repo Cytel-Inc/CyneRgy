@@ -1,19 +1,30 @@
 ######################################################################################################################## .
 #' @name ProbExpGreaterCtrlBeta
-#' @title Compute a Beta-Binomial Posterior Probability
-#' @description Computes the posterior probability that the experimental response probability exceeds the control response probability by Monte Carlo sampling from beta posteriors.
-#' @author J. Kyle Wathen
-#' @param vOutcomesS Binary outcomes observed on the control arm.
-#' @param vOutcomesE Binary outcomes observed on the experimental arm.
-#' @param dAlphaS Alpha parameter of the beta prior for the control arm.
-#' @param dBetaS Beta parameter of the beta prior for the control arm.
-#' @param dAlphaE Alpha parameter of the beta prior for the experimental arm.
-#' @param dBetaE Beta parameter of the beta prior for the experimental arm.
-#' @return A named list containing `dPostProb`, the estimated posterior probability that the experimental response probability exceeds the control response probability.
+#'
+#' @title Prob Exp Greater Ctrl Beta
+#'
+#' @description Estimate the posterior probability that the experimental response probability exceeds the control
+#'   response probability by sampling from the two beta posterior distributions.
+#'
+#' @author J. Kyle Wathen and Gabriel Potvin
+#'
+#' @param vOutcomesS Integer vector of observed control-arm binary outcomes (0 = non-response, 1 = response).
+#'
+#' @param vOutcomesE Integer vector of observed experimental-arm binary outcomes (0 = non-response, 1 = response).
+#'
+#' @param dAlphaS Positive numeric alpha parameter of the control-arm beta prior.
+#'
+#' @param dBetaS Positive numeric beta parameter of the control-arm beta prior.
+#'
+#' @param dAlphaE Positive numeric alpha parameter of the experimental-arm beta prior.
+#'
+#' @param dBetaE Positive numeric beta parameter of the experimental-arm beta prior.
+#'
+#' @return List containing dPostProb, the estimated posterior probability that the experimental response
+#'   probability exceeds the control response probability.
 ######################################################################################################################## .
 
-ProbExpGreaterCtrlBeta <- function( vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlphaE, dBetaE )
-{
+ProbExpGreaterCtrlBeta <- function( vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAlphaE, dBetaE ) {
     # In the beta-binomial model if we make the assumption that
     # pi ~ Beta( a, b )
     # then the posterior of pi is:
@@ -21,32 +32,34 @@ ProbExpGreaterCtrlBeta <- function( vOutcomesS, vOutcomesE, dAlphaS, dBetaS, dAl
 
     # Compute the posterior parameters for control treatment
     dAlphaS <- dAlphaS + sum( vOutcomesS )
-    dBetaS  <- dBetaS  + length( vOutcomesS ) - sum( vOutcomesS )
+    dBetaS <- dBetaS + length( vOutcomesS ) - sum( vOutcomesS )
 
     # Compute the posterior parameters for Exp treatment
-    dAlphaE  <- dAlphaE + sum( vOutcomesE )
-    dBetaE   <- dBetaE  + length( vOutcomesE ) - sum( vOutcomesE )
+    dAlphaE <- dAlphaE + sum( vOutcomesE )
+    dBetaE <- dBetaE + length( vOutcomesE ) - sum( vOutcomesE )
 
     # There are much more efficient ways to compute this, but for simplicity, we are just sampling the posteriors
-    vPiCtrl    <- rbeta( 10000, dAlphaS, dBetaS )
-    vPiExp     <- rbeta( 10000, dAlphaE, dBetaE )
-    dPostProb  <- ifelse( vPiExp > vPiCtrl, 1, 0 )
-    dPostProb  <- sum( dPostProb ) / length( dPostProb )
+    vPiCtrl <- stats::rbeta( 10000, dAlphaS, dBetaS )
+    vPiExp <- stats::rbeta( 10000, dAlphaE, dBetaE )
+    dPostProb <- ifelse( vPiExp > vPiCtrl, 1, 0 )
+    dPostProb <- sum( dPostProb ) / length( dPostProb )
 
     return( list( dPostProb = dPostProb ) )
 }
 
+
+
+
 # Function to compute Bayesian predictive probability of success
-ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams )
-{
+ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams ) {
     # Compute the posterior parameters based on observed data
     posteriorAlphaS <- priorAlphaS + sum( dataS )
-    posteriorBetaS  <- priorBetaS + length( dataS ) - sum( dataS )
+    posteriorBetaS <- priorBetaS + length( dataS ) - sum( dataS )
 
     posteriorAlphaE <- priorAlphaE + sum( dataE )
-    posteriorBetaE  <- priorBetaE + length( dataE ) - sum( dataE )
+    posteriorBetaE <- priorBetaE + length( dataE ) - sum( dataE )
 
-    #lAnalysisParams <- list( dAlphaCtrl = priorAlphaS,
+    # lAnalysisParams <- list( dAlphaCtrl = priorAlphaS,
     #                         dBetaCtrl  = priorBetaS,
     #                         dAlphaExp  = priorAlphaE,
     #                         dBetaExp   = priorBetaE )
@@ -55,26 +68,29 @@ ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dat
     successfulTrials <- 0
 
     # Simulate the remaining trials and compute the predictive probability
-    for( i in 1:nSimulations )
-    {
+    for ( i in 1:nSimulations ) {
         # Sample response rates from posterior distributions
-        posteriorRateS <- rbeta( 1, posteriorAlphaS, posteriorBetaS )
-        posteriorRateE <- rbeta( 1, posteriorAlphaE, posteriorBetaE )
+        posteriorRateS <- stats::rbeta( 1, posteriorAlphaS, posteriorBetaS )
+        posteriorRateE <- stats::rbeta( 1, posteriorAlphaE, posteriorBetaE )
 
-        # Simulate patient outcomes for for the current virtual trial based on sampled rates
+        # Simulate patient outcomes for the current virtual trial based on sampled rates
         # The data at the end of the trial is a combination of the data at the interim, dataS, and the simulated data to the end of the trial, remainingDataS
-        remainingDataS <- SimulatePatientOutcome( nQtyOfPatsS - length( dataS ), posteriorRateS )
-        combinedDataS  <- c( dataS, remainingDataS )
+        remainingDataS <- stats::rbinom( nQtyOfPatsS - length( dataS ), size = 1, prob = posteriorRateS )
+        combinedDataS <- c( dataS, remainingDataS )
 
-        remainingDataE <- SimulatePatientOutcome( nQtyOfPatsE - length( dataE ), posteriorRateE )
-        combinedDataE  <- c( dataE, remainingDataE )
+        remainingDataE <- stats::rbinom( nQtyOfPatsE - length( dataE ), size = 1, prob = posteriorRateE )
+        combinedDataE <- c( dataE, remainingDataE )
+
 
         # Perform the analysis with combined data to check if the trial is successful
-        result <- ProbExpGreaterCtrlBeta( combinedDataS, combinedDataE, lAnalysisParams )
+        result <- ProbExpGreaterCtrlBeta(
+            combinedDataS, combinedDataE,
+            lAnalysisParams$dAlphaCtrl, lAnalysisParams$dBetaCtrl,
+            lAnalysisParams$dAlphaExp, lAnalysisParams$dBetaExp
+        )
 
         # Check if the result meets the cutoff for success
-        if( result$dPostProb <= finalBoundary )
-        {
+        if ( result$dPostProb >= finalBoundary ) {
             successfulTrials <- successfulTrials + 1
         }
     }
