@@ -258,7 +258,7 @@ CyneRgy::PlotExampleFlowchart(
         ),
         "Analysis" = c(
             "Load patient responses and true response probabilities",
-            "Calculate Z-statistic using East formula (same way as East Horizon)", 
+            "Calculate Z-statistic using the East Horizon formula",
             "Return decision and true response probabilities (will be part of Phase 2 results)"
         )
     )
@@ -311,7 +311,7 @@ where $Y_i \in \{0,1\}$ is the binary response, and $\pi_j$ is the true response
   <p style="margin-bottom:0"> This endpoint is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
 </div>
 
-The analysis is the same as East Horizon, based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2). No user-defined parameter is required for this integration point.
+The analysis is the same as East Horizon, based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East Horizon manual (24.2). No user-defined parameter is required for this integration point.
 
 **Test Statistic:**
 

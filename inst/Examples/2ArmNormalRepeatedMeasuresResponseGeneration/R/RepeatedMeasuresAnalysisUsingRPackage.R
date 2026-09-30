@@ -107,6 +107,83 @@
 #'     Horizon Design: Not available.}
 #' }
 #'
+#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
+#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#' \describe{
+#'   \item{NumLooks}{Integer total number of analysis looks.}
+#'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
+#'   \item{InfoFrac}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the information fraction
+#'     for each look.}
+#'   \item{CumAlpha}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent
+#'     (for one-sided tests) for each look. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{CumAlphaLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower cumulative
+#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if left-tailed one-sided test. Only makes
+#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{CumAlphaUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper cumulative
+#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if right-tailed one-sided test. Only makes
+#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
+#'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event` and for
+#'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
+#'     Ratio of Poisson Rates`). East Horizon Design: Not available for `Time-to-Event` tests.}
+#'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
+#'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
+#'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon
+#'     Design: Possible values: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. – `2`: One-sided
+#'     efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility lower. – `5`:
+#'     One-sided efficacy lower, futility upper. – `6`: Two-sided efficacy only. – `7`: Two-sided futility only. –
+#'     `8`: Two-sided efficacy, futility. – `9`: Equivalence.}
+#'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Possible values: – `0`: Z scale.
+#'     East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale.}
+#'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
+#'     values (for one-sided tests) for each look. East Horizon Explore: Set to `NA` for `Endpoint Type =
+#'     Continuous with Repeated Measures`. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{EffBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower efficacy
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{EffBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper efficacy
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: – `0`: Z scale. –
+#'     `2`: Delta scale. East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale. – `2`: Delta
+#'     scale. – `3`: Conditional power scale.}
+#'   \item{CPDeltaOption}{Integer. Delta option for conditional power computation: 0 = design Delta; 1 = estimated
+#'     Delta. East Horizon Design only; available when the futility boundary scale is conditional power.}
+#'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
+#'     values (for one-sided tests) for each look. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{FutBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower futility
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{FutBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper futility
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
+#'   \item{InterimVisit}{Integer. Index of the visit which is driving the interims (starts at 1). East Horizon
+#'     Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon Design: Not
+#'     available.}
+#'   \item{FutContrast}{Integer. The contrast based on which futility boundaries are being computed: – `0`: Primary
+#'     contrast. – `1`: Secondary contrast. East Horizon Explore: Only available for `Endpoint Type = Continuous
+#'     with Repeated Measures`. East Horizon Design: Not available.}
+#'   \item{IncludePipeline}{Integer. Indicates whether to include pipeline subjects in the interim: – `0`: Do not
+#'     include. – `1`: Include. East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated
+#'     Measures`. East Horizon Design: Not available.}
+#' }
+#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -130,62 +207,51 @@
 #'     simulations.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This fixed-sample example assumes a common treatment effect across all post-baseline visits and
+#'   returns its signed normal-equivalent statistic, computed from the model's two-sided t-test p-value.
+#'   It does not estimate the configured visit-specific primary and secondary
+#'   contrasts. Extend the model before returning PrimDelta or SecDelta. A non-NULL LookInfo is unsupported and
+#'   returns ErrorCode = 1.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
 ######################################################################################################################## .
 
-MMRMAna <- function( SimData, DesignParam, UserParam = NULL ) {
-    nErrorCode <- 0
-    dPrimaryDeltaEstimate <- 0
-    dSecondaryDeltaEstimate <- 0
-    dStandardError <- 1
+MMRMAna <- function( SimData, DesignParam, UserParam = NULL, LookInfo = NULL ) {
+    # This example fits a fixed-sample model with a common treatment effect across follow-up visits.
+    if ( !is.null( LookInfo ) ) {
+        return( list( TestStat = NA_real_, ErrorCode = 1L ) )
+    }
 
-    # SimData <- read.csv( "C:\\Users\\shubham.lahoti\\Downloads\\MMRM codes and data\\MMRMSimData.csv" )
-    SimData$id <- seq_len( DesignParam$SampleSize )
-    nNumVisit <- DesignParam$NumVisit
-
+    SimData$id <- seq_len( nrow( SimData ) )
+    nVisits <- DesignParam$NumVisit
     dfLongData <- stats::reshape( SimData,
-        varying   = paste0( "Response", seq_len( nNumVisit ) ),
+        varying = paste0( "Response", seq_len( nVisits ) ),
         direction = "long",
-        sep       = "",
-        idvar     = "id"
+        sep = "",
+        idvar = "id"
     )
-    dfLongData <- dfLongData[ order( dfLongData$TreatmentID, dfLongData$id, dfLongData$time ), ]
+    dfLongData <- dfLongData[ order( dfLongData$id, dfLongData$time ), ]
 
-    vOutcome <- dfLongData[ dfLongData$time != 1, ]$Response
-    vBaselineOutcome <- dfLongData[ dfLongData$time == 1, ]$Response
-    vBaselineOutcome <- rep( vBaselineOutcome, each = nNumVisit - 1 )
-    vTreatment <- dfLongData[ dfLongData$time != 5, ]$TreatmentID
+    # Match baseline responses to subjects before restricting the model data to follow-up visits.
+    dfBaseline <- dfLongData[ dfLongData$time == 1, c( "id", "Response" ) ]
+    dfFollowUp <- dfLongData[ dfLongData$time != 1, ]
+    dfFollowUp$Baseline <- dfBaseline$Response[ match( dfFollowUp$id, dfBaseline$id ) ]
+    dfFollowUp$time <- dfFollowUp$time - 1
 
-    fitMMRM <- nlme::gls( vOutcome ~ vBaselineOutcome + vTreatment,
+    cMMRM <- nlme::gls( Response ~ Baseline + TreatmentID,
+        data = dfFollowUp,
         na.action = stats::na.omit,
-        data = dfLongData,
         correlation = nlme::corSymm( form = ~ time | id ),
         weights = nlme::varIdent( form = ~ 1 | time )
     )
-    # fitMMRM <- nlme::gls( vOutcome ~ vBaselineOutcome * factor( time ) + TreatmentID * factor( time ),
-    #                       na.action = stats::na.omit, data = dfLongData,
-    #                       correlation = nlme::corSymm( form = ~ time | id ),
-    #                       weights = nlme::varIdent( form = ~ 1 | time ) )
-    summary( fitMMRM )
+    mCoefficients <- summary( cMMRM )$tTable
+    dTValue <- mCoefficients[ "TreatmentID", "t-value" ]
+    dTwoSidedPValue <- mCoefficients[ "TreatmentID", "p-value" ]
+    dTestStatistic <- sign( dTValue ) * stats::qnorm( dTwoSidedPValue / 2, lower.tail = FALSE )
 
-    if ( summary( fitMMRM )$tTable[ "vTreatment", "p-value" ] <= 0.025 ) {
-        nDecision <- 2
-    } else {
-        nDecision <- 0
-    }
-    dTestStatistic <- summary( fitMMRM )$tTable[ "vTreatment", "t-value" ]
-
-    return( list(
-        TestStat = as.double( dTestStatistic ),
-        PrimDelta = as.double( dPrimaryDeltaEstimate ),
-        SecDelta = as.double( dSecondaryDeltaEstimate ),
-        ErrorCode = as.integer( nErrorCode )
-    ) )
-
-    # return( list( Decision = as.integer( nDecision ), ErrorCode = as.integer( nError ),
-    #               TestStat = as.double( dTestStatistic ),
-    #               PVal = as.double( summary( fitMMRM )$tTable[ "vTreatment", "p-value" ] ) ) )
+    # Primary and secondary contrasts require a model that estimates visit-specific treatment effects.
+    return( list( TestStat = as.double( dTestStatistic ), ErrorCode = 0L ) )
 }

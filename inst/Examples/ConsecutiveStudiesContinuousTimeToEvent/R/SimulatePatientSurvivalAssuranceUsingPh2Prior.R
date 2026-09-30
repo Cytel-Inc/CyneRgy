@@ -44,14 +44,14 @@
 #'      \item{UserParam$dIntercept}{Intercept for the linear relationship between true treatment difference and
 #'        log(HR).}
 #'      \item{UserParam$dSlope}{Slope for the linear relationship between true treatment difference and log(HR).}
-#'      \item{UserParam$dMeanTTECtrl}{Mean time-to-event for the control group.}
+#'   \item{UserParam$dMeanTTECtrl}{Positive numeric mean time-to-event for the control arm.}
 #'   }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
-#'     enrollment, with one element per subject. Required.}
+#'     enrollment, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

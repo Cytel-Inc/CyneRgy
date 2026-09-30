@@ -36,8 +36,8 @@
 #' Example-specific parameters and requirements:
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
-#'    \item{UserParam$dProbOfZeroOutcomeCtrl}{A value in (0, 1) that defines the probability a patient will have an
-#'      outcome of 0 on the control arm.}
+#'   \item{UserParam$dProbOfZeroOutcomeCtrl}{Numeric probability in [0, 1] that a subject has a zero outcome
+#'     on the control arm.}
 #'    \item{UserParam$dProbOfZeroOutcomeExp1}{A value in (0, 1) that defines the probability a patient will have an
 #'      outcome of 0 on the experimental arm 1.}
 #'    \item{UserParam$dProbOfZeroOutcomeExp2}{A value in (0, 1) that defines the probability a patient will have an
@@ -47,7 +47,7 @@
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. Required.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

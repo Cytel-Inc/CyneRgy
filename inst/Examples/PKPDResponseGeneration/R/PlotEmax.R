@@ -3,7 +3,8 @@
 #'
 #' @title Emax To Long
 #'
-#' @description Packages
+#' @description Convert generated visit-level Emax responses to long format and plot the response
+#'   trajectories and group summaries. Run this demonstration from the example R directory.
 #'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
 #'

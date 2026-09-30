@@ -124,15 +124,15 @@
 #' Example-specific parameters and requirements:
 #' If UserParam is supplied, the list must contain the following named element:
 #'  \describe{
-#'  \item{UserParam$dPriorAlpha}{A value (0,1) that defines the prior alpha parameter of the beta distribution.
-#'                          If this value is not specified, the default is 0.2.}
-#'  \item{UserParam$dPriorBeta}{A value (0,1) that specifies the prior beta parameter of the beta distribution.
-#'                              If this value is not specified, the default is 0.8.}
-#'  \item{UserParam$dHistoricResponseRate}{ A value (0,1) that specifies the historic response rate.
-#'                                  If this value is not specified, the default is 0.2.}
-#'  \item{UserParam$dMinPosteriorProbability}{A value (0,1) that specifies the posterior probability needed of
-#'    being greater than the historic response rate for an experimental treatment to be selected.
-#'                              If this value is not specified, the default is 0.5.}
+#'   \item{UserParam$dPriorAlpha}{Positive numeric alpha parameter of the beta prior. When UserParam is NULL,
+#'     the default is 0.2.}
+#'   \item{UserParam$dPriorBeta}{Positive numeric beta parameter of the beta prior. When UserParam is NULL,
+#'     the default is 0.8.}
+#'   \item{UserParam$dHistoricResponseRate}{Numeric historical response probability in [0, 1]. When UserParam
+#'     is NULL, the default is 0.2.}
+#'   \item{UserParam$dMinPosteriorProbability}{Numeric posterior probability threshold in [0, 1] for
+#'     selecting a treatment whose response probability exceeds the historical rate. When UserParam is NULL,
+#'     the default is 0.5.}
 #'           }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
@@ -169,10 +169,10 @@ SelectExpUsingBayesianRule <- function( SimData, DesignParam, LookInfo, UserPara
     #### Determine the posterior parameters based on SimData and the prior parameters ####
     # Calculate the number of responses (Yj) and treatment failures per treatment (Y'j)
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
-    tabResults <- table( SimData$TreatmentID, SimData$Response )
+    tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
 
     # Only want data on experimental treatments is wanted, experimental data starts in row 2
-    tabResultsExperimental <- tabResults[ c( 2:nrow( tabResults ) ), ]
+    tabResultsExperimental <- tabResults[ c( 2:nrow( tabResults ) ), , drop = FALSE ]
     nQtyOfExperimentalArms <- nrow( tabResultsExperimental )
 
     # Loop over the experimental arms and record which treatments are selected for stage 2

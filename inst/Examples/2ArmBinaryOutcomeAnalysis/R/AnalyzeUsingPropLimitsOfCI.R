@@ -177,12 +177,12 @@
 #' Example-specific parameters and requirements:
 #' UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifics the lower limit, eg  Minimum Acceptable Value
+#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifies the lower limit, eg  Minimum Acceptable Value
 #'     (MAV).}
 #'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg
 #'     Target Value (TV).}
-#'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the prop.test function in
-#'     base R.}
+#'   \item{UserParam$dConfLevel}{Numeric confidence level in (0, 1) used to construct the confidence
+#'     interval.}
 #' }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
@@ -209,7 +209,10 @@
 #'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This example returns the lower confidence limit in TestStat for reporting and supplies Decision
+#'   to apply its custom stopping rule. The reported confidence limit is not a Wald Z statistic.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
@@ -257,7 +260,10 @@ AnalyzeUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo = NULL, U
     vOutcomesE <- vPatientOutcome[ vPatientTreatment == 1 ]
 
     # Perform the desired analysis, then determine if the lower limit of the confidence interval is greater than the user-specified value ####
-    mData <- cbind( table( vOutcomesS ), table( vOutcomesE ) )
+    mData <- rbind(
+        c( sum( vOutcomesE ), length( vOutcomesE ) - sum( vOutcomesE ) ),
+        c( sum( vOutcomesS ), length( vOutcomesS ) - sum( vOutcomesS ) )
+    )
     lAnalysisResult <- stats::prop.test( mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel )
     dLowerLimitCI <- lAnalysisResult$conf.int[ 1 ]
     dUpperLimitCI <- lAnalysisResult$conf.int[ 2 ]

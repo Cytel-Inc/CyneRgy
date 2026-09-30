@@ -27,7 +27,7 @@ available and adjusts the analysis parameters accordingly.
 ## Introduction
 
 The following examples illustrate how to integrate new analysis
-capabilities into East Horizon or East using R functions in the context
+capabilities into East Horizon using R functions in the context
 of a two-arm trial. In each example, the trial design includes a
 standard-of-care control arm and an experimental treatment arm, with
 patient outcomes modeled as time-to-event data. The design includes two
@@ -51,7 +51,7 @@ you will find the following R files:
 1.  [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R) -
     Contains a function named *AnalyzeUsingEastLogrankFormula.R* that
     computes the test statistic for a TTE endpoint using Formulas of
-    Appendix Q.8 from the East manual.
+    Appendix Q.8 from the East Horizon manual.
 
 2.  [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R) -
     Contains a function named *AnalyzeUsingSurvivalPackage* that
@@ -77,14 +77,14 @@ you will find the following R files:
     Contains a function named *AnalyzeSubpopulation* that extends the
     standard TTE analysis to support subpopulations.
 
-## Example 1 - Using Formulas Q.242 and Q.243 from the East manual
+## Example 1 - Using Formulas Q.242 and Q.243 from the East Horizon manual
 
 This example is related to this R file:
 [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R)
 
 In this example, the analysis is customized by replacing the default
 method with a user-defined calculation based on formulas of the
-**Appendix Q.8 - Survival : Two Samples** from the East manual (Q.242
+**Appendix Q.8 - Survival : Two Samples** from the East Horizon manual (Q.242
 and Q.243).
 
 **Numerator of Test Statistic:**
@@ -125,7 +125,7 @@ With:
 
 The objective is to demonstrate a straightforward way to modify both the
 analysis and decision-making process. The computed test statistic is
-compared to the efficacy boundary provided by East Horizon or East as
+compared to the efficacy boundary provided by East Horizon as
 input. This example does not include a futility rule and does not use
 any user-defined parameters.
 
@@ -144,8 +144,7 @@ This example utilizes the
 [`survival::survdiff()`](https://rdrr.io/pkg/survival/man/survdiff.html)
 function from the `survival` package to perform the log-rank test. The
 resulting chi-square statistic is used to compute the log-rank value,
-which is then compared to the lower efficacy boundary provided by East
-Horizon or East. Like Example 1, this example does not include a
+which is then compared to the lower efficacy boundary provided by East Horizon. Like Example 1, this example does not include a
 futility rule and does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R
@@ -170,7 +169,7 @@ decisions are often guided by two key thresholds:
 
 This example demonstrates how to approximate probabilistic
 decision-making using frequentist confidence intervals (CIs), ignoring
-the boundaries provided by East Horizon or East in favor of a CI-based
+the boundaries provided by East Horizon in favor of a CI-based
 logic. If the hazard ratio is likely to be below the MAV, a Go decision
 is made. If not, and it is unlikely to be below the TV, a No-Go decision
 is made.
@@ -204,7 +203,7 @@ parameters used in this example.
 | **dConfLevel** | Confidence Level: the level of confidence used to construct the confidence interval for Go/No-Go decision-making (e.g., 0.80 for an 80% CI). |
 
 **Note:** In this example, the boundary information that is computed in
-East Horizon or East is ignored. User-defined parameters and the Cox
+East Horizon is ignored. User-defined parameters and the Cox
 model are used to analyze the data and compute the desired confidence
 intervals.
 

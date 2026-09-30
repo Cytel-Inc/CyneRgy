@@ -10,8 +10,8 @@ GetMEPDecision(
   DataSummary,
   LookInfo,
   DesignParam,
-  OutList,
-  UserParam
+  OutList = NULL,
+  UserParam = NULL
 )
 }
 \arguments{

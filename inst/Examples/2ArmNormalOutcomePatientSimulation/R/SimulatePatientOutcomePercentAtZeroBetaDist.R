@@ -33,8 +33,7 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' Example-specific parameters and requirements: A list of user defined parameters in East Horizon. The
-#'   default must be NULL resulting in ignoring the percent of patients at 0. If UserParam is supplied, the list
+#' When UserParam is NULL, no subjects are forced to have zero outcomes. If supplied, the list
 #'   must contain the following named elements: UserParam$dCtrlBetaParam1 - First parameter in the Beta
 #'   distribution for the control (ctrl) treatment. UserParam$dCtrlBetaParam2 - Second parameter in the Beta
 #'   distribution for the control (ctrl) treatment. UserParam$dExpBetaParam1 - First parameter in the Beta
@@ -44,7 +43,7 @@
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. Required.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

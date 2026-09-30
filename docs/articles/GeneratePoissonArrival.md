@@ -16,7 +16,7 @@ not supported. Reapeated measures are supported.
 
 The following examples demonstrate how to integrate the capability to
 generate patient arrival times following a Poisson process with a
-ramp-up phase into East Horizon or East using R functions. They showcase
+ramp-up phase into East Horizon using R functions. They showcase
 different approaches for simulating arrival times based on a Poisson
 process, offering flexibility in modeling patient recruitment dynamics.
 
@@ -26,7 +26,7 @@ Code, or any other supported IDE with the following command:
 \
 `CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"GeneratePoissonArrival"`` ``)`
 
-**East Workbook**:
+**East Horizon Workbook**:
 [GeneratePoissonArrival.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx)
 
 **RStudio Project File**:

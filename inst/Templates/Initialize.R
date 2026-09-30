@@ -19,7 +19,7 @@
 #' @return Integer execution status: 0 = no error; a positive value aborts the current simulation but allows
 #'   subsequent simulations to run; a negative value is fatal and stops all further simulations.
 #'
-#' @details Do not use install.package or attempt to install new R packages in Solara as this will fail. Please
+#' @details Do not use \code{install.packages} or attempt to install new R packages in East Horizon as this will fail. Please
 #'   contact help to install libraries.
 ######################################################################################################################## .
 

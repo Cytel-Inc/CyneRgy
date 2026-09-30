@@ -241,10 +241,10 @@ study objectives and endpoint types:</p>
 </table>
 </div>
 <div class="section level3">
-<h3 id="east">East<a class="anchor" aria-label="anchor" href="#east"></a>
+<h3 id="east">East Horizon<a class="anchor" aria-label="anchor" href="#east"></a>
 </h3>
 <details><summary>
-This integration point is available in East for the following tests
+This integration point is available in East Horizon for the following tests
 (click to expand/collapse):
 </summary><table style="width:100%;" class="table">
 <colgroup>
@@ -367,7 +367,7 @@ screenshot below:</p>
 <img src="GettingStarted_files/initialization.png"></details>
 </div>
 <div class="section level3">
-<h3 id="in-east">In East<a class="anchor" aria-label="anchor" href="#in-east"></a>
+<h3 id="in-east">In East Horizon<a class="anchor" aria-label="anchor" href="#in-east"></a>
 </h3>
 <p>You can set up an initialization function by navigating to the
 <strong>Initialize R Environment</strong> task of the <strong>User
@@ -418,7 +418,7 @@ Refer to the screenshot below:</p>
 <h2 id="input-variables">Input Variables<a class="anchor" aria-label="anchor" href="#input-variables"></a>
 </h2>
 <p>When creating a custom R script, you can optionally use certain
-variables provided by East Horizon’s or East’s engine itself. These
+variables provided by East Horizon’s engine itself. These
 variables are automatically available and do not need to be set by the
 user, except for the <code>UserParam</code> variable. Refer to the table
 below for the variable that is available for this integration point.</p>
@@ -442,8 +442,7 @@ below for the variable that is available for this integration point.</p>
 <tr class="even">
 <td><strong>UserParam</strong></td>
 <td>List</td>
-<td>Contains all user-defined parameters specified in East Horizon’s or
-East’s interface (refer to the <a href="#instructions">Instructions</a>
+<td>Contains all user-defined parameters specified in East Horizon’s interface (refer to the <a href="#instructions">Instructions</a>
 section). To access these parameters in your R code, use the syntax:
 <code>UserParam$NameOfTheVariable</code>, replacing
 <code>NameOfTheVariable</code> with the appropriate parameter name.</td>
@@ -494,7 +493,7 @@ the interface.</p>
 <span><span class="op">{</span></span>
 <span>  <span class="co"># Do something, for example set the seed</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span> <span class="fl">42</span> <span class="op">)</span></span>
-<span>  <span class="co"># If you want the user to set the seed using East Horizon's or East's interface, you could use set.seed( UserParam$seed ) </span></span>
+<span>  <span class="co"># If you want the user to set the seed using East Horizon's interface, you could use set.seed( UserParam$seed ) </span></span>
 <span>  </span>
 <span>  <span class="co"># Error handling (no error)</span></span>
 <span>  <span class="va">nError</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>

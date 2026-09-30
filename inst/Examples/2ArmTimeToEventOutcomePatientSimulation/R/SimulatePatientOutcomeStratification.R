@@ -51,17 +51,12 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
-#'     enrollment, with one element per subject. Required.}
+#'     enrollment, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
 #'
-#' Example-specific additional output elements:
-#' \describe{
-#'   \item{Response}{Required numeric value. Contains a vector of generated Survival Time for all subjects across
-#'     the strata}
-#' }
 #'
 #' @details Usage of ArrivalTime in this example: A vector of subject arrival times. (Not used in this function but
 #'   required for integration.)
@@ -76,7 +71,7 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
     nErrorCode <- 0
 
     # Initialize vectors
-    vSurvResponses <- numeric( 0 )
+    vSurvResponses <- rep( NA_real_, NumSub )
     vUniqueStrata <- unique( StratumID )
 
     # Loop through strata
@@ -84,13 +79,14 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
         nStratumInd <- vUniqueStrata[ nStratumIdx ]
 
         # Number of subjects in this stratum
-        nStratumSubjects <- sum( StratumID == nStratumInd )
+        vSubjectIndices <- which( StratumID == nStratumInd )
+        nStratumSubjects <- length( vSubjectIndices )
 
         # Response Gen params in this stratum
-        vStratumParams <- SurvParam[ nStratumIdx, ]
+        vStratumParams <- SurvParam[ nStratumInd, ]
 
         vPatientOutcome <- rep( 0, nStratumSubjects )
-        vTreatmentIndex <- TreatmentID + 1 # TreatmentID is 0-based
+        vTreatmentIndex <- TreatmentID[ vSubjectIndices ] + 1 # TreatmentID is 0-based
 
         # SurvMethod 1: Hazard Rates
         if ( SurvMethod == 1 ) {
@@ -99,11 +95,15 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
 
         # SurvMethod 2: Cumulative % Survival
         if ( SurvMethod == 2 ) {
-            dSurvTime <- as.numeric( PrdTime[ 1 ] )
+            vSurvTimes <- rep( as.numeric( PrdTime[ 1 ] ), NumArm )
+            if ( is.matrix( PrdTime ) ) {
+                vSurvTimes <- PrdTime[ nStratumInd, ]
+            }
             vS <- vStratumParams / 100
             vHazardRates <- rep( NA, NumArm )
 
             for ( nArmIdx in 1:NumArm ) {
+                dSurvTime <- vSurvTimes[ nArmIdx ]
                 if ( vS[ nArmIdx ] > 0 && vS[ nArmIdx ] < 1 && dSurvTime > 0 ) {
                     vHazardRates[ nArmIdx ] <- -log( vS[ nArmIdx ] ) / dSurvTime
                 } else {
@@ -140,8 +140,8 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
             }
         }
 
-        # Append strata-wise responses
-        vSurvResponses <- c( vSurvResponses, vPatientOutcome )
+        # Return each outcome in the same subject order as TreatmentID and StratumID.
+        vSurvResponses[ vSubjectIndices ] <- vPatientOutcome
     }
 
     # For consistency checks

@@ -199,8 +199,6 @@
 #'     sample size multiplier for each step.}
 #'   \item{TargetCP}{Numeric. Target conditional power. Available only for `SSRFuncScale = 0 (continuous)`.}
 #'   \item{OrigCP}{Numeric. Conditional power computed from the maximum number of completers/events.}
-#'   \item{MaxSSMult}{Numeric maximum sample size multiplier, when supplied directly. Continuous and step rules
-#'     also expose the multiplier in MaxSSMultInp$MaxSSMult.}
 #' }
 #'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
@@ -234,27 +232,26 @@
 #'     re-estimation design.}
 #' }
 #'
-#' Example-specific additional output elements:
-#' \describe{
-#'   \item{TrmtCompleters }{Integer value. Required if Decision is not returned and Futility Boundary scale is CP.}
-#' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details Implement the placeholder sample size re-estimation rule before use. The template returns
+#'   ErrorCode = 1 until its logic has been completed.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NULL, UserParam = NULL ) {
-    nErrorCode <- 0
-    retval1 <- 0
-    retval2 <- 0
+    nErrorCode <- 1 # Replace the placeholder SSR logic before running simulations.
+    nReEstCount <- DesignParam$MaxCompleters
+    nDecision <- 0
     # Write the actual code here.
     # Use appropriate error handling and modify
     # the error appropriately.
     return( list(
-        ReEstCompleters = as.integer( retval1 ),
-        Decision = as.integer( retval2 ),
+        ReEstCompleters = as.integer( nReEstCount ),
+        Decision = as.integer( nDecision ),
         ErrorCode = as.integer( nErrorCode )
     ) )
 }

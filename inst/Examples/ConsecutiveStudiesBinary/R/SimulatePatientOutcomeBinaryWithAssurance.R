@@ -29,20 +29,20 @@
 #' Example-specific parameters and requirements:
 #' If UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
-#'    \item{UserParam$dParameter1Ctrl}{For control treament, the design prior parameter 1 in the Beta distribution
+#'    \item{UserParam$dParameter1Ctrl}{For control treatment, the design prior parameter 1 in the Beta distribution
 #'      }
-#'    \item{UserParam$dParameter2Ctrl}{For control treament, the design prior parameter 2 in the Beta distribution
+#'    \item{UserParam$dParameter2Ctrl}{For control treatment, the design prior parameter 2 in the Beta distribution
 #'      }
-#'    \item{UserParam$dParameter1Exp}{For experimental treament, the design prior parameter 1 in the Beta
+#'    \item{UserParam$dParameter1Exp}{For experimental treatment, the design prior parameter 1 in the Beta
 #'      distribution }
-#'    \item{UserParam$dParameter2Exp}{For experimental treament, the design prior parameter 2 in the Beta
+#'    \item{UserParam$dParameter2Exp}{For experimental treatment, the design prior parameter 2 in the Beta
 #'      distribution }
 #' }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. Required.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

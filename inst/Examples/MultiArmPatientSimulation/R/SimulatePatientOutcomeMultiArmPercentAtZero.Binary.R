@@ -38,8 +38,8 @@
 #' Example-specific parameters and requirements:
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
-#'    \item{UserParam$dProbOfTreatmentResistantCtrl}{A value in (0, 1) that defines the probability a patient is
-#'      treatment resistant on the control arm.}
+#'   \item{UserParam$dProbOfTreatmentResistantCtrl}{Numeric probability in [0, 1] that a subject is treatment
+#'     resistant on the control arm.}
 #'    \item{UserParam$dProbOfTreatmentResistantExp1}{A value in (0, 1) that defines the probability a patient is
 #'      treatment resistant on the experimental arm 1.}
 #'    \item{UserParam$dProbOfTreatmentResistantExp2}{A value in (0, 1) that defines the probability a patient is
@@ -49,7 +49,7 @@
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. Required.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

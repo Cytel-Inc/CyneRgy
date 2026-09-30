@@ -185,10 +185,6 @@
 #'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
 #'
-#' Example-specific additional output elements:
-#' \describe{
-#'   \item{TrmtCompleters }{Integer value. Required if Decision is not returned and Futility Boundary scale is CP.}
-#' }
 #'
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for

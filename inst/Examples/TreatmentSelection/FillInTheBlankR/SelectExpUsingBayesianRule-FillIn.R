@@ -6,12 +6,14 @@
 #'
 #' @description This function is used for the MAMS design with a binary outcome and will perform treatment
 #'   selection at the interim analysis (IA). At the IA, utilize a Bayesian rule to select any experimental
-#'   treatment that has at least a user-specified probability (treatmentPValue) of being greater than a
-#'   user-specified historical response rate (historicResponseRate). Specifically, if Pr( pj > historicResponseRate
-#'   | data ) > treatmentPValue, then experimental treatment j is selected for stage 2. If none of the treatments
-#'   meet the criteria for selection, then select the treatment with the largest Pr( pj > historicResponseRate |
-#'   data ). User-specified pj ~ Beta( dPriorAlpha, dPriorBeta ) After the IA, use a randomization ratio of 2:1
-#'   (experimental:control) for all experimental treatments that are selected for stage 2.
+#'   treatment that has at least a user-specified probability (UserParam$dMinPosteriorProbability) of being greater
+#'   than a user-specified historical response rate (UserParam$dHistoricResponseRate). Specifically, if Pr( pj >
+#'   UserParam$dHistoricResponseRate | data ) > UserParam$dMinPosteriorProbability, then experimental treatment j
+#'   is selected for stage 2. If none of the treatments meet the criteria for selection, then select the treatment
+#'   with the largest Pr( pj > UserParam$dHistoricResponseRate | data ). User-specified pj ~ Beta(
+#'   UserParam$dPriorAlpha, UserParam$dPriorBeta ). All experimental arms assume the same prior. After the IA, use
+#'   a randomization ratio of 2:1 (experimental:control) for all experimental treatments that are selected for
+#'   stage 2.
 #'
 #' @author Sydney Ringold, J. Kyle Wathen
 #'
@@ -123,15 +125,15 @@
 #' Example-specific parameters and requirements:
 #' If UserParam is supplied, the list must contain the following named element:
 #'  \describe{
-#'  \item{UserParam$dPriorAlpha}{A value (0,1) that defines the prior alpha parameter of the beta distribution.
-#'                          If this value is not specified, the default is 0.2.}
-#'  \item{UserParam$dPriorBeta}{A value (0,1) that specifies the prior beta parameter of the beta distribution.
-#'                              If this value is not specified, the default is 0.8.}
-#'  \item{UserParam$dHistoricResponseRate}{ A value (0,1) that specifies the historic response rate.
-#'                                  If this value is not specified, the default is 0.2.}
-#'  \item{UserParam$dMinPosteriorProbability}{A value (0,1) that specifies the posterior probability needed of
-#'    being greater than the historic response rate for an experimental treatment to be selected.
-#'                              If this value is not specified, the default is 0.5.}
+#'   \item{UserParam$dPriorAlpha}{Positive numeric alpha parameter of the beta prior. When UserParam is NULL,
+#'     the default is 0.2.}
+#'   \item{UserParam$dPriorBeta}{Positive numeric beta parameter of the beta prior. When UserParam is NULL,
+#'     the default is 0.8.}
+#'   \item{UserParam$dHistoricResponseRate}{Numeric historical response probability in [0, 1]. When UserParam
+#'     is NULL, the default is 0.2.}
+#'   \item{UserParam$dMinPosteriorProbability}{Numeric posterior probability threshold in [0, 1] for
+#'     selecting a treatment whose response probability exceeds the historical rate. When UserParam is NULL,
+#'     the default is 0.5.}
 #'           }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
@@ -151,18 +153,22 @@
 #'
 #' Worked output objects:
 #' \preformatted{
-#' Example Output Object: Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for
-#'   Control:Experimental 1:Experimental 2 vSelectedTreatments <- c( 1, 2 ) # Experimental 1 and 2 both have an
-#'   allocation ratio of 2. vAllocationRatio <- c( 2, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID =
-#'   vSelectedTreatments, AllocRatio = vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn )
+#' # Example 1: Control:Experimental 1:Experimental 2 allocation is 1:2:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 2, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
 #'
-#' Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-#'   vSelectedTreatments <- c( 1, 2 ) # Experimental 2 will receive twice as many as Experimental 1 or Control.
-#'   vAllocationRatio <- c( 1, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID = vSelectedTreatments, AllocRatio =
-#'   vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn ) }
-#'
-#' This is a fill-in-the-blank exercise. Replace the underscore placeholders before sourcing or running the
-#'   function.
+#' # Example 2: Control:Experimental 1:Experimental 2 allocation is 1:1:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 1, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
+#' }
 ######################################################################################################################## .
 
 SelectExpUsingBayesianRule <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) {
@@ -183,10 +189,10 @@ SelectExpUsingBayesianRule <- function( SimData, DesignParam, LookInfo, UserPara
     #### Determine the posterior parameters based on SimData and the prior parameters ####
     # Calculate the number of responses (Yj) and treatment failures per treatment (Y'j)
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
-    tabResults <- table( SimData$TreatmentID, SimData$Response )
+    tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
 
     # Only want data on experimental treatments is wanted, experimental data starts in row 2
-    tabResultsExperimental <- tabResults[ c( 2:nrow( __________ ) ), ]
+    tabResultsExperimental <- tabResults[ c( 2:nrow( __________ ) ), , drop = FALSE ]
     nQtyOfExperimentalArms <- nrow( tabResultsExperimental )
 
     # Loop over the experimental arms and record which treatments are selected for stage 2

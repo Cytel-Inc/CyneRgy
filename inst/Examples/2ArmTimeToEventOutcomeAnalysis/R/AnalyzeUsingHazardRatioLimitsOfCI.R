@@ -188,11 +188,11 @@
 #' Example-specific parameters and requirements:
 #' UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dMAV}{A value (0, Inf) that specifics the lower limit, eg  Minimum Acceptable Value (MAV). }
+#'   \item{UserParam$dMAV}{A value (0, Inf) that specifies the lower limit, eg  Minimum Acceptable Value (MAV). }
 #'   \item{UserParam$dTV}{A value (0 Inf) that specifies the upper limit for the confidence interval, eg Target
 #'     Value (TV).}
-#'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the t.test() function in
-#'     base R library.}
+#'   \item{UserParam$dConfLevel}{Numeric confidence level in (0, 1) used to construct the confidence
+#'     interval.}
 #' }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation

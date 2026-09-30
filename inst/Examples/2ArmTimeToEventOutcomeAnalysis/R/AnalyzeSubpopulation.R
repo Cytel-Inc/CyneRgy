@@ -41,7 +41,7 @@
 #'         }
 #'
 #'   \item Collects population-specific test statistics and applies the graphical
-#'         multiple testing procedure via \code{compute_gMCPDecisions()}.
+#'         multiple testing procedure via \code{ComputeGMCPDecisions()}.
 #'
 #'   \item Converts GMCP rejection flags into population-specific decision codes:
 #'         \itemize{

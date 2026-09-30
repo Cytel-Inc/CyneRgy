@@ -24,7 +24,7 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
-#'     1 = first experimental arm, 2 = second experimental arm, and so on. Required.}
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

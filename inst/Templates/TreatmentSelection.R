@@ -130,15 +130,22 @@
 #'
 #' Worked output objects:
 #' \preformatted{
-#' Example Output Object: Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for
-#'   Control:Experimental 1:Experimental 2 vSelectedTreatments <- c( 1, 2 ) # Experimental 1 and 2 both have an
-#'   allocation ratio of 2. vAllocationRatio <- c( 2, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID =
-#'   vSelectedTreatments, AllocRatio = vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn )
+#' # Example 1: Control:Experimental 1:Experimental 2 allocation is 1:2:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 2, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
 #'
-#' Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-#'   vSelectedTreatments <- c( 1, 2 ) # Experimental 2 will receive twice as many as Experimental 1 or Control.
-#'   vAllocationRatio <- c( 1, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID = vSelectedTreatments, AllocRatio =
-#'   vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn ) }
+#' # Example 2: Control:Experimental 1:Experimental 2 allocation is 1:1:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 1, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
+#' }
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) {

@@ -176,10 +176,10 @@
 #'    \item{UserParam$dPriorStdDevCtrl}{Prior standard deviation for control (Ctrl) used in analysis}
 #'    \item{UserParam$dPriorMeanExp}{Prior mean for experimental (Exp) used in analysis.}
 #'    \item{UserParam$dPriorStdDevExp}{Prior standard deviation for experimental (Exp) used in analysis}
-#'    \item{UserParam$dSigma}{The known sampling variance.  Note, make sure this is the same as the sampling
-#'      varaince in East Horizon.}
+#'   \item{UserParam$dSigma}{Known common sampling standard deviation. Use the same standard deviation as in
+#'     the East Horizon response simulation.}
 #'    \item{UserParam$dMAV}{Minimum Acceptable Value (MAV)}
-#'    \item{UserParam$dPU}{A value in [0, 1] that specifies the upper cuttoff for efficacy.  If posterior
+#'    \item{UserParam$dPU}{A value in [0, 1] that specifies the upper cutoff for efficacy.  If posterior
 #'      probability is greater than PU a Go decision is made.}
 #'    \item{UserParam$dPUFutility}{A value in [0, 1] that specifies the threshold probability of futility stopping.
 #'      If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early
@@ -212,7 +212,27 @@
 #'     conditional-power rule.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{PostProb}{Numeric posterior probability of exceeding the minimum acceptable value at the final
+#'     analysis, or predictive probability of meeting the final Go rule at an interim analysis.}
+#'   \item{dTrueDelta}{Numeric true experimental-minus-control mean difference used to generate the current
+#'     simulation.}
+#'   \item{dCtrlPostMean}{Numeric posterior mean of the control-arm response mean.}
+#'   \item{dCtrlPostVar}{Numeric posterior variance of the control-arm response mean.}
+#'   \item{dExpPostMean}{Numeric posterior mean of the experimental-arm response mean.}
+#'   \item{dExpPostVar}{Numeric posterior variance of the experimental-arm response mean.}
+#'   \item{dObsMeanCtrl}{Numeric observed mean response in the control arm.}
+#'   \item{dObsMeanExp}{Numeric observed mean response in the experimental arm.}
+#'   \item{dSimMeanCtrl}{Numeric true control-arm response mean used to generate the current simulation.}
+#'   \item{dSimMeanExp}{Numeric true experimental-arm response mean used to generate the current simulation.}
+#' }
+#'
+#' @details This Bayesian example supplies Decision and does not return TestStat. Its Delta output stores
+#'   the true generating effect for summary plots; it is not an estimated effect for native Delta-scale futility.
+#'   The assurance generator must supply vTrueDelta, dSimMeanCtrl, and dSimMeanExp in SimData.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
@@ -297,7 +317,7 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
             # dPostProbGrt = Pr( pi_E - pi_C > 0.8 | Data )
             dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ) )
 
-            # Note: At this point we have sampled the posterior at the end of the trial 10,000 times.   If it is close to the boundarly then we
+            # Note: At this point we have sampled the posterior at the end of the trial 10,000 times.   If it is close to the boundary then we
             #      want to sample more.  If it is 10% less than the boundary then we can conclude futility.  This is just to speed up computations
             #      and avoid larger posterior samples in clear cases
             if ( dPostProbGrt < UserParam$dPU + 0.05 & dPostProbGrt >= UserParam$dPU - 0.1 ) { # The trial concluded futility
@@ -349,7 +369,7 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
         }
     }
 
-    # Note: the SimData$vTrueDelta vector was added to the SimData via the return in the SimulatePateintOutcomeNormalAssurance
+    # Note: the SimData$vTrueDelta vector was added to the SimData via the return in the SimulatePatientOutcomeNormalAssurance
 
     lReturn <- list(
         Decision = as.integer( nDecision ),
@@ -372,20 +392,6 @@ AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, 
 
 ######################################################################################################################## .
 # Helper function to compute the posterior parameters ####
-#' @name ComputePosteriorParametersNormal
-#' @title Compute normal posterior parameters
-#' @description Compute posterior means and variances for control and experimental arms under independent normal priors.
-#' @author J. Kyle Wathen, Laurent Spiess, Gabriel Potvin
-#' @param vCtrlData Vector of data for the Control treatment
-#' @param vExpData Vector of data for the experimental treatment
-#' @param dPriorMeanCtrl Prior mean for control
-#' @param dPriorStdDevCtrl Prior standard deviation for control
-#' @param dPriorMeanExp Prior mean for experimental
-#' @param dPriorStdDevExp Prior standard deviation for experimental
-#' @param dSigma Known sampling variance
-#' Note: Passing UserParam directly to a helper may prevent East Horizon from automatically populating the required parameters.
-#' @return A named list containing posterior means and variances for the control and experimental arms.
-######################################################################################################################## .
 ######################################################################################################################## .
 #' @name ComputePosteriorParametersNormal
 #'

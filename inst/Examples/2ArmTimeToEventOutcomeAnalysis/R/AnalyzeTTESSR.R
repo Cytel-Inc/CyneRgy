@@ -217,10 +217,6 @@
 #'     sample size multiplier for each step.}
 #'   \item{TargetCP}{Numeric. Target conditional power. Available only for `SSRFuncScale = 0 (continuous)`.}
 #'   \item{OrigCP}{Numeric. Conditional power computed from the maximum number of completers/events.}
-#'   \item{MaxSSMult}{Numeric maximum sample size multiplier, when supplied directly. Continuous and step rules
-#'     also expose the multiplier in MaxSSMultInp$MaxSSMult.}
-#'   \item{MaxEventsMult}{Numeric maximum event-count multiplier for time-to-event sample size re-estimation, when
-#'     supplied directly.}
 #' }
 #'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
@@ -255,7 +251,10 @@
 #'     conditional-power rule.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This example applies one-sided efficacy boundaries on the Z scale. Extend its boundary logic
+#'   before using p-value-scale boundaries or two-sided designs.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
@@ -301,58 +300,60 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     ## Step 2 — Test Statistic And HR Computation
     ###########################################################
 
-    nEventsTreatment <- sum( SimDataCurrLook$Event[ SimDataCurrLook$TreatmentID == 1 ] )
-    nEventsControl <- sum( SimDataCurrLook$Event[ SimDataCurrLook$TreatmentID == 0 ] )
-    nTotalEvents <- nEventsTreatment + nEventsControl
-
-    nAtRiskTreatment <- sum( SimDataCurrLook$TreatmentID == 1 )
-    nAtRiskControl <- sum( SimDataCurrLook$TreatmentID == 0 )
-    nTotalAtRisk <- nAtRiskTreatment + nAtRiskControl
-
-    dExpectedTreatment <- nAtRiskTreatment * nTotalEvents / nTotalAtRisk
-    dExpectedControl <- nAtRiskControl * nTotalEvents / nTotalAtRisk
-
-    dVarianceTreatment <- ( nAtRiskTreatment * nAtRiskControl * nTotalEvents * ( nTotalAtRisk - nTotalEvents ) ) /
-        ( nTotalAtRisk^2 * ( nTotalAtRisk - 1 ) )
-
-    dTestStatistic <- ( nEventsTreatment - dExpectedTreatment ) / sqrt( dVarianceTreatment )
-
-    coxModel <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ TreatmentID, data = SimData )
-    dHR <- exp( stats::coef( coxModel ) )
+    cLogrank <- survival::survdiff(
+        survival::Surv( ObservedTime, Event ) ~ TreatmentID,
+        data = SimDataCurrLook
+    )
+    cCoxModel <- survival::coxph(
+        survival::Surv( ObservedTime, Event ) ~ TreatmentID,
+        data = SimDataCurrLook
+    )
+    dHR <- exp( stats::coef( cCoxModel ) )
+    dTestStatistic <- sqrt( cLogrank$chisq )
+    if ( dHR < 1 ) {
+        dTestStatistic <- -dTestStatistic
+    }
 
     ###########################################################
     ## Step 3 — Conditional Power Computation
     ###########################################################
     dOrigCp <- NA
+    dZCrit <- DesignParam$CriticalPoint
+    dTau <- 1
+    nReEstEvents <- DesignParam$MaxEvents
 
     if ( !is.na( dTestStatistic ) ) {
         if ( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) ) {
-            dZCrit <- LookInfo$EffBdry[ nLookIndex ]
+            dZCrit <- LookInfo$EffBdry[ nQtyOfLooks ]
         }
         if ( !is.null( LookInfo ) ) {
             dTau <- LookInfo$InfoFrac[ nLookIndex ]
         }
-        dOrigCp <- 1 - stats::pnorm( ( dZCrit - dTestStatistic * sqrt( dTau ) ) / sqrt( 1 - dTau + 1e-12 ) )
+        dTailSign <- 1
+        if ( DesignParam$TailType == 0 ) {
+            dTailSign <- -1
+        }
+        dOrigCp <- 1 - stats::pnorm( ( dTailSign * ( dZCrit - dTestStatistic * sqrt( dTau ) ) ) / sqrt( 1 - dTau + 1e-12 ) )
     }
 
     ###########################################################
     ## Step 4 — Re-estimated Events Computation
     ###########################################################
-    if ( AdaptInfo$SSRFuncScale == 0 ) {
+    if ( !is.null( AdaptInfo ) && AdaptInfo$SSRFuncScale == 0 ) {
         if ( is.na( dOrigCp ) ) {
             nReEstEvents <- DesignParam$MaxEvents
         } else if ( dOrigCp > AdaptInfo$PromZoneMin && dOrigCp < AdaptInfo$PromZoneMax ) {
-            nReEstEvents <- DesignParam$MaxEvents * AdaptInfo$MaxSSMultInp$MaxEventsMult
+            nReEstEvents <- DesignParam$MaxEvents * AdaptInfo$MaxSSMultInp$MaxSSMult
         } else {
             nReEstEvents <- DesignParam$MaxEvents
         }
-    } else if ( AdaptInfo$SSRFuncScale == 1 ) {
+    } else if ( !is.null( AdaptInfo ) && AdaptInfo$SSRFuncScale == 1 ) {
         if ( is.na( dOrigCp ) ) {
             nReEstEvents <- DesignParam$MaxEvents
         } else {
             vStepLowerBound <- AdaptInfo$MaxSSMultInp$From
             vStepUpperBound <- AdaptInfo$MaxSSMultInp$To
-            vStepMultiplier <- AdaptInfo$MaxSSMultInp$MaxEventsMult
+            vStepMultiplier <- AdaptInfo$MaxSSMultInp$MaxSSMult
             nIdx <- which( dOrigCp > vStepLowerBound & dOrigCp <= vStepUpperBound )
             if ( length( nIdx ) == 0 ) {
                 nReEstEvents <- DesignParam$MaxEvents
@@ -373,7 +374,11 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
 
         bEfficacyCondition <- FALSE
         if ( !is.null( dEffBdry ) && !is.na( dEffBdry ) ) {
-            bEfficacyCondition <- dTestStatistic > dEffBdry
+            if ( DesignParam$TailType == 0 ) {
+                bEfficacyCondition <- dTestStatistic < dEffBdry
+            } else {
+                bEfficacyCondition <- dTestStatistic > dEffBdry
+            }
         }
         strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
             bIAEfficacyCondition = bEfficacyCondition,

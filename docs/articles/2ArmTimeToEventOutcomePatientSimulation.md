@@ -27,7 +27,7 @@ for more information.
 ## Introduction
 
 The following examples illustrate how to integrate new patient outcome
-simulation (*response*) capabilities into East Horizon or East using R
+simulation (*response*) capabilities into East Horizon using R
 functions in the context of a two-arm trial. In each example, the trial
 design includes a standard-of-care control arm and an experimental
 treatment arm, with patient outcomes modeled as time-to-event data.
@@ -38,7 +38,7 @@ Code, or any other supported IDE with the following command:
 \
 `CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmTimeToEventOutcomePatientSimulation"`` ``)`
 
-**East Workbook**:
+**East Horizon Workbook**:
 [2ArmTimeToEventOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.cywx)
 
 **RStudio Project File**:
@@ -98,7 +98,7 @@ Assume that the difference in risk of death for patients in the control
 arm compared to the risk of death for patients in the experimental arm
 remains the same over time. The time to death or progression of patients
 is simulated from a Weibull distribution with the shape and scale for
-each arm provided in East Horizon or East and sent to R. Refer to the
+each arm provided in East Horizon and sent to R. Refer to the
 table below for the values of the user-defined parameters used in this
 example.
 
@@ -112,7 +112,7 @@ example.
 The scale parameters are calculated based on the median survival time
 for each arm. This example demonstrates that using the R function with
 these parameters produces the same results as simulating the data
-directly in East Horizon or East without an R function.
+directly in East Horizon without an R function.
 
 ![](2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-5-1.png)![](2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-5-2.png)
 
@@ -123,7 +123,7 @@ increases over time in both arms, but at different rates: the control
 arm’s hazard increases more slowly than that of the experimental arm.
 The time to death or progression is simulated using a Weibull
 distribution, with shape and scale parameters specified for each arm in
-East Horizon or East and then sent to R. Refer to the table below for
+East Horizon and then sent to R. Refer to the table below for
 the values of the user-defined parameters used in this example.
 
 | **User parameter** | **Value** |
@@ -134,7 +134,7 @@ the values of the user-defined parameters used in this example.
 | **dScaleExp**      | 17.54     |
 
 This example demonstrates how an R function can be used to simulate data
-in a way that differs from East Horizon’s or East’s default simulation
+in a way that differs from East Horizon’s default simulation
 approach.
 
 ![](2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-6-1.png)![](2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-6-2.png)
@@ -146,7 +146,7 @@ assumes that hazards decrease over time in both arms. However, the
 control arm’s hazard decreases at a slower rate than that of the
 experimental arm. The time to death or progression is simulated using a
 Weibull distribution, with shape and scale parameters specified for each
-arm in East Horizon or East and then sent to R. Refer to the table below
+arm in East Horizon and then sent to R. Refer to the table below
 for the values of the user-defined parameters used in this example.
 
 | **User parameter** | **Value** |
@@ -157,7 +157,7 @@ for the values of the user-defined parameters used in this example.
 | **dScaleExp**      | 25.30     |
 
 This example demonstrates how an R function can be used to simulate data
-differently from East Horizon’s or East’s default simulation approach.
+differently from East Horizon’s default simulation approach.
 
 ![](2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-7-1.png)![](2ArmTimeToEventOutcomePatientSimulation_files/figure-html/unnamed-chunk-7-2.png)
 

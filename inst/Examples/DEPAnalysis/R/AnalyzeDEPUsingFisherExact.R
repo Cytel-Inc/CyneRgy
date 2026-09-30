@@ -61,7 +61,7 @@
 #'     information for endpoint 1. - `3`: Full information for endpoint 2.}
 #'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
 #'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
-#'   \item{Alpha}{Numeric. Type I Error.}
+#'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{CriticalPoint}{Named List of Numeric. Named List of length equal to the number of endpoints, indicating
 #'     the critical value for each endpoint. For example, `CriticalPoint["Endpoint 1"]` is the value for Endpoint
 #'     1. Only available if `Statistical Design = Fixed Sample`.}
@@ -73,7 +73,7 @@
 #'     indicating the upper critical value for each endpoint. For example, `UpperCriticalPoint["Endpoint 1"]` is
 #'     the value for Endpoint 1. Only available if `Statistical Design = Fixed Sample` and `Tail Type = Right
 #'     Tailed`.}
-#'   \item{SampleSize}{Integer. Sample size of the trial.}
+#'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MultAdj}{Integer. Multiplicity adjustment method: - `0`: None. - `1`: Fallback. - `2`: Fixed sequence. -
 #'     `3`: Weighted Bonferroni. - `4`: Weighted Bonferroni-Holms. - `5`: Weighted Hochberg. Only available if the
 #'     multiplicity adjustment method is not custom.}
@@ -112,7 +112,7 @@
 #'     indicating the number of looks for each endpoint. For example, `NumEndpointLooks["Endpoint 1"]` is the
 #'     number of looks for Endpoint 1.}
 #'   \item{NumLooks}{Integer. Number of looks, defined as the maximum across all endpoints.}
-#'   \item{CurrLookIndex}{Integer. Current index look, starting from 1.}
+#'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
 #'   \item{SyncInterim}{Integer. Interim synchronization option: - `1`: Based on endpoint 1. - `2`: Based on
 #'     endpoint 2.}
 #'   \item{InputInfoFrac}{Named List of Vector of Numeric. Named List of length equal to the number of endpoints,

@@ -131,8 +131,6 @@
 #'     sample size multiplier for each step.}
 #'   \item{TargetCP}{Numeric. Target conditional power. Available only for `SSRFuncScale = 0 (continuous)`.}
 #'   \item{OrigCP}{Numeric. Conditional power computed from the maximum number of completers/events.}
-#'   \item{MaxSSMult}{Numeric maximum sample size multiplier, when supplied directly. Continuous and step rules
-#'     also expose the multiplier in MaxSSMultInp$MaxSSMult.}
 #' }
 #'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
@@ -241,7 +239,10 @@
 #'     re-estimation design.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This example applies one-sided efficacy boundaries on the Z scale. Extend its boundary logic
+#'   before using p-value-scale boundaries or two-sided designs.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
@@ -270,20 +271,18 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
 
     SimData$CalendarResponseTime <- SimData$ArrivalTime + DesignParam$RespLag
     SimData <- SimData[ order( SimData$CalendarResponseTime ), ]
-    dAnalysisTime <- SimData[ nQtyOfCompleters, ]$CalendarResponseTime
-
-    SimData <- SimData[ SimData$ArrivalTime <= dAnalysisTime, ]
-    SimData$Completers <- ifelse( SimData$CalendarResponseTime > dAnalysisTime, 0, 1 )
-    SimData$ObservedTime <- ifelse(
-        SimData$CalendarResponseTime > dAnalysisTime,
-        dAnalysisTime - SimData$ArrivalTime,
-        SimData$CalendarResponseTime - SimData$ArrivalTime
-    )
-
-    SimData <- SimData[ order( SimData$ObservedTime ), ]
-
-    # Include patients arriving exactly at analysis time
-    SimDataCurrLook <- subset( SimData, SimData$ArrivalTime <= dAnalysisTime + 1e-4 )
+    # Count completed responses, excluding dropouts when the engine supplies censor indicators.
+    bCompleter <- rep( TRUE, nrow( SimData ) )
+    if ( "CensorInd" %in% names( SimData ) ) {
+        bCompleter <- SimData$CensorInd == 1
+    }
+    vCompleterTimes <- SimData$CalendarResponseTime[ bCompleter ]
+    if ( nQtyOfCompleters < 1 || nQtyOfCompleters > length( vCompleterTimes ) ) {
+        return( list( Decision = 0L, TestStat = NA_real_,
+            ReEstCompleters = as.integer( DesignParam$MaxCompleters ), ErrorCode = 1L ) )
+    }
+    dAnalysisTime <- vCompleterTimes[ nQtyOfCompleters ]
+    SimDataCurrLook <- SimData[ bCompleter & SimData$CalendarResponseTime <= dAnalysisTime, ]
 
     ###########################################################
     ## Step 2 — Test Statistic And Delta Computation
@@ -322,11 +321,14 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     ###########################################################
 
     dOrigCp <- NA
+    dZCrit <- DesignParam$CriticalPoint
+    dTau <- 1
+    nReEstCompleters <- DesignParam$MaxCompleters
 
     if ( !is.na( dTestStatistic ) ) {
         # Z-critical
         if ( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) ) {
-            dZCrit <- LookInfo$EffBdry[ nLookIndex ]
+            dZCrit <- LookInfo$EffBdry[ nQtyOfLooks ]
         }
 
         # Information fraction
@@ -335,7 +337,11 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
         }
 
         # Conditional power
-        dOrigCp <- 1 - stats::pnorm( ( dZCrit - dTestStatistic * sqrt( dTau ) ) /
+        dTailSign <- 1
+        if ( DesignParam$TailType == 0 ) {
+            dTailSign <- -1
+        }
+        dOrigCp <- 1 - stats::pnorm( ( dTailSign * ( dZCrit - dTestStatistic * sqrt( dTau ) ) ) /
             sqrt( 1 - dTau + 1e-12 ) )
     }
 
@@ -343,7 +349,7 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     ## Step 4 — Re-estimated Completers Computation
     ###########################################################
 
-    if ( AdaptInfo$SSRFuncScale == 0 ) {
+    if ( !is.null( AdaptInfo ) && AdaptInfo$SSRFuncScale == 0 ) {
         if ( is.na( dOrigCp ) ) {
             nReEstCompleters <- DesignParam$MaxCompleters
         } else if ( dOrigCp > AdaptInfo$PromZoneMin &&
@@ -353,7 +359,7 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
         } else {
             nReEstCompleters <- DesignParam$MaxCompleters
         }
-    } else if ( AdaptInfo$SSRFuncScale == 1 ) {
+    } else if ( !is.null( AdaptInfo ) && AdaptInfo$SSRFuncScale == 1 ) {
         if ( is.na( dOrigCp ) ) {
             nReEstCompleters <- DesignParam$MaxCompleters
         } else {
@@ -385,7 +391,11 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
 
         bEfficacyCondition <- FALSE
         if ( !is.null( dEffBdry ) && !is.na( dEffBdry ) ) {
-            bEfficacyCondition <- dTestStatistic > dEffBdry
+            if ( DesignParam$TailType == 0 ) {
+                bEfficacyCondition <- dTestStatistic < dEffBdry
+            } else {
+                bEfficacyCondition <- dTestStatistic > dEffBdry
+            }
         }
         strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
             bIAEfficacyCondition = bEfficacyCondition,

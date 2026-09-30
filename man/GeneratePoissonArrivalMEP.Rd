@@ -4,7 +4,14 @@
 \alias{GeneratePoissonArrivalMEP}
 \title{Generate Patient Arrival Times for an MEP Design}
 \usage{
-GeneratePoissonArrivalMEP(NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL)
+GeneratePoissonArrivalMEP(
+  NumPat,
+  NumPrd,
+  PrdStart,
+  AccrRate,
+  UserParam = NULL,
+  Type = 0
+)
 }
 \arguments{
 \item{NumPat}{Integer number of patients.}
@@ -16,6 +23,8 @@ GeneratePoissonArrivalMEP(NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL)
 \item{AccrRate}{Numeric accrual rates by period.}
 
 \item{UserParam}{Optional list of user-defined parameters.}
+
+\item{Type}{Integer enrollment type; this implementation supports global enrollment (\code{0}).}
 }
 \value{
 A list in the format required by the arrival integration point.

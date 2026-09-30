@@ -37,13 +37,13 @@ Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any
 CyneRgy::RunExample( "2ArmBinaryOutcomeAnalysis" )
 ```
 
-**East Workbook**: [2ArmBinaryOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.cywx)
+**East Horizon Workbook**: [2ArmBinaryOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.cywx)
 
 **RStudio Project File**: [2ArmBinaryOutcomeAnalysis.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.Rproj)
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R) you will find the following R files:
 
-1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R) - Contains a function named *AnalyzeUsingEastManualFormula* that computes the two-sample Z-statistic for a binary endpoint using Formula 24.2 from the East manual.
+1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R) - Contains a function named *AnalyzeUsingEastManualFormula* that computes the two-sample Z-statistic for a binary endpoint using Formula 24.2 from the East Horizon manual.
 
 2.  [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R) - Contains a function named *AnalyzeUsingPropTest* that performs the analysis using R's built-in `prop.test()` function.
 
@@ -55,13 +55,13 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
 
-# Example 1 - Using Formula 24.2 from the East manual
+# Example 1 - Using Formula 24.2 from the East Horizon manual
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
 </div>
 
-In this example, the analysis is customized by replacing the default method with a user-defined calculation based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2).
+In this example, the analysis is customized by replacing the default method with a user-defined calculation based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East Horizon manual (24.2).
 
 **Test Statistic:**
 
@@ -96,7 +96,7 @@ CyneRgy::PlotExampleFlowchart(
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R" class="alert-link">AnalyzeUsingPropTest.R</a></p>
 </div>
 
-This example utilizes the base R `prop.test()` function to perform the interim and final analyses. The p-value is used to compute the Z-statistic, which is compared against the efficacy boundary provided by East Horizon . Like Example 1, this example does not include a futility rule and does not use any user-defined parameters.
+This example utilizes the base R `prop.test()` function to perform the interim and final analyses. The p-value is used to compute the Z-statistic, which is compared against the efficacy boundary provided by East Horizon. Like Example 1, this example does not include a futility rule and does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -142,8 +142,8 @@ Refer to the table below for the definitions of the user-defined parameters used
 
 |**User parameter**|**Definition**|
 |--|------|
-|**dMAV**|Minimum Acceptable Value: the smallest treatment effect considered clinically meaningful to warrant further development.|
-|**dTV**|Target Value: the desired treatment effect that would represent a strong clinical benefit or strategic advantage.|
+|**dLowerLimit**|Minimum Acceptable Value: the smallest treatment effect considered clinically meaningful to warrant further development.|
+|**dUpperLimit**|Target Value: the desired treatment effect that would represent a strong clinical benefit or strategic advantage.|
 |**dConfLevel**|Confidence Level: the level of confidence used to construct the confidence interval for Go/No-Go decision-making (e.g., 0.80 for an 80% CI).|
 
 **Note:** In this example, the boundary information that is computed in East Horizon is ignored. User-defined parameters and the function `prop.test()` from base R are used to analyze the data and compute the desired confidence intervals.

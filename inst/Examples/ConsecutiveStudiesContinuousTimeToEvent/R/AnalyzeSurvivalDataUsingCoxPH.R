@@ -204,7 +204,10 @@
 #'     conditional-power rule.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This example implements a one-sided Cox test. The p-value follows DesignParam$TailType and is
+#'   compared with Alpha for a fixed-sample design or the current efficacy boundary for a sequential design.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
@@ -241,8 +244,25 @@ AnalyzeSurvivalDataUsingCoxPH <- function( SimData, DesignParam, LookInfo = NULL
     fitCox <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ as.factor( TreatmentID ), data = SimData )
     dPValue <- summary( fitCox )$coefficients[ , "Pr(>|z|)" ]
     dZVal <- summary( fitCox )$coefficients[ , "z" ]
-    dPValue <- stats::pnorm( dZVal, lower.tail = TRUE )
-    nDecision <- ifelse( dPValue <= DesignParam$Alpha, 2, 3 )
+    dPValue <- stats::pnorm( dZVal, lower.tail = DesignParam$TailType == 0 )
+    dPValueCutoff <- DesignParam$Alpha
+    if ( !is.null( LookInfo ) ) {
+        if ( !is.null( LookInfo$EffBdryScale ) && LookInfo$EffBdryScale == 1 ) {
+            dPValueCutoff <- LookInfo$EffBdry[ nLookIndex ]
+        } else {
+            dPValueCutoff <- stats::pnorm( LookInfo$EffBdry[ nLookIndex ],
+                lower.tail = DesignParam$TailType == 0 )
+        }
+    }
+    nQtyOfLooks <- 1
+    if ( !is.null( LookInfo ) ) {
+        nQtyOfLooks <- LookInfo$NumLooks
+    }
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+        bIAEfficacyCondition = dPValue <= dPValueCutoff,
+        bFAEfficacyCondition = dPValue <= dPValueCutoff
+    )
+    nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 
     #
     # Decision Code
@@ -255,11 +275,11 @@ AnalyzeSurvivalDataUsingCoxPH <- function( SimData, DesignParam, LookInfo = NULL
 
     dTrueHR <- as.double( SimData$TrueHR[ 1 ] )
 
-    if ( UserParam$bReturnLogTrueHazard ) {
+    if ( isTRUE( as.logical( UserParam$bReturnLogTrueHazard ) ) ) {
         dTrueHR <- log( dTrueHR )
     }
 
-    if ( UserParam$bReturnNAForNoGoTrials & nDecision != 2 ) {
+    if ( isTRUE( as.logical( UserParam$bReturnNAForNoGoTrials ) ) && !nDecision %in% c( 1, 2 ) ) {
         dTrueHR <- NA
     }
     lRet <- list(

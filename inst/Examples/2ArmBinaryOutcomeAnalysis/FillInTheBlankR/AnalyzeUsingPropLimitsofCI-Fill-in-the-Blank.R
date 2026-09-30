@@ -3,9 +3,21 @@
 #'
 #' @title Analyze using the prop.test function in base R.
 #'
-#' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from
-#'   prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon
-#'   as an input. This example does NOT include a futility rule.
+#' @description In this simplified example of upper and lower confidence boundary designs, if it is likely that the
+#'   treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made. If a Go decision
+#'   is not made, then if it is unlikely that the treatment difference is above the Target Value (TV) a No Go
+#'   decision is made. In this example, the prop.test from base R is utilized to analyze the data and compute at
+#'   user-specified confidence interval (dConfLevel). The team would like to make a Go decision if there is at
+#'   least a 90\% chance that the difference in treatment is greater than the MAV. If a Go decision is not made,
+#'   then a No Go decision is made if there is less than a 10\% chance the difference is greater than the TV. Using
+#'   a frequentist CI an approximation to this design can be done by the logic described below. At an analysis, if
+#'   the Lower Limit of the CI, denoted by LL, is greater than user-specified dLowerLimit then a Go decision is
+#'   made.
+#'
+#' If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than user-specified
+#'   dUpperLimit a No Go decision is made. Specifically, if LL > UserParam$dLowerLimit --> Go if UL <
+#'   UserParam$dUpperLimit --> No Go Otherwise, continue to the next analysis. At the Final Analysis: If LL >
+#'   UserParam$dLowerLimit then a Go decision is made, otherwise, a No Go decision is made
 #'
 #' @author J. Kyle Wathen and Gabriel Potvin
 #'
@@ -162,11 +174,16 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' Example-specific parameters and requirements: A list of user defined parameters in East Horizon. The default must be
-#'   NULL. If UserParam is supplied, the list must contain the following named elements: UserParam$dLowerLimit - A
-#'   value (0,1) that specifies the lower limit for the confidence interval. UserParam$dUpperLimit - A value (0,1)
-#'   that specifies the upper limit for the confidence interval. UserParam$dConfLevel - A value (0,1) that
-#'   specifies the confidence level for the prop.test function in base R.
+#' Example-specific parameters and requirements:
+#' UserParam must be supplied, the list must contain the following named elements:
+#' \describe{
+#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifies the lower limit, eg  Minimum Acceptable Value
+#'     (MAV).}
+#'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg
+#'     Target Value (TV).}
+#'   \item{UserParam$dConfLevel}{Numeric confidence level in (0, 1) used to construct the confidence
+#'     interval.}
+#' }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
@@ -192,7 +209,10 @@
 #'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This example returns the lower confidence limit in TestStat for reporting and supplies Decision
+#'   to apply its custom stopping rule. The reported confidence limit is not a Wald Z statistic.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
@@ -240,7 +260,10 @@ AnalyzeUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo = NULL, U
     vOutcomesE <- vPatientOutcome[ vPatientTreatment == 1 ]
 
     # Perform the desired analysis, then determine if the lower limit of the confidence interval is greater than the user-specified value ####
-    mData <- cbind( table( _______ ), table( vOutcomesE ) )
+    mData <- rbind(
+        c( sum( vOutcomesE ), length( vOutcomesE ) - sum( vOutcomesE ) ),
+        c( sum( _______ ), length( vOutcomesS ) - sum( vOutcomesS ) )
+    )
     lAnalysisResult <- stats::prop.test( mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel )
     dLowerLimitCI <- lAnalysisResult$conf.int[ 1 ]
     dUpperLimitCI <- lAnalysisResult$conf.int[ 2 ]

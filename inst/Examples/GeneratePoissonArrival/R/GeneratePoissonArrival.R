@@ -13,6 +13,10 @@
 #'
 #' @param NumSub Integer number of subjects in the trial.
 #'
+#' @param Type Integer enrollment type: 0 = global enrollment; 1 = regional enrollment. This function
+#'   implements global enrollment and defaults to 0. Use the regional arguments described below for a regional
+#'   implementation.
+#'
 #' @param NumPrd Integer number of accrual periods.
 #'
 #' @param PrdStart Numeric vector of accrual-period starting times of length NumPrd. The first period starts at 0.
@@ -35,7 +39,7 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
-#'     subject, in the same order as TreatmentID. Required; return times in subject order.}
+#'     subject, in the same order as TreatmentID.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -48,7 +52,7 @@
 #'   PrdStart, and AccrRate.
 ######################################################################################################################## .
 
-GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL ) {
+GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0
     vPatientArrivalTime <- c( )

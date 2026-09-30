@@ -132,28 +132,29 @@
 #'
 #' Worked output objects:
 #' \preformatted{
-#' # Example Output Object:
-#'       # Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental
-#'         1:Experimental 2
-#'       vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2.
-#'       vAllocationRatio    <- c( 2, 2 )
-#'       nErrorCode          <- 0
-#'       lReturn             <- list( TreatmentID = vSelectedTreatments,
-#'                                    AllocRatio  = vAllocationRatio,
-#'                                    ErrorCode   = nErrorCode )
-#'       return( lReturn )
+#' # Example 1: Control:Experimental 1:Experimental 2 allocation is 1:2:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 2, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
 #'
-#' #Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-#'   vSelectedTreatments <- c( 1, 2 ) # Experimental 2 will receive twice as many as Experimental 1 or Control.
-#'   vAllocationRatio <- c( 1, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID = vSelectedTreatments, AllocRatio =
-#'   vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn ) }
+#' # Example 2: Control:Experimental 1:Experimental 2 allocation is 1:1:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 1, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
+#' }
 ######################################################################################################################## .
 
 SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) {
     # Calculate the number of responders and treatment failures for each treatment
 
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
-    tabResults <- table( SimData$TreatmentID, SimData$Response )
+    tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
 
     # Compute the response probability as # of responses/(  # of treatment failures + # of responses )
     vProbabilityResponse <- as.vector( tabResults[ , 2 ] / ( tabResults[ , 1 ] + tabResults[ , 2 ] ) )
@@ -180,13 +181,8 @@ SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo, User
         vReturnTreatmentID <- which.max( vProbabilityResponseOnExperimental )
     }
 
-    # We want all treatments to have a randomization ratio of 1
-    # The allocation will put twice as many on the treatment with the highest number of responses,
-    # eg. the Treatment vReturnTreatmentID[ 1 ] will receive twice as many patients as vReturnTreatmentID[ 2 ]
+    # Selected experimental arms have the same allocation as control.
     vAllocationRatio <- rep( 1, length( vReturnTreatmentID ) )
-
-    # Treatment vReturnTreatmentID[ 1 ] will have a ratio of 2, vReturnTreatmentID[ 2 ] a ratio of 1, and control is always 1
-
     nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
     if ( length( vReturnTreatmentID ) != length( vAllocationRatio ) ) {

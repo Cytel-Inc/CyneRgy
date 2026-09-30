@@ -153,7 +153,7 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/PKPDResponseGeneration.md
 
 This example demonstrates three ways to customize the statistical test
 in East Horizon for a two-arm trial with a continuous outcome: using a
-formula from the East manual, using the
+formula from the East Horizon manual, using the
 [`t.test()`](https://rdrr.io/r/stats/t.test.html) function, and using
 confidence interval limits for Go/No-Go decision-making. It also
 presents an additional example using Sample Size Re-estimation. [Click
@@ -165,7 +165,7 @@ EndpointTTESSRStratification & Subpopulations
 
 This example demonstrates three ways to customize the statistical test
 in East Horizon for a two-arm trial with a time-to-event outcome: using
-formulas from the East manual, using the
+formulas from the East Horizon manual, using the
 [`survival::survdiff()`](https://rdrr.io/pkg/survival/man/survdiff.html)
 function, and using confidence interval limits for Go/No-Go
 decision-making. It also presents additional examples using Sample Size
@@ -177,7 +177,7 @@ example.](https://Cytel-Inc.github.io/CyneRgy/articles/2ArmTimeToEventOutcomeAna
 
 This example demonstrates four ways to customize the statistical test in
 East Horizon for a two-arm trial with a binary outcome: using a formula
-from the East manual, using the
+from the East Horizon manual, using the
 [`prop.test()`](https://rdrr.io/r/stats/prop.test.html) function, using
 confidence interval limits for Go/No-Go decision-making, and using a
 Bayesian Beta-Binomial model. It also presents an additional example

@@ -13,6 +13,10 @@
 #'
 #' @param NumPat Integer number of subjects in the trial.
 #'
+#' @param Type Integer enrollment type: 0 = global enrollment; 1 = regional enrollment. This function
+#'   implements global enrollment and defaults to 0. Use the regional arguments described below for a regional
+#'   implementation.
+#'
 #' @param NumPrd Integer number of accrual periods.
 #'
 #' @param PrdStart Numeric vector of accrual-period starting times of length NumPrd. The first period starts at 0.
@@ -35,7 +39,7 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
-#'     subject, in the same order as TreatmentID. Required; return times in subject order.}
+#'     subject, in the same order as TreatmentID.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -48,7 +52,7 @@
 #'   PrdStart, and AccrRate.
 ######################################################################################################################## .
 
-GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL ) {
+GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
     # Error = 0 --> No Error;
     # Error > 0 --> Nonfatal error; the current simulation will be aborted, but the next simulation will run
     # Error < 0 --> Fatal Error - No further simulation will be attempted. We suggest that user should classify error in these categories depending on the context.

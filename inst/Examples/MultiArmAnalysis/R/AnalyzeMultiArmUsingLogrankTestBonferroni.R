@@ -3,7 +3,7 @@
 #'
 #' @title Analyze multi-arm time-to-event outcomes using Bonferroni-adjusted log-rank tests.
 #'
-#' @description Analyze multi-arm time-to-event outcomes using Bonferroni-adjusted log-rank tests.. Use the
+#' @description Analyze multi-arm time-to-event outcomes using Bonferroni-adjusted log-rank tests. Use the
 #'   documented inputs and outputs to integrate this function with the simulation workflow.
 #'
 #' @author Gabriel Potvin and Anoop Singh Rawat

@@ -140,15 +140,22 @@
 #'
 #' Worked output objects:
 #' \preformatted{
-#' Example Output Object: Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for
-#'   Control:Experimental 1:Experimental 2 vSelectedTreatments <- c( 1, 2 ) # Experimental 1 and 2 both have an
-#'   allocation ratio of 2. vAllocationRatio <- c( 2, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID =
-#'   vSelectedTreatments, AllocRatio = vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn )
+#' # Example 1: Control:Experimental 1:Experimental 2 allocation is 1:2:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 2, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
 #'
-#' Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-#'   vSelectedTreatments <- c( 1, 2 ) # Experimental 2 will receive twice as many as Experimental 1 or Control.
-#'   vAllocationRatio <- c( 1, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID = vSelectedTreatments, AllocRatio =
-#'   vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn ) }
+#' # Example 2: Control:Experimental 1:Experimental 2 allocation is 1:1:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 1, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
+#' }
 ######################################################################################################################## .
 
 SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) {
@@ -158,7 +165,7 @@ SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo
 
     # Calculate the number of responders and treatment failures for each treatment
     # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
-    tabResults <- table( SimData$TreatmentID, SimData$Response )
+    tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
 
     # Step 1 - The first step it to perform the data analysis to determine which treatments will be selected for stage 2 ####
     #           Since the chisq.test function requires a 2x2 table, the first row of tabResults can be taken for control and then treatment rows 2,3,4 can be looped through
@@ -191,8 +198,7 @@ SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo
     }
 
     # Step 3: Create the allocation ratios for all selected treatments ####
-    # In this case, all selected treatments should have an allocation ration of 1:1
-    # The allocation will put twice as many patients on the treatment with the highest number of responses
+    # In this case, all selected treatments have an allocation ratio of 1:1
     vAllocationRatio <- rep( 1, length( vReturnTreatmentID ) )
 
     nErrorCode <- 0

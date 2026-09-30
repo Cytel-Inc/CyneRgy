@@ -174,8 +174,8 @@
 #' Example-specific parameters and requirements:
 #' Relevant elements include:
 #'                  \describe{
-#'                    \item{HazardRatioCutoffIA}{OS hazard ratio threshold for interim analysis.}
-#'                    \item{HazardRatioCutoffFA}{OS hazard ratio threshold for final analysis.}
+#'   \item{HazardRatioCutoffIA}{OS hazard ratio threshold for interim analysis.}
+#'   \item{HazardRatioCutoffFA}{OS hazard ratio threshold for final analysis.}
 #'                  }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
@@ -220,10 +220,11 @@
 #'   \item{dZValPFS}{Z-value for progression-free survival endpoint.}
 #'   \item{dPValueOS}{P-value for overall survival endpoint.}
 #'   \item{dHazardRatioPFS}{Hazard ratio for progression-free survival endpoint.}
+#'   \item{HazardRatio}{Custom numeric hazard ratio for progression-free survival, equal to dHazardRatioPFS.}
 #'   \item{dHazardRatioOS}{Hazard ratio for overall survival endpoint.}
 #'   \item{dEffBdry}{Efficacy boundary value for the current look.}
-#'   \item{HazardRatioCutoffIA}{Hazard ratio threshold for interim analysis.}
-#'   \item{HazardRatioCutoffFA}{Hazard ratio threshold for final analysis.}
+#'   \item{HazardRatioCutoffIA}{OS hazard ratio threshold for interim analysis.}
+#'   \item{HazardRatioCutoffFA}{OS hazard ratio threshold for final analysis.}
 #' }
 #'
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
@@ -231,8 +232,6 @@
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
 #'
-#' Example-specific output usage: Delta: Hazard ratio (optional numeric value). Used in Solara for creating the
-#'   observed hazard ratio graph. Applicable for time-to-event data.
 ######################################################################################################################## .
 
 AnalyzePFSAndOS <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {

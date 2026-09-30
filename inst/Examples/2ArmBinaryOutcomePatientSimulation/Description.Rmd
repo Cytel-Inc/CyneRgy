@@ -30,7 +30,7 @@ Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any
 CyneRgy::RunExample( "2ArmBinaryOutcomePatientSimulation" )
 ```
 
-**East Workbook**: [2ArmBinaryOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/2ArmBinaryOutcomePatientSimulation.cywx)
+**East Horizon Workbook**: [2ArmBinaryOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/2ArmBinaryOutcomePatientSimulation.cywx)
 
 **RStudio Project File**: [2ArmBinaryOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomePatientSimulation/2ArmBinaryOutcomePatientSimulation.Rproj)
 
@@ -82,7 +82,7 @@ Assume that no patient will be treatment-resistant. A binomial distribution is u
 |**dProbOfTreatmentResistantCtrl**|0.0|
 |**dProbOfTreatmentResistantExp**|0.0|
 
-This demonstrates that using the R function with a treatment resistance probability of zero produces the same results as simulating the data directly with the default engine of East Horizon .
+This demonstrates that using the R function with a treatment resistance probability of zero produces the same results as simulating the data directly with the default engine of East Horizon.
 
 ## Example 1.2 - 20% of Treatment-Resistant Patients
 
@@ -110,7 +110,7 @@ This example is similar to the previous one, but here we assume that, on average
 
 Similarly to Example 1, this function models a binary patient outcome, where 0 represents treatment failure (non-response) and 1 indicates a successful response, and an unknown proportion of patients are treatment-resistant and will not respond, resulting in an outcome of 0.
 
-Now, the function *SimulatePatientOutcomePercentAtZeroBetaDist.Binary* assumes that the probability of a patient being treatment-resistant is random and follows a Beta distribution, incorporating variability in the unknown probability of treatment resistance. Additionally, the function allows for a different Beta distribution for each treatment arm, enabling the evaluation of how a treatment that reduces the likelihood of failure would perform in the trial. In these examples, a Beta distribution is used to determine whether a patient is treatment-resistant. If the patient is not treatment-resistant, their outcome is then simulated from a binomial distribution based on the response probability specified in East Horizon , with the data sent to R for further analysis.
+Now, the function *SimulatePatientOutcomePercentAtZeroBetaDist.Binary* assumes that the probability of a patient being treatment-resistant is random and follows a Beta distribution, incorporating variability in the unknown probability of treatment resistance. Additionally, the function allows for a different Beta distribution for each treatment arm, enabling the evaluation of how a treatment that reduces the likelihood of failure would perform in the trial. In these examples, a Beta distribution is used to determine whether a patient is treatment-resistant. If the patient is not treatment-resistant, their outcome is then simulated from a binomial distribution based on the response probability specified in East Horizon, with the data sent to R for further analysis.
 
 Refer to the table below for the definitions of the user-defined parameters used in this example.
 

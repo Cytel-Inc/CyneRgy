@@ -9,7 +9,7 @@
 #'   being less than dLowerCutoffForFutility. In this example we assume a Bayesian model and use posterior
 #'   probabilities for decision making UserParam is required; illustrative priors are: pi_Ctrl ~ beta( 10, 40 ); to
 #'   reflect that knowledge that on control treatment 10/50 previous patients responded pi_Exp ~ beta( 0.2, 0.8 );
-#'   non-informative prior for Experimental to have the same prior mean as S but only 1 prior patient observed
+#'   weak prior for the experimental arm with the same prior mean as control and an effective sample size of 1.
 #'
 #' At an IA: If Pr( pi_Exp > pi_Ctrl | data ) > 0.95 --> Stop for efficacy. Otherwise if Pr( pi_Exp > pi_Ctrl |
 #'   data ) < 0.1 --> Stop for futility. At an FA: If Pr( pi_Exp > pi_Ctrl | data ) > 0.95 --> Declare efficacy,
@@ -18,8 +18,7 @@
 #' When using simulation to obtain the frequentist Operating Characteristic (OC) of a Bayesian design, you should
 #'   set dLowerCutoffForFutility = 0 when simulating under the null case in order to obtain the false-positive rate
 #'   of the non-binding futility rule. When you set dLowerCutoffForFutility > 0, simulation will provide the OC of
-#'   the binding futility rule because the rule is ALWAYS followed. Complete the blanks to reproduce the supplied
-#'   beta-binomial analysis example.
+#'   the binding futility rule because the rule is ALWAYS followed.
 #'
 #' @author J. Kyle Wathen and Gabriel Potvin
 #'
@@ -192,8 +191,7 @@
 #'      \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility
 #'        check. Below this value will declare futility.}
 #'  }
-#'  If user variables are not specified then a Beta( 1, 1 ) prior is utilized for both standard of care and
-#'    experimental.
+#'  UserParam is required. Missing user parameters return ErrorCode = -1.
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
@@ -219,7 +217,10 @@
 #'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This example returns the posterior probability in TestStat for reporting and supplies Decision
+#'   to apply its Bayesian stopping rule. The reported posterior probability is not a Wald Z statistic.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.

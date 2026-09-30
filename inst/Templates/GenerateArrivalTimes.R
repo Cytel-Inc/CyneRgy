@@ -10,6 +10,10 @@
 #'
 #' @param NumSub Integer number of subjects in the trial.
 #'
+#' @param Type Integer enrollment type: 0 = global enrollment; 1 = regional enrollment. This function
+#'   implements global enrollment and defaults to 0. Use the regional arguments described below for a regional
+#'   implementation.
+#'
 #' @param NumPrd Integer number of accrual periods.
 #'
 #' @param PrdStart Numeric vector of accrual-period starting times of length NumPrd. The first period starts at 0.
@@ -22,15 +26,12 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' Example-specific parameters and requirements: A list of user defined parameters in East Horizon. You
-#'   must have a default of NULL, as in this example. If UserParam are supplied, they will be an element in the
-#'   list, UserParam.
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
-#'     subject, in the same order as TreatmentID. Required; return times in subject order.}
+#'     subject, in the same order as TreatmentID.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -43,10 +44,10 @@
 #'   PrdStart, and AccrRate.
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL ) {
+{{FUNCTION_NAME}} <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0
-    vPatientArrivalTime <- rep( 0, NumSub ) # Note, as you simulate the patient data put in in this vector so it can be returned
+    vPatientArrivalTime <- rep( 0, NumSub ) # Note, as you simulate the patient data put it in this vector so it can be returned
 
     # Step 2 - Validate custom variable input and set defaults ####
     if ( is.null( UserParam ) ) {

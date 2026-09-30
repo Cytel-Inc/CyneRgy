@@ -61,7 +61,7 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
-#'     enrollment, with one element per subject. Required.}
+#'     enrollment, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

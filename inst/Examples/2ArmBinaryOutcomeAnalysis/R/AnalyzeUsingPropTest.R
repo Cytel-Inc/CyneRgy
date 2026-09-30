@@ -216,7 +216,10 @@ AnalyzeUsingPropTest <- function( SimData, DesignParam, LookInfo = NULL, UserPar
     vOutcomesE <- vPatientOutcome[ vPatientTreatment == 1 ]
 
     # Perform the desired analysis
-    mData <- cbind( table( vOutcomesS ), table( vOutcomesE ) )
+    mData <- rbind(
+        c( sum( vOutcomesE ), length( vOutcomesE ) - sum( vOutcomesE ) ),
+        c( sum( vOutcomesS ), length( vOutcomesS ) - sum( vOutcomesS ) )
+    )
     lAnalysisResult <- stats::prop.test( mData, alternative = "greater", correct = FALSE )
     dPValue <- lAnalysisResult$p.value
     dZValue <- stats::qnorm( 1 - dPValue )

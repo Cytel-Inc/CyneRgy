@@ -50,9 +50,6 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' Example-specific parameters and requirements: A list of user defined parameters in East Horizon. You must have a
-#'   default = NULL, as in this example. If UserParam are supplied in East Horizon, they will be an element in the
-#'   list, eg UserParam$ParameterName.
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.

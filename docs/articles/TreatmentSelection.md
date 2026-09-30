@@ -17,7 +17,7 @@ following configuration:
 ## Introduction
 
 The following examples illustrate how to integrate new treatment
-selection capabilities into East Horizon or East using R functions in
+selection capabilities into East Horizon using R functions in
 the context of a multi-arm trial. In each example, the trial design
 includes a standard-of-care control arm and three experimental treatment
 arms. The design includes one interim analysis (IA) and one final
@@ -35,7 +35,7 @@ Code, or any other supported IDE with the following command:
 \
 `CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"TreatmentSelection"`` ``)`
 
-**East Workbook**:
+**East Horizon Workbook**:
 [TreatmentSelection.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.cywx)
 
 **RStudio Project File**:

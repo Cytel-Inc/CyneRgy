@@ -31,7 +31,7 @@ Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any
 CyneRgy::RunExample( "2ArmTimeToEventOutcomePatientSimulation" )
 ```
 
-**East Workbook**: [2ArmTimeToEventOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.cywx)
+**East Horizon Workbook**: [2ArmTimeToEventOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.cywx)
 
 **RStudio Project File**: [2ArmTimeToEventOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.Rproj)
 
@@ -77,7 +77,7 @@ CyneRgy::PlotExampleFlowchart(
 
 ## Example 1.1 – Constant Hazards
 
-Assume that the difference in risk of death for patients in the control arm compared to the risk of death for patients in the experimental arm remains the same over time. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East Horizon nt to R. Refer to the table below for the values of the user-defined parameters used in this example.
+Assume that the difference in risk of death for patients in the control arm compared to the risk of death for patients in the experimental arm remains the same over time. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East Horizon and sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
 
 |**User parameter**|**Value**|
 |---|---|

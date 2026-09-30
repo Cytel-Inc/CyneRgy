@@ -45,22 +45,24 @@
 #' Example-specific parameters and requirements:
 #' UserParam must be supplied and the list must contain the following named elements:
 #' \describe{
-#'      \item{UserParam$dWeight1}{Probability of sampling from part 1}
-#'      \item{UserParam$dWeight2}{Probability of sampling from part 2}
-#'      \item{UserParam$dPriorMean}{Prior mean for normal distibution}
+#'   \item{UserParam$dWeight1}{Nonnegative numeric sampling weight for the first component of the mixture
+#'     prior.}
+#'   \item{UserParam$dWeight2}{Nonnegative numeric sampling weight for the second component of the mixture
+#'     prior. At least one component weight must be positive; sample() normalizes the weights.}
+#'      \item{UserParam$dPriorMean}{Prior mean for normal distribution}
 #'      \item{UserParam$dPriorSD}{Prior standard deviation for the normal distribution}
 #'      \item{UserParam$dAlpha}{The alpha parameter in the Beta( alpha, beta ) piece of the prior distribution}
 #'      \item{UserParam$dBeta}{The beta parameter in the Beta( alpha, beta ) piece of the prior distribution}
 #'      \item{UserParam$dUpper}{Upper limit for scaling the Beta distribution.}
 #'      \item{UserParam$dLower}{Lower limit for scaling the Beta distribution. }
-#'      \item{UserParam$dMeanTTECtrl}{The mean time-to-event for the control treatment. }
+#'   \item{UserParam$dMeanTTECtrl}{Positive numeric mean time-to-event for the control arm.}
 #'  }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
-#'     enrollment, with one element per subject. Required.}
+#'     enrollment, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -76,7 +78,7 @@ SimulatePatientSurvivalAssurance <- function( NumSub, NumArm, ArrivalTime, Treat
 
     # Step 2: First sample the piece of the prior we want to use ####
 
-    nPriorPart <- stats::rbinom( 1, 1, UserParam$dWeight1 )
+    nPriorPart <- sample( c( 1, 0 ), 1, prob = c( UserParam$dWeight1, UserParam$dWeight2 ) )
 
     if ( nPriorPart == 1 ) {
         # Sample the normal part

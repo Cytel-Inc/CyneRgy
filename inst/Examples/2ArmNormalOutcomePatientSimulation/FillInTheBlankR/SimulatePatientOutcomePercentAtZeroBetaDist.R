@@ -5,7 +5,7 @@
 #'   where the probability of a 0 is drawn from a Beta distribution.
 #'
 #' @description The function assumes that the probability a patient has a zero response is random and follows a
-#'   Beta( a, b ) distribution. Each distribution must provide 2 parameters for the beta distribution and the
+#'   Beta( a, b ) distribution. Each distribution must provide 2 parameters for the Beta distribution and the
 #'   probability of 0 outcome is selected from the corresponding Beta distribution. The probability of 0 outcome on
 #'   the control treatment is sampled from a Beta( UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 )
 #'   distribution. The probability of 0 outcome on the experimental treatment is sampled from a Beta(
@@ -33,18 +33,17 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' Example-specific parameters and requirements: A list of user defined parameters in East Horizon. The default must be
-#'   NULL resulting in ignoring the percent of patients at 0. If UserParam is supplied, the list must contain the
-#'   following named elements: UserParam$dCtrlBetaParam1 - First parameter in the Beta distribution for the control
-#'   (ctrl) treatment. UserParam$dCtrlBetaParam2 - Second parameter in the Beta distribution for the control (ctrl)
-#'   treatment. UserParam$dExpBetaParam1 - First parameter in the Beta distribution for the experimental (exp)
-#'   treatment. UserParam$dExpBetaParam2 - Second parameter in the Beta distribution for the experimental (exp)
-#'   treatment.
+#' When UserParam is NULL, no subjects are forced to have zero outcomes. If supplied, the list
+#'   must contain the following named elements: UserParam$dCtrlBetaParam1 - First parameter in the Beta
+#'   distribution for the control (ctrl) treatment. UserParam$dCtrlBetaParam2 - Second parameter in the Beta
+#'   distribution for the control (ctrl) treatment. UserParam$dExpBetaParam1 - First parameter in the Beta
+#'   distribution for the experimental (exp) treatment. UserParam$dExpBetaParam2 - Second parameter in the Beta
+#'   distribution for the experimental (exp) treatment.
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. Required.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

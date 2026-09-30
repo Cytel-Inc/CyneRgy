@@ -25,7 +25,7 @@ following configuration:
 ## Introduction
 
 The following examples illustrate how to customize the dropout
-distribution in East Horizon or East using R functions. Patients may
+distribution in East Horizon using R functions. Patients may
 drop out of a trial for various reasons, including safety concerns,
 treatment burden, or non-trial-related factors. In some cases, dropout
 rates can reach 30%, particularly if the drug has adverse side effects.

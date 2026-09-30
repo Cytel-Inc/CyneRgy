@@ -441,7 +441,7 @@ This endpoint is related to this R file:
 [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesBinary/R/AnalyzeUsingEastManualFormula.R)
 
 The analysis is the same as East Horizon, based on formulas of the
-**Chapter 24: Binomial Superiority Two‐Sample** from the East manual
+**Chapter 24: Binomial Superiority Two‐Sample** from the East Horizon manual
 (24.2). No user-defined parameter is required for this integration
 point.
 

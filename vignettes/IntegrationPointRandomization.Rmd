@@ -66,10 +66,10 @@ This integration point is available in East Horizon Explore for the following st
 Important: for some tests, you may need to compute the analytical design input set before simulating the design to see the option.
 </details>
 
-## East
+## East Horizon
 
 <details>
-<summary>This integration point is available in East for the following tests (click to expand/collapse):</summary>
+<summary>This integration point is available in East Horizon for the following tests (click to expand/collapse):</summary>
 
 |Test|Number of Samples|Endpoint|Availability|
 |-------|-----|-----|--|
@@ -127,9 +127,9 @@ For a visual guide of where to find the option, refer to the screenshot below:
 ![](GettingStarted_files/randomizationDesign.png)
 </details>
 
-## In East
+## In East Horizon
 
-You can set up a randomization function in East by navigating to the **Randomize Subjects** task of the **User Defined R Function** tab of a **Simulation Input** window, after including the option.
+You can set up a randomization function in East Horizon by navigating to the **Randomize Subjects** task of the **User Defined R Function** tab of a **Simulation Input** window, after including the option.
 
 <details>
 <summary>Follow these steps (click to expand/collapse):</summary>

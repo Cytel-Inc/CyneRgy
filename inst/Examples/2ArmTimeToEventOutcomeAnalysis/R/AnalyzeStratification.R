@@ -240,7 +240,10 @@
 #'     conditional-power rule.}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This example applies one-sided efficacy boundaries on the Z scale. Extend its boundary logic
+#'   before using p-value-scale boundaries or two-sided designs.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
@@ -322,7 +325,11 @@ AnalyzeStratification <- function( SimData, DesignParam, LookInfo = NULL, UserPa
 
         bEfficacyCondition <- FALSE
         if ( !is.null( dEffBdry ) && !is.na( dEffBdry ) ) {
-            bEfficacyCondition <- dTestStatistic > dEffBdry
+            if ( DesignParam$TailType == 0 ) {
+                bEfficacyCondition <- dTestStatistic < dEffBdry
+            } else {
+                bEfficacyCondition <- dTestStatistic > dEffBdry
+            }
         }
         strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
             bIAEfficacyCondition = bEfficacyCondition,

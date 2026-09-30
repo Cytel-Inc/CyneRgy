@@ -25,7 +25,7 @@ adjusts the analysis parameters accordingly.
 ## Introduction
 
 The following examples illustrate how to integrate new analysis
-capabilities into East Horizon or East using R functions in the context
+capabilities into East Horizon using R functions in the context
 of a two-arm trial. In each example, the trial design includes a
 standard-of-care control arm and an experimental treatment arm, with
 patient outcomes assumed to follow a normal distribution. The design
@@ -39,7 +39,7 @@ Code, or any other supported IDE with the following command:
 \
 `CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmNormalOutcomeAnalysis"`` ``)`
 
-**East Workbook**:
+**East Horizon Workbook**:
 [2ArmNormalOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.cywx)
 
 **RStudio Project File**:
@@ -52,7 +52,7 @@ you will find the following R files:
 1.  [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R) -
     Contains a function named *AnalyzeUsingEastManualFormula* that
     computes the two-sample Z-statistic for a continuous endpoint using
-    Formulas of Appendix Q.3.3 from the East manual.
+    Formulas of Appendix Q.3.3 from the East Horizon manual.
 
 2.  [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R) -
     Contains a function named *AnalyzeUsingTTest* that performs the
@@ -71,14 +71,14 @@ you will find the following R files:
     standard continuous analysis to support conditional power–based
     sample size re-estimation (SSR) in a group sequential design.
 
-## Example 1 - Using Formulas Q.3.3 from the East manual
+## Example 1 - Using Formulas Q.3.3 from the East Horizon manual
 
 This example is related to this R file:
 [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R)
 
 In this example, the analysis is customized by replacing the default
 method with a user-defined calculation based on formulas of the
-**Appendix Q.3.3 - Parallel Design: Difference of Means** from the East
+**Appendix Q.3.3 - Parallel Design: Difference of Means** from the East Horizon
 manual.
 
 **Estimate of the pooled standard deviation:**
@@ -115,7 +115,7 @@ Where:
 
 The objective is to demonstrate a straightforward way to modify both the
 analysis and decision-making process. The computed test statistic is
-compared to the efficacy boundary provided by East Horizon or East as
+compared to the efficacy boundary provided by East Horizon as
 input. This example does not include a futility rule and does not use
 any user-defined parameters.
 
@@ -133,7 +133,7 @@ This example is related to this R file:
 This example utilizes the base R
 [`t.test()`](https://rdrr.io/r/stats/t.test.html) function to perform
 the interim and final analyses. The resulting t-statistic is compared
-against the efficacy boundary provided by East Horizon or East. Like
+against the efficacy boundary provided by East Horizon. Like
 Example 1, this example does not include a futility rule and does not
 use any user-defined parameters.
 
@@ -159,7 +159,7 @@ decisions are often guided by two key thresholds:
 
 This example demonstrates how to approximate probabilistic
 decision-making using frequentist confidence intervals (CIs), ignoring
-the boundaries provided by East Horizon or East in favor of a CI-based
+the boundaries provided by East Horizon in favor of a CI-based
 logic. We use the function
 [`t.test()`](https://rdrr.io/r/stats/t.test.html) from base R to analyze
 the data and compute the desired confidence intervals. If the treatment
@@ -192,7 +192,7 @@ the user-defined parameters used in this example.
 | **dConfLevel** | Confidence Level: the level of confidence used to construct the confidence interval for Go/No-Go decision-making (e.g., 0.80 for an 80% CI). |
 
 **Note:** In this example, the boundary information that is computed in
-East Horizon or East is ignored. User-defined parameters and the
+East Horizon is ignored. User-defined parameters and the
 function [`t.test()`](https://rdrr.io/r/stats/t.test.html) from base R
 are used to analyze the data and compute the desired confidence
 intervals.

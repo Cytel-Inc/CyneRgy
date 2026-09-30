@@ -3,7 +3,7 @@
 #'
 #' @title Analyze binary outcome for multi-arm design using the prop.test function in base R.
 #'
-#' @description Analyze binary outcome for multi-arm design using the prop.test function in base R.. Use the
+#' @description Analyze binary outcome for multi-arm design using the prop.test function in base R. Use the
 #'   documented inputs and outputs to integrate this function with the simulation workflow.
 #'
 #' @author Gabriel Potvin and Anoop Singh Rawat
@@ -219,7 +219,10 @@ AnalyzeMultiArmUsingPropTestBonferroni <- function( SimData, DesignParam, LookIn
     for ( nTrtID in 1:DesignParam$NumTreatments ) {
         if ( vIsTrtPresent[ nTrtID ] == 1 ) {
             vOutcomesE <- vPatientOutcome[ vPatientTreatment == nTrtID ]
-            mData <- cbind( table( vOutcomesS ), table( vOutcomesE ) )
+            mData <- rbind(
+                c( sum( vOutcomesE ), length( vOutcomesE ) - sum( vOutcomesE ) ),
+                c( sum( vOutcomesS ), length( vOutcomesS ) - sum( vOutcomesS ) )
+            )
             lAnalysisResult <- stats::prop.test( mData, alternative = "greater", correct = FALSE )
             dPValue <- lAnalysisResult$p.value
         } else {

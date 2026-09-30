@@ -5,8 +5,8 @@
 #'
 #' @description This function is used for the MAMS design with a binary outcome and will perform treatment
 #'   selection at the interim analysis (IA). At the IA, the user-specified number of experimental treatments
-#'   (maxSelection) that have the largest number of responses are selected. After the IA, we would like to
-#'   randomize based on user specified inputs: 1:highestResponse:nextHighestResponse (control, selected
+#'   (QtyOfArmsToSelect) that have the largest number of responses are selected. After the IA, we would like to
+#'   randomize based on user specified inputs: 1:Rank1AllocationRatio:Rank2AllocationRatio (control, selected
 #'   experimental arm with highest number of responses, selected experimental arm with the second highest number of
 #'   responses)
 #'
@@ -120,14 +120,13 @@
 #' Example-specific parameters and requirements:
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
-#' \item{UserParam$QtyOfArmsToSelect}{A value that defines how many treatment arms are chosen to advance.
-#'                          Note this number must match the number of user-specified allocation values.
-#'                          If this value is not specified, the default is 2.}
-#' \item{UserParam$Rank1AllocationRatio}{A value that specifies the allocation to the arm with the highest response
-#'                             If this value is not specified, the default is 2.}
-#' \item{UserParam$Rank2AllocationRatio}{A value that specifies the allocation to the arm with the next highest
-#'   response
-#'                                 If this value is not specified, the default is 1.}
+#'   \item{UserParam$QtyOfArmsToSelect}{Integer number of experimental arms to advance, between 1 and the
+#'     number of available experimental arms. When UserParam is NULL, the default is 1. Supply one
+#'     RankNAllocationRatio parameter for each selected rank.}
+#'   \item{UserParam$Rank1AllocationRatio}{Positive numeric treatment-to-control allocation ratio for the arm
+#'     ranked first by number of responses. When UserParam is NULL, the default is 2.}
+#'   \item{UserParam$Rank2AllocationRatio}{Positive numeric treatment-to-control allocation ratio for the arm
+#'     ranked second by number of responses. Required when selecting at least two arms; there is no default.}
 #'          }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
@@ -147,35 +146,39 @@
 #'
 #' Worked output objects:
 #' \preformatted{
-#' Example Output Object: Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for
-#'   Control:Experimental 1:Experimental 2 vSelectedTreatments <- c( 1, 2 ) # Experimental 1 and 2 both have an
-#'   allocation ratio of 2. vAllocationRatio <- c( 2, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID =
-#'   vSelectedTreatments, AllocRatio = vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn )
+#' # Example 1: Control:Experimental 1:Experimental 2 allocation is 1:2:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 2, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
 #'
-#' Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-#'   vSelectedTreatments <- c( 1, 2 ) # Experimental 2 will receive twice as many as Experimental 1 or Control.
-#'   vAllocationRatio <- c( 1, 2 ) nErrorCode <- 0 lReturn <- list( TreatmentID = vSelectedTreatments, AllocRatio =
-#'   vAllocationRatio, ErrorCode = nErrorCode ) return( lReturn ) }
-#'
-#' This is a fill-in-the-blank exercise. Replace the underscore placeholders before sourcing or running the
-#'   function.
+#' # Example 2: Control:Experimental 1:Experimental 2 allocation is 1:1:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 1, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
+#' }
 ######################################################################################################################## .
 
 SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) {
-    if ( !exists( "UserParam" ) | is.null( UserParam ) ) {
+    if ( is.null( UserParam ) ) {
         # Default is to select the treatment with highest number of responses and allocation of 2:1 (Experimental:Control)
         UserParam <- list( QtyOfArmsToSelect = 1, Rank1AllocationRatio = 2 )
     }
     # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
-    tabResults <- table( SimData$TreatmentID, SimData$Response )
+    tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
 
     # Want to select the top user-specified (QtyOfArmsToSelect) number of experimental treatments, so drop control from the sorting
     # Now, only the experimental treatments are left
-    tabResults <- ______[ -1, ]
+    tabResults <- ______[ -1, , drop = FALSE ]
 
     # Sort in descending order based on the number of responses (column 2)
     # After the sort, the matrix will have the largest number of responses in the first row and the smallest number of responses in the last row
-    mSortedMatrix <- tabResults[ order( tabResults[ , 2 ], decreasing = TRUE ), ]
+    mSortedMatrix <- tabResults[ order( tabResults[ , 2 ], decreasing = TRUE ), , drop = FALSE ]
 
     # Select the user-specified (QtyOfArmsToSelect) number of treatments with the largest number of responses
     vSortedNames <- row.names( mSortedMatrix ) # Get the names of the treatments in order by number of responses

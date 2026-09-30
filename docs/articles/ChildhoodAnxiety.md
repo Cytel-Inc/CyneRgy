@@ -246,7 +246,7 @@ process of setting up the scenarios and then filtering the results to
 show what we wanted was cumbersome and inefficient. See Figure 4 for the
 initial setup.
 
-**Figure 4**: Initial input in East Horizon ![East Horizion R code
+**Figure 4**: Initial input in East Horizon ![East Horizon R code
 Development](ChildhoodAnxiety_files/Approach1.jpg)
 
 ## Improved R Code

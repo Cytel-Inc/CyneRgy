@@ -3,7 +3,7 @@
 #'
 #' @title Analyze continuous outcome for multi-arm design using the t.test function in base R.
 #'
-#' @description Analyze continuous outcome for multi-arm design using the t.test function in base R.. Use the
+#' @description Analyze continuous outcome for multi-arm design using the t.test function in base R. Use the
 #'   documented inputs and outputs to integrate this function with the simulation workflow.
 #'
 #' @author Gabriel Potvin and Anoop Singh Rawat
