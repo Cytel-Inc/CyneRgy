@@ -29,6 +29,9 @@ GetDecisionString(
 
 \item{bFAFutilityCondition}{Logical condition evaluated to determine final futility at the last look (defaults to \code{FALSE}).}
 }
+\value{
+Character string equal to \code{"Efficacy"}, \code{"Futility"}, or \code{"Continue"}.
+}
 \description{
 This function evaluates look information, efficacy conditions, and futility conditions to generate the decision string (\code{strDecision}) required for the \code{GetDecision} function.
 If \code{LookInfo} is not \code{NULL}, the \code{LookInfo$RejType} parameter can be used to determine the design type.
@@ -49,13 +52,6 @@ If \code{LookInfo} is not \code{NULL}, the \code{LookInfo$RejType} parameter can
 \itemize{
 \item 1-Sided Efficacy Upper and Futility Lower = 4
 \item 1-Sided Efficacy Lower and Futility Upper = 5
-}
-\item \strong{Not in East Horizon Explore Yet}:
-\itemize{
-\item 2-Sided Efficacy Only = 6
-\item 2-Sided Futility Only = 7
-\item 2-Sided Efficacy and Futility = 8
-\item Equivalence = 9
 }
 }
 }

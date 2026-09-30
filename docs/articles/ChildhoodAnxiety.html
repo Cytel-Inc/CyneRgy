@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Audrey Wathen,
 J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>ChildhoodAnxiety.Rmd</code></div>
@@ -145,12 +145,10 @@ being an integer value.</p>
 Horizon using the <strong>Two Arm Confirmatory</strong> study objective
 and the <strong>Continuous</strong> endpoint, and then create an input
 set using the <strong>Explore</strong> task.</p>
-<p>Once CyneRgy is installed, you can load this example in RStudio with
-the following commands:</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"ChildhoodAnxiety"</span> <span class="op">)</span></span></code></pre></div>
-<p>Running the command above will load the RStudio project in
-RStudio.</p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ChildhoodAnxiety/ChildhoodAnxiety.Rproj" class="external-link">ChildhoodAnxiety.Rproj</a></p>
 <p>In this example, we first develop the necessary R code to simulate
 the patient data as well as a script to call the function and plot
@@ -387,22 +385,22 @@ below.</p>
 <tbody>
 <tr class="odd">
 <td><strong>Mean Control</strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">Mean [ 0 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">Mean [ 0 ]</annotation></semantics></math></td>
 <td>20</td>
 </tr>
 <tr class="even">
 <td><strong>Mean Treatment</strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">Mean [ 1 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">Mean [ 1 ]</annotation></semantics></math></td>
 <td>20</td>
 </tr>
 <tr class="odd">
 <td><strong>SD Control</strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">StdDev [ 0 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">StdDev [ 0 ]</annotation></semantics></math></td>
 <td>5</td>
 </tr>
 <tr class="even">
 <td><strong>SD Treatment</strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">StdDev [ 1 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">StdDev [ 1 ]</annotation></semantics></math></td>
 <td>5</td>
 </tr>
 </tbody>
@@ -488,22 +486,22 @@ in the table below.</p>
 <tbody>
 <tr class="odd">
 <td><strong>Mean Control</strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">Mean [ 0 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">Mean [ 0 ]</annotation></semantics></math></td>
 <td>0</td>
 </tr>
 <tr class="even">
 <td><strong>Mean Treatment</strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">Mean [ 1 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">Mean [ 1 ]</annotation></semantics></math></td>
 <td>0:10:1</td>
 </tr>
 <tr class="odd">
 <td><strong>SD Control</strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">StdDev [ 0 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">StdDev [ 0 ]</annotation></semantics></math></td>
 <td>10.6</td>
 </tr>
 <tr class="even">
 <td><strong>SD Treatment</strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">StdDev [ 1 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">StdDev [ 1 ]</annotation></semantics></math></td>
 <td>10.6</td>
 </tr>
 </tbody>
@@ -521,7 +519,7 @@ in the table below.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

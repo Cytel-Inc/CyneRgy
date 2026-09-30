@@ -33,14 +33,11 @@ randomization methods and control how subjects are assigned to
 designated arms into East Horizon or East using R functions in the
 context of a two-arm trial.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "RandomizeSubjects" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"RandomizeSubjects"`` ``)`
 
 **RStudio Project File**:
 [RandomizeSubjects.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/RandomizeSubjects/RandomizeSubjects.Rproj)

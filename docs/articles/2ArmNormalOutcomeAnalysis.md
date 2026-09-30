@@ -33,14 +33,11 @@ includes two interim analyses (IA) and one final analysis (FA). At each
 IA, an analysis is conducted which may lead to early stopping for
 efficacy or futility, depending on the predefined design criteria.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "2ArmNormalOutcomeAnalysis" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmNormalOutcomeAnalysis"`` ``)`
 
 **East Workbook**:
 [2ArmNormalOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.cywx)

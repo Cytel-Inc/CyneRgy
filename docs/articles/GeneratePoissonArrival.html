@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle
 Wathen</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>GeneratePoissonArrival.Rmd</code></div>
@@ -123,12 +123,10 @@ ramp-up phase into East Horizon or East using R functions. They showcase
 different approaches for simulating arrival times based on a Poisson
 process, offering flexibility in modeling patient recruitment
 dynamics.</p>
-<p>Once CyneRgy is installed, you can load this example in RStudio with
-the following commands:</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"GeneratePoissonArrival"</span> <span class="op">)</span></span></code></pre></div>
-<p>Running the command above will load the RStudio project in
-RStudio.</p>
 <p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx" class="external-link">GeneratePoissonArrival.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.Rproj" class="external-link">GeneratePoissonArrival.Rproj</a></p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/GeneratePoissonArrival/R" class="external-link">R
@@ -252,61 +250,61 @@ below for more information.</p>
 <tr class="odd">
 <td>Starting at Time (Period 1)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 1 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">PrdStart[ 1 ]</annotation></semantics></math></td>
 <td>0</td>
 </tr>
 <tr class="even">
 <td>Starting at Time (Period 2)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>2</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 2 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">PrdStart[ 2 ]</annotation></semantics></math></td>
 <td>6</td>
 </tr>
 <tr class="odd">
 <td>Starting at Time (Period 3)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>3</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 3 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mo stretchy="false" form="prefix">[</mo><mn>3</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">PrdStart[ 3 ]</annotation></semantics></math></td>
 <td>12</td>
 </tr>
 <tr class="even">
 <td>Starting at Time (Period 4)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>4</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 4 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mo stretchy="false" form="prefix">[</mo><mn>4</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">PrdStart[ 4 ]</annotation></semantics></math></td>
 <td>18</td>
 </tr>
 <tr class="odd">
 <td>Starting at Time (Period 5)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>5</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">PrdStart[ 5 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>d</mi><mi>S</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mo stretchy="false" form="prefix">[</mo><mn>5</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">PrdStart[ 5 ]</annotation></semantics></math></td>
 <td>24</td>
 </tr>
 <tr class="even">
 <td>Average Subjects Enrolled (Period 1)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 1 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">AccrRate[ 1 ]</annotation></semantics></math></td>
 <td>1</td>
 </tr>
 <tr class="odd">
 <td>Average Subjects Enrolled (Period 2)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>2</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 2 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">AccrRate[ 2 ]</annotation></semantics></math></td>
 <td>4</td>
 </tr>
 <tr class="even">
 <td>Average Subjects Enrolled (Period 3)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>3</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 3 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo stretchy="false" form="prefix">[</mo><mn>3</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">AccrRate[ 3 ]</annotation></semantics></math></td>
 <td>12</td>
 </tr>
 <tr class="odd">
 <td>Average Subjects Enrolled (Period 4)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>4</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 4 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo stretchy="false" form="prefix">[</mo><mn>4</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">AccrRate[ 4 ]</annotation></semantics></math></td>
 <td>24</td>
 </tr>
 <tr class="even">
 <td>Average Subjects Enrolled (Period 5)</td>
 <td>Enrollment Card</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mrow><mo stretchy="true" form="prefix">[</mo><mn>5</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">AccrRate[ 5 ]</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>c</mi><mi>c</mi><mi>r</mi><mi>R</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo stretchy="false" form="prefix">[</mo><mn>5</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">AccrRate[ 5 ]</annotation></semantics></math></td>
 <td>48</td>
 </tr>
 </tbody>
@@ -368,7 +366,7 @@ Horizon inputs are ignored.</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -30,6 +30,12 @@ statistical endpoint (continuous, time-to-event, and binary), using
 standard R functions and a Bonferroni adjustment to handle multiple
 comparisons.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"MultiArmAnalysis"`` ``)`
+
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MultiArmAnalysis/R)
 you will find the following R files:

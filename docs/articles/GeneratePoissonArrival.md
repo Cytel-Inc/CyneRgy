@@ -20,14 +20,11 @@ ramp-up phase into East Horizon or East using R functions. They showcase
 different approaches for simulating arrival times based on a Poisson
 process, offering flexibility in modeling patient recruitment dynamics.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "GeneratePoissonArrival" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"GeneratePoissonArrival"`` ``)`
 
 **East Workbook**:
 [GeneratePoissonArrival.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx)

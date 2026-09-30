@@ -21,11 +21,11 @@ A variety of examples highlighting how R scripts integrate with Cytel's simulati
 After installing CyneRgy, you can list or open examples. For example:
 
 ```r
-CyneRgy::RunExample()                                # Lists all available examples
-CyneRgy::RunExample("TreatmentSelection")            # Opens the example project/folder in your IDE
-CyneRgy::RunExample("GeneratePoissonArrival")
-CyneRgy::RunExample("2ArmPatientDropout")
-CyneRgy::RunExample("TreatmentSelection", strDirectory = getwd())   # Copy to a specific folder
+CyneRgy::RunExample()                                                 # Lists all available examples
+CyneRgy::RunExample( "TreatmentSelection" )                           # Opens the example project/folder in your IDE
+CyneRgy::RunExample( "GeneratePoissonArrival" )
+CyneRgy::RunExample( "2ArmPatientDropout" )
+CyneRgy::RunExample( "TreatmentSelection", strDirectory = getwd() )   # Copy to a specific folder
 ```
 
 `RunExample()` creates a writable copy when needed, then opens the description and R scripts in the active supported IDE. Use `strDirectory` to choose the copy location.

@@ -1,7 +1,5 @@
 # Contributing to CyneRgy
 
-## Contributing to CyneRgy
-
 If you would like to contribute to CyneRgy there are multiple avenues to
 get involved.
 
@@ -26,11 +24,12 @@ you find something that is not clear or incorrect, please add an issue.
 2.  If an issue does not exist in the CyneRgy repository, then please
     add one and use it to create a new branch for development. If an
     issue already exists, then create a branch for development.
-3.  You can start a new example with the function
-    CyneRgy::CreateCyneRgyExample.
-4.  Once the example is complete, copy the example folder to the
-    inst/Examples directory of CyneRgy.  
-5.  Use Git to add the files to the repository.  
+3.  Start a new example with
+    [`CyneRgy::CreateCyneRgyExample()`](https://Cytel-Inc.github.io/CyneRgy/reference/CreateCyneRgyExample.md).
+4.  Place the completed example in `inst/Examples`; keep its
+    example-specific functions there rather than in the package-level
+    `R` directory.
+5.  Use Git to add the files to the repository.\
 6.  Update the vignettes/ExampleOutline.Rmd file to include a brief
     description and link to the new example.
 7.  Use Git to commit to the branch created above.
@@ -40,15 +39,22 @@ you find something that is not clear or incorrect, please add an issue.
 Please note that all branches are merged into Dev. Dev is used to
 combine all branches, then a branch is created for building the package
 website and reviewed for documentation and completeness. Once this is
-done, the Dev branch is merged into Main via a Pull Request and the
-example is then included on the website as well as in the package when
-it is installed from GitHub.
+done, the Dev branch is merged into Main via a Pull Request from the
+repository owner, and the example is then included on the website as
+well as in the package when it is installed from GitHub.
 
 ## Package Development
 
-This document is intended to help with development of this package. In
-this document you can find packages that are helpful, example code
-snippets and function calls that were made to create new functions.
+This document is intended to help with development of this package.
+
+After changing package code or documentation, run
+[`devtools::document()`](https://devtools.r-lib.org/reference/document.html),
+[`devtools::test()`](https://devtools.r-lib.org/reference/test.html),
+[`devtools::check()`](https://devtools.r-lib.org/reference/check.html),
+and
+[`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html).
+Include the relevant generated files under `man/` and `docs/` in the
+pull request.
 
 ### Helpful packages
 
@@ -94,11 +100,11 @@ snippets and function calls that were made to create new functions.
 
 If you need help please ask Kyle Wathen or another team member.
 
-Add code snippet by Clicking Tools → Global Options → Code → Edit
-Snippets. In the Snippets menu choose R. When creating new snippets the
-keyword “snippet” should start in column 1 and the snippets should be
-indented. To insert a snippet in RStudio, type the snippet name, or
-partial name, and click tab.
+Add a code snippet by selecting Tools → Global Options → Code → Edit
+Snippets. In the Snippets menu, choose R. When creating new snippets,
+the keyword “snippet” should start in column 1 and the snippets should
+be indented. To insert a snippet in RStudio, type the snippet name, or
+partial name, and press Tab.
 
 Snippet to insert a new comment (newcom) will insert a commented code
 block.

@@ -34,14 +34,11 @@ data generation and can significantly impact subsequent analysis. In all
 examples, we assume a trial design consisting of a control group and an
 experimental treatment.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "2ArmPatientDropout" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmPatientDropout"`` ``)`
 
 **RStudio Project File**:
 [2ArmPatientDropout.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmPatientDropout/2ArmPatientDropout.Rproj)
@@ -88,12 +85,12 @@ information.
 
 Steps:
 
-1.  Let $`pd`$ be the dropout probability.  
+1.  Let $`pd`$ be the dropout probability.\
 2.  Draw a random sample from a Bernoulli distribution with
-    $`p = 1 - pd`$, i.e., $`Binomial(1, pd)`$, of size $`n = NumSub`$.  
+    $`p = 1 - pd`$, i.e., $`Binomial(1, pd)`$, of size $`n = NumSub`$.\
 3.  The generated sample serves as a censoring indicator:
     - **1** indicates a patient who completes the trial (does not drop
-      out).  
+      out).\
     - **0** indicates a patient who drops out (non-completer).
 
 The figure below illustrates where this example fits within the R

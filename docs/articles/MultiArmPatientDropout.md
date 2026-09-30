@@ -22,6 +22,12 @@ due to varying efficacy, tolerability, or burden of treatment. Modeling
 these differences is essential for accurate trial simulation, as dropout
 can impact both power and interpretation of results.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"MultiArmPatientDropout"`` ``)`
+
 In the following examples, we demonstrate how to integrate a **custom
 dropout distribution** into East Horizon through R integration. We focus
 on two common approaches to modeling dropout:
@@ -83,7 +89,7 @@ Steps:
     $`p = 1 - pd`$ (completion probability).
 4.  The generated sample serves as a censoring indicator:
     - **1** indicates a patient who completes the trial (does not drop
-      out).  
+      out).\
     - **0** indicates a patient who drops out (non-completer).
 
 The figure below illustrates where this example fits within the R

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Shubham Lahoti,
 J. Kyle Wathen, and Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>2ArmNormalOutcomeAnalysis.Rmd</code></div>
@@ -155,12 +155,10 @@ patient outcomes assumed to follow a normal distribution. The design
 includes two interim analyses (IA) and one final analysis (FA). At each
 IA, an analysis is conducted which may lead to early stopping for
 efficacy or futility, depending on the predefined design criteria.</p>
-<p>Once CyneRgy is installed, you can load this example in RStudio with
-the following commands:</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmNormalOutcomeAnalysis"</span> <span class="op">)</span></span></code></pre></div>
-<p>Running the command above will load the RStudio project in
-RStudio.</p>
 <p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.cywx" class="external-link">2ArmNormalOutcomeAnalysis.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.Rproj" class="external-link">2ArmNormalOutcomeAnalysis.Rproj</a></p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomeAnalysis/R" class="external-link">R
@@ -199,7 +197,7 @@ method with a user-defined calculation based on formulas of the
 <strong>Appendix Q.3.3 - Parallel Design: Difference of Means</strong>
 from the East manual.</p>
 <p><strong>Estimate of the pooled standard deviation:</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>=</mo><msqrt><mfrac><mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>t</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><msubsup><mi>σ</mi><mi>t</mi><mn>2</mn></msubsup><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>c</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><msubsup><mi>σ</mi><mi>c</mi><mn>2</mn></msubsup></mrow><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></mfrac></msqrt></mrow><annotation encoding="application/x-tex">\hat\sigma^{2} = \sqrt{ 
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>=</mo><msqrt><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>t</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><msubsup><mi>σ</mi><mi>t</mi><mn>2</mn></msubsup><mo>+</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>c</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><msubsup><mi>σ</mi><mi>c</mi><mn>2</mn></msubsup></mrow><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></mfrac></msqrt></mrow><annotation encoding="application/x-tex">\hat\sigma^{2} = \sqrt{ 
 \frac{(n_t - 1) \cdot \sigma_t^2 + (n_c - 1) \cdot \sigma_c^2}
 {n - 2}
 }</annotation></semantics></math></p>
@@ -222,7 +220,7 @@ groups, respectively.</li>
 is the total number of patients.</li>
 </ul>
 <p><strong>Test Statistic:</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>c</mi></msub></mrow><msqrt><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><msub><mi>n</mi><mi>c</mi></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>n</mi><mi>t</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">Z = \frac{\hat{\mu}_t - \hat{\mu}_c}
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>c</mi></msub></mrow><msqrt><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><mfrac><mn>1</mn><msub><mi>n</mi><mi>c</mi></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>n</mi><mi>t</mi></msub></mfrac><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">Z = \frac{\hat{\mu}_t - \hat{\mu}_c}
 { \sqrt{\hat\sigma^{2} \cdot (\frac{1}{n_c} + \frac{1}{n_t})}}</annotation></semantics></math></p>
 <p>Where:</p>
 <ul>
@@ -589,7 +587,7 @@ outlining the general steps performed by the R code.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

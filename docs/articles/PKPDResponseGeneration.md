@@ -30,15 +30,14 @@ continuous outcomes for a two-arm trial (control vs treatment). A final
 example shows how to integrate externally sourced PK/PD data from a CSV
 file.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "PKPDResponseGeneration" )
-```
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"PKPDResponseGeneration"`` ``)`
 
 **RStudio Project File**:
-[PKPDResponseGeneration.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/PKPDResponseGeneration)
+[PKPDResponseGeneration.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/PKPDResponseGeneration.Rproj)
 
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/PKPDResponseGeneration/R)
@@ -287,7 +286,7 @@ Horizon project:
 
 ![](PKPDResponseGeneration_files/RFiles.png)
 
-  
+\
 
 #### Step 2: Upload CSV File to Inputs Folder
 
@@ -302,7 +301,7 @@ Horizon project. You can use one of the provided example files:
 
 ![](PKPDResponseGeneration_files/CSVFiles.png)
 
-  
+\
 
 #### Step 3: Configure Response Card
 

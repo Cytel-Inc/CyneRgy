@@ -36,14 +36,11 @@ response data is analyzed using a t-test. In contrast, the other two
 examples employ Analysis of covariance (ANCOVA) to account for covariate
 effects.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following command:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "MultipleEndpointsWithCovariates" )
-```
-
-This will open the corresponding RStudio project.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"MultipleEndpointsWithCovariates"`` ``)`
 
 **RStudio Project File**:
 [MultipleEndpointsWithCovariates.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultipleEndpointsWithCovariates/MultipleEndpointsWithCovariates.Rproj)

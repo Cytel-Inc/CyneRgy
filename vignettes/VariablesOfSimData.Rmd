@@ -5,8 +5,6 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: html_document
 ---
 
-# Variables of SimData
-
 The variables in SimData are created during data generation and depend on the current simulation. It stores outputs produced by integration points such as response, enrollment, dropout, or randomization. Any optional custom outputs defined at an endpoint are also included as columns in this data frame. Common and useful variables include:
 
 |**Variable**|**Description**|**Notes**|

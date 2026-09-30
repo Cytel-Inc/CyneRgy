@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Gabriel Potvin,
 Valeria A. G. Mazzanti, Sheetal Solanki</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>TimeToEventConditionalPowerFutilityAnalysis.Rmd</code></div>
@@ -150,6 +150,10 @@ simulations. Therefore, an analytical design must first be created,
 after which simulations can be run based on its computation. During the
 simulation, the futility evaluation from the original design is replaced
 by the custom futility logic implemented in the R script.</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"TimeToEventConditionalPowerFutilityAnalysis"</span> <span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="why-do-we-need-r-integration-for-this-example">Why do we need R Integration for this example?<a class="anchor" aria-label="anchor" href="#why-do-we-need-r-integration-for-this-example"></a>
 </h3>
@@ -223,7 +227,7 @@ parameters and current look index.</p>
 treatment and control arms. The test statistic
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>)
 is computed as:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><msqrt><msup><mi>χ</mi><mn>2</mn></msup></msqrt><mo>⋅</mo><mo>sign</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>O</mi><mn>2</mn></msub><mo>−</mo><msub><mi>E</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><msqrt><msup><mi>χ</mi><mn>2</mn></msup></msqrt><mo>⋅</mo><mrow><mi mathvariant="normal">sign</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>O</mi><mn>2</mn></msub><mo>−</mo><msub><mi>E</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 Z = \sqrt{\chi^2} \cdot \operatorname{sign}(O_2 - E_2)
 </annotation></semantics></math></p>
 <p>where:</p>
@@ -242,17 +246,17 @@ group.</li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>)
 is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>1</mn><mo>−</mo><msub><mi>F</mi><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup></msub><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>1</mn><mo>−</mo><msub><mi>F</mi><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup></msub><mo stretchy="false" form="prefix">(</mo><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 p = 1 - F_{\chi^2_1}(\chi^2)
 </annotation></semantics></math></p>
 <p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup></msub><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">F_{\chi^2_1}(\chi^2)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup></msub><mo stretchy="false" form="prefix">(</mo><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">F_{\chi^2_1}(\chi^2)</annotation></semantics></math>
 is the cumulative distribution function (CDF) of a chi-square with 1
 degree of freedom.</p>
 <p>We also compute the standard error of log hazard ratio
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">se</mtext><mrow><mo>ln</mo><mi>H</mi><mi>R</mi></mrow></msub><annotation encoding="application/x-tex">\text{se}_{\ln HR}</annotation></semantics></math>)
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">se</mtext><mrow><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mi>H</mi><mi>R</mi></mrow></msub><annotation encoding="application/x-tex">\text{se}_{\ln HR}</annotation></semantics></math>)
 as:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">se</mtext><mrow><mo>ln</mo><mi>H</mi><mi>R</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><mi>n</mi><mo>⋅</mo><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">se</mtext><mrow><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mi>H</mi><mi>R</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><mi>n</mi><mo>⋅</mo><mi>r</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>r</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">
 \text{se}_{\ln HR} = \frac{1}{\sqrt{n \cdot r (1-r)}}
 </annotation></semantics></math></p>
 <p>where:</p>
@@ -271,7 +275,7 @@ size.</li>
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>P</mi></mrow><annotation encoding="application/x-tex">CP</annotation></semantics></math>),
 or in other words the probability of ultimately crossing the efficacy
 boundary given the interim results, is calculated as:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>P</mi><mo>=</mo><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mi>α</mi></msub><msqrt><mrow><mn>1</mn><mo>+</mo><mfrac><msub><mi>n</mi><mn>1</mn></msub><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>−</mo><msub><mi>n</mi><mn>1</mn></msub></mrow></mfrac></mrow></msqrt><mo>−</mo><mi>Z</mi><msqrt><mfrac><msub><mi>n</mi><mn>1</mn></msub><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>−</mo><msub><mi>n</mi><mn>1</mn></msub></mrow></mfrac></msqrt><mo>−</mo><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>H</mi><msup><mi>R</mi><mo>*</mo></msup><mo stretchy="true" form="postfix">)</mo></mrow><msqrt><mrow><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msqrt><msqrt><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>−</mo><msub><mi>n</mi><mn>1</mn></msub></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>P</mi><mo>=</mo><mi mathvariant="normal">Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mi>α</mi></msub><msqrt><mrow><mn>1</mn><mo>+</mo><mfrac><msub><mi>n</mi><mn>1</mn></msub><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>−</mo><msub><mi>n</mi><mn>1</mn></msub></mrow></mfrac></mrow></msqrt><mo>−</mo><mi>Z</mi><msqrt><mfrac><msub><mi>n</mi><mn>1</mn></msub><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>−</mo><msub><mi>n</mi><mn>1</mn></msub></mrow></mfrac></msqrt><mo>−</mo><mi mathvariant="normal">ln</mi><mo stretchy="false" form="prefix">(</mo><mi>H</mi><msup><mi>R</mi><mo>*</mo></msup><mo stretchy="false" form="postfix">)</mo><msqrt><mrow><mi>r</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>r</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><msqrt><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>−</mo><msub><mi>n</mi><mn>1</mn></msub></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 CP = \Phi \left(
   z_\alpha \sqrt{1 + \frac{n_1}{n_2 - n_1}}
   - Z \sqrt{\frac{n_1}{n_2 - n_1}}
@@ -281,10 +285,10 @@ CP = \Phi \left(
 <p>where:</p>
 <ul>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>.</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\Phi(.)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Φ</mi><mo stretchy="false" form="prefix">(</mo><mi>.</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Phi(.)</annotation></semantics></math>
 is the standard normal cumulative distribution function (CDF).</li>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>α</mi></msub><mo>=</mo><msup><mi>Φ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.025</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">z_\alpha = \Phi^{-1}(0.025)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>α</mi></msub><mo>=</mo><msup><mi mathvariant="normal">Φ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><mn>0.025</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">z_\alpha = \Phi^{-1}(0.025)</annotation></semantics></math>
 is the critical value we set for the efficacy boundary on the Z-test
 statistic scale (in this case, using a one-sided significance level of
 2.5%).</li>
@@ -353,7 +357,7 @@ Boundary Family</em> and choosing <strong>Design HR</strong> for the
 </h3>
 <p>For this option, the conditional power is computed using an
 <strong>estimated hazard ratio</strong> derived from interim data:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><msup><mi>R</mi><mo>*</mo></msup><mo>=</mo><mover><mrow><mi>H</mi><mi>R</mi></mrow><mo accent="true">̂</mo></mover><mo>=</mo><mo>exp</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">(</mo><mi>Z</mi><mo>⋅</mo><msub><mtext mathvariant="normal">se</mtext><mrow><mo>ln</mo><mi>H</mi><mi>R</mi></mrow></msub><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><msup><mi>R</mi><mo>*</mo></msup><mo>=</mo><mover><mrow><mi>H</mi><mi>R</mi></mrow><mo accent="true">̂</mo></mover><mo>=</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>Z</mi><mo>⋅</mo><msub><mtext mathvariant="normal">se</mtext><mrow><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mi>H</mi><mi>R</mi></mrow></msub><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 HR^* = \widehat{HR} = \exp\big( Z \cdot \text{se}_{\ln HR} \big)
 </annotation></semantics></math></p>
 <p>where:</p>
@@ -362,7 +366,7 @@ HR^* = \widehat{HR} = \exp\big( Z \cdot \text{se}_{\ln HR} \big)
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
 is the Logrank test statistic, as defined before.</li>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">se</mtext><mrow><mo>ln</mo><mi>H</mi><mi>R</mi></mrow></msub><annotation encoding="application/x-tex">\text{se}_{\ln HR}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">se</mtext><mrow><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mi>H</mi><mi>R</mi></mrow></msub><annotation encoding="application/x-tex">\text{se}_{\ln HR}</annotation></semantics></math>
 is the standard error of log hazard ratio, as defined before.</li>
 </ul>
 <p>To enable this option, set <strong>nComputationOption = 2</strong>
@@ -582,7 +586,7 @@ hazard ratios.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

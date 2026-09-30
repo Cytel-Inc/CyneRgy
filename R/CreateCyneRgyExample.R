@@ -91,15 +91,13 @@ CreateCyneRgyExample <- function( strFunctionType = "", strNewExampleName = "", 
     vTags    <- c( "FUNCTION_NAME", "CREATION_DATE" )
     vReplace <- c( strNewExampleName, format( Sys.Date(), format = "%m/%d/%Y" ) )
     ReplaceTagsInFile( strRCodeFileName, vTags, vReplace )
-
-    strDescriptionFile <- file.path( strNewExamplePath, "Description.Rmd" )
-    strProjectLink     <- if( isTRUE( bCreateProject ) )
-                              paste0( "Open the [RStudio project](`", strNewExampleName, ".Rproj`)." )
-                          else
-                              ""
-    ReplaceTagsInFile( strDescriptionFile,
-                       c( "EXAMPLE_NAME", "PROJECT_FILE" ),
-                       c( strNewExampleName, strProjectLink ) )
+    strProjectFileSection <- if( isTRUE( bCreateProject ) )
+        paste0( "**RStudio Project File**: `", strNewExampleName, ".Rproj`" )
+    else
+        ""
+    ReplaceTagsInFile( file.path( strNewExamplePath, "Description.Rmd" ),
+                       c( "EXAMPLE_NAME", "PROJECT_FILE_SECTION" ),
+                       c( strNewExampleName, strProjectFileSection ) )
 
     bCreationComplete <- TRUE
     strNewExamplePath <- normalizePath( strNewExamplePath, winslash = "/", mustWork = TRUE )

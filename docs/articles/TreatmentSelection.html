@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Sydney Ringold,
 J. Kyle Wathen</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>TreatmentSelection.Rmd</code></div>
@@ -141,12 +141,10 @@ continue into stage 2 of the trial. If the trial is not stopped early
 for efficacy or futility, the control arm and the selected treatments
 proceed to the final stage. These examples showcase different approaches
 for selecting treatments to carry forward into stage 2.</p>
-<p>Once CyneRgy is installed, you can load this example in R Studio with
-the following commands:</p>
+<p>Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span><span class="st">"TreatmentSelection"</span><span class="op">)</span></span></code></pre></div>
-<p>Running the command above will load the RStudio project in
-RStudio.</p>
+<code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"TreatmentSelection"</span> <span class="op">)</span></span></code></pre></div>
 <p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.cywx" class="external-link">TreatmentSelection.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/TreatmentSelection/TreatmentSelection.Rproj" class="external-link">TreatmentSelection.Rproj</a></p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TreatmentSelection/R" class="external-link">R
@@ -336,7 +334,7 @@ denote the probability of response for treatment
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">j = 1, 2, 3</annotation></semantics></math>.</li>
 <li>The prior distribution is defined as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>j</mi></msub><mo>∼</mo><mtext mathvariant="normal">Beta</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">dPriorAlpha</mtext><mo>,</mo><mtext mathvariant="normal">dPriorBeta</mtext><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_j \sim \text{Beta}( \text{dPriorAlpha}, \text{dPriorBeta} )</annotation></semantics></math>.</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>j</mi></msub><mo>∼</mo><mtext mathvariant="normal">Beta</mtext><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">dPriorAlpha</mtext><mo>,</mo><mtext mathvariant="normal">dPriorBeta</mtext><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p_j \sim \text{Beta}( \text{dPriorAlpha}, \text{dPriorBeta} )</annotation></semantics></math>.</li>
 <li>We select any treatment
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
 that has at least a user-specified probability
@@ -344,7 +342,7 @@ that has at least a user-specified probability
 user-specified historical response rate
 (<em>dHistoricResponseRate</em>). Specifically, if it meets the
 criterion:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mi>j</mi></msub><mo>&gt;</mo><mtext mathvariant="normal">dHistoricResponseRate</mtext><mo>∣</mo><mtext mathvariant="normal">data</mtext><mo stretchy="true" form="postfix">)</mo></mrow><mo>&gt;</mo><mtext mathvariant="normal">dMinPosteriorProbability</mtext></mrow><annotation encoding="application/x-tex">\Pr( p_j &gt; \text{dHistoricResponseRate} \mid \text{data} ) &gt; \text{dMinPosteriorProbability}</annotation></semantics></math>.</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>p</mi><mi>j</mi></msub><mo>&gt;</mo><mtext mathvariant="normal">dHistoricResponseRate</mtext><mo>∣</mo><mtext mathvariant="normal">data</mtext><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mtext mathvariant="normal">dMinPosteriorProbability</mtext></mrow><annotation encoding="application/x-tex">\Pr( p_j &gt; \text{dHistoricResponseRate} \mid \text{data} ) &gt; \text{dMinPosteriorProbability}</annotation></semantics></math>.</li>
 <li>If no treatment meets this threshold, we select the treatment with
 the highest posterior probability of exceeding the historical response
 rate.</li>
@@ -402,7 +400,7 @@ outlining the general steps performed by the R code.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

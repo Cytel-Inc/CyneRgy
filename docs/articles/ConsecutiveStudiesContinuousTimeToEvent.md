@@ -49,14 +49,11 @@ The scenarios covered are as follows:
 1.  Two consecutive studies: phase 2 with a normal endpoint followed by
     phase 3, with a time-to-event endpoint.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "ConsecutiveStudiesContinuousTimeToEvent" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"ConsecutiveStudiesContinuousTimeToEvent"`` ``)`
 
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R)
@@ -439,7 +436,6 @@ mean and $`\sigma^2`$ is a known, fixed variance.
 We assume *a priori* that:
 
 ``` math
-
 \mu_j \sim \mathcal{N}(\theta_j, \tau_j^2 = 1000^2), \quad j \in \{\text{S}, \text{E}\}
 ```
 
@@ -447,14 +443,12 @@ After observing $`n`$ patients on treatment $`j`$, the posterior
 distribution of $`\mu_j`$ becomes:
 
 ``` math
-
 \mu_j \mid \bar{y} \sim \mathcal{N}(\theta_j^*, \tau_j^{2*})
 ```
 
 where:
 
 ``` math
-
 \theta_j^* = \frac{\frac{\theta_j}{\tau_j^2} + \frac{n \bar{y}}{\sigma^2}}{\frac{1}{\tau_j^2} + \frac{n}{\sigma^2}}, \quad \text{and} \quad
 \frac{1}{\tau_j^{2*}} = \frac{1}{\tau_j^2} + \frac{n}{\sigma^2}
 ```
@@ -464,7 +458,6 @@ experimental arm exceeds the control arm by more than the minimum
 acceptable value (MAV) is calculated as:
 
 ``` math
-
 \rho = \Pr(\mu_E > \mu_S + \text{MAV} \mid \text{data})
 ```
 

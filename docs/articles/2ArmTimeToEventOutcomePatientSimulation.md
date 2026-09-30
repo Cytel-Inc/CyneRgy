@@ -32,14 +32,11 @@ functions in the context of a two-arm trial. In each example, the trial
 design includes a standard-of-care control arm and an experimental
 treatment arm, with patient outcomes modeled as time-to-event data.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "2ArmTimeToEventOutcomePatientSimulation" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmTimeToEventOutcomePatientSimulation"`` ``)`
 
 **East Workbook**:
 [2ArmTimeToEventOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.cywx)
@@ -171,14 +168,12 @@ $`\alpha`$ and a scale parameter $`\sigma`$, with a probability density
 function (PDF) given by:
 
 ``` math
-
 f(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1} e^{-\left(\frac{x}{\sigma}\right)^\alpha}
 ```
 
 Its corresponding hazard function is:
 
 ``` math
-
 h(x) = \frac{\alpha}{\sigma} \left(\frac{x}{\sigma}\right)^{\alpha-1}
 ```
 
@@ -186,14 +181,12 @@ The Exponential distribution in R is parameterized by a rate parameter
 $`\lambda`$, with a PDF given by:
 
 ``` math
-
 f(x) = \lambda e^{-\lambda x}
 ```
 
 Its hazard function remains constant:
 
 ``` math
-
 h(x) = \lambda
 ```
 

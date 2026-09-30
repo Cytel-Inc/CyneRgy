@@ -32,17 +32,14 @@ design includes a standard-of-care control arm and an experimental
 treatment arm, with patient outcomes assumed to follow a normal
 distribution.
 
-Once CyneRgy is installed, you can load this example in RStudio with the
-following commands:
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
 
-``` r
-CyneRgy::RunExample( "2ArmNormalOutcomePatientSimulation" )
-```
-
-Running the command above will load the RStudio project in RStudio.
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmNormalOutcomePatientSimulation"`` ``)`
 
 **East Workbook**:
-[2ArmNormalOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj)
+[2ArmNormalOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.cywx)
 
 **RStudio Project File**:
 [2ArmNormalOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj)

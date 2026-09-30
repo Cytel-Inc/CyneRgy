@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CyneRgy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Cytel-Inc/CyneRgy" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">J. Kyle Wathen,
 Gabriel Potvin</h4>
             
-            <h4 data-toc-skip class="date">July 07, 2026</h4>
+            <h4 data-toc-skip class="date">September 17, 2026</h4>
       
 
       <div class="d-none name"><code>ExampleOutline.Rmd</code></div>
@@ -378,6 +378,16 @@ into East Horizon, across three cases: multiple endpoints using a
 t-test, multiple endpoints with covariates using ANCOVA, and multiple
 endpoints with covariates and stratified randomization. <a href="MultipleEndpointsWithCovariates.html">Click here to view the full
 example.</a>
+</details><details><summary><strong>Multiple-Arm Two-Stage Design with Dual Endpoints</strong> <span class="badge text-bg-primary ms-1">Multiple Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Binary</span><span class="badge text-bg-warning ms-1">TTE</span>
+</summary>
+This example demonstrates how to implement a two-stage design for a
+seamless Phase II/III design. In Stage 1, treatment selection is
+performed using a binary outcome endpoint, while the final efficacy
+analysis in Stage 2 is based on Progression-Free Survival (PFS).
+Importantly, the final analysis incorporates all available PFS data from
+both Stage 1 and Stage 2 for the selected treatment arm and the control
+arm. <a href="MultiArmTwoEndpointTwoStageTrial.html">Click here to view
+the full example.</a>
 </details><details><summary><strong>Schizophrenia Trial (MMRM Analysis)</strong> <span class="badge text-bg-primary ms-1">2-Arm</span><span class="badge text-bg-danger ms-1">Single Endpoint</span><span class="badge text-bg-warning ms-1">Repeated Measures</span>
 </summary>
 This example demonstrates how to simulate and analyze data using a Mixed
@@ -397,7 +407,7 @@ view the full example.</a>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

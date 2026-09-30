@@ -1,4 +1,7 @@
 url: https://Cytel-Inc.github.io/CyneRgy/
+repo:
+  url:
+    source: null
 template:
   bootstrap: 5
   light-switch: true

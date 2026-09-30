@@ -20,6 +20,12 @@ The following examples illustrate how to integrate new *multiplicity
 adjustment* capabilities into East Horizon using R functions in the
 context of 2-arm clinical trials with dual endpoints.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"DEPDecisionsUsingMCP"`` ``)`
+
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/DEPDecisionsUsingMCP/R)
 you will find the following R file:

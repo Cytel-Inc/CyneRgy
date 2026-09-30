@@ -1,8 +1,9 @@
 # Combine All R Files
 
 This function combines the contents of all R files in a specified
-directory into one file. It also replaces any sequence of one or more
-`#` characters with a single `#`.
+directory into one file. Files are combined in alphabetical order and
+the output file itself is automatically excluded when it is located in
+the input directory.
 
 ## Usage
 
@@ -28,8 +29,8 @@ CombineAllRFiles(
 
 - strFileNameToIgnore:
 
-  The name of any file to be ignored during the combination process.
-  Defaults to NA.
+  The name, or part of the name, of any file to ignore. Defaults to
+  `NA`.
 
 ## Value
 
@@ -60,7 +61,10 @@ A list containing the following elements:
 
 ``` r
 if (FALSE) { # \dontrun{
-  result <- CombineAllRFiles(strOutFileName = "combined.R", strDirectory = "/path/to/your/directory")
-  print(result$strReturn)
+  result <- CombineAllRFiles(
+      strOutFileName = "combined.R",
+      strDirectory = "/path/to/your/directory"
+  )
+  print( result$strReturn )
 } # }
 ```

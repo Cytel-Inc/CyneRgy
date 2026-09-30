@@ -26,6 +26,12 @@ Adjustment** integration points of other designs. The example supports
 an arbitrary number of endpoints, heterogeneous endpoint types, and
 look-specific efficacy and futility rules.
 
+Once CyneRgy is installed, you can load this example in RStudio, VS
+Code, or any other supported IDE with the following command:
+
+\
+`CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"MEPDesign"`` ``)`
+
 In the [R directory of this
 example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/MEPDesign/R)
 you will find the following R file:
