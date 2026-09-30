@@ -61,6 +61,6 @@ pages on the Cytel Knowledge Base:
 
 - [R Integration in
   East Horizon](https://knowledge.cytel.com/r-integration-east)
-- [R Connection Additional Help: East Horizon User Manual Appendix
+- [R Connection Additional Help: East User Manual Appendix
   O](https://knowledge.cytel.com/r-connect-additional-help-east-user-manual-chapter-o)
   For Cytel users only.

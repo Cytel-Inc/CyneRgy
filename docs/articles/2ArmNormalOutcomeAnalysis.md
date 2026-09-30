@@ -39,7 +39,7 @@ Code, or any other supported IDE with the following command:
 \
 `CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmNormalOutcomeAnalysis"`` ``)`
 
-**East Horizon Workbook**:
+**East Workbook**:
 [2ArmNormalOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.cywx)
 
 **RStudio Project File**:
@@ -52,7 +52,7 @@ you will find the following R files:
 1.  [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R) -
     Contains a function named *AnalyzeUsingEastManualFormula* that
     computes the two-sample Z-statistic for a continuous endpoint using
-    Formulas of Appendix Q.3.3 from the East Horizon manual.
+    Formulas of Appendix Q.3.3 from the East manual.
 
 2.  [AnalyzeUsingTTestNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R) -
     Contains a function named *AnalyzeUsingTTest* that performs the
@@ -71,14 +71,14 @@ you will find the following R files:
     standard continuous analysis to support conditional power–based
     sample size re-estimation (SSR) in a group sequential design.
 
-## Example 1 - Using Formulas Q.3.3 from the East Horizon manual
+## Example 1 - Using Formulas Q.3.3 from the East manual
 
 This example is related to this R file:
 [AnalyzeUsingEastManualFormulaNormal.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R)
 
 In this example, the analysis is customized by replacing the default
 method with a user-defined calculation based on formulas of the
-**Appendix Q.3.3 - Parallel Design: Difference of Means** from the East Horizon
+**Appendix Q.3.3 - Parallel Design: Difference of Means** from the East
 manual.
 
 **Estimate of the pooled standard deviation:**

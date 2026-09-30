@@ -37,13 +37,13 @@ Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any
 CyneRgy::RunExample( "2ArmBinaryOutcomeAnalysis" )
 ```
 
-**East Horizon Workbook**: [2ArmBinaryOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.cywx)
+**East Workbook**: [2ArmBinaryOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.cywx)
 
 **RStudio Project File**: [2ArmBinaryOutcomeAnalysis.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.Rproj)
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R) you will find the following R files:
 
-1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R) - Contains a function named *AnalyzeUsingEastManualFormula* that computes the two-sample Z-statistic for a binary endpoint using Formula 24.2 from the East Horizon manual.
+1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R) - Contains a function named *AnalyzeUsingEastManualFormula* that computes the two-sample Z-statistic for a binary endpoint using Formula 24.2 from the East manual.
 
 2.  [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R) - Contains a function named *AnalyzeUsingPropTest* that performs the analysis using R's built-in `prop.test()` function.
 
@@ -55,13 +55,13 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
 
-# Example 1 - Using Formula 24.2 from the East Horizon manual
+# Example 1 - Using Formula 24.2 from the East manual
 
 <div class="alert alert-primary" role="alert">
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R" class="alert-link">AnalyzeUsingEastManualFormula.R</a></p>
 </div>
 
-In this example, the analysis is customized by replacing the default method with a user-defined calculation based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East Horizon manual (24.2).
+In this example, the analysis is customized by replacing the default method with a user-defined calculation based on formulas of the **Chapter 24: Binomial Superiority Two‐Sample** from the East manual (24.2).
 
 **Test Statistic:**
 

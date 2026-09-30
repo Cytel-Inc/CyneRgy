@@ -51,7 +51,7 @@ you will find the following R files:
 1.  [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R) -
     Contains a function named *AnalyzeUsingEastLogrankFormula.R* that
     computes the test statistic for a TTE endpoint using Formulas of
-    Appendix Q.8 from the East Horizon manual.
+    Appendix Q.8 from the East manual.
 
 2.  [AnalyzeUsingSurvivalPackage.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R) -
     Contains a function named *AnalyzeUsingSurvivalPackage* that
@@ -77,14 +77,14 @@ you will find the following R files:
     Contains a function named *AnalyzeSubpopulation* that extends the
     standard TTE analysis to support subpopulations.
 
-## Example 1 - Using Formulas Q.242 and Q.243 from the East Horizon manual
+## Example 1 - Using Formulas Q.242 and Q.243 from the East manual
 
 This example is related to this R file:
 [AnalyzeUsingEastLogrankFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R)
 
 In this example, the analysis is customized by replacing the default
 method with a user-defined calculation based on formulas of the
-**Appendix Q.8 - Survival : Two Samples** from the East Horizon manual (Q.242
+**Appendix Q.8 - Survival : Two Samples** from the East manual (Q.242
 and Q.243).
 
 **Numerator of Test Statistic:**

@@ -3,7 +3,7 @@
 #'
 #' @title Analyze continuous subject responses
 #'
-#' @description Use the formula Q.3.3 in the East Horizon manual to compute the statistic. The purpose of this example is
+#' @description Use the formula Q.3.3 in the East manual to compute the statistic. The purpose of this example is
 #'   to demonstrate how the analysis and decision making can be modified in a simple approach. The test statistic
 #'   is compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a
 #'   futility rule. Two sample Z test for Normal distribution. Number of Looks > 1.
@@ -229,10 +229,10 @@ AnalyzeUsingEastManualFormulaNormal <- function( SimData, DesignParam, LookInfo 
     dStdDevOfResponsesOnS <- stats::sd( vOutcomesS )
     nQtyOfPatsOnS <- length( vOutcomesS )
 
-    # Equation from Appendix Q - 3.3 in East Horizon manual for the estimate of Pooled Std. Deviation
+    # Equation from Appendix Q - 3.3 in East manual for the estimate of Pooled Std. Deviation
     dStdDevPooled <- sqrt( ( ( nQtyOfPatsOnE - 1 ) * dStdDevOfResponsesOnE^2 + ( nQtyOfPatsOnS - 1 ) * dStdDevOfResponsesOnS^2 ) / ( nQtyOfPatsOnE + nQtyOfPatsOnS - 2 ) )
 
-    # Equation from Appendix Q - 3.3 in East Horizon manual
+    # Equation from Appendix Q - 3.3 in East manual
     dZj <- ( dMeanOfResponsesOnE - dMeanOfResponsesOnS ) / ( dStdDevPooled * sqrt( 1 / nQtyOfPatsOnE + 1 / nQtyOfPatsOnS ) )
     dBoundary <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
 

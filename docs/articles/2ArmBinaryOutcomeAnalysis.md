@@ -38,7 +38,7 @@ Code, or any other supported IDE with the following command:
 \
 `CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmBinaryOutcomeAnalysis"`` ``)`
 
-**East Horizon Workbook**:
+**East Workbook**:
 [2ArmBinaryOutcomeAnalysis.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.cywx)
 
 **RStudio Project File**:
@@ -51,7 +51,7 @@ you will find the following R files:
 1.  [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R) -
     Contains a function named *AnalyzeUsingEastManualFormula* that
     computes the two-sample Z-statistic for a binary endpoint using
-    Formula 24.2 from the East Horizon manual.
+    Formula 24.2 from the East manual.
 
 2.  [AnalyzeUsingPropTest.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R) -
     Contains a function named *AnalyzeUsingPropTest* that performs the
@@ -80,14 +80,14 @@ would like some code to help you get started we have provided
 fill-in-the-blank type code files in the [FillInTheBlankR
 directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).
 
-## Example 1 - Using Formula 24.2 from the East Horizon manual
+## Example 1 - Using Formula 24.2 from the East manual
 
 This example is related to this R file:
 [AnalyzeUsingEastManualFormula.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R)
 
 In this example, the analysis is customized by replacing the default
 method with a user-defined calculation based on formulas of the
-**Chapter 24: Binomial Superiority Two‐Sample** from the East Horizon manual
+**Chapter 24: Binomial Superiority Two‐Sample** from the East manual
 (24.2).
 
 **Test Statistic:**

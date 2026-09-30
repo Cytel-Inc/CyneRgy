@@ -60,4 +60,4 @@ For tips, best practices, and further information, visit the following pages on 
 ### East Horizon Desktop
 
 - [R Integration in East Horizon](https://knowledge.cytel.com/r-integration-east)
-- [R Connection Additional Help: East Horizon User Manual Appendix O](https://knowledge.cytel.com/r-connect-additional-help-east-user-manual-chapter-o) <span class="badge text-bg-secondary">For Cytel users only.</span>
+- [R Connection Additional Help: East User Manual Appendix O](https://knowledge.cytel.com/r-connect-additional-help-east-user-manual-chapter-o) <span class="badge text-bg-secondary">For Cytel users only.</span>

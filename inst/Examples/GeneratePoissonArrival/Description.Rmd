@@ -19,7 +19,7 @@ Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any
 CyneRgy::RunExample( "GeneratePoissonArrival" )
 ```
 
-**East Horizon Workbook**: [GeneratePoissonArrival.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx)
+**East Workbook**: [GeneratePoissonArrival.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx)
 
 **RStudio Project File**: [GeneratePoissonArrival.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.Rproj)
 

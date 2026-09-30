@@ -30,7 +30,7 @@ Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any
 CyneRgy::RunExample( "2ArmNormalOutcomePatientSimulation" )
 ```
 
-**East Horizon Workbook**: [2ArmNormalOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.cywx)
+**East Workbook**: [2ArmNormalOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.cywx)
 
 **RStudio Project File**: [2ArmNormalOutcomePatientSimulation.Rproj](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/2ArmNormalOutcomePatientSimulation.Rproj)
 

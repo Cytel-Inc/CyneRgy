@@ -26,7 +26,7 @@ Code, or any other supported IDE with the following command:
 \
 `CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"GeneratePoissonArrival"`` ``)`
 
-**East Horizon Workbook**:
+**East Workbook**:
 [GeneratePoissonArrival.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/GeneratePoissonArrival/GeneratePoissonArrival.cywx)
 
 **RStudio Project File**:

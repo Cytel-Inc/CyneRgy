@@ -1,9 +1,9 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingEastManualFormula
 #'
-#' @title Compute the statistic using formula 28.2 in the East Horizon manual.
+#' @title Compute the statistic using formula 28.2 in the East manual.
 #'
-#' @description Use the formula 28.2 in the East Horizon manual to compute the statistic. The purpose of this example is to
+#' @description Use the formula 28.2 in the East manual to compute the statistic. The purpose of this example is to
 #'   demonstrate how the analysis and decision making can be modified in a simple approach. The test statistic is
 #'   compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility
 #'   rule.
@@ -222,13 +222,13 @@ AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo = NULL
     nQtyOfResponsesOnS <- sum( vOutcomesS )
     nQtyOfPatsOnS <- length( vOutcomesS )
 
-    # Compute the estimates in equation 28.2 from the East Horizon user manual
+    # Compute the estimates in equation 28.2 from the East user manual
     dPiHatExperimental <- nQtyOfResponsesOnE / nQtyOfPatsOnE
     dPiHatControl <- nQtyOfResponsesOnS / nQtyOfPatsOnS
 
     dPiHatj <- ( nQtyOfResponsesOnE + nQtyOfResponsesOnS ) / ( nQtyOfPatsOnE + nQtyOfPatsOnS )
 
-    # Equation 28.2 in East Horizon manual
+    # Equation 28.2 in East manual
     dZj <- ( dPiHatExperimental - dPiHatControl ) / sqrt( dPiHatj * ( 1 - dPiHatj ) * ( 1 / nQtyOfPatsOnE + 1 / nQtyOfPatsOnS ) )
     dBoundary <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
 

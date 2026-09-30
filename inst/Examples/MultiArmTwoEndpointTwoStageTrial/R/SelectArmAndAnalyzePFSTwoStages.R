@@ -480,12 +480,12 @@ SelectArmAndAnalyzePFSTwoStages <- function( SimData, DesignParam, LookInfo = NU
             nEvents <- nEventsOnTreatment + nEventsOnControl
             nSubjectsAtRisk <- nSubjectsAtRiskTreatment + nSubjectsAtRiskControl
 
-            # Equation Q.242 in East Horizon Manual
+            # Equation Q.242 in East Manual
             dNum <- dNum + nEventsOnTreatment - nSubjectsAtRiskTreatment * nEvents / nSubjectsAtRisk
 
             # Generate dDen based on number of subjects at risk
             if ( nSubjectsAtRisk != 1 ) {
-                # Equation Q.243 in East Horizon Manual
+                # Equation Q.243 in East Manual
                 dDen <- dDen + nSubjectsAtRiskTreatment * nSubjectsAtRiskControl * ( nSubjectsAtRisk - nEvents ) * nEvents / ( ( nSubjectsAtRisk - 1 ) * nSubjectsAtRisk^2 )
             }
             # Update the count of subjects at risk before the next iteration

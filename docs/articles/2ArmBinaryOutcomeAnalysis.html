@@ -160,7 +160,7 @@ depending on the predefined design criteria.</p>
 Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmBinaryOutcomeAnalysis"</span> <span class="op">)</span></span></code></pre></div>
-<p><strong>East Horizon Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.cywx" class="external-link">2ArmBinaryOutcomeAnalysis.cywx</a></p>
+<p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.cywx" class="external-link">2ArmBinaryOutcomeAnalysis.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/2ArmBinaryOutcomeAnalysis.Rproj" class="external-link">2ArmBinaryOutcomeAnalysis.Rproj</a></p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
@@ -168,7 +168,7 @@ directory of this example</a> you will find the following R files:</p>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R" class="external-link">AnalyzeUsingEastManualFormula.R</a>
 - Contains a function named <em>AnalyzeUsingEastManualFormula</em> that
 computes the two-sample Z-statistic for a binary endpoint using Formula
-24.2 from the East Horizon manual.</p></li>
+24.2 from the East manual.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R" class="external-link">AnalyzeUsingPropTest.R</a>
 - Contains a function named <em>AnalyzeUsingPropTest</em> that performs
 the analysis using R’s built-in <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">prop.test()</a></code>
@@ -194,7 +194,7 @@ fill-in-the-blank type code files in the <a href="https://github.com/Cytel-Inc/C
 directory</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="example-1---using-formula-24-2-from-the-east-manual">Example 1 - Using Formula 24.2 from the East Horizon manual<a class="anchor" aria-label="anchor" href="#example-1---using-formula-24-2-from-the-east-manual"></a>
+<h2 id="example-1---using-formula-24-2-from-the-east-manual">Example 1 - Using Formula 24.2 from the East manual<a class="anchor" aria-label="anchor" href="#example-1---using-formula-24-2-from-the-east-manual"></a>
 </h2>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
@@ -205,7 +205,7 @@ This example is related to this R file:
 <p>In this example, the analysis is customized by replacing the default
 method with a user-defined calculation based on formulas of the
 <strong>Chapter 24: Binomial Superiority Two‐Sample</strong> from the
-East Horizon manual (24.2).</p>
+East manual (24.2).</p>
 <p><strong>Test Statistic:</strong></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>j</mi></msub><mo>=</mo><mfrac><mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mrow><mi>t</mi><mi>j</mi></mrow></msub><mo>−</mo><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mrow><mi>c</mi><mi>j</mi></mrow></msub></mrow><msqrt><mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><mfrac><mn>1</mn><msub><mi>n</mi><mrow><mi>t</mi><mi>j</mi></mrow></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>n</mi><mrow><mi>c</mi><mi>j</mi></mrow></msub></mfrac><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">Z_j = \frac{\hat{\pi}_{tj} - \hat{\pi}_{cj}}{\sqrt{\hat{\pi}_j \cdot (1 - \hat{\pi}_j) \cdot ( \frac{1}{n_{tj}} + \frac{1}{n_{cj}} )}}</annotation></semantics></math></p>
 <p>Where:</p>

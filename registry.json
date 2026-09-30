@@ -1554,7 +1554,7 @@
     "examples": [
         {
             "name": "2-Arm, Binary Outcome - Analysis",
-            "description": "Binary two-arm analysis using East Horizon manual formula, prop.test(), CI-based Go/No-Go, and Bayesian Beta-Binomial.",
+            "description": "Binary two-arm analysis using East manual formula, prop.test(), CI-based Go/No-Go, and Bayesian Beta-Binomial.",
             "download_urls": [
                 "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingEastManualFormula.R",
                 "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingPropTest.R",
@@ -1691,7 +1691,7 @@
         },
         {
             "name": "2-Arm, Continuous Outcome - Analysis",
-            "description": "Continuous two-arm analysis using East Horizon manual formula, t.test(), and CI-based Go/No-Go.",
+            "description": "Continuous two-arm analysis using East manual formula, t.test(), and CI-based Go/No-Go.",
             "download_urls": [
                 "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R",
                 "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R",
@@ -2047,7 +2047,7 @@
         },
         {
             "name": "2-Arm, Time-To-Event Outcome - Analysis",
-            "description": "TTE two-arm analysis using East Horizon manual logrank formula, survival::survdiff(), and CI-based Go/No-Go.",
+            "description": "TTE two-arm analysis using East manual logrank formula, survival::survdiff(), and CI-based Go/No-Go.",
             "download_urls": [
                 "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingEastLogrankFormula.R",
                 "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingSurvivalPackage.R",

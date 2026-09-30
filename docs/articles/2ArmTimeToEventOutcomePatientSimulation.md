@@ -38,7 +38,7 @@ Code, or any other supported IDE with the following command:
 \
 `CyneRgy``::`[`RunExample`](https://Cytel-Inc.github.io/CyneRgy/reference/RunExample.md)`(`` ``"2ArmTimeToEventOutcomePatientSimulation"`` ``)`
 
-**East Horizon Workbook**:
+**East Workbook**:
 [2ArmTimeToEventOutcomePatientSimulation.cywx](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomePatientSimulation/2ArmTimeToEventOutcomePatientSimulation.cywx)
 
 **RStudio Project File**:

@@ -159,7 +159,7 @@ efficacy or futility, depending on the predefined design criteria.</p>
 Code, or any other supported IDE with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CyneRgy</span><span class="fu">::</span><span class="fu"><a href="../reference/RunExample.html">RunExample</a></span><span class="op">(</span> <span class="st">"2ArmNormalOutcomeAnalysis"</span> <span class="op">)</span></span></code></pre></div>
-<p><strong>East Horizon Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.cywx" class="external-link">2ArmNormalOutcomeAnalysis.cywx</a></p>
+<p><strong>East Workbook</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.cywx" class="external-link">2ArmNormalOutcomeAnalysis.cywx</a></p>
 <p><strong>RStudio Project File</strong>: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/2ArmNormalOutcomeAnalysis.Rproj" class="external-link">2ArmNormalOutcomeAnalysis.Rproj</a></p>
 <p>In the <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmNormalOutcomeAnalysis/R" class="external-link">R
 directory of this example</a> you will find the following R files:</p>
@@ -167,7 +167,7 @@ directory of this example</a> you will find the following R files:</p>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingEastManualFormulaNormal.R" class="external-link">AnalyzeUsingEastManualFormulaNormal.R</a>
 - Contains a function named <em>AnalyzeUsingEastManualFormula</em> that
 computes the two-sample Z-statistic for a continuous endpoint using
-Formulas of Appendix Q.3.3 from the East Horizon manual.</p></li>
+Formulas of Appendix Q.3.3 from the East manual.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R" class="external-link">AnalyzeUsingTTestNormal.R</a>
 - Contains a function named <em>AnalyzeUsingTTest</em> that performs the
 analysis using R’s built-in <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test()</a></code> function.</p></li>
@@ -184,7 +184,7 @@ size re-estimation (SSR) in a group sequential design.</p></li>
 </ol>
 </div>
 <div class="section level2">
-<h2 id="example-1---using-formulas-q-3-3-from-the-east-manual">Example 1 - Using Formulas Q.3.3 from the East Horizon manual<a class="anchor" aria-label="anchor" href="#example-1---using-formulas-q-3-3-from-the-east-manual"></a>
+<h2 id="example-1---using-formulas-q-3-3-from-the-east-manual">Example 1 - Using Formulas Q.3.3 from the East manual<a class="anchor" aria-label="anchor" href="#example-1---using-formulas-q-3-3-from-the-east-manual"></a>
 </h2>
 <div class="alert alert-primary" role="alert">
 <p style="margin-bottom:0">
@@ -195,7 +195,7 @@ This example is related to this R file:
 <p>In this example, the analysis is customized by replacing the default
 method with a user-defined calculation based on formulas of the
 <strong>Appendix Q.3.3 - Parallel Design: Difference of Means</strong>
-from the East Horizon manual.</p>
+from the East manual.</p>
 <p><strong>Estimate of the pooled standard deviation:</strong></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup><mo>=</mo><msqrt><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>t</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><msubsup><mi>σ</mi><mi>t</mi><mn>2</mn></msubsup><mo>+</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>c</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><msubsup><mi>σ</mi><mi>c</mi><mn>2</mn></msubsup></mrow><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></mfrac></msqrt></mrow><annotation encoding="application/x-tex">\hat\sigma^{2} = \sqrt{ 
 \frac{(n_t - 1) \cdot \sigma_t^2 + (n_c - 1) \cdot \sigma_c^2}
