@@ -73,9 +73,9 @@ type. The availability will depend on the specific test you choose:
 Important: for some tests, you may need to compute the analytical design
 input set before simulating the design to see the option.
 
-### East Horizon
+### East
 
-This integration point is available in East Horizon for the following tests
+This integration point is available in East for the following tests
 (click to expand/collapse):
 
 | Test | Number of Samples | Endpoint | Availability |
@@ -149,9 +149,9 @@ below:
 
 ![](GettingStarted_files/randomizationDesign.png)
 
-### In East Horizon
+### In East
 
-You can set up a randomization function in East Horizon by navigating to the
+You can set up a randomization function in East by navigating to the
 **Randomize Subjects** task of the **User Defined R Function** tab of a
 **Simulation Input** window, after including the option.
 
@@ -186,7 +186,7 @@ below:
 ## Input Variables
 
 When creating a custom R script, you can optionally use certain
-variables provided by East Horizon’s engine itself. These
+variables provided by East Horizon’s or East’s engine itself. These
 variables are automatically available and do not need to be set by the
 user, except for the `UserParam` variable. Refer to the table below for
 the variable that is available for this integration point.
@@ -196,7 +196,7 @@ the variable that is available for this integration point.
 | **NumSub** | Integer | Number of subjects in the trial. |
 | **NumArms** | Integer | Number of arms in the trial ﴾including placebo/control, and experimental﴿. |
 | **AllocRatio** | Vector of Numeric | Vector of length `NumArm - 1`, indicating the expected allocation ratios for each treatment arm relative to the control arm ($`n_{t_i}/n_c`$). |
-| **UserParam** | List | Contains all user-defined parameters specified in East Horizon’s interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam** | List | Contains all user-defined parameters specified in East Horizon’s or East’s interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 ## Expected Output Variable
 

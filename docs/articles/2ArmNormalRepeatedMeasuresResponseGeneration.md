@@ -23,7 +23,7 @@ time. In this context, a single subject can have multiple responses over
 time, and these responses can be correlated across different visits.
 
 The following example illustrates how to integrate new patient outcome
-simulation (*response*) capabilities into East Horizon using R
+simulation (*response*) capabilities into East Horizon or East using R
 functions in the context of a two-arm trial with repeated measures.
 
 Once CyneRgy is installed, you can load this example in RStudio, VS
@@ -56,7 +56,7 @@ This example is related to this R file:
 For a continuous endpoint with repeated measures, the generation of
 responses primarily depends on the mean and standard deviation across
 all visits, as well as the correlation between these visits. This
-examples uses built-in input variables coming from East Horizon
+examples uses built-in input variables coming from East Horizon or East
 to simulate repeated measures data. It uses the
 [`MASS::mvrnorm`](https://rdrr.io/pkg/MASS/man/mvrnorm.html) function.
 This example does not use any user-defined parameters.

@@ -26,7 +26,7 @@ for more information.
 ## Introduction
 
 The following examples illustrate how to integrate new patient outcome
-simulation (*response*) capabilities into East Horizon using R
+simulation (*response*) capabilities into East Horizon or East using R
 functions in the context of a two-arm trial. In each example, the trial
 design includes a standard-of-care control arm and an experimental
 treatment arm, with patient outcomes assumed to follow a normal
@@ -62,7 +62,7 @@ you will find the following R files:
     distribution.
 
 3.  [TestingAndExploration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/TestingAndExploration.R) -
-    This file provides an example of loading East Horizon output and calling the
+    This file provides an example of loading East output and calling the
     R functions in in Example 1 from within R. The intent of this file
     is to help users call and test the function in Example 1.
 
@@ -106,7 +106,7 @@ Assume that all patients will respond to treatment. A binomial
 distribution is used to determine whether a patient is a responder or a
 non-responder. If the patient is a responder, their outcome is simulated
 from a normal distribution using the mean and standard deviation
-specified in East Horizon and sent to R. In this example, the
+specified in East Horizon or East and sent to R. In this example, the
 probability of a patient being a non-responder is set to zero. Refer to
 the table below for the values of the user-defined parameters used in
 this example.
@@ -118,7 +118,7 @@ this example.
 
 This demonstrates that using the R function with a non-responder
 probability of zero produces the same results as simulating the data
-directly with the default engine of East Horizon.
+directly with the default engine of East Horizon or East.
 
 ### Example 1.2 - 20% of Non-Responders
 
@@ -126,7 +126,7 @@ Now, assume that, on average, 20% of patients will not respond to
 treatment. A binomial distribution is used to determine whether a
 patient is a non-responder. If the patient is a responder, their outcome
 is simulated from a normal distribution using the mean and standard
-deviation specified in East Horizon and sent to R. Refer to the
+deviation specified in East or East Horizon and sent to R. Refer to the
 table below for the values of the user-defined parameters used in this
 example.
 

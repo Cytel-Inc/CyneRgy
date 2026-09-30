@@ -57,10 +57,10 @@ pages on the Cytel Knowledge Base:
 - [R Code Assistant](https://knowledge.cytel.com/r-code-assistant) For
   Cytel users only.
 
-#### East Horizon Desktop
+#### East Desktop
 
 - [R Integration in
-  East Horizon](https://knowledge.cytel.com/r-integration-east)
+  East](https://knowledge.cytel.com/r-integration-east)
 - [R Connection Additional Help: East User Manual Appendix
   O](https://knowledge.cytel.com/r-connect-additional-help-east-user-manual-chapter-o)
   For Cytel users only.

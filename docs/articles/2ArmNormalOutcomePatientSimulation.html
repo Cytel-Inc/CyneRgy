@@ -141,7 +141,8 @@ Point: Response - Continuous Outcome</strong></a> for more information.
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>The following examples illustrate how to integrate new patient
-outcome simulation (<em>response</em>) capabilities into East Horizon using R functions in the context of a two-arm trial. In each
+outcome simulation (<em>response</em>) capabilities into East Horizon or
+East using R functions in the context of a two-arm trial. In each
 example, the trial design includes a standard-of-care control arm and an
 experimental treatment arm, with patient outcomes assumed to follow a
 normal distribution.</p>
@@ -165,7 +166,7 @@ a mixture distribution where a proportion of patients have a null
 response. This approach assumes that the probability of null response is
 unknown and must first be drawn from a Beta distribution.</p></li>
 <li><p><a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomePatientSimulation/R/TestingAndExploration.R" class="external-link">TestingAndExploration.R</a>
-- This file provides an example of loading East Horizon output and calling the R
+- This file provides an example of loading East output and calling the R
 functions in in Example 1 from within R. The intent of this file is to
 help users call and test the function in Example 1.</p></li>
 </ol>
@@ -227,7 +228,7 @@ outlining the general steps performed by the R code.</p>
 distribution is used to determine whether a patient is a responder or a
 non-responder. If the patient is a responder, their outcome is simulated
 from a normal distribution using the mean and standard deviation
-specified in East Horizon and sent to R. In this example, the
+specified in East Horizon or East and sent to R. In this example, the
 probability of a patient being a non-responder is set to zero. Refer to
 the table below for the values of the user-defined parameters used in
 this example.</p>
@@ -249,7 +250,7 @@ this example.</p>
 </table>
 <p>This demonstrates that using the R function with a non-responder
 probability of zero produces the same results as simulating the data
-directly with the default engine of East Horizon.</p>
+directly with the default engine of East Horizon or East.</p>
 </div>
 <div class="section level3">
 <h3 id="example-1-2---20-of-non-responders">Example 1.2 - 20% of Non-Responders<a class="anchor" aria-label="anchor" href="#example-1-2---20-of-non-responders"></a>
@@ -258,7 +259,7 @@ directly with the default engine of East Horizon.</p>
 treatment. A binomial distribution is used to determine whether a
 patient is a non-responder. If the patient is a responder, their outcome
 is simulated from a normal distribution using the mean and standard
-deviation specified in East Horizon and sent to R. Refer to the
+deviation specified in East or East Horizon and sent to R. Refer to the
 table below for the values of the user-defined parameters used in this
 example.</p>
 <table class="table">

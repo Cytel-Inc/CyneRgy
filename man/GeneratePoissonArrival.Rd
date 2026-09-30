@@ -4,14 +4,7 @@
 \alias{GeneratePoissonArrival}
 \title{Generate Patient Arrival Times}
 \usage{
-GeneratePoissonArrival(
-  NumSub,
-  NumPrd,
-  PrdStart,
-  AccrRate,
-  UserParam = NULL,
-  Type = 0
-)
+GeneratePoissonArrival(NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL)
 }
 \arguments{
 \item{NumSub}{Integer number of subjects to simulate.}
@@ -23,8 +16,6 @@ GeneratePoissonArrival(
 \item{AccrRate}{Numeric vector containing the accrual rate in each period.}
 
 \item{UserParam}{Optional list of user-defined rates named \code{dRate1}, \code{dRate2}, and so on.}
-
-\item{Type}{Integer enrollment type; this implementation supports global enrollment (\code{0}).}
 }
 \value{
 A list in the format required by the arrival integration point.

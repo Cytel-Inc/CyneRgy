@@ -155,7 +155,7 @@ parameters accordingly.
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>The following examples illustrate how to integrate new analysis
-capabilities into East Horizon using R functions in the context
+capabilities into East Horizon or East using R functions in the context
 of a two-arm trial. In each example, the trial design includes a
 standard-of-care control arm and an experimental treatment arm, with
 patient outcomes modeled as time-to-event data. The design includes two
@@ -246,7 +246,7 @@ is the total number of subjects at risk just before time
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">Den</mtext><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>n</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>⋅</mo><msub><mi>n</mi><mrow><mi>i</mi><mo>,</mo><mi>c</mi></mrow></msub><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><msub><mi>d</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><msub><mi>d</mi><mi>i</mi></msub></mrow><mrow><msubsup><mi>n</mi><mi>i</mi><mn>2</mn></msubsup><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{Den}_i = \frac{n_{i,t} \cdot n_{i,c} \cdot (n_i - d_i) \cdot d_i}{n_i^2 \cdot (n_i - 1)}</annotation></semantics></math></p>
 <p>The objective is to demonstrate a straightforward way to modify both
 the analysis and decision-making process. The computed test statistic is
-compared to the efficacy boundary provided by East Horizon as
+compared to the efficacy boundary provided by East Horizon or East as
 input. This example does not include a futility rule and does not use
 any user-defined parameters.</p>
 <p>The figure below illustrates where this example fits within the R
@@ -267,7 +267,8 @@ This example is related to this R file:
 <p>This example utilizes the <code><a href="https://rdrr.io/pkg/survival/man/survdiff.html" class="external-link">survival::survdiff()</a></code> function
 from the <code>survival</code> package to perform the log-rank test. The
 resulting chi-square statistic is used to compute the log-rank value,
-which is then compared to the lower efficacy boundary provided by East Horizon. Like Example 1, this example does not include a
+which is then compared to the lower efficacy boundary provided by East
+Horizon or East. Like Example 1, this example does not include a
 futility rule and does not use any user-defined parameters.</p>
 <p>The figure below illustrates where this example fits within the R
 integration points of Cytel products, accompanied by a flowchart
@@ -297,7 +298,7 @@ effect based on clinical or strategic considerations.</li>
 </ul>
 <p>This example demonstrates how to approximate probabilistic
 decision-making using frequentist confidence intervals (CIs), ignoring
-the boundaries provided by East Horizon in favor of a CI-based
+the boundaries provided by East Horizon or East in favor of a CI-based
 logic. If the hazard ratio is likely to be below the MAV, a Go decision
 is made. If not, and it is unlikely to be below the TV, a No-Go decision
 is made.</p>
@@ -359,7 +360,7 @@ CI).</td>
 </tbody>
 </table>
 <p><strong>Note:</strong> In this example, the boundary information that
-is computed in East Horizon is ignored. User-defined parameters
+is computed in East Horizon or East is ignored. User-defined parameters
 and the Cox model are used to analyze the data and compute the desired
 confidence intervals.</p>
 <p>The figure below illustrates where this example fits within the R

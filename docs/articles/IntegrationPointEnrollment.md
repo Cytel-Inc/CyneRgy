@@ -72,9 +72,9 @@ type. The availability will depend on the specific test you choose:
 Important: for some tests, you may need to compute the analytical design
 input set before simulating the design to see the option.
 
-### East Horizon
+### East
 
-This integration point is available in East Horizon for the following tests
+This integration point is available in East for the following tests
 (click to expand/collapse):
 
 | Test | Number of Samples | Endpoint | Availability |
@@ -151,7 +151,7 @@ For some tests, the option is available under *Accrual Model*.
 
 ![](GettingStarted_files/enrollmentDesign2.png)
 
-### In East Horizon
+### In East
 
 You can set up an enrollment function by navigating to the **Generate
 Arrival Times** task of the **User Defined R Function** tab of a
@@ -188,7 +188,7 @@ below:
 ## Input Variables
 
 When creating a custom R script, you can optionally use certain
-variables provided by East Horizon’s engine itself. These
+variables provided by East Horizon’s or East’s engine itself. These
 variables are automatically available and do not need to be set by the
 user, except for the `UserParam` variable. Refer to the table below for
 the variable that is available for this integration point.

@@ -25,7 +25,7 @@ for more information.
 ## Introduction
 
 The following examples illustrate how to integrate new patient outcome
-simulation (*response*) capabilities into East Horizon using R
+simulation (*response*) capabilities into East Horizon or East using R
 functions in the context of a two-arm trial. In each example, the trial
 design includes a standard-of-care control arm and an experimental
 treatment arm, with patient outcomes modeled as binary data.
@@ -78,7 +78,7 @@ impact on expected study power. In these examples, a binomial
 distribution is used to determine whether a patient is
 treatment-resistant. If a patient is not treatment-resistant, their
 outcome is then simulated from a binomial distribution based on the
-response probability specified in East Horizon and then sent to
+response probability specified in East Horizon or East and then sent to
 R.
 
 Refer to the table below for the definitions of the user-defined
@@ -101,7 +101,7 @@ Assume that no patient will be treatment-resistant. A binomial
 distribution is used to determine whether a patient is
 treatment-resistant or not. If the patient is not treatment-resistant,
 their outcome is simulated from a binomial distribution using the
-parameters specified in East Horizon and sent to R. In this
+parameters specified in East Horizon or East and sent to R. In this
 example, the probability of a patient being treatment-resistant is set
 to zero. Refer to the table below for the values of the user-defined
 parameters used in this example.
@@ -113,7 +113,7 @@ parameters used in this example.
 
 This demonstrates that using the R function with a treatment resistance
 probability of zero produces the same results as simulating the data
-directly with the default engine of East Horizon.
+directly with the default engine of East Horizon or East.
 
 ### Example 1.2 - 20% of Treatment-Resistant Patients
 
@@ -121,7 +121,7 @@ Now, assume that, on average, 20% of patients will be
 treatment-resistant. A binomial distribution is used to determine
 whether a patient is treatment-resistant or not. If the patient is not
 treatment-resistant, their outcome is simulated from a binomial
-distribution using the parameters specified in East Horizon and
+distribution using the parameters specified in East Horizon or East and
 sent to R. Refer to the table below for the values of the user-defined
 parameters used in this example.
 
@@ -162,7 +162,7 @@ of failure would perform in the trial. In these examples, a Beta
 distribution is used to determine whether a patient is
 treatment-resistant. If the patient is not treatment-resistant, their
 outcome is then simulated from a binomial distribution based on the
-response probability specified in East Horizon, with the data
+response probability specified in East Horizon or East, with the data
 sent to R for further analysis.
 
 Refer to the table below for the definitions of the user-defined

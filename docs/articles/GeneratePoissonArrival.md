@@ -16,7 +16,7 @@ not supported. Reapeated measures are supported.
 
 The following examples demonstrate how to integrate the capability to
 generate patient arrival times following a Poisson process with a
-ramp-up phase into East Horizon using R functions. They showcase
+ramp-up phase into East Horizon or East using R functions. They showcase
 different approaches for simulating arrival times based on a Poisson
 process, offering flexibility in modeling patient recruitment dynamics.
 

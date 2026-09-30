@@ -32,9 +32,9 @@ study objectives and endpoint types:
 | Two Arm Confirmatory | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ | \- | ✅ | ✅ |  |
 | Two Arm Confirmatory - Multiple Endpoints | ❌ | \- | ❌ | ❌ | \- | \- | \- | \- | \- | \- |  |
 
-### East Horizon
+### East
 
-This integration point is available in East Horizon for the following tests
+This integration point is available in East for the following tests
 (click to expand/collapse):
 
 | Test | Number of Samples | Endpoint | Availability |
@@ -78,7 +78,7 @@ below:
 
 ![](GettingStarted_files/initialization.png)
 
-### In East Horizon
+### In East
 
 You can set up an initialization function by navigating to the
 **Initialize R Environment** task of the **User Defined R Function** tab
@@ -123,7 +123,7 @@ Input** window. Refer to the screenshot below:
 ## Input Variables
 
 When creating a custom R script, you can optionally use certain
-variables provided by East Horizon’s engine itself. These
+variables provided by East Horizon’s or East’s engine itself. These
 variables are automatically available and do not need to be set by the
 user, except for the `UserParam` variable. Refer to the table below for
 the variable that is available for this integration point.
@@ -131,7 +131,7 @@ the variable that is available for this integration point.
 | **Variable** | **Type** | **Description** |
 |----|----|----|
 | **Seed** | Integer | Randomization seed set by the engine. |
-| **UserParam** | List | Contains all user-defined parameters specified in East Horizon’s interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam** | List | Contains all user-defined parameters specified in East Horizon’s or East’s interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 ## Expected Output Variable
 
@@ -156,7 +156,7 @@ A detailed template with step-by-step explanations is available here:
     {
       # Do something, for example set the seed
       set.seed( 42 )
-      # If you want the user to set the seed using East Horizon's interface, you could use set.seed( UserParam$seed )
+      # If you want the user to set the seed using East Horizon's or East's interface, you could use set.seed( UserParam$seed ) 
       
       # Error handling (no error)
       nError <- 0

@@ -24,7 +24,7 @@ available and adjusts the analysis parameters accordingly.
 ## Introduction
 
 The following examples illustrate how to integrate new analysis
-capabilities into East Horizon using R functions in the context
+capabilities into East Horizon or East using R functions in the context
 of a two-arm trial. In each example, the trial design includes a
 standard-of-care control arm and an experimental treatment arm, with
 patient outcomes modeled as binary data. The design includes two interim
@@ -108,7 +108,7 @@ Where:
 
 The objective is to demonstrate a straightforward way to modify both the
 analysis and decision-making process. The computed test statistic is
-compared to the efficacy boundary provided by East Horizon as
+compared to the efficacy boundary provided by East Horizon or East as
 input. This example does not include a futility rule and does not use
 any user-defined parameters.
 
@@ -127,7 +127,7 @@ This example utilizes the base R
 [`prop.test()`](https://rdrr.io/r/stats/prop.test.html) function to
 perform the interim and final analyses. The p-value is used to compute
 the Z-statistic, which is compared against the efficacy boundary
-provided by East Horizon. Like Example 1, this example does not
+provided by East Horizon or East. Like Example 1, this example does not
 include a futility rule and does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R
@@ -152,7 +152,7 @@ decisions are often guided by two key thresholds:
 
 This example demonstrates how to approximate probabilistic
 decision-making using frequentist confidence intervals (CIs), ignoring
-the boundaries provided by East Horizon in favor of a CI-based
+the boundaries provided by East Horizon or East in favor of a CI-based
 logic. We use the function
 [`prop.test()`](https://rdrr.io/r/stats/prop.test.html) from base R to
 analyze the data and compute the desired confidence intervals. If the
@@ -183,7 +183,7 @@ parameters used in this example.
 | **dConfLevel** | Confidence Level: the level of confidence used to construct the confidence interval for Go/No-Go decision-making (e.g., 0.80 for an 80% CI). |
 
 **Note:** In this example, the boundary information that is computed in
-East Horizon is ignored. User-defined parameters and the
+East Horizon or East is ignored. User-defined parameters and the
 function [`prop.test()`](https://rdrr.io/r/stats/prop.test.html) from
 base R are used to analyze the data and compute the desired confidence
 intervals.

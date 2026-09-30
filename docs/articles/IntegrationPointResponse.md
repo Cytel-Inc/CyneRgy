@@ -80,9 +80,9 @@ type. The availability will depend on the specific test you choose:
 Important: for some tests, you may need to compute the analytical design
 input set before simulating the design to see the option.
 
-### East Horizon
+### East
 
-This integration point is available in East Horizon for the following tests
+This integration point is available in East for the following tests
 (click to expand/collapse):
 
 | Test | Number of Samples | Endpoint | Availability |
@@ -167,7 +167,7 @@ Generation Method**.
 
 ![](GettingStarted_files/responseDesign2.png)
 
-### In East Horizon
+### In East
 
 You can set up a response function by navigating to the **Generate
 Response** task of the **User Defined R Function** tab of a **Simulation

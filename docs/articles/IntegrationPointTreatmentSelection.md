@@ -8,7 +8,7 @@ page](https://Cytel-Inc.github.io/CyneRgy/articles/Overview.md)
 The Treatment Selection integration point allows you to customize the
 selection of arms to carry forward after an interim analysis using a
 custom R script. Instead of relying on the limited settings (rules) of
-East Horizon, such as selecting a fixed number of top treatments
+East or East Horizon, such as selecting a fixed number of top treatments
 or applying a threshold, you can implement entirely alternative methods
 to better suit your trial’s requirements. For example, you could use
 Bayesian rules.
@@ -65,9 +65,9 @@ type. The availability will depend on the specific test you choose:
 Important: for some tests, you may need to compute the analytical design
 input set before simulating the design to see the option.
 
-### East Horizon
+### East
 
-This integration point is available in East Horizon for the following tests
+This integration point is available in East for the following tests
 (click to expand/collapse):
 
 | Test | Number of Samples | Endpoint | Availability |
@@ -144,9 +144,9 @@ below:
 
 ![](GettingStarted_files/treatmentselectionDesign.png)
 
-### In East Horizon
+### In East
 
-You can set up a treatment selection function in East Horizon by navigating to
+You can set up a treatment selection function in East by navigating to
 the **Use R For Treatment Selection** setting of the **Treatment
 Selection** tab of a **Simulation Input** window.
 
