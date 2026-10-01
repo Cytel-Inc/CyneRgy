@@ -3,11 +3,10 @@
 #'
 #' @title Simulate Time-To-Event Data for Assurance
 #'
-#' @description The analysis is assumed to be a cox proportional hazard model where a Go decision is made if the
-#'   p-value <= 0.025.
-#' For assurance, a bi-modal prior on the Log(HR) is used.   The components of the prior are:
-#' Weight: 25\% on $N( 0, 0.02 )$
-#' Weight: 75\% on $Beta( 2, 2)$, rescaled between -0.4 and 0.
+#' @description Generate exponential survival times using a treatment-to-control hazard ratio sampled once
+#'   per simulation. UserParam controls a mixture prior on the log hazard ratio: one normal component and
+#'   one Beta component rescaled to [dLower, dUpper]. The accompanying analysis uses a Cox proportional
+#'   hazards model and makes a Go decision when the p-value is at most 0.025.
 #'
 #' @author J. Kyle Wathen and Laurent Spiess
 #'
@@ -58,8 +57,8 @@
 #'   \item{UserParam$dMeanTTECtrl}{Positive numeric mean time-to-event for the control arm.}
 #'  }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
@@ -67,14 +66,20 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{TrueHR}{Numeric vector of sampled treatment-to-control hazard ratios, with one element per subject.
+#'     The same hazard ratio is repeated for all subjects in a simulation.}
+#' }
+
 ######################################################################################################################## .
 
 SimulatePatientSurvivalAssurance <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
     # Step 1 - Determine how many patients on each treatment need to be simulated ####
-    vTrtAllocation <- table( TreatmentID )
     vSurvTime <- rep( -1, NumSub ) # The vector of patient survival times that will be returned.
 
-    ErrorCode <- 0
+    nErrorCode <- 0
 
     # Step 2: First sample the piece of the prior we want to use ####
 
@@ -98,8 +103,8 @@ SimulatePatientSurvivalAssurance <- function( NumSub, NumArm, ArrivalTime, Treat
 
     vRates <- c( dRateCtrl, dRateExp )
 
-    for ( i in 1:NumSub ) {
-        vSurvTime[ i ] <- stats::rexp( 1, vRates[ TreatmentID[ i ] + 1 ] )
+    for ( nPatIndx in seq_len( NumSub ) ) {
+        vSurvTime[ nPatIndx ] <- stats::rexp( 1, vRates[ TreatmentID[ nPatIndx ] + 1 ] )
     }
 
     # vTrt1 <- rexp( vTrtAllocation[ 1 ], vRates[ 1 ] )
@@ -110,7 +115,7 @@ SimulatePatientSurvivalAssurance <- function( NumSub, NumArm, ArrivalTime, Treat
 
     lRet <- list(
         SurvivalTime = as.double( vSurvTime ),
-        ErrorCode = as.integer( ErrorCode ),
+        ErrorCode = as.integer( nErrorCode ),
         TrueHR = as.double( rep( dTrueHazard, NumSub ) )
     )
 

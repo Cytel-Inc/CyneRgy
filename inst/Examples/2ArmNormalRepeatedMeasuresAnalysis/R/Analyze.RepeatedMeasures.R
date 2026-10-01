@@ -24,8 +24,9 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of subject arrival times on the calendar scale for
-#'     visit VisitID. Replace VisitID by the actual visit number.}
+#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each
+#'     subject's enrollment, with one element per subject. Replace VisitID by the actual visit number.
+#'     Add ArrivalTime to obtain calendar visit times.}
 #' }
 #'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
@@ -86,11 +87,11 @@
 #'   \item{Sigma}{Numeric. Design standard deviation specified in simulations. East Horizon Explore: Not available.
 #'     East Horizon Design: Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3
 #'     (Z-test)`.}
-#'   \item{NumVisit}{Integer. Number of visits. East Horizon Explore: Only available for `Endpoint Type =
+#'   \item{NumVisit}{Integer number of visits. East Horizon Explore: Only available for `Endpoint Type =
 #'     Continuous with Repeated Measures`. East Horizon Design: Not available.}
-#'   \item{VisitTime}{Vector of Numeric. Vector of length `NumVisit`, indicating the time for each visit. East
-#'     Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon
-#'     Design: Not available.}
+#'   \item{VisitTime}{Numeric vector of visit times measured from enrollment, of length NumVisit and
+#'     ordered by visit. East Horizon Explore: Only available for `Endpoint Type = Continuous with
+#'     Repeated Measures`. East Horizon Design: Not available.}
 #'   \item{VisitStatus}{Vector of Integer. Vector of length `NumVisit`, indicating the visit selection status for
 #'     each visit: – `0`: Visit has not been selected for analysis. – `1`: Visit has been selected for analysis.
 #'     East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon
@@ -235,7 +236,7 @@ Analyze.RepeatedMeasures <- function( SimData, DesignParam, LookInfo = NULL, Use
         nTailType <- DesignParam$TailType
     }
 
-    dfWideData <- data.frame( id = 1:DesignParam$SampleSize, TreatmentID = SimData$TreatmentID )
+    dfWideData <- data.frame( id = seq_len( nrow( SimData ) ), TreatmentID = SimData$TreatmentID )
     vResponseColumns <- c( )
     vVisitTimesColumns <- c( )
     for ( i in 1:DesignParam$NumVisit ) {
@@ -261,6 +262,9 @@ Analyze.RepeatedMeasures <- function( SimData, DesignParam, LookInfo = NULL, Use
         }
 
         dfAnalysisData <- dfLongData[ dfLongData[[ "id" ]] %in% vSubjectsForAnalysis, ]
+        if ( nLookIndex < nQtyOfLooks ) {
+            dfAnalysisData <- dfAnalysisData[ dfAnalysisData$CalendarVisitTime <= dAnalysisTime, ]
+        }
     } else {
         dfAnalysisData <- dfLongData
     }
@@ -271,7 +275,10 @@ Analyze.RepeatedMeasures <- function( SimData, DesignParam, LookInfo = NULL, Use
         weights = nlme::varIdent( form = ~ 1 | Visit )
     )
 
-    dpValue <- summary( mmrm )$tTable[ "TreatmentID", "p-value" ]
+    dTValue <- summary( mmrm )$tTable[ "TreatmentID", "t-value" ]
+    dPValue <- stats::pt( dTValue, mmrm$dims$N - mmrm$dims$p,
+        lower.tail = DesignParam$TailType == 0
+    )
 
     # Get group sequential boundaries
     if ( !is.null( LookInfo ) ) {
@@ -283,8 +290,8 @@ Analyze.RepeatedMeasures <- function( SimData, DesignParam, LookInfo = NULL, Use
 
     # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
-        bIAEfficacyCondition = dpValue <= dAlpha,
-        bFAEfficacyCondition = dpValue <= dAlpha
+        bIAEfficacyCondition = dPValue <= dAlpha,
+        bFAEfficacyCondition = dPValue <= dAlpha
     )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
 

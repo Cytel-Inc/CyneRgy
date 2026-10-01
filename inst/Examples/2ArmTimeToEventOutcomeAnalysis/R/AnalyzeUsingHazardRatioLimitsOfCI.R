@@ -8,14 +8,13 @@
 #'   not made, then if it is unlikely that the Hazard ratio is below the Target Value (TV) a No Go decision is
 #'   made. In this example, the coxph() from survival package in R is utilized to analyze the data and compute
 #'   estimate of log HR and Std error of log HR. The team would like to make a Go decision if there is at least a
-#'   90\% chance that HR is below than the MAV. If a Go decision is not made, then a No Go decision is made if
-#'     there
-#'   is less than a 10\% chance the HR is less than the TV.
+#'   90\% chance that HR is below the MAV. If a Go decision is not made, then a No Go decision is made if
+#'   there is less than a 10\% chance the HR is less than the TV.
 #'
 #' Specifically, if user provides upper and lower limit in Hazard ratio scale then, 1. For Hazard Ratio if UL <
 #'   UserParam$dMAV --> Go if LL > UserParam$dTV --> No Go Otherwise, continue to the next analysis.
 #'
-#' 2. For log Hazard Ratio if UL < UserParam$dMAV --> Go if LL > UserParam$dTV --> No Go Otherwise, continue to the
+#' 2. For log Hazard Ratio if UL < log( UserParam$dMAV ) --> Go if LL > log( UserParam$dTV ) --> No Go Otherwise, continue to the
 #'   next analysis. Note - HR and log HR are monotonically related. In coxph() function, we get the analysis for
 #'   log HR and hence we make the use of 2) in decision making.
 #'
@@ -188,9 +187,10 @@
 #' Example-specific parameters and requirements:
 #' UserParam must be supplied, the list must contain the following named elements:
 #' \describe{
-#'   \item{UserParam$dMAV}{A value (0, Inf) that specifies the lower limit, eg  Minimum Acceptable Value (MAV). }
-#'   \item{UserParam$dTV}{A value (0 Inf) that specifies the upper limit for the confidence interval, eg Target
-#'     Value (TV).}
+#'   \item{UserParam$dMAV}{Positive numeric Minimum Acceptable Value (MAV) for the hazard ratio. A Go
+#'     decision is made when the upper confidence limit is below this value.}
+#'   \item{UserParam$dTV}{Positive numeric Target Value (TV) for the hazard ratio. A No-Go decision is
+#'     made when the lower confidence limit is above this value.}
 #'   \item{UserParam$dConfLevel}{Numeric confidence level in (0, 1) used to construct the confidence
 #'     interval.}
 #' }
@@ -221,6 +221,11 @@
 #'     conditional-power rule.}
 #' }
 #'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{HazardRatio}{Estimated treatment-to-control hazard ratio, retained as a custom output for reporting.}
+#' }
+#'
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
@@ -231,6 +236,10 @@
 ######################################################################################################################## .
 
 AnalyzeUsingHazardRatioLimitsOfCI <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+    if ( is.null( UserParam ) ) {
+        return( list( Decision = 0L, ErrorCode = -1L ) )
+    }
+
     # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if ( !is.null( LookInfo ) ) {
         # Look info was provided so use it
@@ -283,7 +292,7 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function( SimData, DesignParam, LookInfo = 
     # Generate decision using GetDecisionString and GetDecision helpers
     strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
         bIAEfficacyCondition = dUpperLimitCI < log( UserParam$dMAV ),
-        bIAFutilityCondition = dLowerLimitCI > UserParam$dTV,
+        bIAFutilityCondition = dLowerLimitCI > log( UserParam$dTV ),
         bFAEfficacyCondition = dUpperLimitCI < log( UserParam$dMAV )
     )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )

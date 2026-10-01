@@ -39,9 +39,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}

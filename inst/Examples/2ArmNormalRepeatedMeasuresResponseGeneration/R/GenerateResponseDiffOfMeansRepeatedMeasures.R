@@ -3,7 +3,8 @@
 #'
 #' @title Simulate repeated-measures subject responses
 #'
-#' @description The following function generates Response Values for Two Arm Continuous Endpoint: Repeated Measures
+#' @description Generate multivariate normal repeated-measures responses using the arm-specific means,
+#'   standard deviations, and visit correlation matrix supplied by East Horizon.
 #'
 #' @author Shubham Lahoti
 #'
@@ -20,7 +21,8 @@
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
 #'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
 #'
@@ -39,8 +41,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
 #'     Replace NumVisit by the actual number of visits.}
@@ -69,19 +71,18 @@ GenRespDiffOfMeansRepMeasures <- function( NumSub, NumVisit, ArrivalTime, Treatm
     mCovarianceControl <- mIntermediateControl * CorrMat
     mCovarianceTrt <- mIntermediateTrt * CorrMat
 
-    vQtyPatientsPerArm <- table( TreatmentID )
-
-    mCtrl <- MASS::mvrnorm( vQtyPatientsPerArm[ 1 ], MeanControl, Sigma = mCovarianceControl )
-    mExp <- MASS::mvrnorm( vQtyPatientsPerArm[ 2 ], MeanTrt, Sigma = mCovarianceTrt )
-
     # Initialize a matrix to hold the outcomes
-    mOutcomes <- matrix( nrow = sum( vQtyPatientsPerArm ), ncol = nQtyTimePoints )
+    mOutcomes <- matrix( nrow = NumSub, ncol = nQtyTimePoints )
 
     # Get outcomes for control group
-    mOutcomes[ TreatmentID == 0, ] <- mCtrl
+    if ( any( TreatmentID == 0 ) ) {
+        mOutcomes[ TreatmentID == 0, ] <- MASS::mvrnorm( sum( TreatmentID == 0 ), MeanControl, Sigma = mCovarianceControl )
+    }
 
     # Get outcomes for experimental group
-    mOutcomes[ TreatmentID == 1, ] <- mExp
+    if ( any( TreatmentID == 1 ) ) {
+        mOutcomes[ TreatmentID == 1, ] <- MASS::mvrnorm( sum( TreatmentID == 1 ), MeanTrt, Sigma = mCovarianceTrt )
+    }
 
     # Build the return list; East Horizon expects a Response variable in the return so just make it the first type ####
     lReturn <- list( Response = as.double( mOutcomes[ , 1 ] ), ErrorCode = as.integer( 0 ) )

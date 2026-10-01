@@ -36,7 +36,7 @@
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
 #' Example-specific parameters and requirements:
-#' Contains treatment-specific means and covariate parameters:
+#' UserParam must be supplied and contains the following treatment-specific means and covariate parameters:
 #'        \describe{
 #'          \item{MeanOutcome1Ctrl}{Mean of outcome 1 for control group}
 #'          \item{MeanOutcome1Trt}{Mean of outcome 1 for treatment group}
@@ -50,8 +50,8 @@
 #'          \item{Cov2Prob}{Probability of covariate 2 being 1}
 #'        }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
@@ -68,9 +68,10 @@
 #'   \item{Covariate2}{Binary vector of simulated values for covariate 2}
 #' }
 #'
-#' @details Usage of Mean in this example: Numeric. Not used directly in this function.
+#' @details Usage of Mean in this example: The arm-specific mean response vector is not used directly in this function.
 #'
-#' Usage of StdDev in this example: Numeric. Not used directly in this function.
+#' Usage of StdDev in this example: The arm-specific response standard deviation vector is not used directly
+#'   in this function.
 #'
 #' Example-specific error codes: Integer. 0 if successful, 1 if `UserParam` is NULL
 ######################################################################################################################## .
@@ -85,7 +86,7 @@ SimulateMultipleOutcomesCovariates <- function( NumSub, ArrivalTime, TreatmentID
     nErrorCode <- 0
 
     if ( is.null( UserParam ) ) {
-        nErrorCode <- 1
+        return( list( Response = rep( 0, NumSub ), ErrorCode = 1L ) )
     }
 
     # Extract means for each outcome and group

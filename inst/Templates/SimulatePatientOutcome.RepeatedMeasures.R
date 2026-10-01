@@ -21,7 +21,8 @@
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
 #'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
 #'
@@ -40,8 +41,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
 #'     Replace NumVisit by the actual number of visits.}
@@ -59,20 +60,20 @@
     # TO DO : Modify this function appropriately
     nErrorCode <- 0
     vOutResponse <- c( )
-    retval <- list( )
+    lReturn <- list( )
 
     # Add code to simulate the patient data as desired.
     # Example of how to create the return list with Response1, Response2, ..., ResponseNumVisit
-    # Store the generated continuous response values in # an array called retval.
+    # Store the generated continuous response values in # an array called lReturn.
     # Initializing Response Array to 0
-    for ( i in 1:NumVisit ) {
-        strVisitName <- paste0( "Response", i )
+    for ( nVisitIndx in seq_len( NumVisit ) ) {
+        strVisitName <- paste0( "Response", nVisitIndx )
         vOutResponse <- rep( 0, NumSub )
-        retval[[ strVisitName ]] <- as.double( vOutResponse )
+        lReturn[[ strVisitName ]] <- as.double( vOutResponse )
     }
 
     # Use appropriate error handling and modify the
     # error appropriately
-    retval$ErrorCode <- as.integer( nErrorCode )
-    return( retval )
+    lReturn$ErrorCode <- as.integer( nErrorCode )
+    return( lReturn )
 }

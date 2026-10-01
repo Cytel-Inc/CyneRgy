@@ -6,7 +6,7 @@
 #' @description Generate correlated survival and binary outcomes using a Gaussian copula. Simulate two standard
 #'   normal samples, impose the requested correlation on the normal scale, then transform one endpoint to
 #'   exponential survival times and the other to binary responses using the endpoint-specific inputs. This example
-#'   supports one hazard period.
+#'   supports one hazard period and requires SurvMethod = 1 for the survival endpoint.
 #'
 #' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
 #'
@@ -52,9 +52,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Required named list of numeric response vectors, indexed by EndpointName, with one value per
 #'     subject in each vector. Time-to-event responses are measured from enrollment.}
@@ -73,35 +72,31 @@ SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, A
     vPatientOutcomeEP2 <- rep( 0, NumSub )
     lResponse <- list( )
 
-    if ( !is.null( UserParam ) ) {
-        # Customized logic for data generation using UserParam will go here.
-    } else {
-        # Get correlation matrix given qualitative correlation input
-        mCor <- GetCorrMatrix( Correlation )
+    # Get correlation matrix given qualitative correlation input
+    mCor <- GetCorrMatrix( Correlation )
 
-        # Cholesky decomposition of correlation matrix
-        mChol <- chol( mCor )
+    # Cholesky decomposition of correlation matrix
+    mChol <- chol( mCor )
 
-        # Generating (NumSub * 2) standard normal responses
-        mZ <- matrix( stats::rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
+    # Generating (NumSub * 2) standard normal responses
+    mZ <- matrix( stats::rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
 
-        # Intermediate matrix
-        mNormResp <- mZ %*% mChol
+    # Intermediate matrix
+    mNormResp <- mZ %*% mChol
 
-        # Thresholds for binary EP
-        threshold <- stats::qnorm( PropResp[[ 2 ]] )
+    # Thresholds for binary EP
+    vThreshold <- stats::qnorm( PropResp[[ EndpointName[ 2 ] ]] )
 
-        for ( nSubjID in 1:NumSub ) {
-            # EP1: Survival time
-            vPatientOutcomeEP1[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 1 ] ) ) / SurvParam[[ 1 ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
+    for ( nSubjID in 1:NumSub ) {
+        # EP1: Survival time
+        vPatientOutcomeEP1[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 1 ] ) ) / SurvParam[[ EndpointName[ 1 ] ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
 
-            # EP2: Binary outcome using inverse probability transform
-            vPatientOutcomeEP2[ nSubjID ] <- as.numeric( mNormResp[ nSubjID, 2 ] < threshold[ TreatmentID[ nSubjID ] + 1 ] )
-        }
-        if ( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
-            length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ) ) {
-            nErrorCode <- -100
-        }
+        # EP2: Binary outcome using inverse probability transform
+        vPatientOutcomeEP2[ nSubjID ] <- as.numeric( mNormResp[ nSubjID, 2 ] < vThreshold[ TreatmentID[ nSubjID ] + 1 ] )
+    }
+    if ( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
+        length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ) ) {
+        nErrorCode <- -100
     }
 
     lResponse[[ EndpointName[[ 1 ]] ]] <- vPatientOutcomeEP1
@@ -112,7 +107,7 @@ SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, A
 
 # Helper function to create correlation matrix given qualitative correlation
 GetCorrMatrix <- function( Correlation ) {
-    rho <- ifelse( Correlation == 0, 0,
+    dCorrelation <- ifelse( Correlation == 0, 0,
         ifelse( Correlation == 1, 0.15,
             ifelse( Correlation == 2, 0.3,
                 ifelse( Correlation == 3, 0.5,
@@ -135,5 +130,5 @@ GetCorrMatrix <- function( Correlation ) {
     )
 
     # Return the 2x2 correlation matrix
-    return( matrix( c( 1, rho, rho, 1 ), nrow = 2 ) )
+    return( matrix( c( 1, dCorrelation, dCorrelation, 1 ), nrow = 2 ) )
 }

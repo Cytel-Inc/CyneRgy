@@ -3,7 +3,7 @@
 #'
 #' @title Initialize the R simulation environment
 #'
-#' @description Template for Initialization function
+#' @description Set the R random seed supplied by the engine. Load the survival package for the example environment.
 #'
 #' @author J. Kyle Wathen
 #'

@@ -3,8 +3,8 @@
 #'
 #' @title Initialize the R simulation environment
 #'
-#' @description For example - 1 of 2-Arm Time To Event (TTE) analysis, computation of Hazard Ratio requires
-#'   installation of package named "survival". Hence, we need to call this function via "Initialize R Environment"
+#' @description Set the R random seed and load survival for hazard-ratio estimation and logrank testing
+#'   in the two-arm time-to-event analysis example. Select this function at the initialization integration point.
 #'
 #' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
 #'

@@ -40,8 +40,8 @@
 #'          \item{MeanOutcome3Trt}{Mean of outcome 3 for treatment group}
 #'        }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
@@ -56,9 +56,10 @@
 #'   \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}
 #' }
 #'
-#' @details Usage of Mean in this example: Numeric. Not used directly in this function.
+#' @details Usage of Mean in this example: The arm-specific mean response vector is not used directly in this function.
 #'
-#' Usage of StdDev in this example: Numeric. Not used directly in this function.
+#' Usage of StdDev in this example: The arm-specific response standard deviation vector is not used directly
+#'   in this function.
 #'
 #' Example-specific error codes: Integer. 0 if successful, 1 if `UserParam` is NULL
 ######################################################################################################################## .
@@ -73,7 +74,7 @@ SimulateMultipleOutcomes <- function( NumSub, ArrivalTime, TreatmentID, Mean, St
     nErrorCode <- 0
 
     if ( is.null( UserParam ) ) {
-        nErrorCode <- 1
+        return( list( Response = rep( 0, NumSub ), ErrorCode = 1L ) )
     }
 
     # Extract means for each outcome and arm from UserParam

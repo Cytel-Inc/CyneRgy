@@ -40,7 +40,7 @@
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
 #' Example-specific parameters and requirements:
-#' If UserParam is supplied it must contain the following
+#' UserParam must be supplied and must contain the following named elements:
 #'  \describe{
 #'       \item{UserParam$QtyOfSubgroups}{The quantity of patient subgroups. For each subgroup II =
 #'         1,2..,QtyOfSubgroups,
@@ -57,8 +57,8 @@
 #'         experimental treatment}
 #'  }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
@@ -70,6 +70,13 @@
 #' @details SurvMethod, NumPrd, PrdTime, and SurvParam are accepted for compatibility with the response integration
 #'   point but are ignored in this example. Supply the required distribution parameters through UserParam as
 #'   documented above.
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{Subgroup}{Numeric vector of sampled subgroup indices, with one element per subject. Indices range
+#'     from 1 to UserParam$QtyOfSubgroups and remain in the same subject order as TreatmentID.}
+#' }
+
 ######################################################################################################################## .
 
 SimulatePatientSurvivalMixtureExponentials <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {

@@ -13,10 +13,12 @@
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by visit.
 #'
 #' @return Data frame with one row per subject and visit, including Subject, Group, Visit, VisitIndex, Response,
 #'   and VisitTime.
+#'
+#' @details If VisitTime is NULL, use the numeric visit indices as visit times.
 ######################################################################################################################## .
 
 source( "GenerateResponseEmaxModel.R" )
@@ -33,7 +35,7 @@ EmaxToLong <- function( lEmaxRetval, TreatmentID, VisitTime = NULL ) {
     mResp <- do.call( cbind, lEmaxRetval[ vRespNames ] )
     colnames( mResp ) <- vRespNames
 
-    df <- as.data.frame( mResp ) |>
+    dfData <- as.data.frame( mResp ) |>
         dplyr::mutate(
             Subject = dplyr::row_number( ),
             Group = ifelse( TreatmentID == 0, "Control", "Treatment" )
@@ -48,20 +50,39 @@ EmaxToLong <- function( lEmaxRetval, TreatmentID, VisitTime = NULL ) {
 
     # attach actual times if provided
     if ( !is.null( VisitTime ) ) {
-        stopifnot( length( unique( df$VisitIndex ) ) == length( VisitTime ) )
-        df <- df |> dplyr::mutate( VisitTime = VisitTime[ VisitIndex ] )
+        stopifnot( length( unique( dfData$VisitIndex ) ) == length( VisitTime ) )
+        dfData <- dfData |> dplyr::mutate( VisitTime = VisitTime[ VisitIndex ] )
     } else {
-        df <- df |> dplyr::mutate( VisitTime = VisitIndex )
+        dfData <- dfData |> dplyr::mutate( VisitTime = VisitIndex )
     }
-    return( df )
+    return( dfData )
 }
 
-# Plot function: means with 95% CI, by group across visits ####
-PlotEmaxGroups <- function( dfData, sTitle, bShowIndividuals = TRUE ) {
+######################################################################################################################## .
+#' @name PlotEmaxGroups
+#'
+#' @title Plot Emax response summaries by treatment group
+#'
+#' @description Plot mean responses and 95\% confidence intervals by treatment group and visit time,
+#'   optionally including individual subject trajectories. Confidence intervals use the number of observed
+#'   responses in each group and visit.
+#'
+#' @author Anton Sun, Jacob Wathen, Gabriel Potvin
+#'
+#' @param dfData Data frame returned by EmaxToLong, with Subject, Group, VisitTime, and Response columns.
+#'
+#' @param strTitle Character title for the plot.
+#'
+#' @param bShowIndividuals Logical value indicating whether to include individual subject trajectories.
+#'
+#' @return An invisible named list containing summary (group and visit summaries) and plot (the ggplot object).
+#'   The function also displays the plot.
+######################################################################################################################## .
+PlotEmaxGroups <- function( dfData, strTitle, bShowIndividuals = TRUE ) {
     dfSummary <- dfData |>
         dplyr::group_by( Group, VisitTime ) |>
         dplyr::summarise(
-            n = dplyr::n( ),
+            n = sum( !is.na( Response ) ),
             mean = mean( Response, na.rm = TRUE ),
             sd = stats::sd( Response, na.rm = TRUE ),
             se = sd / sqrt( n ),
@@ -69,7 +90,7 @@ PlotEmaxGroups <- function( dfData, sTitle, bShowIndividuals = TRUE ) {
             .groups = "drop"
         )
 
-    p <- ggplot2::ggplot( ) +
+    cPlot <- ggplot2::ggplot( ) +
         {
             # optional faint individual trajectories
             if ( bShowIndividuals ) {
@@ -100,15 +121,15 @@ PlotEmaxGroups <- function( dfData, sTitle, bShowIndividuals = TRUE ) {
             size = 2
         ) +
         ggplot2::labs(
-            title = sTitle,
+            title = strTitle,
             x = "Visit Time",
             y = "Response ( Emax model output )",
             color = "Group", fill = "Group"
         ) +
         ggplot2::theme_minimal( base_size = 12 )
 
-    print( p )
-    invisible( list( summary = dfSummary, plot = p ) )
+    print( cPlot )
+    return( invisible( list( summary = dfSummary, plot = cPlot ) ) )
 }
 
 # Example usage ####
@@ -156,7 +177,7 @@ lEmaxOut <- GenerateResponseEmaxModel(
 dfEmax <- EmaxToLong( lEmaxOut, TreatmentID, VisitTime )
 
 lPlotResults <- PlotEmaxGroups( dfEmax,
-    sTitle = "Control vs Treatment: Emax Responses over Visits",
+    strTitle = "Control vs Treatment: Emax Responses over Visits",
     bShowIndividuals = TRUE
 )
 

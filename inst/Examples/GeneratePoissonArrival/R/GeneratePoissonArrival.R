@@ -31,9 +31,12 @@
 #'
 #' Example-specific parameters and requirements:
 #' \describe{
-#'      \item{dRate1}{The rate in the first unit of time}
-#'      \item{dRate2}{The rate in the first second of time}
-#'    }
+#'   \item{dRate1}{Numeric accrual rate (subjects per unit time) during the first unit of time.}
+#'   \item{dRate2}{Numeric accrual rate (subjects per unit time) during the second unit of time.}
+#'   \item{dRateN}{Additional consecutively numbered rates for later units of time. Supply dRate1 through dRateN
+#'     without gaps; the final rate continues after the ramp-up. Rates must be nonnegative, with a positive
+#'     final rate to ensure that all requested subjects can enroll.}
+#' }
 #'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
@@ -49,7 +52,7 @@
 #'   = regional), RegionName (character region names), RegionStart (numeric region start times), and
 #'   EnrollmentCapPcnt (numeric enrollment caps in percent), with one element per region. Add these engine-supplied
 #'   arguments to the function signature when implementing regional enrollment. For global enrollment, use NumPrd,
-#'   PrdStart, and AccrRate.
+#'   PrdStart, and AccrRate. Unsupported enrollment types or invalid rate inputs return ErrorCode = -1.
 ######################################################################################################################## .
 
 GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
@@ -67,11 +70,22 @@ GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserPara
     } else {
         # Step 2.2 - Pull the rates of and create a vector ####
         nQtyOfRates <- length( UserParam )
+        vExpectedRateNames <- paste0( "dRate", seq_len( nQtyOfRates ) )
+        if ( nQtyOfRates == 0 || !setequal( names( UserParam ), vExpectedRateNames ) ) {
+            return( list( ArrivalTime = numeric( 0 ), ErrorCode = -1L ) )
+        }
         vRates <- rep( NA, nQtyOfRates )
         vPeriodStartTime <- 0:( nQtyOfRates - 1 )
-        for ( i in 1:nQtyOfRates ) {
-            vRates[ i ] <- UserParam[[ paste0( "dRate", i ) ]]
+        for ( nRateIndex in seq_len( nQtyOfRates ) ) {
+            vRates[ nRateIndex ] <- UserParam[[ paste0( "dRate", nRateIndex ) ]]
         }
+    }
+
+    # A zero final rate cannot enroll the requested subjects and would leave the loop running forever.
+    if ( Type != 0 || nQtyOfRates == 0 || length( vPeriodStartTime ) != nQtyOfRates ||
+         any( !is.finite( vRates ) | vRates < 0 ) || vRates[ nQtyOfRates ] == 0 ||
+         any( !is.finite( vPeriodStartTime ) ) || any( diff( vPeriodStartTime ) <= 0 ) ) {
+        return( list( ArrivalTime = numeric( 0 ), ErrorCode = -1L ) )
     }
 
     vPeriodWidth <- c( diff( vPeriodStartTime ), 1 )
@@ -95,7 +109,7 @@ GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserPara
     }
 
     # If the last replication generated too many arrival times, retain only those needed.
-    vPatientArrivalTime <- vPatientArrivalTime[ 1:NumSub ]
+    vPatientArrivalTime <- vPatientArrivalTime[ seq_len( NumSub ) ]
 
     return( list(
         ArrivalTime = as.double( vPatientArrivalTime ),
@@ -104,6 +118,10 @@ GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserPara
 }
 
 SimulateAccrualTimesWithConstantRate <- function( dPatsPerUnitTime, dPeriodStartTime, dQtyOfUnitsOfTime = 1 ) {
+    if ( dPatsPerUnitTime == 0 ) {
+        return( numeric( 0 ) )
+    }
+
     nMaxQtyPatsInThisTimeUnit <- stats::qpois( 0.9999, dPatsPerUnitTime ) + 10
     vIntraArrivalTime <- stats::rexp( dQtyOfUnitsOfTime * nMaxQtyPatsInThisTimeUnit, dPatsPerUnitTime )
 

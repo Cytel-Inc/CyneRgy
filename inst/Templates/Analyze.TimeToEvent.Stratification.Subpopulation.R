@@ -2,7 +2,7 @@
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #'
-#' @title Template: Analyze time-to-event subject outcomes
+#' @title Template: Analyze stratified time-to-event subject outcomes with subpopulations
 #'
 #' @description Analyze time-to-event subject outcomes. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
@@ -210,11 +210,15 @@
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
-#'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
-#'     (unavailable in East Horizon Explore).}
-#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
-#'   \item{HR}{Estimated treatment-to-control hazard ratio.}
+#'   \item{Decision}{Named list of integer boundary-crossing codes, with one element for the full
+#'     population and each subpopulation, using the population names defined by the design: 0 = no
+#'     boundary crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 3 =
+#'     futility boundary crossed; 4 = equivalence boundary crossed (unavailable in East Horizon
+#'     Explore).}
+#'   \item{TestStat}{Named list of numeric test statistics on the Wald (Z) scale, with one element for
+#'     the full population and each subpopulation, using the population names defined by the design.}
+#'   \item{HR}{Named list of estimated treatment-to-control hazard ratios, with one element for the full
+#'     population and each subpopulation, using the population names defined by the design.}
 #'   \item{Delta}{Estimated log hazard ratio (natural logarithm of HR).}
 #'   \item{CtrlEvents}{Number of observed events in the control arm.}
 #'   \item{TrmtEvents}{Number of observed events in the experimental arm.}
@@ -245,15 +249,15 @@
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
     # TO DO: Modify this function appropriately
-    retval <- list( )
+    lDecisions <- list( )
     nErrorCode <- 0
-    retval[[ "SubPopulation 1" ]] <- 0
-    retval[[ "SubPopulation 2" ]] <- 0
-    EstAnalysisTime <- 0
+    lDecisions[[ "SubPopulation 1" ]] <- 0
+    lDecisions[[ "SubPopulation 2" ]] <- 0
+    dEstAnalysisTime <- 0
     # Write the actual code here.
     # Compute test statistic value and store the decision
-    # value (appropriate code) in retval
+    # value (appropriate code) in lDecisions
     # Use appropriate error handling and modify the
     # error appropriately.
-    return( list( Decision = as.list( retval ), AnalysisTime = as.double( EstAnalysisTime ), ErrorCode = as.integer( nErrorCode ) ) )
+    return( list( Decision = as.list( lDecisions ), AnalysisTime = as.double( dEstAnalysisTime ), ErrorCode = as.integer( nErrorCode ) ) )
 }

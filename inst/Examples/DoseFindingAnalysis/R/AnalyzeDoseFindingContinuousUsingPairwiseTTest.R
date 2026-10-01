@@ -6,7 +6,7 @@
 #' @description This function implements Fixed Sequence Pairwise testing for dose-finding studies with continuous
 #'   endpoints. The Fixed Sequence gatekeeping procedure tests hypotheses sequentially from the highest dose
 #'   downward, rejecting the null hypothesis only if the raw p-value is less than the total alpha. Once a
-#'   hypothesis fails to reject, all lower dose hypotheses are automatically rejected (futility cascade).
+#'   hypothesis fails to reject, all lower dose hypotheses are not rejected and are stopped for futility (futility cascade).
 #'
 #' @author Sayantan Biswas, Pradip Maske, Gabriel Potvin
 #'
@@ -56,12 +56,12 @@
 #'     Design: Only available for `Combining P-Values (MAMS)` tests.}
 #'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: – `0`:
 #'     Bonferroni. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values:- – `0`: Bonferroni. – `1`: Sidak.
+#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values: – `0`: Bonferroni. – `1`: Sidak.
 #'     – `2`: Simes. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
 #'     Fallback. – `7`: Hochberg's Step Up. – `10`: Holm's Step Down. – `11`: Hommel's Step Up. – `12`: Dunnett's
 #'     Step Down. – `13`: Dunnett's Step Up.}
 #'   \item{NumTreatments}{Integer number of experimental treatment arms, excluding control.}
-#'   \item{IsArmPresent}{Vector or Integer.. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
+#'   \item{IsArmPresent}{Vector of Integer. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     indicating whether each arm is still in the trial or was dropped in the interim: - `0`: Dropped in the
 #'     interim. - `1`: Still present. East Horizon Explore: Fixed to `1` for the first look and for `Statistical
 #'     Design = Fixed Sample`. East Horizon Design: Fixed to `1` for the first look and for `Statistical Design =
@@ -138,9 +138,14 @@
 #'   \item{POCStatus}{Optional integer overall proof-of-concept status: 0 = threshold not crossed; 1 = threshold
 #'     crossed. This example uses the highest-dose arm to determine the overall status.}
 #' }
+#'
+#' @details OutList carries vPOCStatusArm (one proof-of-concept status per experimental arm) and dOverallPOC
+#'   (overall proof-of-concept status) from the previous look. The first look starts with zero statuses. The
+#'   current-look PoCThreshold is applied to isotonic treatment-effect estimates. Analysis timing counts only
+#'   completers and includes the native RespLag. A NULL LookInfo selects a fixed-sample analysis.
 ######################################################################################################################## .
 
-AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam, LookInfo, OutList, UserParam = NULL ) {
+AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam, LookInfo = NULL, OutList = NULL, UserParam = NULL ) {
     nErrorCode <- 0L
 
     # Reading inputs ####
@@ -149,13 +154,21 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
     dTotalAlpha <- DesignParam$Alpha
     nTailType <- DesignParam$TailType
     nVarType <- DesignParam$VarType
-    bIsArmPresent <- DesignParam$IsArmPresent
-    # Extracting parameters from LookInfo
-    nNumLooks <- LookInfo$NumLooks
-    nCurrLookIndex <- LookInfo$CurrLookIndex
-    vFutBdry <- LookInfo$FutBdry
-    dPoCThreshold <- LookInfo$PoCThreshold
-    vCumCompleters <- LookInfo$CumCompleters
+    vIsArmPresent <- DesignParam$IsArmPresent
+    # Extract current-look parameters, or use the fixed-sample defaults.
+    if ( !is.null( LookInfo ) ) {
+        nNumLooks <- LookInfo$NumLooks
+        nCurrLookIndex <- LookInfo$CurrLookIndex
+        vFutBdry <- LookInfo$FutBdry
+        dPoCThreshold <- LookInfo$PoCThreshold[ nCurrLookIndex ]
+        vCumCompleters <- LookInfo$CumCompleters
+    } else {
+        nNumLooks <- 1
+        nCurrLookIndex <- 1
+        vFutBdry <- NULL
+        dPoCThreshold <- NULL
+        vCumCompleters <- DesignParam$MaxCompleters
+    }
 
     # Initializing output vectors ####
     # Decision vector: NA = dropped, 0 = no boundary, 1 = lower eff, 2 = upper eff, 3 = futility
@@ -169,7 +182,7 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
     dOverallPOC <- 0.0
 
     # Setting decision of earlier dropped arms/doses as NA
-    vDecision[ bIsArmPresent == 0 ] <- NA_integer_
+    vDecision[ vIsArmPresent == 0 ] <- NA_integer_
     # Reading PoC status of the last look
     if ( nCurrLookIndex > 1 ) {
         vPOCStatusArm <- OutList$vPOCStatusArm
@@ -178,7 +191,8 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
 
     # Compute Analysis Time ####
     dEstAnalysisTime <- ComputeAnalysisTime(
-        dRespLag = DesignParam$dRespLag, vArrivalTime = SimData$ArrivalTime,
+        dRespLag = DesignParam$RespLag,
+        vArrivalTime = SimData$ArrivalTime[ SimData$CensorIndOrg == 1 ],
         vCumCompleters = vCumCompleters, nCurrLookIndex = nCurrLookIndex
     )
 
@@ -187,9 +201,9 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
 
     # Compute Summary ####
     # Identify active and dropped arms
-    vSelectedArmIndex <- which( bIsArmPresent == 1 )
+    vSelectedArmIndex <- which( vIsArmPresent == 1 )
     nNumActive <- length( vSelectedArmIndex )
-    vDroppedArms <- which( bIsArmPresent == 0 )
+    vDroppedArms <- which( vIsArmPresent == 0 )
 
     vRespCtrl <- dfSimData$Response[ dfSimData$TreatmentID == 0 ]
     nNumCtrl <- length( vRespCtrl )
@@ -344,19 +358,22 @@ ComputeIsotonicDeltas <- function( vValues, nTailType ) {
     }
 
     vBlockVal <- vValues
-    vBlockIdx <- as.list( 1:n )
+    lBlockIndices <- as.list( 1:n )
 
     repeat {
         bMerged <- FALSE
         i <- 1
         while ( i < length( vBlockVal ) ) {
             if ( vBlockVal[ i ] > vBlockVal[ i + 1 ] ) {
-                # Merge blocks i and i+1 with simple average
-                dNewVal <- mean( c( vBlockVal[ i ], vBlockVal[ i + 1 ] ) )
+                # Weight the pooled value by the number of original doses in each block.
+                dNewVal <- stats::weighted.mean(
+                    c( vBlockVal[ i ], vBlockVal[ i + 1 ] ),
+                    c( length( lBlockIndices[[ i ]] ), length( lBlockIndices[[ i + 1 ]] ) )
+                )
                 vBlockVal[ i ] <- dNewVal
                 vBlockVal <- vBlockVal[ -( i + 1 ) ]
-                vBlockIdx[[ i ]] <- c( vBlockIdx[[ i ]], vBlockIdx[[ i + 1 ]] )
-                vBlockIdx <- vBlockIdx[ -( i + 1 ) ]
+                lBlockIndices[[ i ]] <- c( lBlockIndices[[ i ]], lBlockIndices[[ i + 1 ]] )
+                lBlockIndices <- lBlockIndices[ -( i + 1 ) ]
                 bMerged <- TRUE
             } else {
                 i <- i + 1
@@ -370,7 +387,7 @@ ComputeIsotonicDeltas <- function( vValues, nTailType ) {
     # Reconstruct result vector
     vResult <- numeric( n )
     for ( j in seq_along( vBlockVal ) ) {
-        vResult[ vBlockIdx[[ j ]] ] <- vBlockVal[ j ]
+        vResult[ lBlockIndices[[ j ]] ] <- vBlockVal[ j ]
     }
 
     # Negate back if left-tail

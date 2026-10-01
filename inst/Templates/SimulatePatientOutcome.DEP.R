@@ -50,9 +50,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Required named list of numeric response vectors, indexed by EndpointName, with one value per
 #'     subject in each vector. Time-to-event responses are measured from enrollment.}
@@ -67,7 +66,7 @@
     nErrorCode <- 0
     vPatientOutcomeEP1 <- rep( 0, NumSub )
     vPatientOutcomeEP2 <- rep( 0, NumSub )
-    Response <- list( )
+    lResponse <- list( )
 
     # Step 2 - Validate custom variable input and set defaults ####
     if ( is.null( UserParam ) ) {
@@ -78,7 +77,7 @@
         # UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
     }
 
-    # Step 3 - Simulate the patient data and store in Response ####
+    # Step 3 - Simulate the patient data and store in lResponse ####
     for ( nSubjID in 1:NumSub ) {
         # Write code to simulate patient data with a specified correlation.
     }
@@ -86,8 +85,8 @@
     # Use appropriate error handling and modify the
     # error appropriately in each of the methods.
 
-    Response[[ EndpointName[[ 1 ]] ]] <- vPatientOutcomeEP1
-    Response[[ EndpointName[[ 2 ]] ]] <- vPatientOutcomeEP2
+    lResponse[[ EndpointName[[ 1 ]] ]] <- vPatientOutcomeEP1
+    lResponse[[ EndpointName[[ 2 ]] ]] <- vPatientOutcomeEP2
 
-    return( list( Response = as.list( Response ), ErrorCode = as.integer( nErrorCode ) ) )
+    return( list( Response = as.list( lResponse ), ErrorCode = as.integer( nErrorCode ) ) )
 }

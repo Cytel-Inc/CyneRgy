@@ -2,7 +2,7 @@
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #'
-#' @title Template: Analyze time-to-event subject outcomes
+#' @title Template: Analyze stratified time-to-event subject outcomes
 #'
 #' @description Analyze time-to-event subject outcomes. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
@@ -246,12 +246,12 @@
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
     # TO DO: Modify this function appropriately
     nErrorCode <- 0
-    retval <- 0
-    EstAnalysisTime <- 0
+    nDecision <- 0
+    dEstAnalysisTime <- 0
     # Write the actual code here.
     # Compute test statistic value and store the decision
-    # value (appropriate code) in retval
+    # value (appropriate code) in nDecision
     # Use appropriate error handling and modify the
     # error appropriately.
-    return( list( Decision = as.integer( retval ), AnalysisTime = as.double( EstAnalysisTime ), ErrorCode = as.integer( nErrorCode ) ) )
+    return( list( Decision = as.integer( nDecision ), AnalysisTime = as.double( dEstAnalysisTime ), ErrorCode = as.integer( nErrorCode ) ) )
 }

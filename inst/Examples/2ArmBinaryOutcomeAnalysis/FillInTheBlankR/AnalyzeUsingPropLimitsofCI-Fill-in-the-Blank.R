@@ -1,12 +1,12 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingPropLimitsOfCI
 #'
-#' @title Analyze using the prop.test function in base R.
+#' @title Analyze using the prop.test function in the stats package in R.
 #'
 #' @description In this simplified example of upper and lower confidence boundary designs, if it is likely that the
 #'   treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made. If a Go decision
 #'   is not made, then if it is unlikely that the treatment difference is above the Target Value (TV) a No Go
-#'   decision is made. In this example, the prop.test from base R is utilized to analyze the data and compute at
+#'   decision is made. In this example, the prop.test from the stats package in R is utilized to analyze the data and compute at
 #'   user-specified confidence interval (dConfLevel). The team would like to make a Go decision if there is at
 #'   least a 90\% chance that the difference in treatment is greater than the MAV. If a Go decision is not made,
 #'   then a No Go decision is made if there is less than a 10\% chance the difference is greater than the TV. Using

@@ -222,13 +222,13 @@ AnalyzeDEPUsingModWtLogRank <- function( SimData, DesignParam, LookInfo = NULL, 
 
     # Compute the Observed Time variable for the analysis
     if ( nAnalysisEndpointIndex == 1 ) {
-        dfAnalysisData$Event <- dfAnalysisData$CensorIndOrg * ( dfAnalysisData$ClndrRespTime < dAnalysisTime )
+        dfAnalysisData$Event <- dfAnalysisData$CensorIndOrg * ( dfAnalysisData$ClndrRespTime <= dAnalysisTime )
         dfAnalysisData$ObservedTime <- pmin(
             dAnalysisTime - dfAnalysisData$ArrivalTime,
             dfAnalysisData$ClndrRespTime - dfAnalysisData$ArrivalTime
         )
     } else {
-        dfAnalysisData$Event <- dfAnalysisData$CensorIndOrg2 * ( dfAnalysisData$ClndrRespTime2 < dAnalysisTime )
+        dfAnalysisData$Event <- dfAnalysisData$CensorIndOrg2 * ( dfAnalysisData$ClndrRespTime2 <= dAnalysisTime )
         dfAnalysisData$ObservedTime <- pmin(
             dAnalysisTime - dfAnalysisData$ArrivalTime,
             dfAnalysisData$ClndrRespTime2 - dfAnalysisData$ArrivalTime

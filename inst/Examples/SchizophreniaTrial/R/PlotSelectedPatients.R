@@ -24,8 +24,9 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of subject arrival times on the calendar scale for
-#'     visit VisitID. Replace VisitID by the actual visit number.}
+#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each subject's
+#'     enrollment, with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to
+#'     obtain calendar visit times.}
 #' }
 #'
 #' @param vPatientIDs Integer vector. IDs of patients to include in the plot.
@@ -86,8 +87,8 @@ PlotSelectedPatients <- function( SimData, vPatientIDs ) {
     )
 
     # Plot (both color and fill map to PatientLabel → merged legend)
-    Plot <- ggplot2::ggplot( dfPlot, ggplot2::aes( x = Visit, y = Response, group = idFactor, color = PatientLabel ) ) +
-        ggplot2::geom_line( size = 1.1 ) +
+    cPlot <- ggplot2::ggplot( dfPlot, ggplot2::aes( x = Visit, y = Response, group = idFactor, color = PatientLabel ) ) +
+        ggplot2::geom_line( linewidth = 1.1 ) +
         ggplot2::geom_point( ggplot2::aes( fill = PatientLabel ), shape = 21, size = 3, stroke = 0.8, color = "white" ) +
         ggplot2::scale_color_manual(
             name = "Patient (Treatment)",
@@ -122,5 +123,5 @@ PlotSelectedPatients <- function( SimData, vPatientIDs ) {
             fill = ggplot2::guide_legend( order = 1, override.aes = list( shape = 21, stroke = 0.8 ) )
         )
 
-    return( Plot )
+    return( cPlot )
 }

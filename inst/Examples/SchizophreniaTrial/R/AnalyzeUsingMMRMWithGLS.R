@@ -24,8 +24,9 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of subject arrival times on the calendar scale for
-#'     visit VisitID. Replace VisitID by the actual visit number.}
+#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each
+#'     subject's enrollment, with one element per subject. Replace VisitID by the actual visit number.
+#'     Add ArrivalTime to obtain calendar visit times.}
 #' }
 #'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
@@ -86,11 +87,11 @@
 #'   \item{Sigma}{Numeric. Design standard deviation specified in simulations. East Horizon Explore: Not available.
 #'     East Horizon Design: Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3
 #'     (Z-test)`.}
-#'   \item{NumVisit}{Integer. Number of visits. East Horizon Explore: Only available for `Endpoint Type =
+#'   \item{NumVisit}{Integer number of visits. East Horizon Explore: Only available for `Endpoint Type =
 #'     Continuous with Repeated Measures`. East Horizon Design: Not available.}
-#'   \item{VisitTime}{Vector of Numeric. Vector of length `NumVisit`, indicating the time for each visit. East
-#'     Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon
-#'     Design: Not available.}
+#'   \item{VisitTime}{Numeric vector of visit times measured from enrollment, of length NumVisit and
+#'     ordered by visit. East Horizon Explore: Only available for `Endpoint Type = Continuous with
+#'     Repeated Measures`. East Horizon Design: Not available.}
 #'   \item{VisitStatus}{Vector of Integer. Vector of length `NumVisit`, indicating the visit selection status for
 #'     each visit: – `0`: Visit has not been selected for analysis. – `1`: Visit has been selected for analysis.
 #'     East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon
@@ -217,6 +218,9 @@
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
 #'
+#' If only one post-baseline visit has been observed, the repeated-measures model reduces to a baseline-adjusted
+#'   ANCOVA at that visit. Future visit responses are excluded from interim analyses.
+#'
 #' Example-specific output usage: PrimDelta: Estimated treatment effect from the MMRM model with GLS at the final
 #'   visit.
 ######################################################################################################################## .
@@ -244,7 +248,7 @@ AnalyzeUsingMMRMWithGLS <- function( SimData, DesignParam, LookInfo = NULL, User
     # Step 3: Fit the MMRM using nlme::gls ####
     nVisits <- sum( grepl( "^Response", names( SimData ) ) )
     dfNoBaselineAnalysisData$TreatmentID <- as.factor( dfNoBaselineAnalysisData$TreatmentID )
-    dfNoBaselineAnalysisData$Visit <- factor( dfNoBaselineAnalysisData$Visit, levels = seq( 2:nVisits ) )
+    dfNoBaselineAnalysisData$Visit <- factor( dfNoBaselineAnalysisData$Visit, levels = seq.int( 2, nVisits ) )
 
     # Create the vectors for analysis, using the names needed for the GetLSDiffGLS
     vOut <- dfNoBaselineAnalysisData$Response
@@ -253,13 +257,22 @@ AnalyzeUsingMMRMWithGLS <- function( SimData, DesignParam, LookInfo = NULL, User
     vTime <- dfNoBaselineAnalysisData$Visit
     vIND <- dfNoBaselineAnalysisData$Id
 
-    glsFit <- nlme::gls( vOut ~ vBaseline + vTrt * vTime,
-        weights = nlme::varIdent( form = ~ 1 | vTime ),
-        correlation = nlme::corSymm( form = ~ 1 | vIND ),
-        na.action = stats::na.omit
-    )
+    nObservedVisits <- length( unique( vTime ) )
+    if ( nObservedVisits == 1 ) {
+        # With one follow-up per subject, the repeated-measures model reduces to ANCOVA.
+        glsFit <- nlme::gls( vOut ~ vBaseline + vTrt, na.action = stats::na.omit )
+    } else {
+        glsFit <- nlme::gls( vOut ~ vBaseline + vTrt * vTime,
+            weights = nlme::varIdent( form = ~ 1 | vTime ),
+            correlation = nlme::corSymm( form = ~ 1 | vIND ),
+            na.action = stats::na.omit
+        )
+    }
 
-    lRetGLS <- GetLSDiffGLS( glsFit, 1, nVisits, FALSE )
+    lRetGLS <- GetLSDiffGLS( glsFit, 1, max( as.integer( as.character( dfNoBaselineAnalysisData$Visit ) ) ), FALSE )
+    lRetGLS$dPValue <- stats::pt( lRetGLS$dTStat, lRetGLS$nDOF,
+        lower.tail = DesignParam$TailType == 0
+    )
 
     # Step 4: Obtain group‐sequential alpha ####
     if ( !is.null( LookInfo ) ) {
@@ -372,6 +385,10 @@ CreateAnalysisDataset <- function( SimData, LookInfo ) {
 
         dfAnalysisData <- dfLongData |>
             dplyr::filter( Id %in% vSubjectsForAnalysis )
+        if ( nLookIndex < nQtyOfLooks ) {
+            dfAnalysisData <- dfAnalysisData |>
+                dplyr::filter( CalendarVisitTime <= dAnalysisTime )
+        }
     } else {
         dfAnalysisData <- dfLongData
     }

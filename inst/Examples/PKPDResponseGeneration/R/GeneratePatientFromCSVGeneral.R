@@ -25,7 +25,8 @@
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
 #'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
 #'
@@ -50,8 +51,8 @@
 #'        "SimPatientDataAlt.csv").}
 #'   }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
 #'     Replace NumVisit by the actual number of visits.}
@@ -60,19 +61,15 @@
 #'     simulations.}
 #' }
 #'
-#' Example-specific additional output elements:
+#' Example-specific ErrorCode values:
 #' \describe{
-#'   \item{`Response1`, `Response2`, ...}{Numeric vectors of patient responses for each visit.}
-#'   \item{`ErrorCode`}{Integer value:
-#'                      \describe{
-#'                        \item{0}{No error.}
-#'                        \item{-1}{CSV file not found.}
-#'                        \item{-2}{Error reading CSV file.}
-#'                        \item{-3}{Treatment column not found.}
-#'                        \item{-4}{Insufficient visit columns in CSV.}
-#'                        \item{-5}{Insufficient patients in CSV for one or both arms.}
-#'                        \item{-6}{Specific visit column not found in CSV.}
-#'                      }}
+#'   \item{0}{No error.}
+#'   \item{-1}{CSV file not found.}
+#'   \item{-2}{Error reading CSV file.}
+#'   \item{-3}{Treatment column not found.}
+#'   \item{-4}{Insufficient visit columns in CSV.}
+#'   \item{-5}{Insufficient patients in CSV for one or both arms.}
+#'   \item{-6}{Specific visit column not found in CSV.}
 #' }
 #'
 #' @details Return each visit response as a separate named list element: Response1, Response2, ...,
@@ -214,12 +211,12 @@ GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, ArrivalTime, Treatm
     # Sample unique rows per arm (no replacement), then map to subjects in East Horizon order
     vTakeCtrl <- integer( 0 )
     if ( nNeedCtl > 0 ) {
-        vTakeCtrl <- sample( vIdxCtrl, nNeedCtl, replace = FALSE )
+        vTakeCtrl <- vIdxCtrl[ sample.int( length( vIdxCtrl ), nNeedCtl, replace = FALSE ) ]
     }
 
     vTakeTrt <- integer( 0 )
     if ( nNeedTrt > 0 ) {
-        vTakeTrt <- sample( vIdxTrt, nNeedTrt, replace = FALSE )
+        vTakeTrt <- vIdxTrt[ sample.int( length( vIdxTrt ), nNeedTrt, replace = FALSE ) ]
     }
 
     # vPick will contain the index of the patient to use from the CSV that was treated with TreatmentID

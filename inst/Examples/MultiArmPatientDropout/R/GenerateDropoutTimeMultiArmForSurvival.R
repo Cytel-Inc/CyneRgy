@@ -42,7 +42,8 @@
 #' }
 #'
 #' @details The example code implements a single dropout period (NumPrd = 1). For multiple hazard periods, extend
-#'   the generation logic to use the appropriate row of DropParam for each period.
+#'   the generation logic to use the appropriate row of DropParam for each period. Unsupported configurations
+#'   return ErrorCode = -1 rather than silently using the wrong dropout parameters.
 ######################################################################################################################## .
 
 GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL ) {
@@ -54,31 +55,35 @@ GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID,
 
     vDropoutTime <- rep( Inf, NumSub )
 
+    if ( NumPrd != 1 || !( DropMethod %in% c( 1, 2 ) ) ) {
+        return( list( DropOutTime = vDropoutTime, ErrorCode = -1L ) )
+    }
+
     if ( DropMethod == 1 ) { # Dropout Hazard Rates
         # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are the dropout times.
         for ( nArmIndex in seq( 0, NumArm - 1 ) ) {
-            if ( DropParam[ nArmIndex + 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
+            if ( DropParam[ 1, nArmIndex + 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
                 # Identify the patients from various arms
                 vIndexArm <- which( TreatmentID == nArmIndex )
                 nQtyOfPatientsOnArm <- length( vIndexArm )
                 # Generate dropout time based on arm wise dropout parameters
-                vDropoutTime[ vIndexArm ] <- stats::rexp( nQtyOfPatientsOnArm, rate = DropParam[ nArmIndex + 1 ] )
+                vDropoutTime[ vIndexArm ] <- stats::rexp( nQtyOfPatientsOnArm, rate = DropParam[ 1, nArmIndex + 1 ] )
             }
         }
     }
 
     if ( DropMethod == 2 ) { # Probability of Dropout
         # Conversion of dropout probabilities into Hazard rates
-        dExpDropoutRate <- -log( 1 - DropParam ) / PrdTime
+        vExpDropoutRate <- -log( 1 - DropParam[ 1, ] ) / PrdTime[ 1 ]
 
         # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are the dropout times.
         for ( nArmIndex in seq( 0, NumArm - 1 ) ) {
-            if ( DropParam[ nArmIndex + 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
+            if ( DropParam[ 1, nArmIndex + 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
                 # Identify the patients from various arms
                 vIndexArm <- which( TreatmentID == nArmIndex )
                 nQtyOfPatientsOnArm <- length( vIndexArm )
                 # Generate dropout time based on arm wise dropout parameters
-                vDropoutTime[ vIndexArm ] <- stats::rexp( nQtyOfPatientsOnArm, rate = dExpDropoutRate[ nArmIndex + 1 ] )
+                vDropoutTime[ vIndexArm ] <- stats::rexp( nQtyOfPatientsOnArm, rate = vExpDropoutRate[ nArmIndex + 1 ] )
             }
         }
     }

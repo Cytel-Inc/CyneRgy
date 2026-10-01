@@ -41,22 +41,22 @@ RandomizeSubjectsAcrossMultipleArms <- function( NumSub, NumArms, AllocRatio, Us
     vAllocFraction <- vAllocRatio / sum( vAllocRatio )
 
     # Calculate target sample sizes based on allocation ratio
-    nTargetSampleSize <- floor( NumSub * vAllocFraction )
+    vTargetSampleSize <- floor( NumSub * vAllocFraction )
 
     # Calculate how many subjects are left to allocate
-    nRemaining <- NumSub - sum( nTargetSampleSize )
+    nRemaining <- NumSub - sum( vTargetSampleSize )
 
     # Allocate remaining subjects based on the fractional parts of the ideal allocation
     if ( nRemaining > 0 ) {
         # Calculate fractional parts
-        vFractionalParts <- ( NumSub * vAllocFraction ) - nTargetSampleSize
+        vFractionalParts <- ( NumSub * vAllocFraction ) - vTargetSampleSize
 
         # Sort arms by fractional parts (descending) to prioritize allocation
         vArmOrder <- order( vFractionalParts, decreasing = TRUE )
 
         # Allocate remaining subjects to arms with highest fractional parts
-        for ( i in 1:nRemaining ) {
-            nTargetSampleSize[ vArmOrder[ i ] ] <- nTargetSampleSize[ vArmOrder[ i ] ] + 1
+        for ( nRemainingIndex in seq_len( nRemaining ) ) {
+            vTargetSampleSize[ vArmOrder[ nRemainingIndex ] ] <- vTargetSampleSize[ vArmOrder[ nRemainingIndex ] ] + 1
         }
     }
 
@@ -64,10 +64,10 @@ RandomizeSubjectsAcrossMultipleArms <- function( NumSub, NumArms, AllocRatio, Us
     vAllTreatmentIDs <- 0:( NumArms - 1 )
 
     # Create a vector with the correct number of each treatment ID
-    vTreatmentIDs <- rep( vAllTreatmentIDs, times = nTargetSampleSize )
+    vTreatmentIDs <- rep( vAllTreatmentIDs, times = vTargetSampleSize )
 
     # Randomly shuffle the treatment assignments
-    vTreatmentIDs <- sample( vTreatmentIDs )
+    vTreatmentIDs <- vTreatmentIDs[ sample.int( length( vTreatmentIDs ) ) ]
 
     return( list( TreatmentID = as.integer( vTreatmentIDs ), ErrorCode = as.integer( nErrorCode ) ) )
 }

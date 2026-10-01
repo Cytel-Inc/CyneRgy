@@ -48,38 +48,40 @@ RandomizationSubjectsUsingUniformDistribution <- function( NumSub, NumArms, Allo
     vAllocRatio <- c( 1, AllocRatio )
 
     # Convert the Allocation Ratio to Allocation Fraction for control and treatment arm
-    dAllocFraction <- c( vAllocRatio[ 1 ] / sum( vAllocRatio ), 1 - vAllocRatio[ 1 ] / sum( vAllocRatio ) )
-    vSampleSizeArmWise <- c( round( NumSub * dAllocFraction[ 1 ] ), NumSub - round( NumSub * dAllocFraction[ 1 ] ) )
-    retval <- c( )
-    u <- c( )
+    vAllocFraction <- c( vAllocRatio[ 1 ] / sum( vAllocRatio ), 1 - vAllocRatio[ 1 ] / sum( vAllocRatio ) )
+    vSampleSizeArmWise <- c( round( NumSub * vAllocFraction[ 1 ] ), NumSub - round( NumSub * vAllocFraction[ 1 ] ) )
+    vTreatmentIDs <- c( )
+    vUniformDraws <- c( )
 
-    for ( i in 1:NumSub ) {
-        u[ i ] <- stats::runif( 1, 0, 1 ) # Generate a random number from U(0, 1)
+    for ( nSubjectIndex in seq_len( NumSub ) ) {
+        vUniformDraws[ nSubjectIndex ] <- stats::runif( 1, 0, 1 ) # Generate a random number from U(0, 1)
 
         # Here 0 means subject is allotted to control arm, 1 means subject is allotted to treatment arm.
         # CDF of Uniform (0, 1) is given as F(x) = x. We make use of this CDF to allocate the subjects randomly on either arms.
-        if ( u[ i ] > dAllocFraction[ 1 ] && sum( retval ) <= vSampleSizeArmWise[ 2 ] ) {
-            retval[ i ] <- 1
-        } else if ( u[ i ] <= dAllocFraction[ 1 ] && sum( retval == 0 ) <= vSampleSizeArmWise[ 1 ] ) {
-            retval[ i ] <- 0
+        if ( vUniformDraws[ nSubjectIndex ] > vAllocFraction[ 1 ] && sum( vTreatmentIDs ) <= vSampleSizeArmWise[ 2 ] ) {
+            vTreatmentIDs[ nSubjectIndex ] <- 1
+        } else if ( vUniformDraws[ nSubjectIndex ] <= vAllocFraction[ 1 ] && sum( vTreatmentIDs == 0 ) <= vSampleSizeArmWise[ 1 ] ) {
+            vTreatmentIDs[ nSubjectIndex ] <- 0
         } else {
-            retval[ i ] <- 1
+            vTreatmentIDs[ nSubjectIndex ] <- 1
         }
     }
 
     # The following chunk of code is to make sure that allotment of patients is exactly the same as per the allocation ratio (expected patients on each arm) provided.
 
-    if ( sum( retval ) != vSampleSizeArmWise[ 2 ] ) { # If observed allotment is not the same as expected allotment
-        if ( sum( retval ) > vSampleSizeArmWise[ 2 ] ) { # if observed patients on treatment arm > expected patients on treatment arm
-            diff <- sum( retval ) - vSampleSizeArmWise[ 2 ] # find the difference between No of observed patients and No of expected patients on treatment arm denoted by diff.
-            k <- sample( which( retval == 1 ), diff ) # randomly choose the sample of "diff" indices from set of treatment indices
-            retval[ k ] <- 0 # assign the retval = 0 for the corresponding sampled indices
+    if ( sum( vTreatmentIDs ) != vSampleSizeArmWise[ 2 ] ) { # If observed allotment is not the same as expected allotment
+        if ( sum( vTreatmentIDs ) > vSampleSizeArmWise[ 2 ] ) { # if observed patients on treatment arm > expected patients on treatment arm
+            nAllocationDifference <- sum( vTreatmentIDs ) - vSampleSizeArmWise[ 2 ] # find the difference between No of observed patients and No of expected patients on treatment arm denoted by nAllocationDifference.
+            vAvailableIndices <- which( vTreatmentIDs == 1 )
+            vIndicesToUpdate <- vAvailableIndices[ sample.int( length( vAvailableIndices ), nAllocationDifference ) ] # randomly choose the sample of "nAllocationDifference" indices from set of treatment indices
+            vTreatmentIDs[ vIndicesToUpdate ] <- 0 # assign the vTreatmentIDs = 0 for the corresponding sampled indices
         } else { # if observed patients on treatment arm < expected patients on treatment arm
-            diff <- vSampleSizeArmWise[ 2 ] - sum( retval ) # find the difference between No of observed patients and No of expected patients on control arm denoted by diff
-            k <- sample( which( retval == 0 ), diff ) # randomly choose the sample of "diff" indices from set of control indices
-            retval[ k ] <- 1 # assign the retval = 1 for the corresponding sampled indices
+            nAllocationDifference <- vSampleSizeArmWise[ 2 ] - sum( vTreatmentIDs ) # find the difference between No of observed patients and No of expected patients on control arm denoted by nAllocationDifference
+            vAvailableIndices <- which( vTreatmentIDs == 0 )
+            vIndicesToUpdate <- vAvailableIndices[ sample.int( length( vAvailableIndices ), nAllocationDifference ) ] # randomly choose the sample of "nAllocationDifference" indices from set of control indices
+            vTreatmentIDs[ vIndicesToUpdate ] <- 1 # assign the vTreatmentIDs = 1 for the corresponding sampled indices
         }
     }
 
-    return( list( TreatmentID = as.integer( retval ), ErrorCode = as.integer( nErrorCode ) ) )
+    return( list( TreatmentID = as.integer( vTreatmentIDs ), ErrorCode = as.integer( nErrorCode ) ) )
 }

@@ -3,8 +3,9 @@
 #'
 #' @title Simulate patient time-to-event outcomes from a Weibull distribution for multi-arm trials
 #'
-#' @description Generate Weibull survival times for multiple treatment arms, using arm-specific shapes and survival
-#'   inputs.
+#' @description Generate Weibull survival times using the arm-specific shape and scale parameters
+#'   supplied through UserParam. The survival parameters from East Horizon are accepted for integration
+#'   compatibility and are ignored in this example.
 #'
 #' @author Gabriel Potvin and Anoop Singh Rawat
 #'
@@ -42,20 +43,22 @@
 #' Example-specific parameters and requirements:
 #' If UserParam is supplied it must contain the following:
 #'  \describe{
-#'       \item{UserParam$dShapeCtrl}{The shape parameter in the Weibull distribution for the control treatment}
-#'       \item{UserParam$dScaleCtrl}{The scale parameter in the Weibull distribution for the control treatment}
-#'       \item{UserParam$dShapeExp1}{The shape parameter in the Weibull distribution for the experimental treatment
-#'         1}
-#'       \item{UserParam$dScaleExp1}{The scale parameter in the Weibull distribution for the experimental treatment
-#'         1}
-#'       \item{UserParam$dShapeExp2}{The shape parameter in the Weibull distribution for the experimental treatment
-#'         2}
-#'       \item{UserParam$dScaleExp2}{The scale parameter in the Weibull distribution for the experimental treatment
-#'         2}
+#'   \item{UserParam$dShapeCtrl}{Positive numeric Weibull shape parameter for the control arm, as used by
+#'     `stats::rweibull()`.}
+#'   \item{UserParam$dScaleCtrl}{Positive numeric Weibull scale parameter for the control arm, as used by
+#'     `stats::rweibull()`.}
+#'   \item{UserParam$dShapeExp1}{Positive numeric Weibull shape parameter for the experimental 1 arm, as used by
+#'     `stats::rweibull()`.}
+#'   \item{UserParam$dScaleExp1}{Positive numeric Weibull scale parameter for the experimental 1 arm, as used by
+#'     `stats::rweibull()`.}
+#'   \item{UserParam$dShapeExp2}{Positive numeric Weibull shape parameter for the experimental 2 arm, as used by
+#'     `stats::rweibull()`.}
+#'   \item{UserParam$dScaleExp2}{Positive numeric Weibull scale parameter for the experimental 2 arm, as used by
+#'     `stats::rweibull()`.}
 #'  }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
@@ -63,6 +66,11 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#'
+#' @details This example supports control and two experimental arms. With UserParam = NULL, the control
+#'   shape and scale are both 1 and both experimental-arm shapes and scales are 12. SurvMethod, NumPrd,
+#'   PrdTime, and SurvParam are accepted for integration compatibility and are ignored.
+
 ######################################################################################################################## .
 
 SimulatePatientSurvivalMultiArmWeibull <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
@@ -89,8 +97,7 @@ SimulatePatientSurvivalMultiArmWeibull <- function( NumSub, NumArm, ArrivalTime,
     vScales <- c( UserParam$dScaleCtrl, UserParam$dScaleExp1, UserParam$dScaleExp2 )
 
     # Simulate the patient survival times based on the treatment
-    # For the Hazard Rate input with 1 piece, this is just simulating from an exponential distribution as an example and results will match
-    # East Horizon if you used the build hazard option.
+    # Use the custom Weibull shape and scale parameters for each arm.
     for ( nPatIndx in 1:NumSub ) {
         nPatientTreatment <- vTreatmentID[ nPatIndx ]
         vSurvTime[ nPatIndx ] <- stats::rweibull( 1, vShapes[ nPatientTreatment ], vScales[ nPatientTreatment ] )

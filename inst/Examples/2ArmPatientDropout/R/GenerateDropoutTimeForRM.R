@@ -14,7 +14,8 @@
 #'
 #' @param NumVisit Integer number of visits. The engine sets this to 1 when DropMethod = 2.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
 #'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
@@ -52,7 +53,8 @@
 #'
 #' @details Return at least one of the three supported dropout representations. East Horizon uses CensorInd1, ...,
 #'   CensorIndNumVisit first, then DropoutVisitID if censor indicators are absent, then DropOutTime if neither of
-#'   the other representations is returned. Inf dropout times indicate no dropout.
+#'   the other representations is returned. Inf dropout times indicate no dropout. This example implements only
+#'   two-arm dropout by time (NumArm = 2 and DropMethod = 2); unsupported configurations return ErrorCode = -1.
 ######################################################################################################################## .
 
 GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL ) {
@@ -62,6 +64,10 @@ GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, Treat
     # i.e., effectively they haven't dropped out at all, meaning that they all are completers
     # We modify this vector later
     vDropoutTime <- rep( Inf, NumSub )
+
+    if ( NumArm != 2 || DropMethod != 2 ) {
+        return( list( DropOutTime = vDropoutTime, ErrorCode = -1L ) )
+    }
 
     # Identify the patients from Control and Experimental arm
     vIndexControl <- which( TreatmentID == 0 )

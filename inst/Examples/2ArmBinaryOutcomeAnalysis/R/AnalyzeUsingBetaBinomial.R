@@ -2,7 +2,7 @@
 #' @name AnalyzeUsingBetaBinomial
 #'
 #' @title Analyze for efficacy using a beta( alpha, beta ) prior to compute the posterior probability that
-#'   experimental is better than control treatment care.
+#'   experimental is better than control treatment.
 #'
 #' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior
 #'   probability that experimental is better than control treatment. The futility is based on posterior probability
@@ -188,7 +188,7 @@
 #'        of treatment failures.}
 #'      \item{UserParam$dUpperCutoffEfficacy}{A value (0,1) that specifies the upper cutoff for the efficacy check.
 #'        Above this value will declare efficacy.}
-#'      \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specified the lower cutoff for the futility
+#'      \item{UserParam$dLowerCutoffForFutility}{A value (0,1) that specifies the lower cutoff for the futility
 #'        check. Below this value will declare futility.}
 #'  }
 #'  UserParam is required. Missing user parameters return ErrorCode = -1.

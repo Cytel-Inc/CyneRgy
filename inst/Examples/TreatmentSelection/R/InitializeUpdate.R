@@ -3,7 +3,7 @@
 #'
 #' @title Initialize the R simulation environment
 #'
-#' @description Template for Initialization function
+#' @description Set the R random seed supplied by the engine.
 #'
 #' @author Sydney Ringold, J. Kyle Wathen
 #'

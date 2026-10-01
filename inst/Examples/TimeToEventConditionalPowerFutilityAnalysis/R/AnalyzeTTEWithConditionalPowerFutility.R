@@ -216,16 +216,17 @@
 #'   \item{dConditionalPower}{Numeric. The conditional power at the current analysis (–1 if not computed).}
 #' }
 #'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#' @details This example implements a one-sided left-tailed efficacy test on the Z scale and checks conditional
+#'   power futility at interim looks. Conditional power targets the final efficacy boundary supplied by East
+#'   Horizon, or the nominal Alpha boundary when no explicit boundary is supplied.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
 ######################################################################################################################## .
 
 AnalyzeTTEWithConditionalPowerFutility <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
-    library( CyneRgy )
-    library( survival )
-
     nErrorCode <- 0
     nDecision <- 0
     dTestStatistic <- 0
@@ -265,8 +266,13 @@ AnalyzeTTEWithConditionalPowerFutility <- function( SimData, DesignParam, LookIn
 
 
 
-    # Critical value for the efficacy boundary (one-sided significance level of 2.5%)
-    dEffBdry <- stats::qnorm( 0.025 )
+    # Conditional power targets the final left-tail efficacy boundary.
+    dEffBdry <- stats::qnorm( DesignParam$Alpha )
+    if ( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) ) {
+        dEffBdry <- LookInfo$EffBdry[ nQtyOfLooks ]
+    } else if ( !is.null( DesignParam$CriticalPoint ) ) {
+        dEffBdry <- DesignParam$CriticalPoint
+    }
 
     nDecision <- 0 # Set a default value
     if ( nLookIndex < nQtyOfLooks ) {

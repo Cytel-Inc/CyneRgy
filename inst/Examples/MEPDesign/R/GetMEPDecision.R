@@ -24,7 +24,7 @@
 #'     for a specific endpoint. `EPNAME` is the endpoint name specified in East Horizon. Endpoint names can also be
 #'     accessed using `DesignParam$EndpointName`.}
 #'   \item{CensorID.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated censor
-#'     indicator values for a specific endpoint: – `0`: Dropout. – `1`: Completer `EPNAME` is the endpoint name
+#'     indicator values for a specific endpoint: – `0`: Dropout. – `1`: Completer. `EPNAME` is the endpoint name
 #'     specified in East Horizon. Endpoint names can also be accessed using `DesignParam$EndpointName`.}
 #'   \item{Response.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated responses
 #'     for a specific endpoint after adjusting for endpoint and dropout rules. `EPNAME` is the endpoint name
@@ -34,7 +34,7 @@
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #'   \item{DropoutID.`EPNAME`}{Vector of length equal to the number of subjects, containing whether each patient
-#'     dropped out before responding for a specific endpoint: – `0`: Dropout. – `1`: Completer `EPNAME` is the
+#'     dropped out before responding for a specific endpoint: – `0`: Dropout. – `1`: Completer. `EPNAME` is the
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #' }
@@ -111,8 +111,7 @@
 #'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon
-#'     product
-#'   as indicated below.
+#'   product as indicated below.
 #' \describe{
 #'   \item{TotalLooks}{Integer. Total number of planned looks.}
 #'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
@@ -123,7 +122,7 @@
 #'   \item{TailType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the nature of
 #'     critical region for each endpoint. Order matches `EndpointName` order. Possible values: – `0`: Left-tailed.
 #'     – `1`: Right-tailed.}
-#'   \item{NumPat}{Integer. Total number of patients.}
+#'   \item{NumPat}{Integer number of subjects in the trial.}
 #'   \item{AllocRatio}{Numeric. Treatment allocation ratio: number of patients in the treatment arm over number of
 #'     patient in the control arm.}
 #'   \item{TrialType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the trial
@@ -194,8 +193,11 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{Decision}{Integer vector of endpoint decisions in DesignParam$EndpointName order: 0 = continue; 1 =
-#'     efficacy; 2 = futility.}
-#'   \item{Response}{Named list of endpoint-specific outputs in DesignParam$EndpointName order.}
+#'     efficacy; 2 = futility. This is the required output.}
+#'   \item{TestStat}{Optional named list of endpoint test statistics, using the names and order in
+#'     DesignParam$EndpointName.}
+#'   \item{Response}{Named list of numeric response vectors, one vector per endpoint with one element per subject,
+#'     using the names and order in DesignParam$EndpointName.}
 #'   \item{RawPVal}{Optional numeric vector of raw endpoint p-values.}
 #'   \item{EfficacyBoundary}{Optional numeric vector of endpoint efficacy boundaries.}
 #'   \item{WinStatus}{Optional integer trial status: 0 = no decision; 1 = win; -1 = lose.}
@@ -210,27 +212,33 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#'
+#' @details This example retains prior endpoint decisions and tests efficacy against the current p-value boundary.
+#'   It checks the futility thresholds only when an efficacy boundary and p-value are available. An undecided
+#'   endpoint stops for futility at its target information, when information is insufficient, or after its last
+#'   planned efficacy look.
 ######################################################################################################################## .
 
 GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList = NULL, UserParam = NULL ) {
-    # Initialize Decision with last look's decisions
-    Decision <- LookInfo$LastLookDecision
+    # Initialize vDecision with last look's decisions
+    vDecision <- LookInfo$LastLookDecision
 
     # Get number of endpoints
     nNumEP <- length( DesignParam$EndpointName )
 
     # For each endpoint
-    for ( nEPID in 1:nNumEP ) {
+    for ( nEPID in seq_len( nNumEP ) ) {
         # Only process if last look decision was Continue (0)
-        if ( Decision[ nEPID ] == 0 ) {
-            # Get efficacy boundary and p-value for current endpoint
-            boundary <- LookInfo$EfficacyBoundaryPScale[ nEPID ]
-            pvalue <- LookInfo$TestStatisticsOutputs[[ nEPID ]]$data$TSPVal
+        if ( vDecision[ nEPID ] == 0 ) {
+            strEPName <- DesignParam$EndpointName[ nEPID ]
+            # Get efficacy dBoundary and p-value for current endpoint
+            dBoundary <- LookInfo$EfficacyBoundaryPScale[ nEPID ]
+            dPValue <- LookInfo$TestStatisticsOutputs[[ strEPName ]]$data$TSPVal
 
-            # Check if both boundary and p-value exist and p-value is less than boundary
-            if ( !is.nan( boundary ) && !is.nan( pvalue ) ) {
-                if ( pvalue < boundary ) {
-                    Decision[ nEPID ] <- 1
+            # Check if both dBoundary and p-value exist and p-value is less than dBoundary
+            if ( !is.na( dBoundary ) && !is.na( dPValue ) ) {
+                if ( dPValue < dBoundary ) {
+                    vDecision[ nEPID ] <- 1
                     next
                 }
 
@@ -238,7 +246,7 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, Design
                 nCurrentLook <- LookInfo$LookNum
                 if ( DesignParam$FutFlg[ nCurrentLook, nEPID ] == 1 ) {
                     # Get futility threshold for this endpoint at this look
-                    futThreshold <- DesignParam$FutThrsld[ nCurrentLook, nEPID ]
+                    dFutilityThreshold <- DesignParam$FutThrsld[ nCurrentLook, nEPID ]
 
                     # Get endpoint name and type
                     strEPName <- DesignParam$EndpointName[ nEPID ]
@@ -246,16 +254,16 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, Design
 
                     # Get HR or Delta from DataSummary based on endpoint type
                     if ( nEPType == 2 ) {
-                        observedValue <- DataSummary[[ strEPName ]]$HR
+                        dObservedValue <- DataSummary[[ strEPName ]]$HR
                         # Declare futility if HR > threshold
-                        if ( !is.nan( observedValue ) && observedValue > futThreshold ) {
-                            Decision[ nEPID ] <- 2
+                        if ( !is.na( dObservedValue ) && dObservedValue > dFutilityThreshold ) {
+                            vDecision[ nEPID ] <- 2
                         }
                     } else {
-                        observedValue <- DataSummary[[ strEPName ]]$Delta
+                        dObservedValue <- DataSummary[[ strEPName ]]$Delta
                         # Declare futility if Delta < threshold
-                        if ( !is.nan( observedValue ) && observedValue < futThreshold ) {
-                            Decision[ nEPID ] <- 2
+                        if ( !is.na( dObservedValue ) && dObservedValue < dFutilityThreshold ) {
+                            vDecision[ nEPID ] <- 2
                         }
                     }
                 }
@@ -263,40 +271,40 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, Design
         }
 
         # If still not stopped, check if we've reached or exceeded target information
-        if ( Decision[ nEPID ] == 0 ) {
+        if ( vDecision[ nEPID ] == 0 ) {
             strEPName <- DesignParam$EndpointName[ nEPID ]
             nEPType <- DesignParam$EndpointType[ nEPID ]
-            targetInfo <- DesignParam$TargetInformation[ nEPID ]
+            nTargetInformation <- DesignParam$TargetInformation[ nEPID ]
 
             # Get current events/completers count based on endpoint type
-            currentCount <- if ( nEPType == 2 ) {
+            nCurrentCount <- if ( nEPType == 2 ) {
                 DataSummary[[ strEPName ]]$Events
             } else {
                 DataSummary[[ strEPName ]]$Completers
             }
 
-            if ( currentCount >= targetInfo ) {
-                Decision[ nEPID ] <- 2
+            if ( !is.na( nCurrentCount ) && nCurrentCount >= nTargetInformation ) {
+                vDecision[ nEPID ] <- 2
             }
             if ( LookInfo$EPStatus[ nEPID ] == 1 ) {
-                Decision[ nEPID ] <- 2
+                vDecision[ nEPID ] <- 2
             }
 
             nCurrentLook <- LookInfo$LookNum
-            futureEfficacyLooks <- if ( nCurrentLook < nrow( DesignParam$EffFlg ) ) {
+            bFutureEfficacyLooks <- if ( nCurrentLook < nrow( DesignParam$EffFlg ) ) {
                 any( DesignParam$EffFlg[ ( nCurrentLook + 1 ):nrow( DesignParam$EffFlg ), nEPID ] == 1 )
             } else {
                 FALSE
             }
 
-            if ( !futureEfficacyLooks && DesignParam$EffFlg[ nCurrentLook, nEPID ] == 1 ) {
-                Decision[ nEPID ] <- 2
+            if ( !bFutureEfficacyLooks && DesignParam$EffFlg[ nCurrentLook, nEPID ] == 1 ) {
+                vDecision[ nEPID ] <- 2
             }
         }
     }
 
     lRet <- list(
-        Decision = Decision,
+        Decision = as.integer( vDecision ),
         ErrorCode = as.integer( 0 )
     )
 

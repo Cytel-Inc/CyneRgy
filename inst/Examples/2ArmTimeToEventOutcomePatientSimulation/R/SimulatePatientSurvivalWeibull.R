@@ -3,8 +3,9 @@
 #'
 #' @title Simulate patient outcomes from a Weibull distribution.
 #'
-#' @description Generate survival times from a Weibull distribution using user-defined shapes and arm-specific
-#'   survival inputs.
+#' @description Generate Weibull survival times using the arm-specific shape and scale parameters
+#'   supplied through UserParam. The survival parameters from East Horizon are accepted for integration
+#'   compatibility and are ignored in this example.
 #'
 #' @author Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin
 #'
@@ -42,14 +43,18 @@
 #' Example-specific parameters and requirements:
 #' If UserParam is supplied it must contain the following:
 #'  \describe{
-#'       \item{UserParam$dShapeCtrl}{The shape parameter in the Weibull distribution for the control treatment}
-#'       \item{UserParam$dScaleCtrl}{The scale parameter in the Weibull distribution for the control treatment}
-#'       \item{UserParam$dShapeExp}{The shape parameter in the Weibull distribution for the experimental treatment}
-#'       \item{UserParam$dScaleExp}{The scale parameter in the Weibull distribution for the experimental treatment}
+#'   \item{UserParam$dShapeCtrl}{Positive numeric Weibull shape parameter for the control arm, as used by
+#'     `stats::rweibull()`.}
+#'   \item{UserParam$dScaleCtrl}{Positive numeric Weibull scale parameter for the control arm, as used by
+#'     `stats::rweibull()`.}
+#'   \item{UserParam$dShapeExp}{Positive numeric Weibull shape parameter for the experimental arm, as used by
+#'     `stats::rweibull()`.}
+#'   \item{UserParam$dScaleExp}{Positive numeric Weibull scale parameter for the experimental arm, as used by
+#'     `stats::rweibull()`.}
 #'  }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
@@ -60,14 +65,15 @@
 #'
 #' @details SurvMethod, NumPrd, PrdTime, and SurvParam are accepted for compatibility with the response integration
 #'   point but are ignored in this example. Supply the required distribution parameters through UserParam as
-#'   documented above.
+#'   documented above. With UserParam = NULL, the control shape and scale are both 1 and the experimental
+#'   shape and scale are both 12.
 ######################################################################################################################## .
 
 SimulatePatientSurvivalWeibull <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
     # Step 1 - Initialize the return variables or other variables needed ####
     vSurvTime <- rep( -1, NumSub ) # The vector of patient survival times that will be returned.
     vTreatmentID <- TreatmentID + 1 # If this is 0 then it is control, 1 is treatment. Adding one since vectors are index by 1
-    ErrorCode <- as.integer( 0 )
+    nErrorCode <- as.integer( 0 )
 
     # Step 2 - Validate custom variable input and set defaults ####
     if ( is.null( UserParam ) ) {
@@ -84,12 +90,11 @@ SimulatePatientSurvivalWeibull <- function( NumSub, NumArm, ArrivalTime, Treatme
     vScales <- c( UserParam$dScaleCtrl, UserParam$dScaleExp )
 
     # Simulate the patient survival times based on the treatment
-    # For the Hazard Rate input with 1 piece, this is just simulating from an exponential distribution as an example and results will match
-    # East Horizon if you used the build hazard option.
+    # Use the custom Weibull shape and scale parameters for each arm.
     for ( nPatIndx in 1:NumSub ) {
         nPatientTreatment <- vTreatmentID[ nPatIndx ]
         vSurvTime[ nPatIndx ] <- stats::rweibull( 1, vShapes[ nPatientTreatment ], vScales[ nPatientTreatment ] )
     }
 
-    return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = ErrorCode ) )
+    return( list( SurvivalTime = as.double( vSurvTime ), ErrorCode = nErrorCode ) )
 }

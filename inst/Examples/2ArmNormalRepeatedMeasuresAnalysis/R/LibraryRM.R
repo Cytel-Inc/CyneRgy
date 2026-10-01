@@ -3,8 +3,8 @@
 #'
 #' @title Initialize the R simulation environment
 #'
-#' @description Initialize the R simulation environment. Use the documented inputs and outputs to integrate this
-#'   function with the simulation workflow.
+#' @description Set the R random seed and load nlme, stats, and rpact for repeated-measures model fitting
+#'   and group sequential decision calculations.
 #'
 #' @author Gabriel Potvin and Anoop Singh Rawat
 #'

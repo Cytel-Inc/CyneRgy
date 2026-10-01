@@ -3,7 +3,9 @@
 #'
 #' @title Simulate Patient Survival Times Using a Phase 2 Prior for Assurance
 #'
-#' @description Function simulates from exponential, just included as a simple example as a starting point
+#' @description Generate exponential survival times using successive treatment effects from successful Phase 2
+#'   simulations. Transform each effect to a log hazard ratio using UserParam$dIntercept and UserParam$dSlope,
+#'   then use the control mean time-to-event and that hazard ratio to determine the arm-specific hazard rates.
 #'
 #' @author J. Kyle Wathen, Laurent Spiess, Gabriel Potvin
 #'
@@ -39,7 +41,7 @@
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
 #' Example-specific parameters and requirements:
-#' If UserParam is supplied, the list must contain the following named elements:
+#' UserParam must be supplied and must contain the following named elements:
 #' \describe{
 #'      \item{UserParam$dIntercept}{Intercept for the linear relationship between true treatment difference and
 #'        log(HR).}
@@ -47,8 +49,8 @@
 #'   \item{UserParam$dMeanTTECtrl}{Positive numeric mean time-to-event for the control arm.}
 #'   }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
@@ -56,6 +58,13 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{TrueHR}{Numeric vector of sampled treatment-to-control hazard ratios, with one element per subject.
+#'     The same hazard ratio is repeated for all subjects in a simulation.}
+#' }
+
 ######################################################################################################################## .
 
 SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
@@ -66,10 +75,15 @@ SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, Arriv
     }
 
     # Step 1 - Determine how many patients on each treatment need to be simulated ####
-    vTrtAllocation <- table( TreatmentID )
+    nControlSubjects <- sum( TreatmentID == 0 )
+    nExperimentalSubjects <- sum( TreatmentID == 1 )
     vSurvTime <- rep( -1, NumSub ) # The vector of patient survival times that will be returned.
 
-    ErrorCode <- rep( -1, NumSub )
+    nErrorCode <- 0L
+
+    if ( !exists( "gnIndex" ) || gnIndex < 1 || gnIndex > length( gvPrior ) ) {
+        return( list( SurvivalTime = rep( 0, NumSub ), ErrorCode = -100L ) )
+    }
 
     # Step 2: Using the true treatment difference from Ph 2, compute the log( true hazard ratio) ####
     dTrueTreatmentDiff <- gvPrior[ gnIndex ]
@@ -85,13 +99,17 @@ SimulatePatientSurvivalAssuranceUsingPh2Prior <- function( NumSub, NumArm, Arriv
 
     vRates <- c( dRateCtrl, dRateExp )
 
-    vTrt1 <- stats::rexp( vTrtAllocation[ 1 ], vRates[ 1 ] )
-    vTrt2 <- stats::rexp( vTrtAllocation[ 2 ], vRates[ 2 ] )
+    vTrt1 <- stats::rexp( nControlSubjects, vRates[ 1 ] )
+    vTrt2 <- stats::rexp( nExperimentalSubjects, vRates[ 2 ] )
 
     vSurvTime[ TreatmentID == 0 ] <- vTrt1
     vSurvTime[ TreatmentID == 1 ] <- vTrt2
 
-    return( list( SurvivalTime = as.double( vSurvTime ), TrueHR = as.double( rep( dTrueHazardRatio, NumSub ) ), ErrorCode = ErrorCode ) )
+    if ( any( !is.finite( vSurvTime ) ) ) {
+        nErrorCode <- -100L
+    }
+
+    return( list( SurvivalTime = as.double( vSurvTime ), TrueHR = as.double( rep( dTrueHazardRatio, NumSub ) ), ErrorCode = nErrorCode ) )
 }
 
 LoadData <- function( ) {

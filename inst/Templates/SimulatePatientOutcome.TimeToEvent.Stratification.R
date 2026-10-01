@@ -42,9 +42,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
@@ -57,30 +56,30 @@
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
     # TO DO : Modify this function appropriately
     nErrorCode <- 0
-    retval <- c( )
+    vSurvResponses <- c( )
     # Initialising Response Array to 0
     for ( i in 1:NumSub ) {
-        retval[ i ] <- 0
+        vSurvResponses[ i ] <- 0
     }
     if ( SurvMethod == 1 ) { # Hazard Rates
         # Write the actual code for SurvMethod 1
         # here.
         # Store the generated survival times in an
-        # array called retval.
+        # array called vSurvResponses.
     }
     if ( SurvMethod == 2 ) { # Cumulative % Survivals
         # Write the actual code for SurvMethod 2
         # here.
         # Store the generated survival times in an
-        # array called retval.
+        # array called vSurvResponses.
     }
     if ( SurvMethod == 3 ) { # Median Survival Times
         # Write the actual code for SurvMethod 3
         # here.
         # Store the generated survival times in an
-        # array called retval.
+        # array called vSurvResponses.
     }
     # Use appropriate error handling and modify the
     # Error appropriately in each of the methods
-    return( list( SurvivalTime = as.double( retval ), ErrorCode = as.integer( nErrorCode ) ) )
+    return( list( SurvivalTime = as.double( vSurvResponses ), ErrorCode = as.integer( nErrorCode ) ) )
 }

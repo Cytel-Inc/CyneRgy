@@ -23,7 +23,7 @@
 #'     for a specific endpoint. `EPNAME` is the endpoint name specified in East Horizon. Endpoint names can also be
 #'     accessed using `DesignParam$EndpointName`.}
 #'   \item{CensorID.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated censor
-#'     indicator values for a specific endpoint: – `0`: Dropout. – `1`: Completer `EPNAME` is the endpoint name
+#'     indicator values for a specific endpoint: – `0`: Dropout. – `1`: Completer. `EPNAME` is the endpoint name
 #'     specified in East Horizon. Endpoint names can also be accessed using `DesignParam$EndpointName`.}
 #'   \item{Response.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated responses
 #'     for a specific endpoint after adjusting for endpoint and dropout rules. `EPNAME` is the endpoint name
@@ -33,7 +33,7 @@
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #'   \item{DropoutID.`EPNAME`}{Vector of length equal to the number of subjects, containing whether each patient
-#'     dropped out before responding for a specific endpoint: – `0`: Dropout. – `1`: Completer `EPNAME` is the
+#'     dropped out before responding for a specific endpoint: – `0`: Dropout. – `1`: Completer. `EPNAME` is the
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #' }
@@ -110,8 +110,7 @@
 #'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon
-#'     product
-#'   as indicated below.
+#'   product as indicated below.
 #' \describe{
 #'   \item{TotalLooks}{Integer. Total number of planned looks.}
 #'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
@@ -122,7 +121,7 @@
 #'   \item{TailType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the nature of
 #'     critical region for each endpoint. Order matches `EndpointName` order. Possible values: – `0`: Left-tailed.
 #'     – `1`: Right-tailed.}
-#'   \item{NumPat}{Integer. Total number of patients.}
+#'   \item{NumPat}{Integer number of subjects in the trial.}
 #'   \item{AllocRatio}{Numeric. Treatment allocation ratio: number of patients in the treatment arm over number of
 #'     patient in the control arm.}
 #'   \item{TrialType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the trial
@@ -193,8 +192,11 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{Decision}{Integer vector of endpoint decisions in DesignParam$EndpointName order: 0 = continue; 1 =
-#'     efficacy; 2 = futility.}
-#'   \item{Response}{Named list of endpoint-specific outputs in DesignParam$EndpointName order.}
+#'     efficacy; 2 = futility. This is the required output.}
+#'   \item{TestStat}{Optional named list of endpoint test statistics, using the names and order in
+#'     DesignParam$EndpointName.}
+#'   \item{Response}{Named list of numeric response vectors, one vector per endpoint with one element per subject,
+#'     using the names and order in DesignParam$EndpointName.}
 #'   \item{RawPVal}{Optional numeric vector of raw endpoint p-values.}
 #'   \item{EfficacyBoundary}{Optional numeric vector of endpoint efficacy boundaries.}
 #'   \item{WinStatus}{Optional integer trial status: 0 = no decision; 1 = win; -1 = lose.}

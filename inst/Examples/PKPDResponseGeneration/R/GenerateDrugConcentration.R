@@ -4,7 +4,7 @@
 #' @title Generate Drug Concentration Response from a One-Compartment Model with First-order Absorption
 #'
 #' @description Use a one-compartment PK model with first-order absorption to simulate plasma concentrations for
-#'   patients.
+#'   patients, then add arm-specific normal measurement noise.
 #'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
 #'
@@ -21,7 +21,8 @@
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
 #'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
 #'
@@ -47,8 +48,8 @@
 #'   \item{Dose}{Required positive numeric administered dose.}
 #' }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
 #'     Replace NumVisit by the actual number of visits.}
@@ -57,20 +58,12 @@
 #'     simulations.}
 #' }
 #'
-#' Example-specific additional output elements:
-#' \describe{
-#'   \item{Response<NumVisit>}{A set of arrays of response for all subjects. Each array corresponds to each visit
-#'     user has specified}
-#' }
-#'
 #' @details Return each visit response as a separate named list element: Response1, Response2, ...,
 #'   ResponseNumVisit. Optional ArrivalTime may be included in the function signature when calendar arrival times
 #'   are needed; it has the same definition as at the enrollment integration point.
 ######################################################################################################################## .
 
 GenerateDrugConcentration <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
-    library( deSolve )
-
     # Initialize error code and return list
     nErrorCode <- 0
     lRetval <- list( )

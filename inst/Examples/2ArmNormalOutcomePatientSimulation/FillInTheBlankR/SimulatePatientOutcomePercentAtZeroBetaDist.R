@@ -33,15 +33,21 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' When UserParam is NULL, no subjects are forced to have zero outcomes. If supplied, the list
-#'   must contain the following named elements: UserParam$dCtrlBetaParam1 - First parameter in the Beta
-#'   distribution for the control (ctrl) treatment. UserParam$dCtrlBetaParam2 - Second parameter in the Beta
-#'   distribution for the control (ctrl) treatment. UserParam$dExpBetaParam1 - First parameter in the Beta
-#'   distribution for the experimental (exp) treatment. UserParam$dExpBetaParam2 - Second parameter in the Beta
-#'   distribution for the experimental (exp) treatment.
+#' When UserParam is NULL, no subjects are forced to have zero outcomes. If supplied, the list must
+#'   contain the following named elements:
+#' \describe{
+#'   \item{UserParam$dCtrlBetaParam1}{Positive numeric shape1 (alpha) parameter for the Beta prior on the
+#'     probability of a zero outcome on the control arm.}
+#'   \item{UserParam$dCtrlBetaParam2}{Positive numeric shape2 (beta) parameter for the Beta prior on the
+#'     probability of a zero outcome on the control arm.}
+#'   \item{UserParam$dExpBetaParam1}{Positive numeric shape1 (alpha) parameter for the Beta prior on the
+#'     probability of a zero outcome on the experimental arm.}
+#'   \item{UserParam$dExpBetaParam2}{Positive numeric shape2 (beta) parameter for the Beta prior on the
+#'     probability of a zero outcome on the experimental arm.}
+#' }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current

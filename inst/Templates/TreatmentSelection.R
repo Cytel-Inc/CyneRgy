@@ -17,6 +17,10 @@
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
+#'     enrollment, with one element per subject.}
+#'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
+#'     element per subject. Inf indicates no dropout.}
 #'   \item{CensorInd}{Integer vector of censor indicators, with one element per subject: 0 = dropout/non-completer;
 #'     1 = completer.}
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
@@ -38,6 +42,7 @@
 #'     `Combining P-Values (MAMS)` tests.}
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
+#'   \item{MaxEvents}{Integer maximum number of events in the trial. Only available for time-to-event endpoints.}
 #'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
 #'   \item{TestStatType}{Integer. Test statistic type: - `3`: Z-test. - `4`: t-test. East Horizon Explore: Only
 #'     available for `Endpoint Type = Continuous`. East Horizon Design: Only available for `Continuous` tests.}
@@ -52,7 +57,7 @@
 #'     Design: Only available for `Combining P-Values (MAMS)` tests.}
 #'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: – `0`:
 #'     Bonferroni. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values:- – `0`: Bonferroni. – `1`: Sidak.
+#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values: – `0`: Bonferroni. – `1`: Sidak.
 #'     – `2`: Simes. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
 #'     Fallback. – `7`: Hochberg's Step Up. – `10`: Holm's Step Down. – `11`: Hommel's Step Up. – `12`: Dunnett's
 #'     Step Down. – `13`: Dunnett's Step Up.}
@@ -70,7 +75,7 @@
 #'     = Dose Finding`. East Horizon Design: Only available for `Multiple Comparison Procedure = 5 (Fixed Sequence)
 #'     or 6 (Fallback)`. Not available for `Test = MAMS Difference of Means: Combining P-Values (Continuous) or
 #'     MAMS Difference of Proportions: Combining P-Values (Binary) or MAMS Logrank (Time-to-Event)`.}
-#'   \item{IsArmPresent}{Vector or Integer.. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
+#'   \item{IsArmPresent}{Vector of Integer. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     indicating whether each arm is still in the trial or was dropped in the interim: - `0`: Dropped in the
 #'     interim. - `1`: Still present. East Horizon Explore: Fixed to `1` for the first look and for `Statistical
 #'     Design = Fixed Sample`. East Horizon Design: Fixed to `1` for the first look and for `Statistical Design =
@@ -93,6 +98,8 @@
 #'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event`. East
 #'     Horizon Design: Not available for `Time-to-Event` tests.}
+#'   \item{CumEvents}{Integer cumulative number of events at the current look. Only available for time-to-event
+#'     endpoints.}
 #'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
 #'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
 #'     lower. – `5`: One-sided efficacy lower, futility upper.}

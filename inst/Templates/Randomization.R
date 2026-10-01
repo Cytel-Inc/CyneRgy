@@ -39,8 +39,8 @@
     vAllocRatio <- c( 1, AllocRatio )
 
     # Convert the Allocation Ratio to Allocation Fraction for control and treatment arms
-    dAllocFraction <- vAllocRatio / sum( vAllocRatio )
-    vTreatmentIDs <- sample( 0:( NumArms - 1 ), NumSub, prob = dAllocFraction, replace = TRUE )
+    vAllocFraction <- vAllocRatio / sum( vAllocRatio )
+    vTreatmentIDs <- sample( 0:( NumArms - 1 ), NumSub, prob = vAllocFraction, replace = TRUE )
 
     return( list( TreatmentID = as.integer( vTreatmentIDs ), ErrorCode = as.integer( nErrorCode ) ) )
 }

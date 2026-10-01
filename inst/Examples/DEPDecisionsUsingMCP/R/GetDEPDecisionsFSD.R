@@ -194,8 +194,9 @@
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Decision}{Integer vector of endpoint decisions in endpoint order: 0 = no boundary crossed; 1 = lower
-#'     efficacy boundary crossed; 2 = upper efficacy boundary crossed; 4 = futility boundary crossed. The
+#'   \item{Decision}{Named list of integer endpoint decisions in DesignParam$EndpointName order: 0 = no boundary
+#'     crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 4 = futility boundary
+#'     crossed. The
 #'     multiplicity-adjustment integration point uses 4 for futility.}
 #'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
 #'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
@@ -215,25 +216,27 @@
 ######################################################################################################################## .
 
 GetDEPDecisionsFSD <- function( SimData, DesignParam, LookInfo = NULL, TestStat, OutList = NULL, UserParam = NULL ) {
-    lDecision <- list( )
-    vEndpointName <- DesignParam$vEndpointName
+    vEndpointName <- DesignParam$EndpointName
+    lDecision <- as.list( stats::setNames( rep( 0L, length( vEndpointName ) ), vEndpointName ) )
 
-    if ( DesignParam$TailType[[ 1 ]] == 0 ) {
-        lDecision[ vEndpointName[[ 1 ]] ] <- ifelse( stats::pnorm( TestStat[[ 1 ]] ) < DesignParam$Alpha / 2, 1, 0 )
-    } else {
-        lDecision[ vEndpointName[[ 1 ]] ] <- ifelse( stats::pnorm( TestStat[[ 1 ]], lower.tail = FALSE ) < DesignParam$Alpha / 2, 1, 0 )
+    for ( strEndpointName in vEndpointName ) {
+        dTestStat <- TestStat[[ strEndpointName ]]
+        nTailType <- DesignParam$TailType[[ strEndpointName ]]
+        if ( !is.na( dTestStat ) ) {
+            if ( nTailType == 0 ) {
+                if ( stats::pnorm( dTestStat ) < DesignParam$Alpha / 2 ) {
+                    lDecision[[ strEndpointName ]] <- 1L
+                }
+            } else {
+                if ( stats::pnorm( dTestStat, lower.tail = FALSE ) < DesignParam$Alpha / 2 ) {
+                    lDecision[[ strEndpointName ]] <- 2L
+                }
+            }
+        }
     }
 
-    if ( DesignParam$TailType[[ 2 ]] == 0 ) {
-        lDecision[ vEndpointName[[ 2 ]] ] <- ifelse( stats::pnorm( TestStat[[ 2 ]] ) < DesignParam$Alpha / 2, 1, 0 )
-    } else {
-        lDecision[ vEndpointName[[ 2 ]] ] <- ifelse( stats::pnorm( TestStat[[ 2 ]], lower.tail = FALSE ) < DesignParam$Alpha / 2, 1, 0 )
-    }
+    nErrorCode <- 0L
+    lOutList <- list( OutVal = 0 )
 
-    nErrorCode <- 0
-    nRetval <- 0
-    lOutList <- list( )
-    lOutList$OutVal <- nRetval
-
-    return( list( Decision = as.list( lDecision ), OutList = as.list( lOutList ), ErrorCode = as.integer( nErrorCode ) ) )
+    return( list( Decision = lDecision, OutList = lOutList, ErrorCode = nErrorCode ) )
 }

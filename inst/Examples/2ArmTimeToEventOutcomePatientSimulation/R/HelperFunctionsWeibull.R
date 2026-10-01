@@ -66,7 +66,7 @@ dScaleE
 vHazardE <- ComputeHazardWeibull( vTime, dShapeE, dScaleE )
 vDataE <- stats::rweibull( nQtyPats, dShapeE, dScaleE )
 
-plot( vTime, vHazardS, type = "l", xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
+graphics::plot( vTime, vHazardS, type = "l", xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
 graphics::lines( vTime, vHazardE, lty = 2 )
 #
 #
@@ -98,7 +98,7 @@ dScaleE
 vHazardE <- ComputeHazardWeibull( vTime, dShapeE, dScaleE )
 vDataE <- stats::rweibull( nQtyPats, dShapeE, dScaleE )
 
-plot( vTime, vHazardS, type = "l", xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
+graphics::plot( vTime, vHazardS, type = "l", xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
 graphics::lines( vTime, vHazardE, lty = 2 )
 #
 #
@@ -130,7 +130,7 @@ dScaleE
 vHazardE <- ComputeHazardWeibull( vTime, dShapeE, dScaleE )
 vDataE <- stats::rweibull( nQtyPats, dShapeE, dScaleE )
 
-plot( vTime, vHazardS, type = "l", xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
+graphics::plot( vTime, vHazardS, type = "l", xlab = "Time (Months)", ylab = "Hazard", main = "Hazard: Standard of Care (Solid), Experimental (Dashed)" )
 graphics::lines( vTime, vHazardE, lty = 2 )
 
 # print( paste( "Parameters for S: Shape = ", round( dShapeS, 3), ", Scale= ", round( dScaleS, 3 )) )

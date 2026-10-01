@@ -23,11 +23,11 @@
 #'
 #' @details The function performs the following steps:
 #'
-#' 1. Sets a random seed (123) for reproducibility 2. Randomly assigns subjects to treatment (1) or control (0)
-#'   groups 3. Simulates responses for 5 visits using normal distributions with mean = 10 and standard deviation =
-#'   3 4. For treatment subjects, applies a treatment effect starting from Visit 2: effect = -dTreatmentEffect *
-#'   (visit - 1) 5. Creates a data frame with columns: Treatment, Visit 1, Visit 2, Visit 3, Visit 4, Visit 5 6.
-#'   Writes the data to a CSV file
+#' 1. Set the random seed to 123 for reproducibility.
+#' 2. Randomly assign subjects to treatment (1) or control (0).
+#' 3. Simulate five normally distributed visits with a baseline mean of 10 and standard deviation of 3.
+#' 4. Apply -dTreatmentEffect * (visit - 1) to treatment responses from visit 2 onward.
+#' 5. Create Treatment and Visit 1 through Visit 5 columns and write them to strFileName.
 ######################################################################################################################## .
 
 GenerateTreatmentControlCSV <- function( nSubjects = 100000, strFileName = "SimPatientDataNull.csv", dTreatmentEffect = 2 ) {
@@ -54,7 +54,7 @@ GenerateTreatmentControlCSV <- function( nSubjects = 100000, strFileName = "SimP
     colnames( dfData ) <- c( "Treatment", vVisitNames )
 
     # Write to CSV
-    utils::write.csv( dfData, paste0( "", strFileName ), row.names = FALSE )
+    utils::write.csv( dfData, strFileName, row.names = FALSE )
 
     return( dfData )
 }

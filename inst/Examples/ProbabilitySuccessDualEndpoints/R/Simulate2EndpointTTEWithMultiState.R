@@ -78,8 +78,8 @@
 #'                        death before PFS for the treatment group.}
 #'                  }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
@@ -135,7 +135,7 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
         dMedianOS1 <- UserParam$dMedianOS1
         dProbOfDeathBeforeProgression1 <- UserParam$dProbOfDeathBeforeProgression1
 
-        vPatsPerArm <- table( TreatmentID )
+        vPatsPerArm <- c( sum( TreatmentID == 0 ), sum( TreatmentID == 1 ) )
         dfControlPats <- SimulateDualMultiStateTTE( vPatsPerArm[ 1 ], dMedianPFS0, dMedianOS0, dProbOfDeathBeforeProgression0 )
         dfExpPats <- SimulateDualMultiStateTTE( vPatsPerArm[ 2 ], dMedianPFS1, dMedianOS1, dProbOfDeathBeforeProgression1 )
     }
@@ -143,7 +143,7 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
     # using prior distributions. In this case, vValuesOption2 are used and vValuesOption1 are ignored.
 
     else if ( length( vValuesOption2 ) == 12 && !( all( vValuesOption2 == 0 ) ) ) {
-        vPatsPerArm <- table( TreatmentID )
+        vPatsPerArm <- c( sum( TreatmentID == 0 ), sum( TreatmentID == 1 ) )
 
         # First need to sample the prior for control
         dfControlPats <- data.frame( vPFS = NA, vOS = NA )
@@ -239,6 +239,10 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
     vOS[ TreatmentID == 0 ] <- dfControlPats$vOS
     vOS[ TreatmentID == 1 ] <- dfExpPats$vOS
 
+    if ( any( !is.finite( vPFS ) ) || any( !is.finite( vOS ) ) ) {
+        nErrorCode <- 1L
+    }
+
     return( list( SurvivalTime = as.double( vPFS ), OS = as.double( vOS ), ErrorCode = as.integer( nErrorCode ) ) )
 }
 
@@ -273,6 +277,10 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
 ######################################################################################################################## .
 
 SimulateDualMultiStateTTE <- function( nQtyOfPatients, dMedianPFS, dMedianOS, dProbOfDeathBeforeProgression ) {
+    if ( nQtyOfPatients == 0 ) {
+        return( data.frame( vPFS = numeric( 0 ), vOS = numeric( 0 ) ) )
+    }
+
     # Get alphas using ComputeAlphasForMultiStateModel function
     lAlphas <- ComputeAlphasForMultiStateModel( dMedianPFS, dMedianOS, dProbOfDeathBeforeProgression )
 
@@ -295,7 +303,7 @@ SimulateDualMultiStateTTE <- function( nQtyOfPatients, dMedianPFS, dMedianOS, dP
     # Initialize vectors to capture PFS and OS
     vPFS <- c( )
     vOS <- c( )
-    for ( iPat in 1:nQtyOfPatients ) {
+    for ( iPat in seq_len( nQtyOfPatients ) ) {
         if ( vTimeToProgression[ iPat ] < vTimeToDeath[ iPat ] ) {
             vPFS <- c( vPFS, vTimeToProgression[ iPat ] )
             vOS <- c( vOS, vTimeToProgression[ iPat ] + vTimeFromProgressionToDeath[ iPat ] )

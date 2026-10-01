@@ -2,7 +2,7 @@
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #'
-#' @title Template: Analyze time-to-event subject outcomes
+#' @title Template: Analyze time-to-event subject outcomes with sample size re-estimation
 #'
 #' @description Analyze time-to-event subject outcomes. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional

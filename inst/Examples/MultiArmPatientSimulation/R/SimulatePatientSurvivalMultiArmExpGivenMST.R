@@ -3,8 +3,9 @@
 #'
 #' @title Simulate survival outcomes for multi-arm clinical trial simulations given Median Survival Times (MST)
 #'
-#' @description Generates patient-level survival times under several survival distribution parameterizations for
-#'   multi-arm clinical trial simulations.
+#' @description Generate exponential survival times for multiple arms from the median survival times supplied
+#'   in SurvParam. This example requires SurvMethod = 3 and supports a single survival period; other input
+#'   methods return ErrorCode = -100.
 #'
 #' @author Gabriel Potvin and Anoop Singh Rawat
 #'
@@ -39,8 +40,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}

@@ -24,8 +24,9 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of subject arrival times on the calendar scale for
-#'     visit VisitID. Replace VisitID by the actual visit number.}
+#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each subject's
+#'     enrollment, with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to
+#'     obtain calendar visit times.}
 #' }
 #'
 #' @return A ggplot object showing arm-specific mean responses and 95\% confidence intervals by visit.
@@ -49,7 +50,7 @@ PlotTreatmentControlCI <- function( SimData ) {
         dplyr::group_by( Visit, Treatment ) |>
         dplyr::summarise(
             Mean = mean( Response, na.rm = TRUE ),
-            SE = stats::sd( Response, na.rm = TRUE ) / sqrt( dplyr::n( ) ),
+            SE = stats::sd( Response, na.rm = TRUE ) / sqrt( sum( !is.na( Response ) ) ),
             .groups = "drop"
         ) |>
         dplyr::mutate(
@@ -57,9 +58,9 @@ PlotTreatmentControlCI <- function( SimData ) {
             Upper = Mean + 1.96 * SE
         )
 
-    Plot <- ggplot2::ggplot( dfSummary, ggplot2::aes( x = Visit, y = Mean, color = Treatment, fill = Treatment ) ) +
+    cPlot <- ggplot2::ggplot( dfSummary, ggplot2::aes( x = Visit, y = Mean, color = Treatment, fill = Treatment ) ) +
         ggplot2::geom_ribbon( ggplot2::aes( ymin = Lower, ymax = Upper ), alpha = 0.2, color = NA ) +
-        ggplot2::geom_line( size = 1.2 ) +
+        ggplot2::geom_line( linewidth = 1.2 ) +
         ggplot2::geom_point( size = 3, shape = 21, color = "white", stroke = 1 ) +
         ggplot2::scale_color_manual( values = c( Control = "dodgerblue", Treatment = "hotpink" ) ) +
         ggplot2::scale_fill_manual( values = c( Control = "dodgerblue", Treatment = "hotpink" ) ) +
@@ -68,7 +69,7 @@ PlotTreatmentControlCI <- function( SimData ) {
             x = "Visit Number",
             y = "Mean Response",
             title = "Control vs Treatment: Mean Response ±95% CI"
- ) +
+        ) +
         ggplot2::theme_minimal( base_size = 14 ) +
         ggplot2::theme(
             legend.position = "bottom",
@@ -80,5 +81,5 @@ PlotTreatmentControlCI <- function( SimData ) {
             legend.key = ggplot2::element_blank( )
         )
 
-    return( Plot )
+    return( cPlot )
 }

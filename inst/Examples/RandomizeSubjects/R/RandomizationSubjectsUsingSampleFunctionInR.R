@@ -40,20 +40,24 @@
 RandomizationSubjectsUsingSampleFunctionInR <- function( NumSub, NumArms, AllocRatio, UserParam = NULL ) {
     nErrorCode <- 0
 
+    if ( NumArms != 2 ) {
+        return( list( TreatmentID = rep( 0L, NumSub ), ErrorCode = -1L ) )
+    }
+
     # Allocation ratio on control and treatment arm
     vAllocRatio <- c( 1, AllocRatio )
 
     # Convert the Allocation Ratio to Allocation Fraction for control and treatment arm
-    dAllocFraction <- c( vAllocRatio[ 1 ] / sum( vAllocRatio ), 1 - vAllocRatio[ 1 ] / sum( vAllocRatio ) )
-    vSampleSizeArmWise <- c( round( NumSub * dAllocFraction[ 1 ] ), NumSub - round( NumSub * dAllocFraction[ 1 ] ) )
+    vAllocFraction <- c( vAllocRatio[ 1 ] / sum( vAllocRatio ), 1 - vAllocRatio[ 1 ] / sum( vAllocRatio ) )
+    vSampleSizeArmWise <- c( round( NumSub * vAllocFraction[ 1 ] ), NumSub - round( NumSub * vAllocFraction[ 1 ] ) )
 
     # Find the indices for Control and treatment arms
-    vControlArmIndex <- sample( 1:NumSub, size = vSampleSizeArmWise[ 1 ], replace = FALSE )
-    vTreatmentArmIndex <- c( 1:NumSub )[ -vControlArmIndex ]
+    vControlArmIndex <- sample( seq_len( NumSub ), size = vSampleSizeArmWise[ 1 ], replace = FALSE )
+    vTreatmentArmIndex <- setdiff( seq_len( NumSub ), vControlArmIndex )
 
     # Generate a vector of zeroes of size NumSub and then replace the Treatment Indices with 1.
-    retval <- rep( 0, NumSub )
-    retval[ vTreatmentArmIndex ] <- 1
+    vTreatmentIDs <- rep( 0, NumSub )
+    vTreatmentIDs[ vTreatmentArmIndex ] <- 1
 
-    return( list( TreatmentID = as.integer( retval ), ErrorCode = as.integer( nErrorCode ) ) )
+    return( list( TreatmentID = as.integer( vTreatmentIDs ), ErrorCode = as.integer( nErrorCode ) ) )
 }

@@ -11,7 +11,7 @@
 #' @return This script creates example results or test expectations in the R session; it is not an engine
 #'   integration function.
 #'
-#' Source and test both outcome generators from this example's working directory.
+#' @details Source and test both outcome generators from this example's working directory.
 ######################################################################################################################## .
 
 testthat::test_that( "Childhood anxiety generators return valid bounded responses", {

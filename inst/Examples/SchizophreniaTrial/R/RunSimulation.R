@@ -3,29 +3,17 @@
 #'
 #' @title Run Simulation
 #'
-#' @description
-#'   ====================================================================================================
-#' Script Name: RunSimulation.R
-#' Description:
-#' This script allows you to run the entire simulation workflow directly in RStudio,
-#' outside of the East Horizon (EH) environment. It sources all necessary component scripts
-#' for data generation, model analysis, and visualization.
-#' Once executed, the script will:
-#' - Generate simulated trial and patient-level data
-#' - Perform model-based analyses using MMRM approaches
-#' - Create analysis datasets
-#' - Produce visualizations of the data
-#' This setup is useful for debugging, local testing, or further extending
-#' simulation and plotting functionality outside of EH.
-#' ====================================================================================================
-#' —————————————————————————————————————————————————————————————
-#' Source Necessary Files
-#' —————————————————————————————————————————————————————————————
+#' @description Run the repeated-measures trial simulation directly in R. Source the response-generation,
+#'   MMRM analysis, and plotting functions, inspect a single simulated trial, and estimate power across
+#'   repeated trials using both mixed-model and generalized least-squares analyses.
 #'
 #' @author Jacob Wathen
 #'
-#' @return This script creates example results or test expectations in the R session; it is not an engine
-#'   integration function.
+#' @return This demonstration script creates simulated subject data, analysis results, plots, and matrices
+#'   of interim and final results in the R session.
+#'
+#' @details Run from the example R directory with MASS, dplyr, tidyr, ggplot2, nlme, rpact, RColorBrewer,
+#'   and CyneRgy installed. The final expressions report empirical efficacy rates and treatment effects.
 ######################################################################################################################## .
 
 source( "PlotTreatmentControlCI.R" )
@@ -88,7 +76,7 @@ lGeneratedData <- GenerateMMRMResponses(
 # Step 4: Prepare Data for Analysis
 # Data generation function returns responses in the form of a list. However, the analysis functions
 # Require a data frame that contains the responses, arrival times, and treatment IDs.
-SimData <- data.frame(
+dfSimData <- data.frame(
     ArrivalTime = vArrivalTime,
     TreatmentID = vTreatmentID,
     Response1 = lGeneratedData$Response1,
@@ -103,14 +91,14 @@ SimData <- data.frame(
     ArrTimeVisit5 = rep( vVisitTime[ 5 ], nNumSub )
 )
 
-DesignParam <- list(
+lDesignParam <- list(
     SampleSize = nNumSub,
     Alpha = 0.05,
     NumVisit = length( vVisitTime ),
     TailType = 0
 )
 
-LookInfo <- list(
+lLookInfo <- list(
     NumLooks = 2,
     CurrLookIndex = 1,
     CumCompleters = c( nNumSub / 2, nNumSub ),
@@ -120,14 +108,14 @@ LookInfo <- list(
 )
 
 # Step 5: Run Analysis
-lAnalysis <- AnalyzeUsingMMRM( SimData, DesignParam, LookInfo, UserParam = NULL )
-lAnalysisGLS <- AnalyzeUsingMMRMWithGLS( SimData, DesignParam, LookInfo, UserParam = NULL )
+lAnalysis <- AnalyzeUsingMMRM( dfSimData, lDesignParam, lLookInfo, UserParam = NULL )
+lAnalysisGLS <- AnalyzeUsingMMRMWithGLS( dfSimData, lDesignParam, lLookInfo, UserParam = NULL )
 
 # Step 6: Plot both Control and Treatment
-TrialPlot <- PlotTreatmentControlCI( SimData )
+cTrialPlot <- PlotTreatmentControlCI( dfSimData )
 
 # Step 7: Plot Individual Patient Trajectories (subset of patients)
-PatientPlot <- PlotSelectedPatients( SimData, vPatientIDs = vPlotPatients )
+cPatientPlot <- PlotSelectedPatients( dfSimData, vPatientIDs = vPlotPatients )
 
 # —————————————————————————————————————————————————————————————
 # Run Multiple Simulations
@@ -138,12 +126,12 @@ nQtyReps <- 10
 
 # Step 2: Define Objects to store results
 mResultsIA <- matrix( 0, nrow = nQtyReps, ncol = 4 )
-colnames( mResultsIA ) <- c( "Decision", "Prime Delta", "P-Value", "Error" )
+colnames( mResultsIA ) <- c( "Decision", "Primary Delta", "P-Value", "Error" )
 
 mResultsIAGLS <- mResultsIA
 
 mResultsFA <- matrix( 0, nrow = nQtyReps, ncol = 4 )
-colnames( mResultsFA ) <- c( "Decision", "Prime Delta", "P-Value", "Error" )
+colnames( mResultsFA ) <- c( "Decision", "Primary Delta", "P-Value", "Error" )
 
 mResultsFAGLS <- mResultsFA
 
@@ -166,7 +154,7 @@ for ( iRep in 1:nQtyReps ) {
         lUserParamDataGen
     )
 
-    SimData <- data.frame(
+    dfSimData <- data.frame(
         ArrivalTime = vArrivalTime,
         TreatmentID = vTreatmentID,
         Response1 = lGeneratedData$Response1,
@@ -181,39 +169,39 @@ for ( iRep in 1:nQtyReps ) {
         ArrTimeVisit5 = rep( vVisitTime[ 5 ], nNumSub )
     )
 
-    lLoopSimData[[ iRep ]] <- SimData
+    lLoopSimData[[ iRep ]] <- dfSimData
 
-    DesignParam <- list( SampleSize = nNumSub, Alpha = 0.025, NumVisit = length( vVisitTime ), TailType = 0 )
-    LookInfoIA <- list(
+    lDesignParam <- list( SampleSize = nNumSub, Alpha = 0.025, NumVisit = length( vVisitTime ), TailType = 0 )
+    lLookInfoIA <- list(
         NumLooks = 2, CurrLookIndex = 1, CumCompleters = c( nNumSub / 2, nNumSub ),
         InterimVisit = 2, IncludePipeline = 0, RejType = 2
     )
-    LookInfoFA <- list(
+    lLookInfoFA <- list(
         NumLooks = 2, CurrLookIndex = 2, CumCompleters = c( nNumSub / 2, nNumSub ),
         InterimVisit = 2, IncludePipeline = 0, RejType = 2
     )
 
     # Analysis for IA  using 2 methods
-    lAnalysisIA <- AnalyzeUsingMMRM( SimData, DesignParam, LookInfoIA, UserParam = NULL )
+    lAnalysisIA <- AnalyzeUsingMMRM( dfSimData, lDesignParam, lLookInfoIA, UserParam = NULL )
     mResultsIA[ iRep, 1 ] <- lAnalysisIA$Decision
     mResultsIA[ iRep, 2 ] <- lAnalysisIA$PrimDelta
     mResultsIA[ iRep, 3 ] <- lAnalysisIA$p.value
     mResultsIA[ iRep, 4 ] <- lAnalysisIA$ErrorCode
 
-    lAnalysisIA <- AnalyzeUsingMMRMWithGLS( SimData, DesignParam, LookInfoIA, UserParam = NULL )
+    lAnalysisIA <- AnalyzeUsingMMRMWithGLS( dfSimData, lDesignParam, lLookInfoIA, UserParam = NULL )
     mResultsIAGLS[ iRep, 1 ] <- lAnalysisIA$Decision
     mResultsIAGLS[ iRep, 2 ] <- lAnalysisIA$PrimDelta
     mResultsIAGLS[ iRep, 3 ] <- lAnalysisIA$p.value
     mResultsIAGLS[ iRep, 4 ] <- lAnalysisIA$ErrorCode
 
     # Analysis for FA  using 2 methods
-    lAnalysisFA <- AnalyzeUsingMMRM( SimData, DesignParam, LookInfoFA, UserParam = NULL )
+    lAnalysisFA <- AnalyzeUsingMMRM( dfSimData, lDesignParam, lLookInfoFA, UserParam = NULL )
     mResultsFA[ iRep, 1 ] <- lAnalysisFA$Decision
     mResultsFA[ iRep, 2 ] <- lAnalysisFA$PrimDelta
     mResultsFA[ iRep, 3 ] <- lAnalysisFA$p.value
     mResultsFA[ iRep, 4 ] <- lAnalysisFA$ErrorCode
 
-    lAnalysisFA <- AnalyzeUsingMMRMWithGLS( SimData, DesignParam, LookInfoFA, UserParam = NULL )
+    lAnalysisFA <- AnalyzeUsingMMRMWithGLS( dfSimData, lDesignParam, lLookInfoFA, UserParam = NULL )
     mResultsFAGLS[ iRep, 1 ] <- lAnalysisFA$Decision
     mResultsFAGLS[ iRep, 2 ] <- lAnalysisFA$PrimDelta
     mResultsFAGLS[ iRep, 3 ] <- lAnalysisFA$p.value

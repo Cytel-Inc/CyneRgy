@@ -2,7 +2,7 @@
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
 #'
-#' @title Template: Analyze binary subject responses
+#' @title Template: Analyze binary subject responses with sample size re-estimation
 #'
 #' @description Analyze binary subject responses. Use this template as a starting point for custom logic. Preserve
 #'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined

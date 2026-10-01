@@ -54,12 +54,12 @@
 #'     Design: Only available for `Combining P-Values (MAMS)` tests.}
 #'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: – `0`:
 #'     Bonferroni. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values:- – `0`: Bonferroni. – `1`: Sidak.
+#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values: – `0`: Bonferroni. – `1`: Sidak.
 #'     – `2`: Simes. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
 #'     Fallback. – `7`: Hochberg's Step Up. – `10`: Holm's Step Down. – `11`: Hommel's Step Up. – `12`: Dunnett's
 #'     Step Down. – `13`: Dunnett's Step Up.}
 #'   \item{NumTreatments}{Integer number of experimental treatment arms, excluding control.}
-#'   \item{IsArmPresent}{Vector or Integer.. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
+#'   \item{IsArmPresent}{Vector of Integer. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     indicating whether each arm is still in the trial or was dropped in the interim: - `0`: Dropped in the
 #'     interim. - `1`: Still present. East Horizon Explore: Fixed to `1` for the first look and for `Statistical
 #'     Design = Fixed Sample`. East Horizon Design: Fixed to `1` for the first look and for `Statistical Design =
@@ -157,7 +157,7 @@
     vPOCStatusArm <- rep( 0.0, nNumTrt )
     dOverallPOC <- 0.0
     dEstAnalysisTime <- NA
-    lcurrOutList <- list( )
+    lCurrOutList <- list( )
 
     # Step 3: Logic to compute Analysis Time
 
@@ -172,7 +172,7 @@
         POCStatusArm = as.integer( vPOCStatusArm ),
         POCStatus = as.integer( dOverallPOC ),
         AnalysisTime = as.double( dEstAnalysisTime ),
-        OutList = as.list( lcurrOutList ),
+        OutList = as.list( lCurrOutList ),
         ErrorCode = as.integer( nErrorCode )
     ) )
 }

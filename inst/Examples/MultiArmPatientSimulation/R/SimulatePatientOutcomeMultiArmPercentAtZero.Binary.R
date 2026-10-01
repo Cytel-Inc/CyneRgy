@@ -40,16 +40,17 @@
 #' \describe{
 #'   \item{UserParam$dProbOfTreatmentResistantCtrl}{Numeric probability in [0, 1] that a subject is treatment
 #'     resistant on the control arm.}
-#'    \item{UserParam$dProbOfTreatmentResistantExp1}{A value in (0, 1) that defines the probability a patient is
-#'      treatment resistant on the experimental arm 1.}
-#'    \item{UserParam$dProbOfTreatmentResistantExp2}{A value in (0, 1) that defines the probability a patient is
-#'      treatment resistant on the experimental arm 2.}
+#'   \item{UserParam$dProbOfTreatmentResistantExp1}{Numeric probability in [0, 1] that a subject is treatment
+#'     resistant on experimental arm 1 and therefore has a response of 0.}
+#'   \item{UserParam$dProbOfTreatmentResistantExp2}{Numeric probability in [0, 1] that a subject is treatment
+#'     resistant on experimental arm 2 and therefore has a response of 0.}
 #' }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
-#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#'   \item{Response}{Numeric vector of generated binary subject responses, coded 0 = non-response and 1 = response,
+#'     with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -60,6 +61,11 @@
 #'   treatment-to-control ratio of proportions). These standard binary examples do not use those inputs; extend the
 #'   signature and generation logic for a vaccine-efficacy design. Standard binary responses are coded 0 =
 #'   non-response and 1 = response.
+#'
+#' This example supports control and two experimental arms. With UserParam = NULL, the probability of
+#'   a forced zero outcome is 0 on all arms. Extend the named user parameters and probability vector before
+#'   using additional experimental arms.
+
 ######################################################################################################################## .
 
 SimulatePatientOutcomeMultiArmPercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
@@ -86,12 +92,12 @@ SimulatePatientOutcomeMultiArmPercentAtZero.Binary <- function( NumSub, NumArm, 
     # Loop over the patients and simulate the outcome according to the treatment they
     for ( nPatIndx in 1:NumSub ) {
         nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # Convert to 1-based index
-        probResist <- vProbabilityOfTreatmentResistant[ nTreatmentID ]
+        dProbResist <- vProbabilityOfTreatmentResistant[ nTreatmentID ]
 
         # Determine if patient is treatment resistant
-        if ( probResist > 0 & probResist < 1 ) {
-            nTreatmentResistant <- stats::rbinom( 1, 1, probResist )
-        } else if ( probResist <= 0 ) {
+        if ( dProbResist > 0 & dProbResist < 1 ) {
+            nTreatmentResistant <- stats::rbinom( 1, 1, dProbResist )
+        } else if ( dProbResist <= 0 ) {
             nTreatmentResistant <- 0
         } else {
             nTreatmentResistant <- 1

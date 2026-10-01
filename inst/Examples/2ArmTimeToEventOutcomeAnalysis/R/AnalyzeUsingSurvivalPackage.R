@@ -197,6 +197,11 @@
 #'     conditional-power rule.}
 #' }
 #'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{HazardRatio}{Estimated treatment-to-control hazard ratio, retained as a custom output for reporting.}
+#' }
+#'
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the

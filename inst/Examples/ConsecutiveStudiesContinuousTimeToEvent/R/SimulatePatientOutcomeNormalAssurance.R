@@ -45,8 +45,8 @@
 #'   \item{UserParam$dSDExp}{Nonnegative numeric experimental-arm response standard deviation.}
 #' }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{vTrueDelta}{Custom numeric vector of true experimental-minus-control mean differences, with one
@@ -144,8 +144,8 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
 #'   \item{UserParam$dSDExp}{Nonnegative numeric experimental-arm response standard deviation.}
 #' }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{vTrueDelta}{Custom numeric vector of true experimental-minus-control mean differences, with one

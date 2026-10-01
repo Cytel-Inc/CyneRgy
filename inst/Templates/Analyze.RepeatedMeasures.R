@@ -24,8 +24,9 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of subject arrival times on the calendar scale for
-#'     visit VisitID. Replace VisitID by the actual visit number.}
+#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each
+#'     subject's enrollment, with one element per subject. Replace VisitID by the actual visit number.
+#'     Add ArrivalTime to obtain calendar visit times.}
 #' }
 #'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
@@ -86,11 +87,11 @@
 #'   \item{Sigma}{Numeric. Design standard deviation specified in simulations. East Horizon Explore: Not available.
 #'     East Horizon Design: Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3
 #'     (Z-test)`.}
-#'   \item{NumVisit}{Integer. Number of visits. East Horizon Explore: Only available for `Endpoint Type =
+#'   \item{NumVisit}{Integer number of visits. East Horizon Explore: Only available for `Endpoint Type =
 #'     Continuous with Repeated Measures`. East Horizon Design: Not available.}
-#'   \item{VisitTime}{Vector of Numeric. Vector of length `NumVisit`, indicating the time for each visit. East
-#'     Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon
-#'     Design: Not available.}
+#'   \item{VisitTime}{Numeric vector of visit times measured from enrollment, of length NumVisit and
+#'     ordered by visit. East Horizon Explore: Only available for `Endpoint Type = Continuous with
+#'     Repeated Measures`. East Horizon Design: Not available.}
 #'   \item{VisitStatus}{Vector of Integer. Vector of length `NumVisit`, indicating the visit selection status for
 #'     each visit: – `0`: Visit has not been selected for analysis. – `1`: Visit has been selected for analysis.
 #'     East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon
@@ -222,7 +223,7 @@
     bIAFutilityCheck <- FALSE
     bFAEfficacyCheck <- TRUE
 
-    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
+    # Step 1 - If LookInfo is NULL, this is a fixed-sample design and all rows in SimData are analyzed
     # Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if ( !is.null( LookInfo ) ) {
         nQtyOfLooks <- LookInfo$NumLooks

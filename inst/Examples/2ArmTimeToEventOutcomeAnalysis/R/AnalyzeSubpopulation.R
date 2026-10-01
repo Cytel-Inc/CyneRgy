@@ -265,11 +265,15 @@
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
-#'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
-#'     (unavailable in East Horizon Explore).}
-#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
-#'   \item{HR}{Estimated treatment-to-control hazard ratio.}
+#'   \item{Decision}{Named list of integer boundary-crossing codes, with one element for the full
+#'     population and each subpopulation, using the population names defined by the design: 0 = no
+#'     boundary crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 3 =
+#'     futility boundary crossed; 4 = equivalence boundary crossed (unavailable in East Horizon
+#'     Explore).}
+#'   \item{TestStat}{Named list of numeric test statistics on the Wald (Z) scale, with one element for
+#'     the full population and each subpopulation, using the population names defined by the design.}
+#'   \item{HR}{Named list of estimated treatment-to-control hazard ratios, with one element for the full
+#'     population and each subpopulation, using the population names defined by the design.}
 #'   \item{Delta}{Estimated log hazard ratio (natural logarithm of HR).}
 #'   \item{CtrlEvents}{Number of observed events in the control arm.}
 #'   \item{TrmtEvents}{Number of observed events in the experimental arm.}
@@ -425,7 +429,7 @@ AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserPar
         nGMCPFlag <- lGMCPResult$decisionFlag[ iPop ]
 
         if ( nGMCPFlag == 1 ) {
-            nFinalDecision <- 2
+            nFinalDecision <- ifelse( DesignParam$TailType == 0, 1L, 2L )
         } else if ( nLookIndex == nQtyOfLooks ) {
             nFinalDecision <- 3
         } else {

@@ -194,8 +194,9 @@
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
-#'   \item{Decision}{Integer vector of endpoint decisions in endpoint order: 0 = no boundary crossed; 1 = lower
-#'     efficacy boundary crossed; 2 = upper efficacy boundary crossed; 4 = futility boundary crossed. The
+#'   \item{Decision}{Named list of integer endpoint decisions in DesignParam$EndpointName order: 0 = no boundary
+#'     crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 4 = futility boundary
+#'     crossed. The
 #'     multiplicity-adjustment integration point uses 4 for futility.}
 #'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
 #'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
@@ -211,15 +212,12 @@
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, TestStat = NULL, OutList = NULL, UserParam = NULL ) {
-    EndpointName <- DesignParam$EndpointName
-    lDecision <- list( )
-    lDecision[ EndpointName[[ 1 ]] ] <- lDecision[ EndpointName[[ 2 ]] ] <- 0
-    nErrorCode <- 0
-    Retval <- 0
-    OutList <- list( )
-    OutList$OutVal <- Retval
+    vEndpointName <- DesignParam$EndpointName
+    lDecision <- as.list( stats::setNames( rep( 0L, length( vEndpointName ) ), vEndpointName ) )
+    nErrorCode <- 0L
+    lOutList <- list( OutVal = 0 )
 
     # Write logic to implement a particular multiplicity adjustment method and update Decisions
 
-    return( list( Decision = as.list( lDecision ), OutList = as.list( OutList ), ErrorCode = as.integer( nErrorCode ) ) )
+    return( list( Decision = as.list( lDecision ), OutList = lOutList, ErrorCode = as.integer( nErrorCode ) ) )
 }

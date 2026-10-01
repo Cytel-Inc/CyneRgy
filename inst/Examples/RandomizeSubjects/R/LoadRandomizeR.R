@@ -3,7 +3,8 @@
 #'
 #' @title Initialize the R simulation environment
 #'
-#' @description For Performing Block randomization in R, a package named "randomizeR" is required to be installed.
+#' @description Set the R random seed and load randomizeR for block randomization. Install randomizeR
+#'   before selecting this function at the initialization integration point.
 #'
 #' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
 #'

@@ -213,14 +213,17 @@ AnalyzeDEPUsingFisherExact <- function( SimData, DesignParam, LookInfo = NULL, U
     strAnalysisEndpointName <- DesignParam$EndpointName[ nAnalysisEndpointIndex ]
 
     dAnalysisTime <- ComputeDEPAnalysisTime( SimData, DesignParam, LookInfo )
-    dfAnalysisData <- SimData[ SimData$ArrivalTime <= dAnalysisTime, ] # Slicing the data to be used for analysis
+    dfAnalysisData <- SimData[ SimData$ClndrRespTime2 <= dAnalysisTime & SimData$CensorIndOrg2 == 1, ] # Slicing the data to be used for analysis
 
     # Create the vector of simulated data for this interim analysis
     vPatientOutcome <- dfAnalysisData[[ paste0( "Response", nAnalysisEndpointIndex ) ]]
     vPatientTreatment <- dfAnalysisData$TreatmentID
 
     # Create contingency table for Fisher's Exact Test
-    mContingencyTable <- table( vPatientTreatment, vPatientOutcome )
+    mContingencyTable <- table(
+        factor( vPatientTreatment, levels = 0:1 ),
+        factor( vPatientOutcome, levels = 0:1 )
+    )
 
     # Perform Fisher's Exact Test
     if ( DesignParam$TailType[[ nAnalysisEndpointIndex ]] == 0 ) {
@@ -232,7 +235,11 @@ AnalyzeDEPUsingFisherExact <- function( SimData, DesignParam, LookInfo = NULL, U
     dPValue <- lFisherResult$p.value
 
     # Convert p-value to standard normal quantile
-    dZValue <- stats::qnorm( 1 - dPValue )
+    if ( DesignParam$TailType[[ nAnalysisEndpointIndex ]] == 0 ) {
+        dZValue <- stats::qnorm( dPValue )
+    } else {
+        dZValue <- stats::qnorm( dPValue, lower.tail = FALSE )
+    }
     dControlProportion <- mContingencyTable[ 1, ][ 2 ] / apply( mContingencyTable, 1, sum )[ 1 ]
     dTreatmentProportion <- mContingencyTable[ 2, ][ 2 ] / apply( mContingencyTable, 1, sum )[ 2 ]
     nErrorCode <- 0

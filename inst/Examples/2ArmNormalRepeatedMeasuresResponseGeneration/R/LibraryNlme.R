@@ -3,8 +3,8 @@
 #'
 #' @title Initialize the R simulation environment
 #'
-#' @description This library is used to run mvrnorm() function in R for generating Normal responses in Repeated
-#'   measures.
+#' @description Set the R random seed and load nlme and stats for repeated-measures analyses with
+#'   `nlme::gls()` and related model functions.
 #'
 #' @author Shubham Lahoti
 #'

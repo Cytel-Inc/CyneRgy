@@ -4,11 +4,10 @@
 #' @title Simulate patient outcomes for Survival-Survival Dual Endpoint design using single piece hazard rates as
 #'   inputs.
 #'
-#' @description In this example, the response (Survival times) is generated for two correlated Time to Event
-#'   Endpoints. The hazard inputs are single piece hazard rates in this example. The steps to simulating patient
-#'   data in this example follows a two-step procedure. Step 1: Generate two standard normal samples, each of size
-#'   NumSub. Step 2: Transform the sample to be correlated (on normal scale) as per the specified input. Step 3:
-#'   Convert the normal responses to the TTE (exponential) responses by using corresponding endpoints hazard input.
+#' @description Generate two correlated survival endpoints using a Gaussian copula. Simulate two standard
+#'   normal samples, impose the requested correlation on the normal scale, then transform each endpoint to
+#'   exponential survival times using its arm-specific hazard rates. This example supports one hazard period
+#'   and requires SurvMethod = 1 for both endpoints.
 #'
 #' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
 #'
@@ -54,9 +53,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Required named list of numeric response vectors, indexed by EndpointName, with one value per
 #'     subject in each vector. Time-to-event responses are measured from enrollment.}
@@ -75,31 +73,26 @@ SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, 
     vPatientOutcomeEP2 <- rep( 0, NumSub )
     lResponse <- list( )
 
-    if ( !is.null( UserParam ) ) {
-        # Customized logic for data generation using UserParam will go here.
-    } else {
-        # Get correlation matrix given qualitative correlation input
-        mCor <- GetCorrMatrix( Correlation )
+    # Get correlation matrix given qualitative correlation input
+    mCor <- GetCorrMatrix( Correlation )
 
-        # Cholesky decomposition of correlation matrix
-        mChol <- chol( mCor )
+    # Cholesky decomposition of correlation matrix
+    mChol <- chol( mCor )
 
-        # Generating (NumSub * 2) standard normal responses
-        mZ <- matrix( stats::rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
+    # Generating (NumSub * 2) standard normal responses
+    mZ <- matrix( stats::rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
 
-        # Intermediate matrix
-        mNormResp <- mZ %*% mChol
+    # Intermediate matrix
+    mNormResp <- mZ %*% mChol
 
-        # Surv times
-        for ( nSubjID in 1:NumSub ) {
-            # browser()
-            vPatientOutcomeEP1[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 1 ] ) ) / SurvParam[[ 1 ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
-            vPatientOutcomeEP2[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 2 ] ) ) / SurvParam[[ 2 ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
-        }
-        if ( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
-            length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ) ) {
-            nErrorCode <- -100
-        }
+    # Surv times
+    for ( nSubjID in 1:NumSub ) {
+        vPatientOutcomeEP1[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 1 ] ) ) / SurvParam[[ EndpointName[ 1 ] ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
+        vPatientOutcomeEP2[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 2 ] ) ) / SurvParam[[ EndpointName[ 2 ] ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
+    }
+    if ( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
+        length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ) ) {
+        nErrorCode <- -100
     }
 
     lResponse[[ EndpointName[[ 1 ]] ]] <- vPatientOutcomeEP1
@@ -110,7 +103,7 @@ SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, 
 
 # Helper function to create correlation matrix given qualitative correlation
 GetCorrMatrix <- function( Correlation ) {
-    rho <- ifelse( Correlation == 0, 0,
+    dCorrelation <- ifelse( Correlation == 0, 0,
         ifelse( Correlation == 1, 0.15,
             ifelse( Correlation == 2, 0.3,
                 ifelse( Correlation == 3, 0.5,
@@ -133,5 +126,5 @@ GetCorrMatrix <- function( Correlation ) {
     )
 
     # Return the 2x2 correlation matrix
-    return( matrix( c( 1, rho, rho, 1 ), nrow = 2 ) )
+    return( matrix( c( 1, dCorrelation, dCorrelation, 1 ), nrow = 2 ) )
 }

@@ -21,7 +21,8 @@
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
 #'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
 #'
@@ -50,20 +51,14 @@
 #'   \item{EC50}{Required positive numeric concentration producing half of Emax.}
 #' }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
 #'     Replace NumVisit by the actual number of visits.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
-#' }
-#'
-#' Example-specific additional output elements:
-#' \describe{
-#'   \item{Response<NumVisit>}{A set of arrays of response for all subjects. Each array corresponds to each visit
-#'     user has specified}
 #' }
 #'
 #' @details Return each visit response as a separate named list element: Response1, Response2, ...,
@@ -82,26 +77,26 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
     dAbsorptionRate <- UserParam$AbsorptionRate # Absorption rate constant
     dEliminationRate <- UserParam$EliminationRate # Elimination rate constant
     dDose <- UserParam$Dose # Dose administered
-    E0 <- UserParam$E0 # Baseline effec
-    Emax <- UserParam$Emax # Maximum effect
-    EC50 <- UserParam$EC50 # Concentration at 50% of Emax
+    dE0 <- UserParam$E0 # Baseline effect
+    dEmax <- UserParam$Emax # Maximum effect
+    dEC50 <- UserParam$EC50 # Concentration at 50% of Emax
 
     # Check if all required Emax parameters are provided
-    if ( is.null( E0 ) || is.null( Emax ) || is.null( EC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) ) {
+    if ( is.null( dE0 ) || is.null( dEmax ) || is.null( dEC50 ) || is.null( dAbsorptionRate ) || is.null( dEliminationRate ) || is.null( dDose ) ) {
         nErrorCode <- -1 # Fatal error if required parameters are missing
         lRetval$ErrorCode <- as.integer( nErrorCode )
         return( lRetval )
     }
 
     # Call PK function to get concentration responses for treatment group
-    lPkResult <- GenerateDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose )
+    lPkResult <- GenerateEmaxDrugConcentration( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose )
 
     # Simulate response for each patient
     for ( nPatIndx in 1:NumSub ) {
         for ( nVisitIndx in 1:NumVisit ) {
-            Cp <- lPkResult[[ paste0( "Response", nVisitIndx ) ]][ nPatIndx ]
+            dConcentration <- lPkResult[[ paste0( "Response", nVisitIndx ) ]][ nPatIndx ]
 
-            dTreatmentEffect <- E0 + ( Emax * Cp ) / ( EC50 + Cp ) # Calculate Emax
+            dTreatmentEffect <- dE0 + ( dEmax * dConcentration ) / ( dEC50 + dConcentration ) # Calculate Emax
 
             if ( TreatmentID[ nPatIndx ] == 0 ) {
                 mResponses[ nPatIndx, nVisitIndx ] <- stats::rnorm( 1, mean = MeanControl[ nVisitIndx ], sd = StdDevControl[ nVisitIndx ] ) # Generates response for control group
@@ -122,7 +117,7 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 
 
 ######################################################################################################################## .
-#' @name GenerateDrugConcentration
+#' @name GenerateEmaxDrugConcentration
 #'
 #' @title Generate Drug Concentration
 #'
@@ -141,7 +136,8 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
 #'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
 #'
@@ -161,8 +157,8 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 #'
 #' @param dDose Positive numeric administered dose.
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
 #'     Replace NumVisit by the actual number of visits.}
@@ -172,9 +168,7 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 #' }
 ######################################################################################################################## .
 
-GenerateDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose ) {
-    library( deSolve )
-
+GenerateEmaxDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, dAbsorptionRate, dEliminationRate, dDose ) {
     # Initialize error code and return list
     nErrorCode <- 0
     lRetval <- list( )

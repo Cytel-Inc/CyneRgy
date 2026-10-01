@@ -22,6 +22,12 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
+#' Example-specific parameters and requirements:
+#' \describe{
+#'   \item{BlockSize1, ..., BlockSizeN}{Required positive integer block sizes, named consecutively in this order.
+#'     They must sum to NumSub, and each must be a multiple of the sum of the integer allocation ratios.}
+#' }
+#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -56,23 +62,26 @@
 #'                              \item{ErrorCode = -1}{Invalid number of arms}
 #'                              \item{ErrorCode = -2}{Missing UserParam}
 #'                              \item{ErrorCode = -3}{Incorrect block naming format}
-#'                              \item{ErrorCode = -4}{Non-integer block size detected}
+#'                              \item{ErrorCode = -4}{Non-positive, nonfinite, or non-integer block size detected}
 #'                              \item{ErrorCode = -5}{Block sizes do not sum to NumSub}
 #'                              \item{ErrorCode = -6}{Block size incompatible with allocation ratio}
+#'                              \item{ErrorCode = -7}{Invalid allocation ratio}
 #'     }
 ######################################################################################################################## .
 
 BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio, UserParam = NULL ) {
     nErrorCode <- 0
 
-    # Convert the allocation ratio
-    vAllocRatio <- ConvertRatio( AllocRatio )
-
     # Variable check ####
     # 1. Only two-arm designs are supported
     if ( NumArms != 2 ) {
         return( list( TreatmentID = as.integer( rep( 0, NumSub ) ), ErrorCode = as.integer( -1 ) ) )
     }
+
+    if ( length( AllocRatio ) != 1 || !is.finite( AllocRatio ) || AllocRatio <= 0 ) {
+        return( list( TreatmentID = rep( 0L, NumSub ), ErrorCode = -7L ) )
+    }
+    vAllocRatio <- ConvertRatio( AllocRatio )
 
     # 2. Block sizes must be provided
     if ( is.null( names( UserParam ) ) ) {
@@ -81,14 +90,15 @@ BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio
 
     # 3. Names must be exactly BlockSize1, BlockSize2, ..., BlockSizeX
     nBlocks <- length( UserParam )
-    expectedNames <- paste0( "BlockSize", seq_len( nBlocks ) )
+    vExpectedNames <- paste0( "BlockSize", seq_len( nBlocks ) )
 
-    if ( !identical( names( UserParam ), expectedNames ) ) {
+    if ( !identical( names( UserParam ), vExpectedNames ) ) {
         return( list( TreatmentID = as.integer( rep( 0, NumSub ) ), ErrorCode = as.integer( -3 ) ) )
     }
 
     # 4. Block sizes must be integers
-    if ( any( unlist( UserParam ) != as.integer( unlist( UserParam ) ) ) ) {
+    if ( any( !is.finite( unlist( UserParam ) ) | unlist( UserParam ) <= 0 ) ||
+         any( unlist( UserParam ) != as.integer( unlist( UserParam ) ) ) ) {
         return( list( TreatmentID = as.integer( rep( 0, NumSub ) ), ErrorCode = as.integer( -4 ) ) )
     }
 
@@ -112,7 +122,7 @@ BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio
     return( list( TreatmentID = as.integer( vReturn ), ErrorCode = as.integer( nErrorCode ) ) )
 }
 
-########## Auxilliary function ################
+########## Auxiliary function ################
 
 # Convert a numeric treatment-to-control ratio (n_t / n_c) into the smallest integer allocation vector:
 # c(n_c, n_t)

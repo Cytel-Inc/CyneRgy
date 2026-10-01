@@ -24,8 +24,9 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of subject arrival times on the calendar scale for
-#'     visit VisitID. Replace VisitID by the actual visit number.}
+#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each
+#'     subject's enrollment, with one element per subject. Replace VisitID by the actual visit number.
+#'     Add ArrivalTime to obtain calendar visit times.}
 #' }
 #'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
@@ -86,11 +87,11 @@
 #'   \item{Sigma}{Numeric. Design standard deviation specified in simulations. East Horizon Explore: Not available.
 #'     East Horizon Design: Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3
 #'     (Z-test)`.}
-#'   \item{NumVisit}{Integer. Number of visits. East Horizon Explore: Only available for `Endpoint Type =
+#'   \item{NumVisit}{Integer number of visits. East Horizon Explore: Only available for `Endpoint Type =
 #'     Continuous with Repeated Measures`. East Horizon Design: Not available.}
-#'   \item{VisitTime}{Vector of Numeric. Vector of length `NumVisit`, indicating the time for each visit. East
-#'     Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon
-#'     Design: Not available.}
+#'   \item{VisitTime}{Numeric vector of visit times measured from enrollment, of length NumVisit and
+#'     ordered by visit. East Horizon Explore: Only available for `Endpoint Type = Continuous with
+#'     Repeated Measures`. East Horizon Design: Not available.}
 #'   \item{VisitStatus}{Vector of Integer. Vector of length `NumVisit`, indicating the visit selection status for
 #'     each visit: – `0`: Visit has not been selected for analysis. – `1`: Visit has been selected for analysis.
 #'     East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon
@@ -217,6 +218,9 @@
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
 #'
+#' If only one post-baseline visit has been observed, the repeated-measures model reduces to a baseline-adjusted
+#'   ANCOVA at that visit. Future visit responses are excluded from interim analyses.
+#'
 #' Example-specific output usage: PrimDelta: Estimated treatment effect from the MMRM model at the final visit.
 ######################################################################################################################## .
 
@@ -254,35 +258,46 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
 
     dfNoBaselineAnalysisData$Visit <- stats::relevel( dfNoBaselineAnalysisData$Visit, ref = strLastVisit )
 
+    nObservedVisits <- length( unique( dfNoBaselineAnalysisData$Visit ) )
     mmrmModel <- tryCatch(
         {
-            nlme::lme( Response ~ Baseline + TreatmentID * Visit,
-                random      = ~ 1 | Id,
-                correlation = nlme::corCompSymm( form = ~ 1 | Id ),
-                weights     = nlme::varIdent( form = ~ 1 | Visit ),
-                data        = dfNoBaselineAnalysisData,
-                method      = "REML",
-                na.action   = stats::na.omit,
-                control     = lmeCtrls
-            )
+            if ( nObservedVisits == 1 ) {
+                # With one follow-up per subject, the repeated-measures model reduces to ANCOVA.
+                nlme::gls( Response ~ Baseline + TreatmentID,
+                    data = dfNoBaselineAnalysisData, method = "REML", na.action = stats::na.omit
+                )
+            } else {
+                nlme::lme( Response ~ Baseline + TreatmentID * Visit,
+                    random      = ~ 1 | Id,
+                    correlation = nlme::corCompSymm( form = ~ 1 | Id ),
+                    weights     = nlme::varIdent( form = ~ 1 | Visit ),
+                    data        = dfNoBaselineAnalysisData,
+                    method      = "REML",
+                    na.action   = stats::na.omit,
+                    control     = lmeCtrls
+                )
+            }
         },
         error = function( e ) {
-            # Non-fatal error should skip the simulation if it does not work
-            nErrorCode <- 0
-            NULL
+            return( NULL )
         }
     )
 
     # Step 3b: Extract the treatment × last‐visit effect ####
     if ( !is.null( mmrmModel ) ) {
         tTable <- summary( mmrmModel )$tTable
+        if ( inherits( mmrmModel, "gls" ) ) {
+            tTable <- cbind( tTable, DF = mmrmModel$dims$N - mmrmModel$dims$p )
+        }
         cTrtRow <- grep( "^TreatmentID", rownames( tTable ), value = TRUE )[ 1 ]
 
         if ( cTrtRow %in% rownames( tTable ) ) {
             dPrimDelta <- tTable[ cTrtRow, "Value" ]
             stdErr <- tTable[ cTrtRow, "Std.Error" ]
             df <- tTable[ cTrtRow, "DF" ]
-            dPValue <- max( tTable[ cTrtRow, "p-value" ], .Machine$double.eps )
+            dPValue <- stats::pt( tTable[ cTrtRow, "t-value" ], df,
+                lower.tail = DesignParam$TailType == 0
+            )
         } else {
             warning( "Treatment coefficient not found: ", cTrtRow )
             nErrorCode <- 1
@@ -405,6 +420,10 @@ CreateAnalysisDataset <- function( SimData, LookInfo ) {
 
         dfAnalysisData <- dfLongData |>
             dplyr::filter( Id %in% vSubjectsForAnalysis )
+        if ( nLookIndex < nQtyOfLooks ) {
+            dfAnalysisData <- dfAnalysisData |>
+                dplyr::filter( CalendarVisitTime <= dAnalysisTime )
+        }
     } else {
         dfAnalysisData <- dfLongData
     }

@@ -36,8 +36,8 @@
 #'     \item \code{dStdDevBaselineExp} – Standard deviation of baseline outcome for the experimental group.
 #'   }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
@@ -72,17 +72,17 @@ SimulatePatientOutcome <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdD
         nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
         # Simulate from a normal distribution and round to nearest integer
-        outcome1 <- round( stats::rnorm( 1, vMeanBaseline[ nTreatmentID ], vStdDevBaseline[ nTreatmentID ] ) )
+        dBaselineScore <- round( stats::rnorm( 1, vMeanBaseline[ nTreatmentID ], vStdDevBaseline[ nTreatmentID ] ) )
 
         # Generate the follow-up score for this treatment arm.
-        outcome2 <- round( stats::rnorm( 1, vMeanBaseline[ nTreatmentID ] - Mean[ nTreatmentID ], StdDev[ nTreatmentID ] ) )
+        dFollowUpScore <- round( stats::rnorm( 1, vMeanBaseline[ nTreatmentID ] - Mean[ nTreatmentID ], StdDev[ nTreatmentID ] ) )
 
         # Ensure outcome is within specified range
-        outcome1 <- max( min( outcome1, 45 ), 9 )
-        outcome2 <- max( min( outcome2, 45 ), 9 )
+        dBaselineScore <- max( min( dBaselineScore, 45 ), 9 )
+        dFollowUpScore <- max( min( dFollowUpScore, 45 ), 9 )
 
         # Note: Response = Baseline - Followup so a value above 0 means the patient improved.
-        vPatientOutcome[ nPatIndx ] <- outcome1 - outcome2
+        vPatientOutcome[ nPatIndx ] <- dBaselineScore - dFollowUpScore
     }
 
     # Error Checking

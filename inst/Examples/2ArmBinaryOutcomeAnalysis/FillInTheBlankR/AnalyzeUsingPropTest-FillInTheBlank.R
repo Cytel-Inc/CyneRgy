@@ -1,9 +1,9 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingPropTest
 #'
-#' @title Analyze using the prop.test function in base R.
+#' @title Analyze using the prop.test function in the stats package in R.
 #'
-#' @description This example utilizes the prop.test function in base R to perform the analysis. The p-value from
+#' @description This example utilizes the prop.test function in the stats package in R to perform the analysis. The p-value from
 #'   prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon
 #'   as an input. This example does NOT include a futility rule.
 #'

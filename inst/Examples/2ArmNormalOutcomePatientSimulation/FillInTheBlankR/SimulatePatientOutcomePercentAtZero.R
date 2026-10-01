@@ -3,11 +3,9 @@
 #'
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0.
 #'
-#' @description In this example, the continuous outcome is a patient's change from baseline. For this function,
-#'   20\%
-#'   of patients are believed to have no change due to treatment. As such, this function simulates patient outcome
-#'   where, on average, 20\% will have a value of 0 for the outcome and 80\%, on average, will have their value
-#'   simulated from a normal distribution with the mean and standard deviation as sent from East Horizon.
+#' @description Generate normal subject responses with an arm-specific probability of a zero outcome.
+#'   Subjects selected to have a zero outcome are assigned 0; otherwise their responses are drawn from the
+#'   normal distribution specified by Mean and StdDev. With UserParam = NULL, no outcomes are forced to zero.
 #'
 #' @author J. Kyle Wathen
 #'
@@ -30,14 +28,17 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' When UserParam is NULL, no subjects are forced to have zero outcomes. If supplied, the list
-#'   must contain the following named elements: UserParam$dProbOfZeroOutcomeCtrl - A value in (0, 1) that defines
-#'   the probability a patient will have an outcome of 0 on the control (ctrl) treatment.
-#'   UserParam$dProbOfZeroOutcomeExp - A value in (0, 1) that defines the probability a patient will have an
-#'   outcome of 0 on the control (ctrl) treatment.
+#' When UserParam is NULL, no subjects are forced to have zero outcomes. If supplied, the list must
+#'   contain the following named elements:
+#' \describe{
+#'   \item{UserParam$dProbOfZeroOutcomeCtrl}{Numeric probability in [0, 1] that a subject has a zero outcome
+#'     on the control arm.}
+#'   \item{UserParam$dProbOfZeroOutcomeExp}{Numeric probability in [0, 1] that a subject has a zero outcome
+#'     on the experimental arm.}
+#' }
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
@@ -57,7 +58,7 @@ SimulatePatientOutcomePercentAtZero <- function( NumSub, ArrivalTime, TreatmentI
     }
 
     # Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
-    vProbabilityOfZeroOutcome <- c( UserParam$dProbOfZeroOutcomeCtrl, UserParam$dProbOfZeroOutcomeExp ) # For this example, 20% of patients do not respond to treatment and thus have no change from baseline.
+    vProbabilityOfZeroOutcome <- c( UserParam$dProbOfZeroOutcomeCtrl, UserParam$dProbOfZeroOutcomeExp )
 
     nErrorCode <- 0 # No errors occurred
     vPatientOutcome <- rep( 0, _________ ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated

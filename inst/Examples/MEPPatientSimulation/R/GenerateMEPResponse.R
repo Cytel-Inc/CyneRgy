@@ -3,7 +3,8 @@
 #'
 #' @title Simulate multiple-endpoint subject responses
 #'
-#' @description Generate Multi-Endpoint Patient Responses
+#' @description Generate correlated continuous, binary, and time-to-event responses for multiple endpoints
+#'   using a Gaussian copula and the endpoint-specific parameters in RespParams.
 #'
 #' @author Anoop Singh Rawat, Gabriel Potvin
 #'
@@ -46,8 +47,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response}{Required named list of numeric response vectors, indexed by EndpointName, with one value per
 #'     subject in each vector. Time-to-event responses are measured from enrollment.}

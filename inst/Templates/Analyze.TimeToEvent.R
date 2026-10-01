@@ -210,7 +210,7 @@
     bIAFutilityCheck <- FALSE
     bFAEfficacyCheck <- TRUE
 
-    # Step 1 - If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxEvents
+    # Step 1 - If LookInfo is NULL, this is a fixed-sample design and all rows in SimData are analyzed
     # Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if ( !is.null( LookInfo ) ) {
         # Look info was provided so this is a group sequential design and need to use the look information

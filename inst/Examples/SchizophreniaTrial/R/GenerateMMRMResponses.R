@@ -21,7 +21,8 @@
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
 #'
-#' @param VisitTime Numeric vector of visit times of length NumVisit.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
 #'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
 #'
@@ -40,8 +41,8 @@
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
 #' \describe{
 #'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
 #'     Replace NumVisit by the actual number of visits.}
@@ -54,7 +55,7 @@
 #'   ResponseNumVisit. Optional ArrivalTime may be included in the function signature when calendar arrival times
 #'   are needed; it has the same definition as at the enrollment integration point.
 #'
-#' Usage of Inputmethod in this example: Character. Placeholder for input method (currently not used).
+#' Usage of Inputmethod in this example: Integer input method (currently not used).
 #'
 #' Usage of VisitTime in this example: Numeric vector. Visit times (currently not used).
 ######################################################################################################################## .
@@ -77,31 +78,26 @@ GenerateMMRMResponses <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, I
     }
 
     # Step 2: Build covariance matrices for each arm ####
-    CovMatControl <- ( StdDevControl %*% t( StdDevControl ) ) * CorrMat
-    CovMatTrt <- ( StdDevTrt %*% t( StdDevTrt ) ) * CorrMat
+    mCovMatControl <- ( StdDevControl %*% t( StdDevControl ) ) * CorrMat
+    mCovMatTrt <- ( StdDevTrt %*% t( StdDevTrt ) ) * CorrMat
 
-    # Step 3: Draw multivariate‐normal samples for each arm ####
-    ControlResponses <- MASS::mvrnorm(
-        n = sum( TreatmentID == 0 ),
-        mu = MeanControl,
-        Sigma = CovMatControl
-    )
+    # Step 3: Draw multivariate-normal samples for each arm and preserve subject order ####
+    mResponses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
 
-    TrtResponses <- MASS::mvrnorm(
-        n = sum( TreatmentID == 1 ),
-        mu = MeanTrt,
-        Sigma = CovMatTrt
-    )
-
-    # Step 4: Combine responses into a matrix ####
-    Responses <- matrix( 0, nrow = NumSub, ncol = NumVisit )
-
-    Responses[ TreatmentID == 0, ] <- ControlResponses
-    Responses[ TreatmentID == 1, ] <- TrtResponses
+    if ( any( TreatmentID == 0 ) ) {
+        mResponses[ TreatmentID == 0, ] <- MASS::mvrnorm(
+            n = sum( TreatmentID == 0 ), mu = MeanControl, Sigma = mCovMatControl
+        )
+    }
+    if ( any( TreatmentID == 1 ) ) {
+        mResponses[ TreatmentID == 1, ] <- MASS::mvrnorm(
+            n = sum( TreatmentID == 1 ), mu = MeanTrt, Sigma = mCovMatTrt
+        )
+    }
 
     # Step 5: Return the simulated outcomes and error code ####
     for ( i in seq_len( NumVisit ) ) {
-        lRet[[ paste0( "Response", i ) ]] <- as.double( Responses[ , i ] )
+        lRet[[ paste0( "Response", i ) ]] <- as.double( mResponses[ , i ] )
     }
 
     lRet$ErrorCode <- as.integer( nErrorCode )
