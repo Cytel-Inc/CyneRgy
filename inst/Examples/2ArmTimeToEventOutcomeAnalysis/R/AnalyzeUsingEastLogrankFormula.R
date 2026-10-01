@@ -1,17 +1,13 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingEastLogrankFormula
-#'
 #' @title Compute the statistic using formulas Q.242 and Q.243 in the East manual.
-#'
 #' @description Use the formulas Q.242 and Q.243 in the East manual to compute the statistic. The purpose of this
 #'   example is to demonstrate how the analysis and decision making can be modified in a simple approach. The test
 #'   statistic is compared to the lower boundary computed and sent by East Horizon as an input. This example does NOT
 #'   include a futility rule.
-#'
 #' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -22,10 +18,7 @@
 #'     enrollment, with one element per subject.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
-#'   \item{OS}{Optional custom numeric vector of subject overall-survival times measured from enrollment. Available
-#'     when the multi-state response generator returns OS.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -45,8 +38,8 @@
 #'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
 #'     `Statistical Design = Fixed Sample`.}
@@ -95,7 +88,6 @@
 #'   \item{LambdaC}{Numeric. Control Hazard rate. East Horizon Explore: Not available. East Horizon Design: Only
 #'     available for `Time-to-Event` tests.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -118,13 +110,13 @@
 #'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
 #'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
 #'     Two-sided asymmetric or symmetric`.}
-#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number of
-#'     events for each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` and for
-#'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
-#'     Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{LookTime}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the calendar time of each
-#'     time-based look. East Horizon Design: Only available for `Time-to-Event` tests if `Look Fix Option =
-#'     Time-based`.}
+#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
+#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
+#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
+#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
+#'     Event` tests.}
+#'   \item{LookTime}{Numeric calendar time of the current look. East Horizon Design: Only available for `Time-to-Event`
+#'     tests if `Look Fix Option = Time-based`.}
 #'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
 #'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
 #'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon
@@ -166,12 +158,10 @@
 #'     Two-sided asymmetric or symmetric`.}
 #'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -181,8 +171,6 @@
 #'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
 #'   \item{HR}{Estimated treatment-to-control hazard ratio.}
 #'   \item{Delta}{Estimated log hazard ratio (natural logarithm of HR).}
-#'   \item{CtrlEvents}{Number of observed events in the control arm.}
-#'   \item{TrmtEvents}{Number of observed events in the experimental arm.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
@@ -202,11 +190,10 @@
 #' \describe{
 #'   \item{HazardRatio}{Estimated treatment-to-control hazard ratio, retained as a custom output for reporting.}
 #' }
-#'
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
+#'   re-estimated total event/completer count.
 ######################################################################################################################## .
 
 AnalyzeUsingEastLogrankFormula <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
@@ -229,23 +216,39 @@ AnalyzeUsingEastLogrankFormula <- function( SimData, DesignParam, LookInfo = NUL
     }
 
     SimData$TimeOfEvent <- SimData$ArrivalTime + SimData$SurvivalTime # This is the calendar time in the trial that the patients event is observed
+    # Censor survival observations at dropout and any fixed follow-up limit.
+    SimData$TimeOfObservation <- SimData$TimeOfEvent
+    SimData$Event <- 1L
+    vCensorTimes <- rep( Inf, nrow( SimData ) )
+    if ( "DropOutTime" %in% names( SimData ) ) {
+        vCensorTimes <- SimData$DropOutTime
+    }
+    if ( !is.null( DesignParam$FollowUpType ) && DesignParam$FollowUpType == 1 ) {
+        vCensorTimes <- pmin( vCensorTimes, DesignParam$FollowUpDur )
+    }
+    SimData$Event <- as.integer( SimData$SurvivalTime <= vCensorTimes )
+    SimData$TimeOfObservation <- SimData$ArrivalTime + pmin( SimData$SurvivalTime, vCensorTimes )
 
     # Compute the time of analysis
-    SimData <- SimData[ order( SimData$TimeOfEvent ), ]
-    dTimeOfAnalysis <- SimData[ nQtyOfEvents, ]$TimeOfEvent
+    SimData <- SimData[ order( SimData$TimeOfObservation ), ]
+    vObservedEventTimes <- SimData$TimeOfEvent[ SimData$Event == 1 ]
+    if ( nQtyOfEvents < 1 || nQtyOfEvents > length( vObservedEventTimes ) ) {
+        return( list( ErrorCode = 1L ) )
+    }
+    dTimeOfAnalysis <- vObservedEventTimes[ nQtyOfEvents ]
 
     # Add the Observed Time variable
     SimData <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ] # Exclude any patients that were not enrolled by the time of the analysis
-    SimData$Event <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 ) # If the event is observed after the analysis it is not observed, eg censored
-    SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
+    SimData$Event <- SimData$Event * as.integer( SimData$TimeOfEvent <= dTimeOfAnalysis ) # If the event is observed after the analysis it is not observed, eg censored
+    SimData$ObservedTime <- ifelse( SimData$TimeOfObservation > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfObservation - SimData$ArrivalTime )
 
     # Order the data by observed time for the remainder of the computations
     SimData <- SimData[ order( SimData$ObservedTime ), ]
 
     # Compute Observed HR
 
-    coxModel <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ TreatmentID, data = SimData )
-    dTrueHR <- exp( coxModel$coefficients )
+    cCoxModel <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ TreatmentID, data = SimData )
+    dTrueHR <- exp( cCoxModel$coefficients )
 
     SimData$EventOnTreatment <- ifelse( SimData$TreatmentID == 1, SimData$Event, 0 ) # If the event is observed on treatment
     SimData$EventOnControl <- ifelse( SimData$TreatmentID == 0, SimData$Event, 0 ) # If the event is observed on control

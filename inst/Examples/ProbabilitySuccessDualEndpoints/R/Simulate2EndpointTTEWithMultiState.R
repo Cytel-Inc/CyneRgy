@@ -1,40 +1,28 @@
 ######################################################################################################################## .
 #' @name Simulate2EndpointTTEWithMultiState
-#'
 #' @title Simulate Trial Data for Two Time-to-Event Endpoints Using a Multi-State Model
-#'
 #' @description This function generates simulated trial data for two time-to-event (TTE) endpoints,
 #'   progression-free survival (PFS) and overall survival (OS), using a multi-state model. The simulation utilizes
 #'   input parameters such as the number of subjects, number of arms, and user-defined survival parameters.
-#'
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param SurvMethod Integer survival input method: 1 = hazard rates; 2 = cumulative survival percentages; 3 =
 #'   median survival times.
-#'
 #' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
 #'   survival generation.
-#'
 #' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
 #'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
 #'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
-#'   stratification).
-#'
+#'   stratification). The control-arm entries may be NA in engine-supplied arrays.
 #' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
 #'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
 #'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
 #'   SurvMethod = 3. Without stratification, the median-survival method has one row.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -77,7 +65,6 @@
 #'                      \item{UserParam$dProbOfDeathBeforeProgression1Param2}{Beta parameter for probability of
 #'                        death before PFS for the treatment group.}
 #'                  }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -90,9 +77,27 @@
 #'
 #' Example-specific additional output elements:
 #' \describe{
-#'   \item{OS}{Optional custom numeric vector of subject overall-survival times measured from enrollment. Available
-#'     when the multi-state response generator returns OS.}
+#'   \item{OS}{Numeric vector of subject overall-survival times measured from enrollment, with one element
+#'     per subject.}
 #' }
+#' @details This example uses the single-survival response integration point: SurvivalTime contains PFS,
+#'   and OS is a custom output for the accompanying analysis. NumArm must be 2.
+#'
+#' Supply one complete set of UserParam fields. The six fixed-value fields specify control and
+#'   experimental median PFS, median OS, and probabilities of death before progression. The twelve
+#'   prior fields instead specify Gamma shape and rate parameters for the four medians and Beta
+#'   shape1 and shape2 parameters for the two death-before-progression probabilities. The sampled
+#'   parameters are shared by all subjects on an arm within a simulation. When both sets are supplied,
+#'   the fixed-value set takes precedence. All medians and prior parameters must be positive, median OS
+#'   must exceed median PFS, and fixed death-before-progression probabilities must lie strictly between
+#'   0 and 1. A missing, incomplete, or all-zero parameter set returns ErrorCode = -1 or -2.
+#'
+#' Prior sampling retries combinations with median OS below median PFS or incompatible transition
+#'   rates up to 100 times. ErrorCode values 1 and 2 indicate unsuccessful control-arm sampling or
+#'   calibration; values 3 and 4 indicate the corresponding experimental-arm failures. The fixed-value
+#'   option returns ErrorCode = 1 when its requested parameters cannot generate finite PFS and OS times.
+#'   These positive codes abort only the current simulation. Reset the random seed before direct R
+#'   calls when reproducibility is required; the numerical median calibration also uses simulation.
 ######################################################################################################################## .
 
 Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
@@ -250,25 +255,17 @@ Simulate2EndpointTTEWithMultiState <- function( NumSub, NumArm, ArrivalTime, Tre
 
 ######################################################################################################################## .
 #' @name SimulateDualMultiStateTTE
-#'
 #' @title Simulate Dual Multi-State Time-to-Event Data
-#'
 #' @description This function simulates progression-free survival (PFS) and overall survival (OS) using a
 #'   multi-state model. Patients can transition between states: progression-free, progression, and death. It uses
 #'   exponential distributions to model time-to-event transitions based on specified median survival times and
 #'   probabilities of death before progression.
-#'
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#'
 #' @param nQtyOfPatients Integer number of subjects to simulate.
-#'
 #' @param dMedianPFS Positive numeric median progression-free survival time (PFS), including progression and death
 #'   before progression.
-#'
 #' @param dMedianOS Positive numeric median overall survival time (OS).
-#'
 #' @param dProbOfDeathBeforeProgression Numeric probability of death before progression, strictly between 0 and 1.
-#'
 #' @return A data frame containing two columns:
 #'         \describe{
 #'             \item{vPFS}{Simulated progression-free survival times.}
@@ -303,13 +300,13 @@ SimulateDualMultiStateTTE <- function( nQtyOfPatients, dMedianPFS, dMedianOS, dP
     # Initialize vectors to capture PFS and OS
     vPFS <- c( )
     vOS <- c( )
-    for ( iPat in seq_len( nQtyOfPatients ) ) {
-        if ( vTimeToProgression[ iPat ] < vTimeToDeath[ iPat ] ) {
-            vPFS <- c( vPFS, vTimeToProgression[ iPat ] )
-            vOS <- c( vOS, vTimeToProgression[ iPat ] + vTimeFromProgressionToDeath[ iPat ] )
+    for ( nPatientIndex in seq_len( nQtyOfPatients ) ) {
+        if ( vTimeToProgression[ nPatientIndex ] < vTimeToDeath[ nPatientIndex ] ) {
+            vPFS <- c( vPFS, vTimeToProgression[ nPatientIndex ] )
+            vOS <- c( vOS, vTimeToProgression[ nPatientIndex ] + vTimeFromProgressionToDeath[ nPatientIndex ] )
         } else {
-            vPFS <- c( vPFS, vTimeToDeath[ iPat ] )
-            vOS <- c( vOS, vTimeToDeath[ iPat ] )
+            vPFS <- c( vPFS, vTimeToDeath[ nPatientIndex ] )
+            vOS <- c( vOS, vTimeToDeath[ nPatientIndex ] )
         }
     }
 
@@ -321,22 +318,15 @@ SimulateDualMultiStateTTE <- function( nQtyOfPatients, dMedianPFS, dMedianOS, dP
 
 ######################################################################################################################## .
 #' @name ComputeAlphasForMultiStateModel
-#'
 #' @title Compute Transition Rates for Multi-State Model
-#'
 #' @description This function calculates transition rates (alphas) for a multi-state model based on input
 #'   parameters. The model transitions include time to progression, time to death, and time from progression to
 #'   death. The rates are derived from median survival times and the probability of death before progression.
-#'
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#'
 #' @param dMedianPFS Positive numeric median progression-free survival time (PFS), including progression and death
 #'   before progression.
-#'
 #' @param dMedianOS Positive numeric median overall survival time (OS).
-#'
 #' @param dProbOfDeathBeforeProgression Numeric probability of death before progression, strictly between 0 and 1.
-#'
 #' @return A list containing:
 #'         \describe{
 #'   \item{dAlpha01}{Rate for time to progression.}
@@ -376,22 +366,15 @@ ComputeAlphasForMultiStateModel <- function( dMedianPFS, dMedianOS, dProbOfDeath
 
 ######################################################################################################################## .
 #' @name ComputeMedianProgToDeath
-#'
 #' @title Compute Median Time from Progression to Death
-#'
 #' @description This function computes the median time from progression to death in a multi-state model. It uses
 #'   input parameters such as median progression-free survival (PFS), median overall survival (OS), and the
 #'   probability of death before progression to derive the median progression-to-death survival time.
-#'
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#'
 #' @param dMedianPFS Positive numeric median progression-free survival time (PFS), including progression and death
 #'   before progression.
-#'
 #' @param dMedianOS Positive numeric median overall survival time (OS).
-#'
 #' @param dProbDeathB4Prog Numeric probability of death before progression, strictly between 0 and 1.
-#'
 #' @return Numeric value representing the median progression-to-death time. Returns `NA` if computation fails.
 ######################################################################################################################## .
 
@@ -418,32 +401,25 @@ ComputeMedianProgToDeath <- function( dMedianPFS, dMedianOS, dProbDeathB4Prog ) 
 
 ######################################################################################################################## .
 #' @name ComputeMedianOS
-#'
 #' @title Compute Median Overall Survival Using Simulated Data
-#'
 #' @description This function simulates progression-free survival (PFS) and overall survival (OS) times for a large
 #'   number of patients. It calculates the median overall survival based on these simulations. The function uses
 #'   specified median PFS, median progression-to-death times, and the probability of death before progression to
 #'   simulate survival times.
-#'
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#'
 #' @param dMedianPFS Positive numeric median progression-free survival time (PFS), including progression and death
 #'   before progression.
-#'
 #' @param dMedianProgToDeath Positive numeric median time from progression to death.
-#'
 #' @param dProbDeathB4Prog Numeric probability of death before progression, strictly between 0 and 1.
-#'
 #' @return Numeric value representing the median overall survival (OS).
 ######################################################################################################################## .
 
 ComputeMedianOS <- function( dMedianPFS, dMedianProgToDeath, dProbDeathB4Prog ) {
-    n <- 10000
+    nPatients <- 10000
 
-    vPFS <- stats::rexp( n, log( 2 ) / dMedianPFS )
-    vOS <- vPFS + stats::rexp( n, log( 2 ) / dMedianProgToDeath )
-    vDeathB4Prog <- stats::rbinom( n, 1, dProbDeathB4Prog )
+    vPFS <- stats::rexp( nPatients, log( 2 ) / dMedianPFS )
+    vOS <- vPFS + stats::rexp( nPatients, log( 2 ) / dMedianProgToDeath )
+    vDeathB4Prog <- stats::rbinom( nPatients, 1, dProbDeathB4Prog )
     vOS <- ifelse( vDeathB4Prog == 1, vPFS, vOS )
 
     dMedianOS <- stats::median( vOS )

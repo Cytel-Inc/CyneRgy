@@ -1,16 +1,12 @@
 ######################################################################################################################## .
 #' @name GetMEPDecision
-#'
 #' @title Make multiple-endpoint trial decisions
-#'
 #' @description This function allows users to implement custom decision-making logic for the MEP engine. It is
 #'   called at each analysis look to make decisions about endpoint efficacy, futility and trial continuation based
 #'   on user-defined criteria.
-#'
 #' @author Anoop Singh Rawat, Gabriel Potvin
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{SimID}{Vector of length equal to the number of subjects, indicating the simulation ID.}
@@ -38,10 +34,8 @@
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #' }
-#'
 #' @param AnalysisData Data frame containing the subset of SimData available at the current analysis look. It uses
 #'   the same column definitions as SimData.
-#'
 #' @param DataSummary Named list of endpoint-specific summary statistics. Access an element by endpoint name, for
 #'   example `DataSummary[[DesignParam$EndpointName[1]]]$Events`.
 #' \describe{
@@ -80,7 +74,6 @@
 #'   \item{Prop1}{Observed proportion of responders in the treatment arm. Only available for `Endpoint Type =
 #'     Binary`.}
 #' }
-#'
 #' @param LookInfo Named list of information for the current look, including the single look in a fixed-sample
 #'   multiple-endpoint design.
 #' \describe{
@@ -108,7 +101,6 @@
 #'     each endpoint. Order matches `DesignParam$EndpointName` order. Possible values: - `0`: Success. - `1`:
 #'     Insufficient information. - `2`: Excessive information. - `3`: Computational error.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon
 #'   product as indicated below.
@@ -144,7 +136,7 @@
 #'     TTE. Order matches `EndpointName` order.}
 #'   \item{MultiplicityDetails}{List. Multiplicity adjustment details. Contains: - `MCP`: Integer, multiple
 #'     comparison procedure. Possible values: `0` = None, `1` = Fallback, `2` = Fixed Sequence, `3` =
-#'     Bonferroni/Weighted Bonferroni, `4` = Holms, `5` = Weighted Holms, `6` = User-specified GMCP. -
+#'     Bonferroni/Weighted Bonferroni, `4` = Holm, `5` = Weighted Holm, `6` = User-specified GMCP. -
 #'     `AlphaAlloc`: Vector of Numeric of length equal to the number of endpoints, containing the Alpha allocation
 #'     percentages for each endpoint. Order matches `EndpointName` order. - `TestOrder`: Vector of Integer of
 #'     length equal to the number of endpoints, containing the testing order for each endpoint. Available for
@@ -179,16 +171,13 @@
 #'     be won for trial success. Order matches `EndpointName` order. Possible values: `0` = Not required, `1` =
 #'     Must win.}
 #' }
-#'
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
 #'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
 #'   Available for designs that support passing state between looks.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -212,14 +201,14 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details This example retains prior endpoint decisions and tests efficacy against the current p-value boundary.
-#'   It checks the futility thresholds only when an efficacy boundary and p-value are available. An undecided
-#'   endpoint stops for futility at its target information, when information is insufficient, or after its last
-#'   planned efficacy look.
+#'   It checks scheduled futility thresholds even at looks without an efficacy boundary. An undecided endpoint
+#'   stops for futility at its target information, when information is insufficient, or after its last planned
+#'   efficacy look.
 ######################################################################################################################## .
 
-GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList = NULL, UserParam = NULL ) {
+GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo,
+                            DesignParam, OutList = NULL, UserParam = NULL ) {
     # Initialize vDecision with last look's decisions
     vDecision <- LookInfo$LastLookDecision
 
@@ -241,30 +230,23 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, Design
                     vDecision[ nEPID ] <- 1
                     next
                 }
+            }
 
-                # Check for futility if efficacy is not declared
-                nCurrentLook <- LookInfo$LookNum
-                if ( DesignParam$FutFlg[ nCurrentLook, nEPID ] == 1 ) {
-                    # Get futility threshold for this endpoint at this look
-                    dFutilityThreshold <- DesignParam$FutThrsld[ nCurrentLook, nEPID ]
+            # Check scheduled futility even when this look has no efficacy boundary.
+            nCurrentLook <- LookInfo$LookNum
+            if ( DesignParam$FutFlg[ nCurrentLook, nEPID ] == 1 ) {
+                dFutilityThreshold <- DesignParam$FutThrsld[ nCurrentLook, nEPID ]
+                nEPType <- DesignParam$EndpointType[ nEPID ]
 
-                    # Get endpoint name and type
-                    strEPName <- DesignParam$EndpointName[ nEPID ]
-                    nEPType <- DesignParam$EndpointType[ nEPID ]
-
-                    # Get HR or Delta from DataSummary based on endpoint type
-                    if ( nEPType == 2 ) {
-                        dObservedValue <- DataSummary[[ strEPName ]]$HR
-                        # Declare futility if HR > threshold
-                        if ( !is.na( dObservedValue ) && dObservedValue > dFutilityThreshold ) {
-                            vDecision[ nEPID ] <- 2
-                        }
-                    } else {
-                        dObservedValue <- DataSummary[[ strEPName ]]$Delta
-                        # Declare futility if Delta < threshold
-                        if ( !is.na( dObservedValue ) && dObservedValue < dFutilityThreshold ) {
-                            vDecision[ nEPID ] <- 2
-                        }
+                if ( nEPType == 2 ) {
+                    dObservedValue <- DataSummary[[ strEPName ]]$HR
+                    if ( !is.na( dObservedValue ) && dObservedValue > dFutilityThreshold ) {
+                        vDecision[ nEPID ] <- 2
+                    }
+                } else {
+                    dObservedValue <- DataSummary[[ strEPName ]]$Delta
+                    if ( !is.na( dObservedValue ) && dObservedValue < dFutilityThreshold ) {
+                        vDecision[ nEPID ] <- 2
                     }
                 }
             }

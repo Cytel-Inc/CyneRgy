@@ -1,33 +1,24 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomePercentAtZero.Binary
-#'
-#' @title Simulate patient outcomes from a binary distribution with a percent of patients are treatment resistant.
-#'
+#' @title Simulate patient outcomes from a binary distribution with a proportion of treatment-resistant patients.
 #' @description In this example, the binary outcome is a patient's response to treatment (0 non-response or 1
 #'   response). For this function, a percent of patients are believed to be treatment resistant, meaning the
 #'   patient will not respond to any treatment and their outcome is always a 0.
 #'
-#' The steps to simulating patient data in this example follows a two-step procedure. Step 1: Determine if the
+#' Simulating patient data in this example follows a two-step procedure. Step 1: Determine if the
 #'   patient is treatment resistant by simulating a binary variable with the probability of success defined by
-#'   UserParam$dProbOfTreatmentResistantCtrl or UserParam$dProbOfTreatmentResistantExp Step 2: If the value in Step
-#'   1, indicating the patient is treatment resistant then their outcome is set to 0, otherwise simulate their
+#'   UserParam$dProbOfTreatmentResistantCtrl or UserParam$dProbOfTreatmentResistantExp. Step 2: If the value in Step
+#'   1 is 1, indicating that the patient is treatment resistant, their outcome is set to 0, otherwise simulate their
 #'   outcome from a binomial distribution using the response probabilities provided in PropResp.
-#'
 #' @author J. Kyle Wathen
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order. Each probability is between 0 and 1.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -41,7 +32,6 @@
 #'   \item{UserParam$dProbOfTreatmentResistantExp}{Numeric probability in [0, 1] that a subject is treatment
 #'     resistant on the experimental arm.}
 #' }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -51,12 +41,10 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
 #'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
-#'   treatment-to-control ratio of proportions). These standard binary examples do not use those inputs; extend the
-#'   signature and generation logic for a vaccine-efficacy design. Standard binary responses are coded 0 =
-#'   non-response and 1 = response.
+#'   treatment-to-control ratio of proportions). Include these arguments in the function signature for a
+#'   vaccine-efficacy design. Standard binary responses are coded 0 = non-response and 1 = response.
 ######################################################################################################################## .
 
 SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {

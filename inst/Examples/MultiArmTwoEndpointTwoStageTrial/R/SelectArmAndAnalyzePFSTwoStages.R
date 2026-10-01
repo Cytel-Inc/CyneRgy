@@ -1,16 +1,12 @@
 ######################################################################################################################## .
 #' @name SelectArmAndAnalyzePFSTwoStages
-#'
 #' @title Two-Stage Arm Selection and PFS Analysis
-#'
 #' @description This function performs a two-stage adaptive analysis for multi-arm clinical trials. Stage 1 selects
 #'   the best treatment arm based on binary response endpoint. Stage 2 tests efficacy using progression-free
 #'   survival (PFS) via log-rank test.
-#'
 #' @author Julija Saltane, J. Kyle Wathen
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -21,11 +17,15 @@
 #'     enrollment, with one element per subject.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
-#'   \item{PFSNonCens}{Numeric vector of PFS times relative to patient enrollment}
-#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject. May contain a
-#'     custom binary endpoint, such as the stage 1 response in the two-stage example.}
 #' }
 #'
+#' Additional fields returned by SimulateBinaryAndPFS:
+#' \describe{
+#'   \item{Response}{Numeric vector of generated binary subject responses, coded 0 = non-response and 1 = response,
+#'     with one element per subject.}
+#'   \item{PFSNonCens}{Numeric vector of uncensored progression-free-survival times measured from each subject's
+#'     enrollment, with one element per subject.}
+#' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -34,8 +34,8 @@
 #'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
 #'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
-#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of
-#'     arms - 1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of
+#'     arms - 1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{CriticalPoint}{Numeric. Critical value. East Horizon Explore: Only available if `Statistical Design =
 #'     Fixed Sample`. Not available for `Study Objective = Dose Finding`. East Horizon Design: Not available for
 #'     `Combining P-Values (MAMS)` tests.}
@@ -85,7 +85,6 @@
 #'     have been updated during treatment selection.}
 #'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -96,9 +95,9 @@
 #'     for each look.}
 #'   \item{CumAlpha}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent
 #'     (for one-sided tests) for each look. East Horizon Design: Only available if `Test Type = One-sided`.}
-#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative event for
-#'     each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not available for
-#'     `Study Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event` tests.}
+#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative event for each
+#'     look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not available for `Study
+#'     Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event` tests.}
 #'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
 #'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
 #'     lower. – `5`: One-sided efficacy lower, futility upper.}
@@ -112,40 +111,10 @@
 #'     `2`: Delta scale. – `6`: Hazard ratio scale.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
-#'   \item{CumAlphaUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper cumulative
-#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if right-tailed one-sided test. Only makes
-#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
-#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{CumAlphaLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower cumulative
-#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if left-tailed one-sided test. Only makes
-#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
-#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{EffBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper efficacy
-#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
-#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{EffBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower efficacy
-#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
-#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{FutBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper futility
-#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
-#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{FutBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower futility
-#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
-#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
 #' }
-#'
+#' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
+#'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
+#'   Available for designs that support passing state between looks.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -161,20 +130,17 @@
 #'          \item{SwitchSign}{Character value ('yes' or 'no') indicating whether the critical-point sign should be
 #'            reversed for the PFS analysis}
 #'        }
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
 #'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
 #'     (unavailable in East Horizon Explore). Return one value per experimental arm in treatment-ID order.}
-#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale. Return one value per experimental arm in
+#'   \item{TestStat}{Numeric vector of test statistics on the Wald (Z) scale, with one value per experimental arm in
 #'     treatment-ID order.}
 #'   \item{HR}{Numeric vector of estimated treatment-to-control hazard ratios, one per experimental arm in
 #'     treatment-ID order.}
 #'   \item{Delta}{Estimated log hazard ratio (natural logarithm of HR).}
-#'   \item{CtrlEvents}{Number of observed events in the control arm.}
-#'   \item{TrmtEvents}{Number of observed events in the experimental arm.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{AdjPVal}{Numeric vector of p-values adjusted for multiple comparisons, one per experimental arm.}
@@ -185,8 +151,6 @@
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
-#'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
-#'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
 #'
 #' Example-specific additional output elements:
@@ -206,11 +170,13 @@
 #'   \item{Stage1Patients_Arm_i}{Number of Stage 1 patients per treatment arm.}
 #'   \item{Stage2Patients_Arm_i}{Number of Stage 2 patients per treatment arm.}
 #' }
-#'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
-#'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
+#' @details Return Decision to apply custom stopping logic, or TestStat, AdjPVal, or RawPVal to let East Horizon
+#'   apply its supported multiplicity adjustments and boundaries. Return one value per experimental arm
+#'   in treatment-ID order and NA for arms absent at the current look. Delta is required for Delta-scale
+#'   futility; HR is required for hazard-ratio-scale futility in time-to-event designs. RawPVal cannot be
+#'   used for adjusted-p-value-scale futility. Return TestStat alongside RawPVal when the selected
+#'   Dunnett procedure requires it. Use OutList to pass custom state between looks. This example may use
+#'   only a subset of the documented design fields.
 #'
 #' **IMPORTANT**: Type I error rate is NOT adjusted for interim data unblinding at Stage 1.
 #'
@@ -242,8 +208,8 @@
 #'   disregarded. For example, if arm 2 is selected, only `Decision2` contains the decision value. Engine
 #'   requirement mandates vector length equals `NumTreatments`.
 #'
-#' Usage of LookInfo in this example: List with interim analysis information, or NULL for fixed design. **Currently
-#'   only fixed design is supported**, adaptive designs not yet implemented.
+#' This example requires LookInfo = NULL. A non-NULL LookInfo returns ErrorCode = -2 because group
+#'   sequential analysis is not implemented.
 #'
 #' Example-specific error codes:
 #' \describe{
@@ -256,7 +222,7 @@
 #' }
 ######################################################################################################################## .
 
-SelectArmAndAnalyzePFSTwoStages <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+SelectArmAndAnalyzePFSTwoStages <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL, OutList = NULL ) {
     nTrtArms <- DesignParam$NumTreatments
     nErrorCode <- 0
 
@@ -449,8 +415,8 @@ SelectArmAndAnalyzePFSTwoStages <- function( SimData, DesignParam, LookInfo = NU
     dfSimDataStage2 <- dfSimDataStage2[ order( dfSimDataStage2$PFSObservedTime ), ]
 
     # Compute Observed HR
-    coxModel <- survival::coxph( survival::Surv( PFSObservedTime, PFSEvent ) ~ Trt, data = dfSimDataStage2 )
-    dTrueHR <- exp( coxModel$coefficients )
+    cCoxModel <- survival::coxph( survival::Surv( PFSObservedTime, PFSEvent ) ~ Trt, data = dfSimDataStage2 )
+    dTrueHR <- exp( cCoxModel$coefficients )
 
     dfSimDataStage2$EventOnTreatment <- ifelse( dfSimDataStage2$Trt == 1, dfSimDataStage2$PFSEvent, 0 )
     dfSimDataStage2$EventOnControl <- ifelse( dfSimDataStage2$Trt == 0, dfSimDataStage2$PFSEvent, 0 )

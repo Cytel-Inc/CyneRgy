@@ -1,15 +1,11 @@
 ######################################################################################################################## .
 #' @name MMRMAna
-#'
 #' @title Analyze repeated-measures subject responses
-#'
 #' @description Analyze repeated-measures subject responses. Use the documented inputs and outputs to integrate
 #'   this function with the simulation workflow.
-#'
 #' @author Shubham Lahoti
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -24,11 +20,10 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each
-#'     subject's enrollment, with one element per subject. Replace VisitID by the actual visit number.
-#'     Add ArrivalTime to obtain calendar visit times.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
+#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
+#'     calendar visit times.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -48,8 +43,8 @@
 #'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
 #'     `Statistical Design = Fixed Sample`.}
@@ -107,7 +102,6 @@
 #'     (LOCF). East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East
 #'     Horizon Design: Not available.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -184,12 +178,10 @@
 #'     include. – `1`: Include. East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated
 #'     Measures`. East Horizon Design: Not available.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -207,7 +199,6 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details This fixed-sample example assumes a common treatment effect across all post-baseline visits and
 #'   returns its signed normal-equivalent statistic, computed from the model's two-sided t-test p-value.
 #'   It does not estimate the configured visit-specific primary and secondary
@@ -217,7 +208,7 @@
 #' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
+#'   re-estimated total event/completer count.
 ######################################################################################################################## .
 
 MMRMAna <- function( SimData, DesignParam, UserParam = NULL, LookInfo = NULL ) {

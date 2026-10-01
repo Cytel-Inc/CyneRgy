@@ -1,19 +1,15 @@
 ######################################################################################################################## .
 #' @name SelectSpecifiedNumberOfExpWithHighestResponses
-#'
 #' @title Select experimental treatments for the next stage
-#'
 #' @description This function is used for the MAMS design with a binary outcome and will perform treatment
 #'   selection at the interim analysis (IA). At the IA, the user-specified number of experimental treatments
 #'   (QtyOfArmsToSelect) that have the largest number of responses are selected. After the IA, we would like to
 #'   randomize based on user-specified inputs: 1:Rank1AllocationRatio:Rank2AllocationRatio (control, selected
 #'   experimental arm with highest number of responses, selected experimental arm with the second highest number of
 #'   responses).
-#'
 #' @author Sydney Ringold, J. Kyle Wathen
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -30,7 +26,6 @@
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -39,8 +34,9 @@
 #'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
 #'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
-#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of
-#'     arms - 1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number
+#'     of arms - 1), containing the ratios of the experimental group sample sizes to the control group sample
+#'     size.}
 #'   \item{CriticalPoint}{Numeric. Critical value. East Horizon Explore: Only available if `Statistical Design =
 #'     Fixed Sample`. Not available for `Study Objective = Dose Finding`. East Horizon Design: Not available for
 #'     `Combining P-Values (MAMS)` tests.}
@@ -88,7 +84,6 @@
 #'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
 #'     have been updated during treatment selection.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -102,8 +97,10 @@
 #'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event`. East
 #'     Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Integer cumulative number of events at the current look. Only available for time-to-event
-#'     endpoints.}
+#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
+#'     of events for each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not
+#'     available for `Study Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event`
+#'     tests.}
 #'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
 #'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
 #'     lower. – `5`: One-sided efficacy lower, futility upper.}
@@ -118,7 +115,6 @@
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -135,7 +131,6 @@
 #'   \item{UserParam$Rank2AllocationRatio}{Positive numeric treatment-to-control allocation ratio for the arm
 #'     ranked second by number of responses. Required when selecting at least two arms; there is no default.}
 #'          }
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -147,7 +142,6 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details Invalid selection counts or missing/non-positive allocation ratios return ErrorCode = -2.
 #'
 #' TreatmentID and AllocRatio must have the same nonzero length and matching order. Include only
@@ -175,13 +169,15 @@
 
 SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) {
     if ( is.null( UserParam ) ) {
-        # Default is to select the treatment with highest number of responses and allocation of 2:1 (Experimental:Control)
+        # Default is to select the treatment with highest number of responses and allocation of 2:1
+        #   (Experimental:Control)
         UserParam <- list( QtyOfArmsToSelect = 1, Rank1AllocationRatio = 2 )
     }
     # Calculate the number of responses per arm and select the highest user-specified number (QtyOfArmsToSelect) of arms
     tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
 
-    # Want to select the top user-specified (QtyOfArmsToSelect) number of experimental treatments, so drop control from the sorting
+    # Want to select the top user-specified (QtyOfArmsToSelect) number of experimental treatments, so drop control from
+    #   the sorting
     # Now, only the experimental treatments are left
     tabResults <- tabResults[ -1, , drop = FALSE ]
 
@@ -199,7 +195,8 @@ SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam
     }
 
     # Sort in descending order based on the number of responses (column 2)
-    # After the sort, the matrix will have the largest number of responses in the first row and the smallest number of responses in the last row
+    # After the sort, the matrix will have the largest number of responses in the first row and the smallest number of
+    #   responses in the last row
     mSortedMatrix <- tabResults[ order( tabResults[ , 2 ], decreasing = TRUE ), , drop = FALSE ]
 
     # Select the user-specified (QtyOfArmsToSelect) number of treatments with the largest number of responses
@@ -209,8 +206,8 @@ SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam
     # Each selected arm receives its RankNAllocationRatio times as many patients as control.
     # NOTE: Always pull elements from the list by name rather than assuming a specific order
     vAllocationRatio <- c( )
-    for ( iRank in 1:UserParam$QtyOfArmsToSelect ) {
-        vAllocationRatio <- c( vAllocationRatio, UserParam[[ paste0( "Rank", iRank, "AllocationRatio" ) ]] )
+    for ( nRank in seq_len( UserParam$QtyOfArmsToSelect ) ) {
+        vAllocationRatio <- c( vAllocationRatio, UserParam[[ paste0( "Rank", nRank, "AllocationRatio" ) ]] )
     }
 
     # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$Rank1AllocationRatio and

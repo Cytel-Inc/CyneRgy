@@ -1,18 +1,14 @@
 ######################################################################################################################## .
 #' @name SelectExpWithPValueLessThanSpecified
-#'
 #' @title Compare treatment and experimental to control with a chi-squared test, selecting treatments with a
 #'   p-value less than specified value.
-#'
 #' @description At the interim analysis, compare each experimental treatment to control using a chi-squared
 #'   test. Any treatment with p-value < dMaxPValue is selected for stage 2. If none of the treatments have a
 #'   p-value < dMaxPValue, select the treatment with the smallest p-value. In the second stage, the randomization
 #'   ratio will be 1:1 (experimental:control).
-#'
 #' @author Sydney Ringold, J. Kyle Wathen
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -29,7 +25,6 @@
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -38,8 +33,9 @@
 #'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
 #'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
-#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of
-#'     arms - 1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number
+#'     of arms - 1), containing the ratios of the experimental group sample sizes to the control group sample
+#'     size.}
 #'   \item{CriticalPoint}{Numeric. Critical value. East Horizon Explore: Only available if `Statistical Design =
 #'     Fixed Sample`. Not available for `Study Objective = Dose Finding`. East Horizon Design: Not available for
 #'     `Combining P-Values (MAMS)` tests.}
@@ -87,7 +83,6 @@
 #'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
 #'     have been updated during treatment selection.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -101,8 +96,10 @@
 #'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event`. East
 #'     Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Integer cumulative number of events at the current look. Only available for time-to-event
-#'     endpoints.}
+#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
+#'     of events for each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not
+#'     available for `Study Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event`
+#'     tests.}
 #'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
 #'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
 #'     lower. – `5`: One-sided efficacy lower, futility upper.}
@@ -117,7 +114,6 @@
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -130,7 +126,6 @@
 #'    which treatments to advance.
 #'       Any treatment with less than the specified p-value will be advanced to the second stage}
 #'           }
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -142,7 +137,6 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details TreatmentID and AllocRatio must have the same nonzero length and matching order. Include only
 #'   experimental treatment IDs; do not include 0 for control. The control allocation ratio is always 1.
 #'
@@ -172,11 +166,14 @@ SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo
     }
 
     # Calculate the number of responders and treatment failures for each treatment
-    # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
+    # The next lines create a table where each treatment is in a row, number of treatment failures is the first column,
+    #   and number of responses is the second column.
     tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
 
-    # Step 1 - The first step it to perform the data analysis to determine which treatments will be selected for stage 2 ####
-    #           Since the chisq.test function requires a 2x2 table, the first row of tabResults can be taken for control and then treatment rows 2,3,4 can be looped through
+    # Step 1 - The first step is to perform the data analysis to determine which treatments will be selected for stage 2
+    #   ####
+    #           Since the chisq.test function requires a 2x2 table, the first row of tabResults can be taken for control
+    #   and then treatment rows 2,3,4 can be looped through
 
     # This vector will be used to track which treatments have p-value < dMaxPValue and are then selected
     vReturnTreatmentID <- c( )
@@ -190,7 +187,8 @@ SelectExpWithPValueLessThanSpecified <- function( SimData, DesignParam, LookInfo
 
         # Error checking - If the data had no patient responses, the p-value may not be able to be computed.
         if ( is.nan( vPValue[ nIndex - 1 ] ) ) {
-            # The Chi Squared Test did not calculate a p-value, which can occur if no patients respond, so make the p-value 1
+            # The Chi Squared Test did not calculate a p-value, which can occur if no patients respond, so make the
+            #   p-value 1
             vPValue[ nIndex - 1 ] <- 1
         }
 

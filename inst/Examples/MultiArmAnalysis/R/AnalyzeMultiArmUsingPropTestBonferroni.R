@@ -1,15 +1,11 @@
 ######################################################################################################################## .
 #' @name AnalyzeMultiArmUsingPropTestBonferroni
-#'
 #' @title Analyze binary outcome for multi-arm design using the prop.test function in the stats package in R.
-#'
 #' @description Analyze binary outcome for multi-arm design using the prop.test function in the stats package in R. Use the
 #'   documented inputs and outputs to integrate this function with the simulation workflow.
-#'
 #' @author Gabriel Potvin and Anoop Singh Rawat
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -22,7 +18,6 @@
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -31,8 +26,8 @@
 #'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
 #'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
-#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of
-#'     arms - 1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of
+#'     arms - 1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{CriticalPoint}{Numeric. Critical value. East Horizon Explore: Only available if `Statistical Design =
 #'     Fixed Sample`. Not available for `Study Objective = Dose Finding`. East Horizon Design: Not available for
 #'     `Combining P-Values (MAMS)` tests.}
@@ -80,7 +75,6 @@
 #'     have been updated during treatment selection.}
 #'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -94,9 +88,9 @@
 #'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event`. East
 #'     Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative event for
-#'     each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not available for
-#'     `Study Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event` tests.}
+#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative event for each
+#'     look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not available for `Study
+#'     Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event` tests.}
 #'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
 #'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
 #'     lower. – `5`: One-sided efficacy lower, futility upper.}
@@ -110,62 +104,25 @@
 #'     `2`: Delta scale. – `6`: Hazard ratio scale.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
-#'   \item{CumAlphaUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper cumulative
-#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if right-tailed one-sided test. Only makes
-#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
-#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{CumAlphaLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower cumulative
-#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if left-tailed one-sided test. Only makes
-#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
-#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{EffBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper efficacy
-#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
-#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{EffBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower efficacy
-#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
-#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{FutBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper futility
-#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
-#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
-#'   \item{FutBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower futility
-#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
-#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
-#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
-#'     Two-sided asymmetric or symmetric`.}
 #' }
-#'
+#' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
+#'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
+#'   Available for designs that support passing state between looks.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
 #'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
 #'     (unavailable in East Horizon Explore). Return one value per experimental arm in treatment-ID order.}
-#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale. Return one value per experimental arm in
+#'   \item{TestStat}{Numeric vector of test statistics on the Wald (Z) scale, with one value per experimental arm in
 #'     treatment-ID order.}
 #'   \item{Delta}{Numeric vector of estimated experimental-minus-control treatment effects, one per experimental
 #'     arm in treatment-ID order. For binary outcomes, each effect is a proportion difference; for continuous
 #'     outcomes, each effect is a mean difference.}
-#'   \item{CtrlCompleters}{Number of completers in the control arm. Required when the selected conditional-power
-#'     rule uses the estimated treatment effect.}
-#'   \item{TrmtCompleters}{Number of completers in the experimental arm. Required when the selected
-#'     conditional-power rule uses the estimated treatment effect.}
-#'   \item{CtrlPi}{Observed proportion of responders in the control arm. Return only when required by the selected
-#'     conditional-power rule.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{AdjPVal}{Numeric vector of p-values adjusted for multiple comparisons, one per experimental arm.}
@@ -176,17 +133,30 @@
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
-#'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
-#'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
-#'
-#' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
-#'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
+#' @details Return Decision to apply custom stopping logic, or TestStat, AdjPVal, or RawPVal to let East Horizon
+#'   apply its supported multiplicity adjustments and boundaries. Return one value per experimental arm
+#'   in treatment-ID order and NA for arms absent at the current look. Delta is required for Delta-scale
+#'   futility; HR is required for hazard-ratio-scale futility in time-to-event designs. RawPVal cannot be
+#'   used for adjusted-p-value-scale futility. Return TestStat alongside RawPVal when the selected
+#'   Dunnett procedure requires it. Use OutList to pass custom state between looks. This example may use
+#'   only a subset of the documented design fields.
 ######################################################################################################################## .
 
-AnalyzeMultiArmUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+AnalyzeMultiArmUsingPropTestBonferroni <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL, OutList = NULL ) {
+    # Analyze observed completers; simulated dropout responses are not observed data.
+    if ( "CensorInd" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorInd ) & SimData$CensorInd == 1, , drop = FALSE ]
+    } else if ( "CensorIndOrg" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorIndOrg ) & SimData$CensorIndOrg == 1, , drop = FALSE ]
+    }
+    if ( !is.null( LookInfo ) && !is.null( LookInfo$CumCompleters ) ) {
+        nTargetCompleters <- LookInfo$CumCompleters[ LookInfo$CurrLookIndex ]
+        if ( nTargetCompleters < 1 || nTargetCompleters > nrow( SimData ) ) {
+            return( list( ErrorCode = 1L ) )
+        }
+    }
+
     # Step 1: Retrieve necessary information from the objects East Horizon sent ####
     if ( !is.null( LookInfo ) ) {
         nQtyOfLooks <- LookInfo$NumLooks
@@ -238,11 +208,15 @@ AnalyzeMultiArmUsingPropTestBonferroni <- function( SimData, DesignParam, LookIn
     # vDecision                    <- ifelse( vAdjPValues < vEfficacyBoundaryPScale[ nLookIndex], 2, 0 )  # A decision of 2 means success, 0 means continue the trial
     vDecision <- c( )
     for ( i in 1:length( vAdjPValues ) ) {
-        strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
-            bIAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ],
-            bFAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ]
-        )
-        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+        if ( vIsTrtPresent[ i ] == 1 ) {
+            strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+                bIAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ],
+                bFAEfficacyCondition = vAdjPValues[ i ] < vEfficacyBoundaryPScale[ nLookIndex ]
+            )
+            nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
+        } else {
+            nDecision <- NA_integer_
+        }
         vDecision <- c( vDecision, nDecision )
     }
     # for( i in 1:length(vDecision) ){

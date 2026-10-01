@@ -1,15 +1,11 @@
 ######################################################################################################################## .
 #' @name PlotSelectedPatients
-#'
 #' @title Plot Individual Patient Trajectories Across Visits
-#'
 #' @description This function generates a ggplot showing response trajectories for selected patients across visits,
 #'   with color-coded points indicating treatment assignment.
-#'
 #' @author Jacob Wathen
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -24,13 +20,11 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each subject's
-#'     enrollment, with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to
-#'     obtain calendar visit times.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
+#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
+#'     calendar visit times.}
 #' }
-#'
 #' @param vPatientIDs Integer vector. IDs of patients to include in the plot.
-#'
 #' @return A ggplot object showing response trajectories for the selected patients.
 ######################################################################################################################## .
 

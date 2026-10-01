@@ -1,9 +1,7 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomePercentAtZeroBetaDist
-#'
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0
 #'   where the probability of a 0 is drawn from a Beta distribution.
-#'
 #' @description The function assumes that the probability a patient has a zero response is random and follows a
 #'   Beta( a, b ) distribution. Each distribution must provide 2 parameters for the Beta distribution and the
 #'   probability of 0 outcome is selected from the corresponding Beta distribution. The probability of 0 outcome on
@@ -11,23 +9,16 @@
 #'   distribution. The probability of 0 outcome on the experimental treatment is sampled from a Beta(
 #'   UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 ) distribution. The intent of this option is to incorporate
 #'   the variability in the unknown, probability of no response, quantity.
-#'
 #' @author J. Kyle Wathen
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
 #'   in TreatmentID order.
-#'
 #' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -45,7 +36,6 @@
 #'   \item{UserParam$dExpBetaParam2}{Positive numeric shape2 (beta) parameter for the Beta prior on the
 #'     probability of a zero outcome on the experimental arm.}
 #' }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -63,11 +53,11 @@ SimulatePatientOutcomePercentAtZeroBetaDist <- function( NumSub, ArrivalTime, Tr
         vProbabilityOfZeroOutcome <- c( 0, 0 )
     } else {
         # Simulate the probability of a 0 response from the respective Beta distributions
-        dProbabilityofZeroOutcomeCtrl <- stats::rbeta( 1, UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 )
-        dProbabilityofZeroOutcomeExp <- stats::rbeta( 1, UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 )
+        dProbabilityOfZeroOutcomeCtrl <- stats::rbeta( 1, UserParam$dCtrlBetaParam1, UserParam$dCtrlBetaParam2 )
+        dProbabilityOfZeroOutcomeExp <- stats::rbeta( 1, UserParam$dExpBetaParam1, UserParam$dExpBetaParam2 )
 
         # Create the vProbabilityOfZeroOutcome that is needed below when the patient outcome is simulated
-        vProbabilityOfZeroOutcome <- c( dProbabilityofZeroOutcomeCtrl, dProbabilityofZeroOutcomeExp )
+        vProbabilityOfZeroOutcome <- c( dProbabilityOfZeroOutcomeCtrl, dProbabilityOfZeroOutcomeExp )
     }
 
     nErrorCode <- 0 # No errors occurred

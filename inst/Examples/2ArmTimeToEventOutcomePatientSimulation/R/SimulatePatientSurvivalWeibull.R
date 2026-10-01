@@ -1,40 +1,27 @@
 ######################################################################################################################## .
 #' @name SimulatePatientSurvivalWeibull
-#'
 #' @title Simulate patient outcomes from a Weibull distribution.
-#'
 #' @description Generate Weibull survival times using the arm-specific shape and scale parameters
-#'   supplied through UserParam. The survival parameters from East Horizon are accepted for integration
-#'   compatibility and are ignored in this example.
-#'
+#'   supplied through UserParam.
 #' @author Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param SurvMethod Integer survival input method: 1 = hazard rates; 2 = cumulative survival percentages; 3 =
 #'   median survival times.
-#'
 #' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
 #'   survival generation.
-#'
 #' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
 #'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
 #'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
-#'   stratification).
-#'
+#'   stratification). The control-arm entries may be NA in engine-supplied arrays.
 #' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
 #'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
 #'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
 #'   SurvMethod = 3. Without stratification, the median-survival method has one row.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -52,7 +39,6 @@
 #'   \item{UserParam$dScaleExp}{Positive numeric Weibull scale parameter for the experimental arm, as used by
 #'     `stats::rweibull()`.}
 #'  }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -62,10 +48,7 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
-#' @details SurvMethod, NumPrd, PrdTime, and SurvParam are accepted for compatibility with the response integration
-#'   point but are ignored in this example. Supply the required distribution parameters through UserParam as
-#'   documented above. With UserParam = NULL, the control shape and scale are both 1 and the experimental
+#' @details Supply the required distribution parameters through UserParam as documented above. With UserParam = NULL, the control shape and scale are both 1 and the experimental
 #'   shape and scale are both 12.
 ######################################################################################################################## .
 

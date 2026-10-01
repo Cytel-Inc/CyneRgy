@@ -1,26 +1,18 @@
 ######################################################################################################################## .
 #' @name GenerateTreatmentControlCSV
-#'
 #' @title Generate Sample CSV File with Treatment and Control Patient Data
-#'
 #' @description This helper function creates a CSV file with simulated patient data across multiple visits. It is
 #'   designed to help users test the CSV-reading functions (GeneratePatientFromCSVGeneral.R and
 #'   GeneratePatientFromCSVSpecific.R) by generating properly formatted sample data. The function simulates
 #'   treatment and control groups with normally distributed responses and an optional treatment effect that
 #'   increases across visits.
-#'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#'
 #' @param nSubjects The number of subjects to simulate. Default is 100000.
-#'
 #' @param strFileName The name of the output CSV file. Default is "SimPatientDataNull.csv".
-#'
 #' @param dTreatmentEffect The magnitude of the treatment effect. The effect is applied from Visit 2 onwards and
 #'   increases linearly with each subsequent visit. Set to 0 for null hypothesis simulation (no treatment effect).
 #'   Default is 2.
-#'
 #' @return The generated data frame, also written to strFileName as a CSV file.
-#'
 #' @details The function performs the following steps:
 #'
 #' 1. Set the random seed to 123 for reproducibility.

@@ -1,29 +1,20 @@
 ######################################################################################################################## .
 #' @name SimulateMultipleOutcomes
-#'
 #' @title Simulate Multiple Independent Outcomes
-#'
 #' @description This function simulates three independent normally distributed outcomes for a given number of
 #'   subjects, based on their treatment assignment. Each outcome has a treatment-specific mean and a fixed standard
 #'   deviation. Covariates are not used in this version. Note: this code can be extended to any number of
 #'   endpoints.
-#'
 #' @author Julija Saltane
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
 #'   in TreatmentID order.
-#'
 #' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -39,7 +30,6 @@
 #'          \item{MeanOutcome3Ctrl}{Mean of outcome 3 for control group}
 #'          \item{MeanOutcome3Trt}{Mean of outcome 3 for treatment group}
 #'        }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -51,15 +41,15 @@
 #'
 #' Example-specific additional output elements:
 #' \describe{
-#'   \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1}
-#'   \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2}
-#'   \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}
+#'   \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1, with one element per subject.}
+#'   \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2, with one element per subject.}
+#'   \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3, with one element per subject.}
 #' }
+#' @details PatientOutcome1, PatientOutcome2, and PatientOutcome3 contain the generated outcomes, each with
+#'   residual standard deviation 1. Response is a zero-filled placeholder for the native endpoint; the
+#'   accompanying analysis uses the custom PatientOutcome fields.
 #'
-#' @details Usage of Mean in this example: The arm-specific mean response vector is not used directly in this function.
-#'
-#' Usage of StdDev in this example: The arm-specific response standard deviation vector is not used directly
-#'   in this function.
+#' Endpoint means come from UserParam, and the residual standard deviation is fixed at 1.
 #'
 #' Example-specific error codes: Integer. 0 if successful, 1 if `UserParam` is NULL
 ######################################################################################################################## .

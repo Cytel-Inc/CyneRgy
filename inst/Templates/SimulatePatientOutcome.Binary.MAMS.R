@@ -1,31 +1,22 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#'
 #' @title Template: Simulate binary subject responses
-#'
 #' @description Simulate binary subject responses. Use this template as a starting point for custom logic. Preserve
 #'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
 #'   inputs through UserParam where that argument is supported.
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order. Each probability is between 0 and 1.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -35,12 +26,7 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
-#' @details For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
-#'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
-#'   treatment-to-control ratio of proportions). These standard binary examples do not use those inputs; extend the
-#'   signature and generation logic for a vaccine-efficacy design. Standard binary responses are coded 0 =
-#'   non-response and 1 = response.
+#' @details This template accepts the standard multi-arm binary response inputs.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
@@ -65,8 +51,8 @@
         # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
         # nTreatmentID <- TreatmentID[ nPatIndx ] + 1
 
-        # Make any adjustments to the code as needed, for example simulating from a normal distribution
-        # vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
+        # Make any adjustments to the code as needed, for example, simulating binary responses.
+        # vPatientOutcome[ nPatIndx ] <- stats::rbinom( 1, 1, PropResp[ nTreatmentID ] )
     }
 
     # Write the actual code here.

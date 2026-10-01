@@ -1,17 +1,12 @@
 ######################################################################################################################## .
 #' @name RunSimulation
-#'
 #' @title Run Simulation
-#'
 #' @description Run the repeated-measures trial simulation directly in R. Source the response-generation,
 #'   MMRM analysis, and plotting functions, inspect a single simulated trial, and estimate power across
 #'   repeated trials using both mixed-model and generalized least-squares analyses.
-#'
 #' @author Jacob Wathen
-#'
 #' @return This demonstration script creates simulated subject data, analysis results, plots, and matrices
 #'   of interim and final results in the R session.
-#'
 #' @details Run from the example R directory with MASS, dplyr, tidyr, ggplot2, nlme, rpact, RColorBrewer,
 #'   and CyneRgy installed. The final expressions report empirical efficacy rates and treatment effects.
 ######################################################################################################################## .

@@ -1,15 +1,12 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#'
 #' @title Template: Select experimental treatments for the next stage
-#'
 #' @description Select experimental treatments for the next stage. Use this template as a starting point for custom
 #'   logic. Preserve the engine-supplied argument names and access named list elements by name. Supply additional
 #'   user-defined inputs through UserParam where that argument is supported.
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -26,7 +23,6 @@
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -35,8 +31,9 @@
 #'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
 #'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
-#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of
-#'     arms - 1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number
+#'     of arms - 1), containing the ratios of the experimental group sample sizes to the control group sample
+#'     size.}
 #'   \item{CriticalPoint}{Numeric. Critical value. East Horizon Explore: Only available if `Statistical Design =
 #'     Fixed Sample`. Not available for `Study Objective = Dose Finding`. East Horizon Design: Not available for
 #'     `Combining P-Values (MAMS)` tests.}
@@ -84,7 +81,6 @@
 #'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
 #'     have been updated during treatment selection.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -98,8 +94,10 @@
 #'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event`. East
 #'     Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Integer cumulative number of events at the current look. Only available for time-to-event
-#'     endpoints.}
+#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
+#'     of events for each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not
+#'     available for `Study Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event`
+#'     tests.}
 #'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
 #'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
 #'     lower. – `5`: One-sided efficacy lower, futility upper.}
@@ -114,12 +112,10 @@
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -131,7 +127,6 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details TreatmentID and AllocRatio must have the same nonzero length and matching order. Include only
 #'   experimental treatment IDs; do not include 0 for control. The control allocation ratio is always 1.
 #'
@@ -162,8 +157,10 @@
 
     # Step 1 - Validate custom variable input and set defaults ####
     if ( is.null( UserParam ) ) {
-        # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
-        # take care of any issues.   Also, if there is a default value for the parameters you may want to set them here.  Default values usually
+        # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the
+        #   values are valid and
+        # take care of any issues.   Also, if there is a default value for the parameters you may want to set them here.
+        #   Default values usually
         # are applied to have the same functionality as East Horizon, see the first example
 
         # EXAMPLE - Set the default if needed
@@ -181,13 +178,15 @@
     # Add any code here for creating the treatment id vector
 
     # Step 4: Create a vector of allocation ratios ####
-    # All ratios are relative to control, which has a ratio of 1, and are for the corresponding treatment in vReturnTreatmentID
+    # All ratios are relative to control, which has a ratio of 1, and are for the corresponding treatment in
+    #   vReturnTreatmentID
     # Example: Put twice as many on experimental treatment 1 as there are on 2
     # vAllocationRatio   <- c( 2, 1 )    # This puts twice as many on Experimental treatment 1 because vReturnTreatmentID = c( 1, 2 ) in this example
 
     # Add any code necessary for creating the allocation ratio vector.
 
-    # If you use the variable vReturnTreatmentID and vAllocationRatio above, then the remainder of this code will perform a basic error check
+    # If you use the variable vReturnTreatmentID and vAllocationRatio above, then the remainder of this code will
+    #   perform a basic error check
     # and create the return object.
     # Modify this code as necessary
 

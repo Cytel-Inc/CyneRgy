@@ -1,32 +1,23 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#'
 #' @title Template: Simulate continuous subject responses
-#'
 #' @description Simulate continuous subject responses. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
 #'   user-defined inputs through UserParam where that argument is supported.
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
 #'   in TreatmentID order.
-#'
 #' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -56,7 +47,7 @@
     for ( nPatIndx in 1:NumSub ) {
         nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
-        # Make any adjustments to the code as needed, example simulating from for a normal distribution
+        # Make any adjustments to the code as needed, for example, simulating from a normal distribution
         vPatientOutcome[ nPatIndx ] <- stats::rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ] )
     }
 

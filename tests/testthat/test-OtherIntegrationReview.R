@@ -106,3 +106,47 @@ test_that( "ranked selection rejects unavailable ranks and missing allocation ra
     expect_identical( lResult$TreatmentID, c( 1L, 2L ) )
     expect_identical( lResult$AllocRatio, c( 2, 1 ) )
 } )
+
+test_that( "Poisson enrollment counts are not capped in short accrual periods", {
+    for ( strFunction in c( "GeneratePoissonArrival", "GeneratePoissonArrivalMEP" ) ) {
+        fnArrival <- .GetCommonExampleFunction( "GeneratePoissonArrival", paste0( strFunction, ".R" ), strFunction )
+        fnPeriod <- get( "SimulateAccrualTimesWithConstantRate", envir = environment( fnArrival ) )
+        set.seed( 389 )
+        vCounts <- replicate( 1000, length( fnPeriod( 100, 0, 0.1 ) ) )
+        expect_equal( mean( vCounts ), 10, tolerance = 0.05 )
+        expect_true( any( vCounts > 14 ) )
+        lResult <- fnArrival( 200, 3, c( 0, 0.1, 1.1 ), c( 100, 0, 20 ) )
+        expect_length( lResult$ArrivalTime, 200 )
+        expect_true( all( diff( lResult$ArrivalTime ) >= 0 ) )
+        expect_false( any( lResult$ArrivalTime >= 0.1 & lResult$ArrivalTime < 1.1 ) )
+    }
+} )
+
+test_that( "MEP futility-only looks do not require an efficacy boundary", {
+    fnDecision <- .GetCommonExampleFunction( "MEPDesign", "GetMEPDecision.R", "GetMEPDecision" )
+    for ( nEndpointType in c( 1L, 2L ) ) {
+        lDesign <- list( EndpointName = "Clinical response", EndpointType = nEndpointType,
+            TargetInformation = 100, EffFlg = matrix( c( 0L, 1L ), 2, 1 ),
+            FutFlg = matrix( c( 1L, 0L ), 2, 1 ), FutThrsld = matrix( 0.5, 2, 1 ) )
+        lLook <- list( LastLookDecision = 0L, EfficacyBoundaryPScale = NaN, LookNum = 1L,
+            TestStatisticsOutputs = list( "Clinical response" = list( data =
+                list( TSPVal = 0.7, Delta = 0.1, HR = 0.9 ) ) ), EPStatus = 0L )
+        lSummary <- list( "Clinical response" = list( Completers = 20, Events = 20, Delta = 0.1, HR = 0.9 ) )
+        lResult <- fnDecision( data.frame( ), data.frame( ), lSummary, lLook, lDesign )
+        expect_identical( lResult$Decision, 2L )
+        expect_identical( lResult$ErrorCode, 0L )
+    }
+} )
+
+
+test_that( "block randomization rejects ratios outside its integer representation", {
+    fnRandomize <- .GetCommonExampleFunction( "RandomizeSubjects", "BlockRandomizationSubjectsUsingRPackage.R",
+        "BlockRandomizationSubjectsUsingRPackage" )
+    for ( dRatio in c( 0.005, 1e-9, 1e10 ) ) {
+        expect_identical( fnRandomize( 100, 2, dRatio, list( BlockSize1 = 100 ) )$ErrorCode, -7L )
+    }
+    fnConvert <- get( "ConvertRatio", envir = environment( fnRandomize ) )
+    expect_identical( fnConvert( 0.5 ), c( 2L, 1L ) )
+    expect_identical( fnConvert( 1 ), c( 1L, 1L ) )
+    expect_identical( fnConvert( 2 ), c( 1L, 2L ) )
+} )

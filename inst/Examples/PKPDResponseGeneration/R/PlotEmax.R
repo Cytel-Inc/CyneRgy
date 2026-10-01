@@ -1,23 +1,15 @@
 ######################################################################################################################## .
 #' @name EmaxToLong
-#'
 #' @title Emax To Long
-#'
 #' @description Convert generated visit-level Emax responses to long format and plot the response
 #'   trajectories and group summaries. Run this demonstration from the example R directory.
-#'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#'
 #' @param lEmaxRetval Named list of simulated visit-level responses returned by GenerateResponseEmaxModel.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by visit.
-#'
 #' @return Data frame with one row per subject and visit, including Subject, Group, Visit, VisitIndex, Response,
 #'   and VisitTime.
-#'
 #' @details If VisitTime is NULL, use the numeric visit indices as visit times.
 ######################################################################################################################## .
 
@@ -60,21 +52,14 @@ EmaxToLong <- function( lEmaxRetval, TreatmentID, VisitTime = NULL ) {
 
 ######################################################################################################################## .
 #' @name PlotEmaxGroups
-#'
 #' @title Plot Emax response summaries by treatment group
-#'
 #' @description Plot mean responses and 95\% confidence intervals by treatment group and visit time,
 #'   optionally including individual subject trajectories. Confidence intervals use the number of observed
 #'   responses in each group and visit.
-#'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#'
 #' @param dfData Data frame returned by EmaxToLong, with Subject, Group, VisitTime, and Response columns.
-#'
 #' @param strTitle Character title for the plot.
-#'
 #' @param bShowIndividuals Logical value indicating whether to include individual subject trajectories.
-#'
 #' @return An invisible named list containing summary (group and visit summaries) and plot (the ggplot object).
 #'   The function also displays the plot.
 ######################################################################################################################## .
@@ -137,18 +122,18 @@ PlotEmaxGroups <- function( dfData, strTitle, bShowIndividuals = TRUE ) {
 # Define a small scenario to demonstrate plot
 set.seed( 123 )
 
-NumSub <- 60
-NumVisit <- 5
-VisitTime <- c( 1, 2, 3, 4, 5 )
-TreatmentID <- sample( c( 0, 1 ), NumSub, replace = TRUE, prob = c( 0.5, 0.5 ) )
+nSubjects <- 60
+nVisits <- 5
+vVisitTime <- c( 1, 2, 3, 4, 5 )
+vTreatmentID <- sample( c( 0, 1 ), nSubjects, replace = TRUE, prob = c( 0.5, 0.5 ) )
 
-MeanControl <- c( 10, 10, 10, 10, 10 )
-MeanTrt <- c( 0, 0, 0, 0, 0 )
-StdDevControl <- rep( 5, NumVisit )
-StdDevTrt <- rep( 5, NumVisit )
-CorrMat <- diag( NumVisit )
+vMeanControl <- c( 10, 10, 10, 10, 10 )
+vMeanTrt <- c( 0, 0, 0, 0, 0 )
+vStdDevControl <- rep( 5, nVisits )
+vStdDevTrt <- rep( 5, nVisits )
+mCorrMat <- diag( nVisits )
 
-UserParam <- list(
+lUserParam <- list(
     AbsorptionRate = 1, # absorption rate constant
     EliminationRate = 0.2, # elimination rate constant
     Dose = 500, # dose administered
@@ -159,22 +144,22 @@ UserParam <- list(
 
 # Run simulator
 lEmaxOut <- GenerateResponseEmaxModel(
-    NumSub        = NumSub,
-    NumVisit      = NumVisit,
-    ArrivalTime   = rep( 0, NumSub ),
-    TreatmentID   = TreatmentID,
+    NumSub        = nSubjects,
+    NumVisit      = nVisits,
+    ArrivalTime   = rep( 0, nSubjects ),
+    TreatmentID   = vTreatmentID,
     Inputmethod   = 0,
-    VisitTime     = VisitTime,
-    MeanControl   = MeanControl,
-    MeanTrt       = MeanTrt,
-    StdDevControl = StdDevControl,
-    StdDevTrt     = StdDevTrt,
-    CorrMat       = CorrMat,
-    UserParam     = UserParam
+    VisitTime     = vVisitTime,
+    MeanControl   = vMeanControl,
+    MeanTrt       = vMeanTrt,
+    StdDevControl = vStdDevControl,
+    StdDevTrt     = vStdDevTrt,
+    CorrMat       = mCorrMat,
+    UserParam     = lUserParam
 )
 
 # Build tidy frame and plot
-dfEmax <- EmaxToLong( lEmaxOut, TreatmentID, VisitTime )
+dfEmax <- EmaxToLong( lEmaxOut, vTreatmentID, vVisitTime )
 
 lPlotResults <- PlotEmaxGroups( dfEmax,
     strTitle = "Control vs Treatment: Emax Responses over Visits",

@@ -1,29 +1,19 @@
 ######################################################################################################################## .
 #' @name GeneratePoissonArrival
-#'
 #' @title Generate patient arrival time according to a Poisson process.
-#'
-#' @description This function allows for patient arrival time in the clinical trial according to a Poisson process.
-#'   If the UserParam is provided then PrdStart and AccrRate are ignored. If the UserParam is supplied, a ramp-up
-#'   in accrual is obtained by supplying more than one Rate parameter. The rate is per unit time and the Rate with
-#'   the largest index will be used after the ramp up. If UserParam is not supplied, then PrdStart, AccrRate are
-#'   used to simulate arrival times according to a Poisson process.
-#'
+#' @description Simulate patient arrival times in a clinical trial according to a Poisson process. When UserParam
+#'   is supplied, its consecutively numbered dRate1 through dRateN parameters specify accrual rates for successive
+#'   units of time. Each rate is per unit time, and the final rate continues after the ramp-up. When UserParam is
+#'   NULL, PrdStart and AccrRate define the accrual schedule.
 #' @author J. Kyle Wathen
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param Type Integer enrollment type: 0 = global enrollment; 1 = regional enrollment. This function
 #'   implements global enrollment and defaults to 0. Use the regional arguments described below for a regional
 #'   implementation.
-#'
 #' @param NumPrd Integer number of accrual periods.
-#'
 #' @param PrdStart Numeric vector of accrual-period starting times of length NumPrd. The first period starts at 0.
-#'
 #' @param AccrRate Numeric vector of accrual rates (subjects per unit time), with one element per accrual period.
 #'   For regional enrollment, one element per region.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -37,7 +27,6 @@
 #'     without gaps; the final rate continues after the ramp-up. Rates must be nonnegative, with a positive
 #'     final rate to ensure that all requested subjects can enroll.}
 #' }
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -47,7 +36,6 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details These functions use global enrollment inputs. Regional enrollment can also provide Type (0 = global, 1
 #'   = regional), RegionName (character region names), RegionStart (numeric region start times), and
 #'   EnrollmentCapPcnt (numeric enrollment caps in percent), with one element per region. Add these engine-supplied
@@ -68,7 +56,7 @@ GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserPara
         vRates <- AccrRate
         nQtyOfRates <- length( vRates )
     } else {
-        # Step 2.2 - Pull the rates of and create a vector ####
+        # Step 2.2 - Read the named rates and create a vector ####
         nQtyOfRates <- length( UserParam )
         vExpectedRateNames <- paste0( "dRate", seq_len( nQtyOfRates ) )
         if ( nQtyOfRates == 0 || !setequal( names( UserParam ), vExpectedRateNames ) ) {
@@ -122,11 +110,9 @@ SimulateAccrualTimesWithConstantRate <- function( dPatsPerUnitTime, dPeriodStart
         return( numeric( 0 ) )
     }
 
-    nMaxQtyPatsInThisTimeUnit <- stats::qpois( 0.9999, dPatsPerUnitTime ) + 10
-    vIntraArrivalTime <- stats::rexp( dQtyOfUnitsOfTime * nMaxQtyPatsInThisTimeUnit, dPatsPerUnitTime )
-
-    vTimes <- cumsum( vIntraArrivalTime )
-    vTimes <- vTimes[ vTimes < dQtyOfUnitsOfTime ]
+    # Conditional on the Poisson count, arrivals are sorted uniform times within this period.
+    nSubjectsInPeriod <- stats::rpois( 1, dPatsPerUnitTime * dQtyOfUnitsOfTime )
+    vTimes <- sort( stats::runif( nSubjectsInPeriod, min = 0, max = dQtyOfUnitsOfTime ) )
     vTimes <- vTimes + dPeriodStartTime
 
     return( vTimes )

@@ -1,18 +1,11 @@
 ######################################################################################################################## .
 #' @name ComputeHazardWeibull
-#'
 #' @title Compute Hazard Weibull
-#'
 #' @description Function to compute the hazard of the Weibull distribution
-#'
 #' @author Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin
-#'
 #' @param vTime Numeric vector of times at which to evaluate the Weibull hazard.
-#'
 #' @param dShape Positive numeric shape parameter of the Weibull distribution, as used by `stats::rweibull()`.
-#'
 #' @param dScale Positive numeric scale parameter of the Weibull distribution, as used by `stats::rweibull()`.
-#'
 #' @return Numeric vector of Weibull hazard values at vTime.
 ######################################################################################################################## .
 
@@ -25,17 +18,11 @@ ComputeHazardWeibull <- function( vTime, dShape, dScale ) {
 # It accepts `dShape` and `dMedian` and returns the Weibull scale parameter.
 ######################################################################################################################## .
 #' @name ComputeScaleGivenShapeMedian
-#'
 #' @title Compute Scale Given Shape Median
-#'
 #' @description Compute the scale parameter of a Weibull distribution from its shape and median survival time.
-#'
 #' @author Valeria A. G. Mazzanti, J. Kyle Wathen, and Gabriel Potvin
-#'
 #' @param dShape Positive numeric shape parameter of the Weibull distribution, as used by `stats::rweibull()`.
-#'
 #' @param dMedian Positive numeric median survival time of the Weibull distribution.
-#'
 #' @return Positive numeric Weibull scale parameter.
 ######################################################################################################################## .
 

@@ -1,44 +1,34 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeBinaryWithAssurance
-#'
 #' @title Simulate binary patient outcomes using a Beta distribution prior
-#'
 #' @description Generate patient outcomes for a binary response trial while incorporating uncertainty about the
 #'   true response rates by sampling them from a Beta distribution prior.
-#'
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order. Each probability is between 0 and 1.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
 #' Example-specific parameters and requirements:
-#' If UserParam must be supplied, the list must contain the following named elements:
+#' UserParam must be supplied and must contain the following named elements:
 #' \describe{
-#'    \item{UserParam$dParameter1Ctrl}{For control treatment, the design prior parameter 1 in the Beta distribution
-#'      }
-#'    \item{UserParam$dParameter2Ctrl}{For control treatment, the design prior parameter 2 in the Beta distribution
-#'      }
-#'    \item{UserParam$dParameter1Exp}{For experimental treatment, the design prior parameter 1 in the Beta
-#'      distribution }
-#'    \item{UserParam$dParameter2Exp}{For experimental treatment, the design prior parameter 2 in the Beta
-#'      distribution }
+#'   \item{UserParam$dParameter1Ctrl}{Positive numeric shape1 (alpha) parameter for the control response-probability
+#'     Beta prior.}
+#'   \item{UserParam$dParameter2Ctrl}{Positive numeric shape2 (beta) parameter for the control response-probability
+#'     Beta prior.}
+#'   \item{UserParam$dParameter1Exp}{Positive numeric shape1 (alpha) parameter for the experimental response-probability
+#'     Beta prior.}
+#'   \item{UserParam$dParameter2Exp}{Positive numeric shape2 (beta) parameter for the experimental response-probability
+#'     Beta prior.}
 #' }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -56,7 +46,10 @@
 #'   \item{TrueProbabilityExperimental}{Numeric vector of the sampled experimental response probability, repeated
 #'     for all subjects in a simulation.}
 #' }
-
+#' @details For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
+#'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
+#'   treatment-to-control ratio of proportions). Include these arguments in the function signature for a
+#'   vaccine-efficacy design. Standard binary responses are coded 0 = non-response and 1 = response.
 ######################################################################################################################## .
 
 SimulatePatientOutcomeBinaryWithAssurance <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {

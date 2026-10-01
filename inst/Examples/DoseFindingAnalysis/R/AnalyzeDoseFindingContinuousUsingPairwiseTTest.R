@@ -1,17 +1,13 @@
 ######################################################################################################################## .
 #' @name AnalyzeDoseFindingContinuousUsingPairwiseTTest
-#'
 #' @title Analyze continuous outcome for dose finding design using Fixed Sequence Pairwise t-test.
-#'
 #' @description This function implements Fixed Sequence Pairwise testing for dose-finding studies with continuous
 #'   endpoints. The Fixed Sequence gatekeeping procedure tests hypotheses sequentially from the highest dose
 #'   downward, rejecting the null hypothesis only if the raw p-value is less than the total alpha. Once a
 #'   hypothesis fails to reject, all lower dose hypotheses are not rejected and are stopped for futility (futility cascade).
-#'
 #' @author Sayantan Biswas, Pradip Maske, Gabriel Potvin
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -26,7 +22,6 @@
 #'   \item{ClndrRespTime}{Numeric vector of response times on the calendar scale, with one element per subject. For
 #'     a survival endpoint, this is ArrivalTime plus the event or censoring time measured from enrollment.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -35,8 +30,8 @@
 #'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
 #'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
-#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of
-#'     arms - 1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of
+#'     arms - 1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
 #'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
@@ -70,7 +65,6 @@
 #'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
 #'     have been updated during treatment selection.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -98,16 +92,13 @@
 #'     (PoC) threshold. East Horizon Explore: Only available for `Study Objective = Dose Finding`. East Horizon
 #'     Design: Not available.}
 #' }
-#'
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
 #'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
 #'   Available for designs that support passing state between looks.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -138,7 +129,6 @@
 #'   \item{POCStatus}{Optional integer overall proof-of-concept status: 0 = threshold not crossed; 1 = threshold
 #'     crossed. This example uses the highest-dose arm to determine the overall status.}
 #' }
-#'
 #' @details OutList carries vPOCStatusArm (one proof-of-concept status per experimental arm) and dOverallPOC
 #'   (overall proof-of-concept status) from the previous look. The first look starts with zero statuses. The
 #'   current-look PoCThreshold is applied to isotonic treatment-effect estimates. Analysis timing counts only
@@ -321,15 +311,15 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
 ######################################################################################################################## .
 ComputeAnalysisTime <- function( dRespLag, vArrivalTime, vCumCompleters, nCurrLookIndex ) {
     dRespLag <- ifelse( !is.null( dRespLag ), dRespLag, 0 )
-    dCompletionTimes <- sort( vArrivalTime + dRespLag )
+    vCompletionTimes <- sort( vArrivalTime + dRespLag )
     nTargetCompleters <- vCumCompleters[ nCurrLookIndex ]
 
     if ( !is.null( nTargetCompleters ) &&
         !is.na( nTargetCompleters ) &&
-        nTargetCompleters <= length( dCompletionTimes ) ) {
-        dEstAnalysisTime <- dCompletionTimes[ nTargetCompleters ]
+        nTargetCompleters <= length( vCompletionTimes ) ) {
+        dEstAnalysisTime <- vCompletionTimes[ nTargetCompleters ]
     } else {
-        dEstAnalysisTime <- max( dCompletionTimes, na.rm = TRUE )
+        dEstAnalysisTime <- max( vCompletionTimes, na.rm = TRUE )
     }
     return( dEstAnalysisTime )
 }

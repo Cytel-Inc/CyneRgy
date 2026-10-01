@@ -1,16 +1,11 @@
 ######################################################################################################################## .
 #' @name test-childpsychology
-#'
 #' @title Test childhood anxiety response generators
-#'
 #' @description Verify bounded responses, deterministic arm means, and missing-parameter handling for both
 #'   childhood anxiety response generators.
-#'
 #' @author Audrey Wathen, J. Kyle Wathen
-#'
 #' @return This script creates example results or test expectations in the R session; it is not an engine
 #'   integration function.
-#'
 #' @details Source and test both outcome generators from this example's working directory.
 ######################################################################################################################## .
 

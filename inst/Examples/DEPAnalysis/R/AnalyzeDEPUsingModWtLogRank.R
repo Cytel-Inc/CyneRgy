@@ -1,14 +1,10 @@
 ######################################################################################################################## .
 #' @name AnalyzeDEPUsingModWtLogRank
-#'
 #' @title Compute the modestly weighted log rank test statistic.
-#'
 #' @description Compute modestly weighted log rank test statistic given simulation data.
-#'
 #' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -32,7 +28,6 @@
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -59,8 +54,8 @@
 #'     TTE-Binary`.}
 #'   \item{PlanEndTrial}{Integer. Planned end of trial: - `1`: Full information for both endpoints. - `2`: Full
 #'     information for endpoint 1. - `3`: Full information for endpoint 2.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{CriticalPoint}{Named List of Numeric. Named List of length equal to the number of endpoints, indicating
 #'     the critical value for each endpoint. For example, `CriticalPoint["Endpoint 1"]` is the value for Endpoint
@@ -103,7 +98,6 @@
 #'     first, then for the analysis of "Endpoint 1" we will have `TestStat["Endpoint 2"] = NA`.}
 #'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -127,9 +121,9 @@
 #'     completers for each look for Endpoint 1. East Horizon Explore: Not available for `Dual Endpoint = TTE-TTE`.
 #'     Set to `NA` for endpoints with `Endpoint Type = Time-to-Event`.}
 #'   \item{CumEvents}{Named List of Vector of Integer. Named List of length equal to the number of endpoints,
-#'     containing the cumulative events vector for each endpoint. For example, `CumEvents["Endpoint 1"]` is a
-#'     vector of length `LookInfo$NumLooks` containing the cumulative number of events for each look for Endpoint
-#'     1. East Horizon Explore: Set to `NA` for endpoints with `Endpoint Type = Binary`.}
+#'     containing the cumulative events vector for each endpoint. For example, `CumEvents["Endpoint 1"]` is a vector of
+#'     length `LookInfo$NumLooks` containing the cumulative number of events for each look for Endpoint 1. East Horizon
+#'     Explore: Set to `NA` for endpoints with `Endpoint Type = Binary`.}
 #'   \item{RejType}{Named List of Integer. Named List of length equal to the number of endpoints, containing the
 #'     rejection type for each endpoint. For example, `RejType["Endpoint 1"]` is the rejection type for Endpoint 1.
 #'     Possible values: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy
@@ -178,12 +172,10 @@
 #'     the binding type for each endpoint. For example, `BindingType["Endpoint 1"]` is the binding type for
 #'     Endpoint 1. Possible values: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -198,7 +190,6 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details The current code assumes there are no dropouts. Modify the code accordingly for dropout case.
 #'
 #' The dual-endpoint engine exposes Response1 and Response2 and the endpoint-specific calendar times and original
@@ -239,8 +230,8 @@ AnalyzeDEPUsingModWtLogRank <- function( SimData, DesignParam, LookInfo = NULL, 
     dfAnalysisData <- dfAnalysisData[ order( dfAnalysisData$ObservedTime ), ]
 
     # Compute Observed HR
-    coxModel <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ TreatmentID, data = dfAnalysisData )
-    dTrueHR <- exp( coxModel$coefficients )
+    cCoxModel <- survival::coxph( survival::Surv( ObservedTime, Event ) ~ TreatmentID, data = dfAnalysisData )
+    dTrueHR <- exp( cCoxModel$coefficients )
 
     dfAnalysisData$EventOnTreatment <- ifelse( dfAnalysisData$TreatmentID == 1, dfAnalysisData$Event, 0 )
     dfAnalysisData$EventOnControl <- ifelse( dfAnalysisData$TreatmentID == 0, dfAnalysisData$Event, 0 )
@@ -252,7 +243,7 @@ AnalyzeDEPUsingModWtLogRank <- function( SimData, DesignParam, LookInfo = NULL, 
     # Initialize numerator and denominator
     dNum <- 0
     dDen <- 0
-    weight <- 1
+    dWeight <- 1
     # Iterate over subjects
     for ( nSubject in 1:nrow( dfAnalysisData ) ) {
         # Non-event: update risk set
@@ -273,14 +264,14 @@ AnalyzeDEPUsingModWtLogRank <- function( SimData, DesignParam, LookInfo = NULL, 
             nSubjectsAtRisk <- nSubjectsAtRiskTreatment + nSubjectsAtRiskControl
 
             # Weight for modestly weighted log-rank test
-            weight <- ifelse( dfAnalysisData$ObservedTime[ nSubject ] <= UserParam[[ DesignParam$EndpointName[[ nAnalysisEndpointIndex ]] ]]$delay,
-                weight * 1 / ( 1 - nEvents / nSubjectsAtRisk ), weight
+            dWeight <- ifelse( dfAnalysisData$ObservedTime[ nSubject ] <= UserParam[[ DesignParam$EndpointName[[ nAnalysisEndpointIndex ]] ]]$delay,
+                dWeight * 1 / ( 1 - nEvents / nSubjectsAtRisk ), dWeight
             )
 
-            dNum <- dNum + weight * ( nEventsOnTreatment - nSubjectsAtRiskTreatment * nEvents / nSubjectsAtRisk )
+            dNum <- dNum + dWeight * ( nEventsOnTreatment - nSubjectsAtRiskTreatment * nEvents / nSubjectsAtRisk )
 
             if ( nSubjectsAtRisk != 1 ) {
-                dDen <- dDen + weight^2 * (
+                dDen <- dDen + dWeight^2 * (
                     nSubjectsAtRiskTreatment * nSubjectsAtRiskControl *
                         ( nSubjectsAtRisk - nEvents ) * nEvents /
                         ( ( nSubjectsAtRisk - 1 ) * nSubjectsAtRisk^2 )
@@ -318,37 +309,37 @@ ComputeDEPAnalysisTime <- function( SimData, DesignParam, LookInfo = NULL ) {
         nQtyOfLooks <- LookInfo$NumLooks
         nLookIndex <- LookInfo$CurrLookIndex
 
-        # CumTargets will be planned cumulative events/completers for the Endpoint used for the current look positioning.
+        # vCumTargets will be planned cumulative events/completers for the Endpoint used for the current look positioning.
         if ( nLookIndex <= LookInfo$NumEndpointLooks[ nSyncEndpointIndex ] ) {
             if ( nSyncEndpointType == 2 ) {
-                CumTargets <- LookInfo$CumEvents[[ DesignParam$EndpointName[ nSyncEndpointIndex ] ]]
+                vCumTargets <- LookInfo$CumEvents[[ DesignParam$EndpointName[ nSyncEndpointIndex ] ]]
             } else {
-                CumTargets <- LookInfo$CumCompleters[[ DesignParam$EndpointName[ nSyncEndpointIndex ] ]]
+                vCumTargets <- LookInfo$CumCompleters[[ DesignParam$EndpointName[ nSyncEndpointIndex ] ]]
             }
         } else {
             if ( nOtherEndpointType == 2 ) {
-                CumTargets <- LookInfo$CumEvents[[ DesignParam$EndpointName[ nOtherEndpointIndex ] ]]
+                vCumTargets <- LookInfo$CumEvents[[ DesignParam$EndpointName[ nOtherEndpointIndex ] ]]
             } else {
-                CumTargets <- LookInfo$CumCompleters[[ DesignParam$EndpointName[ nOtherEndpointIndex ] ]]
+                vCumTargets <- LookInfo$CumCompleters[[ DesignParam$EndpointName[ nOtherEndpointIndex ] ]]
             }
         }
 
-        nQtyOfTargets <- CumTargets[ nLookIndex ]
+        nQtyOfTargets <- vCumTargets[ nLookIndex ]
 
-        EPIDforSlicingData <- ifelse( nLookIndex <= LookInfo$NumEndpointLooks[ nSyncEndpointIndex ], nSyncEndpointIndex, nOtherEndpointIndex )
-        if ( EPIDforSlicingData == 1 ) {
-            SimDataAnlys <- SimData[ order( SimData$ClndrRespTime, SimData$CensorIndOrg ), ]
-            idxAnlys <- which( cumsum( SimDataAnlys$CensorIndOrg ) >= nQtyOfTargets )
-            dAnalysisTime <- ifelse( length( idxAnlys ) > 0,
-                SimDataAnlys$ClndrRespTime[ min( idxAnlys ) ],
-                SimDataAnlys$ClndrRespTime[ DesignParam$SampleSize ]
+        nEndpointIDForSlicingData <- ifelse( nLookIndex <= LookInfo$NumEndpointLooks[ nSyncEndpointIndex ], nSyncEndpointIndex, nOtherEndpointIndex )
+        if ( nEndpointIDForSlicingData == 1 ) {
+            dfSimDataAnalysis <- SimData[ order( SimData$ClndrRespTime, SimData$CensorIndOrg ), ]
+            vAnalysisIndices <- which( cumsum( dfSimDataAnalysis$CensorIndOrg ) >= nQtyOfTargets )
+            dAnalysisTime <- ifelse( length( vAnalysisIndices ) > 0,
+                dfSimDataAnalysis$ClndrRespTime[ min( vAnalysisIndices ) ],
+                dfSimDataAnalysis$ClndrRespTime[ DesignParam$SampleSize ]
             )
         } else {
-            SimDataAnlys <- SimData[ order( SimData$ClndrRespTime2, SimData$CensorIndOrg2 ), ]
-            idxAnlys <- which( cumsum( SimDataAnlys$CensorIndOrg2 ) >= nQtyOfTargets )
-            dAnalysisTime <- ifelse( length( idxAnlys ) > 0,
-                SimDataAnlys$ClndrRespTime2[ min( idxAnlys ) ],
-                SimDataAnlys$ClndrRespTime2[ DesignParam$SampleSize ]
+            dfSimDataAnalysis <- SimData[ order( SimData$ClndrRespTime2, SimData$CensorIndOrg2 ), ]
+            vAnalysisIndices <- which( cumsum( dfSimDataAnalysis$CensorIndOrg2 ) >= nQtyOfTargets )
+            dAnalysisTime <- ifelse( length( vAnalysisIndices ) > 0,
+                dfSimDataAnalysis$ClndrRespTime2[ min( vAnalysisIndices ) ],
+                dfSimDataAnalysis$ClndrRespTime2[ DesignParam$SampleSize ]
             )
         }
     } else { # FSD design
@@ -361,11 +352,11 @@ ComputeDEPAnalysisTime <- function( SimData, DesignParam, LookInfo = NULL ) {
                 DesignParam$MaxCompleters[[ DesignParam$EndpointName[ 1 ] ]],
                 DesignParam$MaxEvents[[ DesignParam$EndpointName[ 1 ] ]]
             )
-            SimDataEP1 <- SimData[ order( SimData$ClndrRespTime, SimData$CensorIndOrg ), ]
-            idxEP1 <- which( cumsum( SimDataEP1$CensorIndOrg ) >= nQtyOfTargets )
-            AnalysisTimeEP1 <- ifelse( length( idxEP1 ) > 0,
-                SimDataEP1$ClndrRespTime[ min( idxEP1 ) ],
-                SimDataEP1$ClndrRespTime[ DesignParam$SampleSize ]
+            dfSimDataEndpoint1 <- SimData[ order( SimData$ClndrRespTime, SimData$CensorIndOrg ), ]
+            vEndpoint1Indices <- which( cumsum( dfSimDataEndpoint1$CensorIndOrg ) >= nQtyOfTargets )
+            dEndpoint1AnalysisTime <- ifelse( length( vEndpoint1Indices ) > 0,
+                dfSimDataEndpoint1$ClndrRespTime[ min( vEndpoint1Indices ) ],
+                dfSimDataEndpoint1$ClndrRespTime[ DesignParam$SampleSize ]
             )
         }
         if ( DesignParam$PlanEndTrial == 3 || DesignParam$PlanEndTrial == 1 ) { # Full info on Endpoint 2 or Both Endpoints
@@ -373,16 +364,16 @@ ComputeDEPAnalysisTime <- function( SimData, DesignParam, LookInfo = NULL ) {
                 DesignParam$MaxCompleters[[ DesignParam$EndpointName[ 2 ] ]],
                 DesignParam$MaxEvents[[ DesignParam$EndpointName[ 2 ] ]]
             )
-            SimDataEP2 <- SimData[ order( SimData$ClndrRespTime2, SimData$CensorIndOrg2 ), ]
-            idxEP2 <- which( cumsum( SimDataEP2$CensorIndOrg2 ) >= nQtyOfTargets )
-            AnalysisTimeEP2 <- ifelse( length( idxEP2 ) > 0,
-                SimDataEP2$ClndrRespTime2[ min( idxEP2 ) ],
-                SimDataEP2$ClndrRespTime2[ DesignParam$SampleSize ]
+            dfSimDataEndpoint2 <- SimData[ order( SimData$ClndrRespTime2, SimData$CensorIndOrg2 ), ]
+            vEndpoint2Indices <- which( cumsum( dfSimDataEndpoint2$CensorIndOrg2 ) >= nQtyOfTargets )
+            dEndpoint2AnalysisTime <- ifelse( length( vEndpoint2Indices ) > 0,
+                dfSimDataEndpoint2$ClndrRespTime2[ min( vEndpoint2Indices ) ],
+                dfSimDataEndpoint2$ClndrRespTime2[ DesignParam$SampleSize ]
             )
         }
 
-        dAnalysisTime <- ifelse( DesignParam$PlanEndTrial == 1, max( AnalysisTimeEP1, AnalysisTimeEP2 ),
-            ifelse( DesignParam$PlanEndTrial == 2, AnalysisTimeEP1, AnalysisTimeEP2 )
+        dAnalysisTime <- ifelse( DesignParam$PlanEndTrial == 1, max( dEndpoint1AnalysisTime, dEndpoint2AnalysisTime ),
+            ifelse( DesignParam$PlanEndTrial == 2, dEndpoint1AnalysisTime, dEndpoint2AnalysisTime )
         )
     }
     return( dAnalysisTime )

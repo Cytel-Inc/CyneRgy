@@ -1,28 +1,19 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeNormalAssurance
-#'
 #' @title Simulate normal responses for Bayesian assurance
-#'
 #' @description Generate normal subject responses using a two-component normal mixture prior for the
 #'   experimental-minus-control treatment effect. Sample the treatment effect once per simulation, add it to
 #'   the control mean, then generate subject responses using the arm-specific standard deviations.
-#'
 #' @author J. Kyle Wathen, Laurent Spiess, Gabriel Potvin
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
 #'   in TreatmentID order.
-#'
 #' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -44,7 +35,6 @@
 #'   \item{UserParam$dSDCtrl}{Nonnegative numeric control-arm response standard deviation.}
 #'   \item{UserParam$dSDExp}{Nonnegative numeric experimental-arm response standard deviation.}
 #' }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -52,12 +42,15 @@
 #'   \item{vTrueDelta}{Custom numeric vector of true experimental-minus-control mean differences, with one
 #'     element per subject and the same value throughout a simulation.}
 #'   \item{Delta}{Custom numeric vector equal to vTrueDelta, retained for existing summary-statistic outputs.}
-#'   \item{dSimMeanCtrl}{Numeric true control-arm response mean used to generate the current simulation.}
-#'   \item{dSimMeanExp}{Numeric true experimental-arm response mean used to generate the current simulation.}
+#'   \item{dSimMeanCtrl}{Numeric vector of true control-arm response means, with one element per subject and the
+#'     same value throughout a simulation.}
+#'   \item{dSimMeanExp}{Numeric vector of true experimental-arm response means, with one element per subject and
+#'     the same value throughout a simulation.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#' @details UserParam supplies the control mean, both response standard deviations, and the treatment-effect prior.
 ######################################################################################################################## .
 
 SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
@@ -80,7 +73,7 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
     for ( nPatIndx in 1:NumSub ) {
         nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
-        # Make any adjustments to the code as needed, example simulating from for a normal distribution
+        # Make any adjustments to the code as needed, for example, simulating from a normal distribution
         vPatientOutcome[ nPatIndx ] <- stats::rnorm( 1, vMean[ nTreatmentID ], vStdDev[ nTreatmentID ] )
     }
 
@@ -110,29 +103,20 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
 
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeNormalAssuranceUsingPriorInput
-#'
 #' @title Simulate normal responses from a supplied assurance prior
-#'
 #' @description Generate normal responses using successive experimental-arm means from the global prior vector
 #'   vPrior. Advance the global index nSimIndex once per call. Initialize both globals before simulation; return
 #'   ErrorCode = -100 when they are missing or the prior vector is exhausted.
-#'
 #' @author J. Kyle Wathen, Laurent Spiess, Gabriel Potvin
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
 #'   in TreatmentID order.
-#'
 #' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -143,7 +127,6 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
 #'   \item{UserParam$dSDCtrl}{Nonnegative numeric control-arm response standard deviation.}
 #'   \item{UserParam$dSDExp}{Nonnegative numeric experimental-arm response standard deviation.}
 #' }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -151,12 +134,16 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
 #'   \item{vTrueDelta}{Custom numeric vector of true experimental-minus-control mean differences, with one
 #'     element per subject and the same value throughout a simulation.}
 #'   \item{Delta}{Custom numeric vector equal to vTrueDelta, retained for existing summary-statistic outputs.}
-#'   \item{dSimMeanCtrl}{Numeric true control-arm response mean used to generate the current simulation.}
-#'   \item{dSimMeanExp}{Numeric true experimental-arm response mean used to generate the current simulation.}
+#'   \item{dSimMeanCtrl}{Numeric vector of true control-arm response means, with one element per subject and the
+#'     same value throughout a simulation.}
+#'   \item{dSimMeanExp}{Numeric vector of true experimental-arm response means, with one element per subject and
+#'     the same value throughout a simulation.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#' @details Mean supplies the control response mean. The experimental mean is replaced by the next vPrior
+#'   value. UserParam supplies the response standard deviations for both arms.
 ######################################################################################################################## .
 
 SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
@@ -183,7 +170,7 @@ SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, Arriva
     for ( nPatIndx in 1:NumSub ) {
         nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
 
-        # Make any adjustments to the code as needed, example simulating from for a normal distribution
+        # Make any adjustments to the code as needed, for example, simulating from a normal distribution
         vPatientOutcome[ nPatIndx ] <- stats::rnorm( 1, Mean[ nTreatmentID ], vStdDev[ nTreatmentID ] )
     }
 

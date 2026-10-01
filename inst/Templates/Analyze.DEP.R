@@ -1,15 +1,12 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#'
 #' @title Template: Analyze a dual-design endpoint
-#'
 #' @description Analyze a dual-design endpoint. Use this template as a starting point for custom logic. Preserve
 #'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
 #'   inputs through UserParam where that argument is supported.
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -33,7 +30,6 @@
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -60,8 +56,8 @@
 #'     TTE-Binary`.}
 #'   \item{PlanEndTrial}{Integer. Planned end of trial: - `1`: Full information for both endpoints. - `2`: Full
 #'     information for endpoint 1. - `3`: Full information for endpoint 2.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{CriticalPoint}{Named List of Numeric. Named List of length equal to the number of endpoints, indicating
 #'     the critical value for each endpoint. For example, `CriticalPoint["Endpoint 1"]` is the value for Endpoint
@@ -104,7 +100,6 @@
 #'     first, then for the analysis of "Endpoint 1" we will have `TestStat["Endpoint 2"] = NA`.}
 #'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -128,9 +123,9 @@
 #'     completers for each look for Endpoint 1. East Horizon Explore: Not available for `Dual Endpoint = TTE-TTE`.
 #'     Set to `NA` for endpoints with `Endpoint Type = Time-to-Event`.}
 #'   \item{CumEvents}{Named List of Vector of Integer. Named List of length equal to the number of endpoints,
-#'     containing the cumulative events vector for each endpoint. For example, `CumEvents["Endpoint 1"]` is a
-#'     vector of length `LookInfo$NumLooks` containing the cumulative number of events for each look for Endpoint
-#'     1. East Horizon Explore: Set to `NA` for endpoints with `Endpoint Type = Binary`.}
+#'     containing the cumulative events vector for each endpoint. For example, `CumEvents["Endpoint 1"]` is a vector of
+#'     length `LookInfo$NumLooks` containing the cumulative number of events for each look for Endpoint 1. East Horizon
+#'     Explore: Set to `NA` for endpoints with `Endpoint Type = Binary`.}
 #'   \item{RejType}{Named List of Integer. Named List of length equal to the number of endpoints, containing the
 #'     rejection type for each endpoint. For example, `RejType["Endpoint 1"]` is the rejection type for Endpoint 1.
 #'     Possible values: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy
@@ -179,12 +174,10 @@
 #'     the binding type for each endpoint. For example, `BindingType["Endpoint 1"]` is the binding type for
 #'     Endpoint 1. Possible values: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -199,15 +192,12 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details The dual-endpoint engine exposes Response1 and Response2 and the endpoint-specific calendar times and
 #'   original censor indicators listed in SimData. Each endpoint-specific design/list value is indexed by its
 #'   actual EndpointName.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
-    require( survival )
-
     dTrueHR <- 0
     dTS <- 0
     nErrorCode <- 0

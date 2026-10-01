@@ -1,28 +1,19 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcome
-#'
 #' @title Simulate bounded childhood anxiety score changes
-#'
 #' @description Generate baseline and follow-up scores for control and experimental arms, round and restrict each
 #'   score to the instrument range 9 to 45, and return the baseline-minus-follow-up change. Positive responses
 #'   indicate improvement.
-#'
 #' @author Audrey Wathen, J. Kyle Wathen
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
 #'   in TreatmentID order.
-#'
 #' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -35,7 +26,6 @@
 #'     \item \code{dStdDevFollowUpCtrl} – Standard deviation at follow-up for the control group.
 #'     \item \code{dStdDevFollowUpExp} – Standard deviation at follow-up for the experimental group.
 #'   }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -44,12 +34,12 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details UserParam is required for this example. Missing required fields return ErrorCode = -1. Required fields
 #'   are dMeanFollowUpCtrl, dMeanFollowUpExp, dStdDevFollowUpCtrl, dStdDevFollowUpExp. The mean fields specify
 #'   arm-specific follow-up means; the standard deviation fields specify the corresponding arm-specific standard
 #'   deviations. Responses are baseline minus follow-up, rounded and bounded by the instrument's score range (9 to
-#'   45), so changes lie between -36 and 36.
+#'   45), so changes lie between -36 and 36. In this example, Mean and StdDev specify the baseline
+#'   distributions; UserParam supplies the follow-up distributions.
 ######################################################################################################################## .
 
 SimulatePatientOutcome <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {

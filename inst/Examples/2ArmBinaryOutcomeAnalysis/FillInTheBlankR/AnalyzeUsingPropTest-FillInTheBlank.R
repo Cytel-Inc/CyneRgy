@@ -1,16 +1,12 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingPropTest
-#'
 #' @title Analyze using the prop.test function in the stats package in R.
-#'
 #' @description This example utilizes the prop.test function in the stats package in R to perform the analysis. The p-value from
 #'   prop.test is used to compute the Z statistic that is compared to the upper boundary computed and sent by East Horizon
 #'   as an input. This example does NOT include a futility rule.
-#'
 #' @author J. Kyle Wathen and Gabriel Potvin
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -23,7 +19,6 @@
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -43,8 +38,8 @@
 #'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
 #'     `Statistical Design = Fixed Sample`.}
@@ -81,7 +76,6 @@
 #'   \item{PiC}{Numeric. Design proportion for the control arm. East Horizon Explore: Not available. East Horizon
 #'     Design: Only available for `Binary` tests.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -108,13 +102,13 @@
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event` and for
 #'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
 #'     Ratio of Poisson Rates`). East Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number of
-#'     events for each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` and for
-#'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
-#'     Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{LookTime}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the calendar time of each
-#'     time-based look. East Horizon Design: Only available for `Time-to-Event` tests if `Look Fix Option =
-#'     Time-based`.}
+#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
+#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
+#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
+#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
+#'     Event` tests.}
+#'   \item{LookTime}{Numeric calendar time of the current look. East Horizon Design: Only available for `Time-to-Event`
+#'     tests if `Look Fix Option = Time-based`.}
 #'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
 #'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
 #'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon
@@ -156,12 +150,10 @@
 #'     Two-sided asymmetric or symmetric`.}
 #'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -185,17 +177,29 @@
 #'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
 #'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
-#'
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
+#'   re-estimated total event/completer count.
 #'
 #' This is a fill-in-the-blank exercise. Replace the underscore placeholders before sourcing or running the
 #'   function.
 ######################################################################################################################## .
 
 AnalyzeUsingPropTest <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+    # Analyze observed completers; simulated dropout responses are not observed data.
+    if ( "CensorInd" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorInd ) & SimData$CensorInd == 1, , drop = FALSE ]
+    } else if ( "CensorIndOrg" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorIndOrg ) & SimData$CensorIndOrg == 1, , drop = FALSE ]
+    }
+    if ( !is.null( LookInfo ) && !is.null( LookInfo$CumCompleters ) ) {
+        nTargetCompleters <- LookInfo$CumCompleters[ LookInfo$CurrLookIndex ]
+        if ( nTargetCompleters < 1 || nTargetCompleters > nrow( SimData ) ) {
+            return( list( ErrorCode = 1L ) )
+        }
+    }
+
     # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if ( !is.null( LookInfo ) ) {
         nQtyOfLooks <- LookInfo$NumLooks

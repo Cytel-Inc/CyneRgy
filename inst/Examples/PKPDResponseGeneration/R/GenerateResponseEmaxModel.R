@@ -1,41 +1,26 @@
 ######################################################################################################################## .
 #' @name GenerateResponseEmaxModel
-#'
 #' @title Simulate Treatment Effect with Emax Model
-#'
 #' @description Generate drug concentrations per subject per visit, then apply the Emax equation to convert
 #'   per-visit plasma concentrations into treatment responses using the Emax PD model.
-#'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumVisit Integer number of visits.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
-#'
 #' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
 #'   visit.
-#'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
-#'
 #' @param MeanTrt Numeric vector of experimental-arm mean responses of length NumVisit, ordered by visit.
-#'
 #' @param StdDevControl Numeric vector of control-arm response standard deviations of length NumVisit, ordered by
 #'   visit.
-#'
 #' @param StdDevTrt Numeric vector of experimental-arm response standard deviations of length NumVisit, ordered by
 #'   visit.
-#'
 #' @param CorrMat Numeric correlation matrix between visits, with NumVisit rows and NumVisit columns.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -50,7 +35,6 @@
 #'   \item{Emax}{Required numeric maximum pharmacodynamic effect.}
 #'   \item{EC50}{Required positive numeric concentration producing half of Emax.}
 #' }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -60,10 +44,10 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details Return each visit response as a separate named list element: Response1, Response2, ...,
-#'   ResponseNumVisit. Optional ArrivalTime may be included in the function signature when calendar arrival times
-#'   are needed; it has the same definition as at the enrollment integration point.
+#'   ResponseNumVisit.
+#'
+#' This example uses independent normal measurement noise at each visit.
 ######################################################################################################################## .
 
 GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
@@ -118,45 +102,28 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 
 ######################################################################################################################## .
 #' @name GenerateEmaxDrugConcentration
-#'
 #' @title Generate Drug Concentration
-#'
 #' @description Generate visit-level drug concentrations using a one-compartment model with first-order absorption
 #'   and elimination, then add arm-specific normal measurement noise.
-#'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumVisit Integer number of visits.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
-#'
 #' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
 #'   visit.
-#'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
-#'
 #' @param MeanTrt Numeric vector of experimental-arm mean responses of length NumVisit, ordered by visit.
-#'
 #' @param StdDevControl Numeric vector of control-arm response standard deviations of length NumVisit, ordered by
 #'   visit.
-#'
 #' @param StdDevTrt Numeric vector of experimental-arm response standard deviations of length NumVisit, ordered by
 #'   visit.
-#'
 #' @param CorrMat Numeric correlation matrix between visits, with NumVisit rows and NumVisit columns.
-#'
 #' @param dAbsorptionRate Positive numeric first-order absorption rate constant.
-#'
 #' @param dEliminationRate Positive numeric first-order elimination rate constant.
-#'
 #' @param dDose Positive numeric administered dose.
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -225,20 +192,13 @@ GenerateEmaxDrugConcentration <- function( NumSub, NumVisit, TreatmentID, Inputm
 
 ######################################################################################################################## .
 #' @name OneCompartmentModelPK
-#'
 #' @title One Compartment Model PK
-#'
 #' @description Compute derivatives for the absorption and central compartments of the one-compartment
 #'   pharmacokinetic model.
-#'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#'
 #' @param time Time variable for ODE solver
-#'
 #' @param state State variables (A1: amount in absorption compartment, A2: concentration in central compartment)
-#'
 #' @param parameters Parameters for the ODE (dAbsorptionRate, dEliminationRate)
-#'
 #' @return List containing a numeric vector of derivatives in state order: dA1 for absorption and dA2 for the
 #'   central compartment.
 ######################################################################################################################## .

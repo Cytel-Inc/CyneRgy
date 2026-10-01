@@ -1,15 +1,11 @@
 ######################################################################################################################## .
 #' @name PlotTreatmentControlCI
-#'
 #' @title Plot Treatment vs Control Mean Responses with 95\% Confidence Interval
-#'
 #' @description This function generates a ggplot comparing mean responses between treatment and control groups
 #'   across visits, including 95\% confidence intervals.
-#'
 #' @author Jacob Wathen
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -24,11 +20,10 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each subject's
-#'     enrollment, with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to
-#'     obtain calendar visit times.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
+#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
+#'     calendar visit times.}
 #' }
-#'
 #' @return A ggplot object showing arm-specific mean responses and 95\% confidence intervals by visit.
 ######################################################################################################################## .
 

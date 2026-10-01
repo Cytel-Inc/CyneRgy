@@ -1,41 +1,29 @@
 ######################################################################################################################## .
 #' @name SimulatePatientSurvivalAssurance
-#'
 #' @title Simulate Time-To-Event Data for Assurance
-#'
 #' @description Generate exponential survival times using a treatment-to-control hazard ratio sampled once
 #'   per simulation. UserParam controls a mixture prior on the log hazard ratio: one normal component and
 #'   one Beta component rescaled to [dLower, dUpper]. The accompanying analysis uses a Cox proportional
 #'   hazards model and makes a Go decision when the p-value is at most 0.025.
-#'
 #' @author J. Kyle Wathen and Laurent Spiess
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param SurvMethod Integer survival input method: 1 = hazard rates; 2 = cumulative survival percentages; 3 =
 #'   median survival times.
-#'
 #' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
 #'   survival generation.
-#'
 #' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
 #'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
 #'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
-#'   stratification).
-#'
+#'   stratification). The control-arm entries may be NA in engine-supplied arrays.
 #' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
 #'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
 #'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
 #'   SurvMethod = 3. Without stratification, the median-survival method has one row.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -56,7 +44,6 @@
 #'      \item{UserParam$dLower}{Lower limit for scaling the Beta distribution. }
 #'   \item{UserParam$dMeanTTECtrl}{Positive numeric mean time-to-event for the control arm.}
 #'  }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -72,7 +59,6 @@
 #'   \item{TrueHR}{Numeric vector of sampled treatment-to-control hazard ratios, with one element per subject.
 #'     The same hazard ratio is repeated for all subjects in a simulation.}
 #' }
-
 ######################################################################################################################## .
 
 SimulatePatientSurvivalAssurance <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {

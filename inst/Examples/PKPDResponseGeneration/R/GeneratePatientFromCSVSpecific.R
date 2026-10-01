@@ -1,43 +1,28 @@
 ######################################################################################################################## .
 #' @name GeneratePatientFromCSVSpecific
-#'
 #' @title Generate Patient Responses from CSV File with Strict Formatting (Faster)
-#'
 #' @description This function reads pre-simulated patient data from a CSV file and returns visit-level responses
 #'   for trial subjects. It requires strict CSV formatting (specific column names and treatment identifiers) but
 #'   runs faster than GeneratePatientFromCSVGeneral. Use this function when you have control over CSV formatting
 #'   and want optimal performance. For more flexible formatting support, see GeneratePatientFromCSVGeneral.R.
-#'
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumVisit Integer number of visits.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
 #'   changes from baseline at each visit. Preserve this engine-supplied spelling.
-#'
 #' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
 #'   visit.
-#'
 #' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
-#'
 #' @param MeanTrt Numeric vector of experimental-arm mean responses of length NumVisit, ordered by visit.
-#'
 #' @param StdDevControl Numeric vector of control-arm response standard deviations of length NumVisit, ordered by
 #'   visit.
-#'
 #' @param StdDevTrt Numeric vector of experimental-arm response standard deviations of length NumVisit, ordered by
 #'   visit.
-#'
 #' @param CorrMat Numeric correlation matrix between visits, with NumVisit rows and NumVisit columns.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -45,10 +30,9 @@
 #'
 #' Example-specific parameters and requirements:
 #' \describe{
-#'            \item{`UserParam$InputFileName`}{The name of the CSV file in the Inputs folder (e.g.,
-#'              "SimPatientDataAlt.csv").}
+#'   \item{UserParam$InputFileName}{Required character name of the CSV file in the Inputs folder, for example
+#'     "SimPatientDataAlt.csv".}
 #'     }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -62,16 +46,14 @@
 #' Example-specific ErrorCode values:
 #' \describe{
 #'   \item{0}{No error.}
-#'   \item{-1}{CSV file not found.}
+#'   \item{-1}{InputFileName is missing or invalid, or the CSV file was not found.}
 #'   \item{-2}{Error reading CSV file.}
 #'   \item{-3}{Treatment column not found.}
 #'   \item{-4}{Insufficient visit columns in CSV.}
 #'   \item{-5}{Insufficient patients in CSV for one or both arms.}
 #' }
-#'
 #' @details Return each visit response as a separate named list element: Response1, Response2, ...,
-#'   ResponseNumVisit. Optional ArrivalTime may be included in the function signature when calendar arrival times
-#'   are needed; it has the same definition as at the enrollment integration point.
+#'   ResponseNumVisit.
 #'
 #' The CSV file must contain:
 #' - A Treatment column (exact name, case-sensitive) with treatment assignments
@@ -83,36 +65,23 @@
 #'
 #' Missing Values: "", "NA", "NaN", "na", "null", "N/A" are recognized as missing
 #'
-#' The function caches the CSV data globally (`gdfPatients`) for efficiency across multiple function calls.
+#' The function caches the CSV data globally (`gdfPatients`) with its normalized file path for efficiency
+#'   across multiple calls. The cache is reloaded when the requested file changes.
 #'   Patients are randomly sampled without replacement from each treatment arm, ensuring unique patient assignments
 #'   within each simulation replicate.
-#'
-#' Usage of Inputmethod in this example: Method for specifying input parameters (passed from East Horizon, not used
-#'   in this function).
-#'
-#' Usage of VisitTime in this example: Numeric vector of visit times (passed from East Horizon, not used in this
-#'   function).
-#'
-#' Usage of MeanControl in this example: Numeric vector of control means for all visits (passed from East Horizon,
-#'   not used in this function).
-#'
-#' Usage of MeanTrt in this example: Numeric vector of treatment means for all visits (passed from East Horizon,
-#'   not used in this function).
-#'
-#' Usage of StdDevControl in this example: Numeric vector of control standard deviations for all visits (passed
-#'   from East Horizon, not used in this function).
-#'
-#' Usage of StdDevTrt in this example: Numeric vector of treatment standard deviations for all visits (passed from
-#'   East Horizon, not used in this function).
-#'
-#' Usage of CorrMat in this example: Correlation matrix between all visits (passed from East Horizon, not used in
-#'   this function).
 ######################################################################################################################## .
 
 GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
     # Initialize return variables and error code
     nErrorCode <- 0
     lReturn <- list( )
+
+    # Require a single file name before building the CSV path.
+    if ( is.null( UserParam$InputFileName ) || !is.character( UserParam$InputFileName ) ||
+        length( UserParam$InputFileName ) != 1 || is.na( UserParam$InputFileName ) ||
+        !nzchar( UserParam$InputFileName ) ) {
+        return( list( ErrorCode = -1L ) )
+    }
 
     # Build CSV path and confirm it exists
     strCSVPath <- paste0( "Inputs/", UserParam$InputFileName )
@@ -123,8 +92,13 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, ArrivalTime, Treat
         return( lReturn )
     }
 
-    # Cache CSV across calls if available
-    if ( !exists( "gdfPatients", envir = .GlobalEnv ) ) {
+    # Cache only the requested file, even when simulation scenarios use different CSV inputs.
+    strCSVPath <- normalizePath( strCSVPath )
+    dfPatients <- NULL
+    if ( exists( "gdfPatients", envir = .GlobalEnv, inherits = FALSE ) ) {
+        dfPatients <- get( "gdfPatients", envir = .GlobalEnv )
+    }
+    if ( is.null( dfPatients ) || !identical( attr( dfPatients, "CyneRgyInputFile" ), strCSVPath ) ) {
         dfPatients <- tryCatch(
             {
                 utils::read.csv( strCSVPath, check.names = FALSE, stringsAsFactors = FALSE )
@@ -133,9 +107,10 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, ArrivalTime, Treat
                 NULL
             }
         )
-        gdfPatients <<- dfPatients
-    } else {
-        dfPatients <- get( "gdfPatients", envir = .GlobalEnv )
+        if ( !is.null( dfPatients ) ) {
+            attr( dfPatients, "CyneRgyInputFile" ) <- strCSVPath
+            assign( "gdfPatients", dfPatients, envir = .GlobalEnv )
+        }
     }
 
     if ( is.null( dfPatients ) ) {
@@ -166,9 +141,9 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, ArrivalTime, Treat
     }
 
     for ( strCol in vVisitCols ) {
-        xChr <- as.character( dfPatients[[ strCol ]] )
-        xChr[ xChr %in% c( "", "NA", "NaN", "na", "null", "N/A" ) ] <- NA_character_
-        dfPatients[[ strCol ]] <- suppressWarnings( as.double( xChr ) )
+        vChr <- as.character( dfPatients[[ strCol ]] )
+        vChr[ vChr %in% c( "", "NA", "NaN", "na", "null", "N/A" ) ] <- NA_character_
+        dfPatients[[ strCol ]] <- suppressWarnings( as.double( vChr ) )
     }
 
     # Determine how many patients needed for each arm
@@ -201,19 +176,19 @@ GeneratePatientFromCSVSpecific <- function( NumSub, NumVisit, ArrivalTime, Treat
     nCtl <- 0
     nTrt <- 0
 
-    for ( iSub in seq_len( NumSub ) ) {
-        if ( as.integer( TreatmentID[ iSub ] ) == 0 ) {
+    for ( nSubIndx in seq_len( NumSub ) ) {
+        if ( as.integer( TreatmentID[ nSubIndx ] ) == 0 ) {
             nCtl <- nCtl + 1
-            vPick[ iSub ] <- vTakeCtrl[ nCtl ]
+            vPick[ nSubIndx ] <- vTakeCtrl[ nCtl ]
         } else {
             nTrt <- nTrt + 1
-            vPick[ iSub ] <- vTakeTrt[ nTrt ]
+            vPick[ nSubIndx ] <- vTakeTrt[ nTrt ]
         }
     }
 
     # Build Response1..ResponseK values for each subject
-    for ( iVisit in seq_len( NumVisit ) ) {
-        lReturn[[ paste0( "Response", iVisit ) ]] <- as.double( dfPatients[ vPick, vVisitCols[ iVisit ] ] )
+    for ( nVisitIndx in seq_len( NumVisit ) ) {
+        lReturn[[ paste0( "Response", nVisitIndx ) ]] <- as.double( dfPatients[ vPick, vVisitCols[ nVisitIndx ] ] )
     }
 
     # Return assembled output with error code

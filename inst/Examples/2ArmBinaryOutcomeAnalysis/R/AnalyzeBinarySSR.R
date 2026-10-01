@@ -1,8 +1,6 @@
 ######################################################################################################################## .
 #' @name AnalyzeBinarySSR
-#'
 #' @title Analyze binary subject responses
-#'
 #' @description Implements binary-outcome analysis with conditional power–based sample size re-estimation (SSR).
 #' The function:
 #' \enumerate{
@@ -12,11 +10,9 @@
 #'   \item Determines re-estimated completers using a continuous or step-function SSR rule
 #'   \item Generates a decision at the current look (efficacy, continue, or futility at final look)
 #' }
-#'
 #' @author J. Kyle Wathen and Gabriel Potvin
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -29,7 +25,6 @@
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -49,8 +44,8 @@
 #'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
 #'     `Statistical Design = Fixed Sample`.}
@@ -87,7 +82,6 @@
 #'   \item{PiC}{Numeric. Design proportion for the control arm. East Horizon Explore: Not available. East Horizon
 #'     Design: Only available for `Binary` tests.}
 #' }
-#'
 #' @param AdaptInfo Named list of sample size re-estimation parameters for a two-arm continuous, binary, or
 #'   time-to-event design. Access elements by name, for example `AdaptInfo$SSRFuncScale`. Available only for
 #'   designs with sample size re-estimation.
@@ -132,7 +126,6 @@
 #'   \item{TargetCP}{Numeric. Target conditional power. Available only for `SSRFuncScale = 0 (continuous)`.}
 #'   \item{OrigCP}{Numeric. Conditional power computed from the maximum number of completers/events.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -159,13 +152,13 @@
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event` and for
 #'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
 #'     Ratio of Poisson Rates`). East Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number of
-#'     events for each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` and for
-#'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
-#'     Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{LookTime}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the calendar time of each
-#'     time-based look. East Horizon Design: Only available for `Time-to-Event` tests if `Look Fix Option =
-#'     Time-based`.}
+#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
+#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
+#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
+#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
+#'     Event` tests.}
+#'   \item{LookTime}{Numeric calendar time of the current look. East Horizon Design: Only available for `Time-to-Event`
+#'     tests if `Look Fix Option = Time-based`.}
 #'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
 #'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
 #'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon
@@ -207,12 +200,10 @@
 #'     Two-sided asymmetric or symmetric`.}
 #'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -238,14 +229,13 @@
 #'   \item{ReEstCompleters}{Required integer re-estimated total number of completers for the sample size
 #'     re-estimation design.}
 #' }
-#'
 #' @details This example applies one-sided efficacy boundaries on the Z scale. Extend its boundary logic
 #'   before using p-value-scale boundaries or two-sided designs.
 #'
 #' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
+#'   re-estimated total event/completer count.
 ######################################################################################################################## .
 
 AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo = NULL, UserParam = NULL ) {
@@ -282,14 +272,14 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
             ReEstCompleters = as.integer( DesignParam$MaxCompleters ), ErrorCode = 1L ) )
     }
     dAnalysisTime <- vCompleterTimes[ nQtyOfCompleters ]
-    SimDataCurrLook <- SimData[ bCompleter & SimData$CalendarResponseTime <= dAnalysisTime, ]
+    dfSimDataCurrLook <- SimData[ bCompleter & SimData$CalendarResponseTime <= dAnalysisTime, ]
 
     ###########################################################
     ## Step 2 — Test Statistic And Delta Computation
     ###########################################################
 
-    vPatientOutcome <- SimDataCurrLook$Response
-    vPatientTreatment <- SimDataCurrLook$TreatmentID
+    vPatientOutcome <- dfSimDataCurrLook$Response
+    vPatientTreatment <- dfSimDataCurrLook$TreatmentID
 
     vOutcomesCtrl <- vPatientOutcome[ vPatientTreatment == 0 ]
     vOutcomesExp <- vPatientOutcome[ vPatientTreatment == 1 ]

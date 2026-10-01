@@ -1,25 +1,17 @@
 ######################################################################################################################## .
 #' @name RandomizeSubjectsAcrossMultipleArms
-#'
 #' @title Randomize Subjects Across Multiple Arms
-#'
 #' @description The following function randomly allots the subjects on one of the arms
-#'
 #' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArms Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param AllocRatio Numeric vector of experimental-to-control allocation ratios, one element per experimental arm.
 #'   The control allocation is 1, so a ratio of 2 assigns twice as many subjects to that experimental arm as to
 #'   control.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{

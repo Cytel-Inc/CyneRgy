@@ -1,14 +1,12 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingBetaBinomial
-#'
 #' @title Analyze for efficacy using a beta( alpha, beta ) prior to compute the posterior probability that
 #'   experimental is better than control treatment.
-#'
 #' @description In this version, the analysis for efficacy is to assume a beta prior to compute the posterior
 #'   probability that experimental is better than control treatment. The futility is based on posterior probability
 #'   being less than dLowerCutoffForFutility. In this example we assume a Bayesian model and use posterior
-#'   probabilities for decision making UserParam is required; illustrative priors are: pi_Ctrl ~ beta( 10, 40 ); to
-#'   reflect that knowledge that on control treatment 10/50 previous patients responded pi_Exp ~ beta( 0.2, 0.8 );
+#'   probabilities for decision making. UserParam is required; illustrative priors are: pi_Ctrl ~ beta( 10, 40 ); to
+#'   reflect the knowledge that on control treatment 10/50 previous patients responded pi_Exp ~ beta( 0.2, 0.8 );
 #'   weak prior for the experimental arm with the same prior mean as control and an effective sample size of 1.
 #'
 #' At an IA: If Pr( pi_Exp > pi_Ctrl | data ) > 0.95 --> Stop for efficacy. Otherwise if Pr( pi_Exp > pi_Ctrl |
@@ -19,11 +17,9 @@
 #'   set dLowerCutoffForFutility = 0 when simulating under the null case in order to obtain the false-positive rate
 #'   of the non-binding futility rule. When you set dLowerCutoffForFutility > 0, simulation will provide the OC of
 #'   the binding futility rule because the rule is ALWAYS followed.
-#'
 #' @author J. Kyle Wathen and Gabriel Potvin
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -36,7 +32,6 @@
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -56,8 +51,8 @@
 #'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
 #'     `Statistical Design = Fixed Sample`.}
@@ -94,7 +89,6 @@
 #'   \item{PiC}{Numeric. Design proportion for the control arm. East Horizon Explore: Not available. East Horizon
 #'     Design: Only available for `Binary` tests.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -121,13 +115,13 @@
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event` and for
 #'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
 #'     Ratio of Poisson Rates`). East Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number of
-#'     events for each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` and for
-#'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
-#'     Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{LookTime}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the calendar time of each
-#'     time-based look. East Horizon Design: Only available for `Time-to-Event` tests if `Look Fix Option =
-#'     Time-based`.}
+#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
+#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
+#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
+#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
+#'     Event` tests.}
+#'   \item{LookTime}{Numeric calendar time of the current look. East Horizon Design: Only available for `Time-to-Event`
+#'     tests if `Look Fix Option = Time-based`.}
 #'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
 #'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
 #'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon
@@ -169,7 +163,6 @@
 #'     Two-sided asymmetric or symmetric`.}
 #'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -192,7 +185,6 @@
 #'        check. Below this value will declare futility.}
 #'  }
 #'  UserParam is required. Missing user parameters return ErrorCode = -1.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -216,23 +208,38 @@
 #'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
 #'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
-#'
 #' @details This example returns the posterior probability in TestStat for reporting and supplies Decision
 #'   to apply its Bayesian stopping rule. The reported posterior probability is not a Wald Z statistic.
 #'
 #' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
+#'   re-estimated total event/completer count.
 ######################################################################################################################## .
 
 AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+    # Analyze observed completers; simulated dropout responses are not observed data.
+    if ( "CensorInd" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorInd ) & SimData$CensorInd == 1, , drop = FALSE ]
+    } else if ( "CensorIndOrg" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorIndOrg ) & SimData$CensorIndOrg == 1, , drop = FALSE ]
+    }
+    if ( !is.null( LookInfo ) && !is.null( LookInfo$CumCompleters ) ) {
+        nTargetCompleters <- LookInfo$CumCompleters[ LookInfo$CurrLookIndex ]
+        if ( nTargetCompleters < 1 || nTargetCompleters > nrow( SimData ) ) {
+            return( list( ErrorCode = 1L ) )
+        }
+    }
+
     # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if ( !is.null( LookInfo ) ) {
         # Group sequential design
         nLookIndex <- LookInfo$CurrLookIndex
         nQtyOfLooks <- LookInfo$NumLooks
-        nQtyOfEvents <- LookInfo$CumEvents[ nLookIndex ]
+        nQtyOfEvents <- LookInfo$CumEvents
+        if ( length( nQtyOfEvents ) > 1 ) {
+            nQtyOfEvents <- nQtyOfEvents[ nLookIndex ]
+        }
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
         nRejType <- LookInfo$RejType
         nTailType <- DesignParam$TailType
@@ -281,7 +288,22 @@ AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, Use
     return( list( ________ = as.double( lRet$dPostProb ), ErrorCode = as.integer( nErrorCode ), Decision = as.integer( nDecision ), Delta = as.double( lRet$dDelta ) ) )
 }
 
-# Function for performing statistical analysis using a Beta-Binomial Bayesian model
+######################################################################################################################## .
+#' @name ProbExpGreaterCtrlBeta
+#' @title Compute the posterior probability of a higher experimental response rate
+#' @description Estimate the posterior probability that the experimental response probability exceeds the control
+#'   response probability by sampling from the two beta posterior distributions.
+#' @author J. Kyle Wathen and Gabriel Potvin
+#' @param vOutcomesCtrl Integer vector of observed control-arm binary outcomes (0 = non-response, 1 = response).
+#' @param vOutcomesExp Integer vector of observed experimental-arm binary outcomes (0 = non-response, 1 = response).
+#' @param dAlphaCtrl Positive numeric alpha parameter of the control-arm beta prior.
+#' @param dBetaCtrl Positive numeric beta parameter of the control-arm beta prior.
+#' @param dAlphaExp Positive numeric alpha parameter of the experimental-arm beta prior.
+#' @param dBetaExp Positive numeric beta parameter of the experimental-arm beta prior.
+#' @return List containing dPostProb, the estimated posterior probability that the experimental response
+#'   probability exceeds the control response probability, and dDelta, the experimental-minus-control
+#'   posterior mean response-probability difference.
+######################################################################################################################## .
 
 ProbExpGreaterCtrlBeta <- function( vOutcomesCtrl, vOutcomesExp, dAlphaCtrl, dBetaCtrl, dAlphaExp, dBetaExp ) {
     # In the beta-binomial model if we make the assumption that
@@ -303,54 +325,72 @@ ProbExpGreaterCtrlBeta <- function( vOutcomesCtrl, vOutcomesExp, dAlphaCtrl, dBe
     dPostProb <- ifelse( vPiExp > vPiCtrl, 1, 0 )
     dPostProb <- sum( dPostProb ) / length( dPostProb )
 
-    # Compute Delta: mean( Pi_E ) - mean( Pi_C )
-    dDelta <- ( dAlphaExp / ( dAlphaExp + dBetaExp ) ) - ( dAlphaCtrl / ( dAlphaCtrl + dBetaCtrl ) )
+    dDelta <- dAlphaExp / ( dAlphaExp + dBetaExp ) - dAlphaCtrl / ( dAlphaCtrl + dBetaCtrl )
     return( list( dPostProb = dPostProb, dDelta = dDelta ) )
 }
 
-# Function to compute Bayesian predictive probability of success
+######################################################################################################################## .
+#' @name ComputeBayesianPredictiveProbabilityWithBayesianAnalysis
+#' @title Compute the Bayesian predictive probability of trial success
+#' @description Sample response probabilities from the current beta posteriors, simulate the remaining
+#'   binary outcomes, and estimate the probability that the final Bayesian analysis meets its success cutoff.
+#' @author J. Kyle Wathen and Gabriel Potvin
+#' @param dataS Integer vector of observed control-arm binary outcomes (0 = non-response, 1 = response).
+#' @param dataE Integer vector of observed experimental-arm binary outcomes (0 = non-response, 1 = response).
+#' @param priorAlphaS Positive numeric alpha parameter of the control-arm beta prior used for prediction.
+#' @param priorBetaS Positive numeric beta parameter of the control-arm beta prior used for prediction.
+#' @param priorAlphaE Positive numeric alpha parameter of the experimental-arm beta prior used for prediction.
+#' @param priorBetaE Positive numeric beta parameter of the experimental-arm beta prior used for prediction.
+#' @param nQtyOfPatsS Integer planned final number of control subjects, including subjects already observed.
+#' @param nQtyOfPatsE Integer planned final number of experimental subjects, including subjects already observed.
+#' @param nSimulations Positive integer number of simulated future trials.
+#' @param finalBoundary Numeric posterior-probability cutoff for final success, between 0 and 1.
+#' @param lAnalysisParams Named list of positive numeric beta-prior parameters for the final analysis:
+#'   dAlphaCtrl, dBetaCtrl, dAlphaExp, and dBetaExp.
+#' @return Named list containing predictiveProbabilityS, the estimated predictive probability of final success.
+######################################################################################################################## .
+
 ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams ) {
     # Compute the posterior parameters based on observed data
-    posteriorAlphaS <- priorAlphaS + sum( dataS )
-    posteriorBetaS <- priorBetaS + length( dataS ) - sum( dataS )
+    dPosteriorAlphaS <- priorAlphaS + sum( dataS )
+    dPosteriorBetaS <- priorBetaS + length( dataS ) - sum( dataS )
 
-    posteriorAlphaE <- priorAlphaE + sum( dataE )
-    posteriorBetaE <- priorBetaE + length( dataE ) - sum( dataE )
-
-    # lAnalysisParams <- list( dAlphaCtrl = priorAlphaS,
-    #                         dBetaCtrl  = priorBetaS,
-    #                         dAlphaExp  = priorAlphaE,
-    #                         dBetaExp   = priorBetaE )
+    dPosteriorAlphaE <- priorAlphaE + sum( dataE )
+    dPosteriorBetaE <- priorBetaE + length( dataE ) - sum( dataE )
 
     # Initialize counters for successful trials
-    successfulTrials <- 0
+    nSuccessfulTrials <- 0
 
     # Simulate the remaining trials and compute the predictive probability
-    for ( i in 1:nSimulations ) {
+    for ( iSimulation in seq_len( nSimulations ) ) {
         # Sample response rates from posterior distributions
-        posteriorRateS <- stats::rbeta( 1, posteriorAlphaS, posteriorBetaS )
-        posteriorRateE <- stats::rbeta( 1, posteriorAlphaE, posteriorBetaE )
+        dPosteriorRateS <- stats::rbeta( 1, dPosteriorAlphaS, dPosteriorBetaS )
+        dPosteriorRateE <- stats::rbeta( 1, dPosteriorAlphaE, dPosteriorBetaE )
 
-        # Simulate patient outcomes for for the current virtual trial based on sampled rates
-        # The data at the end of the trial is a combination of the data at the interim, dataS, and the simulated data to the end of the trial, remainingDataS
-        remainingDataS <- stats::rbinom( nQtyOfPatsS - length( dataS ), size = 1, prob = posteriorRateS )
-        combinedDataS <- c( dataS, remainingDataS )
+        # Simulate patient outcomes for the current virtual trial based on sampled rates
+        # The data at the end of the trial is a combination of the data at the interim, dataS, and the simulated data to the end of the trial, vRemainingDataS
+        vRemainingDataS <- stats::rbinom( nQtyOfPatsS - length( dataS ), size = 1, prob = dPosteriorRateS )
+        vCombinedDataS <- c( dataS, vRemainingDataS )
 
-        remainingDataE <- stats::rbinom( nQtyOfPatsE - length( dataE ), size = 1, prob = posteriorRateE )
-        combinedDataE <- c( dataE, remainingDataE )
+        vRemainingDataE <- stats::rbinom( nQtyOfPatsE - length( dataE ), size = 1, prob = dPosteriorRateE )
+        vCombinedDataE <- c( dataE, vRemainingDataE )
 
         # Perform the analysis with combined data to check if the trial is successful
-        result <- ProbExpGreaterCtrlBeta( combinedDataS, combinedDataE, lAnalysisParams$dAlphaCtrl, lAnalysisParams$dBetaCtrl, lAnalysisParams$dAlphaExp, lAnalysisParams$dBetaExp )
+        lResult <- ProbExpGreaterCtrlBeta(
+            vCombinedDataS, vCombinedDataE,
+            lAnalysisParams$dAlphaCtrl, lAnalysisParams$dBetaCtrl,
+            lAnalysisParams$dAlphaExp, lAnalysisParams$dBetaExp
+        )
 
-        # Check if the result meets the cutoff for success
-        if ( result$dPostProb >= finalBoundary ) {
-            successfulTrials <- successfulTrials + 1
+        # Check if the lResult meets the cutoff for success
+        if ( lResult$dPostProb >= finalBoundary ) {
+            nSuccessfulTrials <- nSuccessfulTrials + 1
         }
     }
 
     # Compute the Bayesian predictive probability of success
-    predictiveProbabilityS <- successfulTrials / nSimulations
+    dPredictiveProbability <- nSuccessfulTrials / nSimulations
 
-    # Return the result
-    return( list( predictiveProbabilityS = predictiveProbabilityS ) )
+    # Return the lResult
+    return( list( predictiveProbabilityS = dPredictiveProbability ) )
 }

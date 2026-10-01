@@ -1,15 +1,11 @@
 ######################################################################################################################## .
 #' @name AnalyzeUsingMMRM
-#'
 #' @title Perform MMRM analysis
-#'
 #' @description This function fits a Mixed Model for Repeated Measures (MMRM) to simulated patient data, and
 #'   returns the treatment effect estimate, p-value, and decision outcome.
-#'
 #' @author Jacob Wathen
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -24,11 +20,10 @@
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Optional custom numeric vector of visit times measured from each
-#'     subject's enrollment, with one element per subject. Replace VisitID by the actual visit number.
-#'     Add ArrivalTime to obtain calendar visit times.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
+#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
+#'     calendar visit times.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -48,8 +43,8 @@
 #'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
 #'     `Statistical Design = Fixed Sample`.}
@@ -107,7 +102,6 @@
 #'     (LOCF). East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East
 #'     Horizon Design: Not available.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -184,12 +178,10 @@
 #'     include. – `1`: Include. East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated
 #'     Measures`. East Horizon Design: Not available.}
 #' }
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -212,11 +204,10 @@
 #' \describe{
 #'   \item{p.value}{p-value for the analysis}
 #' }
-#'
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count. This example may use only a subset of the documented design fields.
+#'   re-estimated total event/completer count.
 #'
 #' If only one post-baseline visit has been observed, the repeated-measures model reduces to a baseline-adjusted
 #'   ANCOVA at that visit. Future visit responses are excluded from interim analyses.
@@ -246,7 +237,7 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
     dfNoBaselineAnalysisData <- CreateAnalysisDataset( SimData, LookInfo )
 
     # Step 3: Fit the MMRM with default CS + varIdent ####
-    lmeCtrls <- nlme::lmeControl(
+    lLMEControls <- nlme::lmeControl(
         opt = "optim",
         optimMethod = "BFGS",
         optimCtrl = list( maxit = 500 ),
@@ -259,7 +250,7 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
     dfNoBaselineAnalysisData$Visit <- stats::relevel( dfNoBaselineAnalysisData$Visit, ref = strLastVisit )
 
     nObservedVisits <- length( unique( dfNoBaselineAnalysisData$Visit ) )
-    mmrmModel <- tryCatch(
+    cMMRMModel <- tryCatch(
         {
             if ( nObservedVisits == 1 ) {
                 # With one follow-up per subject, the repeated-measures model reduces to ANCOVA.
@@ -274,7 +265,7 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
                     data        = dfNoBaselineAnalysisData,
                     method      = "REML",
                     na.action   = stats::na.omit,
-                    control     = lmeCtrls
+                    control     = lLMEControls
                 )
             }
         },
@@ -284,22 +275,22 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
     )
 
     # Step 3b: Extract the treatment × last‐visit effect ####
-    if ( !is.null( mmrmModel ) ) {
-        tTable <- summary( mmrmModel )$tTable
-        if ( inherits( mmrmModel, "gls" ) ) {
-            tTable <- cbind( tTable, DF = mmrmModel$dims$N - mmrmModel$dims$p )
+    if ( !is.null( cMMRMModel ) ) {
+        mCoefficients <- summary( cMMRMModel )$tTable
+        if ( inherits( cMMRMModel, "gls" ) ) {
+            mCoefficients <- cbind( mCoefficients, DF = cMMRMModel$dims$N - cMMRMModel$dims$p )
         }
-        cTrtRow <- grep( "^TreatmentID", rownames( tTable ), value = TRUE )[ 1 ]
+        strTrtRow <- grep( "^TreatmentID", rownames( mCoefficients ), value = TRUE )[ 1 ]
 
-        if ( cTrtRow %in% rownames( tTable ) ) {
-            dPrimDelta <- tTable[ cTrtRow, "Value" ]
-            stdErr <- tTable[ cTrtRow, "Std.Error" ]
-            df <- tTable[ cTrtRow, "DF" ]
-            dPValue <- stats::pt( tTable[ cTrtRow, "t-value" ], df,
+        if ( strTrtRow %in% rownames( mCoefficients ) ) {
+            dPrimDelta <- mCoefficients[ strTrtRow, "Value" ]
+            dStdError <- mCoefficients[ strTrtRow, "Std.Error" ]
+            nDOF <- mCoefficients[ strTrtRow, "DF" ]
+            dPValue <- stats::pt( mCoefficients[ strTrtRow, "t-value" ], nDOF,
                 lower.tail = DesignParam$TailType == 0
             )
         } else {
-            warning( "Treatment coefficient not found: ", cTrtRow )
+            warning( "Treatment coefficient not found: ", strTrtRow )
             nErrorCode <- 1
             dPValue <- 1.0
         }
@@ -310,13 +301,18 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
 
     # Step 4: Obtain group‐sequential alpha ####
     if ( !is.null( LookInfo ) ) {
-        gsDesign <- rpact::getDesignGroupSequential(
+        vInformationRates <- LookInfo$InfoFrac
+        if ( is.null( vInformationRates ) ) {
+            vInformationRates <- NA_real_
+        }
+        cGroupSequentialDesign <- rpact::getDesignGroupSequential(
             kMax = nQtyOfLooks,
+            informationRates = vInformationRates,
             alpha = DesignParam$Alpha,
             sided = 1,
             typeOfDesign = "OF"
         )
-        dAlpha <- gsDesign$alphaSpent[ nLookIndex ]
+        dAlpha <- cGroupSequentialDesign$stageLevels[ nLookIndex ]
     } else {
         dAlpha <- DesignParam$Alpha
     }

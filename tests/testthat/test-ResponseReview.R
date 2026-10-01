@@ -113,6 +113,79 @@ test_that( "normal repeated-measures generators handle an empty arm", {
     }
 } )
 
+test_that( "CSV response caches follow the requested input file", {
+    vFunctions <- c( "GeneratePatientFromCSVGeneral", "GeneratePatientFromCSVSpecific" )
+    lFunctions <- lapply( vFunctions, function( strFunction ) {
+        return( .GetCommonExampleFunction( "PKPDResponseGeneration", paste0( strFunction, ".R" ), strFunction ) )
+    } )
+    strOriginalDir <- getwd()
+    bHadCache <- exists( "gdfPatients", envir = .GlobalEnv, inherits = FALSE )
+    if ( bHadCache ) {
+        dfOriginalCache <- get( "gdfPatients", envir = .GlobalEnv )
+    }
+    on.exit( {
+        setwd( strOriginalDir )
+        if ( bHadCache ) {
+            assign( "gdfPatients", dfOriginalCache, envir = .GlobalEnv )
+        } else if ( exists( "gdfPatients", envir = .GlobalEnv, inherits = FALSE ) ) {
+            rm( "gdfPatients", envir = .GlobalEnv )
+        }
+    }, add = TRUE )
+    strTestDir <- tempfile( "response-csv-scenarios-" )
+    dir.create( file.path( strTestDir, "Inputs" ), recursive = TRUE )
+    on.exit( unlink( strTestDir, recursive = TRUE ), add = TRUE )
+    for ( nScenario in seq_len( 2 ) ) {
+        utils::write.csv( data.frame( Treatment = c( 0, 1 ), "Visit 1" = c( 10, 20 ) * nScenario,
+            check.names = FALSE ), file.path( strTestDir, "Inputs", paste0( nScenario, ".csv" ) ),
+            row.names = FALSE )
+    }
+    setwd( strTestDir )
+    for ( fnGenerate in lFunctions ) {
+        for ( nScenario in c( 1, 2, 1 ) ) {
+            lResult <- fnGenerate( 2, 1, c( 0, 0 ), c( 1, 0 ), 0, 1, 0, 0, 1, 1,
+                matrix( 1 ), list( InputFileName = paste0( nScenario, ".csv" ) ) )
+            expect_identical( lResult$ErrorCode, 0L )
+            expect_equal( lResult$Response1, c( 20, 10 ) * nScenario )
+        }
+        lMissing <- fnGenerate( 2, 1, c( 0, 0 ), c( 0, 1 ), 0, 1, 0, 0, 1, 1, matrix( 1 ) )
+        expect_identical( lMissing$ErrorCode, -1L )
+    }
+} )
+
+test_that( "stratified survival reports missing assessment times through ErrorCode", {
+    fnGenerate <- .GetCommonExampleFunction( "2ArmTimeToEventOutcomePatientSimulation",
+        "SimulatePatientOutcomeStratification.R", "SimulatePatientOutcomeStratification" )
+    lResult <- fnGenerate( 2, 2, c( 0, 0 ), c( 0, 1 ), c( 1, 1 ), 2, 1,
+        matrix( c( NA, 12 ), nrow = 1 ), matrix( c( 50, 60 ), nrow = 1 ) )
+    expect_identical( lResult$ErrorCode, -100L )
+    expect_true( is.na( lResult$SurvivalTime[ 1 ] ) )
+    expect_true( is.finite( lResult$SurvivalTime[ 2 ] ) )
+} )
+
+test_that( "binary Phase 3 assurance handles an exhausted posterior without warnings", {
+    fnGenerate <- .GetCommonExampleFunction( "ConsecutiveStudiesBinary",
+        "SimulatePatientOutcomeBinaryWithAssurancePh3.R", "SimulatePatientOutcomeBinaryWithAssurancePh3" )
+    envPrior <- environment( fnGenerate )
+    envPrior$gdfPh2Post <- data.frame( TrueProbabilityControl = 0, TrueProbabilityExperimental = 1 )
+    envPrior$gnIndex <- 1
+    lResult <- fnGenerate( 2, 2, c( 0, 0 ), c( 0, 1 ), c( 0, 1 ) )
+    expect_equal( lResult$Response, c( 0, 1 ) )
+    expect_identical( lResult$ErrorCode, 0L )
+    expect_warning( lExhausted <- fnGenerate( 2, 2, c( 0, 0 ), c( 0, 1 ), c( 0, 1 ) ), NA )
+    expect_identical( lExhausted$ErrorCode, -100L )
+} )
+
+test_that( "binary and PFS generation rejects nonconsecutive hazard-ratio fields", {
+    fnGenerate <- .GetCommonExampleFunction( "MultiArmTwoEndpointTwoStageTrial", "SimulateBinaryAndPFS.R",
+        "SimulateBinaryAndPFS" )
+    for ( strExtraField in c( "HR4", "HRInvalid" ) ) {
+        lUser <- list( MedianSurvCtrl = 12, HR1 = 0.7, HR2 = 0.8 )
+        lUser[[ strExtraField ]] <- 0.9
+        lResult <- fnGenerate( 3, 3, rep( 0, 3 ), 0:2, c( 0.1, 0.2, 0.3 ), lUser )
+        expect_identical( lResult$ErrorCode, -1L )
+    }
+} )
+
 
 test_that( "multiple-outcome examples return their documented error when user inputs are missing", {
     vFunctions <- c( "SimulateMultipleOutcomes", "SimulateMultipleOutcomesCovariates",

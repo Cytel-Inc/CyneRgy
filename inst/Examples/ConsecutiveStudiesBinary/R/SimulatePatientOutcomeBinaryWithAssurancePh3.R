@@ -1,31 +1,21 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeBinaryWithAssurancePh3
-#'
 #' @title Simulate binary patient outcomes using Phase 2 posterior distribution
-#'
 #' @description Generate patient outcomes for a binary response trial while incorporating uncertainty about the
 #'   true response rates by sampling them from the posterior distribution obtained from Phase 2.
-#'
 #' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order. Each probability is between 0 and 1.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -35,9 +25,10 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
-#' @details Usage of UserParam in this example: A list of user defined parameters in East Horizon. The UserParam
-#'   must be NULL or is ignored in this R script
+#' @details Before running Phase 3, copy the Phase 2 results to Inputs/Ph2_results.csv. The helper keeps the last analysis
+#'   of each successful Phase 2 simulation and uses its response probabilities in successive Phase 3 calls.
+#'   It caches this data in gdfPh2Post and advances gnIndex once per call. Exhausted or missing posterior
+#'   indices return ErrorCode = -100; restart the cache and index before starting a new simulation run.
 #'
 #' Example-specific additional output elements:
 #' \describe{
@@ -47,7 +38,11 @@
 #'     for all subjects in a simulation.}
 #'   \item{nIndex}{Integer index of the next Phase 2 posterior row to use after this simulation.}
 #' }
-
+#'
+#' For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
+#'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
+#'   treatment-to-control ratio of proportions). Include these arguments in the function signature for a
+#'   vaccine-efficacy design. Standard binary responses are coded 0 = non-response and 1 = response.
 ######################################################################################################################## .
 
 SimulatePatientOutcomeBinaryWithAssurancePh3 <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
@@ -56,6 +51,10 @@ SimulatePatientOutcomeBinaryWithAssurancePh3 <- function( NumSub, NumArm, Arriva
         # Load posterior distribution obtained from Phase 2
         gdfPh2Post <<- LoadData( )
         gnIndex <<- 1
+    }
+
+    if ( !exists( "gnIndex" ) || gnIndex < 1 || gnIndex > nrow( gdfPh2Post ) ) {
+        return( list( Response = rep( 0, NumSub ), ErrorCode = -100L ) )
     }
 
     dTrueProbCtrl <- gdfPh2Post$TrueProbabilityControl[ gnIndex ]

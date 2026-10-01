@@ -1,15 +1,11 @@
 ######################################################################################################################## .
 #' @name GetDEPDecisionsFSD
-#'
-#' @title Computing Decisions for DEP Fixed Sample design.
-#'
+#' @title Make fixed-sample dual-endpoint decisions with Bonferroni adjustment
 #' @description Compute decisions for DEP given test statistic and total Alpha using Bonferroni multiplicity
 #'   adjustment method.
-#'
 #' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
-#'
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$ArrivalTime`. Columns include the native fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
@@ -33,7 +29,6 @@
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
 #' }
-#'
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
@@ -60,8 +55,8 @@
 #'     TTE-Binary`.}
 #'   \item{PlanEndTrial}{Integer. Planned end of trial: - `1`: Full information for both endpoints. - `2`: Full
 #'     information for endpoint 1. - `3`: Full information for endpoint 2.}
-#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of treatment arms (number of arms -
-#'     1), containing the ratios of the treatment group sample sizes to control group sample size.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{CriticalPoint}{Named List of Numeric. Named List of length equal to the number of endpoints, indicating
 #'     the critical value for each endpoint. For example, `CriticalPoint["Endpoint 1"]` is the value for Endpoint
@@ -76,7 +71,7 @@
 #'     Tailed`.}
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MultAdj}{Integer. Multiplicity adjustment method: - `0`: None. - `1`: Fallback. - `2`: Fixed sequence. -
-#'     `3`: Weighted Bonferroni. - `4`: Weighted Bonferroni-Holms. - `5`: Weighted Hochberg. Only available if the
+#'     `3`: Weighted Bonferroni. - `4`: Weighted Bonferroni-Holm. - `5`: Weighted Hochberg. Only available if the
 #'     multiplicity adjustment method is not custom.}
 #'   \item{TestOrder}{Integer. Testing order: - `1`: Start with endpoint 1. - `2`: Start with endpoint 2. Only
 #'     available if `Multiplicity Adjustment = 1 (Fallback) or 2 (Fixed Sequence)`.}
@@ -103,7 +98,6 @@
 #'     for Endpoint 1. Set to `NA` for endpoints with a pending analysis. For example, if "Endpoint 1" is tested
 #'     first, then for the analysis of "Endpoint 1" we will have `TestStat["Endpoint 2"] = NA`.}
 #' }
-#'
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
@@ -178,26 +172,21 @@
 #'     the binding type for each endpoint. For example, `BindingType["Endpoint 1"]` is the binding type for
 #'     Endpoint 1. Possible values: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#'
 #' @param TestStat Named list of endpoint test statistics on the Wald (Z) scale, returned by the endpoint analyses.
 #'   Access elements using the actual endpoint names.
-#'
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
 #'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
 #'   Available for designs that support passing state between looks.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{Decision}{Named list of integer endpoint decisions in DesignParam$EndpointName order: 0 = no boundary
 #'     crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 4 = futility boundary
-#'     crossed. The
-#'     multiplicity-adjustment integration point uses 4 for futility.}
+#'     crossed. The multiplicity-adjustment integration point uses 4 for futility.}
 #'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
 #'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
 #'     name. Available for designs that support passing state between looks.}
@@ -205,14 +194,10 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
-#' @details The current code assumes there are no dropouts. Modify the code accordingly for dropout case.
-#'
-#' Function Template for performing Multiplicity Adjustment for One Look Tests
-#'
-#' The dual-endpoint engine exposes Response1 and Response2 and the endpoint-specific calendar times and original
-#'   censor indicators listed in SimData. Each endpoint-specific design/list value is indexed by its actual
-#'   EndpointName.
+#' @details This example divides Alpha equally between the two endpoints and uses the test statistics supplied
+#'   by their analyses. Dropout and censoring adjustments belong in those endpoint analyses. The dual-endpoint
+#'   engine exposes Response1 and Response2 and the endpoint-specific calendar times and original censor
+#'   indicators listed in SimData. Each endpoint-specific design/list value is indexed by its actual EndpointName.
 ######################################################################################################################## .
 
 GetDEPDecisionsFSD <- function( SimData, DesignParam, LookInfo = NULL, TestStat, OutList = NULL, UserParam = NULL ) {

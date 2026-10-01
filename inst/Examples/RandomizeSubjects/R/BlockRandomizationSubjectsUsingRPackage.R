@@ -1,22 +1,15 @@
 ######################################################################################################################## .
 #' @name BlockRandomizationSubjectsUsingRPackage
-#'
 #' @title Permuted Block Randomization for Two-Armed Trials
-#'
 #' @description Randomly assigns subjects to two arms (control and treatment) using the permuted block
 #'   randomization technique. This ensures that within each block, the allocation ratio between arms is strictly
 #'   maintained, minimizing imbalance throughout the enrollment process.
-#'
 #' @author Shubham Lahoti, Gabriel Potvin, Anoop Singh Rawat
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param NumArms Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#'
 #' @param AllocRatio Numeric vector of experimental-to-control allocation ratios, one element per experimental arm.
 #'   The control allocation is 1, so a ratio of 2 assigns twice as many subjects to that experimental arm as to
 #'   control.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -27,7 +20,6 @@
 #'   \item{BlockSize1, ..., BlockSizeN}{Required positive integer block sizes, named consecutively in this order.
 #'     They must sum to NumSub, and each must be a multiple of the sum of the integer allocation ratios.}
 #' }
-#'
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
@@ -37,7 +29,6 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details This function implements permuted block randomization for two-arm clinical trial designs. It divides
 #'   the total sample size into user-specified blocks, and within each block, subjects are randomized to control or
 #'   treatment arms according to a specified allocation ratio. The function leverages the `randomizeR` package for
@@ -65,7 +56,8 @@
 #'                              \item{ErrorCode = -4}{Non-positive, nonfinite, or non-integer block size detected}
 #'                              \item{ErrorCode = -5}{Block sizes do not sum to NumSub}
 #'                              \item{ErrorCode = -6}{Block size incompatible with allocation ratio}
-#'                              \item{ErrorCode = -7}{Invalid allocation ratio}
+#'                              \item{ErrorCode = -7}{Invalid allocation ratio or ratio not representable by
+#'                                positive R integers within the denominator limit of 100}
 #'     }
 ######################################################################################################################## .
 
@@ -82,6 +74,9 @@ BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio
         return( list( TreatmentID = rep( 0L, NumSub ), ErrorCode = -7L ) )
     }
     vAllocRatio <- ConvertRatio( AllocRatio )
+    if ( length( vAllocRatio ) != NumArms ) {
+        return( list( TreatmentID = rep( 0L, NumSub ), ErrorCode = -7L ) )
+    }
 
     # 2. Block sizes must be provided
     if ( is.null( names( UserParam ) ) ) {
@@ -130,6 +125,11 @@ ConvertRatio <- function( AllocRatio, Tolerance = 1e-8, MaxDenominator = 100 ) {
     dFraction <- FractionApproximation( AllocRatio, Tolerance, MaxDenominator )
     nNumerator <- unname( dFraction[ "nNumerator" ] ) # treatment
     nDenominator <- unname( dFraction[ "nDenominator" ] ) # control
+
+    if ( nNumerator <= 0 || nDenominator <= 0 ||
+         nNumerator > .Machine$integer.max || nDenominator > .Machine$integer.max ) {
+        return( integer( 0 ) )
+    }
 
     return( c( as.integer( nDenominator ), as.integer( nNumerator ) ) )
 }

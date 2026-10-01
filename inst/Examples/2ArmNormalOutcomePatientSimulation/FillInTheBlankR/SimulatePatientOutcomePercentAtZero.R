@@ -1,28 +1,19 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomePercentAtZero
-#'
 #' @title Simulate patient outcomes from a normal distribution with a percent of patients having an outcome of 0.
-#'
 #' @description Generate normal subject responses with an arm-specific probability of a zero outcome.
 #'   Subjects selected to have a zero outcome are assigned 0; otherwise their responses are drawn from the
 #'   normal distribution specified by Mean and StdDev. With UserParam = NULL, no outcomes are forced to zero.
-#'
 #' @author J. Kyle Wathen
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
 #'   in TreatmentID order.
-#'
 #' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -36,7 +27,6 @@
 #'   \item{UserParam$dProbOfZeroOutcomeExp}{Numeric probability in [0, 1] that a subject has a zero outcome
 #'     on the experimental arm.}
 #' }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -45,7 +35,6 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#'
 #' @details This is a fill-in-the-blank exercise. Replace the underscore placeholders before sourcing or running
 #'   the function.
 ######################################################################################################################## .

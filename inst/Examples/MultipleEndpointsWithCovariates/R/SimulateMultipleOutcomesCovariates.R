@@ -1,35 +1,26 @@
 ######################################################################################################################## .
 #' @name SimulateMultipleOutcomesCovariates
-#'
 #' @title Simulate Multiple Independent Outcomes Using Covariates
-#'
 #' @description This function simulates three independent normally distributed outcomes for a given number of
-#'   subjects,
-#' based on their treatment assignment. Each outcome has a treatment-specific mean and a fixed standard deviation.
+#'   subjects, based on their treatment assignment. Each outcome has a treatment-specific mean and a fixed standard deviation.
 #' Two covariates are used in this version:
 #'        \itemize{
 #'          \item Covariate 1: binary (e.g., diabetic)
 #'          \item Covariate 2: binary (e.g., smoker)
 #'        }
-#' Covariate effects are incorporated linearly into the outcome generation.
+#' Covariate effects are incorporated linearly into the outcome generation. Residuals are independent
+#'   conditional on the covariates; the shared covariate effects can induce marginal correlation between outcomes.
 #' Note: this function can be extended to simulate any number of endpoints and covariates.
-#'
 #' @author Julija Saltane
-#'
 #' @param NumSub Integer number of subjects in the trial.
-#'
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
 #'   in the same order as TreatmentID.
-#'
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
-#'
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
 #'   in TreatmentID order.
-#'
 #' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
 #'   experimental arms in TreatmentID order.
-#'
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -49,7 +40,6 @@
 #'          \item{Cov1Prob}{Probability of covariate 1 being 1}
 #'          \item{Cov2Prob}{Probability of covariate 2 being 1}
 #'        }
-#'
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -61,17 +51,17 @@
 #'
 #' Example-specific additional output elements:
 #' \describe{
-#'   \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1}
-#'   \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2}
-#'   \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3}
+#'   \item{PatientOutcome1}{Numeric vector of simulated values for continuous outcome 1, with one element per subject.}
+#'   \item{PatientOutcome2}{Numeric vector of simulated values for continuous outcome 2, with one element per subject.}
+#'   \item{PatientOutcome3}{Numeric vector of simulated values for continuous outcome 3, with one element per subject.}
 #'   \item{Covariate1}{Binary vector of simulated values for covariate 1}
 #'   \item{Covariate2}{Binary vector of simulated values for covariate 2}
 #' }
+#' @details PatientOutcome1, PatientOutcome2, and PatientOutcome3 contain the generated outcomes, each with
+#'   residual standard deviation 1. Response is a zero-filled placeholder for the native endpoint; the
+#'   accompanying analysis uses the custom PatientOutcome fields.
 #'
-#' @details Usage of Mean in this example: The arm-specific mean response vector is not used directly in this function.
-#'
-#' Usage of StdDev in this example: The arm-specific response standard deviation vector is not used directly
-#'   in this function.
+#' Endpoint means come from UserParam, and the residual standard deviation is fixed at 1.
 #'
 #' Example-specific error codes: Integer. 0 if successful, 1 if `UserParam` is NULL
 ######################################################################################################################## .
