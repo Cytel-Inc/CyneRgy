@@ -1,155 +1,291 @@
 ######################################################################################################################## .
-#' @param AnalyzeUsingPropLimitsOfCI
+#' @name AnalyzeUsingPropLimitsOfCI
 #' @title Analyze using a simplified limits of confidence interval design
-#' @param SimData Data frame which consists of data generated in current simulation.
-#' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
-#' @param LookInfo A list containing input parameters related to multiple looks, which the user may need to compute 
-#'                 test statistics and perform tests. Users should access the variables using their names 
-#'                 (e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
-#'                 
-#'                 - `LookInfo$NumLooks`: An integer representing the number of looks in the study.
-#'                 - `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
-#'                 - `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
-#'                 - `LookInfo$RejType`: A code representing rejection types. Possible values are:
-#'                   - **Efficacy Only:**
-#'                     - `0`: 1-Sided Efficacy Upper.
-#'                     - `2`: 1-Sided Efficacy Lower.
-#'                   - **Futility Only:**
-#'                     - `1`: 1-Sided Futility Upper.
-#'                     - `3`: 1-Sided Futility Lower.
-#'                   - **Efficacy and Futility:**
-#'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
-#'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon. UserParam must be supplied, the list must contain the following named elements:
+#' @description In this simplified example of upper and lower confidence boundary designs, if it is likely that the
+#'   treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made. If a Go decision
+#'   is not made, then if it is unlikely that the treatment difference is above the Target Value (TV) a No Go
+#'   decision is made. In this example, the prop.test from the stats package in R is utilized to analyze the data and compute at
+#'   user-specified confidence interval (dConfLevel). The team would like to make a Go decision if there is at
+#'   least a 90\% chance that the difference in treatment is greater than the MAV. If a Go decision is not made,
+#'   then a No Go decision is made if there is less than a 10\% chance the difference is greater than the TV. Using
+#'   a frequentist CI an approximation to this design can be done by the logic described below. At an analysis, if
+#'   the Lower Limit of the CI, denoted by LL, is greater than user-specified dLowerLimit then a Go decision is
+#'   made.
+#'
+#' If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than user-specified
+#'   dUpperLimit a No Go decision is made. Specifically, if LL > UserParam$dLowerLimit --> Go if UL <
+#'   UserParam$dUpperLimit --> No Go Otherwise, continue to the next analysis. At the Final Analysis: If LL >
+#'   UserParam$dLowerLimit then a Go decision is made, otherwise, a No Go decision is made
+#' @author J. Kyle Wathen and Gabriel Potvin
+#' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
+#'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
-#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifics the lower limit, eg  Minimum Acceptable Value (MAV).}
-#'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg Target Value (TV).}
-#'   \item{UserParam$dConfLevel}{A value (0,1) that specifies the confidence level for the prop.test function in base R.}
+#'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
+#'     subject, in the same order as TreatmentID.}
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#'   \item{CensorInd}{Integer vector of censor indicators, with one element per subject: 0 = dropout/non-completer;
+#'     1 = completer.}
+#'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
+#'     dropout/non-completer; 1 = completer.}
 #' }
-#' @description  In this simplified example of upper and lower confidence boundary designs, if it is likely that the treatment difference is above the Minimum Acceptable Value (MAV) then a Go decision is made.  
-#'               If a Go decision is not made, then if is is unlikely that the treatment difference is above the Target Value (TV) a No Go decision is made.      
-#'               In this example, the prop.test from base R is utilized to analyze the data and compute at user-specified confidence interval (dConfLevel).  
-#'               The team would like to make a Go decision if there is at least a 90% chance that the difference in treatment is greater than the MAV.  
-#'               If a Go decision is not made, then a No Go decision is made if there is less than a 10% chance the difference is greater than the TV.  
-#'               Using a frequentist CI an approximation to this design can be done by the logic described below.
-#'               At an analysis, if the Lower Limit of the CI, denoted by LL, is greater than user-specified dLowerLimit then a Go decision is made.  
-#'               
-#'               If a Go decision is not made, then if the Upper Limit of the CI, denoted by UL, is less than user-specified dUpperLimit a No Go decision is made.  
-#'               Specifically, 
-#'                  if LL > UserParam$dLowerLimit --> Go
-#'                  if UL < UserParam$dUpperLimit --> No Go
-#'               Otherwise, continue to the next analysis. 
-#'               At the Final Analysis: If LL > UserParam$dLowerLimit  then a Go decision is made, otherwise, a No Go decision is made
-#' @return TestStat A double value of the computed test statistic
-#' @return Decision An integer value: Decision = 0 --> No boundary crossed
-#'                                    Decision = 1 --> Lower Efficacy Boundary Crossed
-#'                                    Decision = 2 --> Upper Efficacy Boundary Crossed
-#'                                    Decision = 3 --> Futility Boundary Crossed
-#'                                    Decision = 4 --> Equivalence Boundary Crossed
-#' @return Delta The difference in the estimates, is utilzied in East Horizon Explore to create the observed graph
-#' @return AnalysisTime Optional Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-#'@note In this example, the boundary information that is computed and sent from East Horizon is ignored in order to implement this decision approach.
-#' @details
-#' ## CyneRgy Decision Helpers
+#' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
+#'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
+#'   as indicated below.
+#' \describe{
+#'   \item{Alpha}{Numeric type I error rate (significance level).}
+#'   \item{LowerAlpha}{Numeric. Lower Type I Error. Same as Alpha if left-tailed one-sided test. Only makes sense
+#'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Left-tailed`.
+#'     Two-sided tests do not exist, so this variable is not useful: use Alpha instead. East Horizon Design: Only
+#'     available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided asymmetric`.}
+#'   \item{UpperAlpha}{Numeric. Upper Type I Error. Same as Alpha if right-tailed one-sided test. Only makes sense
+#'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Right-tailed`.
+#'     Two-sided tests do not exist, so this variable is not useful: use Alpha instead. East Horizon Design: Only
+#'     available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided asymmetric`.}
+#'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority. – `1`: Non-inferiority. – `2`: Equivalence. – `3`:
+#'     Super-superiority. East Horizon Explore: Type 2 (equivalence) does not exist.}
+#'   \item{TestType}{Integer. Test Type: – `0`: One-sided. – `1`: Two-sided symmetric. – `2`: Two-sided asymmetric.
+#'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
+#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'     Design: Only available if `Test Type = One-sided`.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
+#'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
+#'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
+#'     `Statistical Design = Fixed Sample`.}
+#'   \item{LowerCriticalPoint}{Numeric. Lower critical value. Same as CriticalPoint if left-tailed one-sided test.
+#'     Only makes sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Statistical
+#'     Design = Fixed Sample` and `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not
+#'     useful: use CriticalPoint instead. East Horizon Design: Only available if `Statistical Design = Fixed
+#'     Sample`. Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided
+#'     symmetric/asymmetric`.}
+#'   \item{UpperCriticalPoint}{Numeric. Upper critical value. Same as CriticalPoint if right-tailed one-sided test.
+#'     Only makes sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Statistical
+#'     Design = Fixed Sample` and `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not
+#'     useful: use CriticalPoint instead. East Horizon Design: Only available if `Statistical Design = Fixed
+#'     Sample`. Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided
+#'     symmetric/asymmetric`.}
+#'   \item{SampleSize}{Integer planned total sample size of the trial.}
+#'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
+#'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
+#'   \item{TestStatType}{Integer. Test statistic type. For `Time-to-Event` tests: - `0`: Logrank. - `1`: Wilcoxon
+#'     Gehan. - `2`: Harrington Fleming. - `3`: Stratified Logrank. - `4`: Stratified Wilcoxon Gehan. - `5`:
+#'     Stratified Harrington Fleming. For `Continuous` test: - `3`: Z-test. - `4`: t-test. For `Binary` test: -
+#'     `5`: Wald. - `6`: Score. East Horizon Explore: Not available. East Horizon Design: Not available for `Test =
+#'     Difference of Proportions or Odds Ratio of Proportions` (Binary).}
+#'   \item{VarType}{Integer. Variance type. For `Continuous` test: - `4`: Equal - `5`: Unequal. For `Difference of
+#'     Proportions` (Binary) test: - `0`: Pooled. - `1`: Unpooled. For `Ratio of Proportions` (Binary): - `2`: Null
+#'     - `3`: Empirical. East Horizon Explore: Not available. East Horizon Design: Not available for
+#'     `Time-to-Event` tests or `Test = Odds Ratio of Proportions` (Binary).}
+#'   \item{TrtEffNull}{Numeric. Treatment effect under null on natural scale. East Horizon Explore: Not available
+#'     for `Endpoint Type = Continuous with Repeated Measures`. Set to `0` for `Trial Type = Superiority`. Set to
+#'     `Delta_0 = log(HR_0)` for `Endpoint Type = Time-to-Event`. Set to `1 - rho_0` for Vaccine Efficacy
+#'     (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson
+#'     Rates`). East Horizon Design: Set to `0` for `Trial Type = Superiority`. Set to `Delta_0 = log(HR_0)` for
+#'     `Time-to-Event` tests.}
+#'   \item{PiC}{Numeric. Design proportion for the control arm. East Horizon Explore: Not available. East Horizon
+#'     Design: Only available for `Binary` tests.}
+#' }
+#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
+#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#' \describe{
+#'   \item{NumLooks}{Integer total number of analysis looks.}
+#'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
+#'   \item{InfoFrac}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the information fraction
+#'     for each look.}
+#'   \item{CumAlpha}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent
+#'     (for one-sided tests) for each look. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{CumAlphaLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower cumulative
+#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if left-tailed one-sided test. Only makes
+#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{CumAlphaUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper cumulative
+#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if right-tailed one-sided test. Only makes
+#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
+#'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event` and for
+#'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
+#'     Ratio of Poisson Rates`). East Horizon Design: Not available for `Time-to-Event` tests.}
+#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
+#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
+#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
+#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
+#'     Event` tests.}
+#'   \item{LookTime}{Numeric calendar time of the current look. East Horizon Design: Only available for `Time-to-Event`
+#'     tests if `Look Fix Option = Time-based`.}
+#'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
+#'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
+#'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon
+#'     Design: Possible values: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. – `2`: One-sided
+#'     efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility lower. – `5`:
+#'     One-sided efficacy lower, futility upper. – `6`: Two-sided efficacy only. – `7`: Two-sided futility only. –
+#'     `8`: Two-sided efficacy, futility. – `9`: Equivalence.}
+#'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Possible values: – `0`: Z scale.
+#'     East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale.}
+#'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
+#'     values (for one-sided tests) for each look. East Horizon Explore: Set to `NA` for `Endpoint Type =
+#'     Continuous with Repeated Measures`. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{EffBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower efficacy
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{EffBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper efficacy
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: – `0`: Z scale. –
+#'     `2`: Delta scale. East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale. – `2`: Delta
+#'     scale. – `3`: Conditional power scale.}
+#'   \item{CPDeltaOption}{Integer. Delta option for conditional power computation: 0 = design Delta; 1 = estimated
+#'     Delta. East Horizon Design only; available when the futility boundary scale is conditional power.}
+#'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
+#'     values (for one-sided tests) for each look. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{FutBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower futility
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{FutBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper futility
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
+#' }
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
 #'
-#' The analysis may use `CyneRgy::GetDecisionString()` and
-#' `CyneRgy::GetDecision()` to determine the decision returned to
-#' East Horizon Explore.
+#' Example-specific parameters and requirements:
+#' UserParam must be supplied, the list must contain the following named elements:
+#' \describe{
+#'   \item{UserParam$dLowerLimit}{A value (0,1) that specifies the lower limit, eg  Minimum Acceptable Value
+#'     (MAV).}
+#'   \item{UserParam$dUpperLimit}{A value (0,1) that specifies the upper limit for the confidence interval, eg
+#'     Target Value (TV).}
+#'   \item{UserParam$dConfLevel}{Numeric confidence level in (0, 1) used to construct the confidence
+#'     interval.}
+#' }
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
+#'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
+#'     (unavailable in East Horizon Explore).}
+#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
+#'   \item{Delta}{Estimated experimental-minus-control treatment effect (proportion difference for binary outcomes;
+#'     mean difference for continuous outcomes).}
+#'   \item{CtrlCompleters}{Number of completers in the control arm. Required when the selected conditional-power
+#'     rule uses the estimated treatment effect.}
+#'   \item{TrmtCompleters}{Number of completers in the experimental arm. Required when the selected
+#'     conditional-power rule uses the estimated treatment effect.}
+#'   \item{CtrlPi}{Observed proportion of responders in the control arm. Return only when required by the selected
+#'     conditional-power rule.}
+#'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
+#'     the study duration at the final analysis. Compute and return this value in the R function.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
+#'     conditional-power rule uses the estimated effect and its standard error.}
+#' }
+#' @details This example returns the lower confidence limit in TestStat for reporting and supplies Decision
+#'   to apply its custom stopping rule. The reported confidence limit is not a Wald Z statistic.
 #'
-#' When these helpers are used, the following input fields are required
-#' and MUST be included when generating sample/test data:
-#'
-#' DesignParam:
-#'   - TailType: Integer indicating the direction of the statistical test.
-#'       0 = Left-tailed
-#'       1 = Right-tailed
-#'
-#' LookInfo (for group sequential designs, NULL for fixed designs):
-#' When not NULL, must contain the following fields:
-#'   - NumLooks: Total number of looks.
-#'   - CurrLookIndex: Current look index, starting at 1.
-#'   - RejType: Integer identifying which stopping boundaries are enabled.
-#'       0 = 1-Sided Efficacy Upper
-#'       1 = 1-Sided Futility Upper
-#'       2 = 1-Sided Efficacy Lower
-#'       3 = 1-Sided Futility Lower
-#'       4 = 1-Sided Efficacy Upper and Futility Lower
-#'       5 = 1-Sided Efficacy Lower and Futility Upper
-#'       6 = 2-Sided Efficacy Only (not used in East Horizon Explore)
-#'       7 = 2-Sided Futility Only (not used in East Horizon Explore)
-#'       8 = 2-Sided Efficacy and Futility (not used in East Horizon Explore)
-#'       9 = Equivalence (not used in East Horizon Explore)
-#' 
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
+#'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
+#'   re-estimated total event/completer count.
 ######################################################################################################################## .
 
-AnalyzeUsingPropLimitsOfCI<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
-{
-    library(CyneRgy)
-    
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
-    if(  !is.null( LookInfo )  )
-    {
+AnalyzeUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+    # Analyze observed completers; simulated dropout responses are not observed data.
+    if ( "CensorInd" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorInd ) & SimData$CensorInd == 1, , drop = FALSE ]
+    } else if ( "CensorIndOrg" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorIndOrg ) & SimData$CensorIndOrg == 1, , drop = FALSE ]
+    }
+    if ( !is.null( LookInfo ) && !is.null( LookInfo$CumCompleters ) ) {
+        nTargetCompleters <- LookInfo$CumCompleters[ LookInfo$CurrLookIndex ]
+        if ( nTargetCompleters < 1 || nTargetCompleters > nrow( SimData ) ) {
+            return( list( ErrorCode = 1L ) )
+        }
+    }
+
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    if ( !is.null( LookInfo ) ) {
         # Group sequential design
-        nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfLooks          <- LookInfo$NumLooks
-        nQtyOfEvents         <- LookInfo$CumEvents[ nLookIndex ]
+        nLookIndex <- LookInfo$CurrLookIndex
+        nQtyOfLooks <- LookInfo$NumLooks
+        nQtyOfEvents <- LookInfo$CumEvents
+        if ( length( nQtyOfEvents ) > 1 ) {
+            nQtyOfEvents <- nQtyOfEvents[ nLookIndex ]
+        }
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-        RejType              <- LookInfo$RejType
-        TailType             <- DesignParam$TailType
-    }
-    else
-    {
+        nRejType <- LookInfo$RejType
+        nTailType <- DesignParam$TailType
+    } else {
         # Fixed Design
-        nLookIndex           <- 1
-        nQtyOfLooks          <- 1
-        nQtyOfEvents         <- DesignParam$MaxCompleters
+        nLookIndex <- 1
+        nQtyOfLooks <- 1
+        nQtyOfEvents <- DesignParam$MaxCompleters
         nQtyOfPatsInAnalysis <- nrow( SimData )
-        TailType             <- DesignParam$TailType
+        nTailType <- DesignParam$TailType
     }
-    
-    
-    if( is.null( UserParam ) )
-    {
-        
-        # FATAL ERROR AS WE DON'T KNOW WHAT THE USER WANTS TO DO.  
+
+    if ( is.null( UserParam ) ) {
+        # FATAL ERROR AS WE DON'T KNOW WHAT THE USER WANTS TO DO.
         # Creating a FATAL error will avoid misleading results when UserParam is not supplied
-        return(list(TestStat  = as.double(0), 
-                    ErrorCode = as.integer(-1), 
-                    Decision  = as.integer( 0 ),
-                    Delta     = as.double( 0 )))
+        return( list(
+            TestStat = as.double( 0 ),
+            ErrorCode = as.integer( -1 ),
+            Decision = as.integer( 0 ),
+            Delta = as.double( 0 )
+        ) )
     }
-    
-    
-    # Create the vector of simulated data for this IA - East sends all of the simulated data ####
-    vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
-    vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
-    
+
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data ####
+    vPatientOutcome <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
+    vPatientTreatment <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
+
     # Create vectors of data for each treatment  ####
-    vOutcomesS           <- vPatientOutcome[ vPatientTreatment == 0 ]
-    vOutcomesE           <- vPatientOutcome[ vPatientTreatment == 1 ]
-    
+    vOutcomesS <- vPatientOutcome[ vPatientTreatment == 0 ]
+    vOutcomesE <- vPatientOutcome[ vPatientTreatment == 1 ]
+
     # Perform the desired analysis, then determine if the lower limit of the confidence interval is greater than the user-specified value ####
-    mData                <- cbind(table(vOutcomesS), table(vOutcomesE)) 
-    lAnalysisResult      <- prop.test(mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel)
-    dLowerLimitCI        <- lAnalysisResult$conf.int[ 1 ]
-    dUpperLimitCI        <- lAnalysisResult$conf.int[ 2 ]
+    mData <- rbind(
+        c( sum( vOutcomesE ), length( vOutcomesE ) - sum( vOutcomesE ) ),
+        c( sum( vOutcomesS ), length( vOutcomesS ) - sum( vOutcomesS ) )
+    )
+    lAnalysisResult <- stats::prop.test( mData, alternative = "two.sided", correct = FALSE, conf.level = UserParam$dConfLevel )
+    dLowerLimitCI <- lAnalysisResult$conf.int[ 1 ]
+    dUpperLimitCI <- lAnalysisResult$conf.int[ 2 ]
 
     # Generate decision using GetDecisionString and GetDecision helpers
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit,
-                                               bIAFutilityCondition = dUpperLimitCI < UserParam$dUpperLimit,
-                                               bFAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit)
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+        bIAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit,
+        bIAFutilityCondition = dUpperLimitCI < UserParam$dUpperLimit,
+        bFAEfficacyCondition = dLowerLimitCI > UserParam$dLowerLimit
+    )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-    
-    Error 	<- 0
 
-    
-    
-    return(list(TestStat  = as.double(dLowerLimitCI), 
-                ErrorCode = as.integer(Error), 
-                Decision  = as.integer( nDecision ),
-                Delta     = as.double( lAnalysisResult$estimate[1] - lAnalysisResult$estimate[2])))
+    nErrorCode <- 0
+
+    return( list(
+        TestStat = as.double( dLowerLimitCI ),
+        ErrorCode = as.integer( nErrorCode ),
+        Decision = as.integer( nDecision ),
+        Delta = as.double( lAnalysisResult$estimate[ 1 ] - lAnalysisResult$estimate[ 2 ] )
+    ) )
 }

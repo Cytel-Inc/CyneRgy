@@ -1,140 +1,117 @@
+######################################################################################################################## .
 #' @name SimulatePatientOutcomeDEPSurvBinSingleHazardPiece
-#' @author Pradip Maske, Anoop Singh Rawat
-#' @title Simulate patient outcomes for Survival-Survival Dual Endpoint design using single piece hazard rates as inputs. 
-#' 
-#' @description
-#' In this example, the response (Survival times) is generated for two correlated Time to Event Endpoints.
-#' The hazard inputs are single piece hazard rates in this example.
-#' The steps to simulating patient data in this example follows a two-step procedure.  
-#' Step 1: Generate two standard normal samples, each of size NumSub. 
-#' Step 2: Transform the sample to be correlated (on normal scale) as per the specified input. 
-#' Step 3: Convert the normal responses to the TTE (exponential) responses by using corresponding endpoints hazard input.
-#' 
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param NumArm The number of arms in the trial including experimental and control, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub.
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
-#' @param EndpointType A vector of endpoint type for each endpoint, 0 (Continuous), 1 (Binary), 2 (TTE). length( EndpointType ) = number of endpoints.
-#' @param EndpointName A vector of endpoint names for each endpoint, length( EndpointType ) = number of endpoints.
-#' The parameters SurvMethod, NumPrd, PrdTime, SurvParam, and PropResp are lists containing two elements -- first corresponds to the first endpoint and second to second.
-#' Below are the details of elements within the respective parameters.
-#' @param SurvMethod A list containing the input methods for each endpoint. TTE endpoint has values 1 (Hazard Rates), 2 (Cumulative % Survivals), 3 (Median Survival Times). Non-TTE endpoints have value NA.
-#' @param NumPrd A list containing the number of time periods specified for each endpoint. For TTE endpoints, this represents the number of time intervals for which hazard rates or survival percentages are defined. For non-TTE endpoints, this value is set to NA.
-#' @param PrdTime \describe{ 
-#'      A list where each element is a vector of period times for TTE endpoints, dependent on the corresponding SurvMethod value. For non-TTE endpoints, this value is set to NA.
-#'      \item{If SurvMethod is 1 (Hazard Rates)}{Element is a vector specifying the starting times of each hazard piece. The number of elements equals NumPrd.}
-#'      \item{If SurvMethod is 2 (Cumulative % Survivals)}{Element is a vector specifying the time points at which the cumulative survival percentages are defined. The number of elements equals NumPrd.}
-#'      \item{If SurvMethod is 3 (Median Survival Times)}{Element is 0 by default as no time periods need to be defined.}
-#'      }
-#' @param SurvParam \describe{
-#'    A list where each element is a 2D array of parameters used to generate survival times based on the corresponding SurvMethod value:
-#'    \item{If SurvMethod is 1 (Hazard Rates)}{The element is an array (NumPrd rows, NumArm columns) that specifies arm-specific hazard rates (one rate per arm per time period). 
-#'    Element [i, j] specifies the hazard rate in the i-th time period for the j-th arm.
-#'    Arms are arranged in columns: column 1 is control arm, column 2 is experimental arm.
-#'    Time periods are arranged in rows: row 1 is time period 1, row 2 is time period 2, etc.}
-#'    \item{If SurvMethod is 2 (Cumulative % Survivals)}{The element is an array (NumPrd rows, NumArm columns) that specifies arm-specific cumulative survival percentages. 
-#'    Element [i, j] specifies the cumulative survival percentage at the i-th time point for the j-th arm.}
-#'    \item{If SurvMethod is 3 (Median Survival Times)}{The element is a 1 x NumArm array specifying the median survival time for each arm. 
-#'    Column 1 is control arm, column 2 is experimental arm.}
-#'  }
-#' @param PropResp \describe{
-#'    A list where each element is a vector of expected proportions of responders in each arm for binary endpoints.
-#'    \item{For binary endpoints}{Element is a vector of length NumArm, where each value represents the expected response proportion for the corresponding arm.}
-#'    \item{For non-binary endpoints}{Element is set to NA as response proportions are not applicable.}
-#'    }
-#' @param Correlation \describe{Correlation between two endpoints as mentioned below,}
-#'    \item{0} {Uncorrelated}  
-#'    \item{1} {Very Weak Positive}  
-#'    \item{2} {Weak Positive}  
-#'    \item{3} {Moderate Positive} 
-#'    \item{4} {Strong Positive}  
-#'    \item{5} {Very Strong Positive}
-#'    \item{-1} {Very Weak Negative} 
-#'    \item{-2} {Weak Negative} 
-#'    \item{-3} {Moderate Negative}  
-#'    \item{-4} {Strong Negative} 
-#'    \item{-5} {Very Strong Negative}  
-#' @param  UserParam A list of user defined parameters in East Horizon. You must have a default = NULL, as in this example.
-#' If UserParam are supplied in East Horizon, they will be an element in the list, eg UserParam$ParameterName.  
-#' @return The function must return a list in the return statement of the function. The information below lists 
-#'             elements of the list, if the element is required or optional and a description of the return values if needed. 
-#'             \describe{
-#'             \item{Response}{Required. A list which contains vectors of generated response values for each endpoint. It will contain survival times for TTE endpoints and appropriate response values for Binary and Continous endpoints.}
-#'             \item{ErrorCode}{Optional integer value \describe{ 
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     } 
- 
-SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime = NULL, TreatmentID, 
-                                                               EndpointType, EndpointName, Correlation, 
-                                                               SurvMethod, NumPrd, PrdTime, 
-                                                               SurvParam, PropResp = NULL, UserParam = NULL )
-{
-    nError               <- 0
-    vPatientOutcomeEP1   <- rep( 0, NumSub )  
-    vPatientOutcomeEP2   <- rep( 0, NumSub )  
-    lResponse            <- list()
-    
-    if( !is.null( UserParam ))
-    {
-      # Customized logic for data generation using UserParam will go here.
-    }
-    else 
-    {
-      # Get correlation matrix given qualitative correlation input
-      mCor <- GetCorrMatrix( Correlation )
-        
-      # Cholesky decomposition of correlation matrix
-      mChol <- chol( mCor )
-      
-      # Generating (NumSub * 2) standard normal responses 
-      mZ <- matrix( rnorm( NumSub*2, 0, 1 ), ncol = 2 )
-      
-      # Intermediate matrix
-      mNormResp <- mZ %*% mChol
- 
-      # Thresholds for binary EP
-      threshold <- qnorm( PropResp[[ 2 ]])
-      
-      for( nSubjID in 1:NumSub ) 
-      {
+#' @title Simulate survival-binary dual endpoints with one hazard period
+#' @description Generate correlated survival and binary outcomes using a Gaussian copula. Simulate two standard
+#'   normal samples, impose the requested correlation on the normal scale, then transform one endpoint to
+#'   exponential survival times and the other to binary responses using the endpoint-specific inputs. This example
+#'   supports one hazard period and requires SurvMethod = 1 for the survival endpoint.
+#' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#' @param EndpointType Integer vector of endpoint types, in EndpointName order: 0 = continuous, 1 = binary, 2 =
+#'   time-to-event.
+#' @param EndpointName Character vector of endpoint names, in the order specified in East Horizon. Use the actual
+#'   names to access endpoint-specific list elements.
+#' @param Correlation Integer correlation category between endpoints: 0 = uncorrelated; absolute values 1, 2, 3, 4,
+#'   and 5 indicate very weak, weak, moderate, strong, and very strong correlation. Positive values indicate
+#'   positive correlation; negative values indicate negative correlation.
+#' @param SurvMethod Named list indexed by EndpointName. For each time-to-event endpoint: 1 = hazard rates; 2 =
+#'   cumulative survival percentages; 3 = median survival times. The value is NA for a non-survival endpoint.
+#' @param NumPrd Named list indexed by EndpointName, containing the integer number of survival periods for each
+#'   time-to-event endpoint and NA for a non-survival endpoint.
+#' @param PrdTime Named list indexed by EndpointName. Each survival endpoint contains its period times: starting
+#'   times of hazard pieces for SurvMethod = 1, times for cumulative survival percentages for SurvMethod = 2, or 0
+#'   for SurvMethod = 3. The value is NA for a non-survival endpoint.
+#' @param SurvParam Named list indexed by EndpointName. Each survival endpoint contains a NumPrd-by-NumArm array:
+#'   hazard rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, or a single row of median
+#'   survival times for SurvMethod = 3. Column 1 is control. The value is NA for a non-survival endpoint.
+#' @param PropResp Named list indexed by EndpointName. Each binary endpoint contains a numeric vector of response
+#'   probabilities by arm, with control first; the value is NA for a non-binary endpoint.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Required named list of numeric response vectors, indexed by EndpointName, with one value per
+#'     subject in each vector. Time-to-event responses are measured from enrollment.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+######################################################################################################################## .
+
+SimulatePatientOutcomeDEPSurvBinSingleHazardPiece <- function( NumSub, NumArm, ArrivalTime = NULL, TreatmentID,
+                                                              EndpointType, EndpointName, Correlation, SurvMethod,
+                                                              NumPrd, PrdTime, SurvParam, PropResp = NULL,
+                                                              UserParam = NULL ) {
+    nErrorCode <- 0
+    vPatientOutcomeEP1 <- rep( 0, NumSub )
+    vPatientOutcomeEP2 <- rep( 0, NumSub )
+    lResponse <- list( )
+
+    # Get correlation matrix given qualitative correlation input
+    mCor <- GetCorrMatrix( Correlation )
+
+    # Cholesky decomposition of correlation matrix
+    mChol <- chol( mCor )
+
+    # Generating (NumSub * 2) standard normal responses
+    mZ <- matrix( stats::rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
+
+    # Intermediate matrix
+    mNormResp <- mZ %*% mChol
+
+    # Thresholds for binary EP
+    vThreshold <- stats::qnorm( PropResp[[ EndpointName[ 2 ] ]] )
+
+    for ( nSubjID in 1:NumSub ) {
         # EP1: Survival time
-        vPatientOutcomeEP1[ nSubjID ] <- (- log( pnorm( mNormResp[ nSubjID, 1 ])) / SurvParam[[ 1 ]][ 1, TreatmentID[ nSubjID ] + 1 ])
-        
+        vPatientOutcomeEP1[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 1 ] ) ) / SurvParam[[ EndpointName[ 1 ] ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
+
         # EP2: Binary outcome using inverse probability transform
-        vPatientOutcomeEP2[ nSubjID ] <- as.numeric( mNormResp[ nSubjID, 2 ] < threshold[ TreatmentID[ nSubjID ] + 1 ])
-      }
-      if( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
-          length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ))
-      {
-        nError <- -100
-      }
-    } 
-    
-    lResponse[[ EndpointName[[ 1 ]]]] <- vPatientOutcomeEP1
-    lResponse[[ EndpointName[[ 2 ]]]] <- vPatientOutcomeEP2
-    
-  return( list( Response = as.list( lResponse ), ErrorCode = as.integer( nError )))
+        vPatientOutcomeEP2[ nSubjID ] <- as.numeric( mNormResp[ nSubjID, 2 ] < vThreshold[ TreatmentID[ nSubjID ] + 1 ] )
+    }
+    if ( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
+        length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ) ) {
+        nErrorCode <- -100
+    }
+
+    lResponse[[ EndpointName[[ 1 ]] ]] <- vPatientOutcomeEP1
+    lResponse[[ EndpointName[[ 2 ]] ]] <- vPatientOutcomeEP2
+
+    return( list( Response = as.list( lResponse ), ErrorCode = as.integer( nErrorCode ) ) )
 }
 
-
 # Helper function to create correlation matrix given qualitative correlation
-GetCorrMatrix <- function(Correlation) 
-{
-  rho <- ifelse( Correlation == 0,  0,
-         ifelse( Correlation == 1,  0.15,
-         ifelse( Correlation == 2,  0.3,
-         ifelse( Correlation == 3,  0.5,
-         ifelse( Correlation == 4,  0.7,
-         ifelse( Correlation == 5,  0.85,
-         ifelse( Correlation == -1, -0.15,
-         ifelse( Correlation == -2, -0.3,
-         ifelse( Correlation == -3, -0.5,
-         ifelse( Correlation == -4, -0.7,
-         ifelse( Correlation == -5, -0.85 )))))))))))
-  
-  # Return the 2x2 correlation matrix
-  return( matrix( c( 1, rho, rho, 1 ), nrow = 2 ))
+GetCorrMatrix <- function( Correlation ) {
+    dCorrelation <- ifelse( Correlation == 0, 0,
+        ifelse( Correlation == 1, 0.15,
+            ifelse( Correlation == 2, 0.3,
+                ifelse( Correlation == 3, 0.5,
+                    ifelse( Correlation == 4, 0.7,
+                        ifelse( Correlation == 5, 0.85,
+                            ifelse( Correlation == -1, -0.15,
+                                ifelse( Correlation == -2, -0.3,
+                                    ifelse( Correlation == -3, -0.5,
+                                        ifelse( Correlation == -4, -0.7,
+                                            ifelse( Correlation == -5, -0.85 )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
+
+    # Return the 2x2 correlation matrix
+    return( matrix( c( 1, dCorrelation, dCorrelation, 1 ), nrow = 2 ) )
 }

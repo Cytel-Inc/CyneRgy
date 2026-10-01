@@ -1,43 +1,256 @@
 ######################################################################################################################## .
-#' Analyze using a Bayesian Normal model
-#' @param SimData Data frame which consists of data generated in current simulation.
-#' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
-#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform analysis.
-#' @param UserParam A list of user defined parameters in East Horizon. The default must be NULL.
-#' Note: UserParam values should be referenced in the main function before
-#' being passed to helper functions. Passing UserParam directly to a helper
-#' may prevent East Horizon from automatically populating the required parameters.
+#' @name AnalyzeUsingBayesianNormals
+#' @title Analyze continuous subject responses
+#' @description Analyze using a Bayesian Normal model
+#' @author J. Kyle Wathen and Laurent Spiess
+#' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
+#'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#' \describe{
+#'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
+#'     subject, in the same order as TreatmentID.}
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#'   \item{CensorInd}{Integer vector of censor indicators, with one element per subject: 0 = dropout/non-completer;
+#'     1 = completer.}
+#'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
+#'     dropout/non-completer; 1 = completer.}
+#' }
+#'
+#' Additional fields returned by SimulatePatientOutcomeNormalAssurance:
+#' \describe{
+#'   \item{vTrueDelta}{Custom numeric vector of true experimental-minus-control mean differences, with one
+#'     element per subject and the same value throughout a simulation.}
+#'   \item{dSimMeanCtrl}{Numeric vector of true control-arm response means, with one element per subject and the
+#'     same value throughout a simulation.}
+#'   \item{dSimMeanExp}{Numeric vector of true experimental-arm response means, with one element per subject and
+#'     the same value throughout a simulation.}
+#' }
+#' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
+#'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
+#'   as indicated below.
+#' \describe{
+#'   \item{Alpha}{Numeric type I error rate (significance level).}
+#'   \item{LowerAlpha}{Numeric. Lower Type I Error. Same as Alpha if left-tailed one-sided test. Only makes sense
+#'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Left-tailed`.
+#'     Two-sided tests do not exist, so this variable is not useful: use Alpha instead. East Horizon Design: Only
+#'     available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided asymmetric`.}
+#'   \item{UpperAlpha}{Numeric. Upper Type I Error. Same as Alpha if right-tailed one-sided test. Only makes sense
+#'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Right-tailed`.
+#'     Two-sided tests do not exist, so this variable is not useful: use Alpha instead. East Horizon Design: Only
+#'     available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided asymmetric`.}
+#'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority. – `1`: Non-inferiority. – `2`: Equivalence. – `3`:
+#'     Super-superiority. East Horizon Explore: Type 2 (equivalence) does not exist.}
+#'   \item{TestType}{Integer. Test Type: – `0`: One-sided. – `1`: Two-sided symmetric. – `2`: Two-sided asymmetric.
+#'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
+#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'     Design: Only available if `Test Type = One-sided`.}
+#'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
+#'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
+#'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
+#'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
+#'     `Statistical Design = Fixed Sample`.}
+#'   \item{LowerCriticalPoint}{Numeric. Lower critical value. Same as CriticalPoint if left-tailed one-sided test.
+#'     Only makes sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Statistical
+#'     Design = Fixed Sample` and `Tail Type = Left-tailed`. Two-sided tests do not exist, so this variable is not
+#'     useful: use CriticalPoint instead. East Horizon Design: Only available if `Statistical Design = Fixed
+#'     Sample`. Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type = Two-sided
+#'     symmetric/asymmetric`.}
+#'   \item{UpperCriticalPoint}{Numeric. Upper critical value. Same as CriticalPoint if right-tailed one-sided test.
+#'     Only makes sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Statistical
+#'     Design = Fixed Sample` and `Tail Type = Right-tailed`. Two-sided tests do not exist, so this variable is not
+#'     useful: use CriticalPoint instead. East Horizon Design: Only available if `Statistical Design = Fixed
+#'     Sample`. Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided
+#'     symmetric/asymmetric`.}
+#'   \item{SampleSize}{Integer planned total sample size of the trial.}
+#'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
+#'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
+#'   \item{TestStatType}{Integer. Test statistic type. For `Time-to-Event` tests: - `0`: Logrank. - `1`: Wilcoxon
+#'     Gehan. - `2`: Harrington Fleming. - `3`: Stratified Logrank. - `4`: Stratified Wilcoxon Gehan. - `5`:
+#'     Stratified Harrington Fleming. For `Continuous` test: - `3`: Z-test. - `4`: t-test. For `Binary` test: -
+#'     `5`: Wald. - `6`: Score. East Horizon Explore: Not available. East Horizon Design: Not available for `Test =
+#'     Difference of Proportions or Odds Ratio of Proportions` (Binary).}
+#'   \item{VarType}{Integer. Variance type. For `Continuous` test: - `4`: Equal - `5`: Unequal. For `Difference of
+#'     Proportions` (Binary) test: - `0`: Pooled. - `1`: Unpooled. For `Ratio of Proportions` (Binary): - `2`: Null
+#'     - `3`: Empirical. East Horizon Explore: Not available. East Horizon Design: Not available for
+#'     `Time-to-Event` tests or `Test = Odds Ratio of Proportions` (Binary).}
+#'   \item{TrtEffNull}{Numeric. Treatment effect under null on natural scale. East Horizon Explore: Not available
+#'     for `Endpoint Type = Continuous with Repeated Measures`. Set to `0` for `Trial Type = Superiority`. Set to
+#'     `Delta_0 = log(HR_0)` for `Endpoint Type = Time-to-Event`. Set to `1 - rho_0` for Vaccine Efficacy
+#'     (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson
+#'     Rates`). East Horizon Design: Set to `0` for `Trial Type = Superiority`. Set to `Delta_0 = log(HR_0)` for
+#'     `Time-to-Event` tests.}
+#'   \item{MuC}{Numeric. Design mean for the control arm. East Horizon Explore: Not available.}
+#'   \item{Sigma}{Numeric. Design standard deviation specified in simulations. East Horizon Explore: Not available.
+#'     East Horizon Design: Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3
+#'     (Z-test)`.}
+#' }
+#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
+#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#' \describe{
+#'   \item{NumLooks}{Integer total number of analysis looks.}
+#'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
+#'   \item{InfoFrac}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the information fraction
+#'     for each look.}
+#'   \item{CumAlpha}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent
+#'     (for one-sided tests) for each look. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{CumAlphaLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower cumulative
+#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if left-tailed one-sided test. Only makes
+#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{CumAlphaUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper cumulative
+#'     alpha spent (for two-sided tests) for each look. Same as CumAlpha if right-tailed one-sided test. Only makes
+#'     sense to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
+#'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event` and for
+#'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
+#'     Ratio of Poisson Rates`). East Horizon Design: Not available for `Time-to-Event` tests.}
+#'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
+#'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
+#'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon
+#'     Design: Possible values: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. – `2`: One-sided
+#'     efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility lower. – `5`:
+#'     One-sided efficacy lower, futility upper. – `6`: Two-sided efficacy only. – `7`: Two-sided futility only. –
+#'     `8`: Two-sided efficacy, futility. – `9`: Equivalence.}
+#'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Possible values: – `0`: Z scale.
+#'     East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale.}
+#'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
+#'     values (for one-sided tests) for each look. East Horizon Explore: Set to `NA` for `Endpoint Type =
+#'     Continuous with Repeated Measures`. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{EffBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower efficacy
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{EffBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper efficacy
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: – `0`: Z scale. –
+#'     `2`: Delta scale. East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale. – `2`: Delta
+#'     scale. – `3`: Conditional power scale.}
+#'   \item{CPDeltaOption}{Integer. Delta option for conditional power computation: 0 = design Delta; 1 = estimated
+#'     Delta. East Horizon Design only; available when the futility boundary scale is conditional power.}
+#'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
+#'     values (for one-sided tests) for each look. East Horizon Design: Only available if `Test Type = One-sided`.}
+#'   \item{FutBdryLower}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the lower futility
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Left-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Left-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{FutBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper futility
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use FutBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
+#' }
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements:
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dPriorMeanCtrl}{Prior mean for control (Ctrl) used in analysis.}
 #'    \item{UserParam$dPriorStdDevCtrl}{Prior standard deviation for control (Ctrl) used in analysis}
 #'    \item{UserParam$dPriorMeanExp}{Prior mean for experimental (Exp) used in analysis.}
 #'    \item{UserParam$dPriorStdDevExp}{Prior standard deviation for experimental (Exp) used in analysis}
-#'    \item{UserParam$dSigma}{The known sampling variance.  Note, make sure this is the same as the sampling varaince in East Horizon.}
+#'   \item{UserParam$dSigma}{Known common sampling standard deviation. Use the same standard deviation as in
+#'     the East Horizon response simulation.}
 #'    \item{UserParam$dMAV}{Minimum Acceptable Value (MAV)}
-#'    \item{UserParam$dPU}{A value in [0, 1] that specifies the upper cuttoff for efficacy.  If posterior probability is greater than PU a Go decision is made.}
-#'    \item{UserParam$dPUFutility}{A value in [0, 1] that specifies the threshold probability of futility stopping. If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early for futility.}
+#'    \item{UserParam$dPU}{A value in [0, 1] that specifies the upper cutoff for efficacy.  If posterior
+#'      probability is greater than PU a Go decision is made.}
+#'    \item{UserParam$dPUFutility}{A value in [0, 1] that specifies the threshold probability of futility stopping.
+#'      If the predictive probability of a No Go decision at the end exceeds this value, the trial is stopped early
+#'      for futility.}
 #'    }
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
+#'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
+#'     (unavailable in East Horizon Explore).}
+#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
+#'   \item{Delta}{Estimated experimental-minus-control treatment effect (proportion difference for binary outcomes;
+#'     mean difference for continuous outcomes).}
+#'   \item{CtrlCompleters}{Number of completers in the control arm. Required when the selected conditional-power
+#'     rule uses the estimated treatment effect.}
+#'   \item{TrmtCompleters}{Number of completers in the experimental arm. Required when the selected
+#'     conditional-power rule uses the estimated treatment effect.}
+#'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
+#'     the study duration at the final analysis. Compute and return this value in the R function.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
+#'     conditional-power rule uses the estimated effect and its standard error.}
+#'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
+#'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
+#'     name. Available for designs that support passing state between looks.}
+#' }
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{PostProb}{Numeric posterior probability of exceeding the minimum acceptable value at the final
+#'     analysis, or predictive probability of meeting the final Go rule at an interim analysis.}
+#'   \item{dTrueDelta}{Numeric true experimental-minus-control mean difference used to generate the current
+#'     simulation.}
+#'   \item{dCtrlPostMean}{Numeric posterior mean of the control-arm response mean.}
+#'   \item{dCtrlPostVar}{Numeric posterior variance of the control-arm response mean.}
+#'   \item{dExpPostMean}{Numeric posterior mean of the experimental-arm response mean.}
+#'   \item{dExpPostVar}{Numeric posterior variance of the experimental-arm response mean.}
+#'   \item{dObsMeanCtrl}{Numeric observed mean response in the control arm.}
+#'   \item{dObsMeanExp}{Numeric observed mean response in the experimental arm.}
+#'   \item{dSimMeanCtrl}{Numeric true control-arm response mean used to generate the current simulation.}
+#'   \item{dSimMeanExp}{Numeric true experimental-arm response mean used to generate the current simulation.}
+#' }
+#' @details This Bayesian example supplies Decision and does not return TestStat. Its Delta output stores
+#'   the true generating effect for summary plots; it is not an estimated effect for native Delta-scale futility.
+#'   The assurance generator must supply vTrueDelta, dSimMeanCtrl, and dSimMeanExp in SimData.
+#'
+#' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
+#'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
+#'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
+#'   re-estimated total event/completer count.
 ######################################################################################################################## .
 
-AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL)
-{
-    bInterimAnalysis <- FALSE   # Assuming a fixed design, the next if statement will check this
+AnalyzeUsingBayesianNormals <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+    # Analyze observed completers; simulated dropout responses are not observed data.
+    if ( "CensorInd" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorInd ) & SimData$CensorInd == 1, , drop = FALSE ]
+    } else if ( "CensorIndOrg" %in% names( SimData ) ) {
+        SimData <- SimData[ !is.na( SimData$CensorIndOrg ) & SimData$CensorIndOrg == 1, , drop = FALSE ]
+    }
+    if ( !is.null( LookInfo ) && !is.null( LookInfo$CumCompleters ) ) {
+        nTargetCompleters <- LookInfo$CumCompleters[ LookInfo$CurrLookIndex ]
+        if ( nTargetCompleters < 1 || nTargetCompleters > nrow( SimData ) ) {
+            return( list( ErrorCode = 1L ) )
+        }
+    }
 
-    if( missing( LookInfo ) == FALSE && !is.null( LookInfo ) )
-    {
-        # Step 1 - If this is the IA then subset the data to include only those for the first look. East sends all simulated data
-        
-        if(  LookInfo$CurrLookIndex == 1 )
-        {
+    bInterimAnalysis <- FALSE # Assuming a fixed design, the next if statement will check this
+
+    if ( missing( LookInfo ) == FALSE && !is.null( LookInfo ) ) {
+        # Step 1 - If this is the IA then subset the data to include only those for the first look. East Horizon sends all simulated data
+
+        if ( LookInfo$CurrLookIndex == 1 ) {
             bInterimAnalysis <- TRUE
             SimData <- SimData[ 1:LookInfo$CumCompleters[ LookInfo$CurrLookIndex ], ]
         }
-        
     }
     # Set default values
-    nError 	         <- 0
-    nDecision 	     <- 0
+    nErrorCode <- 0
+    nDecision <- 0
 
     # Extract UserParam values so East Horizon can identify required parameters; passing UserParam directly to a helper
     # may prevent East Horizon from automatically populating the required parameters.
@@ -56,162 +269,169 @@ AnalyzeUsingBayesianNormals <- function(SimData, DesignParam, LookInfo = NULL, U
         dPriorStdDevExp,
         dSigma
     )
-    
-    # Step 2 - Compute the posterior parameters for each treatment - Need to update the prior 
 
-    
-    if( bInterimAnalysis )
-    {
-        # Currently at the interim analysis 
+    # Step 2 - Compute the posterior parameters for each treatment - Need to update the prior
+
+    if ( bInterimAnalysis ) {
+        # Currently at the interim analysis
         # Step 3.1 - If we are at the interim then we need to check futility.
         #            If the probability that we will conclude the trial with a No Go is large, the trial stops for futility
-        
-        #Need to compute the probability of a No GO at the end given the current data.  This requires simulating the remainder of the trial
-        nQtyRepsPP       <- 5000
-        vPostMeanCtrl    <- rnorm( nQtyRepsPP, lPostParams$dPostMeanCtrl, sqrt( lPostParams$dPostVarCtrl ) )
-        vPostMeanExp     <- rnorm( nQtyRepsPP, lPostParams$dPostMeanExp, sqrt( lPostParams$dPostVarExp ) )
-        
-        # Set variables to track the predictive probability 
-        nQtyFutility     <- 0 
-        vCurrentExpPats  <- SimData$Response[ SimData$TreatmentID == 1 ]
+
+        # Need to compute the probability of a No GO at the end given the current data.  This requires simulating the remainder of the trial
+        nQtyRepsPP <- 5000
+        vPostMeanCtrl <- stats::rnorm( nQtyRepsPP, lPostParams$dPostMeanCtrl, sqrt( lPostParams$dPostVarCtrl ) )
+        vPostMeanExp <- stats::rnorm( nQtyRepsPP, lPostParams$dPostMeanExp, sqrt( lPostParams$dPostVarExp ) )
+
+        # Set variables to track the predictive probability
+        nQtyFutility <- 0
+        vCurrentExpPats <- SimData$Response[ SimData$TreatmentID == 1 ]
         vCurrentCtrlPats <- SimData$Response[ SimData$TreatmentID == 0 ]
-        
+
         # Loop to simulate the remainder of the trial using the sampled vPiC and vPiE
-        # At the end of the study run the analysis using the current patients and the future patients. 
+        # At the end of the study run the analysis using the current patients and the future patients.
         nQtyFuturePatients <- LookInfo$CumCompleters[ 2 ] - LookInfo$CumCompleters[ 1 ]
-        nQtyFuturePatientsPerArm <- nQtyFuturePatients/2
-        for( i in 1:nQtyRepsPP )
-        {
+        nQtyFuturePatientsPerArm <- nQtyFuturePatients / 2
+        for ( i in 1:nQtyRepsPP ) {
             # Futility Check - Step 1, simulate the remaining patients in the trial ####
             # Simulate the future data based on post samples and combine with current data at the interim.
-            vExpPats  <- c( vCurrentExpPats, rnorm( nQtyFuturePatientsPerArm, vPostMeanExp[ i ], dSigma ) )
-            vCtrlPats <- c( vCurrentCtrlPats, rnorm( nQtyFuturePatientsPerArm, vPostMeanCtrl[ i ], dSigma ) )
-            
+            vExpPats <- c( vCurrentExpPats, stats::rnorm( nQtyFuturePatientsPerArm, vPostMeanExp[ i ], dSigma ) )
+            vCtrlPats <- c( vCurrentCtrlPats, stats::rnorm( nQtyFuturePatientsPerArm, vPostMeanCtrl[ i ], dSigma ) )
+
             # Futility Check - Step 2, Compute the posterior parameters for this trial ####
             lPostParamsAtTrialEnd <- ComputePosteriorParametersNormal(
                 vCtrlPats,
                 vExpPats,
-                dSigma,
-                dPriorStdDevCtrl,
-                dPriorStdDevExp,
                 dPriorMeanCtrl,
-                dPriorMeanExp
+                dPriorStdDevCtrl,
+                dPriorMeanExp,
+                dPriorStdDevExp,
+                dSigma
             )
-            
+
             # Futility Check - Step 3 - Final Analysis, of this trial, need to sample the posterior distribution of each treatment ####
-            vMeanCtrl<- rnorm( 10000, lPostParamsAtTrialEnd$dPostMeanCtrl, sqrt( lPostParamsAtTrialEnd$dPostVarCtrl ) ) 
-            vMeanExp <- rnorm( 10000, lPostParamsAtTrialEnd$dPostMeanExp,  sqrt( lPostParamsAtTrialEnd$dPostVarExp ) )
-            
+            vMeanCtrl <- stats::rnorm( 10000, lPostParamsAtTrialEnd$dPostMeanCtrl, sqrt( lPostParamsAtTrialEnd$dPostVarCtrl ) )
+            vMeanExp <- stats::rnorm( 10000, lPostParamsAtTrialEnd$dPostMeanExp, sqrt( lPostParamsAtTrialEnd$dPostVarExp ) )
+
             # Compute the posterior probability that the treatment effect is above 0.8
-            # dPostProbGrt = Pr( pi_E - pi_C > 0.8 | Data )      
-            dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ))
-            
-            #Note: At this point we have sampled the posterior at the end of the trial 10,000 times.   If it is close to the boundarly then we
+            # dPostProbGrt = Pr( pi_E - pi_C > 0.8 | Data )
+            dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ) )
+
+            # Note: At this point we have sampled the posterior at the end of the trial 10,000 times.   If it is close to the boundary then we
             #      want to sample more.  If it is 10% less than the boundary then we can conclude futility.  This is just to speed up computations
             #      and avoid larger posterior samples in clear cases
-            if( dPostProbGrt <  UserParam$dPU +0.05 & dPostProbGrt >=  UserParam$dPU - 0.1 )  # The trial concluded futility
-            {
+            if ( dPostProbGrt < UserParam$dPU + 0.05 & dPostProbGrt >= UserParam$dPU - 0.1 ) { # The trial concluded futility
                 # Close to the boundary, want a more accurate estimate, sample more
-                vMeanCtrl <- c( vMeanCtrl, rnorm( 40000, lPostParamsAtTrialEnd$dPostMeanCtrl, sqrt( lPostParamsAtTrialEnd$dPostVarCtrl ) ) )
-                vMeanExp  <- c( vMeanExp, rnorm( 40000, lPostParamsAtTrialEnd$dPostMeanExp,  sqrt( lPostParamsAtTrialEnd$dPostVarExp ) ) )
-                
-                dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ))
-                if( dPostProbGrt < UserParam$dPU )
+                vMeanCtrl <- c( vMeanCtrl, stats::rnorm( 40000, lPostParamsAtTrialEnd$dPostMeanCtrl, sqrt( lPostParamsAtTrialEnd$dPostVarCtrl ) ) )
+                vMeanExp <- c( vMeanExp, stats::rnorm( 40000, lPostParamsAtTrialEnd$dPostMeanExp, sqrt( lPostParamsAtTrialEnd$dPostVarExp ) ) )
+
+                dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ) )
+                if ( dPostProbGrt < UserParam$dPU ) {
                     nQtyFutility <- nQtyFutility + 1
-            }
-            else if( dPostProbGrt <  UserParam$dPU - 0.1 )
-            {
-                # Futility reached, don't need 
+                }
+            } else if ( dPostProbGrt < UserParam$dPU - 0.1 ) {
+                # Futility reached, don't need
                 nQtyFutility <- nQtyFutility + 1
             }
-            
+
             # As an alternative, one could compute the lower bound of the CI at a confidence limit = 0.6 and it would be very similar, but much faster,
             # than the Bayesian analysis
             # The test at the end is frequentist and a Go decision is made if the lower limit of the confidence interval is
             # greater than 0.8, otherwise a No Go is made
             # ttest       <- t.test( vExpPats, vStdPats, conf.level = 0.6 )
             # dLowerLimit <- ttest$conf.int[1]
-            #if( dLowerLimit < 0.8 )  # This would be a No Go
-            #    nQtyFutility <- nQtyFutility + 1   
+            # if( dLowerLimit < 0.8 )  # This would be a No Go
+            #    nQtyFutility <- nQtyFutility + 1
         }
-        
-        dProbStopAtEnd <- nQtyFutility/nQtyRepsPP 
-        if( dProbStopAtEnd > UserParam$dPUFutility ) # Futility
+
+        dProbStopAtEnd <- nQtyFutility / nQtyRepsPP
+        if ( dProbStopAtEnd > UserParam$dPUFutility ) { # Futility
             nDecision <- 3
-        else
+        } else {
             nDecision <- 0
-        
-        dPostProbGrt <-dProbStopAtEnd
-    }
-    else 
-    {
+        }
+
+        dPostProbGrt <- dProbStopAtEnd
+    } else {
         # Step 3.1 - Final Analysis - Need to sample the posterior distribution of each treatment
-        vMeanCtrl <- rnorm( 50000, lPostParams$dPostMeanCtrl, sqrt( lPostParams$dPostVarCtrl ) ) 
-        vMeanExp  <- rnorm( 50000, lPostParams$dPostMeanExp,  sqrt( lPostParams$dPostVarExp ) )
-        
+        vMeanCtrl <- stats::rnorm( 50000, lPostParams$dPostMeanCtrl, sqrt( lPostParams$dPostVarCtrl ) )
+        vMeanExp <- stats::rnorm( 50000, lPostParams$dPostMeanExp, sqrt( lPostParams$dPostVarExp ) )
+
         # Compute the posterior probability that the treatment effect is above 0.8
-        # dPostProbGrt = Pr( pi_E - pi_C > 0.8 | Data )      
+        # dPostProbGrt = Pr( pi_E - pi_C > 0.8 | Data )
         dPostProbGrt <- mean( ifelse( vMeanExp - vMeanCtrl > UserParam$dMAV, 1, 0 ) )
-        
+
         # Step 4 - If the posterior probability is greater than 80% --> Go Decision, otherwise No Go Decision (eg futility)
-        if( dPostProbGrt > UserParam$dPU )
+        if ( dPostProbGrt > UserParam$dPU ) {
             nDecision <- 2
-        else 
+        } else {
             nDecision <- 3
+        }
     }
 
-    # Note: the SimData$vTrueDelta vector was added to the SimData via the return in the SimulatePateintOutcomeNormalAssurance
-    
-    lReturn <- list(Decision = as.integer( nDecision ),
-                    ErrorCode = as.integer( nError ), 
-                    PostProb = dPostProbGrt, 
-                    Delta      = as.double( SimData$vTrueDelta[ 1 ] ), # This is needed for true value plots in East Horizon
-                    dTrueDelta = as.double( SimData$vTrueDelta[ 1 ] ),
-                    dCtrlPostMean = as.double( lPostParams$dPostMeanCtrl ),
-                    dCtrlPostVar = as.double( lPostParams$dPostVarCtrl ),
-                    dExpPostMean = as.double(  lPostParams$dPostMeanExp ),
-                    dExpPostVar = as.double( lPostParams$dPostVarExp  ),
-                    dObsMeanCtrl = as.double( mean( SimData$Response[ SimData$TreatmentID == 0 ] ) ),
-                    dObsMeanExp = as.double( mean( SimData$Response[ SimData$TreatmentID == 1 ] ) ),
-                    dSimMeanCtrl = as.double( SimData$dSimMeanCtrl[ 1 ] ),
-                    dSimMeanExp = as.double( SimData$dSimMeanExp[ 1 ] ) )
+    # Note: the SimData$vTrueDelta vector was added to the SimData via the return in the SimulatePatientOutcomeNormalAssurance
+
+    lReturn <- list(
+        Decision = as.integer( nDecision ),
+        ErrorCode = as.integer( nErrorCode ),
+        PostProb = dPostProbGrt,
+        Delta = as.double( SimData$vTrueDelta[ 1 ] ), # This is needed for true value plots in East Horizon
+        dTrueDelta = as.double( SimData$vTrueDelta[ 1 ] ),
+        dCtrlPostMean = as.double( lPostParams$dPostMeanCtrl ),
+        dCtrlPostVar = as.double( lPostParams$dPostVarCtrl ),
+        dExpPostMean = as.double( lPostParams$dPostMeanExp ),
+        dExpPostVar = as.double( lPostParams$dPostVarExp ),
+        dObsMeanCtrl = as.double( mean( SimData$Response[ SimData$TreatmentID == 0 ] ) ),
+        dObsMeanExp = as.double( mean( SimData$Response[ SimData$TreatmentID == 1 ] ) ),
+        dSimMeanCtrl = as.double( SimData$dSimMeanCtrl[ 1 ] ),
+        dSimMeanExp = as.double( SimData$dSimMeanExp[ 1 ] )
+    )
 
     return( lReturn )
 }
 
-
 ######################################################################################################################## .
 # Helper function to compute the posterior parameters ####
-#' @param vCtrlData Vector of data for the Control treatment
-#' @param vExpData Vector of data for the experimental treatment
-#' @param dPriorMeanCtrl Prior mean for control
-#' @param dPriorStdDevCtrl Prior standard deviation for control
-#' @param dPriorMeanExp Prior mean for experimental
-#' @param dPriorStdDevExp Prior standard deviation for experimental
-#' @param dSigma Known sampling variance
-#' Note: Passing UserParam directly to a helper may prevent East Horizon from automatically populating the required parameters.
 ######################################################################################################################## .
-ComputePosteriorParametersNormal <- function( vCtrlData, vExpData, dPriorMeanCtrl, dPriorStdDevCtrl, dPriorMeanExp, dPriorStdDevExp, dSigma )
-{
-    # Compute the posterior parameters for the Std treatment   
-    dObsMeanCtrl  <- mean( vCtrlData )
-    nQtyPatsCtrl  <- length( vCtrlData )
-    # Posterior precision = 1/variance 
-    dPostPrecCtrl <- ( 1/dPriorStdDevCtrl^2 + nQtyPatsCtrl/dSigma^2 )
-    dPostMeanCtrl <- ( dPriorMeanCtrl/dPriorStdDevCtrl^2 + dObsMeanCtrl*nQtyPatsCtrl/dSigma^2 )/dPostPrecCtrl
-    dPostVarCtrl  <- 1/dPostPrecCtrl
-    
+#' @name ComputePosteriorParametersNormal
+#' @title Compute Posterior Parameters Normal
+#' @description Compute conjugate normal posterior means and variances for control and experimental arms from
+#'   observed responses, arm-specific normal priors, and a known common sampling standard deviation.
+#' @author J. Kyle Wathen and Laurent Spiess
+#' @param vCtrlData Numeric vector of observed control-arm responses.
+#' @param vExpData Numeric vector of observed experimental-arm responses.
+#' @param dPriorMeanCtrl Numeric mean of the control-arm normal prior.
+#' @param dPriorStdDevCtrl Positive numeric standard deviation of the control-arm normal prior.
+#' @param dPriorMeanExp Numeric mean of the experimental-arm normal prior.
+#' @param dPriorStdDevExp Positive numeric standard deviation of the experimental-arm normal prior.
+#' @param dSigma Positive numeric common sampling standard deviation. Its square is the sampling variance.
+#' @return Named list containing dPostMeanCtrl and dPostMeanExp (posterior means) and dPostVarCtrl and dPostVarExp
+#'   (posterior variances).
+#' @details Pass the scalar prior parameters directly to this helper. Passing UserParam to a helper may prevent
+#'   East Horizon from automatically populating the required parameters.
+######################################################################################################################## .
+
+ComputePosteriorParametersNormal <- function( vCtrlData, vExpData, dPriorMeanCtrl, dPriorStdDevCtrl, dPriorMeanExp, dPriorStdDevExp, dSigma ) {
+    # Compute the posterior parameters for the Std treatment
+    dObsMeanCtrl <- mean( vCtrlData )
+    nQtyPatsCtrl <- length( vCtrlData )
+    # Posterior precision = 1/variance
+    dPostPrecCtrl <- ( 1 / dPriorStdDevCtrl^2 + nQtyPatsCtrl / dSigma^2 )
+    dPostMeanCtrl <- ( dPriorMeanCtrl / dPriorStdDevCtrl^2 + dObsMeanCtrl * nQtyPatsCtrl / dSigma^2 ) / dPostPrecCtrl
+    dPostVarCtrl <- 1 / dPostPrecCtrl
+
     # Compute the posterior parameters for the Exp treatment
-    dObsMeanExp  <- mean( vExpData )  
-    nQtyPatsExp  <- length( vExpData )  
-    # Posterior precision = 1/variance 
-    dPostPrecExp <- ( 1/dPriorStdDevExp^2 + nQtyPatsExp/dSigma^2 )
-    dPostMeanExp <- ( dPriorMeanExp/dPriorStdDevExp^2 + dObsMeanExp*nQtyPatsExp/dSigma^2 )/dPostPrecExp
-    dPostVarExp  <- 1/dPostPrecExp
-    
-    lPostParams <- list( dPostMeanCtrl = dPostMeanCtrl,
-                         dPostVarCtrl  = dPostVarCtrl,
-                         dPostMeanExp  = dPostMeanExp,
-                         dPostVarExp   = dPostVarExp )
+    dObsMeanExp <- mean( vExpData )
+    nQtyPatsExp <- length( vExpData )
+    # Posterior precision = 1/variance
+    dPostPrecExp <- ( 1 / dPriorStdDevExp^2 + nQtyPatsExp / dSigma^2 )
+    dPostMeanExp <- ( dPriorMeanExp / dPriorStdDevExp^2 + dObsMeanExp * nQtyPatsExp / dSigma^2 ) / dPostPrecExp
+    dPostVarExp <- 1 / dPostPrecExp
+
+    lPostParams <- list(
+        dPostMeanCtrl = dPostMeanCtrl,
+        dPostVarCtrl = dPostVarCtrl,
+        dPostMeanExp = dPostMeanExp,
+        dPostVarExp = dPostVarExp
+    )
     return( lPostParams )
 }

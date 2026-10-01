@@ -1,52 +1,62 @@
-#  Last Modified Date: {{CREATION_DATE}}
+######################################################################################################################## .
+# Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @param NumSub: Mandatory. The integer number of subjects that need to be simulated, integer value. The argument value is passed from Engine.
-#' @param NumVisit: Mandatory. Integer number of Visits
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID: Mandatory. Array specifying indexes of arms to which subjects are allocated ﴾one arm index per subject. Index for placebo / control is 0.
-#' @param Inputmethod: Mandatory. 0 - Actual values : Indicating that user has given mean and SD values for each visit. These are used to generate responses.
-#' @param VisitTime: Mandatory. Numeric Visit Times
-#' @param MeanControl: Mandatory. Numeric Control Mean for all visits
-#' @param MeanTrt: Mandatory. Numeric Treatment Mean for all visits
-#' @param StdDevControl: Mandatory. Numeric Control Standard Deviations for all visits
-#' @param StdDevTrt: Mandatory. Numeric Treatment Standard Deviations for all visits
-#' @param CorrMat: Mandatory. Correlation Matrix between all visits. Matrix of dimension n*n containing numeric values where n is number of visits. 
-#' @param UserParam Optional. User can pass custom scalar variables defined by users as a member of this list. 
-#'                  User should access the variables using names, for example UserParam$Var1 and not order. 
-#'                  These variables can be of the following types: Integer, Numeric, or Character
-#' 
-#' @return The function must return a list in the return statement of the function. The information below lists 
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'                  \item{ErrorCode}{ Optional value \describe{ 
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
-#'                                     
-#'                  \item{Response[NumVisit]}{ A set of arrays of response for all subjects. Each array corresponds to each visit user has specified}             
-#'                      
-#'                      
-{{FUNCTION_NAME}} <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL )
-{
+#' @title Template: Simulate repeated-measures subject responses
+#' @description Simulate repeated-measures subject responses. Use this template as a starting point for custom
+#'   logic. Preserve the engine-supplied argument names and access named list elements by name. Supply additional
+#'   user-defined inputs through UserParam where that argument is supported.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumVisit Integer number of visits.
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
+#'   changes from baseline at each visit. Preserve this engine-supplied spelling.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
+#' @param MeanControl Numeric vector of control-arm mean responses of length NumVisit, ordered by visit.
+#' @param MeanTrt Numeric vector of experimental-arm mean responses of length NumVisit, ordered by visit.
+#' @param StdDevControl Numeric vector of control-arm response standard deviations of length NumVisit, ordered by
+#'   visit.
+#' @param StdDevTrt Numeric vector of experimental-arm response standard deviations of length NumVisit, ordered by
+#'   visit.
+#' @param CorrMat Numeric correlation matrix between visits, with NumVisit rows and NumVisit columns.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
+#' \describe{
+#'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
+#'     Replace NumVisit by the actual number of visits.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#' @details Return each visit response as a separate named list element: Response1, Response2, ...,
+#'   ResponseNumVisit.
+######################################################################################################################## .
+
+{{FUNCTION_NAME}} <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
     # TO DO : Modify this function appropriately
-    Error 	     <- 0
-    vOutResponse <- c()
-    retval       <- list()
-    
-    # Add code to simulate the patient data as desired.  
+    nErrorCode <- 0
+    vOutResponse <- c( )
+    lReturn <- list( )
+
+    # Add code to simulate the patient data as desired.
     # Example of how to create the return list with Response1, Response2, ..., ResponseNumVisit
-    # Store the generated continuous response values in # an array called retval.
-    # Initializing Response Array to 0	
-    for(i in 1:NumVisit)
-    {
-        strVisitName <- paste0( "Response", i )
+    # Store the generated response vector for each visit in the list lReturn.
+    # Initializing Response Array to 0
+    for ( nVisitIndx in seq_len( NumVisit ) ) {
+        strVisitName <- paste0( "Response", nVisitIndx )
         vOutResponse <- rep( 0, NumSub )
-        retval[[ strVisitName ]] <- as.double( vOutResponse )
+        lReturn[[ strVisitName ]] <- as.double( vOutResponse )
     }
-    
+
     # Use appropriate error handling and modify the
-    # error appropriately 
-    retval$ErrorCode <- as.integer( Error )
-    return( retval )
+    # error appropriately
+    lReturn$ErrorCode <- as.integer( nErrorCode )
+    return( lReturn )
 }

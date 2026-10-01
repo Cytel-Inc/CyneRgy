@@ -1,16 +1,21 @@
-# Template for Initialization function
-Initialize <- function(Seed)
-{
-    # TO DO : Modify this function appropriately
-    
-    Error <- 0
-    set.seed(Seed)
+######################################################################################################################## .
+#' @name Initialize
+#' @title Initialize the R simulation environment
+#' @description Set the R random seed supplied by the engine. Load the survival package for the example environment.
+#' @author J. Kyle Wathen
+#' @param Seed Integer random seed supplied by the engine. Setting the seed here affects the R random number
+#'   generator.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Integer execution status: 0 = no error; a positive value aborts the current simulation but allows
+#'   subsequent simulations to run; a negative value is fatal and stops all further simulations.
+######################################################################################################################## .
+
+Initialize <- function( Seed, UserParam = NULL ) {
+    nErrorCode <- 0
+    set.seed( Seed )
     library( survival )
-    # User may use other options in set.seed like setting 
-    # the Random Number Generator
-    # User may also initialize Global Variables or set up 
-    # the working directory etc. 
-    # Do the error handling Modify Error appropriately 
-    
-    return(as.integer(Error))
+    return( as.integer( nErrorCode ) )
 }

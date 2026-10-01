@@ -1,63 +1,92 @@
 ######################################################################################################################## .
 #' @name SimulatePatientOutcomeBinaryWithAssurance
 #' @title Simulate binary patient outcomes using a Beta distribution prior
-#' 
-#' @description Generate patient outcomes for a binary response trial while incorporating uncertainty about the true
-#' response rates by sampling them from a Beta distribution prior.
-#' 
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param NumArm The number of arms in the trial including experimental and control, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
-#' @param PropResp A vector of expected proportions of response for each arm
-#' @param UserParam A list of user defined parameters in East Horizon.   
-#' If UserParam must be supplied, the list must contain the following named elements:
+#' @description Generate patient outcomes for a binary response trial while incorporating uncertainty about the
+#'   true response rates by sampling them from a Beta distribution prior.
+#' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
+#'   experimental arms in TreatmentID order. Each probability is between 0 and 1.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements:
+#' UserParam must be supplied and must contain the following named elements:
 #' \describe{
-#'    \item{UserParam$dParameter1Ctrl}{For control treament, the design prior parameter 1 in the Beta distribution }
-#'    \item{UserParam$dParameter2Ctrl}{For control treament, the design prior parameter 2 in the Beta distribution }
-#'    \item{UserParam$dParameter1Exp}{For experimental treament, the design prior parameter 1 in the Beta distribution }
-#'    \item{UserParam$dParameter2Exp}{For experimental treament, the design prior parameter 2 in the Beta distribution }
+#'   \item{UserParam$dParameter1Ctrl}{Positive numeric shape1 (alpha) parameter for the control response-probability
+#'     Beta prior.}
+#'   \item{UserParam$dParameter2Ctrl}{Positive numeric shape2 (beta) parameter for the control response-probability
+#'     Beta prior.}
+#'   \item{UserParam$dParameter1Exp}{Positive numeric shape1 (alpha) parameter for the experimental response-probability
+#'     Beta prior.}
+#'   \item{UserParam$dParameter2Exp}{Positive numeric shape2 (beta) parameter for the experimental response-probability
+#'     Beta prior.}
 #' }
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Numeric vector of generated binary subject responses, coded 0 = non-response and 1 = response,
+#'     with one element per subject.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' Example-specific additional output elements:
+#' \describe{
+#'   \item{TrueProbabilityControl}{Numeric vector of the sampled control response probability, repeated for all
+#'     subjects in a simulation.}
+#'   \item{TrueProbabilityExperimental}{Numeric vector of the sampled experimental response probability, repeated
+#'     for all subjects in a simulation.}
+#' }
+#' @details For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
+#'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
+#'   treatment-to-control ratio of proportions). Include these arguments in the function signature for a
+#'   vaccine-efficacy design. Standard binary responses are coded 0 = non-response and 1 = response.
 ######################################################################################################################## .
 
-SimulatePatientOutcomeBinaryWithAssurance <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
-{
-    
+SimulatePatientOutcomeBinaryWithAssurance <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
     # If the user did not specify the user parameters, but still called this function: error
-    if( is.null( UserParam ) )
-    {
-        nError <- 100
-        lReturn <- list( Response = as.double( rep( NA, NumSub ) ), ErrorCode = as.integer( nError ) )
+    if ( is.null( UserParam ) ) {
+        nErrorCode <- 100
+        lReturn <- list( Response = as.double( rep( NA, NumSub ) ), ErrorCode = as.integer( nErrorCode ) )
         return( lReturn )
     }
-    
-    # Step 1: Sample true probability of response 
-    
-    dTrueProbCtrl <- rbeta( 1, UserParam$dParameter1Ctrl, UserParam$dParameter2Ctrl )
-    dTrueProbExp  <- rbeta( 1, UserParam$dParameter1Exp, UserParam$dParameter2Exp )
-    
+
+    # Step 1: Sample true probability of response
+
+    dTrueProbCtrl <- stats::rbeta( 1, UserParam$dParameter1Ctrl, UserParam$dParameter2Ctrl )
+    dTrueProbExp <- stats::rbeta( 1, UserParam$dParameter1Exp, UserParam$dParameter2Exp )
+
     vTrueProb <- c( dTrueProbCtrl, dTrueProbExp )
-    
-    
-    nError           <- 0 # Code for no errors occurred 
-    vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
-    
-    
-    # Loop over the patients and simulate the outcome according to the treatment they 
-    for( nPatIndx in 1:NumSub )
-    {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
-        vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, vTrueProb[ nTreatmentID ] )
+
+    nErrorCode <- 0 # Code for no errors occurred
+    vPatientOutcome <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
+
+    # Loop over the patients and simulate the outcome according to the treatment they
+    for ( nPatIndx in 1:NumSub ) {
+        nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
+        vPatientOutcome[ nPatIndx ] <- stats::rbinom( 1, 1, vTrueProb[ nTreatmentID ] )
     }
-    
-    if( any( is.na( vPatientOutcome ) == TRUE ) )
-        nError <- -100
-   
-    # True Probability of Responses have to be a vector of same length to number of subjects 
-    
-    lReturn <- list( Response = as.double( vPatientOutcome ), 
-                     ErrorCode = as.integer( nError ), 
-                     TrueProbabilityControl = as.double( rep(dTrueProbCtrl, NumSub) ), 
-                     TrueProbabilityExperimental = as.double( rep(dTrueProbExp, NumSub) ) )
+
+    if ( any( is.na( vPatientOutcome ) == TRUE ) ) {
+        nErrorCode <- -100
+    }
+
+    # True Probability of Responses have to be a vector of same length to number of subjects
+
+    lReturn <- list(
+        Response = as.double( vPatientOutcome ),
+        ErrorCode = as.integer( nErrorCode ),
+        TrueProbabilityControl = as.double( rep( dTrueProbCtrl, NumSub ) ),
+        TrueProbabilityExperimental = as.double( rep( dTrueProbExp, NumSub ) )
+    )
     return( lReturn )
 }

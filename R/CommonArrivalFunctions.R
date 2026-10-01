@@ -14,16 +14,18 @@
 #' @param NumPrd Integer number of accrual periods.
 #' @param PrdStart Numeric vector containing the start time of each accrual period; the first value should be `0`.
 #' @param AccrRate Numeric vector containing the accrual rate in each period.
+#' @param Type Integer enrollment type; this implementation supports global enrollment (`0`).
 #' @param UserParam Optional list of user-defined rates named `dRate1`, `dRate2`, and so on.
 #'
 #' @return A list in the format required by the arrival integration point.
 #' @export
 
-GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 )
 {
     return( .CallCommonExampleFunction(
         "GeneratePoissonArrival", "GeneratePoissonArrival.R", "GeneratePoissonArrival",
-        list( NumSub = NumSub, NumPrd = NumPrd, PrdStart = PrdStart, AccrRate = AccrRate, UserParam = UserParam )
+        list( NumSub = NumSub, NumPrd = NumPrd, PrdStart = PrdStart, AccrRate = AccrRate, UserParam = UserParam,
+              Type = Type )
     ) )
 }
 

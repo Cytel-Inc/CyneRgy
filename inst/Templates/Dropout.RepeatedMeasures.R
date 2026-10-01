@@ -1,82 +1,60 @@
-#  Last Modified Date: {{CREATION_DATE}}
+######################################################################################################################## .
+# Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @param NumSub Mandatory. The integer value specifying the number of patients or subjects in the trial. The numeric value of the argument value is sent in when called.
-#' @param NumArm Mandatory. The number of arms in the trial including experimental and control, integer value. The argument value is passed from Engine.
-#' @param TreatmentID Vector specifying indexes of arms to which subjects are allocated (one arm index per subject). Index for placebo / control is 0. 
-#' @param DropMethod Input method for specifying dropout parameters. 
-#'           \describe{
-#'           \item{Repeated Measures}{1 - Cumulative Probability of Dropout by Visit. 2 - Cumulative Probability of Dropout by Time}
-#'           }
-#' @param NumVisit Mandatory for Repeated Measures. Integer indicating number of visits.
-#' @param VisitTime Mandatory for Repeated Measures. Vector containing numeric visit times for each visit.
-#' @param ByTime Mandatory for Repeated Measures. Vector containing numeric by time for dropouts.
-#' @param DropParamControl Mandatory for Repeated Measures. Vector containing numeric parameters used to generate dropout times for Control arm.
-#' @param DropParamTrt Mandatory for Repeated Measures. Vector containing numeric parameters used to generate dropout times for Treatment arm.
-#' @param UserParam : User can pass custom scalar variables defined by users as a member of this list. 
-#'                    User should access the variables using names, for example UserParam$Var1 and not order. 
-#'                    These variables can be of the following types: Integer, Numeric, or Character
-
-#' @return The function must return a list in the return statement of the function. The information below lists 
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'             \describe{
-#'                  \item{ErrorCode}{Optional integer value \describe{ 
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
-#'                  \item{DropOutTime}{ Applicable for Repeated measures. A numeric array of generated dropout times.}
-#'                  \item{CensorInd[NumVisit]}{Applicable for Repeated Measures design. A set of arrays of censor indicator values for all subjects. Each array corresponds to each visit user has specified.}
-#'                  \item{DropoutVisitID}{Applicable for Repeated Measures design. An array of 1-based Visit ID after which the patient dropped out.}
-#'                      }
-
+#' @title Template: Generate dropout for repeated-measures outcomes
+#' @description Generate dropout for repeated-measures outcomes. Use this template as a starting point for custom
+#'   logic. Preserve the engine-supplied argument names and access named list elements by name. Supply additional
+#'   user-defined inputs through UserParam where that argument is supported.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#' @param NumVisit Integer number of visits. The engine sets this to 1 when DropMethod = 2.
+#' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
+#'   visit.
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#' @param DropMethod Integer dropout input method for repeated measures: 1 = cumulative probability of dropout by
+#'   visit; 2 = cumulative probability of dropout by time.
+#' @param ByTime Numeric dropout assessment times. For DropMethod = 1, a vector of length NumVisit equal to
+#'   VisitTime; for DropMethod = 2, a single numeric time.
+#' @param DropParamControl Control-arm cumulative dropout probabilities. For DropMethod = 1, a numeric vector of
+#'   length NumVisit ordered by visit; for DropMethod = 2, a single numeric probability by ByTime.
+#' @param DropParamTrt Experimental-arm cumulative dropout probabilities. For DropMethod = 1, a numeric vector of
+#'   length NumVisit ordered by visit; for DropMethod = 2, a single numeric probability by ByTime.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
+#'   method; additional custom outputs may also be included.
+#' \describe{
+#'   \item{CensorInd1, ..., CensorIndNumVisit}{Integer censor-indicator vectors, one per visit: 0 =
+#'     dropout/non-completer; 1 = completer.}
+#'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
+#'     element per subject. Inf indicates no dropout.}
+#'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
+#'     subject.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#' @details Return at least one of the three supported dropout representations. East Horizon uses CensorInd1, ...,
+#'   CensorIndNumVisit first, then DropoutVisitID if censor indicators are absent, then DropOutTime if neither of
+#'   the other representations is returned. Inf dropout times indicate no dropout.
+######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID,
-                     DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL )
-{
-  # TO DO : Modify this function appropriately 
-    Error     <-  0
-    initval   <- c()
-    retval    <- list()
-    
-    # Initializing CensorInd Arrays
-    for(i in 1:NumVisit)
-    {
-        strCensorIndName <- paste0( "CensorInd", i )
-        CensorInd        <- rep(1,NumSub)
-        retval[[strCensorIndName]] <- as.integer(CensorInd)
+                             DropMethod, ByTime, DropParamControl, DropParamTrt, UserParam = NULL ) {
+    # Initialize the visit-specific censor indicators to no dropout.
+    nErrorCode <- 0
+    lReturn <- list( )
+    for ( nVisitIndex in seq_len( NumVisit ) ) {
+        strCensorIndName <- paste0( "CensorInd", nVisitIndex )
+        lReturn[[ strCensorIndName ]] <- rep( 1L, NumSub )
     }
-  
-    # Initializing DropOutTime and DropoutVisitID to Inf
-    # This effectively means that all the patients have dropped out at an infinite time,
-    # i.e., effectively they haven't dropped out at all, meaning that they all are completers
-    for(i in 1:NumSub)
-    {
-        initval[i] = Inf;
-    }
-  
-    retval$DropoutVisitID <- as.integer(initval)
-    retval$DropOutTime    <- as.double(rep(NumVisit, NumSub))
-  
-    # Use appropriate error handling and modify the
-    # Error appropriately in each of the methods
-    retval$ErrorCode <- as.integer(Error)
-    
-    # Repeated Measures Dropout Output Hierarchy
-    # Step 1: If user has returned Censor Indicator arrays CensorInd1, CensorInd2, ..., CensorInd[NumVisit] from their R code, 
-    # then no other outputs are required. In that case, all other outputs become optional and the workflow ends here. 
-    # If user has not returned Censor Indicator arrays from their R code, please go to Step 2.
-    # 
-    # Step 2: If user has returned DropoutVisitID from their R code, then no other outputs are required. 
-    # In that case, all other outputs become optional and the workflow ends here.  
-    # If user has not returned DropoutVisitID from their R code, please go to Step 3.
-    # 
-    # Step 3: If user has returned DropOutTime from their R code, then simulations run successfully and 
-    # all other outputs becomes optional. no other outputs are required. If user has not returned DropOutTime from their R code, 
-    # then the application will return an error code. The workflow ends here. 
-    
-    
-    #retval is one of the options: 1) CensorID, 2) VisitID, 3) DropOutTime
-    
-    return( retval );
+
+    # Replace the censor indicators using the chosen dropout model.
+    # Alternatively, return DropoutVisitID or DropOutTime instead of CensorInd1, ... .
+    # Do not return contradictory representations; censor indicators take precedence.
+    lReturn$ErrorCode <- as.integer( nErrorCode )
+    return( lReturn )
 }

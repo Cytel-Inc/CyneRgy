@@ -258,7 +258,7 @@ CyneRgy::PlotExampleFlowchart(
         ),
         "Analysis" = c(
             "Load patient responses and true response probabilities",
-            "Calculate Z-statistic using East formula (same way as East Horizon)", 
+            "Calculate Z-statistic using the East Horizon formula",
             "Return decision and true response probabilities (will be part of Phase 2 results)"
         )
     )
