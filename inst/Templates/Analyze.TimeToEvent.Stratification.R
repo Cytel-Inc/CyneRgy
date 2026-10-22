@@ -68,21 +68,15 @@
 #'     available for `Time-to-Event` tests.}
 #'   \item{FollowUpDur}{Numeric. Follow-up duration. East Horizon Explore: Only available for `Endpoint Type =
 #'     Time-to-Event`. East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{TestStatType}{Integer. Test statistic type. For `Time-to-Event` tests: - `0`: Logrank. - `1`: Wilcoxon
-#'     Gehan. - `2`: Harrington Fleming. - `3`: Stratified Logrank. - `4`: Stratified Wilcoxon Gehan. - `5`:
-#'     Stratified Harrington Fleming. For `Continuous` test: - `3`: Z-test. - `4`: t-test. For `Binary` test: -
-#'     `5`: Wald. - `6`: Score. East Horizon Explore: Not available. East Horizon Design: Not available for `Test =
-#'     Difference of Proportions or Odds Ratio of Proportions` (Binary).}
+#'   \item{TestStatType}{Integer survival test statistic type: 0 = logrank; 1 = Wilcoxon Gehan; 2 = Harrington Fleming; 3, 4,
+#'     and 5 are the corresponding stratified tests. Available in East Horizon Design.
+#'   }
 #'   \item{HFParam1}{Numeric. First parameter of Harrington Fleming. East Horizon Explore: Not available. East
 #'     Horizon Design: Only available for `Time-to-Event` tests.}
 #'   \item{HFParam2}{Numeric. Second parameter of Harrington Fleming. East Horizon Explore: Not available. East
 #'     Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{TrtEffNull}{Numeric. Treatment effect under null on natural scale. East Horizon Explore: Not available
-#'     for `Endpoint Type = Continuous with Repeated Measures`. Set to `0` for `Trial Type = Superiority`. Set to
-#'     `Delta_0 = log(HR_0)` for `Endpoint Type = Time-to-Event`. Set to `1 - rho_0` for Vaccine Efficacy
-#'     (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson
-#'     Rates`). East Horizon Design: Set to `0` for `Trial Type = Superiority`. Set to `Delta_0 = log(HR_0)` for
-#'     `Time-to-Event` tests.}
+#'   \item{TrtEffNull}{Numeric null treatment effect on the log hazard-ratio scale; 0 for superiority.
+#'   }
 #'   \item{NumHzrdPrd}{Integer. Number of Hazard pieces. East Horizon Explore: Not available. East Horizon Design:
 #'     Only available for `Time-to-Event` tests.}
 #'   \item{PrdAt}{Numeric. Period starting value. East Horizon Explore: Not available. East Horizon Design: Only
@@ -99,33 +93,6 @@
 #'   \item{TestStratFactors}{Array of Character. Array of factor names included in the analysis. Length is between
 #'     1 and `NumStratFactors`. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` with
 #'     `Stratification` turned on. East Horizon Design: Not available.}
-#'   \item{NumSubPops}{Integer. Number of subpopulations. East Horizon Explore: Only available for `Endpoint Type =
-#'     Time-to-Event` with `Stratification` and `Subpopulations` turned on. East Horizon Design: Not available.}
-#'   \item{SubPops}{Named List. Named list of length equal to the number of subpopulations, indicating factor
-#'     details. For example, `SubPops["Factor1"]` is an array of level names for Factor 1. East Horizon Explore:
-#'     Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.
-#'     East Horizon Design: Not available.}
-#'   \item{SubpopName}{Array of Character. Array of length equal to the number of subpopulations, indicating the
-#'     subpopulation names. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` with
-#'     `Stratification` and `Subpopulations` turned on. East Horizon Design: Not available.}
-#'   \item{WindCond}{Integer. Winning condition: - `1`: At least subpopulation 1. - `2`: At least subpopulation 2.
-#'     - `3`: At least subpopulation 3. - `4`: At least subpopulation 4. - `5`: At least one subpopulation. - `6`:
-#'     At least two subpopulations. - `7`: At least three subpopulations. - `8`: At least four subpopulations. -
-#'     `9`: At least full population. - `10`: All populations. East Horizon Explore: Only available for `Endpoint
-#'     Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on. East Horizon Design: Not
-#'     available.}
-#'   \item{PlanEndTrial}{Integer. Planned end of trial: - `1`: Subpopulation 1. - `2`: Subpopulation 2. - `3`:
-#'     Subpopulation 3. - `4`: Subpopulation 4. - `5`: Full population. East Horizon Explore: Only available for
-#'     `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on. East Horizon Design:
-#'     Not available.}
-#'   \item{TransitionMatrix}{Matrix of Numeric. Transition matrix between all populations, including full
-#'     population and subpopulations. Dimension of `(NumSubPops + 1) x (NumSubPops + 1)`. East Horizon Explore:
-#'     Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.
-#'     East Horizon Design: Not available.}
-#'   \item{PropAlpha}{Vector of Numeric. Vector of length `(NumSubPops + 1)`, indicating the proportion of alpha
-#'     for all populations, including full population and subpopulations. East Horizon Explore: Only available for
-#'     `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on. East Horizon Design:
-#'     Not available.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -229,9 +196,8 @@
 #'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
 #'   re-estimated total event/completer count.
 #'
-#' SimData also contains the subject-level stratification-factor columns named in DesignParam$StratFactors. When
-#'   subpopulations are enabled, Decision, TestStat, and HR are named lists with one element for the full
-#'   population and each subpopulation, using the population names defined by the design.
+#' SimData also contains the subject-level stratification-factor columns named in DesignParam$StratFactors.
+#'   This function returns scalar results. Use AnalyzeSubpopulation for subpopulation-specific analyses.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {

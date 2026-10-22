@@ -23,15 +23,12 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{CensorInd1, ..., CensorIndNumVisit}{Integer censor-indicator vectors, one per visit: 0 =
 #'     dropout/non-completer; 1 = completer.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
-#'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
-#'     subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -39,7 +36,7 @@
 #' @details Return at least one of the three supported dropout representations. East Horizon uses CensorInd1, ...,
 #'   CensorIndNumVisit first, then DropoutVisitID if censor indicators are absent, then DropOutTime if neither of
 #'   the other representations is returned. Inf dropout times indicate no dropout. This example implements only
-#'   two-arm dropout by time (NumArm = 2 and DropMethod = 2); unsupported configurations return ErrorCode = -1.
+#'   two-arm dropout by time (NumArm = 2 and DropMethod = 2).
 ######################################################################################################################## .
 
 GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, TreatmentID, DropMethod, ByTime,
@@ -51,9 +48,6 @@ GenerateDropoutTimeForRM <- function( NumSub, NumArm, NumVisit, VisitTime, Treat
     # We modify this vector later
     vDropoutTime <- rep( Inf, NumSub )
 
-    if ( NumArm != 2 || DropMethod != 2 ) {
-        return( list( DropOutTime = vDropoutTime, ErrorCode = -1L ) )
-    }
 
     # Identify the patients from Control and Experimental arm
     vIndexControl <- which( TreatmentID == 0 )

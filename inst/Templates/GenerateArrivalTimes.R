@@ -6,13 +6,10 @@
 #'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
 #'   inputs through UserParam where that argument is supported.
 #' @param NumSub Integer number of subjects in the trial.
-#' @param Type Integer enrollment type: 0 = global enrollment; 1 = regional enrollment. This function
-#'   implements global enrollment and defaults to 0. Use the regional arguments described below for a regional
-#'   implementation.
+#' @param Type Integer enrollment type. This function supports global enrollment (0), the default.
 #' @param NumPrd Integer number of accrual periods.
 #' @param PrdStart Numeric vector of accrual-period starting times of length NumPrd. The first period starts at 0.
 #' @param AccrRate Numeric vector of accrual rates (subjects per unit time), with one element per accrual period.
-#'   For regional enrollment, one element per region.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -26,11 +23,8 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#' @details These functions use global enrollment inputs. Regional enrollment can also provide Type (0 = global, 1
-#'   = regional), RegionName (character region names), RegionStart (numeric region start times), and
-#'   EnrollmentCapPcnt (numeric enrollment caps in percent), with one element per region. Add these engine-supplied
-#'   arguments to the function signature when implementing regional enrollment. For global enrollment, use NumPrd,
-#'   PrdStart, and AccrRate.
+#' @details This function uses the global enrollment inputs NumPrd, PrdStart, and AccrRate.
+
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {

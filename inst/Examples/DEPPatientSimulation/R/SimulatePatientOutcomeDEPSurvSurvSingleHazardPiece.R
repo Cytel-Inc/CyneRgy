@@ -36,6 +36,7 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
+#' Unnamed endpoint-parameter lists are interpreted in EndpointName order for compatibility.
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -52,6 +53,9 @@ SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, 
                                                                NumPrd, PrdTime, SurvParam, PropResp = NULL,
                                                                UserParam = NULL ) {
     nErrorCode <- 0
+    if ( is.null( names( SurvParam ) ) ) {
+        names( SurvParam ) <- EndpointName[ seq_along( SurvParam ) ]
+    }
     vPatientOutcomeEP1 <- rep( 0, NumSub )
     vPatientOutcomeEP2 <- rep( 0, NumSub )
     lResponse <- list( )

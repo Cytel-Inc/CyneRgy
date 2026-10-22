@@ -52,9 +52,6 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
                                                  SurvParam, UserParam = NULL ) {
     nErrorCode <- 0
 
-    if ( !SurvMethod %in% c( 1, 2, 3 ) ) {
-        return( list( SurvivalTime = rep( NA_real_, NumSub ), ErrorCode = -100L ) )
-    }
 
     # Initialize vectors
     vSurvResponses <- rep( NA_real_, NumSub )
@@ -90,8 +87,7 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
 
             for ( nArmIdx in 1:NumArm ) {
                 dSurvTime <- vSurvTimes[ nArmIdx ]
-                if ( is.finite( vS[ nArmIdx ] ) && is.finite( dSurvTime ) &&
-                    vS[ nArmIdx ] > 0 && vS[ nArmIdx ] < 1 && dSurvTime > 0 ) {
+                if ( vS[ nArmIdx ] > 0 && vS[ nArmIdx ] < 1 && dSurvTime > 0 ) {
                     vHazardRates[ nArmIdx ] <- -log( vS[ nArmIdx ] ) / dSurvTime
                 } else {
                     vHazardRates[ nArmIdx ] <- NA
@@ -106,7 +102,7 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
             vHazardRates <- rep( NA, NumArm )
 
             for ( nArmIdx in 1:NumArm ) {
-                if ( is.finite( vMedian[ nArmIdx ] ) && vMedian[ nArmIdx ] > 0 ) {
+                if ( vMedian[ nArmIdx ] > 0 ) {
                     vHazardRates[ nArmIdx ] <- log( 2 ) / vMedian[ nArmIdx ]
                 } else {
                     vHazardRates[ nArmIdx ] <- NA

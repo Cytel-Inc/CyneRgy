@@ -16,8 +16,7 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}

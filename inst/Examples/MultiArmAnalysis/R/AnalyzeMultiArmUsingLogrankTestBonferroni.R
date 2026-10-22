@@ -14,67 +14,20 @@
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
-#'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
-#'     element per subject. Inf indicates no dropout.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
-#'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
-#'   as indicated below.
+#'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
+#'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
-#'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
 #'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
-#'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of
-#'     arms - 1), containing the ratios of the experimental group sample sizes to the control group sample size.}
-#'   \item{CriticalPoint}{Numeric. Critical value. East Horizon Explore: Only available if `Statistical Design =
-#'     Fixed Sample`. Not available for `Study Objective = Dose Finding`. East Horizon Design: Not available for
-#'     `Combining P-Values (MAMS)` tests.}
-#'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MaxEvents}{Integer maximum number of events in the trial.}
-#'   \item{FollowUpType}{Integer. Follow-up type: – `0`: Until the end of the study. – `1`: For a fixed period.
-#'     East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not available for `Study Objective
-#'     = Dose Finding`. East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{FollowUpDur}{Numeric. Follow-up duration. East Horizon Explore: Only available for `Endpoint Type =
-#'     Time-to-Event`. Not available for `Study Objective = Dose Finding`. East Horizon Design: Only available for
-#'     `Time-to-Event` tests.}
-#'   \item{TestStatType}{Integer. Test statistic type: - `3`: Z-test. - `4`: t-test. East Horizon Explore: Only
-#'     available for `Endpoint Type = Continuous`. East Horizon Design: Only available for `Continuous` tests.}
-#'   \item{PValCombMethod}{Integer. P-value combination method: - `0`: Inverse normal. East Horizon Explore: Not
-#'     available. East Horizon Design: Only available for `Combining P-Values (MAMS)` tests.}
-#'   \item{w1}{Numeric. Inverse normal weights for stage 1. East Horizon Explore: Not available. East Horizon
-#'     Design: Only available for `Combining P-Values (MAMS)` tests.}
-#'   \item{w2}{Numeric. Inverse normal weights for stage 2. East Horizon Explore: Not available. East Horizon
-#'     Design: Only available for `Combining P-Values (MAMS)` tests.}
-#'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: – `0`:
-#'     Bonferroni. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values: – `0`: Bonferroni. – `1`: Sidak.
-#'     – `2`: Simes. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. – `10`: Holm's Step Down. – `11`: Hommel's Step Up. – `12`: Dunnett's
-#'     Step Down. – `13`: Dunnett's Step Up.}
 #'   \item{NumTreatments}{Integer number of experimental treatment arms, excluding control.}
-#'   \item{AlphaProp}{Vector of Numeric. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
-#'     containing the proportion of Alpha for each treatment arm. East Horizon Explore: Only available for
-#'     `Multiple Comparison Procedure = 4 (Weighted Bonferroni) or 6 (Fallback)`. Not available for `Study
-#'     Objective = Dose Finding`. East Horizon Design: Only available for `Multiple Comparison Procedure = 4
-#'     (Weighted Bonferroni) or 6 (Fallback)`. Not available for `Test = MAMS Difference of Means: Combining
-#'     P-Values (Continuous) or MAMS Difference of Proportions: Combining P-Values (Binary) or MAMS Logrank
-#'     (Time-to-Event)`.}
-#'   \item{TestSeq}{Vector of Integer. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
-#'     containing the test sequence for each comparison (each treatment arm). East Horizon Explore: Only available
-#'     for `Multiple Comparison Procedure = 5 (Fixed Sequence) or 6 (Fallback)`. Not available for `Study Objective
-#'     = Dose Finding`. East Horizon Design: Only available for `Multiple Comparison Procedure = 5 (Fixed Sequence)
-#'     or 6 (Fallback)`. Not available for `Test = MAMS Difference of Means: Combining P-Values (Continuous) or
-#'     MAMS Difference of Proportions: Combining P-Values (Binary) or MAMS Logrank (Time-to-Event)`.}
 #'   \item{IsArmPresent}{Vector of Integer. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     indicating whether each arm is still in the trial or was dropped in the interim: - `0`: Dropped in the
 #'     interim. - `1`: Still present. East Horizon Explore: Fixed to `1` for the first look and for `Statistical
 #'     Design = Fixed Sample`. East Horizon Design: Fixed to `1` for the first look and for `Statistical Design =
 #'     Fixed Sample`.}
-#'   \item{UpdatedAllocInfo}{Vector of Numeric. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
-#'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
-#'     have been updated during treatment selection.}
-#'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -84,24 +37,14 @@
 #'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
 #'   \item{InfoFrac}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the information fraction
 #'     for each look.}
-#'   \item{CumAlpha}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the cumulative alpha spent
-#'     (for one-sided tests) for each look. East Horizon Design: Only available if `Test Type = One-sided`.}
-#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative event for each
-#'     look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not available for `Study
-#'     Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
-#'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
-#'     lower. – `5`: One-sided efficacy lower, futility upper.}
+#'   \item{RejType}{Integer one-sided rejection type supported by the decision helpers: 0 = upper efficacy;
+#'     1 = upper futility; 2 = lower efficacy; 3 = lower futility; 4 = upper efficacy and lower futility;
+#'     5 = lower efficacy and upper futility.}
 #'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Not available for `Study Objective
 #'     = Dose Finding`. Possible values: – `0`: Z scale. East Horizon Design: Possible values: `1`: Adjusted
 #'     p-value scale.}
 #'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
 #'     values for each look. East Horizon Explore: Not available for `Study Objective = Dose Finding`.}
-#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: – `2`: Delta
-#'     scale. – `6`: Hazard ratio scale. East Horizon Design: Possible values: – `1`: Adjusted p-value scale. –
-#'     `2`: Delta scale. – `6`: Hazard ratio scale.}
-#'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
-#'     values for each look.}
 #' }
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
 #'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
@@ -110,17 +53,13 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
 #'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
 #'     (unavailable in East Horizon Explore). Return one value per experimental arm in treatment-ID order.}
-#'   \item{TestStat}{Numeric vector of test statistics on the Wald (Z) scale, with one value per experimental arm in
-#'     treatment-ID order.}
 #'   \item{HR}{Numeric vector of estimated treatment-to-control hazard ratios, one per experimental arm in
 #'     treatment-ID order.}
-#'   \item{Delta}{Estimated log hazard ratio (natural logarithm of HR).}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{AdjPVal}{Numeric vector of p-values adjusted for multiple comparisons, one per experimental arm.}
@@ -169,21 +108,9 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
 
     # This is the calendar time in the trial that the patient event is observed
     SimData$TimeOfEvent <- SimData$ArrivalTime + SimData$SurvivalTime
-    # Censor survival observations at dropout and any fixed follow-up limit.
-    SimData$TimeOfObservation <- SimData$TimeOfEvent
-    SimData$Event <- 1L
-    vCensorTimes <- rep( Inf, nrow( SimData ) )
-    if ( "DropOutTime" %in% names( SimData ) ) {
-        vCensorTimes <- SimData$DropOutTime
-    }
-    if ( !is.null( DesignParam$FollowUpType ) && DesignParam$FollowUpType == 1 ) {
-        vCensorTimes <- pmin( vCensorTimes, DesignParam$FollowUpDur )
-    }
-    SimData$Event <- as.integer( SimData$SurvivalTime <= vCensorTimes )
-    SimData$TimeOfObservation <- SimData$ArrivalTime + pmin( SimData$SurvivalTime, vCensorTimes )
 
     # Order the data by observed time for the remainder of the computations
-    SimData <- SimData[ order( SimData$TimeOfObservation ), ]
+    SimData <- SimData[ order( SimData$TimeOfEvent ), ]
 
     if ( nrow( SimData ) < nQtyOfEvents ) {
         return( list(
@@ -197,18 +124,15 @@ AnalyzeMultiArmUsingLogrankTestBonferroni <- function( SimData, DesignParam, Loo
         ) )
     }
 
-    vObservedEventTimes <- SimData$TimeOfEvent[ SimData$Event == 1 ]
-    if ( nQtyOfEvents < 1 || nQtyOfEvents > length( vObservedEventTimes ) ) {
-        return( list( ErrorCode = 1L ) )
-    }
-    dTimeOfAnalysis <- vObservedEventTimes[ nQtyOfEvents ]
+    vEventTimes <- SimData$TimeOfEvent
+    dTimeOfAnalysis <- vEventTimes[ nQtyOfEvents ]
 
     SimData <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ]
-    SimData$Event <- SimData$Event * as.integer( SimData$TimeOfEvent <= dTimeOfAnalysis )
+    SimData$Event <- as.integer( SimData$TimeOfEvent <= dTimeOfAnalysis )
     SimData$ObservedTime <- ifelse(
-        SimData$TimeOfObservation > dTimeOfAnalysis,
+        SimData$TimeOfEvent > dTimeOfAnalysis,
         dTimeOfAnalysis - SimData$ArrivalTime,
-        SimData$TimeOfObservation - SimData$ArrivalTime
+        SimData$TimeOfEvent - SimData$ArrivalTime
     )
 
     SimData <- SimData[ order( SimData$ObservedTime ), ]

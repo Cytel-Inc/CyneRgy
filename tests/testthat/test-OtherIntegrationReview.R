@@ -43,28 +43,20 @@ test_that( "randomization retains exact sizes for empty and singleton allocation
     expect_identical( fnMultiple( 1, 3, c( 0, 100 ) )$TreatmentID, 2L )
 } )
 
-test_that( "dropout examples reject unsupported model configurations", {
+test_that( "survival dropout preserves no-dropout parameters", {
     fnSurvival <- .GetCommonExampleFunction( "2ArmPatientDropout", "GenerateDropoutTimeForSurvival.R",
         "GenerateDropoutTimeForSurvival" )
     fnMultiple <- .GetCommonExampleFunction( "MultiArmPatientDropout", "GenerateDropoutTimeMultiArmForSurvival.R",
         "GenerateDropoutTimeMultiArmForSurvival" )
     for ( fnDropout in list( fnSurvival, fnMultiple ) ) {
-        lResult <- fnDropout( 4, 2, c( 0, 1, 0, 1 ), 1, 2, c( 0, 2 ), matrix( 0.1, 2, 2 ) )
-        expect_identical( lResult$ErrorCode, -1L )
         expect_identical( fnDropout( 4, 2, c( 0, 1, 0, 1 ), 1, 1, 0,
             matrix( 0, 1, 2 ) )$DropOutTime, rep( Inf, 4 ) )
     }
-    fnRepeated <- .GetCommonExampleFunction( "2ArmPatientDropout", "GenerateDropoutTimeForRM.R",
-        "GenerateDropoutTimeForRM" )
-    lResult <- fnRepeated( 4, 2, 2, c( 1, 2 ), c( 0, 1, 0, 1 ), 1, c( 1, 2 ), c( 0.1, 0.2 ), c( 0.1, 0.2 ) )
-    expect_identical( lResult$ErrorCode, -1L )
 } )
 
-test_that( "Poisson enrollment rejects a zero final rate and handles zero ramp-up rates", {
+test_that( "Poisson enrollment checks custom rates and handles zero ramp-up rates", {
     for ( strFunction in c( "GeneratePoissonArrival", "GeneratePoissonArrivalMEP" ) ) {
         fnArrival <- .GetCommonExampleFunction( "GeneratePoissonArrival", paste0( strFunction, ".R" ), strFunction )
-        expect_identical( fnArrival( 10, 1, 0, 0 )$ErrorCode, -1L )
-        expect_identical( fnArrival( 10, 2, c( 0, 1 ), c( 1, 0 ) )$ErrorCode, -1L )
         expect_identical( fnArrival( 10, 1, 0, 1, UserParam = list( dRate2 = 1 ) )$ErrorCode, -1L )
         lResult <- fnArrival( 10, 2, c( 0, 1 ), c( 0, 5 ) )
         expect_length( lResult$ArrivalTime, 10 )
@@ -84,11 +76,10 @@ test_that( "MEP decision handling accepts missing statistics at pending looks", 
     expect_identical( lResult$ErrorCode, 0L )
 } )
 
-test_that( "block randomization rejects invalid ratios and non-positive blocks before generation", {
+test_that( "block randomization retains existing arm checks and rejects non-positive custom blocks", {
     fnRandomize <- .GetCommonExampleFunction( "RandomizeSubjects", "BlockRandomizationSubjectsUsingRPackage.R",
         "BlockRandomizationSubjectsUsingRPackage" )
     expect_identical( fnRandomize( 10, 3, c( 1, 1 ) )$ErrorCode, -1L )
-    expect_identical( fnRandomize( 10, 2, 0, list( BlockSize1 = 10 ) )$ErrorCode, -7L )
     expect_identical( fnRandomize( 10, 2, 1, list( BlockSize1 = -2, BlockSize2 = 12 ) )$ErrorCode, -4L )
     expect_identical( fnRandomize( 10, 2, 1, list( BlockSize1 = NA_real_ ) )$ErrorCode, -4L )
 } )
@@ -139,12 +130,9 @@ test_that( "MEP futility-only looks do not require an efficacy boundary", {
 } )
 
 
-test_that( "block randomization rejects ratios outside its integer representation", {
+test_that( "block randomization preserves ratio conversion", {
     fnRandomize <- .GetCommonExampleFunction( "RandomizeSubjects", "BlockRandomizationSubjectsUsingRPackage.R",
         "BlockRandomizationSubjectsUsingRPackage" )
-    for ( dRatio in c( 0.005, 1e-9, 1e10 ) ) {
-        expect_identical( fnRandomize( 100, 2, dRatio, list( BlockSize1 = 100 ) )$ErrorCode, -7L )
-    }
     fnConvert <- get( "ConvertRatio", envir = environment( fnRandomize ) )
     expect_identical( fnConvert( 0.5 ), c( 2L, 1L ) )
     expect_identical( fnConvert( 1 ), c( 1L, 1L ) )

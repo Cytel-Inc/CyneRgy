@@ -65,21 +65,15 @@
 #'     available for `Time-to-Event` tests.}
 #'   \item{FollowUpDur}{Numeric. Follow-up duration. East Horizon Explore: Only available for `Endpoint Type =
 #'     Time-to-Event`. East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{TestStatType}{Integer. Test statistic type. For `Time-to-Event` tests: - `0`: Logrank. - `1`: Wilcoxon
-#'     Gehan. - `2`: Harrington Fleming. - `3`: Stratified Logrank. - `4`: Stratified Wilcoxon Gehan. - `5`:
-#'     Stratified Harrington Fleming. For `Continuous` test: - `3`: Z-test. - `4`: t-test. For `Binary` test: -
-#'     `5`: Wald. - `6`: Score. East Horizon Explore: Not available. East Horizon Design: Not available for `Test =
-#'     Difference of Proportions or Odds Ratio of Proportions` (Binary).}
+#'   \item{TestStatType}{Integer survival test statistic type: 0 = logrank; 1 = Wilcoxon Gehan; 2 = Harrington Fleming; 3, 4,
+#'     and 5 are the corresponding stratified tests. Available in East Horizon Design.
+#'   }
 #'   \item{HFParam1}{Numeric. First parameter of Harrington Fleming. East Horizon Explore: Not available. East
 #'     Horizon Design: Only available for `Time-to-Event` tests.}
 #'   \item{HFParam2}{Numeric. Second parameter of Harrington Fleming. East Horizon Explore: Not available. East
 #'     Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{TrtEffNull}{Numeric. Treatment effect under null on natural scale. East Horizon Explore: Not available
-#'     for `Endpoint Type = Continuous with Repeated Measures`. Set to `0` for `Trial Type = Superiority`. Set to
-#'     `Delta_0 = log(HR_0)` for `Endpoint Type = Time-to-Event`. Set to `1 - rho_0` for Vaccine Efficacy
-#'     (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson
-#'     Rates`). East Horizon Design: Set to `0` for `Trial Type = Superiority`. Set to `Delta_0 = log(HR_0)` for
-#'     `Time-to-Event` tests.}
+#'   \item{TrtEffNull}{Numeric null treatment effect on the log hazard-ratio scale; 0 for superiority.
+#'   }
 #'   \item{NumHzrdPrd}{Integer. Number of Hazard pieces. East Horizon Explore: Not available. East Horizon Design:
 #'     Only available for `Time-to-Event` tests.}
 #'   \item{PrdAt}{Numeric. Period starting value. East Horizon Explore: Not available. East Horizon Design: Only
@@ -220,31 +214,16 @@
 
     # Create the calendar time in the trial that the patients' event are observed
     SimData$TimeOfEvent <- SimData$ArrivalTime + SimData$SurvivalTime
-    # Censor survival observations at dropout and any fixed follow-up limit.
-    SimData$TimeOfObservation <- SimData$TimeOfEvent
-    SimData$Event <- 1L
-    vCensorTimes <- rep( Inf, nrow( SimData ) )
-    if ( "DropOutTime" %in% names( SimData ) ) {
-        vCensorTimes <- SimData$DropOutTime
-    }
-    if ( !is.null( DesignParam$FollowUpType ) && DesignParam$FollowUpType == 1 ) {
-        vCensorTimes <- pmin( vCensorTimes, DesignParam$FollowUpDur )
-    }
-    SimData$Event <- as.integer( SimData$SurvivalTime <= vCensorTimes )
-    SimData$TimeOfObservation <- SimData$ArrivalTime + pmin( SimData$SurvivalTime, vCensorTimes )
 
     # Compute the time of analysis using the number of events
-    SimData <- SimData[ order( SimData$TimeOfObservation ), ]
-    vObservedEventTimes <- SimData$TimeOfEvent[ SimData$Event == 1 ]
-    if ( nQtyOfEvents < 1 || nQtyOfEvents > length( vObservedEventTimes ) ) {
-        return( list( ErrorCode = 1L ) )
-    }
-    dTimeOfAnalysis <- vObservedEventTimes[ nQtyOfEvents ]
+    SimData <- SimData[ order( SimData$TimeOfEvent ), ]
+    vEventTimes <- SimData$TimeOfEvent
+    dTimeOfAnalysis <- vEventTimes[ nQtyOfEvents ]
 
     # Add the Observed Time variable
     SimData <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ] # Exclude any patients that were not enrolled by the time of the analysis
-    SimData$Event <- SimData$Event * as.integer( SimData$TimeOfEvent <= dTimeOfAnalysis ) # If the event is observed after the analysis it is not observed, e.g., censored
-    SimData$ObservedTime <- ifelse( SimData$TimeOfObservation > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfObservation - SimData$ArrivalTime )
+    SimData$Event <- as.integer( SimData$TimeOfEvent <= dTimeOfAnalysis ) # If the event is observed after the analysis it is not observed, e.g., censored
+    SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
 
     # Step 3 - Perform the desired analysis ####
     # Example - Fit a cox model

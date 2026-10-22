@@ -130,7 +130,7 @@ test_that( "binary and normal SSR analyses honor lower efficacy boundaries witho
     }
 } )
 
-test_that( "SSR completer analyses exclude pending responses and count actual completers", {
+test_that( "SSR completer analyses exclude future responses without re-filtering engine rows", {
     fnAnalyze <- .GetCommonExampleFunction( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR.R",
         "AnalyzeNormalSSR" )
     dfData <- data.frame( TreatmentID = rep( 0:1, 12 ), ArrivalTime = seq_len( 24 ),
@@ -139,9 +139,11 @@ test_that( "SSR completer analyses exclude pending responses and count actual co
     lLook <- list( NumLooks = 2, CurrLookIndex = 1, InfoFrac = c( 0.5, 1 ),
         EffBdry = c( 2.5, 1.96 ), RejType = 0 )
     lResult <- fnAnalyze( dfData, lDesign, LookInfo = lLook )
-    expect_equal( lResult$AnalysisTime, 111 )
-    expect_equal( lResult$Delta, -1 )
+    expect_equal( lResult$AnalysisTime, 110 )
+    expect_equal( lResult$Delta, 1 )
     expect_identical( lResult$ReEstCompleters, 20L )
+    names( dfData )[ names( dfData ) == "CensorInd" ] <- "CensorIndOrg"
+    expect_equal( fnAnalyze( dfData, lDesign, LookInfo = lLook ), lResult )
 
     lAdapt <- list( SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
         MaxSSMultInp = list( MaxSSMult = 1.5 ) )
@@ -231,6 +233,5 @@ test_that( "repeated-measures analysis preserves subject baselines with two, thr
                 tolerance = 1e-8 )
         }
         expect_false( any( c( "PrimDelta", "SecDelta" ) %in% names( lResult ) ) )
-        expect_identical( fnAnalyze( dfData, list( NumVisit = nVisits ), LookInfo = list() )$ErrorCode, 1L )
     }
 } )

@@ -35,7 +35,7 @@
 #'   \item{UserParam$dWeight1}{Nonnegative numeric sampling weight for the first component of the mixture
 #'     prior.}
 #'   \item{UserParam$dWeight2}{Nonnegative numeric sampling weight for the second component of the mixture
-#'     prior. At least one component weight must be positive; sample() normalizes the weights.}
+#'     prior. Optional: if omitted, the second probability is 1 - dWeight1. When both weights are supplied, sample() normalizes them; at least one must be positive.}
 #'      \item{UserParam$dPriorMean}{Prior mean for normal distribution}
 #'      \item{UserParam$dPriorSD}{Prior standard deviation for the normal distribution}
 #'      \item{UserParam$dAlpha}{The alpha parameter in the Beta( alpha, beta ) piece of the prior distribution}
@@ -69,7 +69,11 @@ SimulatePatientSurvivalAssurance <- function( NumSub, NumArm, ArrivalTime, Treat
 
     # Step 2: First sample the piece of the prior we want to use ####
 
-    nPriorPart <- sample( c( 1, 0 ), 1, prob = c( UserParam$dWeight1, UserParam$dWeight2 ) )
+    if ( is.null( UserParam$dWeight2 ) ) {
+        nPriorPart <- stats::rbinom( 1, 1, UserParam$dWeight1 )
+    } else {
+        nPriorPart <- sample( c( 1, 0 ), 1, prob = c( UserParam$dWeight1, UserParam$dWeight2 ) )
+    }
 
     if ( nPriorPart == 1 ) {
         # Sample the normal part

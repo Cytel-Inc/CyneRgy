@@ -63,9 +63,6 @@ GenerateMEPResponse <- function( NumPat, NumArms, TreatmentID, ArrivalTime, Endp
     # Numeric correlation matrices remain supported for direct calls from R.
     mCorrelation <- Correlation
     if ( all( Correlation == round( Correlation ) ) ) {
-        if ( any( abs( Correlation ) > 5 ) ) {
-            stop( "Correlation categories must be integers between -5 and 5." )
-        }
         vCorrelations <- c( -0.85, -0.7, -0.5, -0.3, -0.15, 0, 0.15, 0.3, 0.5, 0.7, 0.85 )
         mCorrelation <- matrix( vCorrelations[ Correlation + 6 ], nrow = nEndpoints, ncol = nEndpoints )
         diag( mCorrelation ) <- 1

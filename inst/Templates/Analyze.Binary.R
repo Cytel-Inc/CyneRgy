@@ -58,21 +58,15 @@
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
 #'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
-#'   \item{TestStatType}{Integer. Test statistic type. For `Time-to-Event` tests: - `0`: Logrank. - `1`: Wilcoxon
-#'     Gehan. - `2`: Harrington Fleming. - `3`: Stratified Logrank. - `4`: Stratified Wilcoxon Gehan. - `5`:
-#'     Stratified Harrington Fleming. For `Continuous` test: - `3`: Z-test. - `4`: t-test. For `Binary` test: -
-#'     `5`: Wald. - `6`: Score. East Horizon Explore: Not available. East Horizon Design: Not available for `Test =
-#'     Difference of Proportions or Odds Ratio of Proportions` (Binary).}
-#'   \item{VarType}{Integer. Variance type. For `Continuous` test: - `4`: Equal - `5`: Unequal. For `Difference of
-#'     Proportions` (Binary) test: - `0`: Pooled. - `1`: Unpooled. For `Ratio of Proportions` (Binary): - `2`: Null
-#'     - `3`: Empirical. East Horizon Explore: Not available. East Horizon Design: Not available for
-#'     `Time-to-Event` tests or `Test = Odds Ratio of Proportions` (Binary).}
-#'   \item{TrtEffNull}{Numeric. Treatment effect under null on natural scale. East Horizon Explore: Not available
-#'     for `Endpoint Type = Continuous with Repeated Measures`. Set to `0` for `Trial Type = Superiority`. Set to
-#'     `Delta_0 = log(HR_0)` for `Endpoint Type = Time-to-Event`. Set to `1 - rho_0` for Vaccine Efficacy
-#'     (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson
-#'     Rates`). East Horizon Design: Set to `0` for `Trial Type = Superiority`. Set to `Delta_0 = log(HR_0)` for
-#'     `Time-to-Event` tests.}
+#'   \item{TestStatType}{Integer test statistic type for binary outcomes: 5 = Wald; 6 = Score. Available in East Horizon Design
+#'     for binary tests other than Difference of Proportions and Odds Ratio of Proportions.
+#'   }
+#'   \item{VarType}{Integer variance setting for binary outcomes: 0 = pooled; 1 = unpooled for a difference of
+#'     proportions; 2 = null and 3 = empirical for a ratio of proportions. Availability depends on the
+#'     selected test and product.
+#'   }
+#'   \item{TrtEffNull}{Numeric null treatment effect on the selected endpoint scale; 0 for superiority.
+#'   }
 #'   \item{PiC}{Numeric. Design proportion for the control arm. East Horizon Explore: Not available. East Horizon
 #'     Design: Only available for `Binary` tests.}
 #' }
@@ -102,13 +96,6 @@
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event` and for
 #'     Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 -
 #'     Ratio of Poisson Rates`). East Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
-#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
-#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
-#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
-#'     Event` tests.}
-#'   \item{LookTime}{Numeric calendar time of the current look. East Horizon Design: Only available for `Time-to-Event`
-#'     tests if `Look Fix Option = Time-based`.}
 #'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
 #'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
 #'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon

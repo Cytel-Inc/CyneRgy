@@ -35,11 +35,10 @@
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
 #'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
-#'   \item{TestStatType}{Integer. Test statistic type: - `3`: Z-test. - `4`: t-test. East Horizon Explore: Only
-#'     available for `Endpoint Type = Continuous`. East Horizon Design: Only available for `Continuous` tests.}
-#'   \item{VarType}{Integer. Variance type. For `Continuous` test: - `4`: Equal - `5`: Unequal. For `Difference of
-#'     Proportions` (Binary) test: - `0`: Pooled. `1`: Unpooled. East Horizon Explore: Not available for `Endpoint
-#'     Type = Time-to-Event`. East Horizon Design: Not available for `Time-to-Event` tests.}
+#'   \item{VarType}{Integer variance setting for binary outcomes: 0 = pooled; 1 = unpooled for a difference of
+#'     proportions; 2 = null and 3 = empirical for a ratio of proportions. Availability depends on the
+#'     selected test and product.
+#'   }
 #'   \item{PValCombMethod}{Integer. P-value combination method: - `0`: Inverse normal. East Horizon Explore: Not
 #'     available. East Horizon Design: Only available for `Combining P-Values (MAMS)` tests.}
 #'   \item{w1}{Numeric. Inverse normal weights for stage 1. East Horizon Explore: Not available. East Horizon
@@ -89,9 +88,6 @@
 #'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event`. East
 #'     Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{CumEvents}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative event for each
-#'     look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not available for `Study
-#'     Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event` tests.}
 #'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
 #'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
 #'     lower. – `5`: One-sided efficacy lower, futility upper.}

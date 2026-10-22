@@ -19,8 +19,7 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
@@ -29,8 +28,7 @@
 #'     simulations.}
 #' }
 #' @details The example code implements a single dropout period (NumPrd = 1). For multiple hazard periods, extend
-#'   the generation logic to use the appropriate row of DropParam for each period. Unsupported configurations
-#'   return ErrorCode = -1 rather than silently using the wrong dropout parameters.
+#'   the generation logic to use the appropriate row of DropParam for each period.
 ######################################################################################################################## .
 
 GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod,
@@ -42,10 +40,10 @@ GenerateDropoutTimeMultiArmForSurvival <- function( NumSub, NumArm, TreatmentID,
     # i.e., effectively they haven't dropped out at all, meaning that they all are completers
 
     vDropoutTime <- rep( Inf, NumSub )
-
-    if ( NumPrd != 1 || !( DropMethod %in% c( 1, 2 ) ) ) {
-        return( list( DropOutTime = vDropoutTime, ErrorCode = -1L ) )
+    if ( is.null( dim( DropParam ) ) && NumPrd == 1 ) {
+        DropParam <- matrix( DropParam, nrow = 1 )
     }
+
 
     if ( DropMethod == 1 ) { # Dropout Hazard Rates
         # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are

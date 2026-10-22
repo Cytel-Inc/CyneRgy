@@ -20,8 +20,7 @@
 #'   \item{BlockSize1, ..., BlockSizeN}{Required positive integer block sizes, named consecutively in this order.
 #'     They must sum to NumSub, and each must be a multiple of the sum of the integer allocation ratios.}
 #' }
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
@@ -56,8 +55,6 @@
 #'                              \item{ErrorCode = -4}{Non-positive, nonfinite, or non-integer block size detected}
 #'                              \item{ErrorCode = -5}{Block sizes do not sum to NumSub}
 #'                              \item{ErrorCode = -6}{Block size incompatible with allocation ratio}
-#'                              \item{ErrorCode = -7}{Invalid allocation ratio or ratio not representable by
-#'                                positive R integers within the denominator limit of 100}
 #'     }
 ######################################################################################################################## .
 
@@ -70,13 +67,7 @@ BlockRandomizationSubjectsUsingRPackage <- function( NumSub, NumArms, AllocRatio
         return( list( TreatmentID = as.integer( rep( 0, NumSub ) ), ErrorCode = as.integer( -1 ) ) )
     }
 
-    if ( length( AllocRatio ) != 1 || !is.finite( AllocRatio ) || AllocRatio <= 0 ) {
-        return( list( TreatmentID = rep( 0L, NumSub ), ErrorCode = -7L ) )
-    }
     vAllocRatio <- ConvertRatio( AllocRatio )
-    if ( length( vAllocRatio ) != NumArms ) {
-        return( list( TreatmentID = rep( 0L, NumSub ), ErrorCode = -7L ) )
-    }
 
     # 2. Block sizes must be provided
     if ( is.null( names( UserParam ) ) ) {
@@ -126,10 +117,6 @@ ConvertRatio <- function( AllocRatio, Tolerance = 1e-8, MaxDenominator = 100 ) {
     nNumerator <- unname( dFraction[ "nNumerator" ] ) # treatment
     nDenominator <- unname( dFraction[ "nDenominator" ] ) # control
 
-    if ( nNumerator <= 0 || nDenominator <= 0 ||
-         nNumerator > .Machine$integer.max || nDenominator > .Machine$integer.max ) {
-        return( integer( 0 ) )
-    }
 
     return( c( as.integer( nDenominator ), as.integer( nNumerator ) ) )
 }

@@ -31,8 +31,7 @@
 #'     simulations.}
 #' }
 #' @details The example code implements two arms (NumArm = 2) and a single dropout period (NumPrd = 1). For multiple hazard periods, extend
-#'   the generation logic to use the appropriate row of DropParam for each period. Unsupported configurations
-#'   return ErrorCode = -1 rather than silently using the wrong dropout parameters.
+#'   the generation logic to use the appropriate row of DropParam for each period.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, TreatmentID, DropMethod,
@@ -44,10 +43,10 @@
     # i.e., effectively they haven't dropped out at all, meaning that they all are completers
 
     vDropoutTime <- rep( Inf, NumSub )
-
-    if ( NumArm != 2 || NumPrd != 1 || !( DropMethod %in% c( 1, 2 ) ) ) {
-        return( list( DropOutTime = vDropoutTime, ErrorCode = -1L ) )
+    if ( is.null( dim( DropParam ) ) && NumPrd == 1 ) {
+        DropParam <- matrix( DropParam, nrow = 1 )
     }
+
 
     # Identify the patients from Control and Experimental arm
     vIndexControl <- which( TreatmentID == 0 )

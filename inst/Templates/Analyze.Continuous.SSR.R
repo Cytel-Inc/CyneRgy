@@ -58,21 +58,13 @@
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
 #'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
-#'   \item{TestStatType}{Integer. Test statistic type. For `Time-to-Event` tests: - `0`: Logrank. - `1`: Wilcoxon
-#'     Gehan. - `2`: Harrington Fleming. - `3`: Stratified Logrank. - `4`: Stratified Wilcoxon Gehan. - `5`:
-#'     Stratified Harrington Fleming. For `Continuous` test: - `3`: Z-test. - `4`: t-test. For `Binary` test: -
-#'     `5`: Wald. - `6`: Score. East Horizon Explore: Not available. East Horizon Design: Not available for `Test =
-#'     Difference of Proportions or Odds Ratio of Proportions` (Binary).}
-#'   \item{VarType}{Integer. Variance type. For `Continuous` test: - `4`: Equal - `5`: Unequal. For `Difference of
-#'     Proportions` (Binary) test: - `0`: Pooled. - `1`: Unpooled. For `Ratio of Proportions` (Binary): - `2`: Null
-#'     - `3`: Empirical. East Horizon Explore: Not available. East Horizon Design: Not available for
-#'     `Time-to-Event` tests or `Test = Odds Ratio of Proportions` (Binary).}
-#'   \item{TrtEffNull}{Numeric. Treatment effect under null on natural scale. East Horizon Explore: Not available
-#'     for `Endpoint Type = Continuous with Repeated Measures`. Set to `0` for `Trial Type = Superiority`. Set to
-#'     `Delta_0 = log(HR_0)` for `Endpoint Type = Time-to-Event`. Set to `1 - rho_0` for Vaccine Efficacy
-#'     (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson
-#'     Rates`). East Horizon Design: Set to `0` for `Trial Type = Superiority`. Set to `Delta_0 = log(HR_0)` for
-#'     `Time-to-Event` tests.}
+#'   \item{TestStatType}{Integer continuous-outcome test statistic type: 3 = Z-test; 4 = t-test. Availability depends on the
+#'     selected test and product.
+#'   }
+#'   \item{VarType}{Integer variance setting for continuous outcomes: 4 = equal variances; 5 = unequal variances.
+#'   }
+#'   \item{TrtEffNull}{Numeric null treatment effect on the selected endpoint scale; 0 for superiority.
+#'   }
 #'   \item{MuC}{Numeric. Design mean for the control arm. East Horizon Explore: Not available.}
 #'   \item{Sigma}{Numeric. Design standard deviation specified in simulations. East Horizon Explore: Not available.
 #'     East Horizon Design: Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3
@@ -145,8 +137,7 @@
 #'     Two-sided asymmetric or symmetric`.}
 #'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#' @param AdaptInfo Named list of sample size re-estimation parameters for a two-arm continuous, binary, or
-#'   time-to-event design. Access elements by name, for example `AdaptInfo$SSRFuncScale`. Available only for
+#' @param AdaptInfo Named list of sample size re-estimation parameters for this two-arm continuous design. Access elements by name, for example `AdaptInfo$SSRFuncScale`. Available only for
 #'   designs with sample size re-estimation.
 #' \describe{
 #'   \item{AdaptMethod}{Integer. Adaptation method: - `1`: Cui, Hung, and Wang (CHW). - `2`: Chen, DeMets, and Lan
@@ -215,9 +206,6 @@
 #'     conditional-power rule uses the estimated effect and its standard error.}
 #'   \item{ReEstCompleters}{Required integer re-estimated total number of completers for the sample size
 #'     re-estimation design.}
-#'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
-#'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
-#'     name. Available for designs that support passing state between looks.}
 #' }
 #' @details Implement the placeholder sample size re-estimation rule before use. The template returns
 #'   ErrorCode = 1 until its logic has been completed.

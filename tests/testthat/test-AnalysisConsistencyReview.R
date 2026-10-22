@@ -2,7 +2,7 @@
 # Description: Regression checks for corrected example analysis data and boundary handling.
 ######################################################################################################################## .
 
-test_that( "ordinary analyses exclude simulated outcomes for subjects who dropped out", {
+test_that( "ordinary analyses preserve engine-supplied rows regardless of censor metadata", {
     lCases <- list(
         list( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingPropTest", NULL ),
         list( "2ArmBinaryOutcomeAnalysis", "AnalyzeUsingEastManualFormula", NULL ),
@@ -19,25 +19,20 @@ test_that( "ordinary analyses exclude simulated outcomes for subjects who droppe
     for ( lCase in lCases ) {
         fnAnalyze <- .GetCommonExampleFunction( lCase[[ 1 ]], paste0( lCase[[ 2 ]], ".R" ), lCase[[ 2 ]] )
         dfData <- data.frame( TreatmentID = rep( 0:1, each = 30 ) )
-        if ( lCase[[ 1 ]] == "2ArmBinaryOutcomeAnalysis" ) {
-            dfData$Response <- c( rep( 1, 10 ), rep( 0, 20 ), rep( 1, 25 ), rep( 0, 5 ) )
+        dfData$Response <- if ( lCase[[ 1 ]] == "2ArmBinaryOutcomeAnalysis" ) {
+            c( rep( 1, 10 ), rep( 0, 20 ), rep( 1, 25 ), rep( 0, 5 ) )
         } else {
-            dfData$Response <- c( seq( -1, 1, length.out = 30 ), seq( 1, 3, length.out = 30 ) )
+            c( seq( -1, 1, length.out = 30 ), seq( 1, 3, length.out = 30 ) )
         }
         lDesign <- list( TailType = 1, CriticalPoint = 1.96, MaxCompleters = 60 )
         set.seed( 389 )
         lExpected <- fnAnalyze( dfData, lDesign, UserParam = lCase[[ 3 ]] )
-        for ( strIndicator in c( "CensorInd", "CensorIndOrg" ) ) {
-            dfWithDropouts <- rbind( dfData,
-                data.frame( TreatmentID = rep( 0:1, each = 30 ), Response = rep( c( 1, 0 ), each = 30 ) ) )
-            dfWithDropouts[[ strIndicator ]] <- rep( c( 1, 0 ), each = 60 )
+        for ( strColumn in c( "CensorInd", "CensorIndOrg" ) ) {
+            dfEngineData <- dfData
+            dfEngineData[[ strColumn ]] <- rep( 0:1, 30 )
             set.seed( 389 )
-            lObserved <- fnAnalyze( dfWithDropouts, lDesign, UserParam = lCase[[ 3 ]] )
-            expect_equal( lObserved, lExpected, info = lCase[[ 2 ]] )
-        }
-        if ( lCase[[ 2 ]] == "AnalyzeUsingBetaBinomial" ) {
-            expect_length( lExpected$Delta, 1 )
-            expect_equal( lExpected$Delta, 15 / 32 )
+            expect_equal( fnAnalyze( dfEngineData, lDesign, UserParam = lCase[[ 3 ]] ), lExpected,
+                info = paste( lCase[[ 2 ]], strColumn ) )
         }
     }
 } )
@@ -102,68 +97,38 @@ test_that( "MMRM sequential analyses compare p-values with stage rejection level
     }
 } )
 
-test_that( "survival analyses censor dropout and fixed follow-up before positioning the event look", {
+test_that( "survival analyses preserve engine-supplied outcomes without recensoring", {
     skip_if_not_installed( "survival" )
     set.seed( 392 )
-    dfData <- data.frame( ArrivalTime = seq_len( 200 ) / 100, TreatmentID = rep( 0:1, each = 100 ),
-        SurvivalTime = c( stats::rexp( 100, 1 ), stats::rexp( 100, 0.25 ) ), DropOutTime = Inf, TrueHR = 0.25 )
-    vDropouts <- seq( 1, 100, by = 2 )
-    dfData$DropOutTime[ vDropouts ] <- dfData$SurvivalTime[ vDropouts ] / 10
-    lDesign <- list( TailType = 0, Alpha = 0.025, CriticalPoint = -1.96, MaxEvents = 50,
-        FollowUpType = 1, FollowUpDur = 2, NumTreatments = 1, IsArmPresent = 1 )
-    vEventTimes <- sort( ( dfData$ArrivalTime + dfData$SurvivalTime )[
-        dfData$SurvivalTime <= pmin( dfData$DropOutTime, lDesign$FollowUpDur ) ] )
-    dAnalysisTime <- vEventTimes[ lDesign$MaxEvents ]
-    dfExpected <- dfData[ dfData$ArrivalTime <= dAnalysisTime, ]
-    dfExpected$Event <- dfExpected$SurvivalTime <= dfExpected$DropOutTime &
-        dfExpected$SurvivalTime <= lDesign$FollowUpDur &
-        dfExpected$ArrivalTime + dfExpected$SurvivalTime <= dAnalysisTime
-    dfExpected$Time <- pmin( dfExpected$SurvivalTime, dfExpected$DropOutTime,
-        lDesign$FollowUpDur, dAnalysisTime - dfExpected$ArrivalTime )
-    cCox <- survival::coxph( survival::Surv( Time, Event ) ~ factor( TreatmentID ), data = dfExpected )
-    cLogrank <- survival::survdiff( survival::Surv( Time, Event ) ~ TreatmentID, data = dfExpected )
-    dLogrankStatistic <- sqrt( cLogrank$chisq ) * sign( cLogrank$obs[ 2 ] - cLogrank$exp[ 2 ] )
+    dfData <- data.frame( ArrivalTime = rep( 0, 200 ), TreatmentID = rep( 0:1, each = 100 ),
+        SurvivalTime = c( stats::rexp( 100, 1 ), stats::rexp( 100, 0.25 ) ), TrueHR = 0.25 )
+    lDesign <- list( TailType = 0, Alpha = 0.025, CriticalPoint = -1.96, MaxEvents = 100,
+        NumTreatments = 1, IsArmPresent = 1 )
     lCases <- list(
-        list( "BayesianAssuranceTimeToEvent", "AnalyzeSurvivalDataUsingCoxPH", "cox" ),
-        list( "ConsecutiveStudiesContinuousTimeToEvent", "AnalyzeSurvivalDataUsingCoxPH", "cox" ),
-        list( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeTTESSR", "logrank" ),
-        list( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeUsingSurvivalPackage", "logrank" ),
-        list( "MultiArmAnalysis", "AnalyzeMultiArmUsingLogrankTestBonferroni", "multiarm" )
+        list( "BayesianAssuranceTimeToEvent", "AnalyzeSurvivalDataUsingCoxPH" ),
+        list( "ConsecutiveStudiesContinuousTimeToEvent", "AnalyzeSurvivalDataUsingCoxPH" ),
+        list( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeTTESSR" ),
+        list( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeUsingSurvivalPackage" ),
+        list( "MultiArmAnalysis", "AnalyzeMultiArmUsingLogrankTestBonferroni" )
     )
+    dfEngineData <- dfData
+    dfEngineData$DropOutTime <- 0
+    lEngineDesign <- lDesign
+    lEngineDesign$FollowUpType <- 1
+    lEngineDesign$FollowUpDur <- 0.01
     for ( lCase in lCases ) {
         fnAnalyze <- .GetCommonExampleFunction( lCase[[ 1 ]], paste0( lCase[[ 2 ]], ".R" ), lCase[[ 2 ]] )
-        lResult <- fnAnalyze( dfData, lDesign )
-        expect_identical( lResult$ErrorCode, 0L, info = lCase[[ 1 ]] )
-        if ( lCase[[ 3 ]] == "cox" ) {
-            expect_equal( lResult$TestStat, unname( summary( cCox )$coefficients[ , "z" ] ) )
-        } else if ( lCase[[ 3 ]] == "logrank" ) {
-            expect_equal( lResult$TestStat, dLogrankStatistic )
-        } else {
-            expect_equal( lResult$HR, unname( exp( stats::coef( cCox ) ) ) )
-            expect_equal( lResult$RawPVal, stats::pnorm( dLogrankStatistic ) )
-        }
-        if ( !is.null( lResult$AnalysisTime ) ) {
-            expect_equal( lResult$AnalysisTime, dAnalysisTime )
-        }
-        dfNoEvents <- dfData
-        dfNoEvents$DropOutTime <- 0
-        expect_identical( fnAnalyze( dfNoEvents, lDesign )$ErrorCode, 1L )
+        lExpected <- fnAnalyze( dfData, lDesign )
+        expect_identical( lExpected$ErrorCode, 0L )
+        expect_equal( fnAnalyze( dfEngineData, lEngineDesign ), lExpected, info = lCase[[ 2 ]] )
     }
-
-    fnProbabilitySuccess <- .GetCommonExampleFunction( "ProbabilitySuccessDualEndpoints", "AnalyzePFSAndOS.R",
+    fnAnalyze <- .GetCommonExampleFunction( "ProbabilitySuccessDualEndpoints", "AnalyzePFSAndOS.R",
         "AnalyzePFSAndOS" )
-    dfData$OS <- dfData$SurvivalTime + stats::rexp( 200, 1 )
-    dfExpected$OS <- dfData$OS[ dfData$ArrivalTime <= dAnalysisTime ]
-    dfExpected$OSEvent <- dfExpected$OS <= dfExpected$DropOutTime &
-        dfExpected$OS <= lDesign$FollowUpDur & dfExpected$ArrivalTime + dfExpected$OS <= dAnalysisTime
-    dfExpected$OSTime <- pmin( dfExpected$OS, dfExpected$DropOutTime,
-        lDesign$FollowUpDur, dAnalysisTime - dfExpected$ArrivalTime )
-    cOSCox <- survival::coxph( survival::Surv( OSTime, OSEvent ) ~ factor( TreatmentID ), data = dfExpected )
-    lProbabilitySuccess <- fnProbabilitySuccess( dfData, lDesign,
-        UserParam = list( HazardRatioCutoffIA = 1, HazardRatioCutoffFA = 1 ) )
-    expect_identical( lProbabilitySuccess$ErrorCode, 0L )
-    expect_equal( lProbabilitySuccess$dHazardRatioPFS, unname( exp( stats::coef( cCox ) ) ) )
-    expect_equal( lProbabilitySuccess$dHazardRatioOS, unname( exp( stats::coef( cOSCox ) ) ) )
+    dfData$OS <- dfData$SurvivalTime + stats::rexp( 200, rate = 5 )
+    dfEngineData$OS <- dfData$OS
+    lUser <- list( HazardRatioCutoffIA = 1, HazardRatioCutoffFA = 1 )
+    expect_equal( fnAnalyze( dfEngineData, lEngineDesign, UserParam = lUser ),
+        fnAnalyze( dfData, lDesign, UserParam = lUser ) )
 } )
 
 test_that( "standard two-arm analyses accept the current-look event count as a scalar", {

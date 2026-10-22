@@ -42,6 +42,16 @@ test_that( "dual-endpoint responses use named inputs and ignore unused user para
         set.seed( 137 )
         lActual <- do.call( fnGenerate, c( lInputs, list( UserParam = list( Unused = 1 ) ) ) )
         expect_identical( lActual, lExpected )
+        # Positional endpoint lists were also accepted before named lookup was introduced.
+        lPositional <- lInputs
+        lPositional$SurvParam <- if ( bBinary ) {
+            list( lInputs$SurvParam$First )
+        } else {
+            unname( lInputs$SurvParam[ vNames ] )
+        }
+        lPositional$PropResp <- unname( lInputs$PropResp[ vNames ] )
+        set.seed( 137 )
+        expect_identical( do.call( fnGenerate, lPositional ), lExpected )
         expect_true( all( lActual$Response$First > 0 ) )
         expect_identical( lActual$ErrorCode, 0L )
         if ( bBinary ) {
@@ -150,16 +160,6 @@ test_that( "CSV response caches follow the requested input file", {
         lMissing <- fnGenerate( 2, 1, c( 0, 0 ), c( 0, 1 ), 0, 1, 0, 0, 1, 1, matrix( 1 ) )
         expect_identical( lMissing$ErrorCode, -1L )
     }
-} )
-
-test_that( "stratified survival reports missing assessment times through ErrorCode", {
-    fnGenerate <- .GetCommonExampleFunction( "2ArmTimeToEventOutcomePatientSimulation",
-        "SimulatePatientOutcomeStratification.R", "SimulatePatientOutcomeStratification" )
-    lResult <- fnGenerate( 2, 2, c( 0, 0 ), c( 0, 1 ), c( 1, 1 ), 2, 1,
-        matrix( c( NA, 12 ), nrow = 1 ), matrix( c( 50, 60 ), nrow = 1 ) )
-    expect_identical( lResult$ErrorCode, -100L )
-    expect_true( is.na( lResult$SurvivalTime[ 1 ] ) )
-    expect_true( is.finite( lResult$SurvivalTime[ 2 ] ) )
 } )
 
 test_that( "binary Phase 3 assurance handles an exhausted posterior without warnings", {

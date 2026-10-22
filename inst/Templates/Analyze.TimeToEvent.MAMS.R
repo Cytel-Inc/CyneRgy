@@ -39,14 +39,6 @@
 #'   \item{FollowUpDur}{Numeric. Follow-up duration. East Horizon Explore: Only available for `Endpoint Type =
 #'     Time-to-Event`. Not available for `Study Objective = Dose Finding`. East Horizon Design: Only available for
 #'     `Time-to-Event` tests.}
-#'   \item{TestStatType}{Integer. Test statistic type: - `3`: Z-test. - `4`: t-test. East Horizon Explore: Only
-#'     available for `Endpoint Type = Continuous`. East Horizon Design: Only available for `Continuous` tests.}
-#'   \item{PValCombMethod}{Integer. P-value combination method: - `0`: Inverse normal. East Horizon Explore: Not
-#'     available. East Horizon Design: Only available for `Combining P-Values (MAMS)` tests.}
-#'   \item{w1}{Numeric. Inverse normal weights for stage 1. East Horizon Explore: Not available. East Horizon
-#'     Design: Only available for `Combining P-Values (MAMS)` tests.}
-#'   \item{w2}{Numeric. Inverse normal weights for stage 2. East Horizon Explore: Not available. East Horizon
-#'     Design: Only available for `Combining P-Values (MAMS)` tests.}
 #'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: – `0`:
 #'     Bonferroni. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
 #'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values: – `0`: Bonferroni. – `1`: Sidak.

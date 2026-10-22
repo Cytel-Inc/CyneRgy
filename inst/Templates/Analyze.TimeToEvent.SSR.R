@@ -65,21 +65,15 @@
 #'     available for `Time-to-Event` tests.}
 #'   \item{FollowUpDur}{Numeric. Follow-up duration. East Horizon Explore: Only available for `Endpoint Type =
 #'     Time-to-Event`. East Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{TestStatType}{Integer. Test statistic type. For `Time-to-Event` tests: - `0`: Logrank. - `1`: Wilcoxon
-#'     Gehan. - `2`: Harrington Fleming. - `3`: Stratified Logrank. - `4`: Stratified Wilcoxon Gehan. - `5`:
-#'     Stratified Harrington Fleming. For `Continuous` test: - `3`: Z-test. - `4`: t-test. For `Binary` test: -
-#'     `5`: Wald. - `6`: Score. East Horizon Explore: Not available. East Horizon Design: Not available for `Test =
-#'     Difference of Proportions or Odds Ratio of Proportions` (Binary).}
+#'   \item{TestStatType}{Integer survival test statistic type: 0 = logrank; 1 = Wilcoxon Gehan; 2 = Harrington Fleming; 3, 4,
+#'     and 5 are the corresponding stratified tests. Available in East Horizon Design.
+#'   }
 #'   \item{HFParam1}{Numeric. First parameter of Harrington Fleming. East Horizon Explore: Not available. East
 #'     Horizon Design: Only available for `Time-to-Event` tests.}
 #'   \item{HFParam2}{Numeric. Second parameter of Harrington Fleming. East Horizon Explore: Not available. East
 #'     Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{TrtEffNull}{Numeric. Treatment effect under null on natural scale. East Horizon Explore: Not available
-#'     for `Endpoint Type = Continuous with Repeated Measures`. Set to `0` for `Trial Type = Superiority`. Set to
-#'     `Delta_0 = log(HR_0)` for `Endpoint Type = Time-to-Event`. Set to `1 - rho_0` for Vaccine Efficacy
-#'     (`Endpoint Type = Binary` with Lower Value and `Test = 1 - Ratio of Proportions or 1 - Ratio of Poisson
-#'     Rates`). East Horizon Design: Set to `0` for `Trial Type = Superiority`. Set to `Delta_0 = log(HR_0)` for
-#'     `Time-to-Event` tests.}
+#'   \item{TrtEffNull}{Numeric null treatment effect on the log hazard-ratio scale; 0 for superiority.
+#'   }
 #'   \item{NumHzrdPrd}{Integer. Number of Hazard pieces. East Horizon Explore: Not available. East Horizon Design:
 #'     Only available for `Time-to-Event` tests.}
 #'   \item{PrdAt}{Numeric. Period starting value. East Horizon Explore: Not available. East Horizon Design: Only
@@ -157,8 +151,7 @@
 #'     Two-sided asymmetric or symmetric`.}
 #'   \item{BindingType}{Integer. Binding type: - `0`: Non-binding. - `1`: Binding.}
 #' }
-#' @param AdaptInfo Named list of sample size re-estimation parameters for a two-arm continuous, binary, or
-#'   time-to-event design. Access elements by name, for example `AdaptInfo$SSRFuncScale`. Available only for
+#' @param AdaptInfo Named list of sample size re-estimation parameters for this two-arm time-to-event design. Access elements by name, for example `AdaptInfo$SSRFuncScale`. Available only for
 #'   designs with sample size re-estimation.
 #' \describe{
 #'   \item{AdaptMethod}{Integer. Adaptation method: - `1`: Cui, Hung, and Wang (CHW). - `2`: Chen, DeMets, and Lan

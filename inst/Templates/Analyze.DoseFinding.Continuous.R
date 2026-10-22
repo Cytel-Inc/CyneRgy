@@ -34,20 +34,11 @@
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
 #'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
 #'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
-#'   \item{TestStatType}{Integer. Test statistic type: - `3`: Z-test. - `4`: t-test. East Horizon Explore: Only
-#'     available for `Endpoint Type = Continuous`. East Horizon Design: Only available for `Continuous` tests.}
-#'   \item{VarType}{Integer. Variance type. For `Continuous` test: - `4`: Equal - `5`: Unequal. For `Difference of
-#'     Proportions` (Binary) test: - `0`: Pooled. `1`: Unpooled. East Horizon Explore: Not available for `Endpoint
-#'     Type = Time-to-Event`. East Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{Sigma}{Numeric. Design standard deviation specified in simulations. East Horizon Explore: Not available.
-#'     East Horizon Design: Only available for `Test = MAMS Difference of Means: Combining P-Values` (Continuous)
-#'     and `Test Stat Type = 3 (Z-test)`.}
-#'   \item{PValCombMethod}{Integer. P-value combination method: - `0`: Inverse normal. East Horizon Explore: Not
-#'     available. East Horizon Design: Only available for `Combining P-Values (MAMS)` tests.}
-#'   \item{w1}{Numeric. Inverse normal weights for stage 1. East Horizon Explore: Not available. East Horizon
-#'     Design: Only available for `Combining P-Values (MAMS)` tests.}
-#'   \item{w2}{Numeric. Inverse normal weights for stage 2. East Horizon Explore: Not available. East Horizon
-#'     Design: Only available for `Combining P-Values (MAMS)` tests.}
+#'   \item{TestStatType}{Integer continuous-outcome test statistic type: 3 = Z-test; 4 = t-test. Availability depends on the
+#'     selected test and product.
+#'   }
+#'   \item{VarType}{Integer variance setting for continuous outcomes: 4 = equal variances; 5 = unequal variances.
+#'   }
 #'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: – `0`:
 #'     Bonferroni. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
 #'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values: – `0`: Bonferroni. – `1`: Sidak.
@@ -109,10 +100,6 @@
 #'   \item{Delta}{Numeric vector of estimated experimental-minus-control treatment effects, one per experimental
 #'     arm in treatment-ID order. For binary outcomes, each effect is a proportion difference; for continuous
 #'     outcomes, each effect is a mean difference.}
-#'   \item{CtrlCompleters}{Number of completers in the control arm. Required when the selected conditional-power
-#'     rule uses the estimated treatment effect.}
-#'   \item{TrmtCompleters}{Number of completers in the experimental arm. Required when the selected
-#'     conditional-power rule uses the estimated treatment effect.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{AdjPVal}{Numeric vector of p-values adjusted for multiple comparisons, one per experimental arm.}

@@ -7,13 +7,10 @@
 #'   NULL, PrdStart and AccrRate define the accrual schedule.
 #' @author J. Kyle Wathen
 #' @param NumSub Integer number of subjects in the trial.
-#' @param Type Integer enrollment type: 0 = global enrollment; 1 = regional enrollment. This function
-#'   implements global enrollment and defaults to 0. Use the regional arguments described below for a regional
-#'   implementation.
+#' @param Type Integer enrollment type. This function supports global enrollment (0), the default.
 #' @param NumPrd Integer number of accrual periods.
 #' @param PrdStart Numeric vector of accrual-period starting times of length NumPrd. The first period starts at 0.
 #' @param AccrRate Numeric vector of accrual rates (subjects per unit time), with one element per accrual period.
-#'   For regional enrollment, one element per region.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -27,8 +24,7 @@
 #'     without gaps; the final rate continues after the ramp-up. Rates must be nonnegative, with a positive
 #'     final rate to ensure that all requested subjects can enroll.}
 #' }
-#' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
-#'   method; additional custom outputs may also be included.
+#' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
@@ -36,11 +32,9 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#' @details These functions use global enrollment inputs. Regional enrollment can also provide Type (0 = global, 1
-#'   = regional), RegionName (character region names), RegionStart (numeric region start times), and
-#'   EnrollmentCapPcnt (numeric enrollment caps in percent), with one element per region. Add these engine-supplied
-#'   arguments to the function signature when implementing regional enrollment. For global enrollment, use NumPrd,
-#'   PrdStart, and AccrRate. Unsupported enrollment types or invalid rate inputs return ErrorCode = -1.
+#' @details This function uses the global enrollment inputs NumPrd, PrdStart, and AccrRate.
+#'   Invalid custom rate inputs return ErrorCode = -1.
+
 ######################################################################################################################## .
 
 GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
@@ -69,10 +63,8 @@ GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserPara
         }
     }
 
-    # A zero final rate cannot enroll the requested subjects and would leave the loop running forever.
-    if ( Type != 0 || nQtyOfRates == 0 || length( vPeriodStartTime ) != nQtyOfRates ||
-         any( !is.finite( vRates ) | vRates < 0 ) || vRates[ nQtyOfRates ] == 0 ||
-         any( !is.finite( vPeriodStartTime ) ) || any( diff( vPeriodStartTime ) <= 0 ) ) {
+    if ( !is.null( UserParam ) &&
+         ( any( !is.finite( vRates ) | vRates < 0 ) || vRates[ nQtyOfRates ] == 0 ) ) {
         return( list( ArrivalTime = numeric( 0 ), ErrorCode = -1L ) )
     }
 
