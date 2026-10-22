@@ -1,65 +1,68 @@
-#   Last Modified Date: {{CREATION_DATE}}
+######################################################################################################################## .
+# Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Template for simulating patient data in R. 
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param NumArm  The number of arms in the trial, a single numeric value. For a two arm trial, this will be 2. 
-#' @param TreatmentID A vector of treatment ids, 0 is control treatment and  1 experimental treatment. length( TreatmentID ) = NumSub
-#' @param PropResp A vector of length NumArm with the response probabilities for each arm
-#' @param  UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
-#' If UserParam are supplied, they will be an element in the list, UserParam.   
-#' @return The function must return a list in the return statement of the function. The information below lists 
-#'             elements of the list, if the element is required or optional and a description of the return values if needed. 
-#'             \describe{
-#'             \item{Response}{Required numeric value. Contains a vector of generated binary response for all subjects.}
-#'             \item{ErrorCode}{Optional integer value \describe{ 
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
-#'             }
-#' @description
-#' This template can be used as a starting point for developing custom functionality when the patient response is binary.  
-#' The function signature must remain the same.  
-#' However, you may choose to ignore the parameters  PropResp if the patient simulator
-#' you are creating only requires use of parameters the user will add to UserParam
-{{FUNCTION_NAME}}  <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
-{
+#' @title Template: Simulate binary subject responses
+#' @description Simulate binary subject responses. Use this template as a starting point for custom logic. Preserve
+#'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
+#'   inputs through UserParam where that argument is supported.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
+#'   experimental arms in TreatmentID order. Each probability is between 0 and 1.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Numeric vector of generated binary subject responses, coded 0 = non-response and 1 = response,
+#'     with one element per subject.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#' @details For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
+#'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
+#'   treatment-to-control ratio of proportions). Include these arguments in the function signature for a
+#'   vaccine-efficacy design. Standard binary responses are coded 0 = non-response and 1 = response.
+######################################################################################################################## .
 
+{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
     # Step 1 - Initialize the return variables or other variables needed ####
-    Error 	        <- 0
-    vPatientOutcome <- rep( 0, NumSub )  # Note, as you simulate the patient data put in this vector so it can be returned
-    
+    nErrorCode <- 0
+    vPatientOutcome <- rep( 0, NumSub ) # Note, as you simulate the patient data put in this vector so it can be returned
+
     # Step 2 - Validate custom variable input and set defaults ####
-    if( is.null( UserParam ) )
-    {
-        
+    if ( is.null( UserParam ) ) {
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
         # are applied to have the same functionality as East Horizon, see the first example
-        
+
         # EXAMPLE - Set the default if needed
-        #UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
+        # UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
     }
-    
+
     # Step 3 - Loop over the patients and simulate the outcome according to the treatment they received ####
-    
-    #Example 1 - Loop over the patient vector and sample patient outcome using rbinom
-    for( nPatIndx in 1:NumSub )
-    {
+
+    # Example 1 - Loop over the patient vector and sample patient outcome using rbinom
+    for ( nPatIndx in 1:NumSub ) {
         # Add code here to modify how patient data is generated to fit your need
-        
+
         # EXAMPLE
         # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
-        # nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 
-        
-        # Make any adjustments to the code as needed, for example simulating from a normal distribution 
-        # vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
+        # nTreatmentID                <- TreatmentID[ nPatIndx ] + 1
+
+        # Make any adjustments to the code as needed, for example, simulating binary responses.
+        # vPatientOutcome[ nPatIndx ] <- stats::rbinom( 1, 1, PropResp[ nTreatmentID ] )
     }
 
     # Write the actual code here.
     # Use appropriate error handling and modify the error code appropriately.
-    
-    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( Error ) ) )
+
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nErrorCode ) ) )
 }

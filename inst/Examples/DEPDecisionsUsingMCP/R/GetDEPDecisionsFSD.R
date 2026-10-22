@@ -1,64 +1,78 @@
 ######################################################################################################################## .
-#  Last Modified Date: 24/09/2025
 #' @name GetDEPDecisionsFSD
-#' @author Pradip Maske
-#' @title Computing Decisions for DEP Fixed Sample design.
-#'
-#' @description Compute decisions for DEP given test statistic and total Alpha using Bonferroni multiplicity adjustment method.
-#'
-#' @param SimData Data frame with subject data generated in current simulation with one row per patient. 
-#' @param DesignParam Input Parameters which user may need to compute test statistic and perform test. Refer to the DEP analysis template (Analyze.DEP.R) for details of this list.
-#' @param LookInfo List Input Parameters related to multiple looks which user may need to compute test statistic and perform test. Refer to the DEP analysis template (Analyze.DEP.R) for details of this list.
-#' @param UserParam User can pass custom scalar variables defined by them as a member of this list. 
-#' @param TestStat List of test statistics for both the endpoints. These test statistics will be on the Z-scale. Access using the actual endpoint names specified by the user,
-#'                            e.g., TestStat[EndpointName[1]] or TestStat[EndpointName[2]]
-#' @param OutList List of outputs that was returned by the user in the previous look. Only relevant for Group Sequential Design and set to NULL for first look.
-#' Supported data types are lists, and scalar and vector of type numeric, integer and character.
-#' @return The function must return a list in the return statement of the function. The information below lists
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
-#'             \describe{
-#'                  \item{Decision}{Required value. A list of Decisions on both Endpoints: 0 - No Boundary Crossed, 1 - Lower Efficacy Boundary Crossed, 2 - Upper Efficacy Boundary Crossed, 4- Futility Boundary Crossed.
-#'                  \item{Outlist}{Optional list of quantities to pass to the next look. This will be available as inputs to this function in the next look.
-#'                            Only applicable for Group Sequential Design. Supported data types are lists, and scalar and vector of type numeric, integer and character.}
-#'                  \item{ErrorCode}{Optional integer value \describe{
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Non fatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }}
-#'             }
-#'
-#'
-#' @note The current code assumes there are no dropouts. Modify the code accordingly for dropout case.
+#' @title Make fixed-sample dual-endpoint decisions with Bonferroni adjustment
+#' @description Compute decisions for DEP given test statistic and total Alpha using Bonferroni multiplicity
+#'   adjustment method.
+#' @author Gabriel Potvin, Anoop Singh Rawat, Pradip Maske
+#' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
+#'   columns by name, for example `SimData$TreatmentID`. Columns include the fields below when applicable,
+#'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#' \describe{
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#' }
+#' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
+#'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
+#'   as indicated below. The fields listed here are used by this example.
+#' \describe{
+#'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
+#'     endpoint names.}
+#'   \item{TailType}{Named List of Integer. Named List of length equal to the number of endpoints, indicating the
+#'     nature of critical region for each endpoint. For example, `TailType["Endpoint 1"]` is the nature for
+#'     Endpoint 1. Possible values: - `0`: Left-tailed. - `1`: Right-tailed.}
+#'   \item{Alpha}{Numeric type I error rate (significance level).}
+#' }
+#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
+#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#' @param TestStat Named list of endpoint test statistics on the Wald (Z) scale, returned by the endpoint analyses.
+#'   Access elements using the actual endpoint names.
+#' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
+#'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
+#'   Available for designs that support passing state between looks.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the outputs returned by this example.
+#' \describe{
+#'   \item{Decision}{Named list of integer endpoint decisions in DesignParam$EndpointName order: 0 = no boundary
+#'     crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 4 = futility boundary
+#'     crossed. The multiplicity-adjustment integration point uses 4 for futility.}
+#'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
+#'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
+#'     name. Available for designs that support passing state between looks.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#' @details This example divides Alpha equally between the two endpoints and uses the test statistics supplied
+#'   by their analyses. Dropout and censoring adjustments belong in those endpoint analyses. The dual-endpoint
+#'   engine exposes Response1 and Response2 and the endpoint-specific calendar times and original censor
+#'   indicators listed in SimData. Each endpoint-specific design/list value is indexed by its actual EndpointName.
 ######################################################################################################################## .
 
-# Function Template for performing Multiplicity Adjustment for One Look Tests
-GetDEPDecisionsFSD <- function( SimData, DesignParam, LookInfo = NULL, TestStat, OutList = NULL, UserParam = NULL )
-{
-    lDecision      <- list()
-    vEndpointName  <- DesignParam$vEndpointName
-    
-    if( DesignParam$TailType[[ 1 ]] == 0 )
-    {
-        lDecision[ vEndpointName[[ 1 ]]] <- ifelse( pnorm( TestStat[[ 1 ]]) < DesignParam$Alpha / 2, 1, 0 )            
+GetDEPDecisionsFSD <- function( SimData, DesignParam, LookInfo = NULL, TestStat, OutList = NULL, UserParam = NULL ) {
+    vEndpointName <- DesignParam$EndpointName
+    lDecision <- as.list( stats::setNames( rep( 0L, length( vEndpointName ) ), vEndpointName ) )
+
+    for ( nEndpointIndex in seq_along( vEndpointName ) ) {
+        strEndpointName <- vEndpointName[ nEndpointIndex ]
+        dTestStat <- TestStat[[ nEndpointIndex ]]
+        nTailType <- DesignParam$TailType[[ nEndpointIndex ]]
+        if ( nTailType == 0 ) {
+            if ( stats::pnorm( dTestStat ) < DesignParam$Alpha / 2 ) {
+                lDecision[[ strEndpointName ]] <- 1L
+            }
+        } else {
+            if ( stats::pnorm( dTestStat, lower.tail = FALSE ) < DesignParam$Alpha / 2 ) {
+                lDecision[[ strEndpointName ]] <- 2L
+            }
+        }
     }
-    else 
-    {
-        lDecision[ vEndpointName[[ 1 ]]] <- ifelse( pnorm( TestStat[[ 1 ]], lower.tail = FALSE) < DesignParam$Alpha / 2, 1, 0 )            
-    }
-    
-    if( DesignParam$TailType[[ 2 ]] == 0 )
-    {
-        lDecision[ vEndpointName[[ 2 ]]] <- ifelse( pnorm( TestStat[[ 2 ]]) < DesignParam$Alpha / 2, 1, 0 )            
-    }
-    else 
-    {
-        lDecision[ vEndpointName[[ 2 ]]] <- ifelse( pnorm( TestStat[[ 2 ]], lower.tail = FALSE) < DesignParam$Alpha / 2, 1, 0 )            
-    }
-    
-    nError          <- 0
-    nRetval         <- 0
-    lOutList        <- list()
-    lOutList$OutVal <- nRetval
-    
-    return( list( Decision = as.list( lDecision ), OutList = as.list( lOutList ), ErrorCode = as.integer( nError )))
+
+    nErrorCode <- 0L
+    lOutList <- list( OutVal = 0 )
+
+    return( list( Decision = lDecision, OutList = lOutList, ErrorCode = nErrorCode ) )
 }

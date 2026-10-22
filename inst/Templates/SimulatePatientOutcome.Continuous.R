@@ -1,62 +1,62 @@
-#  Last Modified Date: {{CREATION_DATE}}
+######################################################################################################################## .
+# Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Template for simulating patient data in R. 
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
-#' @param Mean A vector of length = 2 with the means of the two treatments.
-#' @param StdDev A vector of length = 2 with the standard deviations of each treatment
-#' @param  UserParam A list of user defined parameters in East or East Horizon. You must have a default of NULL, as in this example.
-#' If UseParam are supplied, they will be an element in the list, UserParam.    
-#' @return The function must return a list in the return statement of the function. The information below lists 
-#'             elements of the list, if the element is required or optional and a description of the return values if needed. 
-#'             \describe{
-#'             \item{Response}{Required numeric value. Contains a vector of generated response for all subjects.}
-#'             \item{ErrorCode}{Optional integer value \describe{ 
-#'                                     \item{ErrorCode = 0}{No Error}
-#'                                     \item{ErrorCode > 0}{Nonfatal error, current simulation is aborted but the next simulations will run}
-#'                                     \item{ErrorCode < 0}{Fatal error, no further simulation will be attempted}
-#'                                     }
-#'                                     }
-#'             }
-#' @description
-#' This template can be used as a starting point for developing custom functionality.  The function signature must remain the same.  
-#' However, you may choose to ignore the parameters  Mean, StdDev if the patient simulator
-#' you are creating only requires use of parameters the user will add to UserParam
-{{FUNCTION_NAME}} <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
-{
-  
+#' @title Template: Simulate continuous subject responses
+#' @description Simulate continuous subject responses. Use this template as a starting point for custom logic.
+#'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
+#'   user-defined inputs through UserParam where that argument is supported.
+#' @param NumSub Integer number of subjects in the trial.
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
+#'   in TreatmentID order.
+#' @param StdDev Numeric vector of response standard deviations by arm, with the control arm first, followed by
+#'   experimental arms in TreatmentID order.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+######################################################################################################################## .
+
+{{FUNCTION_NAME}} <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
     # Step 1 - Validate custom variable input and set defaults ####
-    if( is.null( UserParam ) )
-    {
-        
+    if ( is.null( UserParam ) ) {
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
         # take care of any issues. Also, if there is a default value for the parameters you may want to set them here. Default values usually
-        # are applied to have the same functionality as East, see the first example
-        
-        # EXMAPLE - Set the default if needed
-        #UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
+        # are applied to have the same functionality as East Horizon, see the first example
+
+        # EXAMPLE - Set the default if needed
+        # UserParam <- list( dProbOfZeroOutcomeCtrl = 0, dProbOfZeroOutcomeExp = 0 )
     }
-    
-    # Step 2 - Initialize variable ####   
-    nError           <- 0 # East code for no errors occurred 
-    vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
-    
-    
+
+    # Step 2 - Initialize variable ####
+    nErrorCode <- 0 # No errors occurred
+    vPatientOutcome <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
+
     # Step 3 - Loop over the patients and simulate the outcome according to the treatment they received ####
-    for( nPatIndx in 1:NumSub )
-    {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
-        
-        # Make any adjustments to the code as needed, example simulating from for a normal distribution 
-        vPatientOutcome[ nPatIndx ] <- rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ])
+    for ( nPatIndx in 1:NumSub ) {
+        nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
+
+        # Make any adjustments to the code as needed, for example, simulating from a normal distribution
+        vPatientOutcome[ nPatIndx ] <- stats::rnorm( 1, Mean[ nTreatmentID ], StdDev[ nTreatmentID ] )
     }
-    
+
     # Step 4 - Error Checking ####
-    if(  any( is.na( vPatientOutcome ) ) )
-        nError <- -100
-    
+    if ( any( is.na( vPatientOutcome ) ) ) {
+        nErrorCode <- -100
+    }
+
     # Step 5 - Build the return object, add other variables to the list as needed
-    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) )
+    lReturn <- list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nErrorCode ) )
     return( lReturn )
 }
