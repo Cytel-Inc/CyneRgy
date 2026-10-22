@@ -114,9 +114,13 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     SimData$CalendarResponseTime <- SimData$ArrivalTime + DesignParam$RespLag
     SimData <- SimData[ order( SimData$CalendarResponseTime ), ]
 
-    vCompleterTimes <- SimData$CalendarResponseTime
-    dAnalysisTime <- vCompleterTimes[ nQtyOfCompleters ]
-    dfSimDataCurrLook <- SimData[ SimData$CalendarResponseTime <= dAnalysisTime, ]
+    dAnalysisTime <- SimData[ nQtyOfCompleters, ]$CalendarResponseTime
+    SimData <- SimData[ SimData$ArrivalTime <= dAnalysisTime, ]
+    SimData$Completers <- ifelse( SimData$CalendarResponseTime > dAnalysisTime, 0, 1 )
+    SimData$ObservedTime <- ifelse( SimData$CalendarResponseTime > dAnalysisTime,
+        dAnalysisTime - SimData$ArrivalTime, SimData$CalendarResponseTime - SimData$ArrivalTime )
+    SimData <- SimData[ order( SimData$ObservedTime ), ]
+    dfSimDataCurrLook <- subset( SimData, SimData$ArrivalTime <= dAnalysisTime + 1e-4 )
 
     ###########################################################
     ## Step 2 - Test Statistic And Delta Computation

@@ -42,10 +42,6 @@
 #'   \item{vTrueDelta}{Custom numeric vector of true experimental-minus-control mean differences, with one
 #'     element per subject and the same value throughout a simulation.}
 #'   \item{Delta}{Custom numeric vector equal to vTrueDelta, retained for existing summary-statistic outputs.}
-#'   \item{dSimMeanCtrl}{Numeric vector of true control-arm response means, with one element per subject and the
-#'     same value throughout a simulation.}
-#'   \item{dSimMeanExp}{Numeric vector of true experimental-arm response means, with one element per subject and
-#'     the same value throughout a simulation.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -92,9 +88,7 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
         Response = as.double( vPatientOutcome ),
         ErrorCode = as.integer( nErrorCode ),
         vTrueDelta = as.double( vTrueDelta ),
-        Delta = as.double( vTrueDelta ),
-        dSimMeanCtrl = rep( as.double( vMean[ 1 ] ), NumSub ),
-        dSimMeanExp = rep( as.double( vMean[ 2 ] ), NumSub )
+        Delta = as.double( vTrueDelta )
     )
 
     return( lReturn )
@@ -134,10 +128,6 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
 #'   \item{vTrueDelta}{Custom numeric vector of true experimental-minus-control mean differences, with one
 #'     element per subject and the same value throughout a simulation.}
 #'   \item{Delta}{Custom numeric vector equal to vTrueDelta, retained for existing summary-statistic outputs.}
-#'   \item{dSimMeanCtrl}{Numeric vector of true control-arm response means, with one element per subject and the
-#'     same value throughout a simulation.}
-#'   \item{dSimMeanExp}{Numeric vector of true experimental-arm response means, with one element per subject and
-#'     the same value throughout a simulation.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -186,9 +176,7 @@ SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, Arriva
         Response = as.double( vPatientOutcome ),
         ErrorCode = as.integer( nErrorCode ),
         vTrueDelta = as.double( vTrueDelta ),
-        Delta = as.double( vTrueDelta ),
-        dSimMeanCtrl = rep( as.double( Mean[ 1 ] ), NumSub ),
-        dSimMeanExp = rep( as.double( Mean[ 2 ] ), NumSub )
+        Delta = as.double( vTrueDelta )
     )
 
     return( lReturn )

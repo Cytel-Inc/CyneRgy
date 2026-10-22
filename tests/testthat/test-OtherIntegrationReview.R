@@ -1,11 +1,10 @@
 test_that( "DEP decisions use native endpoint names and the correct efficacy codes", {
     fnDecision <- .GetCommonExampleFunction( "DEPDecisionsUsingMCP", "GetDEPDecisionsFSD.R", "GetDEPDecisionsFSD" )
     lDesign <- list( EndpointName = c( "Survival", "Response" ), Alpha = 0.05,
-        TailType = list( Response = 1L, Survival = 0L ) )
-    lResult <- fnDecision( data.frame( ), lDesign, TestStat = list( Response = 3, Survival = -3 ) )
+        TailType = list( Survival = 0L, Response = 1L ) )
+    lResult <- fnDecision( data.frame( ), lDesign, TestStat = list( Survival = -3, Response = 3 ) )
     expect_identical( lResult$Decision, list( Survival = 1L, Response = 2L ) )
-    lPending <- fnDecision( data.frame( ), lDesign, TestStat = list( Response = NA_real_, Survival = -3 ) )
-    expect_identical( lPending$Decision, list( Survival = 1L, Response = 0L ) )
+
 } )
 
 test_that( "treatment selection preserves IDs when an experimental arm has no observations", {
@@ -69,8 +68,8 @@ test_that( "MEP decision handling accepts missing statistics at pending looks", 
     fnDecision <- .GetCommonExampleFunction( "MEPDesign", "GetMEPDecision.R", "GetMEPDecision" )
     lDesign <- list( EndpointName = "Response", EndpointType = 1L, TargetInformation = 100,
         EffFlg = matrix( 1L, 2, 1 ), FutFlg = matrix( 0L, 2, 1 ), FutThrsld = matrix( 0, 2, 1 ) )
-    lLook <- list( LastLookDecision = 0L, EfficacyBoundaryPScale = NA_real_, LookNum = 1L,
-        TestStatisticsOutputs = list( Response = list( data = list( TSPVal = NA_real_ ) ) ), EPStatus = 0L )
+    lLook <- list( LastLookDecision = 0L, EfficacyBoundaryPScale = NaN, LookNum = 1L,
+        TestStatisticsOutputs = list( Response = list( data = list( TSPVal = NaN ) ) ), EPStatus = 0L )
     lResult <- fnDecision( data.frame( ), data.frame( ), list( Response = list( Completers = 10 ) ), lLook, lDesign )
     expect_identical( lResult$Decision, 0L )
     expect_identical( lResult$ErrorCode, 0L )

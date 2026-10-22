@@ -118,9 +118,6 @@ Analyze.RepeatedMeasures <- function( SimData, DesignParam, LookInfo = NULL, Use
         }
 
         dfAnalysisData <- dfLongData[ dfLongData[[ "id" ]] %in% vSubjectsForAnalysis, ]
-        if ( nLookIndex < nQtyOfLooks ) {
-            dfAnalysisData <- dfAnalysisData[ dfAnalysisData$CalendarVisitTime <= dAnalysisTime, ]
-        }
     } else {
         dfAnalysisData <- dfLongData
     }

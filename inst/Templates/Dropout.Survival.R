@@ -43,9 +43,6 @@
     # i.e., effectively they haven't dropped out at all, meaning that they all are completers
 
     vDropoutTime <- rep( Inf, NumSub )
-    if ( is.null( dim( DropParam ) ) && NumPrd == 1 ) {
-        DropParam <- matrix( DropParam, nrow = 1 )
-    }
 
 
     # Identify the patients from Control and Experimental arm
@@ -59,27 +56,27 @@
         # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are
         #   the dropout times.
 
-        if ( DropParam[ 1, 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
-            vDropoutTime[ vIndexControl ] <- stats::rexp( nQtyOfPatientsOnControl, rate = DropParam[ 1, 1 ] )
+        if ( DropParam[ 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
+            vDropoutTime[ vIndexControl ] <- stats::rexp( nQtyOfPatientsOnControl, rate = DropParam[ 1 ] )
         }
-        if ( DropParam[ 1, 2 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
-            vDropoutTime[ vIndexExperiment ] <- stats::rexp( nQtyOfPatientsOnExperiment, rate = DropParam[ 1, 2 ] )
+        if ( DropParam[ 2 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
+            vDropoutTime[ vIndexExperiment ] <- stats::rexp( nQtyOfPatientsOnExperiment, rate = DropParam[ 2 ] )
         }
     }
 
     if ( DropMethod == 2 ) { # Probability of Dropout
         # Conversion of dropout probabilities into Hazard rates
 
-        dExpDropoutControlRate <- -log( 1 - DropParam[ 1, 1 ] ) / PrdTime
-        dExpDropoutExperimentRate <- -log( 1 - DropParam[ 1, 2 ] ) / PrdTime
+        dExpDropoutControlRate <- -log( 1 - DropParam[ 1 ] ) / PrdTime
+        dExpDropoutExperimentRate <- -log( 1 - DropParam[ 2 ] ) / PrdTime
 
         # Generate a random sample from Exponential distribution using control and experiment rate parameter. These are
         #   the dropout times.
 
-        if ( DropParam[ 1, 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
+        if ( DropParam[ 1 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
             vDropoutTime[ vIndexControl ] <- stats::rexp( nQtyOfPatientsOnControl, rate = dExpDropoutControlRate )
         }
-        if ( DropParam[ 1, 2 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
+        if ( DropParam[ 2 ] > 0 ) { # generate dropout time only in case of Non - zero dropout probability
             vDropoutTime[ vIndexExperiment ] <- stats::rexp(
                 nQtyOfPatientsOnExperiment, rate = dExpDropoutExperimentRate
             )

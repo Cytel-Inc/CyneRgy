@@ -26,7 +26,6 @@
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed.}
-#'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
 #'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
 #'   \item{VarType}{Integer variance setting for continuous outcomes: 4 = equal variances; 5 = unequal variances.
 #'   }
@@ -37,7 +36,7 @@
 #'     Design = Fixed Sample`. East Horizon Design: Fixed to `1` for the first look and for `Statistical Design =
 #'     Fixed Sample`.}
 #' }
-#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#' @param LookInfo Named list of group sequential analysis parameters, for the current group-sequential look. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
 #' \describe{
@@ -83,8 +82,7 @@
 #' }
 #' @details OutList carries vPOCStatusArm (one proof-of-concept status per experimental arm) and dOverallPOC
 #'   (overall proof-of-concept status) from the previous look. The first look starts with zero statuses. The
-#'   current-look PoCThreshold is applied to isotonic treatment-effect estimates. Analysis timing counts only
-#'   completers and includes the native RespLag. A NULL LookInfo selects a fixed-sample analysis.
+#'   current-look PoCThreshold is applied to isotonic treatment-effect estimates. Analysis timing includes RespLag.
 ######################################################################################################################## .
 
 AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam, LookInfo = NULL, OutList = NULL, UserParam = NULL ) {
@@ -97,23 +95,13 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
     nTailType <- DesignParam$TailType
     nVarType <- DesignParam$VarType
     vIsArmPresent <- DesignParam$IsArmPresent
-    # Extract current-look parameters, or use the fixed-sample defaults.
-    if ( !is.null( LookInfo ) ) {
-        nNumLooks <- LookInfo$NumLooks
-        nCurrLookIndex <- LookInfo$CurrLookIndex
-        vFutBdry <- LookInfo$FutBdry
-        dPoCThreshold <- LookInfo$PoCThreshold[ nCurrLookIndex ]
-        vCumCompleters <- LookInfo$CumCompleters
-    } else {
-        nNumLooks <- 1
-        nCurrLookIndex <- 1
-        vFutBdry <- NULL
-        dPoCThreshold <- NULL
-        vCumCompleters <- DesignParam$MaxCompleters
-    }
+    # Extract current-look parameters.
+    nNumLooks <- LookInfo$NumLooks
+    nCurrLookIndex <- LookInfo$CurrLookIndex
+    vFutBdry <- LookInfo$FutBdry
+    dPoCThreshold <- LookInfo$PoCThreshold[ nCurrLookIndex ]
+    vCumCompleters <- LookInfo$CumCompleters
 
-    # Initializing output vectors ####
-    # Decision vector: NA = dropped, 0 = no boundary, 1 = lower eff, 2 = upper eff, 3 = futility
     vDecision <- rep( 0L, nNumTrt )
     vRawPVal <- rep( NA_real_, nNumTrt )
     vTestStat <- rep( NA_real_, nNumTrt )
@@ -134,7 +122,7 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
     # Compute Analysis Time ####
     dEstAnalysisTime <- ComputeAnalysisTime(
         dRespLag = DesignParam$RespLag,
-        vArrivalTime = SimData$ArrivalTime[ SimData$CensorIndOrg == 1 ],
+        vArrivalTime = SimData$ArrivalTime,
         vCumCompleters = vCumCompleters, nCurrLookIndex = nCurrLookIndex
     )
 

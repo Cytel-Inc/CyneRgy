@@ -160,10 +160,10 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo,
             strEPName <- DesignParam$EndpointName[ nEPID ]
             # Get efficacy dBoundary and p-value for current endpoint
             dBoundary <- LookInfo$EfficacyBoundaryPScale[ nEPID ]
-            dPValue <- LookInfo$TestStatisticsOutputs[[ strEPName ]]$data$TSPVal
+            dPValue <- LookInfo$TestStatisticsOutputs[[ nEPID ]]$data$TSPVal
 
             # Check if both dBoundary and p-value exist and p-value is less than dBoundary
-            if ( !is.na( dBoundary ) && !is.na( dPValue ) ) {
+            if ( !is.nan( dBoundary ) && !is.nan( dPValue ) ) {
                 if ( dPValue < dBoundary ) {
                     vDecision[ nEPID ] <- 1
                     next
@@ -178,12 +178,12 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo,
 
                 if ( nEPType == 2 ) {
                     dObservedValue <- DataSummary[[ strEPName ]]$HR
-                    if ( !is.na( dObservedValue ) && dObservedValue > dFutilityThreshold ) {
+                    if ( !is.nan( dObservedValue ) && dObservedValue > dFutilityThreshold ) {
                         vDecision[ nEPID ] <- 2
                     }
                 } else {
                     dObservedValue <- DataSummary[[ strEPName ]]$Delta
-                    if ( !is.na( dObservedValue ) && dObservedValue < dFutilityThreshold ) {
+                    if ( !is.nan( dObservedValue ) && dObservedValue < dFutilityThreshold ) {
                         vDecision[ nEPID ] <- 2
                     }
                 }
@@ -203,7 +203,7 @@ GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo,
                 DataSummary[[ strEPName ]]$Completers
             }
 
-            if ( !is.na( nCurrentCount ) && nCurrentCount >= nTargetInformation ) {
+            if ( nCurrentCount >= nTargetInformation ) {
                 vDecision[ nEPID ] <- 2
             }
             if ( LookInfo$EPStatus[ nEPID ] == 1 ) {

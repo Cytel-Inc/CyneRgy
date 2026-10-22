@@ -53,8 +53,8 @@
     }
 
     # Replace the censor indicators using the chosen dropout model.
-    # Alternatively, return DropoutVisitID or DropOutTime instead of CensorInd1, ... .
-    # Do not return contradictory representations; censor indicators take precedence.
+    lReturn$DropoutVisitID <- as.integer( rep( Inf, NumSub ) )
+    lReturn$DropOutTime <- as.double( rep( NumVisit, NumSub ) )
     lReturn$ErrorCode <- as.integer( nErrorCode )
     return( lReturn )
 }

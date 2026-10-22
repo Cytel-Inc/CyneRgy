@@ -41,11 +41,7 @@
 #'   \item{NumLooks}{Integer total number of analysis looks.}
 #'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
 #'   \item{CumCompleters}{Integer vector of cumulative completer counts, one per look.}
-#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
-#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
-#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
-#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
-#'     Event` tests.}
+#'   \item{CumEvents}{Cumulative event-count vector indexed by LookInfo$CurrLookIndex in this example.}
 #'   \item{RejType}{Integer one-sided rejection type supported by the decision helpers: 0 = upper efficacy;
 #'     1 = upper futility; 2 = lower efficacy; 3 = lower futility; 4 = upper efficacy and lower futility;
 #'     5 = lower efficacy and upper futility.}
@@ -98,10 +94,7 @@ AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, Use
         # Group sequential design
         nLookIndex <- LookInfo$CurrLookIndex
         nQtyOfLooks <- LookInfo$NumLooks
-        nQtyOfEvents <- LookInfo$CumEvents
-        if ( length( nQtyOfEvents ) > 1 ) {
-            nQtyOfEvents <- nQtyOfEvents[ nLookIndex ]
-        }
+        nQtyOfEvents <- LookInfo$CumEvents[ nLookIndex ]
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
         nRejType <- LookInfo$RejType
         nTailType <- DesignParam$TailType

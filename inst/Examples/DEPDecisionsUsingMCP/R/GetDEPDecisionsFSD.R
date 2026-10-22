@@ -54,26 +54,19 @@
 
 GetDEPDecisionsFSD <- function( SimData, DesignParam, LookInfo = NULL, TestStat, OutList = NULL, UserParam = NULL ) {
     vEndpointName <- DesignParam$EndpointName
-    if ( is.null( names( TestStat ) ) ) {
-        names( TestStat ) <- vEndpointName
-    }
-    if ( is.null( names( DesignParam$TailType ) ) ) {
-        names( DesignParam$TailType ) <- vEndpointName
-    }
     lDecision <- as.list( stats::setNames( rep( 0L, length( vEndpointName ) ), vEndpointName ) )
 
-    for ( strEndpointName in vEndpointName ) {
-        dTestStat <- TestStat[[ strEndpointName ]]
-        nTailType <- DesignParam$TailType[[ strEndpointName ]]
-        if ( !is.na( dTestStat ) ) {
-            if ( nTailType == 0 ) {
-                if ( stats::pnorm( dTestStat ) < DesignParam$Alpha / 2 ) {
-                    lDecision[[ strEndpointName ]] <- 1L
-                }
-            } else {
-                if ( stats::pnorm( dTestStat, lower.tail = FALSE ) < DesignParam$Alpha / 2 ) {
-                    lDecision[[ strEndpointName ]] <- 2L
-                }
+    for ( nEndpointIndex in seq_along( vEndpointName ) ) {
+        strEndpointName <- vEndpointName[ nEndpointIndex ]
+        dTestStat <- TestStat[[ nEndpointIndex ]]
+        nTailType <- DesignParam$TailType[[ nEndpointIndex ]]
+        if ( nTailType == 0 ) {
+            if ( stats::pnorm( dTestStat ) < DesignParam$Alpha / 2 ) {
+                lDecision[[ strEndpointName ]] <- 1L
+            }
+        } else {
+            if ( stats::pnorm( dTestStat, lower.tail = FALSE ) < DesignParam$Alpha / 2 ) {
+                lDecision[[ strEndpointName ]] <- 2L
             }
         }
     }

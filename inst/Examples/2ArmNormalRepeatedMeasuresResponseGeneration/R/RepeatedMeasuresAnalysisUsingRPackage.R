@@ -27,9 +27,7 @@
 #'   \item{NumVisit}{Integer number of visits. East Horizon Explore: Only available for `Endpoint Type =
 #'     Continuous with Repeated Measures`. East Horizon Design: Not available.}
 #' }
-#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
-#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
-#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#' @param LookInfo Optional look information; not used by this fixed-sample example.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -37,14 +35,15 @@
 #' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
+#'   \item{PrimDelta}{Zero placeholder for the primary contrast.}
+#'   \item{SecDelta}{Zero placeholder for the secondary contrast.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
 #' @details This fixed-sample example assumes a common treatment effect across all post-baseline visits and
 #'   returns its signed normal-equivalent statistic, computed from the model's two-sided t-test p-value.
-#'   It does not estimate the configured visit-specific primary and secondary
-#'   contrasts. Extend the model before returning PrimDelta or SecDelta.
+#'   PrimDelta and SecDelta retain the example's zero placeholders; visit-specific contrasts are not estimated.
 #'
 ######################################################################################################################## .
 
@@ -78,6 +77,5 @@ MMRMAna <- function( SimData, DesignParam, UserParam = NULL, LookInfo = NULL ) {
     dTwoSidedPValue <- mCoefficients[ "TreatmentID", "p-value" ]
     dTestStatistic <- sign( dTValue ) * stats::qnorm( dTwoSidedPValue / 2, lower.tail = FALSE )
 
-    # Primary and secondary contrasts require a model that estimates visit-specific treatment effects.
-    return( list( TestStat = as.double( dTestStatistic ), ErrorCode = 0L ) )
+    return( list( TestStat = as.double( dTestStatistic ), PrimDelta = 0, SecDelta = 0, ErrorCode = 0L ) )
 }

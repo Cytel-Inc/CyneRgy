@@ -36,7 +36,6 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#' Unnamed endpoint-parameter lists are interpreted in EndpointName order for compatibility.
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
@@ -53,33 +52,35 @@ SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece <- function( NumSub, NumArm, 
                                                                NumPrd, PrdTime, SurvParam, PropResp = NULL,
                                                                UserParam = NULL ) {
     nErrorCode <- 0
-    if ( is.null( names( SurvParam ) ) ) {
-        names( SurvParam ) <- EndpointName[ seq_along( SurvParam ) ]
-    }
     vPatientOutcomeEP1 <- rep( 0, NumSub )
     vPatientOutcomeEP2 <- rep( 0, NumSub )
     lResponse <- list( )
 
-    # Get correlation matrix given qualitative correlation input
-    mCor <- GetCorrMatrix( Correlation )
+    if ( !is.null( UserParam ) ) {
+        # Customized response generation can be supplied here.
+    } else {
+        # Get correlation matrix given qualitative correlation input
+        mCor <- GetCorrMatrix( Correlation )
 
-    # Cholesky decomposition of correlation matrix
-    mChol <- chol( mCor )
+        # Cholesky decomposition of correlation matrix
+        mChol <- chol( mCor )
 
-    # Generating (NumSub * 2) standard normal responses
-    mZ <- matrix( stats::rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
+        # Generating (NumSub * 2) standard normal responses
+        mZ <- matrix( stats::rnorm( NumSub * 2, 0, 1 ), ncol = 2 )
 
-    # Intermediate matrix
-    mNormResp <- mZ %*% mChol
+        # Intermediate matrix
+        mNormResp <- mZ %*% mChol
 
-    # Surv times
-    for ( nSubjID in 1:NumSub ) {
-        vPatientOutcomeEP1[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 1 ] ) ) / SurvParam[[ EndpointName[ 1 ] ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
-        vPatientOutcomeEP2[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 2 ] ) ) / SurvParam[[ EndpointName[ 2 ] ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
-    }
-    if ( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
-        length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ) ) {
-        nErrorCode <- -100
+        # Surv times
+        for ( nSubjID in 1:NumSub ) {
+            vPatientOutcomeEP1[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 1 ] ) ) / SurvParam[[ 1 ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
+            vPatientOutcomeEP2[ nSubjID ] <- ( -log( stats::pnorm( mNormResp[ nSubjID, 2 ] ) ) / SurvParam[[ 2 ]][ 1, TreatmentID[ nSubjID ] + 1 ] )
+        }
+        if ( length( vPatientOutcomeEP1 ) != NumSub || any( is.na( vPatientOutcomeEP1 ) == TRUE ) ||
+            length( vPatientOutcomeEP2 ) != NumSub || any( is.na( vPatientOutcomeEP2 ) == TRUE ) ) {
+            nErrorCode <- -100
+        }
+
     }
 
     lResponse[[ EndpointName[[ 1 ]] ]] <- vPatientOutcomeEP1

@@ -53,7 +53,7 @@ test_that( "subpopulation analyses preserve the original custom hazard-ratio out
     lResult <- envAnalyze$AnalyzeSubpopulation( dfData, lDesign )
     expect_identical( names( lResult$dHR ), c( "Full Population", "A" ) )
     expect_true( all( is.finite( unlist( lResult$dHR ) ) ) )
-    expect_identical( lResult$dHR, lResult$HR )
+    expect_false( "HR" %in% names( lResult ) )
 } )
 
 test_that( "dual-endpoint decisions accept positional statistics and tail directions", {
@@ -61,7 +61,7 @@ test_that( "dual-endpoint decisions accept positional statistics and tail direct
         "GetDEPDecisionsFSD" )
     lDesign <- list( EndpointName = c( "First", "Second" ), TailType = c( First = 0, Second = 1 ),
         Alpha = 0.05 )
-    lExpected <- fnDecide( NULL, lDesign, TestStat = list( Second = 3, First = -3 ) )
+    lExpected <- fnDecide( NULL, lDesign, TestStat = list( First = -3, Second = 3 ) )
     lDesign$TailType <- unname( lDesign$TailType )
     expect_identical( fnDecide( NULL, lDesign, TestStat = list( -3, 3 ) ), lExpected )
     expect_identical( fnDecide( NULL, lDesign, TestStat = c( -3, 3 ) ), lExpected )

@@ -109,19 +109,13 @@ AnalyzeUsingMMRMWithGLS <- function( SimData, DesignParam, LookInfo = NULL, User
     vTime <- dfNoBaselineAnalysisData$Visit
     vIND <- dfNoBaselineAnalysisData$Id
 
-    nObservedVisits <- length( unique( vTime ) )
-    if ( nObservedVisits == 1 ) {
-        # With one follow-up per subject, the repeated-measures model reduces to ANCOVA.
-        cGLSFit <- nlme::gls( vOut ~ vBaseline + vTrt, na.action = stats::na.omit )
-    } else {
-        cGLSFit <- nlme::gls( vOut ~ vBaseline + vTrt * vTime,
-            weights = nlme::varIdent( form = ~ 1 | vTime ),
-            correlation = nlme::corSymm( form = ~ 1 | vIND ),
-            na.action = stats::na.omit
-        )
-    }
+    cGLSFit <- nlme::gls( vOut ~ vBaseline + vTrt * vTime,
+        weights = nlme::varIdent( form = ~ 1 | vTime ),
+        correlation = nlme::corSymm( form = ~ 1 | vIND ),
+        na.action = stats::na.omit
+    )
 
-    lRetGLS <- GetLSDiffGLS( cGLSFit, 1, max( as.integer( as.character( dfNoBaselineAnalysisData$Visit ) ) ), FALSE )
+    lRetGLS <- GetLSDiffGLS( cGLSFit, 1, nVisits, FALSE )
     lRetGLS$dPValue <- stats::pt( lRetGLS$dTStat, lRetGLS$nDOF,
         lower.tail = DesignParam$TailType == 0
     )
@@ -242,10 +236,6 @@ CreateAnalysisDataset <- function( SimData, LookInfo ) {
 
         dfAnalysisData <- dfLongData |>
             dplyr::filter( Id %in% vSubjectsForAnalysis )
-        if ( nLookIndex < nQtyOfLooks ) {
-            dfAnalysisData <- dfAnalysisData |>
-                dplyr::filter( CalendarVisitTime <= dAnalysisTime )
-        }
     } else {
         dfAnalysisData <- dfLongData
     }

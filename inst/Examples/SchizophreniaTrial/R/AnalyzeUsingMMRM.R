@@ -110,25 +110,17 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
 
     dfNoBaselineAnalysisData$Visit <- stats::relevel( dfNoBaselineAnalysisData$Visit, ref = strLastVisit )
 
-    nObservedVisits <- length( unique( dfNoBaselineAnalysisData$Visit ) )
     cMMRMModel <- tryCatch(
         {
-            if ( nObservedVisits == 1 ) {
-                # With one follow-up per subject, the repeated-measures model reduces to ANCOVA.
-                nlme::gls( Response ~ Baseline + TreatmentID,
-                    data = dfNoBaselineAnalysisData, method = "REML", na.action = stats::na.omit
-                )
-            } else {
-                nlme::lme( Response ~ Baseline + TreatmentID * Visit,
-                    random      = ~ 1 | Id,
-                    correlation = nlme::corCompSymm( form = ~ 1 | Id ),
-                    weights     = nlme::varIdent( form = ~ 1 | Visit ),
-                    data        = dfNoBaselineAnalysisData,
-                    method      = "REML",
-                    na.action   = stats::na.omit,
-                    control     = lLMEControls
-                )
-            }
+            nlme::lme( Response ~ Baseline + TreatmentID * Visit,
+                random      = ~ 1 | Id,
+                correlation = nlme::corCompSymm( form = ~ 1 | Id ),
+                weights     = nlme::varIdent( form = ~ 1 | Visit ),
+                data        = dfNoBaselineAnalysisData,
+                method      = "REML",
+                na.action   = stats::na.omit,
+                control     = lLMEControls
+            )
         },
         error = function( e ) {
             return( NULL )
@@ -138,9 +130,6 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
     # Step 3b: Extract the treatment × last‐visit effect ####
     if ( !is.null( cMMRMModel ) ) {
         mCoefficients <- summary( cMMRMModel )$tTable
-        if ( inherits( cMMRMModel, "gls" ) ) {
-            mCoefficients <- cbind( mCoefficients, DF = cMMRMModel$dims$N - cMMRMModel$dims$p )
-        }
         strTrtRow <- grep( "^TreatmentID", rownames( mCoefficients ), value = TRUE )[ 1 ]
 
         if ( strTrtRow %in% rownames( mCoefficients ) ) {
@@ -277,10 +266,6 @@ CreateAnalysisDataset <- function( SimData, LookInfo ) {
 
         dfAnalysisData <- dfLongData |>
             dplyr::filter( Id %in% vSubjectsForAnalysis )
-        if ( nLookIndex < nQtyOfLooks ) {
-            dfAnalysisData <- dfAnalysisData |>
-                dplyr::filter( CalendarVisitTime <= dAnalysisTime )
-        }
     } else {
         dfAnalysisData <- dfLongData
     }

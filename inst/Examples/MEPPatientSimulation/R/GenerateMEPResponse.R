@@ -26,10 +26,7 @@
 #'     StartAtTime contains their starting times. For method 2, ByTime contains the times at which Control survival
 #'     percentages are specified. Method 3 uses the control median survival time.}
 #' }
-#' @param Correlation Square matrix of integer correlation categories in EndpointName order. Category 0 =
-#'   uncorrelated; absolute values 1, 2, 3, 4, and 5 indicate very weak, weak, moderate, strong, and very strong
-#'   correlation. Positive values indicate positive correlation; negative values indicate negative correlation.
-#'   This is an engine category matrix, not a numeric Pearson correlation matrix.
+#' @param Correlation Numeric positive-definite correlation matrix for the latent normal responses.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -47,11 +44,8 @@
 #'   specify their structure. These templates and examples return Response and ErrorCode; consult the requirements
 #'   of the target East Horizon version before using those optional outputs.
 #'
-#' This example maps integer correlation categories to latent-normal correlations 0, 0.15, 0.3, 0.5, 0.7, and 0.85
-#'   with matching signs, and sets diagonal correlations to 1. Non-integer numeric correlation matrices are also
-#'   accepted for direct R calls. The resulting matrix must be positive definite. For time-to-event endpoints this
-#'   example supports a single hazard period; extend the response-generation logic before using piecewise survival
-#'   inputs.
+#' This example uses the supplied numeric correlation matrix directly. It must be positive definite.
+#'   For time-to-event endpoints this example supports a single hazard period.
 ######################################################################################################################## .
 
 GenerateMEPResponse <- function( NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL ) {
@@ -59,15 +53,7 @@ GenerateMEPResponse <- function( NumPat, NumArms, TreatmentID, ArrivalTime, Endp
     lResponse <- list( )
     nEndpoints <- length( EndpointType )
 
-    # Convert the engine's qualitative categories to latent-normal correlations.
-    # Numeric correlation matrices remain supported for direct calls from R.
-    mCorrelation <- Correlation
-    if ( all( Correlation == round( Correlation ) ) ) {
-        vCorrelations <- c( -0.85, -0.7, -0.5, -0.3, -0.15, 0, 0.15, 0.3, 0.5, 0.7, 0.85 )
-        mCorrelation <- matrix( vCorrelations[ Correlation + 6 ], nrow = nEndpoints, ncol = nEndpoints )
-        diag( mCorrelation ) <- 1
-    }
-    mChol <- chol( mCorrelation )
+    mChol <- chol( Correlation )
 
     # Generating (NumPat * nEndpoints) standard normal responses
     mZ <- matrix( stats::rnorm( NumPat * nEndpoints, 0, 1 ), ncol = nEndpoints )

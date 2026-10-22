@@ -105,11 +105,7 @@
 #' \describe{
 #'   \item{NumLooks}{Integer total number of analysis looks.}
 #'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
-#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
-#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
-#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
-#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
-#'     Event` tests.}
+#'   \item{CumEvents}{Cumulative event-count vector indexed by LookInfo$CurrLookIndex in this example.}
 #' }
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
@@ -124,9 +120,7 @@
 #'     Explore).}
 #'   \item{TestStat}{Named list of numeric test statistics on the Wald (Z) scale, with one element for
 #'     the full population and each subpopulation, using the population names defined by the design.}
-#'   \item{HR}{Named list of estimated treatment-to-control hazard ratios, with one element for the full
-#'     population and each subpopulation, using the population names defined by the design.}
-#'   \item{dHR}{Custom alias of HR retained for scripts that consumed the original example output.}
+#'   \item{dHR}{Named list of estimated hazard ratios for the full population and each subpopulation.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
@@ -135,7 +129,7 @@
 #' }
 #'
 #' SimData also contains the subject-level stratification-factor columns named in DesignParam$StratFactors. When
-#'   subpopulations are enabled, Decision, TestStat, and HR are named lists with one element for the full
+#'   subpopulations are enabled, Decision, TestStat, and dHR are named lists with one element for the full
 #'   population and each subpopulation, using the population names defined by the design.
 ######################################################################################################################## .
 
@@ -147,10 +141,7 @@ AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserPar
     if ( !is.null( LookInfo ) ) {
         nQtyOfLooks <- LookInfo$NumLooks
         nLookIndex <- LookInfo$CurrLookIndex
-        nQtyOfEvents <- LookInfo$CumEvents
-        if ( length( nQtyOfEvents ) > 1 ) {
-            nQtyOfEvents <- nQtyOfEvents[ nLookIndex ]
-        }
+        nQtyOfEvents <- LookInfo$CumEvents[ nLookIndex ]
     } else {
         nQtyOfLooks <- 1
         nLookIndex <- 1
@@ -283,7 +274,6 @@ AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserPar
     lRet <- list(
         Decision = as.list( lDecisions ),
         TestStat = as.list( lTestStatistics ),
-        HR = as.list( lHazardRatios ),
         dHR = as.list( lHazardRatios ),
         AnalysisTime = as.double( dTimeOfAnalysis ),
         ErrorCode = as.integer( nErrorCode )

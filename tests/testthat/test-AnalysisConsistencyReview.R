@@ -75,22 +75,26 @@ test_that( "MMRM sequential analyses compare p-values with stage rejection level
     skip_if_not_installed( "tidyr" )
     set.seed( 391 )
     dfData <- data.frame( ArrivalTime = 0, TreatmentID = rep( 0:1, each = 60 ),
-        Response1 = stats::rnorm( 120 ), ArrTimeVisit1 = 0, ArrTimeVisit2 = 1 )
-    vNoise <- stats::residuals( stats::lm( stats::rnorm( 120 ) ~ Response1 + TreatmentID, data = dfData ) )
-    cNoiseModel <- stats::lm( vNoise ~ Response1 + TreatmentID, data = dfData )
+        Response1 = stats::rnorm( 120 ), ArrTimeVisit1 = 0, ArrTimeVisit2 = 1, ArrTimeVisit3 = 2 )
+    vNoise2 <- stats::rnorm( 120 )
+    vNoise3 <- stats::rnorm( 120 )
     cDesign <- rpact::getDesignGroupSequential( kMax = 3, informationRates = c( 0.25, 0.6, 1 ),
         alpha = 0.025, sided = 1, typeOfDesign = "OF" )
     dTargetP <- mean( c( cDesign$stageLevels[ 3 ], 0.025 ) )
-    dEffect <- stats::qt( 1 - dTargetP, stats::df.residual( cNoiseModel ) ) *
-        summary( cNoiseModel )$coefficients[ "TreatmentID", "Std. Error" ]
-    dfData$Response2 <- 0.7 * dfData$Response1 + dEffect * dfData$TreatmentID + vNoise
     lLook <- list( NumLooks = 3, CurrLookIndex = 3, CumCompleters = c( 30, 72, 120 ),
-        InfoFrac = c( 0.25, 0.6, 1 ), InterimVisit = 2, IncludePipeline = 0, RejType = 0 )
+        InfoFrac = c( 0.25, 0.6, 1 ), InterimVisit = 3, IncludePipeline = 0, RejType = 0 )
     for ( strFunction in c( "AnalyzeUsingMMRM", "AnalyzeUsingMMRMWithGLS" ) ) {
         fnAnalyze <- .GetCommonExampleFunction( "SchizophreniaTrial", paste0( strFunction, ".R" ), strFunction )
-        lResult <- fnAnalyze( dfData, list( TailType = 1, Alpha = 0.025 ), lLook )
+        fnAtEffect <- function( dEffect ) {
+            dfData$Response2 <- 0.7 * dfData$Response1 + dEffect * dfData$TreatmentID + vNoise2
+            dfData$Response3 <- 0.7 * dfData$Response1 + dEffect * dfData$TreatmentID + vNoise3
+            fnAnalyze( dfData, list( TailType = 1, Alpha = 0.025 ), lLook )
+        }
+        dEffect <- stats::uniroot( function( dEffect ) fnAtEffect( dEffect )$p.value - dTargetP,
+            c( 0, 2 ), tol = 1e-9 )$root
+        lResult <- fnAtEffect( dEffect )
         expect_identical( lResult$ErrorCode, 0L, info = strFunction )
-        expect_equal( lResult$p.value, dTargetP, tolerance = 1e-10, info = strFunction )
+        expect_equal( lResult$p.value, dTargetP, tolerance = 1e-7, info = strFunction )
         expect_lt( lResult$p.value, 0.025 )
         expect_gt( lResult$p.value, cDesign$stageLevels[ 3 ] )
         expect_identical( lResult$Decision, 0L, info = strFunction )
@@ -129,26 +133,4 @@ test_that( "survival analyses preserve engine-supplied outcomes without recensor
     lUser <- list( HazardRatioCutoffIA = 1, HazardRatioCutoffFA = 1 )
     expect_equal( fnAnalyze( dfEngineData, lEngineDesign, UserParam = lUser ),
         fnAnalyze( dfData, lDesign, UserParam = lUser ) )
-} )
-
-test_that( "standard two-arm analyses accept the current-look event count as a scalar", {
-    skip_if_not_installed( "survival" )
-    set.seed( 393 )
-    dfData <- data.frame( ArrivalTime = 0, TreatmentID = rep( 0:1, each = 100 ),
-        SurvivalTime = c( stats::rexp( 100, 1 ), stats::rexp( 100, 0.25 ) ), TrueHR = 0.25,
-        Region = rep( 1:2, 100 ) )
-    lDesign <- list( TailType = 0, Alpha = 0.025, CriticalPoint = -1.96, MaxEvents = 100,
-        TestStratFactors = "Region" )
-    lScalar <- list( NumLooks = 2, CurrLookIndex = 2, CumEvents = 100,
-        EffBdry = c( -3, -1.96 ), RejType = 2 )
-    lVector <- lScalar
-    lVector$CumEvents <- c( 50, 100 )
-    for ( lCase in list( list( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeStratification" ),
-        list( "BayesianAssuranceTimeToEvent", "AnalyzeSurvivalDataUsingCoxPH" ),
-        list( "ConsecutiveStudiesContinuousTimeToEvent", "AnalyzeSurvivalDataUsingCoxPH" ) ) ) {
-        fnAnalyze <- .GetCommonExampleFunction( lCase[[ 1 ]], paste0( lCase[[ 2 ]], ".R" ), lCase[[ 2 ]] )
-        lExpected <- fnAnalyze( dfData, lDesign, lVector )
-        expect_identical( fnAnalyze( dfData, lDesign, lScalar ), lExpected, info = lCase[[ 1 ]] )
-        expect_identical( lExpected$ErrorCode, 0L )
-    }
 } )

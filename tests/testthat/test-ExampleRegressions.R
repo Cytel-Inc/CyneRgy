@@ -82,8 +82,6 @@ test_that( "assurance generators report treatment effects when the control mean 
         expect_equal( lResult$Response, c( 10, 10.5, 10, 10.5 ), info = strExample )
         expect_equal( lResult$vTrueDelta, rep( 0.5, 4 ), info = strExample )
         expect_identical( lResult$Delta, lResult$vTrueDelta, info = strExample )
-        expect_equal( lResult$dSimMeanCtrl, rep( 10, 4 ), info = strExample )
-        expect_equal( lResult$dSimMeanExp, rep( 10.5, 4 ), info = strExample )
 
         fnAnalyze <- .GetCommonExampleFunction( strExample, "AnalyzeUsingBayesianNormals.R",
             "AnalyzeUsingBayesianNormals" )
@@ -94,8 +92,6 @@ test_that( "assurance generators report treatment effects when the control mean 
             dMAV = 0, dPU = 0.8, dPUFutility = 0.8 )
         lAnalyzed <- fnAnalyze( dfGenerated, list( TailType = 1 ), UserParam = lAnalysisUser )
         expect_identical( lAnalyzed$ErrorCode, 0L, info = strExample )
-        expect_equal( lAnalyzed$dSimMeanCtrl, 10, info = strExample )
-        expect_equal( lAnalyzed$dSimMeanExp, 10.5, info = strExample )
 
         fnFromPrior <- .GetCommonExampleFunction( strExample, "SimulatePatientOutcomeNormalAssurance.R",
             "SimulatePatientOutcomeNormalAssuranceUsingPriorInput" )
@@ -104,8 +100,6 @@ test_that( "assurance generators report treatment effects when the control mean 
         envPrior$nSimIndex <- 1
         lFromPrior <- fnFromPrior( 4, rep( 0, 4 ), c( 0, 1, 0, 1 ), c( 10, 11 ), c( 0, 0 ), lUser )
         expect_equal( lFromPrior$Delta, rep( 0.75, 4 ), info = strExample )
-        expect_equal( lFromPrior$dSimMeanCtrl, rep( 10, 4 ), info = strExample )
-        expect_equal( lFromPrior$dSimMeanExp, rep( 10.75, 4 ), info = strExample )
         expect_equal( envPrior$nSimIndex, 2, info = strExample )
     }
 } )
@@ -130,7 +124,7 @@ test_that( "binary and normal SSR analyses honor lower efficacy boundaries witho
     }
 } )
 
-test_that( "SSR completer analyses exclude future responses without re-filtering engine rows", {
+test_that( "SSR completer analyses preserve Dev response selection", {
     fnAnalyze <- .GetCommonExampleFunction( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR.R",
         "AnalyzeNormalSSR" )
     dfData <- data.frame( TreatmentID = rep( 0:1, 12 ), ArrivalTime = seq_len( 24 ),
@@ -140,7 +134,8 @@ test_that( "SSR completer analyses exclude future responses without re-filtering
         EffBdry = c( 2.5, 1.96 ), RejType = 0 )
     lResult <- fnAnalyze( dfData, lDesign, LookInfo = lLook )
     expect_equal( lResult$AnalysisTime, 110 )
-    expect_equal( lResult$Delta, 1 )
+    expect_equal( lResult$Delta, mean( dfData$Response[ dfData$TreatmentID == 1 ] ) -
+        mean( dfData$Response[ dfData$TreatmentID == 0 ] ) )
     expect_identical( lResult$ReEstCompleters, 20L )
     names( dfData )[ names( dfData ) == "CensorInd" ] <- "CensorIndOrg"
     expect_equal( fnAnalyze( dfData, lDesign, LookInfo = lLook ), lResult )
@@ -232,6 +227,7 @@ test_that( "repeated-measures analysis preserves subject baselines with two, thr
             expect_equal( stats::pnorm( lResult$TestStat, lower.tail = FALSE ), dOneSidedP,
                 tolerance = 1e-8 )
         }
-        expect_false( any( c( "PrimDelta", "SecDelta" ) %in% names( lResult ) ) )
+        expect_equal( lResult$PrimDelta, 0 )
+        expect_equal( lResult$SecDelta, 0 )
     }
 } )

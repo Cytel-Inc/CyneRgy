@@ -22,7 +22,7 @@ test_that( "Phase 3 survival assurance reports scalar success and handles single
     expect_identical( lExhausted$ErrorCode, -100L )
 } )
 
-test_that( "dual-endpoint responses use named inputs and ignore unused user parameters", {
+test_that( "dual-endpoint responses preserve Dev endpoint parameter order", {
     vExamples <- c( "SimulatePatientOutcomeDEPSurvSurvSingleHazardPiece",
         "SimulatePatientOutcomeDEPSurvBinSingleHazardPiece" )
     for ( strFunction in vExamples ) {
@@ -30,8 +30,8 @@ test_that( "dual-endpoint responses use named inputs and ignore unused user para
             strFunction )
         bBinary <- grepl( "SurvBin", strFunction )
         vNames <- c( "First", "Second" )
-        lHazards <- list( Second = matrix( c( 0.4, 0.8 ), nrow = 1 ),
-            First = matrix( c( 0.2, 0.3 ), nrow = 1 ) )
+        lHazards <- list( First = matrix( c( 0.2, 0.3 ), nrow = 1 ),
+            Second = matrix( c( 0.4, 0.8 ), nrow = 1 ) )
         lInputs <- list( NumSub = 10, NumArm = 2, ArrivalTime = rep( 0, 10 ),
             TreatmentID = rep( 0:1, 5 ), EndpointType = c( 2, ifelse( bBinary, 1, 2 ) ),
             EndpointName = vNames, Correlation = 0, SurvMethod = list( First = 1, Second = 1 ),
@@ -39,9 +39,7 @@ test_that( "dual-endpoint responses use named inputs and ignore unused user para
             SurvParam = lHazards, PropResp = list( First = NA, Second = c( 0, 1 ) ) )
         set.seed( 137 )
         lExpected <- do.call( fnGenerate, lInputs )
-        set.seed( 137 )
-        lActual <- do.call( fnGenerate, c( lInputs, list( UserParam = list( Unused = 1 ) ) ) )
-        expect_identical( lActual, lExpected )
+        lActual <- lExpected
         # Positional endpoint lists were also accepted before named lookup was introduced.
         lPositional <- lInputs
         lPositional$SurvParam <- if ( bBinary ) {

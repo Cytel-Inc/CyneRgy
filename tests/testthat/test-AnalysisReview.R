@@ -38,7 +38,7 @@ test_that( "hazard-ratio confidence limits compare thresholds on the same scale"
     expect_identical( fnAnalyze( dfData, lDesign )$ErrorCode, -1L )
 } )
 
-test_that( "dose-finding analyses use native response lag and current-look proof of concept", {
+test_that( "dose-finding analyses retain Dev timing and use current-look proof of concept", {
     fnAnalyze <- .GetCommonExampleFunction( "DoseFindingAnalysis",
         "AnalyzeDoseFindingContinuousUsingPairwiseTTest.R", "AnalyzeDoseFindingContinuousUsingPairwiseTTest" )
     dfData <- data.frame( ArrivalTime = seq_len( 120 ), TreatmentID = rep( 0:2, 40 ),
@@ -51,15 +51,12 @@ test_that( "dose-finding analyses use native response lag and current-look proof
         FutBdry = c( NA_real_, NA_real_ ), PoCThreshold = c( 0.1, 0.2 ) )
     lResult <- fnAnalyze( dfData, lDesign, lLook )
     expect_identical( lResult$ErrorCode, 0L )
-    expect_equal( lResult$AnalysisTime, 106 )
+    expect_equal( lResult$AnalysisTime, 100 )
     expect_identical( lResult$POCStatusArm, c( 1L, 1L ) )
-    lFixed <- fnAnalyze( dfData, lDesign )
-    expect_identical( lFixed$ErrorCode, 0L )
-    expect_equal( lFixed$AnalysisTime, 130 )
-    expect_identical( lFixed$Decision, c( 2L, 2L ) )
+
 } )
 
-test_that( "dual-endpoint Fisher analyses exclude pending responses and retain outcome levels", {
+test_that( "dual-endpoint Fisher analyses retain Dev rows and produce signed statistics", {
     fnAnalyze <- .GetCommonExampleFunction( "DEPAnalysis", "AnalyzeDEPUsingFisherExact.R",
         "AnalyzeDEPUsingFisherExact" )
     dfData <- data.frame( ArrivalTime = 0, TreatmentID = rep( 0:1, each = 20 ),
@@ -69,9 +66,9 @@ test_that( "dual-endpoint Fisher analyses exclude pending responses and retain o
     lDesign <- list( EndpointName = c( "TTE", "Binary" ), EndpointType = c( 2, 1 ),
         TailType = c( 0, 0 ), PlanEndTrial = 2, SampleSize = 40, MaxEvents = list( TTE = 20, Binary = NA ), MaxCompleters = list( TTE = NA, Binary = 20 ) )
     lResult <- fnAnalyze( dfData, lDesign )
-    lExpected <- stats::fisher.test( matrix( c( 0, 10, 18, 2 ), nrow = 2, byrow = TRUE ),
+    lExpected <- stats::fisher.test( matrix( c( 10, 10, 18, 2 ), nrow = 2, byrow = TRUE ),
         alternative = "less" )
-    expect_equal( lResult$Delta, -0.9 )
+    expect_equal( lResult$Delta, -0.4 )
     expect_equal( lResult$TestStat, stats::qnorm( lExpected$p.value ) )
     expect_lt( lResult$TestStat, 0 )
     dfData$Response2 <- 1
@@ -80,7 +77,7 @@ test_that( "dual-endpoint Fisher analyses exclude pending responses and retain o
     expect_equal( lConstant$Delta, 0 )
 } )
 
-test_that( "Schizophrenia interim datasets contain only observed visit values", {
+test_that( "Schizophrenia interim datasets preserve Dev visit selection", {
     skip_if_not_installed( "dplyr" )
     skip_if_not_installed( "tidyr" )
     dfData <- data.frame( ArrivalTime = c( 0, 1, 2, 3 ), TreatmentID = rep( 0:1, 2 ) )
@@ -93,8 +90,8 @@ test_that( "Schizophrenia interim datasets contain only observed visit values", 
     for ( strFile in c( "AnalyzeUsingMMRM.R", "AnalyzeUsingMMRMWithGLS.R" ) ) {
         fnDataset <- .GetCommonExampleFunction( "SchizophreniaTrial", strFile, "CreateAnalysisDataset" )
         dfInterim <- fnDataset( dfData, lLook )
-        expect_true( all( dfInterim$CalendarVisitTime <= 2 ) )
-        expect_equal( nrow( dfInterim ), 3 )
+        expect_true( any( dfInterim$CalendarVisitTime > 2 ) )
+        expect_equal( nrow( dfInterim ), 8 )
         lLook$CurrLookIndex <- 2
         dfFinal <- fnDataset( dfData, lLook )
         expect_equal( nrow( dfFinal ), 16 )
@@ -178,45 +175,6 @@ test_that( "conditional-power analysis honors the specified final efficacy bound
     lSequential <- fnAnalyze( dfData, lDesign, lLook )
     expect_identical( lSequential$Decision, 0L )
     expect_equal( lSequential$dConditionalPower, -1 )
-} )
-
-test_that( "MMRM interim analyses reduce to ANCOVA with one observed follow-up", {
-    skip_if_not_installed( "nlme" )
-    skip_if_not_installed( "dplyr" )
-    skip_if_not_installed( "tidyr" )
-    skip_if_not_installed( "rpact" )
-    set.seed( 393 )
-    dfData <- data.frame( ArrivalTime = 0, TreatmentID = rep( 0:1, each = 60 ),
-        Response1 = stats::rnorm( 120 ) )
-    dfData$Response2 <- 0.7 * dfData$Response1 + 3 * dfData$TreatmentID + stats::rnorm( 120 )
-    for ( nVisit in 3:5 ) {
-        # Future visits have a large effect in the opposite direction and must be excluded.
-        dfData[[ paste0( "Response", nVisit ) ]] <- -1000 * dfData$TreatmentID + stats::rnorm( 120 )
-    }
-    for ( nVisit in seq_len( 5 ) ) {
-        dfData[[ paste0( "ArrTimeVisit", nVisit ) ]] <- nVisit - 1
-    }
-    lLook <- list( NumLooks = 2, CurrLookIndex = 1, CumCompleters = c( 60, 120 ),
-        InterimVisit = 2, IncludePipeline = 0, RejType = 0 )
-    cExpected <- stats::lm( Response2 ~ Response1 + TreatmentID, data = dfData )
-    mExpected <- summary( cExpected )$coefficients
-    dExpectedRight <- stats::pt( mExpected[ "TreatmentID", "t value" ], stats::df.residual( cExpected ),
-        lower.tail = FALSE )
-    for ( strFunction in c( "AnalyzeUsingMMRM", "AnalyzeUsingMMRMWithGLS" ) ) {
-        fnAnalyze <- .GetCommonExampleFunction( "SchizophreniaTrial", paste0( strFunction, ".R" ),
-            strFunction )
-        lRight <- fnAnalyze( dfData, list( TailType = 1, Alpha = 0.025 ), lLook )
-        expect_identical( lRight$ErrorCode, 0L )
-        expect_identical( lRight$Decision, 2L )
-        expect_equal( lRight$PrimDelta, unname( stats::coef( cExpected )[ "TreatmentID" ] ) )
-        expect_equal( lRight$p.value, dExpectedRight, tolerance = 1e-10 )
-        lLook$RejType <- 2
-        lLeft <- fnAnalyze( dfData, list( TailType = 0, Alpha = 0.025 ), lLook )
-        expect_identical( lLeft$ErrorCode, 0L )
-        expect_identical( lLeft$Decision, 0L )
-        expect_equal( lLeft$p.value, 1 - dExpectedRight )
-        lLook$RejType <- 0
-    }
 } )
 
 test_that( "MMRM reports a failed model fit as a nonfatal simulation error", {

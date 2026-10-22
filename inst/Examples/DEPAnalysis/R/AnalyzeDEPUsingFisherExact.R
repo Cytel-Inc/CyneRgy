@@ -87,7 +87,7 @@ AnalyzeDEPUsingFisherExact <- function( SimData, DesignParam, LookInfo = NULL, U
     strAnalysisEndpointName <- DesignParam$EndpointName[ nAnalysisEndpointIndex ]
 
     dAnalysisTime <- ComputeDEPAnalysisTime( SimData, DesignParam, LookInfo )
-    dfAnalysisData <- SimData[ SimData$ClndrRespTime2 <= dAnalysisTime & SimData$CensorIndOrg2 == 1, ] # Slicing the data to be used for analysis
+    dfAnalysisData <- SimData[ SimData$ArrivalTime <= dAnalysisTime, ] # Slicing the data to be used for analysis
 
     # Create the vector of simulated data for this interim analysis
     vPatientOutcome <- dfAnalysisData[[ paste0( "Response", nAnalysisEndpointIndex ) ]]

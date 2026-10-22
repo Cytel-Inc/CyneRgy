@@ -70,7 +70,7 @@
 #'     East Horizon Design: Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3
 #'     (Z-test)`.}
 #' }
-#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#' @param LookInfo Named list of group sequential analysis parameters, for the sample size re-estimation design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
 #'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
 #' \describe{
@@ -207,8 +207,7 @@
 #'   \item{ReEstCompleters}{Required integer re-estimated total number of completers for the sample size
 #'     re-estimation design.}
 #' }
-#' @details Implement the placeholder sample size re-estimation rule before use. The template returns
-#'   ErrorCode = 1 until its logic has been completed.
+#' @details Implement the placeholder sample size re-estimation rule before use.
 #'
 #' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
@@ -217,8 +216,8 @@
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NULL, UserParam = NULL ) {
-    nErrorCode <- 1 # Replace the placeholder SSR logic before running simulations.
-    nReEstCount <- DesignParam$MaxCompleters
+    nErrorCode <- 0 # Replace the placeholder SSR logic before running simulations.
+    nReEstCount <- 0
     nDecision <- 0
     # Write the actual code here.
     # Use appropriate error handling and modify
