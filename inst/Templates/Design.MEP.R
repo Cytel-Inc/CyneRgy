@@ -20,7 +20,7 @@
 #'     for a specific endpoint. `EPNAME` is the endpoint name specified in East Horizon. Endpoint names can also be
 #'     accessed using `DesignParam$EndpointName`.}
 #'   \item{CensorID.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated censor
-#'     indicator values for a specific endpoint: – `0`: Dropout. – `1`: Completer. `EPNAME` is the endpoint name
+#'     indicator values for a specific endpoint: - `0`: Dropout. - `1`: Completer. `EPNAME` is the endpoint name
 #'     specified in East Horizon. Endpoint names can also be accessed using `DesignParam$EndpointName`.}
 #'   \item{Response.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated responses
 #'     for a specific endpoint after adjusting for endpoint and dropout rules. `EPNAME` is the endpoint name
@@ -30,7 +30,7 @@
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #'   \item{DropoutID.`EPNAME`}{Vector of length equal to the number of subjects, containing whether each patient
-#'     dropped out before responding for a specific endpoint: – `0`: Dropout. – `1`: Completer. `EPNAME` is the
+#'     dropped out before responding for a specific endpoint: - `0`: Dropout. - `1`: Completer. `EPNAME` is the
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #' }
@@ -92,8 +92,8 @@
 #'     vectors of the actual information fractions up to the current look for one endpoint. Order matches
 #'     `DesignParam$EndpointName` order.}
 #'   \item{LastLookDecision}{Vector of Integer. Vector of length equal to the number of endpoints, containing the
-#'     decisions from previous look. Order matches `DesignParam$EndpointName` order. Possible values: – `0`:
-#'     Continue. – `1`: Efficacy. – `2`: Futility.}
+#'     decisions from previous look. Order matches `DesignParam$EndpointName` order. Possible values: - `0`:
+#'     Continue. - `1`: Efficacy. - `2`: Futility.}
 #'   \item{EfficacyBoundaryPScale}{Vector of Numeric. Vector of length equal to the number of endpoints, containing
 #'     the final set of efficacy boundaries on the p-value scale used for testing each endpoint by engine. `NaN`
 #'     where boundaries were not calculated. Order matches `DesignParam$EndpointName` order.}
@@ -109,16 +109,16 @@
 #'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
 #'     endpoint names.}
 #'   \item{EndpointType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the
-#'     endpoint types. Order matches `EndpointName` order. Possible values: – `0`: Continuous. – `1`: Binary. –
+#'     endpoint types. Order matches `EndpointName` order. Possible values: - `0`: Continuous. - `1`: Binary. -
 #'     `2`: Time-to-Event.}
 #'   \item{TailType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the nature of
-#'     critical region for each endpoint. Order matches `EndpointName` order. Possible values: – `0`: Left-tailed.
-#'     – `1`: Right-tailed.}
+#'     critical region for each endpoint. Order matches `EndpointName` order. Possible values: - `0`: Left-tailed.
+#'     - `1`: Right-tailed.}
 #'   \item{NumPat}{Integer number of subjects in the trial.}
 #'   \item{AllocRatio}{Numeric. Treatment allocation ratio: number of patients in the treatment arm over number of
 #'     patient in the control arm.}
 #'   \item{TrialType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the trial
-#'     type for each endpoint. Order matches `EndpointName` order. Possible values: – `0`: Superiority. – `1`:
+#'     type for each endpoint. Order matches `EndpointName` order. Possible values: - `0`: Superiority. - `1`:
 #'     Non-inferiority.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{TestStatistics}{Named List. Named List of length equal to the number of endpoints, containing the test

@@ -21,10 +21,10 @@
 #'
 #' Example-specific parameters and requirements:
 #' \itemize{
-#'     \item \code{dMeanBaselineCtrl} – Mean baseline outcome for the control group.
-#'     \item \code{dMeanBaselineExp} – Mean baseline outcome for the experimental group.
-#'     \item \code{dStdDevBaselineCtrl} – Standard deviation of baseline outcome for the control group.
-#'     \item \code{dStdDevBaselineExp} – Standard deviation of baseline outcome for the experimental group.
+#'     \item \code{dMeanBaselineCtrl} - Mean baseline outcome for the control group.
+#'     \item \code{dMeanBaselineExp} - Mean baseline outcome for the experimental group.
+#'     \item \code{dStdDevBaselineCtrl} - Standard deviation of baseline outcome for the control group.
+#'     \item \code{dStdDevBaselineExp} - Standard deviation of baseline outcome for the experimental group.
 #'   }
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.

@@ -22,7 +22,7 @@
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
 #'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
@@ -77,7 +77,7 @@
 #'
 #' Example-specific additional output elements:
 #' \describe{
-#'   \item{dConditionalPower}{Numeric. The conditional power at the current analysis (–1 if not computed).}
+#'   \item{dConditionalPower}{Numeric. The conditional power at the current analysis (-1 if not computed).}
 #' }
 #' @details This example implements a one-sided left-tailed efficacy test on the Z scale and checks conditional
 #'   power futility at interim looks. Conditional power targets the final efficacy boundary supplied by East

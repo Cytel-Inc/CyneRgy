@@ -25,12 +25,12 @@
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{EndpointType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the
-#'     endpoint types: – 0: Continuous. – 1: Binary. – 2: Time-to-Event.}
+#'     endpoint types: - 0: Continuous. - 1: Binary. - 2: Time-to-Event.}
 #'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
 #'     endpoint names.}
 #'   \item{TailType}{Named List of Integer. Named List of length equal to the number of endpoints, indicating the
 #'     nature of critical region for each endpoint. For example, `TailType["Endpoint 1"]` is the nature for
-#'     Endpoint 1. Possible values: – `0`: Left-tailed. – `1`: Right-tailed.}
+#'     Endpoint 1. Possible values: - `0`: Left-tailed. - `1`: Right-tailed.}
 #'   \item{PlanEndTrial}{Integer. Planned end of trial: - `1`: Full information for both endpoints. - `2`: Full
 #'     information for endpoint 1. - `3`: Full information for endpoint 2.}
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}

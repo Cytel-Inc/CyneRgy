@@ -25,7 +25,7 @@
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed.}
 #'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
 #'   \item{RespLag}{Numeric follow-up duration from enrollment to response measurement.}
 #'   \item{VarType}{Integer variance setting for continuous outcomes: 4 = equal variances; 5 = unequal variances.

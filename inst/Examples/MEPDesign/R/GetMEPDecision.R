@@ -18,7 +18,7 @@
 #'     for a specific endpoint. `EPNAME` is the endpoint name specified in East Horizon. Endpoint names can also be
 #'     accessed using `DesignParam$EndpointName`.}
 #'   \item{CensorID.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated censor
-#'     indicator values for a specific endpoint: – `0`: Dropout. – `1`: Completer. `EPNAME` is the endpoint name
+#'     indicator values for a specific endpoint: - `0`: Dropout. - `1`: Completer. `EPNAME` is the endpoint name
 #'     specified in East Horizon. Endpoint names can also be accessed using `DesignParam$EndpointName`.}
 #'   \item{Response.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated responses
 #'     for a specific endpoint after adjusting for endpoint and dropout rules. `EPNAME` is the endpoint name
@@ -28,7 +28,7 @@
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #'   \item{DropoutID.`EPNAME`}{Vector of length equal to the number of subjects, containing whether each patient
-#'     dropped out before responding for a specific endpoint: – `0`: Dropout. – `1`: Completer. `EPNAME` is the
+#'     dropped out before responding for a specific endpoint: - `0`: Dropout. - `1`: Completer. `EPNAME` is the
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #' }
@@ -86,8 +86,8 @@
 #'     `SDPld` (numeric pooled standard deviation), `StdErr` (numeric standard error), `TS` (numeric test
 #'     statistic), `TSPVal` (numeric p-value).}
 #'   \item{LastLookDecision}{Vector of Integer. Vector of length equal to the number of endpoints, containing the
-#'     decisions from previous look. Order matches `DesignParam$EndpointName` order. Possible values: – `0`:
-#'     Continue. – `1`: Efficacy. – `2`: Futility.}
+#'     decisions from previous look. Order matches `DesignParam$EndpointName` order. Possible values: - `0`:
+#'     Continue. - `1`: Efficacy. - `2`: Futility.}
 #'   \item{EfficacyBoundaryPScale}{Vector of Numeric. Vector of length equal to the number of endpoints, containing
 #'     the final set of efficacy boundaries on the p-value scale used for testing each endpoint by engine. `NaN`
 #'     where boundaries were not calculated. Order matches `DesignParam$EndpointName` order.}
@@ -102,7 +102,7 @@
 #'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
 #'     endpoint names.}
 #'   \item{EndpointType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the
-#'     endpoint types. Order matches `EndpointName` order. Possible values: – `0`: Continuous. – `1`: Binary. –
+#'     endpoint types. Order matches `EndpointName` order. Possible values: - `0`: Continuous. - `1`: Binary. -
 #'     `2`: Time-to-Event.}
 #'   \item{TargetInformation}{Vector of Integer. Vector of length equal to the number of endpoints, containing the
 #'     target information of each endpoint: number of completers for Continuous or Binary, number of events for

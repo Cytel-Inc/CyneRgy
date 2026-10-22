@@ -49,7 +49,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 3. [AnalyzeUsingHazardRatioLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeUsingHazardRatioLimitsOfCI.R) - Contains a function named *AnalyzeUsingHazardRatioLimitsOfCI* that bases interim and final decisions on confidence interval limits rather than East Horizon-provided boundaries. The function uses user-defined parameters (MAV, TV, and confidence level) to implement a Go / No-Go decision framework.
 
-4. [AnalyzeTTESSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R) - Contains a function named *AnalyzeTTESSR* that extends the standard TTE analysis to support conditional power–based sample size re-estimation (SSR) in a group sequential design.
+4. [AnalyzeTTESSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R) - Contains a function named *AnalyzeTTESSR* that extends the standard TTE analysis to support conditional power-based sample size re-estimation (SSR) in a group sequential design.
 
 5. [AnalyzeStratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeStratification.R) - Contains a function named *AnalyzeStratification* that extends the standard TTE analysis to support stratification.
 
@@ -188,11 +188,11 @@ CyneRgy::PlotExampleFlowchart(
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeTTESSR.R" class="alert-link">AnalyzeTTESSR.R</a></p>
 </div>
 
-This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total number of events based on interim results. This is achieved using a conditional power–based SSR approach, which allows the trial to increase its planned number of events when interim results fall within a "promising zone".
+This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total number of events based on interim results. This is achieved using a conditional power-based SSR approach, which allows the trial to increase its planned number of events when interim results fall within a "promising zone".
 
 **Test Statistic:**
 
-At each interim look, the analysis time is determined based on the target cumulative number of events implied by the current information fraction. Survival data are censored at this analysis time, and a log-rank–style standardized Z-statistic is computed based on the observed and expected number of events in the treatment arm:
+At each interim look, the analysis time is determined based on the target cumulative number of events implied by the current information fraction. Survival data are censored at this analysis time, and a log-rank-style standardized Z-statistic is computed based on the observed and expected number of events in the treatment arm:
 
 $$Z = \frac{O_T - E_T}{\sqrt{ \text{Var}(O_T) }}$$
 

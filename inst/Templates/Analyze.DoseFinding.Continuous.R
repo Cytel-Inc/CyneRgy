@@ -26,9 +26,9 @@
 #'   as indicated below.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
-#'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
+#'   \item{TrialType}{Integer. Trial Type: - `0`: Superiority.}
+#'   \item{TestType}{Integer. Test Type: - `0`: One-sided.}
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed.}
 #'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of
 #'     arms - 1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
@@ -39,12 +39,12 @@
 #'   }
 #'   \item{VarType}{Integer variance setting for continuous outcomes: 4 = equal variances; 5 = unequal variances.
 #'   }
-#'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: – `0`:
-#'     Bonferroni. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values: – `0`: Bonferroni. – `1`: Sidak.
-#'     – `2`: Simes. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. – `10`: Holm's Step Down. – `11`: Hommel's Step Up. – `12`: Dunnett's
-#'     Step Down. – `13`: Dunnett's Step Up.}
+#'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: - `0`:
+#'     Bonferroni. - `3`: Dunnett's Single Step. - `4`: Weighted Bonferroni. - `5`: Fixed Sequence. - `6`:
+#'     Fallback. - `7`: Hochberg's Step Up. East Horizon Design: Possible values: - `0`: Bonferroni. - `1`: Sidak.
+#'     - `2`: Simes. - `3`: Dunnett's Single Step. - `4`: Weighted Bonferroni. - `5`: Fixed Sequence. - `6`:
+#'     Fallback. - `7`: Hochberg's Step Up. - `10`: Holm's Step Down. - `11`: Hommel's Step Up. - `12`: Dunnett's
+#'     Step Down. - `13`: Dunnett's Step Up.}
 #'   \item{NumTreatments}{Integer number of experimental treatment arms, excluding control.}
 #'   \item{IsArmPresent}{Vector of Integer. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     indicating whether each arm is still in the trial or was dropped in the interim: - `0`: Dropped in the
@@ -68,12 +68,12 @@
 #'   \item{CumCompleters}{Vector of Integer. Vector of length `LookInfo$NumLooks`, containing the cumulative number
 #'     of completers for each look. East Horizon Explore: Not available for `Endpoint Type = Time-to-Event`. East
 #'     Horizon Design: Not available for `Time-to-Event` tests.}
-#'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
-#'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
-#'     lower. – `5`: One-sided efficacy lower, futility upper.}
-#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: – `2`: Delta
-#'     scale. – `6`: Hazard ratio scale. East Horizon Design: Possible values: – `1`: Adjusted p-value scale. –
-#'     `2`: Delta scale. – `6`: Hazard ratio scale.}
+#'   \item{RejType}{Integer. Rejection type: - `0`: One-sided efficacy upper. - `1`: One-sided futility upper. -
+#'     `2`: One-sided efficacy lower. - `3`: One-sided futility lower. - `4`: One-sided efficacy upper, futility
+#'     lower. - `5`: One-sided efficacy lower, futility upper.}
+#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: - `2`: Delta
+#'     scale. - `6`: Hazard ratio scale. East Horizon Design: Possible values: - `1`: Adjusted p-value scale. -
+#'     `2`: Delta scale. - `6`: Hazard ratio scale.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
 #'   \item{PoCScale}{Integer. Proof of concept (PoC) scale: - `0`: High dose vs. control. East Horizon Explore:

@@ -19,7 +19,7 @@
 #'     endpoint names.}
 #'   \item{TailType}{Named List of Integer. Named List of length equal to the number of endpoints, indicating the
 #'     nature of critical region for each endpoint. For example, `TailType["Endpoint 1"]` is the nature for
-#'     Endpoint 1. Possible values: – `0`: Left-tailed. – `1`: Right-tailed.}
+#'     Endpoint 1. Possible values: - `0`: Left-tailed. - `1`: Right-tailed.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access

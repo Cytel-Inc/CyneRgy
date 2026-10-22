@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name AnalyzeBinarySSR
 #' @title Analyze binary subject responses
-#' @description Implements binary-outcome analysis with conditional power–based sample size re-estimation (SSR).
+#' @description Implements binary-outcome analysis with conditional power-based sample size re-estimation (SSR).
 #' The function:
 #' \enumerate{
 #'   \item Prepares observed data up to the interim analysis time
@@ -25,7 +25,7 @@
 #'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
@@ -95,7 +95,7 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     dAnalysisTime <- NA
 
     ###########################################################
-    ## Step 1 — Data Preparation and Analysis Time Computation
+    ## Step 1 - Data Preparation and Analysis Time Computation
     ###########################################################
 
     if ( !is.null( LookInfo ) ) {
@@ -116,7 +116,7 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     dfSimDataCurrLook <- SimData[ SimData$CalendarResponseTime <= dAnalysisTime, ]
 
     ###########################################################
-    ## Step 2 — Test Statistic And Delta Computation
+    ## Step 2 - Test Statistic And Delta Computation
     ###########################################################
 
     vPatientOutcome <- dfSimDataCurrLook$Response
@@ -148,7 +148,7 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     }
 
     ###########################################################
-    ## Step 3 — Conditional Power Computation
+    ## Step 3 - Conditional Power Computation
     ###########################################################
 
     dOrigCp <- NA
@@ -177,7 +177,7 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     }
 
     ###########################################################
-    ## Step 4 — Re-estimated Completers Computation
+    ## Step 4 - Re-estimated Completers Computation
     ###########################################################
 
     if ( !is.null( AdaptInfo ) && AdaptInfo$SSRFuncScale == 0 ) {
@@ -211,7 +211,7 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     }
 
     ###########################################################
-    ## Step 5 — Decision Computation
+    ## Step 5 - Decision Computation
     ###########################################################
 
     if ( !is.na( dTestStatistic ) ) {
@@ -236,7 +236,7 @@ AnalyzeBinarySSR <- function( SimData, DesignParam, AdaptInfo = NULL, LookInfo =
     }
 
     ###########################################################
-    ## Step 6 — Return Output
+    ## Step 6 - Return Output
     ###########################################################
 
     return( list(

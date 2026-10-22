@@ -78,7 +78,7 @@
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{MaxEvents}{Integer maximum number of events in the trial.}
 #'   \item{NumSubPops}{Integer. Number of subpopulations. East Horizon Explore: Only available for `Endpoint Type =

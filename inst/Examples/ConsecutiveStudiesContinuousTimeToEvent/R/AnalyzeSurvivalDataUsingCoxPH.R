@@ -26,7 +26,7 @@
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{MaxEvents}{Integer maximum number of events in the trial.}
 #' }
@@ -44,8 +44,8 @@
 #'   \item{RejType}{Integer one-sided rejection type supported by the decision helpers: 0 = upper efficacy;
 #'     1 = upper futility; 2 = lower efficacy; 3 = lower futility; 4 = upper efficacy and lower futility;
 #'     5 = lower efficacy and upper futility.}
-#'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Possible values: – `0`: Z scale.
-#'     East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale.}
+#'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Possible values: - `0`: Z scale.
+#'     East Horizon Design: Possible values: - `0`: Z scale. - `1`: p-value scale.}
 #'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
 #'     values (for one-sided tests) for each look. East Horizon Explore: Set to `NA` for `Endpoint Type =
 #'     Continuous with Repeated Measures`. East Horizon Design: Only available if `Test Type = One-sided`.}

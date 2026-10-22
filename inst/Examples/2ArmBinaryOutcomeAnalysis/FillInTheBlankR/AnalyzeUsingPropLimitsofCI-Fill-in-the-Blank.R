@@ -29,7 +29,7 @@
 #'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{MaxCompleters}{Integer maximum number of completers in the trial.}
 #' }

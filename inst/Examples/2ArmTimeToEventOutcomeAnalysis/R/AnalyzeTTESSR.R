@@ -1,11 +1,11 @@
 ######################################################################################################################## .
 #' @name AnalyzeTTESSR
 #' @title Analyze time-to-event subject outcomes
-#' @description Implements time-to-event (TTE) analysis with conditional power–based event re-estimation (SSR).
+#' @description Implements time-to-event (TTE) analysis with conditional power-based event re-estimation (SSR).
 #' The function:
 #' \enumerate{
 #'   \item Prepares observed data up to the current analysis time
-#'   \item Computes the log-rank–style test statistic and hazard ratio (HR)
+#'   \item Computes the log-rank-style test statistic and hazard ratio (HR)
 #'   \item Computes conditional power using the design boundary
 #'   \item Determines re-estimated events using a continuous or step-function SSR rule
 #'   \item Generates a decision at the current look (efficacy, continue, or futility at final look)
@@ -28,7 +28,7 @@
 #'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
@@ -95,7 +95,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     dAnalysisTime <- 0
 
     ###########################################################
-    ## Step 1 — Data Preparation and Analysis Time Computation
+    ## Step 1 - Data Preparation and Analysis Time Computation
     ###########################################################
 
     if ( !is.null( LookInfo ) ) {
@@ -126,7 +126,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     dfSimDataCurrLook <- subset( SimData, SimData$ArrivalTime <= dAnalysisTime + 1e-4 )
 
     ###########################################################
-    ## Step 2 — Test Statistic And HR Computation
+    ## Step 2 - Test Statistic And HR Computation
     ###########################################################
 
     cLogrank <- survival::survdiff(
@@ -144,7 +144,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     }
 
     ###########################################################
-    ## Step 3 — Conditional Power Computation
+    ## Step 3 - Conditional Power Computation
     ###########################################################
     dOrigCp <- NA
     dZCrit <- DesignParam$CriticalPoint
@@ -166,7 +166,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     }
 
     ###########################################################
-    ## Step 4 — Re-estimated Events Computation
+    ## Step 4 - Re-estimated Events Computation
     ###########################################################
     if ( !is.null( AdaptInfo ) && AdaptInfo$SSRFuncScale == 0 ) {
         if ( is.na( dOrigCp ) ) {
@@ -193,7 +193,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     }
 
     ###########################################################
-    ## Step 5 — Decision Computation
+    ## Step 5 - Decision Computation
     ###########################################################
     if ( !is.na( dTestStatistic ) ) {
         dEffBdry <- DesignParam$CriticalPoint
@@ -217,7 +217,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
     }
 
     ###########################################################
-    ## Step 6 — Return Output
+    ## Step 6 - Return Output
     ###########################################################
     return( list(
         Decision       = as.integer( nDecision ),

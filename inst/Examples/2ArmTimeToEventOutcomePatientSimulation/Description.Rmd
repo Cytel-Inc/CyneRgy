@@ -75,7 +75,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Example 1.1 – Constant Hazards
+## Example 1.1 - Constant Hazards
 
 Assume that the difference in risk of death for patients in the control arm compared to the risk of death for patients in the experimental arm remains the same over time. The time to death or progression of patients is simulated from a Weibull distribution with the shape and scale for each arm provided in East Horizon and sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
 
@@ -124,7 +124,7 @@ plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazar
 
 ```
 
-## Example 1.2 – Increasing Hazards
+## Example 1.2 - Increasing Hazards
 
 This function assumes that the hazard of death or disease progression increases over time in both arms, but at different rates: the control arm's hazard increases more slowly than that of the experimental arm. The time to death or progression is simulated using a Weibull distribution, with shape and scale parameters specified for each arm in East Horizon and then sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
 
@@ -162,7 +162,7 @@ plot( vTime, vHazExp/vHazCtrl, type = 'l', xlab = "Time (Months)", ylab = "Hazar
 ```
 
 
-## Example 1.3 – Decreasing Hazards
+## Example 1.3 - Decreasing Hazards
 
 This example is similar to the previous one, but here the function assumes that hazards decrease over time in both arms. However, the control arm's hazard decreases at a slower rate than that of the experimental arm. The time to death or progression is simulated using a Weibull distribution, with shape and scale parameters specified for each arm in East Horizon and then sent to R. Refer to the table below for the values of the user-defined parameters used in this example.
 

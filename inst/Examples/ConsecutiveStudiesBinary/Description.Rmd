@@ -42,7 +42,7 @@ The decision to move forward with certain trials is relying more and more on the
 
 Simulations and creating this prior data through the combination of R functions with the East Horizon product can help alleviate this gap in knowledge and help clinical teams decide to invest in an entire program of trials (e.g. a Phase 2 followed by a Phase 3) rather than just one confirmatory trial (e.g. only move forward with a Phase 3). 
 
-By combining the R functions described below with the East Horizon native inputs, users are able to simulate data taking into account uncertainty around their scenario's assumptions, pass generated data from the first trial in a program to the inputs of the second trial's simulation, and then compute the probability of success of each simulated trial as well as the program's probability of success overall. Users will also continue to benefit from East Horizon’s output visualizations for each trial – with the caveat that the Probability of Success & Conditional Probability of Success metrics will be labeled as “Power” in the native outputs of East Horizon.
+By combining the R functions described below with the East Horizon native inputs, users are able to simulate data taking into account uncertainty around their scenario's assumptions, pass generated data from the first trial in a program to the inputs of the second trial's simulation, and then compute the probability of success of each simulated trial as well as the program's probability of success overall. Users will also continue to benefit from East Horizon’s output visualizations for each trial - with the caveat that the Probability of Success & Conditional Probability of Success metrics will be labeled as “Power” in the native outputs of East Horizon.
 
 R Integration is required for this type of trial design because East Horizon does not natively support transferring results from one trial's simulations to another. The R functions created for this example enable users to leverage simulated data from one simulation into a following simulation's inputs. 
 
@@ -95,7 +95,7 @@ In this example, we will create two different input sets: one for the Phase 2 st
 
 ### Design Page
 
-3. Within the input set you just created, navigate to the Design page and enter the Phase 2 details, e.g. sample size. Then select the “User Specified – R” option in the Test field.
+3. Within the input set you just created, navigate to the Design page and enter the Phase 2 details, e.g. sample size. Then select the “User Specified - R” option in the Test field.
 
 ![](ConsecutiveStudiesBinary_files/Step3.png){width=800px}
 
@@ -113,7 +113,7 @@ In this example, we will create two different input sets: one for the Phase 2 st
 
 ### Response Page
 
-8. Navigate to the Response page and then select “User Specified – R” in the Distribution field.
+8. Navigate to the Response page and then select “User Specified - R” in the Distribution field.
 
 ![](ConsecutiveStudiesBinary_files/Step8.png){width=800px}
 
@@ -209,7 +209,7 @@ Note that in this example, we used Beta priors but you could use any other distr
 
 ### Response Page
 
-28. Navigate to the Response page, create an input card, and then select “User Specified – R” in the Distribution field.
+28. Navigate to the Response page, create an input card, and then select “User Specified - R” in the Distribution field.
 
 ![](ConsecutiveStudiesBinary_files/Step8.png){width=800px}
 

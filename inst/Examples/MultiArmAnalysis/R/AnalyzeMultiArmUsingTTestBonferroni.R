@@ -17,7 +17,7 @@
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed.}
 #'   \item{NumTreatments}{Integer number of experimental treatment arms, excluding control.}
 #'   \item{IsArmPresent}{Vector of Integer. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     indicating whether each arm is still in the trial or was dropped in the interim: - `0`: Dropped in the

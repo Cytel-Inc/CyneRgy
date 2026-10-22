@@ -51,7 +51,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 4.  [AnalyzeUsingBetaBinomial.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeUsingBetaBinomial.R) - Contains a function named *AnalyzeUsingBetaBinomial* that performs a Bayesian analysis for binary outcomes using Beta-Binomial conjugate priors.
 
-5.  [AnalyzeBinarySSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeBinarySSR.R) - Contains a function named *AnalyzeBinarySSR* that extends the standard binary analysis to support conditional power–based sample size re-estimation (SSR) in a group sequential design.
+5.  [AnalyzeBinarySSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeBinarySSR.R) - Contains a function named *AnalyzeBinarySSR* that extends the standard binary analysis to support conditional power-based sample size re-estimation (SSR) in a group sequential design.
 
 In addition, if you would like to experiment with these examples to and would like some code to help you get started we have provided fill-in-the-blank type code files in the [FillInTheBlankR directory](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/2ArmBinaryOutcomeAnalysis/FillInTheBlankR).  
 
@@ -239,7 +239,7 @@ CyneRgy::PlotExampleFlowchart(
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmBinaryOutcomeAnalysis/R/AnalyzeBinarySSR.R" class="alert-link">AnalyzeBinarySSR.R</a></p>
 </div>
 
-This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total number of completers based on interim results. This is achieved using a conditional power–based SSR approach, which allows the trial to increase its planned number of completers when interim results fall within a "promising zone".
+This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total number of completers based on interim results. This is achieved using a conditional power-based SSR approach, which allows the trial to increase its planned number of completers when interim results fall within a "promising zone".
 
 **Test Statistic:**
 

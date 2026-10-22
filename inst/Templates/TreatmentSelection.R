@@ -28,9 +28,9 @@
 #'   as indicated below.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority.}
-#'   \item{TestType}{Integer. Test Type: – `0`: One-sided.}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
+#'   \item{TrialType}{Integer. Trial Type: - `0`: Superiority.}
+#'   \item{TestType}{Integer. Test Type: - `0`: One-sided.}
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed.}
 #'   \item{InitialAllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number
 #'     of arms - 1), containing the ratios of the experimental group sample sizes to the control group sample
 #'     size.}
@@ -52,12 +52,12 @@
 #'     Design: Only available for `Combining P-Values (MAMS)` tests.}
 #'   \item{w2}{Numeric. Inverse normal weights for stage 2. East Horizon Explore: Not available. East Horizon
 #'     Design: Only available for `Combining P-Values (MAMS)` tests.}
-#'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: – `0`:
-#'     Bonferroni. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. East Horizon Design: Possible values: – `0`: Bonferroni. – `1`: Sidak.
-#'     – `2`: Simes. – `3`: Dunnett's Single Step. – `4`: Weighted Bonferroni. – `5`: Fixed Sequence. – `6`:
-#'     Fallback. – `7`: Hochberg's Step Up. – `10`: Holm's Step Down. – `11`: Hommel's Step Up. – `12`: Dunnett's
-#'     Step Down. – `13`: Dunnett's Step Up.}
+#'   \item{MultAdjMethod}{Integer. Multiple comparison procedure. East Horizon Explore: Possible values: - `0`:
+#'     Bonferroni. - `3`: Dunnett's Single Step. - `4`: Weighted Bonferroni. - `5`: Fixed Sequence. - `6`:
+#'     Fallback. - `7`: Hochberg's Step Up. East Horizon Design: Possible values: - `0`: Bonferroni. - `1`: Sidak.
+#'     - `2`: Simes. - `3`: Dunnett's Single Step. - `4`: Weighted Bonferroni. - `5`: Fixed Sequence. - `6`:
+#'     Fallback. - `7`: Hochberg's Step Up. - `10`: Holm's Step Down. - `11`: Hommel's Step Up. - `12`: Dunnett's
+#'     Step Down. - `13`: Dunnett's Step Up.}
 #'   \item{NumTreatments}{Integer number of experimental treatment arms, excluding control.}
 #'   \item{AlphaProp}{Vector of Numeric. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     containing the proportion of Alpha for each treatment arm. East Horizon Explore: Only available for
@@ -98,17 +98,17 @@
 #'     of events for each look. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. Not
 #'     available for `Study Objective = Dose Finding`. East Horizon Design: Only available for `Time-to-Event`
 #'     tests.}
-#'   \item{RejType}{Integer. Rejection type: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. –
-#'     `2`: One-sided efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility
-#'     lower. – `5`: One-sided efficacy lower, futility upper.}
+#'   \item{RejType}{Integer. Rejection type: - `0`: One-sided efficacy upper. - `1`: One-sided futility upper. -
+#'     `2`: One-sided efficacy lower. - `3`: One-sided futility lower. - `4`: One-sided efficacy upper, futility
+#'     lower. - `5`: One-sided efficacy lower, futility upper.}
 #'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Not available for `Study Objective
-#'     = Dose Finding`. Possible values: – `0`: Z scale. East Horizon Design: Possible values: `1`: Adjusted
+#'     = Dose Finding`. Possible values: - `0`: Z scale. East Horizon Design: Possible values: `1`: Adjusted
 #'     p-value scale.}
 #'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
 #'     values for each look. East Horizon Explore: Not available for `Study Objective = Dose Finding`.}
-#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: – `2`: Delta
-#'     scale. – `6`: Hazard ratio scale. East Horizon Design: Possible values: – `1`: Adjusted p-value scale. –
-#'     `2`: Delta scale. – `6`: Hazard ratio scale.}
+#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: - `2`: Delta
+#'     scale. - `6`: Hazard ratio scale. East Horizon Design: Possible values: - `1`: Adjusted p-value scale. -
+#'     `2`: Delta scale. - `6`: Hazard ratio scale.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
 #' }

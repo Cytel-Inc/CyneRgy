@@ -35,23 +35,23 @@
 #'   as indicated below.
 #' \describe{
 #'   \item{EndpointType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the
-#'     endpoint types: – 0: Continuous. – 1: Binary. – 2: Time-to-Event.}
+#'     endpoint types: - 0: Continuous. - 1: Binary. - 2: Time-to-Event.}
 #'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
 #'     endpoint names.}
 #'   \item{WinCond}{Integer. Winning condition: - `1`: At least endpoint 1. - `2`: At least endpoint 2. - `3`: At
 #'     least one endpoint. - `4`: Both endpoints.}
 #'   \item{TailType}{Named List of Integer. Named List of length equal to the number of endpoints, indicating the
 #'     nature of critical region for each endpoint. For example, `TailType["Endpoint 1"]` is the nature for
-#'     Endpoint 1. Possible values: – `0`: Left-tailed. – `1`: Right-tailed.}
+#'     Endpoint 1. Possible values: - `0`: Left-tailed. - `1`: Right-tailed.}
 #'   \item{FollowUpType}{Named List of Integer. Named List of length equal to the number of endpoints, indicating
 #'     the follow-up type for each endpoint. For example, `FollowUpType["Endpoint 1"]` is the type for Endpoint 1.
-#'     Possible values: – `0`: Until the end of the study. – `1`: For a fixed period.}
+#'     Possible values: - `0`: Until the end of the study. - `1`: For a fixed period.}
 #'   \item{FollowUpDur}{Named List of Numeric. Named List of length equal to the number of endpoints, indicating
 #'     the follow-up duration for each endpoint. For example, `FollowUpDur["Endpoint 1"]` is the duration for
 #'     Endpoint 1.}
 #'   \item{TrialType}{Named List of Integer. Named List of length equal to the number of endpoints, indicating the
 #'     trial type for each endpoint. For example, `TrialType["Endpoint 1"]` is the type for Endpoint 1. Possible
-#'     values: – `0`: Superiority. – `1`: Non-inferiority.}
+#'     values: - `0`: Superiority. - `1`: Non-inferiority.}
 #'   \item{VarType}{Integer. Variance type: - `0`: Pooled. - `1`: Unpooled. Only available for `Dual Endpoint =
 #'     TTE-Binary`.}
 #'   \item{PlanEndTrial}{Integer. Planned end of trial: - `1`: Full information for both endpoints. - `2`: Full
@@ -127,12 +127,12 @@
 #'     1. East Horizon Explore: Set to `NA` for endpoints with `Endpoint Type = Binary`.}
 #'   \item{RejType}{Named List of Integer. Named List of length equal to the number of endpoints, containing the
 #'     rejection type for each endpoint. For example, `RejType["Endpoint 1"]` is the rejection type for Endpoint 1.
-#'     Possible values: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy
-#'     lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility lower. – `5`: One-sided
+#'     Possible values: - `0`: One-sided efficacy upper. - `1`: One-sided futility upper. - `2`: One-sided efficacy
+#'     lower. - `3`: One-sided futility lower. - `4`: One-sided efficacy upper, futility lower. - `5`: One-sided
 #'     efficacy lower, futility upper.}
 #'   \item{EffBdryScale}{Named List of Integer. Named List of length equal to the number of endpoints, containing
 #'     the efficacy boundary scale for each endpoint. For example, `EffBdryScale["Endpoint 1"]` is the efficacy
-#'     boundary scale for Endpoint 1. Possible values: – `0`: Z scale.}
+#'     boundary scale for Endpoint 1. Possible values: - `0`: Z scale.}
 #'   \item{EffBdry}{Named List of Vector of Numeric. Named List of length equal to the number of endpoints,
 #'     containing the efficacy boundary values for each endpoint. For example, `EffBdry["Endpoint 1"]` is a vector
 #'     of length `LookInfo$NumLooks` containing the efficacy boundary values for each look for Endpoint 1. East
@@ -151,7 +151,7 @@
 #'     for some looks.}
 #'   \item{FutBdryScale}{Named List of Integer. Named List of length equal to the number of endpoints, containing
 #'     the futility boundary scale for each endpoint. For example, `FutBdryScale["Endpoint 1"]` is the futility
-#'     boundary scale for Endpoint 1. Possible values: – `0`: Z scale. – `2`: Delta scale - `6`: Hazard ratio
+#'     boundary scale for Endpoint 1. Possible values: - `0`: Z scale. - `2`: Delta scale - `6`: Hazard ratio
 #'     scale.}
 #'   \item{FutBdry}{Named List of Vector of Numeric. Named List of length equal to the number of endpoints,
 #'     containing the futility boundary values for each endpoint. For example, `FutBdry["Endpoint 1"]` is a vector

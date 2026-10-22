@@ -115,7 +115,7 @@ In this example, we will create two different projects: one for the Phase 2 stud
 
 ### Design Page
 
-3. Within the input set you just created, navigate to the Design page, then select “User Specified – R” in the Test field.
+3. Within the input set you just created, navigate to the Design page, then select “User Specified - R” in the Test field.
 
 ![](ConsecutiveStudiesContinuousTimeToEvent_files/Step3.png){width=800px}
 
@@ -137,7 +137,7 @@ In this example, we will create two different projects: one for the Phase 2 stud
 
 ### Response Page
 
-9. Navigate to the Response page and the relevant response card, and then select “User Specified – R” in the Distribution field.
+9. Navigate to the Response page and the relevant response card, and then select “User Specified - R” in the Distribution field.
 
 ![](ConsecutiveStudiesContinuousTimeToEvent_files/Step9.png){width=800px}
 
@@ -232,7 +232,7 @@ In this example, we will create two different projects: one for the Phase 2 stud
 
 ### Design Page
 
-29. Within the input set you just created, navigate to the Design page, then select “User Specified – R” in the Test Statistic field.
+29. Within the input set you just created, navigate to the Design page, then select “User Specified - R” in the Test Statistic field.
 
 ![](ConsecutiveStudiesContinuousTimeToEvent_files/Step29.png){width=800px}
 
@@ -254,7 +254,7 @@ In this example, we will create two different projects: one for the Phase 2 stud
 
 ### Response Page
 
-36. Navigate to the Response page and the relevant response card of the Phase 3 input set, and then select “User Specified – R” in the Distribution field.
+36. Navigate to the Response page and the relevant response card of the Phase 3 input set, and then select “User Specified - R” in the Distribution field.
 
 ![](ConsecutiveStudiesContinuousTimeToEvent_files/Step36.png){width=800px}
 

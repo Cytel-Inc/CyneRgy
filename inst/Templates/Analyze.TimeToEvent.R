@@ -31,11 +31,11 @@
 #'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Right-tailed`.
 #'     Two-sided tests do not exist, so this variable is not useful: use Alpha instead. East Horizon Design: Only
 #'     available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided asymmetric`.}
-#'   \item{TrialType}{Integer. Trial Type: – `0`: Superiority. – `1`: Non-inferiority. – `2`: Equivalence. – `3`:
+#'   \item{TrialType}{Integer. Trial Type: - `0`: Superiority. - `1`: Non-inferiority. - `2`: Equivalence. - `3`:
 #'     Super-superiority. East Horizon Explore: Type 2 (equivalence) does not exist.}
-#'   \item{TestType}{Integer. Test Type: – `0`: One-sided. – `1`: Two-sided symmetric. – `2`: Two-sided asymmetric.
+#'   \item{TestType}{Integer. Test Type: - `0`: One-sided. - `1`: Two-sided symmetric. - `2`: Two-sided asymmetric.
 #'     East Horizon Explore: Types 1 and 2 (two-sided) do not exist.}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
 #'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
@@ -60,7 +60,7 @@
 #'   \item{MaxEvents}{Integer maximum number of events in the trial.}
 #'   \item{MaxStudyDur}{Integer. Maximum study duration. East Horizon Explore: Not available. East Horizon Design:
 #'     Only available for `Time-to-Event` tests with `Look Fix Option = 1 (Time-based)`.}
-#'   \item{FollowUpType}{Integer. Follow-up type: – `0`: Until the end of the study. – `1`: For a fixed period.
+#'   \item{FollowUpType}{Integer. Follow-up type: - `0`: Until the end of the study. - `1`: For a fixed period.
 #'     East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. East Horizon Design: Only
 #'     available for `Time-to-Event` tests.}
 #'   \item{FollowUpDur}{Numeric. Follow-up duration. East Horizon Explore: Only available for `Endpoint Type =
@@ -110,15 +110,15 @@
 #'     Event` tests.}
 #'   \item{LookTime}{Numeric calendar time of the current look. East Horizon Design: Only available for `Time-to-Event`
 #'     tests if `Look Fix Option = Time-based`.}
-#'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: – `0`: One-sided efficacy
-#'     upper. – `1`: One-sided futility upper. – `2`: One-sided efficacy lower. – `3`: One-sided futility lower. –
-#'     `4`: One-sided efficacy upper, futility lower. – `5`: One-sided efficacy lower, futility upper. East Horizon
-#'     Design: Possible values: – `0`: One-sided efficacy upper. – `1`: One-sided futility upper. – `2`: One-sided
-#'     efficacy lower. – `3`: One-sided futility lower. – `4`: One-sided efficacy upper, futility lower. – `5`:
-#'     One-sided efficacy lower, futility upper. – `6`: Two-sided efficacy only. – `7`: Two-sided futility only. –
-#'     `8`: Two-sided efficacy, futility. – `9`: Equivalence.}
-#'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Possible values: – `0`: Z scale.
-#'     East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale.}
+#'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: - `0`: One-sided efficacy
+#'     upper. - `1`: One-sided futility upper. - `2`: One-sided efficacy lower. - `3`: One-sided futility lower. -
+#'     `4`: One-sided efficacy upper, futility lower. - `5`: One-sided efficacy lower, futility upper. East Horizon
+#'     Design: Possible values: - `0`: One-sided efficacy upper. - `1`: One-sided futility upper. - `2`: One-sided
+#'     efficacy lower. - `3`: One-sided futility lower. - `4`: One-sided efficacy upper, futility lower. - `5`:
+#'     One-sided efficacy lower, futility upper. - `6`: Two-sided efficacy only. - `7`: Two-sided futility only. -
+#'     `8`: Two-sided efficacy, futility. - `9`: Equivalence.}
+#'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Possible values: - `0`: Z scale.
+#'     East Horizon Design: Possible values: - `0`: Z scale. - `1`: p-value scale.}
 #'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
 #'     values (for one-sided tests) for each look. East Horizon Explore: Set to `NA` for `Endpoint Type =
 #'     Continuous with Repeated Measures`. East Horizon Design: Only available if `Test Type = One-sided`.}
@@ -132,9 +132,9 @@
 #'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
 #'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
 #'     Two-sided asymmetric or symmetric`.}
-#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: – `0`: Z scale. –
-#'     `2`: Delta scale. East Horizon Design: Possible values: – `0`: Z scale. – `1`: p-value scale. – `2`: Delta
-#'     scale. – `3`: Conditional power scale.}
+#'   \item{FutBdryScale}{Integer. Futility boundary scale. East Horizon Explore: Possible values: - `0`: Z scale. -
+#'     `2`: Delta scale. East Horizon Design: Possible values: - `0`: Z scale. - `1`: p-value scale. - `2`: Delta
+#'     scale. - `3`: Conditional power scale.}
 #'   \item{CPDeltaOption}{Integer. Delta option for conditional power computation: 0 = design Delta; 1 = estimated
 #'     Delta. East Horizon Design only; available when the futility boundary scale is conditional power.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary

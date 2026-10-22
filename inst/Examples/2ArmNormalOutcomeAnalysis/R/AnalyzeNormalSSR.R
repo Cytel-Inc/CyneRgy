@@ -1,7 +1,7 @@
 ######################################################################################################################## .
 #' @name AnalyzeNormalSSR
 #' @title Analyze continuous subject responses
-#' @description Implements continuous-outcome analysis with conditional power–based sample size re-estimation
+#' @description Implements continuous-outcome analysis with conditional power-based sample size re-estimation
 #'   (SSR).
 #' The function:
 #' \enumerate{
@@ -26,7 +26,7 @@
 #'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
 #'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
@@ -98,7 +98,7 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     dAnalysisTime <- 0
 
     ###########################################################
-    ## Step 1 — Data Preparation and Analysis Time Computation
+    ## Step 1 - Data Preparation and Analysis Time Computation
     ###########################################################
     if ( !is.null( LookInfo ) ) {
         nQtyOfLooks <- LookInfo$NumLooks
@@ -119,7 +119,7 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     dfSimDataCurrLook <- SimData[ SimData$CalendarResponseTime <= dAnalysisTime, ]
 
     ###########################################################
-    ## Step 2 — Test Statistic And Delta Computation
+    ## Step 2 - Test Statistic And Delta Computation
     ###########################################################
     vOutcome <- dfSimDataCurrLook$Response
     vTreat <- dfSimDataCurrLook$TreatmentID
@@ -137,7 +137,7 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     }
 
     ###########################################################
-    ## Step 3 — Conditional Power Computation
+    ## Step 3 - Conditional Power Computation
     ###########################################################
     dOrigCp <- NA
     dZCrit <- DesignParam$CriticalPoint
@@ -165,7 +165,7 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     }
 
     ###########################################################
-    ## Step 4 — Re-estimated Completers Computation
+    ## Step 4 - Re-estimated Completers Computation
     ###########################################################
     if ( !is.null( AdaptInfo ) && AdaptInfo$SSRFuncScale == 0 ) {
         ### Continuous
@@ -197,7 +197,7 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     }
 
     ###########################################################
-    ## Step 5 — Decision Computation
+    ## Step 5 - Decision Computation
     ###########################################################
     if ( !is.na( dTestStatistic ) ) {
         dEffBdry <- DesignParam$CriticalPoint
@@ -221,7 +221,7 @@ AnalyzeNormalSSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo =
     }
 
     ###########################################################
-    ## Step 6 — Return Output
+    ## Step 6 - Return Output
     ###########################################################
     return( list(
         Decision         = as.integer( nDecision ),

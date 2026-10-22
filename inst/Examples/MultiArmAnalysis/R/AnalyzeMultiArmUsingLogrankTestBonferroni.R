@@ -20,7 +20,7 @@
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed.}
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed.}
 #'   \item{MaxEvents}{Integer maximum number of events in the trial.}
 #'   \item{NumTreatments}{Integer number of experimental treatment arms, excluding control.}
 #'   \item{IsArmPresent}{Vector of Integer. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
@@ -41,7 +41,7 @@
 #'     1 = upper futility; 2 = lower efficacy; 3 = lower futility; 4 = upper efficacy and lower futility;
 #'     5 = lower efficacy and upper futility.}
 #'   \item{EffBdryScale}{Integer. Efficacy boundary scale. East Horizon Explore: Not available for `Study Objective
-#'     = Dose Finding`. Possible values: – `0`: Z scale. East Horizon Design: Possible values: `1`: Adjusted
+#'     = Dose Finding`. Possible values: - `0`: Z scale. East Horizon Design: Possible values: `1`: Adjusted
 #'     p-value scale.}
 #'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
 #'     values for each look. East Horizon Explore: Not available for `Study Objective = Dose Finding`.}

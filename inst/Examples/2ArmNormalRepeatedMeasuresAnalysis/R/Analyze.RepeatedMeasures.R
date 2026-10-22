@@ -27,7 +27,7 @@
 #'   as indicated below. The fields listed here are used by this example.
 #' \describe{
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
-#'   \item{TailType}{Integer. Nature of critical region: – `0`: Left-tailed. – `1`: Right-tailed. East Horizon
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
 #'     Design: Only available if `Test Type = One-sided`.}
 #'   \item{NumVisit}{Integer number of visits. East Horizon Explore: Only available for `Endpoint Type =
 #'     Continuous with Repeated Measures`. East Horizon Design: Not available.}
@@ -47,8 +47,8 @@
 #'   \item{InterimVisit}{Integer. Index of the visit which is driving the interims (starts at 1). East Horizon
 #'     Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East Horizon Design: Not
 #'     available.}
-#'   \item{IncludePipeline}{Integer. Indicates whether to include pipeline subjects in the interim: – `0`: Do not
-#'     include. – `1`: Include. East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated
+#'   \item{IncludePipeline}{Integer. Indicates whether to include pipeline subjects in the interim: - `0`: Do not
+#'     include. - `1`: Include. East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated
 #'     Measures`. East Horizon Design: Not available.}
 #' }
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is

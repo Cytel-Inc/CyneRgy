@@ -21,10 +21,10 @@
 #'
 #' Example-specific parameters and requirements:
 #' \itemize{
-#'     \item \code{dMeanFollowUpCtrl} – Mean at follow-up for the control group.
-#'     \item \code{dMeanFollowUpExp} – Mean at follow-up for the experimental group.
-#'     \item \code{dStdDevFollowUpCtrl} – Standard deviation at follow-up for the control group.
-#'     \item \code{dStdDevFollowUpExp} – Standard deviation at follow-up for the experimental group.
+#'     \item \code{dMeanFollowUpCtrl} - Mean at follow-up for the control group.
+#'     \item \code{dMeanFollowUpExp} - Mean at follow-up for the experimental group.
+#'     \item \code{dStdDevFollowUpCtrl} - Standard deviation at follow-up for the control group.
+#'     \item \code{dStdDevFollowUpExp} - Standard deviation at follow-up for the experimental group.
 #'   }
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
