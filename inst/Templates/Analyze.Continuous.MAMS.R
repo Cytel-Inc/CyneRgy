@@ -142,6 +142,32 @@
 #'   used for adjusted-p-value-scale futility. Return TestStat alongside RawPVal when the selected
 #'   Dunnett procedure requires it. Use OutList to pass custom state between looks. This template may use
 #'   only a subset of the documented design fields.
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' `CyneRgy::GetDecisionString()` determines the decision label, and
+#' `CyneRgy::GetDecision()` converts it to the integer decision returned to East Horizon.
+#' When using these helpers, include the following fields in sample/test data as well as simulation inputs:
+#'
+#' - `DesignParam$TailType`: test direction; `0` = left-tailed, `1` = right-tailed.
+#' - For a group sequential design, `LookInfo$NumLooks` (total number of looks),
+#'   `LookInfo$CurrLookIndex` (current look, starting at 1), and `LookInfo$RejType`
+#'   (enabled stopping boundaries) are required.
+#' - For a fixed-sample design, pass `LookInfo = NULL` explicitly to both helpers,
+#'   and pass `nLookIndex = 1` and `nQtyOfLooks = 1` to `GetDecisionString()`.
+#'
+#' Supported one-sided `LookInfo$RejType` values:
+#'
+#' - `0`: upper efficacy only.
+#' - `1`: upper futility only.
+#' - `2`: lower efficacy only.
+#' - `3`: lower futility only.
+#' - `4`: upper efficacy and lower futility.
+#' - `5`: lower efficacy and upper futility.
+#'
+#' The helpers do not support `RejType` values `6` (two-sided efficacy only),
+#' `7` (two-sided futility only), `8` (two-sided efficacy and futility), or `9` (equivalence).
+#' The helper requirements above apply in addition to the inputs used by the analysis itself.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL, OutList = NULL ) {
