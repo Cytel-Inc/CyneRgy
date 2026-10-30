@@ -4,7 +4,7 @@
 #' @title Template: Randomize subjects to treatment arms
 #' @description Randomize subjects to treatment arms. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
-#'   user-defined inputs through UserParam where that argument is supported.
+#'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArms Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
 #' @param AllocRatio Numeric vector of experimental-to-control allocation ratios, one element per experimental arm.

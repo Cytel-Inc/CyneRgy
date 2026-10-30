@@ -4,7 +4,7 @@
 #' @title Template: Simulate multiple-endpoint subject responses
 #' @description Simulate multiple-endpoint subject responses. Use this template as a starting point for custom
 #'   logic. Preserve the engine-supplied argument names and access named list elements by name. Supply additional
-#'   user-defined inputs through UserParam where that argument is supported.
+#'   user-defined inputs through UserParam.
 #' @param NumPat Integer number of subjects in the trial.
 #' @param NumArms Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1

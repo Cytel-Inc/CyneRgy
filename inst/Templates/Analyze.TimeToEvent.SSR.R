@@ -4,7 +4,7 @@
 #' @title Template: Analyze time-to-event subject outcomes with sample size re-estimation
 #' @description Analyze time-to-event subject outcomes. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
-#'   user-defined inputs through UserParam where that argument is supported.
+#'   user-defined inputs through UserParam.
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.

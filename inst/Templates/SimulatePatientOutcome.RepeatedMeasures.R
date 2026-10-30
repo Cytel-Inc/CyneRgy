@@ -4,7 +4,7 @@
 #' @title Template: Simulate repeated-measures subject responses
 #' @description Simulate repeated-measures subject responses. Use this template as a starting point for custom
 #'   logic. Preserve the engine-supplied argument names and access named list elements by name. Supply additional
-#'   user-defined inputs through UserParam where that argument is supported.
+#'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumVisit Integer number of visits.
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,

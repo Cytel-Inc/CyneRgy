@@ -4,7 +4,7 @@
 #' @title Template: Generate dropout for repeated-measures outcomes
 #' @description Generate dropout for repeated-measures outcomes. Use this template as a starting point for custom
 #'   logic. Preserve the engine-supplied argument names and access named list elements by name. Supply additional
-#'   user-defined inputs through UserParam where that argument is supported.
+#'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
 #' @param NumVisit Integer number of visits. The engine sets this to 1 when DropMethod = 2.

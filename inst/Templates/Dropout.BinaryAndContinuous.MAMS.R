@@ -4,7 +4,7 @@
 #' @title Template: Generate dropout indicators for binary or continuous outcomes
 #' @description Generate dropout indicators for binary or continuous outcomes. Use this template as a starting
 #'   point for custom logic. Preserve the engine-supplied argument names and access named list elements by name.
-#'   Supply additional user-defined inputs through UserParam where that argument is supported.
+#'   Supply additional user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param ProbDrop Numeric dropout probability for a two-arm design, shared by both arms; for a multi-arm design, a
 #'   numeric vector of length NumArm with the control probability first and experimental-arm probabilities

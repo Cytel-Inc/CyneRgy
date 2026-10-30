@@ -4,7 +4,7 @@
 #' @title Template: Generate subject arrival times
 #' @description Generate subject arrival times. Use this template as a starting point for custom logic. Preserve
 #'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
-#'   inputs through UserParam where that argument is supported.
+#'   inputs through UserParam.
 #' @param NumPat Integer number of subjects in the trial.
 #' @param Type Integer enrollment type. This function supports global enrollment (0), the default.
 #' @param NumPrd Integer number of accrual periods.

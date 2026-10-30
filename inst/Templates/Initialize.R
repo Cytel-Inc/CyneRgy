@@ -4,7 +4,7 @@
 #' @title Template: Initialize the R simulation environment
 #' @description Initialize the R simulation environment. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
-#'   user-defined inputs through UserParam where that argument is supported.
+#'   user-defined inputs through UserParam.
 #' @param Seed Integer random seed supplied by the engine. Setting the seed here affects the R random number
 #'   generator.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
