@@ -150,14 +150,14 @@ For a visual guide of where to find the option, refer to the screenshot below:
 
 # Input Variables
 
-When creating a custom R script, you can optionally use certain variables provided by East Horizon's or East's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
+When creating a custom R script, you can optionally use certain variables provided by East Horizon's engine itself. These variables are automatically available and do not need to be set by the user, except for the `UserParam` variable. Refer to the table below for the variable that is available for this integration point.
 
 | **Variable**   | **Type** | **Description**                                                                 |
 |----------------|--------------|---------------------------------------------------------------------------------|
 |**NumSub**|Integer|Number of subjects in the trial.|
 |**NumArms**|Integer|Number of arms in the trial ﴾including placebo/control, and experimental﴿.|
 |**AllocRatio**|Vector of Numeric|Vector of length `NumArm - 1`, indicating the expected allocation ratios for each treatment arm relative to the control arm ($n_{t_i}/n_c$).|
-| **UserParam**  | List     | Contains all user-defined parameters specified in East Horizon's or East's interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
+| **UserParam**  | List     | Contains all user-defined parameters specified in East Horizon's interface (refer to the [Instructions](#instructions) section). To access these parameters in your R code, use the syntax: `UserParam$NameOfTheVariable`, replacing `NameOfTheVariable` with the appropriate parameter name. |
 
 # Expected Output Variable
 

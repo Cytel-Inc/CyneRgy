@@ -1,128 +1,154 @@
 ######################################################################################################################## .
-#' @param AnalyzeUsingEastManualFormula
+#' @name AnalyzeUsingEastManualFormula
 #' @title Compute the statistic using formula 28.2 in the East manual.
-#' @param SimData Data frame which consists of data generated in current simulation.
-#' @param DesignParam List of Design and Simulation Parameters required to perform analysis.
-#' @param LookInfo A list containing input parameters related to multiple looks, which the user may need to compute 
-#'                 test statistics and perform tests. Users should access the variables using their names 
-#'                 (e.g., `LookInfo$NumLooks`) rather than by their order. Important variables in group sequential designs include:
-#'                 
-#'                 - `LookInfo$NumLooks`: An integer representing the number of looks in the study.
-#'                 - `LookInfo$CurrLookIndex`: An integer representing the current index look, starting from 1.
-#'                 - `LookInfo$CumEvents`: A vector of length `LookInfo$NumLooks`, containing the cumulative number of events at each look.
-#'                 - `LookInfo$RejType`: A code representing rejection types. Possible values are:
-#'                   - **Efficacy Only:**
-#'                     - `0`: 1-Sided Efficacy Upper.
-#'                     - `2`: 1-Sided Efficacy Lower.
-#'                   - **Futility Only:**
-#'                     - `1`: 1-Sided Futility Upper.
-#'                     - `3`: 1-Sided Futility Lower.
-#'                   - **Efficacy and Futility:**
-#'                     - `4`: 1-Sided Efficacy Upper and Futility Lower.
-#'                     - `5`: 1-Sided Efficacy Lower and Futility Upper.
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL. For this example, user defined parameters are not included. 
-#' @description Use the formula 28.2 in the East manual to compute the statistic. The purpose of this example is to demonstrate how the analysis and decision making can be modified in a simple approach.  
-#'              The test statistic is compared to the upper boundary computed and sent by East as an input. This example does NOT include a futility rule. 
-#' @return TestStat A double value of the computed test statistic
-#' @return Decision An integer value: Decision = 0 --> No boundary crossed
-#'                                    Decision = 1 --> Lower Efficacy Boundary Crossed
-#'                                    Decision = 2 --> Upper Efficacy Boundary Crossed
-#'                                    Decision = 3 --> Futility Boundary Crossed
-#'                                    Decision = 4 --> Equivalence Boundary Crossed
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Nonfatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
+#' @description Use the formula 28.2 in the East manual to compute the statistic. The purpose of this example is to
+#'   demonstrate how the analysis and decision making can be modified in a simple approach. The test statistic is
+#'   compared to the upper boundary computed and sent by East Horizon as an input. This example does NOT include a futility
+#'   rule.
+#' @author Gabriel Potvin, Valeria A. G. Mazzanti, J. Kyle Wathen
+#' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
+#'   columns by name, for example `SimData$TreatmentID`. Columns include the fields below when applicable,
+#'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#' \describe{
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#' }
+#'
+#' Additional fields returned by SimulatePatientOutcomeBinaryWithAssurance:
+#' \describe{
+#'   \item{TrueProbabilityControl}{Numeric vector of the sampled control response probability, repeated for all
+#'     subjects in a simulation.}
+#'   \item{TrueProbabilityExperimental}{Numeric vector of the sampled experimental response probability, repeated
+#'     for all subjects in a simulation.}
+#' }
+#' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
+#'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
+#'   as indicated below. The fields listed here are used by this example.
+#' \describe{
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
+#'     Design: Only available if `Test Type = One-sided`.}
+#'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
+#'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
+#'     `Statistical Design = Fixed Sample`.}
+#' }
+#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
+#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#' \describe{
+#'   \item{NumLooks}{Integer total number of analysis looks.}
+#'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
+#'   \item{CumCompleters}{Integer vector of cumulative completer counts, one per look.}
+#'   \item{RejType}{Integer one-sided rejection type supported by the decision helpers: 0 = upper efficacy;
+#'     1 = upper futility; 2 = lower efficacy; 3 = lower futility; 4 = upper efficacy and lower futility;
+#'     5 = lower efficacy and upper futility.}
+#'   \item{EffBdryUpper}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the upper efficacy
+#'     boundary values (for two-sided tests) for each look. East Horizon Explore: Only available if `Tail Type =
+#'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use EffBdry instead. East
+#'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
+#'     Two-sided asymmetric or symmetric`.}
+#' }
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the outputs returned by this example.
+#' \describe{
+#'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
+#'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
+#'     (unavailable in East Horizon Explore).}
+#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
+#'   \item{Delta}{Estimated experimental-minus-control treatment effect (proportion difference for binary outcomes;
+#'     mean difference for continuous outcomes).}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
 #' @details
 #' ## CyneRgy Decision Helpers
 #'
-#' The analysis may use `CyneRgy::GetDecisionString()` and
-#' `CyneRgy::GetDecision()` to determine the decision returned to
-#' East Horizon Explore.
+#' `CyneRgy::GetDecisionString()` determines the decision label, and
+#' `CyneRgy::GetDecision()` converts it to the integer decision returned to East Horizon.
+#' When using these helpers, include the following fields in sample/test data as well as simulation inputs:
 #'
-#' When these helpers are used, the following input fields are required
-#' and MUST be included when generating sample/test data:
+#' - `DesignParam$TailType`: test direction; `0` = left-tailed, `1` = right-tailed.
+#' - For a group sequential design, `LookInfo$NumLooks` (total number of looks),
+#'   `LookInfo$CurrLookIndex` (current look, starting at 1), and `LookInfo$RejType`
+#'   (enabled stopping boundaries) are required.
+#' - For a fixed-sample design, pass `LookInfo = NULL` explicitly to both helpers,
+#'   and pass `nLookIndex = 1` and `nQtyOfLooks = 1` to `GetDecisionString()`.
 #'
-#' DesignParam:
-#'   - TailType: Integer indicating the direction of the statistical test.
-#'       0 = Left-tailed
-#'       1 = Right-tailed
+#' Supported one-sided `LookInfo$RejType` values:
 #'
-#' LookInfo (for group sequential designs, NULL for fixed designs):
-#' When not NULL, must contain the following fields:
-#'   - NumLooks: Total number of looks.
-#'   - CurrLookIndex: Current look index, starting at 1.
-#'   - RejType: Integer identifying which stopping boundaries are enabled.
-#'       0 = 1-Sided Efficacy Upper
-#'       1 = 1-Sided Futility Upper
-#'       2 = 1-Sided Efficacy Lower
-#'       3 = 1-Sided Futility Lower
-#'       4 = 1-Sided Efficacy Upper and Futility Lower
-#'       5 = 1-Sided Efficacy Lower and Futility Upper
-#'       6 = 2-Sided Efficacy Only (not used in East Horizon Explore)
-#'       7 = 2-Sided Futility Only (not used in East Horizon Explore)
-#'       8 = 2-Sided Efficacy and Futility (not used in East Horizon Explore)
-#'       9 = Equivalence (not used in East Horizon Explore)
-#' 
+#' - `0`: upper efficacy only.
+#' - `1`: upper futility only.
+#' - `2`: lower efficacy only.
+#' - `3`: lower futility only.
+#' - `4`: upper efficacy and lower futility.
+#' - `5`: lower efficacy and upper futility.
+#'
+#' The helpers do not support `RejType` values `6` (two-sided efficacy only),
+#' `7` (two-sided futility only), `8` (two-sided efficacy and futility), or `9` (equivalence).
+#' The helper requirements above apply in addition to the inputs used by the analysis itself.
+######################################################################################################################## .
 
-AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
-{
-    library(CyneRgy)
-    
-    # Step 1: Retrieve necessary information from the objects East sent. You may not need all the variables ####
-    if(  !is.null( LookInfo )  )
-    {
-        nLookIndex           <- LookInfo$CurrLookIndex
-        nQtyOfLooks          <- LookInfo$NumLooks
+AnalyzeUsingEastManualFormula <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+
+    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    if ( !is.null( LookInfo ) ) {
+        nLookIndex <- LookInfo$CurrLookIndex
+        nQtyOfLooks <- LookInfo$NumLooks
         nQtyOfPatsInAnalysis <- LookInfo$CumCompleters[ nLookIndex ]
-        RejType              <- LookInfo$RejType
-        TailType             <- DesignParam$TailType
-    }
-    else
-    {
-        nLookIndex           <- 1
-        nQtyOfLooks          <- 1
+        nRejType <- LookInfo$RejType
+        nTailType <- DesignParam$TailType
+    } else {
+        nLookIndex <- 1
+        nQtyOfLooks <- 1
         nQtyOfPatsInAnalysis <- nrow( SimData )
-        TailType             <- DesignParam$TailType
+        nTailType <- DesignParam$TailType
     }
-    
-    # Create the vector of simulated data for this IA - East sends all of the simulated data
-    vPatientOutcome      <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
-    vPatientTreatment    <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
-    
-    # Create vectors of data for each treatment - E is Experimental and S is Standard of Care 
-    vOutcomesS           <- vPatientOutcome[ vPatientTreatment == 0 ]
-    vOutcomesE           <- vPatientOutcome[ vPatientTreatment == 1 ]
-    
-    nQtyOfResponsesOnE   <- sum( vOutcomesE )
-    nQtyOfPatsOnE        <- length( vOutcomesE )
-    
-    nQtyOfResponsesOnS   <- sum( vOutcomesS )
-    nQtyOfPatsOnS        <- length( vOutcomesS )
-    
+
+    # Create the vector of simulated data for this IA - East Horizon sends all of the simulated data
+    vPatientOutcome <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
+    vPatientTreatment <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
+
+    # Create vectors of data for each treatment - E is Experimental and S is Standard of Care
+    vOutcomesS <- vPatientOutcome[ vPatientTreatment == 0 ]
+    vOutcomesE <- vPatientOutcome[ vPatientTreatment == 1 ]
+
+    nQtyOfResponsesOnE <- sum( vOutcomesE )
+    nQtyOfPatsOnE <- length( vOutcomesE )
+
+    nQtyOfResponsesOnS <- sum( vOutcomesS )
+    nQtyOfPatsOnS <- length( vOutcomesS )
+
     # Compute the estimates in equation 28.2 from the East user manual
-    dPiHatExperimental   <- nQtyOfResponsesOnE/nQtyOfPatsOnE
-    dPiHatControl        <- nQtyOfResponsesOnS/nQtyOfPatsOnS
-    
-    dPiHatj              <- ( nQtyOfResponsesOnE +  nQtyOfResponsesOnS )/( nQtyOfPatsOnE + nQtyOfPatsOnS )
-    
+    dPiHatExperimental <- nQtyOfResponsesOnE / nQtyOfPatsOnE
+    dPiHatControl <- nQtyOfResponsesOnS / nQtyOfPatsOnS
+
+    dPiHatj <- ( nQtyOfResponsesOnE + nQtyOfResponsesOnS ) / ( nQtyOfPatsOnE + nQtyOfPatsOnS )
+
     # Equation 28.2 in East manual
-    dZj                  <- ( dPiHatExperimental - dPiHatControl )/sqrt( dPiHatj*( 1 - dPiHatj ) * ( 1/nQtyOfPatsOnE + 1/nQtyOfPatsOnS) ) 
-    dBoundary            <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex] )
-    
+    dZj <- ( dPiHatExperimental - dPiHatControl ) / sqrt( dPiHatj * ( 1 - dPiHatj ) * ( 1 / nQtyOfPatsOnE + 1 / nQtyOfPatsOnS ) )
+    dBoundary <- ifelse( is.null( LookInfo ), DesignParam$CriticalPoint, LookInfo$EffBdryUpper[ nLookIndex ] )
+
     # Generate decision using GetDecisionString and GetDecision helpers
-    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks, 
-                                               bIAEfficacyCondition = dZj > dBoundary, 
-                                               bFAEfficacyCondition = dZj > dBoundary )
+    strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+        bIAEfficacyCondition = dZj > dBoundary,
+        bFAEfficacyCondition = dZj > dBoundary
+    )
     nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
-    
-    Error <-  0
-    
+
+    nErrorCode <- 0
+
     # Return TrueDelta, TrueProbabilityControl, TrueProbabilityExperimental
-    return(list(TestStat  = as.double( dZj ), 
-                ErrorCode = as.integer( Error ), 
-                Decision  = as.integer( nDecision ),
-                Delta     = as.double( dPiHatExperimental - dPiHatControl ),
-                TrueDelta = as.double( SimData$TrueProbabilityExperimental[ 1 ] - SimData$TrueProbabilityControl[ 1 ] ),
-                TrueProbabilityControl = as.double( SimData$TrueProbabilityControl[ 1 ] ),
-                TrueProbabilityExperimental = as.double( SimData$TrueProbabilityExperimental[ 1 ] )))
+    return( list(
+        TestStat = as.double( dZj ),
+        ErrorCode = as.integer( nErrorCode ),
+        Decision = as.integer( nDecision ),
+        Delta = as.double( dPiHatExperimental - dPiHatControl ),
+        TrueDelta = as.double( SimData$TrueProbabilityExperimental[ 1 ] - SimData$TrueProbabilityControl[ 1 ] ),
+        TrueProbabilityControl = as.double( SimData$TrueProbabilityControl[ 1 ] ),
+        TrueProbabilityExperimental = as.double( SimData$TrueProbabilityExperimental[ 1 ] )
+    ) )
 }

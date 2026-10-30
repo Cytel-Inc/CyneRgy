@@ -1,49 +1,8 @@
+######################################################################################################################## .
 #' @name AnalyzeStratification
-#'
-#' @param SimData 
-#' A data frame containing the simulated patient-level data for the current simulation iteration.  
-#' INcludes at least the following variables:
-#' \itemize{
-#'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
-#'   \item{Response}{— The observed endpoint for continuous outcome}
-#'   \item{TreatmentID}{— 0 = Control, 1 = Treatment}
-#' }
-#'
-#' @param DesignParam 
-#' A list containing the design and simulation parameters required for analysis. Includes:
-#' \itemize{
-#'   \item{MaxCompleters}{— Maximum number of completers for the study}
-#'   \item{RespLag}{— Response lag from arrival time to measurement}
-#'   \item{CriticalPoint}{— Single-look efficacy boundary (if LookInfo = NULL)}
-#'
-#'   %% Stratification parameters
-#'   \item{NumStratFactors}{— Number of stratification factors used in the analysis}
-#'   \item{TestStratFactors}{— Subset of stratification factors to be used specifically for testing (may include \code{NA})}
-#'   \item{StratFactors}{— A list of stratification factor levels, where each element corresponds 
-#'         to a stratification variable.  
-#'         For example:
-#'         \itemize{
-#'            \item{\code{Var1}}{— Levels for stratification variable 1 (e.g., \code{c("1","2")})}
-#'            \item{\code{Var2}}{— Levels for stratification variable 2 (e.g., \code{c("1","2")})}
-#'         }}
-#' }
-#'
-#' @param LookInfo 
-#' A list containing group sequential design information for multi-look trials.  
-#' For group sequential designs, it includes:
-#' \itemize{
-#'   \item{NumLooks}{— Total number of interim analyses}
-#'   \item{CurrLookIndex}{— Current look index}
-#'   \item{InfoFrac}{— Information fraction at each look}
-#'   \item{EffBdry}{— Efficacy boundary at each look}
-#' }
-#'
-#' @param UserParam 
-#' A list of user-defined parameters in East Horizon. Default = NULL.
-#'
-#' @description
-#' Computes a stratified log-rank test, hazard ratio, analysis time and decision   
-#' at a given interim analysis.  
+#' @title Analyze time-to-event subject outcomes
+#' @description Computes a stratified log-rank test, hazard ratio, analysis time and decision at a given interim
+#'   analysis.
 #'
 #' \enumerate{
 #'   \item Prepares observed data up to the interim analysis time
@@ -51,125 +10,195 @@
 #'   \item Computes the HR
 #'   \item Generates a decision at the current look (efficacy, continue, or futility at final look)
 #' }
-#'
-#' @return The function must return a list in the return statement of the function. The information below lists 
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
+#' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
+#' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
+#'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
-#'   \item{Decision}{An integer value indicating the outcome of the analysis:
-#'     \itemize{
-#'       \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
-#'       \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
-#'       \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
-#'       \item{Decision = 3}{when the Futility Boundary Crossed}
-#'       \item{Decision = 4}{when the Equivalence Boundary Crossed}
-#'     }}
-#'   \item{TestStat}{**Optional.** A numeric (double) value representing the teststatistic}
-#'   \item{HR}{**Optional.** A double value containing the computed HR.}
-#'   \item{AnalysisTime}{**Optional.** Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.}
-#'   \item{ErrorCode}{**Optional.** An integer value:
-#'     \itemize{
-#'       \item{0}{— No error}
-#'       \item{>0}{— Non-fatal error (current iteration aborted)}
-#'       \item{<0}{— Fatal error (simulation terminated)}
-#'     }}
+#'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
+#'     subject, in the same order as TreatmentID.}
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
+#'     enrollment, with one element per subject.}
 #' }
-#' @export
-library(survival)
+#'
+#' Subject-level stratification factor columns are named by DesignParam$TestStratFactors (Explore) or
+#'   names(DesignParam$StratFactors) (Design), with each row containing the corresponding subject's factor levels.
+#' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
+#'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
+#'   as indicated below. The fields listed here are used by this example.
+#' \describe{
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
+#'     Design: Only available if `Test Type = One-sided`.}
+#'   \item{CriticalPoint}{Numeric. Critical value (for one-sided tests). East Horizon Explore: Only available if
+#'     `Statistical Design = Fixed Sample`. East Horizon Design: Only available if `Test Type = One-sided` and
+#'     `Statistical Design = Fixed Sample`.}
+#'   \item{MaxEvents}{Integer maximum number of events in the trial.}
+#'   \item{StratFactors}{Named List. Named list of length `NumStratFactors`, indicating stratification factors
+#'     details. For example, `StratFactors["Factor1"]` is an array of level names for Factor 1. East Horizon
+#'     Explore: Only available for `Endpoint Type = Time-to-Event` with `Stratification` turned on. East Horizon
+#'     Design: Only available for `Time-to-Event` tests with `Stratification` turned on.}
+#'   \item{TestStratFactors}{Array of Character. Array of factor names included in the analysis. Length is between
+#'     1 and `NumStratFactors`. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` with
+#'     `Stratification` turned on. East Horizon Design: Not available.}
+#' }
+#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
+#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#' \describe{
+#'   \item{NumLooks}{Integer total number of analysis looks.}
+#'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
+#'   \item{CumEvents}{Cumulative event-count vector indexed by LookInfo$CurrLookIndex in this example.}
+#'   \item{RejType}{Integer one-sided rejection type supported by the decision helpers: 0 = upper efficacy;
+#'     1 = upper futility; 2 = lower efficacy; 3 = lower futility; 4 = upper efficacy and lower futility;
+#'     5 = lower efficacy and upper futility.}
+#'   \item{EffBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the efficacy boundary
+#'     values (for one-sided tests) for each look. East Horizon Explore: Set to `NA` for `Endpoint Type =
+#'     Continuous with Repeated Measures`. East Horizon Design: Only available if `Test Type = One-sided`.}
+#' }
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the outputs returned by this example.
+#' \describe{
+#'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
+#'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
+#'     (unavailable in East Horizon Explore).}
+#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
+#'   \item{HR}{Estimated treatment-to-control hazard ratio.}
+#'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
+#'     the study duration at the final analysis. Compute and return this value in the R function.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#' @details This example applies one-sided efficacy boundaries on the Z scale. Extend its boundary logic
+#'   before using p-value-scale boundaries or two-sided designs.
+#'
+#'
+#' SimData also contains the subject-level stratification-factor columns named in DesignParam$StratFactors.
+#'   This function returns scalar results. Use AnalyzeSubpopulation for subpopulation-specific analyses.
+#' @details
+#' ## CyneRgy Decision Helpers
+#'
+#' `CyneRgy::GetDecisionString()` determines the decision label, and
+#' `CyneRgy::GetDecision()` converts it to the integer decision returned to East Horizon.
+#' When using these helpers, include the following fields in sample/test data as well as simulation inputs:
+#'
+#' - `DesignParam$TailType`: test direction; `0` = left-tailed, `1` = right-tailed.
+#' - For a group sequential design, `LookInfo$NumLooks` (total number of looks),
+#'   `LookInfo$CurrLookIndex` (current look, starting at 1), and `LookInfo$RejType`
+#'   (enabled stopping boundaries) are required.
+#' - For a fixed-sample design, pass `LookInfo = NULL` explicitly to both helpers,
+#'   and pass `nLookIndex = 1` and `nQtyOfLooks = 1` to `GetDecisionString()`.
+#'
+#' Supported one-sided `LookInfo$RejType` values:
+#'
+#' - `0`: upper efficacy only.
+#' - `1`: upper futility only.
+#' - `2`: lower efficacy only.
+#' - `3`: lower futility only.
+#' - `4`: upper efficacy and lower futility.
+#' - `5`: lower efficacy and upper futility.
+#'
+#' The helpers do not support `RejType` values `6` (two-sided efficacy only),
+#' `7` (two-sided futility only), `8` (two-sided efficacy and futility), or `9` (equivalence).
+#' The helper requirements above apply in addition to the inputs used by the analysis itself.
+######################################################################################################################## .
 
-## AnalyzeStratification() : Returning Test Stat, HR and Analysis Time and Decision
-AnalyzeStratification<- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL )
-{
-
-    nError <- 0
+AnalyzeStratification <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+    nErrorCode <- 0
     nDecision <- 0
     dTestStatistic <- 0
     dTimeOfAnalysis <- 0
 
     # Determine number of events for analysis
-    if( !is.null( LookInfo ) )
-    {
-        nQtyOfLooks  <- LookInfo$NumLooks
-        nLookIndex   <- LookInfo$CurrLookIndex
-        vCumEvents    <- LookInfo$CumEvents
-        nQtyOfEvents <- vCumEvents[ nLookIndex ]
+    if ( !is.null( LookInfo ) ) {
+        nQtyOfLooks <- LookInfo$NumLooks
+        nLookIndex <- LookInfo$CurrLookIndex
+        nQtyOfEvents <- LookInfo$CumEvents[ nLookIndex ]
+    } else {
+        nQtyOfLooks <- 1
+        nLookIndex <- 1
+        nQtyOfEvents <- DesignParam$MaxEvents
     }
-    else
-    {
-        nQtyOfLooks  <- 1
-        nLookIndex   <- 1
-        nQtyOfEvents <- DesignParam$MaxEvents 
-    }
-    
+
     # Prepare analysis dataset
-    SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime    
-    SimData              <- SimData[ order( SimData$TimeOfEvent), ]
-    dTimeOfAnalysis      <- SimData[ nQtyOfEvents, ]$TimeOfEvent
-    SimData              <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis ,]
-    SimData$Event        <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1 )
+    SimData$TimeOfEvent <- SimData$ArrivalTime + SimData$SurvivalTime
+    SimData <- SimData[ order( SimData$TimeOfEvent ), ]
+    vEventTimes <- SimData$TimeOfEvent
+    dTimeOfAnalysis <- vEventTimes[ nQtyOfEvents ]
+    SimData <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ]
+    SimData$Event <- as.integer( SimData$TimeOfEvent <= dTimeOfAnalysis )
     SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis, dTimeOfAnalysis - SimData$ArrivalTime, SimData$TimeOfEvent - SimData$ArrivalTime )
-    
-    dtime <- SimData$ObservedTime
-    nstatus <- SimData$Event
-    ntreatment <- SimData$TreatmentID
+
+    vObservedTime <- SimData$ObservedTime
+    vEvent <- SimData$Event
+    vTreatmentID <- SimData$TreatmentID
 
     # Determine which stratification factors to use
-    if (!all(is.na(DesignParam$TestStratFactors))) {
-      strat_factors <- DesignParam$TestStratFactors
+    if ( !all( is.na( DesignParam$TestStratFactors ) ) ) {
+        vStratFactors <- DesignParam$TestStratFactors
     } else {
-      # For Design, as TestStratFactors is NA
-      strat_factors <- names(DesignParam$StratFactors)
+        # For Design, as TestStratFactors is NA
+        vStratFactors <- names( DesignParam$StratFactors )
     }
 
-# Convert each stratification column to factor
-for (fac in strat_factors) {
-  SimData[[fac]] <- factor(SimData[[fac]], levels = unique(SimData[[fac]]))
-}
+    # Convert each stratification column to a factor
+    for ( strFactor in vStratFactors ) {
+        SimData[[ strFactor ]] <- factor( SimData[[ strFactor ]],
+            levels = unique( SimData[[ strFactor ]] )
+        )
+    }
 
-  # Construct the formula for strata dynamically
-    strata_formula <- as.formula(
-      paste0(
-        "Surv(dtime, nstatus) ~ ntreatment + ",
-        paste0("strata(`", strat_factors, "`)", collapse = " + ")
-      )
+    # Construct the formula for strata dynamically
+    fStrataFormula <- stats::as.formula(
+        paste0(
+            "survival::Surv(vObservedTime, vEvent) ~ vTreatmentID + ",
+            paste0( "survival::strata(`", vStratFactors, "`)", collapse = " + " )
+        )
     )
- 
-    # Perform stratified log-rank test
-    dfit <- survdiff(strata_formula, data = SimData)
-    dTestStatistic <- sqrt(dfit$chisq)
-    
-    
-    # Compute Hazard Ratio (HR)
-    dcox_fit <- coxph(strata_formula, data = SimData)
-    dhr <- exp(coef(dcox_fit))
 
-    dTestStatistic <- ifelse(unname(dhr) < 1, dTestStatistic * -1, dTestStatistic)
-    
+    # Perform stratified log-rank test
+    cSurvDiff <- survival::survdiff( fStrataFormula, data = SimData )
+    dTestStatistic <- sqrt( cSurvDiff$chisq )
+
+    # Compute Hazard Ratio (HR)
+    cCoxFit <- survival::coxph( fStrataFormula, data = SimData )
+    dHR <- exp( stats::coef( cCoxFit ) )
+
+    dTestStatistic <- ifelse( unname( dHR ) < 1, dTestStatistic * -1, dTestStatistic )
+
     # Decision logic based on boundaries
-    if(!is.na(dTestStatistic)) {
-      if(!is.null(LookInfo)) {
-        # Use efficacy boundary from LookInfo if available
-        if(!is.null(LookInfo$EffBdry)) {
-          dEffBdry <- LookInfo$EffBdry[nLookIndex]
-          nDecision <- ifelse(is.nan(dEffBdry) | is.na(dEffBdry), 0,
-                              ifelse(dTestStatistic > dEffBdry, 2, 0))
-        } 
-      } else {
-        # Use fixed design boundary
-        if(!is.null(DesignParam$CriticalPoint)) {
-          nDecision <- ifelse(dTestStatistic > DesignParam$CriticalPoint, 2, 0)
+    if ( !is.na( dTestStatistic ) ) {
+        dEffBdry <- DesignParam$CriticalPoint
+        if ( !is.null( LookInfo ) ) {
+            dEffBdry <- LookInfo$EffBdry[ nLookIndex ]
         }
-      }
-      # If no efficacy, check for futility at final look
-      if(nDecision == 0 && nLookIndex == nQtyOfLooks) {
-        nDecision <- 3
-      }
+
+        bEfficacyCondition <- FALSE
+        if ( !is.null( dEffBdry ) && !is.na( dEffBdry ) ) {
+            if ( DesignParam$TailType == 0 ) {
+                bEfficacyCondition <- dTestStatistic < dEffBdry
+            } else {
+                bEfficacyCondition <- dTestStatistic > dEffBdry
+            }
+        }
+        strDecision <- CyneRgy::GetDecisionString( LookInfo, nLookIndex, nQtyOfLooks,
+            bIAEfficacyCondition = bEfficacyCondition,
+            bFAEfficacyCondition = bEfficacyCondition
+        )
+        nDecision <- CyneRgy::GetDecision( strDecision, DesignParam, LookInfo )
     }
-       
-    lRet <- list(TestStat = as.double(dTestStatistic),
-                 AnalysisTime = as.double(dTimeOfAnalysis),
-                 HR = as.double(dhr),
-                 Decision  = as.integer(nDecision), 
-                 ErrorCode = as.integer(nError))
+
+    lRet <- list(
+        TestStat = as.double( dTestStatistic ),
+        AnalysisTime = as.double( dTimeOfAnalysis ),
+        HR = as.double( dHR ),
+        Decision = as.integer( nDecision ),
+        ErrorCode = as.integer( nErrorCode )
+    )
     return( lRet )
 }
-
