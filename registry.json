@@ -2861,6 +2861,46 @@
             }
         },
         {
+            "name": "Dose Finding, Patient Simulation - Continuous",
+            "description": "Customizes patient outcome simulation for dose finding trials with continuous outcomes.",
+            "download_urls": [
+                "https://raw.githubusercontent.com/Cytel-Inc/CyneRgy/main/inst/Examples/DoseFindingPatientSimulation/R/SimulatePatientOutcomeDoseFinding.Continuous.R"
+            ],
+            "website_url": " ",
+            "related_to": {
+                "task": [
+                    {
+                        "id": 2,
+                        "name": "Response"
+                    }
+                ],
+                "endpoint_group": [
+                    {
+                        "id": 6,
+                        "name": "MultiArm-Continuous-DoseFinding"
+                    }
+                ],
+                "run_type": [
+                    {
+                        "id": 1,
+                        "name": "Explore"
+                    }
+                ],
+                "has_repeated_measures": [
+                    false
+                ],
+                "has_ssr": [
+                    false
+                ],
+                "has_stratification": [
+                    false
+                ],
+                "has_subpopulation": [
+                    false
+                ]
+            }
+        },
+        {
             "name": "Multiple Arm, Single Endpoint - Patient Dropout - Continuous and Binary",
             "description": "Customizes the dropout distribution for multi-arm trials with continuous and binary outcomes.",
             "download_urls": [
