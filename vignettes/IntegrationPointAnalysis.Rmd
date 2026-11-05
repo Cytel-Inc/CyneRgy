@@ -40,7 +40,7 @@ This integration point is available in East Horizon Explore for the following st
 |----------------|--|--|--|--|--|--|--|--|--|--|--|
 |Dose Escalation|-|-|-|-|-|-|-|-|-|-|
 |Dose Finding|-|-|-|✅||-|-|-|-|-|-|
-|Multiple Arm Confirmatory|❌|-|✅|✅|-|-|-|-|-|-|
+|Multiple Arm Confirmatory|✅|-|✅|✅|-|-|-|-|-|-|
 |One Arm Exploratory / Confirmatory|-|-|-|-|-|-|-|-|-|-|
 |Two Arm Confirmatory|✅|✅|✅|✅|✅|❌|-|-|✅|✅|
 |Two Arm Confirmatory - Multiple Endpoints|❌\*|-|❌\*|❌\*|-|-|-|-|-|-|
