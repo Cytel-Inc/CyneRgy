@@ -1518,6 +1518,10 @@
                         "name": "MultiArm-Continuous"
                     },
                     {
+                        "id": 6,
+                        "name": "MultiArm-Continuous-DoseFinding"
+                    },
+                    {
                         "id": 7,
                         "name": "MultiArm-Binary"
                     },

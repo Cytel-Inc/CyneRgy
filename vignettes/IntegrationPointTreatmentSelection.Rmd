@@ -19,8 +19,8 @@ This integration point is available in East Horizon Explore for the following st
 
 ||Time to Event|Binary|Continuous|
 |----------------|--|--|--|
-|Dose Finding|-|-|❌|
-|Multiple Arm Confirmatory|❌|✅|✅|
+|Dose Finding|-|-|✅|
+|Multiple Arm Confirmatory|✅|✅|✅|
 
 *This integration point is not applicable to other study objectives.*
 
