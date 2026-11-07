@@ -66,7 +66,6 @@
 
 SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL )
 {
-    library( DoseFinding )
     
     nError <- 0 # No errors occurred
     vResponse <- numeric( NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
@@ -96,11 +95,17 @@ SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, Arriv
     
     # Check if all doses are valid numeric values, all treatment doses must be positive numeric values.
     vDoseValues <- unlist( UserParam[ vDoseNames ], use.names = FALSE )
-    vTrtDoses <- suppressWarnings( as.numeric( vDoseValues ) )
+    vTrtDoses   <- suppressWarnings( as.numeric( vDoseValues ) )
     
     if ( length( vTrtDoses ) != NumArms - 1 || any( is.na( vTrtDoses ) ) || any( !is.finite( vTrtDoses ) ) || any( vTrtDoses <= 0 ) ) {
         return( list( Response = as.double( vResponse ), 
                       ErrorCode = as.integer( -3 ) ) )
+    }
+    
+    # Check that treatment doses are in strictly ascending order (Dose1 < Dose2 < Dose3 < ... < Dose(n))
+    if ( any( diff( vTrtDoses ) <= 0 ) ) {
+        return( list( Response = as.double(vResponse),
+                      ErrorCode = as.integer( -4 ) ) )
     }
     
     vDoses <- c( 0, vTrtDoses )
@@ -108,7 +113,7 @@ SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, Arriv
     # Check there are no duplicate doses
     if ( anyDuplicated( vDoses ) ) {
         return( list( Response = as.double( vResponse ), 
-                      ErrorCode = as.integer( -4 ) ) )
+                      ErrorCode = as.integer( -5 ) ) )
     }
     
     # Check the required parameters
@@ -118,7 +123,7 @@ SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, Arriv
     
     if ( length( vMissingParams ) > 0) {
         return( list( Response = as.double( vResponse ), 
-                      ErrorCode = as.integer( -5 ) ) )
+                      ErrorCode = as.integer( -6 ) ) )
     }
     
     # Checking model for validity
@@ -132,7 +137,7 @@ SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, Arriv
     
     if ( !( cModelName %in% vSupportedModels ) ) {
         return( list( Response = as.double( vResponse ), 
-                      ErrorCode = as.integer( -6 ) ) )
+                      ErrorCode = as.integer( -7 ) ) )
     }
     
     # Checking model parameters
@@ -149,7 +154,7 @@ SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, Arriv
     
     if ( length( vMissingParams ) > 0 ) {
         return( list( Response = as.double( vResponse ), 
-                      ErrorCode = as.integer( -7 ) ) )
+                      ErrorCode = as.integer( -8 ) ) )
     }
     
     # Check scalar model parameters
@@ -159,7 +164,7 @@ SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, Arriv
         dValue <- UserParam[[ dScalarParam ]]
         if ( !is.numeric( dValue ) || length( dValue ) != 1 || !is.finite( dValue ) ) {
             return( list( Response = as.double( vResponse ), 
-                          ErrorCode = as.integer( -8 ) ) )
+                          ErrorCode = as.integer( -9 ) ) )
         }
     }
     
@@ -171,17 +176,24 @@ SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, Arriv
     # Validate model-specific constraints
     if ( cModelName %in% c( "emax", "sigemax" ) && UserParam[[ "ED50" ]] <= 0 ) {
         return( list( Response = as.double( vResponse ), 
-                      ErrorCode = as.integer( -9 ) ) )
+                      ErrorCode = as.integer( -10 ) ) )
     }
     
     if ( cModelName == "sigemax" && UserParam[[ "Hill" ]] <= 0 ) {
         return( list( Response = as.double( vResponse ), 
-                      ErrorCode = as.integer( -10 ) ) )
+                      ErrorCode = as.integer( -11 ) ) )
     }
     
     if ( cModelName == "exponential" && UserParam[[ "Delta" ]] <= 0 ) {
         return( list( Response = as.double( vResponse ), 
-                      ErrorCode = as.integer( -11 ) ) )
+                      ErrorCode = as.integer( -12 ) ) )
+    }
+    
+    if ( cModelName == "beta" && ( UserParam[[ "Scale" ]] < max( Doses ) ||
+                                   UserParam[[ "D1" ]] <= 0 ||
+                                   UserParam[[ "D2" ]] <= 0 ) ) {
+        return( list( Response = as.double( vResponse ), 
+                      ErrorCode = as.integer( -13 ) ) )
     }
     
     # Step 2: Prepare dose and model information ####
@@ -192,7 +204,7 @@ SimulatePatientOutcomeDoseFinding.Continuous <- function( NumSub, NumArms, Arriv
     
     if ( nError < 0 ) {
         return( list( Response = as.double( vResponse ), 
-                      ErrorCode = as.integer( -12 ) ) )
+                      ErrorCode = as.integer( -14 ) ) )
     }
     
     # Step 3: Simulate patient-level responses ####
@@ -231,19 +243,14 @@ GenerateMeans <- function( Doses, UserParam) {
     } else if ( cModelName == "emax" ) {
         
         # Mean(d) = E0 + EMax * d / (ED50 + d)
-        vModelMeans <- DoseFinding:::emax( dose = Doses,
-                                           e0   = UserParam$E0,
-                                           eMax = UserParam$EMax,
-                                           ed50 = UserParam$ED50 )
+        vModelMeans <- UserParam$E0 + UserParam$EMax * Doses / ( UserParam$ED50 + Doses)
         
     } else if ( cModelName == "sigemax" ) {
         
         # Mean(d) = E0 + EMax * d^h / (ED50^h + d^h)
-        vModelMeans <- DoseFinding:::sigEmax( dose = Doses,
-                                              e0   = UserParam$E0,
-                                              eMax = UserParam$EMax,
-                                              ed50 = UserParam$ED50,
-                                              h    = UserParam$Hill )
+        vModelMeans <- UserParam$E0 + 
+            UserParam$EMax * ( Doses ^ UserParam$Hill ) / 
+            ( UserParam$ED50 ^ UserParam$Hill + Doses ^ UserParam$Hill )
         
     } else if ( cModelName == "exponential" ) {
         
