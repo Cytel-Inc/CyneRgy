@@ -41,32 +41,27 @@
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, StratumID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
-    # TO DO : Modify this function appropriately
+    
+    # Modify this function appropriately
     nErrorCode <- 0
     vSurvResponses <- c( )
+    
     # Initialize the response vector to 0
     for ( nPatIndx in 1:NumSub ) {
         vSurvResponses[ nPatIndx ] <- 0
     }
     if ( SurvMethod == 1 ) { # Hazard Rates
-        # Write the actual code for SurvMethod 1
-        # here.
-        # Store the generated survival times in an
-        # array called vSurvResponses.
+        # Simulate patient data using the hazard rates
+        # Store the generated survival times in an array called vSurvResponses.
     }
     if ( SurvMethod == 2 ) { # Cumulative % Survivals
-        # Write the actual code for SurvMethod 2
-        # here.
-        # Store the generated survival times in an
-        # array called vSurvResponses.
+        # Simulate patient data using cumulative % survivals
+        # Store the generated survival times in an array called vSurvResponses
     }
     if ( SurvMethod == 3 ) { # Median Survival Times
-        # Write the actual code for SurvMethod 3
-        # here.
-        # Store the generated survival times in an
-        # array called vSurvResponses.
+        # Simulate patient data using median survival times
+        # Store the generated survival times in an array called vSurvResponses
     }
-    # Use appropriate error handling and modify the
-    # Error appropriately in each of the methods
+    # Use appropriate error handling and modify the Error appropriately in each of the methods
     return( list( SurvivalTime = as.double( vSurvResponses ), ErrorCode = as.integer( nErrorCode ) ) )
 }
