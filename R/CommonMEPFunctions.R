@@ -12,17 +12,18 @@
 #' @param NumPrd Integer number of accrual periods.
 #' @param PrdStart Numeric period start times.
 #' @param AccrRate Numeric accrual rates by period.
+#' @param Type Integer enrollment type; this implementation supports global enrollment (`0`).
 #' @param UserParam Optional list of user-defined parameters.
 #'
 #' @return A list in the format required by the arrival integration point.
 #' @export
 
-GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 )
 {
     return( .CallCommonExampleFunction(
         "GeneratePoissonArrival", "GeneratePoissonArrivalMEP.R", "GeneratePoissonArrivalMEP",
         list( NumPat = NumPat, NumPrd = NumPrd, PrdStart = PrdStart, AccrRate = AccrRate,
-              UserParam = UserParam )
+              UserParam = UserParam, Type = Type )
     ) )
 }
 
@@ -73,7 +74,8 @@ GenerateMEPResponse <- function( NumPat, NumArms, TreatmentID, ArrivalTime, Endp
 #' @return A list in the format required by the MEP design integration point.
 #' @export
 
-GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam, OutList, UserParam )
+GetMEPDecision <- function( SimData, AnalysisData, DataSummary, LookInfo, DesignParam,
+                            OutList = NULL, UserParam = NULL )
 {
     return( .CallCommonExampleFunction(
         "MEPDesign", "GetMEPDecision.R", "GetMEPDecision",

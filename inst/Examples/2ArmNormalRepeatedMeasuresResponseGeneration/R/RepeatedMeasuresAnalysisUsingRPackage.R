@@ -1,48 +1,81 @@
+######################################################################################################################## .
+#' @name MMRMAna
+#' @title Analyze repeated-measures subject responses
+#' @description Analyze repeated-measures subject responses. Use the documented inputs and outputs to integrate
+#'   this function with the simulation workflow.
+#' @author Shubham Lahoti
+#' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
+#'   columns by name, for example `SimData$TreatmentID`. Columns include the fields below when applicable,
+#'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#' \describe{
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'   \item{Response1, ..., ResponseNumVisit}{Numeric response vectors, one per visit, with one element per subject.
+#'     Replace NumVisit by the actual number of visits.}
+#'   \item{CensorInd1, ..., CensorIndNumVisit}{Integer censor-indicator vectors, one per visit: 0 =
+#'     dropout/non-completer; 1 = completer.}
+#'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
+#'     subject.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
+#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
+#'     calendar visit times.}
+#' }
+#' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
+#'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
+#'   as indicated below. The fields listed here are used by this example.
+#' \describe{
+#'   \item{NumVisit}{Integer number of visits. East Horizon Explore: Only available for `Endpoint Type =
+#'     Continuous with Repeated Measures`. East Horizon Design: Not available.}
+#' }
+#' @param LookInfo Optional look information; not used by this fixed-sample example.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the outputs returned by this example.
+#' \describe{
+#'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
+#'   \item{PrimDelta}{Zero placeholder for the primary contrast.}
+#'   \item{SecDelta}{Zero placeholder for the secondary contrast.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#' @details This fixed-sample example assumes a common treatment effect across all post-baseline visits and
+#'   returns its signed normal-equivalent statistic, computed from the model's two-sided t-test p-value.
+#'   PrimDelta and SecDelta retain the example's zero placeholders; visit-specific contrasts are not estimated.
+#'
+######################################################################################################################## .
 
+MMRMAna <- function( SimData, DesignParam, UserParam = NULL, LookInfo = NULL ) {
+    # This example fits a fixed-sample model with a common treatment effect across follow-up visits.
 
-MMRMAna <-function(SimData, DesignParam, UserParam = NULL )
-{
-  library(nlme)
-  library(stats)
-  Error <- 0
-  primdeltaest = 0
-  secdeltaest = 0
-  stderror  = 1
+    SimData$id <- seq_len( nrow( SimData ) )
+    nVisits <- DesignParam$NumVisit
+    dfLongData <- stats::reshape( SimData,
+        varying = paste0( "Response", seq_len( nVisits ) ),
+        direction = "long",
+        sep = "",
+        idvar = "id"
+    )
+    dfLongData <- dfLongData[ order( dfLongData$id, dfLongData$time ), ]
 
-  #SimData <- read.csv("C:\\Users\\shubham.lahoti\\Downloads\\MMRM codes and data\\MMRMSimData.csv")
-  SimData$id <- 1:DesignParam$SampleSize
-  NumVisit <- DesignParam$NumVisit
+    # Match baseline responses to subjects before restricting the model data to follow-up visits.
+    dfBaseline <- dfLongData[ dfLongData$time == 1, c( "id", "Response" ) ]
+    dfFollowUp <- dfLongData[ dfLongData$time != 1, ]
+    dfFollowUp$Baseline <- dfBaseline$Response[ match( dfFollowUp$id, dfBaseline$id ) ]
+    dfFollowUp$time <- dfFollowUp$time - 1
 
-longData <- reshape(SimData, varying = paste0("Response", 1:NumVisit),
-                    direction="long", sep="", idvar="id")
-longData <- longData[order(longData$TreatmentID,longData$id,longData$time),]
+    cMMRM <- nlme::gls( Response ~ Baseline + TreatmentID,
+        data = dfFollowUp,
+        na.action = stats::na.omit,
+        correlation = nlme::corSymm( form = ~ time | id ),
+        weights = nlme::varIdent( form = ~ 1 | time )
+    )
+    mCoefficients <- summary( cMMRM )$tTable
+    dTValue <- mCoefficients[ "TreatmentID", "t-value" ]
+    dTwoSidedPValue <- mCoefficients[ "TreatmentID", "p-value" ]
+    dTestStatistic <- sign( dTValue ) * stats::qnorm( dTwoSidedPValue / 2, lower.tail = FALSE )
 
-y <- longData[longData$time != 1,]$Response 
-y0 <- longData[longData$time == 1,]$Response 
-y0 <- rep(y0, each = NumVisit - 1)
-
-trt <- longData[longData$time != 5,]$TreatmentID
-
-mmrm <- gls(y~y0+trt,
-            na.action=na.omit, data=longData,
-            correlation=nlme::corSymm(form=~time | id),
-            weights=nlme::varIdent(form=~1|time))
-# mmrm <- gls(y~y0*factor(t)+TreatmentID*factor(t),
-#             na.action=na.omit, data=longData,
-#             correlation=nlme::corSymm(form=~time | id),
-#             weights=nlme::varIdent(form=~1|time))
-summary(mmrm)
-
-
-  if(summary(mmrm)$tTable["trt","p-value"] <= 0.025)
-    Decision <- 2
-  else
-    Decision <- 0
-  retval <- summary(mmrm)$tTable["trt","t-value"]
-  
-  return(list(TestStat = as.double(retval), PrimDelta = as.double(primdeltaest), SecDelta = as.double(secdeltaest), ErrorCode = as.integer(Error)))
-
-  #return(list(Decision = as.integer(Decision), ErrorCode = as.integer(Error), tStat = as.double(summary(mmrm)$tTable["trt","t-value"]), PVal = as.double(summary(mmrm)$tTable["trt","p-value"])))
+    return( list( TestStat = as.double( dTestStatistic ), PrimDelta = 0, SecDelta = 0, ErrorCode = 0L ) )
 }
-
-

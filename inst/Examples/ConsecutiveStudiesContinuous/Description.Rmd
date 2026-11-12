@@ -301,7 +301,7 @@ Refer to the table below for all the definitions and values of the user-defined 
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 ######################################################################################################################## .
-# Read in the output from East and compute the assurance and probability of a stop ####
+# Read in the output from East Horizon and compute the assurance and probability of a stop ####
 ######################################################################################################################## .
 library(readr)
 
@@ -341,7 +341,7 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 ######################################################################################################################## .
-# Read in the output from East and compute the assurance and probability of a stop ####
+# Read in the output from East Horizon and compute the assurance and probability of a stop ####
 ######################################################################################################################## .
 
 dfEastResults <- read_csv("Outputs/Example1/Phase3.csv")
@@ -381,7 +381,7 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 ######################################################################################################################## .
-# Read in the output from East and compute the assurance and probability of a stop ####
+# Read in the output from East Horizon and compute the assurance and probability of a stop ####
 ######################################################################################################################## .
 
 dfEastResults <- read_csv("Outputs/Example1/Phase3Conditional.csv")

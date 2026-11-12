@@ -97,8 +97,8 @@ The R function *GenerateDropoutTimeMultiArmForSurvival* simulates dropout times 
 
 The function supports two methods for specifying dropout parameters:
 
-- Hazard rate–based dropout (`DropMethod = 1`): dropout times are drawn directly from exponential distributions parameterized by arm-specific hazard rates.
-- Probability–based dropout (`DropMethod = 2`): dropout probabilities are converted into equivalent exponential hazard rates, offering a simpler way to define dropout intensity.
+- Hazard rate-based dropout (`DropMethod = 1`): dropout times are drawn directly from exponential distributions parameterized by arm-specific hazard rates.
+- Probability-based dropout (`DropMethod = 2`): dropout probabilities are converted into equivalent exponential hazard rates, offering a simpler way to define dropout intensity.
 
 Subjects who do not drop out receive a dropout time of `Inf`, indicating full study completion.
 

@@ -1,83 +1,8 @@
+######################################################################################################################## .
 #' @name AnalyzeSubpopulation
-#' 
-#' ASSUMPTION
-#' The look positioning is based on target events on Full Population
-#'
-#' @param SimData 
-#' A data frame containing the simulated patient-level data for the current simulation iteration.  
-#' Includes at least the following variables:
-#' \itemize{
-#'   \item{ArrivalTime}{— The calendar time at which the subject entered the trial}
-#'   \item{Response}{— The observed endpoint for continuous outcome}
-#'   \item{TreatmentID}{— 0 = Control, 1 = Treatment}
-#' }
-#'
-#' @param DesignParam 
-#' A list containing the design and simulation parameters required for analysis. Includes:
-#' \itemize{
-#'   \item{MaxCompleters}{— Maximum number of completers for the study}
-#'   \item{RespLag}{— Response lag from arrival time to measurement}
-#'   \item{CriticalPoint}{— Single-look efficacy boundary (if LookInfo = NULL)}
-#'
-#'   %% Stratification parameters
-#'   \item{NumStratFactors}{— Number of stratification factors used in the analysis}
-#'   \item{TestStratFactors}{— Subset of stratification factors to be used specifically for testing (may include \code{NA})}
-#'   \item{StratFactors}{— A list of stratification factor levels, where each element corresponds 
-#'         to a stratification variable.  
-#'         For example:
-#'         \itemize{
-#'            \item{\code{Var1}}{— Levels for stratification variable 1 (e.g., \code{c("1","2")})}
-#'            \item{\code{Var2}}{— Levels for stratification variable 2 (e.g., \code{c("1","2")})}
-#'         }}
-#' }
-#' 
-#' %% Subpopulation Analysis Parameters
-#'   \item{NumSubPops}{— Number of predefined subpopulations included in the analysis}
-#'
-#'   \item{SubpopName}{— A vector of subpopulation names or identifiers
-#'         (e.g., \code{c("SP1","SP2","SP3")})}
-#'
-#'   \item{WinCond}{— A list specifying the win conditions for each subpopulation.
-#'         Each element corresponds to a subpopulation and defines the criteria
-#'         used to determine whether a treatment arm “wins” within that group.
-#'         For example:
-#'         \itemize{
-#'            \item{\code{SP1}}{— Win condition settings for Subpopulation 1}
-#'            \item{\code{SP2}}{— Win condition settings for Subpopulation 2}
-#'            \item{\code{SP3}}{— Win condition settings for Subpopulation 3}
-#'         }}
-#' 
-#'   \item{PlanEndTrial}{— A logical flag or condition vector indicating whether
-#'         the trial should be considered complete for each subpopulation at
-#'         the planned analysis points (e.g., \code{TRUE} / \code{FALSE})}
-#'
-#'   \item{TransitionMatrix}{— A transition matrix or list of matrices defining
-#'         how probabilities or subjects transition between states or
-#'         subpopulations (if applicable).
-#'         For example:
-#'         \itemize{
-#'            \item{\code{SP1}}{— Transition matrix for Subpopulation 1}
-#'            \item{\code{SP2}}{— Transition matrix for Subpopulation 2}
-#'            \item{\code{SP3}}{— Transition matrix for Subpopulation 3}
-#'         }}
-#' }
-#' 
-#' @param LookInfo 
-#' A list containing group sequential design information for multi-look trials.  
-#' For group sequential designs, it includes:
-#' \itemize{
-#'   \item{NumLooks}{— Total number of interim analyses}
-#'   \item{CurrLookIndex}{— Current look index}
-#'   \item{InfoFrac}{— Information fraction at each look}
-#'   \item{EffBdry}{— Efficacy boundary at each look}
-#' }
-#'
-#' @param UserParam 
-#' A list of user-defined parameters in East Horizon.  Default = NULL.
-#'
-#' @description
-#' Computes teststat, hazard ratio, analysis time and decision   
-#' at a given interim analysis while having multiple subpopulations.  
+#' @title Analyze time-to-event subject outcomes
+#' @description Computes test statistic, hazard ratio, analysis time and decision at a given interim analysis while
+#'   having multiple subpopulations.
 #'
 #' This function:
 #' \enumerate{
@@ -109,12 +34,12 @@
 #'         \itemize{
 #'           \item Selects the applicable stratification factors
 #'           \item Constructs a dynamic stratified log-rank formula
-#'           \item Computes the standardized test statistic (sqrt of chi-square) 
+#'           \item Computes the standardized test statistic (sqrt of chi-square)
 #'           \item Fits a stratified Cox model and extracts the hazard ratio (HR)
 #'         }
 #'
 #'   \item Collects population-specific test statistics and applies the graphical
-#'         multiple testing procedure via \code{compute_gMCPDecisions()}.
+#'         multiple testing procedure via \code{ComputeGMCPDecisions()}.
 #'
 #'   \item Converts GMCP rejection flags into population-specific decision codes:
 #'         \itemize{
@@ -133,211 +58,254 @@
 #'   \item Returns the overall analysis time at which the interim or final
 #'         evaluation was conducted, along with an error flag.
 #' }
-#'
-#' @return The function must return a list in the return statement of the function. The information below lists 
-#'             elements of the list, if the element is required or optional and a description of the return values if needed.
+#' @author Anoop Singh Rawat, Shubham Lahoti, and Gabriel Potvin
+#' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
+#'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
-#'   \item{Decision}{An integer value indicating the outcome of the analysis:
-#'     \itemize{
-#'       \item{Decision = 0}{when No boundary, futility or efficacy is crossed}
-#'       \item{Decision = 1}{when the Lower Efficacy Boundary Crossed}
-#'       \item{Decision = 2}{when the Upper Efficacy Boundary Crossed}
-#'       \item{Decision = 3}{when the Futility Boundary Crossed}
-#'       \item{Decision = 4}{when the Equivalence Boundary Crossed}
-#'     }}
-#'   \item{TestStat}{**Optional.** A double value containing the computed Test Stat.}
-#'   \item{HR}{**Optional.** A double value containing the computed HR.}
-#'   \item{AnalysisTime}{**Optional.** Numeric value. Estimate of Analysis time. Same as look time for interims. Same as study duration for the final analysis. To be computed and returned by the user.}
-#'   \item{ErrorCode}{**Optional.** An integer value:
-#'     \itemize{
-#'       \item{0}{— No error}
-#'       \item{>0}{— Non-fatal error (current iteration aborted)}
-#'       \item{<0}{— Fatal error (simulation terminated)}
-#'     }}
+#'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
+#'     subject, in the same order as TreatmentID.}
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
+#'     enrollment, with one element per subject.}
 #' }
-#' @export
+#'
+#' The subject-level factor columns referenced by DesignParam$SubPops must also be present in SimData,
+#'   with each row containing the corresponding subject's factor levels.
+#' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
+#'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
+#'   as indicated below. The fields listed here are used by this example.
+#' \describe{
+#'   \item{Alpha}{Numeric type I error rate (significance level).}
+#'   \item{TailType}{Integer. Nature of critical region: - `0`: Left-tailed. - `1`: Right-tailed. East Horizon
+#'     Design: Only available if `Test Type = One-sided`.}
+#'   \item{MaxEvents}{Integer maximum number of events in the trial.}
+#'   \item{NumSubPops}{Integer. Number of subpopulations. East Horizon Explore: Only available for `Endpoint Type =
+#'     Time-to-Event` with `Stratification` and `Subpopulations` turned on. East Horizon Design: Not available.}
+#'   \item{SubPops}{Named List. Named list of length equal to the number of subpopulations, indicating factor
+#'     details. For example, `SubPops["Factor1"]` is an array of level names for Factor 1. East Horizon Explore:
+#'     Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.
+#'     East Horizon Design: Not available.}
+#'   \item{SubpopName}{Array of Character. Array of length equal to the number of subpopulations, indicating the
+#'     subpopulation names. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` with
+#'     `Stratification` and `Subpopulations` turned on. East Horizon Design: Not available.}
+#'   \item{TransitionMatrix}{Matrix of Numeric. Transition matrix between all populations, including full
+#'     population and subpopulations. Dimension of `(NumSubPops + 1) x (NumSubPops + 1)`. East Horizon Explore:
+#'     Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.
+#'     East Horizon Design: Not available.}
+#'   \item{PropAlpha}{Vector of Numeric. Vector of length `(NumSubPops + 1)`, indicating the proportion of alpha
+#'     for all populations, including full population and subpopulations. East Horizon Explore: Only available for
+#'     `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on. East Horizon Design:
+#'     Not available.}
+#' }
+#' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
+#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#' \describe{
+#'   \item{NumLooks}{Integer total number of analysis looks.}
+#'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
+#'   \item{CumEvents}{Cumulative event-count vector indexed by LookInfo$CurrLookIndex in this example.}
+#' }
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the outputs returned by this example.
+#' \describe{
+#'   \item{Decision}{Named list of integer boundary-crossing codes, with one element for the full
+#'     population and each subpopulation, using the population names defined by the design: 0 = no
+#'     boundary crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 3 =
+#'     futility boundary crossed; 4 = equivalence boundary crossed (unavailable in East Horizon
+#'     Explore).}
+#'   \item{TestStat}{Named list of numeric test statistics on the Wald (Z) scale, with one element for
+#'     the full population and each subpopulation, using the population names defined by the design.}
+#'   \item{dHR}{Named list of estimated hazard ratios for the full population and each subpopulation.}
+#'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
+#'     the study duration at the final analysis. Compute and return this value in the R function.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#'
+#' SimData also contains the subject-level stratification-factor columns named in DesignParam$StratFactors. When
+#'   subpopulations are enabled, Decision, TestStat, and dHR are named lists with one element for the full
+#'   population and each subpopulation, using the population names defined by the design.
+######################################################################################################################## .
 
-library(survival)
-AnalyzeSubpopulation <- function(SimData, DesignParam, LookInfo = NULL, UserParam = NULL) 
-{
-  nError <- 0
-  dTimeOfAnalysis <- 0
-  
-  # Step 1: Determine number of events for analysis
-  if (!is.null(LookInfo)) {
-    nQtyOfLooks  <- LookInfo$NumLooks
-    nLookIndex   <- LookInfo$CurrLookIndex
-    vCumEvents    <- LookInfo$CumEvents
-    nQtyOfEvents <- vCumEvents[nLookIndex]
-  } else {
-    nQtyOfLooks  <- 1
-    nLookIndex   <- 1
-    nQtyOfEvents <- DesignParam$MaxEvents 
-  }
-  
-  # Step 2: Prepare analysis dataset
-  SimData$TimeOfEvent  <- SimData$ArrivalTime + SimData$SurvivalTime    
-  SimData              <- SimData[order(SimData$TimeOfEvent), ]
-  dTimeOfAnalysis      <- SimData[nQtyOfEvents, ]$TimeOfEvent
-  SimData              <- SimData[SimData$ArrivalTime <= dTimeOfAnalysis, ]
-  SimData$Event        <- ifelse(SimData$TimeOfEvent > dTimeOfAnalysis, 0, 1)
-  SimData$ObservedTime <- ifelse(SimData$TimeOfEvent > dTimeOfAnalysis, 
-                                 dTimeOfAnalysis - SimData$ArrivalTime, 
-                                 SimData$TimeOfEvent - SimData$ArrivalTime)
-  
-  # Step 3: Reading populations Inputs 
-  nNumSubPops <- DesignParam$NumSubPops
-  PopNames   <- DesignParam$SubpopName
-  SubPops    <- DesignParam$SubPops
-  dPropAlpha  <- DesignParam$PropAlpha
-  
-  # Step 4: Create population filters
-  PopFilters <- list()
-  PopFilters[["Full Population"]] <- rep(TRUE, nrow(SimData))
-  
-  if (nNumSubPops > 0) {
-    for (subpop_name in names(SubPops)) {
-      subpop_filter <- rep(TRUE, nrow(SimData))
-      for (factor_name in names(SubPops[[subpop_name]])) {
-        allowed_values <- SubPops[[subpop_name]][[factor_name]]
-        subpop_filter <- subpop_filter & (SimData[[factor_name]] %in% allowed_values)
-      }
-      PopFilters[[subpop_name]] <- subpop_filter
-    }
-  }
-  
-  # Step 5: Determine all possible factors across all subpops
-  all_factors <- unique(unlist(lapply(SubPops, names)))
-  for (fac in all_factors) {
-    if (fac %in% names(SimData)) {
-      SimData[[fac]] <- factor(SimData[[fac]], levels = unique(SimData[[fac]]))
-    }
-  }
-  
-  # Step 6: Initialize output lists
-  dTestStatistic <- list()
-  dHR <- list()
-  nDecision <- list()
-  
-  vtestStats_vec <- c()
-  vpopOrder <- c()
-  
-  # Step 7: Compute test stats and collect populations
-  for (pop_name in names(PopFilters)) {
-    
-    subset_data <- SimData[PopFilters[[pop_name]], ]
-    
-    if (nrow(subset_data) > 0) {
-      
-      # Identify strat factors
-      if (pop_name == "Full Population") {
-        current_strat_factors <- all_factors
-      } else {
-        current_strat_factors <- names(SubPops[[pop_name]])
-      }
-      current_strat_factors <- current_strat_factors[current_strat_factors %in% names(subset_data)]
-      
-      # Build survival formula
-       if (length(current_strat_factors) > 0) {
-      strata_formula <- as.formula(
-  paste0(
-    "Surv(ObservedTime, Event) ~ TreatmentID + ",
-    paste0("strata(`", current_strat_factors, "`)", collapse = " + ")
-  )
-)
+AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
+    nErrorCode <- 0
+    dTimeOfAnalysis <- 0
 
-      } else {
-        strata_formula <- Surv(ObservedTime, Event) ~ TreatmentID
-      }
-      
-      
-      # HR
-      dcox_fit <- coxph(strata_formula, data = subset_data)
-      dhr <- exp(coef(dcox_fit))
-      
-      # Log-rank test
-      dfit <- survdiff(strata_formula, data = subset_data)
-      test_stat <- sqrt(dfit$chisq)
-      test_stat <- ifelse(unname(dhr) < 1, test_stat * -1, test_stat)
-      
-      
-      # Store outputs in named lists
-      dTestStatistic[[pop_name]] <- as.double(test_stat)
-      dHR[[pop_name]] <- as.double(dhr)
-      
-      # Store test stats for GMCP
-      vtestStats_vec <- c(vtestStats_vec, test_stat)
-      vpopOrder <- c(vpopOrder, pop_name)
-      
+    # Step 1: Determine number of events for analysis
+    if ( !is.null( LookInfo ) ) {
+        nQtyOfLooks <- LookInfo$NumLooks
+        nLookIndex <- LookInfo$CurrLookIndex
+        nQtyOfEvents <- LookInfo$CumEvents[ nLookIndex ]
     } else {
-      # Missing population
-      dTestStatistic[[pop_name]] <- NA
-      dHR[[pop_name]] <- NA
-      vtestStats_vec <- c(vtestStats_vec, NA)
-      vpopOrder <- c(vpopOrder, pop_name)
+        nQtyOfLooks <- 1
+        nLookIndex <- 1
+        nQtyOfEvents <- DesignParam$MaxEvents
     }
-  }
-  
-  # Step 8: Compute GMCP decisions
-  gmcp_result <- compute_gMCPDecisions(
-    testStats = vtestStats_vec,
-    tailType  = DesignParam$TailType,
-    alpha     = DesignParam$Alpha,
-    weights   = DesignParam$PropAlpha,
-    tpm       = DesignParam$TransitionMatrix
-  )
-  
-  # Step 9: Map GMCP decisions to population and store in named list
-  for (i in seq_along(vpopOrder)) {
-    
-    pop_name <- vpopOrder[i]
-    
-    gmcp_flag <- gmcp_result$decisionFlag[i]   # 0 = no reject, 1 = reject
-    
-    if (gmcp_flag == 1) {
-      final_decision <- 2
-    } else {
-      final_decision <- if (nLookIndex == nQtyOfLooks) 3 else 0
+
+    # Step 2: Prepare analysis dataset
+    SimData$TimeOfEvent <- SimData$ArrivalTime + SimData$SurvivalTime
+    SimData <- SimData[ order( SimData$TimeOfEvent ), ]
+    vEventTimes <- SimData$TimeOfEvent
+    dTimeOfAnalysis <- vEventTimes[ nQtyOfEvents ]
+    SimData <- SimData[ SimData$ArrivalTime <= dTimeOfAnalysis, ]
+    SimData$Event <- as.integer( SimData$TimeOfEvent <= dTimeOfAnalysis )
+    SimData$ObservedTime <- ifelse( SimData$TimeOfEvent > dTimeOfAnalysis,
+        dTimeOfAnalysis - SimData$ArrivalTime,
+        SimData$TimeOfEvent - SimData$ArrivalTime
+    )
+
+    # Step 3: Read population inputs
+    nNumSubPops <- DesignParam$NumSubPops
+    vPopNames <- DesignParam$SubpopName
+    lSubPops <- DesignParam$SubPops
+    vPropAlpha <- DesignParam$PropAlpha
+
+    # Step 4: Create population filters
+    lPopFilters <- list( )
+    lPopFilters[[ "Full Population" ]] <- rep( TRUE, nrow( SimData ) )
+
+    if ( nNumSubPops > 0 ) {
+        for ( strSubpopName in names( lSubPops ) ) {
+            vSubpopFilter <- rep( TRUE, nrow( SimData ) )
+            for ( strFactorName in names( lSubPops[[ strSubpopName ]] ) ) {
+                vAllowedValues <- lSubPops[[ strSubpopName ]][[ strFactorName ]]
+                vSubpopFilter <- vSubpopFilter & ( SimData[[ strFactorName ]] %in% vAllowedValues )
+            }
+            lPopFilters[[ strSubpopName ]] <- vSubpopFilter
+        }
     }
-    
-    nDecision[[pop_name]] <- as.integer(final_decision)
-  }
-  
-  # Step 10: Return results
-  # The return line must remain unchanged
-  lRet <- list(
-    Decision = as.list(nDecision),
-    TestStat = as.list(dTestStatistic),
-    dHR = as.list(dHR),
-    AnalysisTime = as.double(dTimeOfAnalysis),
-    ErrorCode = as.integer(nError)
-  )
-  
-  return(lRet)
+
+    # Step 5: Determine all possible factors across all subpopulations
+    vAllFactors <- unique( unlist( lapply( lSubPops, names ) ) )
+    for ( strFactor in vAllFactors ) {
+        if ( strFactor %in% names( SimData ) ) {
+            SimData[[ strFactor ]] <- factor( SimData[[ strFactor ]],
+                levels = unique( SimData[[ strFactor ]] )
+            )
+        }
+    }
+
+    # Step 6: Initialize output lists
+    lTestStatistics <- list( )
+    lHazardRatios <- list( )
+    lDecisions <- list( )
+    vTestStats <- c( )
+    vPopOrder <- c( )
+
+    # Step 7: Compute test statistics and collect populations
+    for ( strPopName in names( lPopFilters ) ) {
+        dfSubsetData <- SimData[ lPopFilters[[ strPopName ]], ]
+
+        if ( nrow( dfSubsetData ) > 0 ) {
+            # Identify stratification factors
+            if ( strPopName == "Full Population" ) {
+                vCurrentStratFactors <- vAllFactors
+            } else {
+                vCurrentStratFactors <- names( lSubPops[[ strPopName ]] )
+            }
+            vCurrentStratFactors <- vCurrentStratFactors[ vCurrentStratFactors %in% names( dfSubsetData ) ]
+
+            # Build survival formula
+            if ( length( vCurrentStratFactors ) > 0 ) {
+                fStrataFormula <- stats::as.formula(
+                    paste0(
+                        "survival::Surv(ObservedTime, Event) ~ TreatmentID + ",
+                        paste0( "survival::strata(`", vCurrentStratFactors, "`)", collapse = " + " )
+                    )
+                )
+            } else {
+                fStrataFormula <- survival::Surv( ObservedTime, Event ) ~ TreatmentID
+            }
+
+            # Estimate the hazard ratio
+            cCoxFit <- survival::coxph( fStrataFormula, data = dfSubsetData )
+            dHazardRatio <- exp( stats::coef( cCoxFit ) )
+
+            # Run the log-rank test
+            cSurvDiff <- survival::survdiff( fStrataFormula, data = dfSubsetData )
+            dTestStat <- sqrt( cSurvDiff$chisq )
+            dTestStat <- ifelse( unname( dHazardRatio ) < 1, dTestStat * -1, dTestStat )
+
+            # Store outputs in named lists
+            lTestStatistics[[ strPopName ]] <- as.double( dTestStat )
+            lHazardRatios[[ strPopName ]] <- as.double( dHazardRatio )
+            vTestStats <- c( vTestStats, dTestStat )
+            vPopOrder <- c( vPopOrder, strPopName )
+        } else {
+            lTestStatistics[[ strPopName ]] <- NA
+            lHazardRatios[[ strPopName ]] <- NA
+            vTestStats <- c( vTestStats, NA )
+            vPopOrder <- c( vPopOrder, strPopName )
+        }
+    }
+
+    # Step 8: Compute GMCP decisions
+    lGMCPResult <- ComputeGMCPDecisions(
+        vTestStats  = vTestStats,
+        nTailType   = DesignParam$TailType,
+        dAlpha      = DesignParam$Alpha,
+        vWeights    = DesignParam$PropAlpha,
+        mTransition = DesignParam$TransitionMatrix
+    )
+
+    # Step 9: Map GMCP decisions to populations and store them in a named list
+    for ( iPop in seq_along( vPopOrder ) ) {
+        strPopName <- vPopOrder[ iPop ]
+        nGMCPFlag <- lGMCPResult$decisionFlag[ iPop ]
+
+        if ( nGMCPFlag == 1 ) {
+            nFinalDecision <- ifelse( DesignParam$TailType == 0, 1L, 2L )
+        } else if ( nLookIndex == nQtyOfLooks ) {
+            nFinalDecision <- 3
+        } else {
+            nFinalDecision <- 0
+        }
+
+        lDecisions[[ strPopName ]] <- as.integer( nFinalDecision )
+    }
+
+    # Step 10: Return results
+    lRet <- list(
+        Decision = as.list( lDecisions ),
+        TestStat = as.list( lTestStatistics ),
+        dHR = as.list( lHazardRatios ),
+        AnalysisTime = as.double( dTimeOfAnalysis ),
+        ErrorCode = as.integer( nErrorCode )
+    )
+
+    return( lRet )
 }
 
-library(survival)
-compute_gMCPDecisions <- function(testStats, tailType, alpha, weights, tpm) {
-  library(gMCPLite) 
-  
-  isTestStatMissing <- is.nan(testStats) | is.na(testStats);
-  if(any(isTestStatMissing)) {
-    testStats[which(isTestStatMissing == TRUE)] <- ifelse(tailType == "Left-Tail", Inf, -Inf)
-  } 
-  
-  #Computing raw p-values
-  if(tailType == 0) {
-    raw.p.values <- pnorm(q=testStats, lower.tail=TRUE)
-  } else {
-    raw.p.values <- pnorm(q=testStats, lower.tail=FALSE)
-  }
-  
-  #Creating graph object
-  graph <- matrix2graph(m=tpm, weights = weights)
-  
-  #Applying gMCP procedure
-  output <- gMCP(graph=graph, pvalues = raw.p.values, test="Bonferroni", alpha = alpha)
-  
-  return(list(raw.p.values=raw.p.values, adj.p.values=output@adjPValues, 
-              decisionFlag= as.numeric(output@rejected)) ) #While returning output, converting logical decison flags to numeric
+ComputeGMCPDecisions <- function( vTestStats, nTailType, dAlpha, vWeights, mTransition ) {
+    bTestStatMissing <- is.nan( vTestStats ) | is.na( vTestStats )
+    if ( any( bTestStatMissing ) ) {
+        vTestStats[ which( bTestStatMissing == TRUE ) ] <- ifelse( nTailType == 0, Inf, -Inf )
+    }
+
+    # Compute raw p-values
+    if ( nTailType == 0 ) {
+        vRawPValues <- stats::pnorm( q = vTestStats, lower.tail = TRUE )
+    } else {
+        vRawPValues <- stats::pnorm( q = vTestStats, lower.tail = FALSE )
+    }
+
+    # Create the graph object and apply the gMCP procedure
+    cGraph <- gMCPLite::matrix2graph( m = mTransition, weights = vWeights )
+    cOutput <- gMCPLite::gMCP(
+        graph = cGraph, pvalues = vRawPValues,
+        test = "Bonferroni", alpha = dAlpha
+    )
+
+    lRet <- list(
+        raw.p.values = vRawPValues,
+        adj.p.values = cOutput@adjPValues,
+        decisionFlag = as.numeric( cOutput@rejected )
+    )
+    return( lRet )
 }

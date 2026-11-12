@@ -1,61 +1,86 @@
-#' @param SimulatePatientOutcomePercentAtZero.Binary
-#' @title Simulate patient outcomes from a binary distribution with a percent of patients are treatment resistant. 
-#' @param NumSub The number of subjects that need to be simulated, integer value
-#' @param NumArm The number of arms in the trial including experimental and control, integer value
-#' @param ArrivalTime Arrival times of the subjects, numeric vector, length( ArrivalTime ) = NumSub
-#' @param TreatmentID A vector of treatment ids, 0 = treatment 1, 1 = Treatment 2. length( TreatmentID ) = NumSub
-#' @param PropResp A vector of expected proportions of response for each arm
-#' @param UserParam A list of user defined parameters in East or East Horizon. The default must be NULL resulting in simulating from a non-mixture distribution.
+######################################################################################################################## .
+#' @name SimulatePatientOutcomePercentAtZero.Binary
+#' @title Simulate patient outcomes from a binary distribution with a proportion of treatment-resistant patients.
+#' @description In this example, the binary outcome is a patient's response to treatment (0 non-response or 1
+#'   response). For this function, a percent of patients are believed to be treatment resistant, meaning the
+#'   patient will not respond to any treatment and their outcome is always a 0.
+#'
+#' Simulating patient data in this example follows a two-step procedure. Step 1: Determine if the
+#'   patient is treatment resistant by simulating a binary variable with the probability of success defined by
+#'   UserParam$dProbOfTreatmentResistantCtrl or UserParam$dProbOfTreatmentResistantExp. Step 2: If the value in Step
+#'   1 is 1, indicating that the patient is treatment resistant, their outcome is set to 0, otherwise simulate their
+#'   outcome from a binomial distribution using the response probabilities provided in PropResp.
+#' @author J. Kyle Wathen
+#' @param NumSub Integer number of subjects in the trial.
+#' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
+#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
+#'   in the same order as TreatmentID.
+#' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
+#'   = first experimental arm, 2 = second experimental arm, and so on.
+#' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
+#'   experimental arms in TreatmentID order. Each probability is between 0 and 1.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#'
+#' Example-specific parameters and requirements:
 #' If UserParam is supplied, the list must contain the following named elements:
 #' \describe{
-#'    \item{UserParam$dProbOfTreatmentResistantCtrl}{A value in (0, 1) that defines the probability a patient is treatment resistant the control (ctrl) treatment.}
-#'    \item{UserParam$dProbOfTreatmentResistantExp}{A value in (0, 1) that defines the probability a patient is treatment resistant experimental (exp) treatment.}
+#'   \item{UserParam$dProbOfTreatmentResistantCtrl}{Numeric probability in [0, 1] that a subject is treatment
+#'     resistant on the control arm.}
+#'   \item{UserParam$dProbOfTreatmentResistantExp}{Numeric probability in [0, 1] that a subject is treatment
+#'     resistant on the experimental arm.}
 #' }
-#' @description
-#' In this example, the binary outcome is a patient's response to treatment (0 non-response  or 1 response).   
-#' For this function, a percent of patients are believed to be treatment resistant,
-#' meaning the patient will not respond to any treatment and their outcome is always a 0.  
-#' 
-#' The steps to simulating patient data in this example follows a two-step procedure.  
-#'  Step 1: Determine if the patient is treatment resistant by simulating a binary variable with the probability of success defined by UserParam$dProbOfTreatmentResistantCtrl or 
-#'  UserParam$dProbOfTreatmentResistantExp
-#'  Step 2: If the value in Step 1, indicating the patient is treatment resistant then their outcome is set to 0, otherwise the simulate their
-#'  outcome from a binomial distribution using the response probabilities provided in PropRest.  
-SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL )
-{
-    if( is.null( UserParam ) )
-    {
+#' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
+#'   custom outputs may also be included.
+#' \describe{
+#'   \item{Response}{Numeric vector of generated binary subject responses, coded 0 = non-response and 1 = response,
+#'     with one element per subject.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#' @details For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
+#'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
+#'   treatment-to-control ratio of proportions). Include these arguments in the function signature for a
+#'   vaccine-efficacy design. Standard binary responses are coded 0 = non-response and 1 = response.
+######################################################################################################################## .
+
+SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
+    if ( is.null( UserParam ) ) {
         UserParam <- list( dProbOfTreatmentResistantCtrl = 0, dProbOfTreatmentResistantExp = 0 )
     }
-    
-    #Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
-    vProbabilityOfTreatmentResistant <- c( UserParam$dProbOfTreatmentResistantCtrl, UserParam$dProbOfTreatmentResistantExp )    # By default, 0% of patients are treatment resistant
-    
-    nError           <- 0 # East code for no errors occurred 
-    vPatientOutcome  <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
-    
-    
-    # Loop over the patients and simulate the outcome according to the treatment they 
-    for( nPatIndx in 1:NumSub )
-    {
-        nTreatmentID                <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East has the treatments as 0, 1 so need to add 1 to get a vector index
-        
-        # Need to check the probability of a 0 outcome to make sure it is in the range (0, 1) and if not simulate the outcome accordingly 
-        if( vProbabilityOfTreatmentResistant[ nTreatmentID ] > 0 & vProbabilityOfTreatmentResistant[ nTreatmentID ] < 1 ) # Probability is valid, so need to simulate if the patient is a 0 response
-            nTreatmentResistant <- rbinom( 1, 1, vProbabilityOfTreatmentResistant[ nTreatmentID ] )
-        else if( vProbabilityOfTreatmentResistant[ nTreatmentID ] <= 0 )   # If Probability of a 0  <= 0
+
+    # Create the vector of probabilities of a 0 outcome for each treatment to be used in the for loop below
+    vProbabilityOfTreatmentResistant <- c( UserParam$dProbOfTreatmentResistantCtrl, UserParam$dProbOfTreatmentResistantExp ) # By default, 0% of patients are treatment resistant
+
+    nErrorCode <- 0 # No errors occurred
+    vPatientOutcome <- rep( 0, NumSub ) # Initialize the vector of patient outcomes as 0 so only the patients that do NOT have a zero response will be simulated
+
+    # Loop over the patients and simulate the outcome according to the treatment they
+    for ( nPatIndx in 1:NumSub ) {
+        nTreatmentID <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
+
+        # Need to check the probability of a 0 outcome to make sure it is in the range (0, 1) and if not simulate the outcome accordingly
+        if ( vProbabilityOfTreatmentResistant[ nTreatmentID ] > 0 & vProbabilityOfTreatmentResistant[ nTreatmentID ] < 1 ) { # Probability is valid, so need to simulate if the patient is a 0 response
+            nTreatmentResistant <- stats::rbinom( 1, 1, vProbabilityOfTreatmentResistant[ nTreatmentID ] )
+        } else if ( vProbabilityOfTreatmentResistant[ nTreatmentID ] <= 0 ) { # If Probability of a 0  <= 0
             nTreatmentResistant <- 0
-        else                        # if the probability of a 0 >= 1 --> Don't need to simulate from the binary distribution as all patients in the treatment are a 0
+        } else { # if the probability of a 0 >= 1 --> Don't need to simulate from the binary distribution as all patients in the treatment are a 0
             nTreatmentResistant <- 1
-        
-        # If nTreatmentResistant == 1 then the patient outcome is a a 0 and we don't need to simulate it. 
-        
-        if( nTreatmentResistant == 0  )  # The patient responded, so we need to simulate their outcome from a binary distribution 
-            vPatientOutcome[ nPatIndx ] <- rbinom( 1, 1, PropResp[ nTreatmentID ])
+        }
+
+        # If nTreatmentResistant == 1 then the patient outcome is a 0 and we don't need to simulate it.
+
+        if ( nTreatmentResistant == 0 ) { # The patient responded, so we need to simulate their outcome from a binary distribution
+            vPatientOutcome[ nPatIndx ] <- stats::rbinom( 1, 1, PropResp[ nTreatmentID ] )
+        }
     }
-    
-    if(  any( is.na( vPatientOutcome ) ) )
-        nError <- -100
-   
-    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nError ) ) )
+
+    if ( any( is.na( vPatientOutcome ) ) ) {
+        nErrorCode <- -100
+    }
+
+    return( list( Response = as.double( vPatientOutcome ), ErrorCode = as.integer( nErrorCode ) ) )
 }

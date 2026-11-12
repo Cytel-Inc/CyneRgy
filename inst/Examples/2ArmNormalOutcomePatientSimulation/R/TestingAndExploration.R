@@ -1,35 +1,44 @@
-# Step 1 - source the desired files ####
+######################################################################################################################## .
+#' @name TestingAndExploration
+#' @title Explore simulated continuous outcomes
+#' @description Load the saved example inputs, call SimulatePatientOutcomePercentAtZero, and inspect the
+#'   mean response and proportion of zero outcomes in each arm. Plot the generated control and experimental
+#'   responses to check the simulation before running larger experiments.
+#' @author J. Kyle Wathen
+#' @return This demonstration script stores the generated response list in lResult, prints the arm-specific
+#'   summaries, and displays two histograms.
+#' @details Run this script from the example R directory. The bundled ExampleEastoutput directory supplies
+#'   NumSub, TreatmentID, Mean, StdDev, and UserParam as RDS files. If ArrivalTime.Rds is available, load it;
+#'   otherwise use zero arrival times.
+######################################################################################################################## .
+
+# Step 1 - Load the response generator and saved inputs.
 source( "SimulatePatientOutcomePercentAtZero.R" )
+nSubjects <- readRDS( "../ExampleEastoutput/NumSub.Rds" )
+vTreatmentID <- readRDS( "../ExampleEastoutput/TreatmentID.Rds" )
+vMean <- readRDS( "../ExampleEastoutput/Mean.Rds" )
+vStdDev <- readRDS( "../ExampleEastoutput/StdDev.Rds" )
+lUserParam <- readRDS( "../ExampleEastoutput/UserParam.Rds" )
 
-# Step 2 - Load any needed input, e.g. if you saved output from East you can manually or programmatically load inputs here ####
-NumSub          <- readRDS( "../ExampleEastoutput/NumSub.Rds" )
-TreatmentID     <- readRDS( "../ExampleEastoutput/TreatmentID.Rds" )
-Mean            <- readRDS( "../ExampleEastoutput/Mean.Rds" )
-StdDev          <- readRDS( "../ExampleEastoutput/StdDev.Rds" )
-UserParam       <- readRDS( "../ExampleEastoutput/UserParam.Rds" )
+strArrivalPath <- "../ExampleEastoutput/ArrivalTime.Rds"
+if ( file.exists( strArrivalPath ) ) {
+    vArrivalTime <- readRDS( strArrivalPath )
+} else {
+    vArrivalTime <- rep( 0, nSubjects )
+}
 
-#UserParam       <- list( dProbOfZeroOutcomeExp = 0, dProbOfZeroOutcomeCtrl = 0 )
+# Step 2 - Call the generator and calculate summaries for each treatment arm.
+lResult <- SimulatePatientOutcomePercentAtZero( nSubjects, vArrivalTime, vTreatmentID, vMean, vStdDev, lUserParam )
+dMeanTrt0 <- mean( lResult$Response[ vTreatmentID == 0 ] )
+dProb0Trt0 <- mean( lResult$Response[ vTreatmentID == 0 ] == 0 )
+dMeanTrt1 <- mean( lResult$Response[ vTreatmentID == 1 ] )
+dProb0Trt1 <- mean( lResult$Response[ vTreatmentID == 1 ] == 0 )
 
-# Step 3 - Example call to the desired function ####
-lRet <- SimulatePatientOutcomePercentAtZero( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam )
+print( dMeanTrt0 )
+print( dProb0Trt0 )
+print( dMeanTrt1 )
+print( dProb0Trt1 )
 
-# Step 4 - Check a few values from simulated data set and create a few visuals to make sure the function you developed appears to function as intended ####
-# Compute the mean and standard deviation of the patient outcomes for each treatment
-dMeanTrt0       <- mean( lRet$Response[ TreatmentID == 0 ] )    
-dProb0Trt0      <- mean( ifelse( lRet$Response[ TreatmentID == 0 ] == 0, 1, 0 ) )   # Compute the probability that the outcome = 0
-dMeanTrt1       <- mean( lRet$Response[ TreatmentID == 1 ] )
-dProb0Trt1      <- mean( ifelse( lRet$Response[ TreatmentID == 1 ] == 0, 1, 0 ) )   # Compute the probability that the outcome = 0
-
-# Inspect the output
-dMeanTrt0 
-dProb0Trt0
-dMeanTrt1 
-dProb0Trt1
-
-# Step 5 - Create a few visual to check if the simulated data looks as expected ####
-
-hist( lRet$Response[ TreatmentID == 0 ], main = "Control" )
-hist( lRet$Response[ TreatmentID == 1 ], main = "Experimental" )
-
-# It is always important to test any code that is developed before running extensive simulations
-
+# Step 3 - Inspect the response distributions before running extensive simulations.
+graphics::hist( lResult$Response[ vTreatmentID == 0 ], main = "Control" )
+graphics::hist( lResult$Response[ vTreatmentID == 1 ], main = "Experimental" )

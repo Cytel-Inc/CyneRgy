@@ -14,16 +14,18 @@
 #' @param NumPrd Integer number of accrual periods.
 #' @param PrdStart Numeric vector containing the start time of each accrual period; the first value should be `0`.
 #' @param AccrRate Numeric vector containing the accrual rate in each period.
+#' @param Type Integer enrollment type; this implementation supports global enrollment (`0`).
 #' @param UserParam Optional list of user-defined rates named `dRate1`, `dRate2`, and so on.
 #'
 #' @return A list in the format required by the arrival integration point.
 #' @export
 
-GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL )
+GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 )
 {
     return( .CallCommonExampleFunction(
         "GeneratePoissonArrival", "GeneratePoissonArrival.R", "GeneratePoissonArrival",
-        list( NumSub = NumSub, NumPrd = NumPrd, PrdStart = PrdStart, AccrRate = AccrRate, UserParam = UserParam )
+        list( NumSub = NumSub, NumPrd = NumPrd, PrdStart = PrdStart, AccrRate = AccrRate, UserParam = UserParam,
+              Type = Type )
     ) )
 }
 
@@ -31,11 +33,10 @@ GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserPara
 # Internal helper mirroring the bundled GeneratePoissonArrival example, kept here for direct unit testing.
 SimulateAccrualTimesWithConstantRate <- function( dPatsPerUnitTime, dPeriodStartTime, dQtyOfUnitsOfTime = 1 )
 {
-    nMaxQtyPatsInThisTimeUnit <- stats::qpois( 0.9999, dPatsPerUnitTime ) + 10
-    vIntraArrivalTime         <- stats::rexp( dQtyOfUnitsOfTime * nMaxQtyPatsInThisTimeUnit, dPatsPerUnitTime )
-    vTimes                    <- cumsum( vIntraArrivalTime )
-    vTimes                    <- vTimes[ vTimes < dQtyOfUnitsOfTime ]
-    vTimes                    <- vTimes + dPeriodStartTime
+    if( dPatsPerUnitTime == 0 )
+        return( numeric( 0 ) )
 
-    return( vTimes )
+    nSubjectsInPeriod <- stats::rpois( 1, dPatsPerUnitTime * dQtyOfUnitsOfTime )
+    vTimes <- sort( stats::runif( nSubjectsInPeriod, min = 0, max = dQtyOfUnitsOfTime ) )
+    return( vTimes + dPeriodStartTime )
 }

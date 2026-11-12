@@ -9,7 +9,7 @@ output: html_document
 
 # Description
 
-The Treatment Selection integration point allows you to customize the selection of arms to carry forward after an interim analysis using a custom R script. Instead of relying on the limited settings (rules) of East or East Horizon, such as selecting a fixed number of top treatments or applying a threshold, you can implement entirely alternative methods to better suit your trial's requirements. For example, you could use Bayesian rules.
+The Treatment Selection integration point allows you to customize the selection of arms to carry forward after an interim analysis using a custom R script. Instead of relying on the limited settings (rules) of East Horizon, such as selecting a fixed number of top treatments or applying a threshold, you can implement entirely alternative methods to better suit your trial's requirements. For example, you could use Bayesian rules.
 
 # Availability
 

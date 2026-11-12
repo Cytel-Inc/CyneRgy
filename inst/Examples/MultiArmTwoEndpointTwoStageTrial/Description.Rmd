@@ -89,7 +89,7 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-By combining the above R functions with the East Horizon native inputs, users are able to simulate and use aggregated data from each simulated trial to compute the expected probability of success of their trial design. Users will also continue to benefit from East Horizon’s output visualizations – with the caveat that the Probability of Success metric will be labeled as “Power” in the native outputs of East Horizon.
+By combining the above R functions with the East Horizon native inputs, users are able to simulate and use aggregated data from each simulated trial to compute the expected probability of success of their trial design. Users will also continue to benefit from East Horizon’s output visualizations - with the caveat that the Probability of Success metric will be labeled as “Power” in the native outputs of East Horizon.
 
 ## Statistical Assumptions
 
@@ -130,7 +130,7 @@ Before starting, make sure you have the required tools and files.
 
 ![](MultiArmTwoEndpointTwoStageTrial_files/Step 4.jpg){width=700px}
 
-5. Select “User Specified – R” in the Test field.
+5. Select “User Specified - R” in the Test field.
 
 ![](MultiArmTwoEndpointTwoStageTrial_files/Step 5.jpg){width=700px}
 
@@ -173,7 +173,7 @@ For binary endpoint, treatment benefit is assumed to be associated with larger r
 
 ## Response 
 
-12. Navigate to the Response page, and then select “User Specified – R” in the Distribution field.
+12. Navigate to the Response page, and then select “User Specified - R” in the Distribution field.
 
 ![](MultiArmTwoEndpointTwoStageTrial_files/Step 12.jpg){width=700px}
 
