@@ -39,6 +39,7 @@
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
+    
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0
     vPatientOutcome <- rep( 0, NumSub ) # Note, as you simulate the patient data put in this vector so it can be returned
@@ -68,15 +69,14 @@
         # Simulate patient data using median survival times
     }
 
-    # Example 2 - Loop over the patient vector and simulate from an Exponential distribution, as an example
+    # Example - Loop over the patient vector and simulate from an Exponential distribution, as an example
     # vTrueRates <- c( 1 / UserParam$dMeanCtrl, 1 / UserParam$dMeanExp )
     # for ( nPatIndx in 1:NumSub ) {
     #     nTreatmentID                 <- TreatmentID[ nPatIndx ] + 1 # The TreatmentID vector sent from East Horizon has the treatments as 0, 1 so need to add 1 to get a vector index
     #     vPatientOutcome[ nPatIndx ]  <- stats::rexp( 1, vTrueRates[ nTreatmentID ] )
     # }
 
-    # Use appropriate error handling and modify the
-    # error appropriately in each of the methods.
+    # Use appropriate error handling and modify the error appropriately in each of the methods.
 
     return( list( SurvivalTime = as.double( vPatientOutcome ), ErrorCode = as.integer( nErrorCode ) ) )
 }
