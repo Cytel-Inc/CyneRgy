@@ -113,8 +113,6 @@
 
 AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
 
-    library( CyneRgy )
-
     # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
     if ( !is.null( LookInfo ) ) {
         # Group sequential design
@@ -133,9 +131,7 @@ AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, Use
         nTailType <- DesignParam$TailType
     }
 
-
     if ( is.null( UserParam ) ) {
-        # FATAL ERROR AS WE DON'T KNOW WHAT THE USER WANTS TO DO.
         # Creating a FATAL error will avoid misleading results when UserParam is not supplied
         return( list(
             TestStat = as.double( 0 ),
@@ -153,7 +149,6 @@ AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, Use
     # Create vectors of data for each treatment
     vOutcomesCtrl <- vPatientOutcome[ vPatientTreatment == 0 ]
     vOutcomesExp <- vPatientOutcome[ vPatientTreatment == 1 ]
-
 
     # Step 3 -Perform the desired analysis - for this case a Bayesian analysis.  If Posterior Probability is > Cutoff --> Efficacy ####
     # The function PerformAnalysisBetaBinomial is provided below in this file.
@@ -235,6 +230,7 @@ ProbExpGreaterCtrlBeta <- function( vOutcomesCtrl, vOutcomesExp, dAlphaCtrl, dBe
 ######################################################################################################################## .
 
 ComputeBayesianPredictiveProbabilityWithBayesianAnalysis <- function( dataS, dataE, priorAlphaS, priorBetaS, priorAlphaE, priorBetaE, nQtyOfPatsS, nQtyOfPatsE, nSimulations, finalBoundary, lAnalysisParams ) {
+    
     # Compute the posterior parameters based on observed data
     dPosteriorAlphaS <- priorAlphaS + sum( dataS )
     dPosteriorBetaS <- priorBetaS + length( dataS ) - sum( dataS )
