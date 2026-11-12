@@ -50,13 +50,14 @@
 ######################################################################################################################## .
 
 SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
-    # Step 1 - Setup the vectors so we can sample which component of the mixture prior to use
+    
+    # Step 1 - Setup the vectors so we can sample which component of the mixture prior to use ####
     vStdDev <- c( UserParam$dSDCtrl, UserParam$dSDExp )
     vMean <- c( UserParam$dMeanCtrl ) # Note: only need control mean as we will sample experimental mean
     vPriorMeans <- c( UserParam$dMean1, UserParam$dMean2 )
     vPriorSDs <- c( UserParam$dSD1, UserParam$dSD2 )
 
-    # Step 2 - Sample the prior mean treatment effect according to the weights of the two normal distributions in the mixture
+    # Step 2 - Sample the prior mean treatment effect according to the weights of the two normal distributions in the mixture ####
     nPrior <- sample( c( 1, 2 ), 1, prob = c( UserParam$dWeight1, UserParam$dWeight2 ), replace = TRUE )
     dTreatmentEffect <- stats::rnorm( 1, vPriorMeans[ nPrior ], vPriorSDs[ nPrior ] )
     vMean <- c( vMean, vMean[ 1 ] + dTreatmentEffect )
@@ -78,12 +79,12 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
         nErrorCode <- -100
     }
 
-    # Step 6 - Create any variables that are returned that need to be included in the output
+    # Step 6 - Create any variables that are returned that need to be included in the output ####
     # Note: Need to return the true delta, and East Horizon expects it to be a vector.
     vTrueDelta <- rep( vMean[ 2 ] - vMean[ 1 ], length( vPatientOutcome ) )
 
-    # Step 7 - Build the return object, add other variables to the list as needed
-    #       Add the vTrueDelta so it can easily be output by saving the East Horizon summary stats.
+    # Step 7 - Build the return object, add other variables to the list as needed ####
+    # Add the vTrueDelta so it can easily be output by saving the East Horizon summary stats.
     lReturn <- list(
         Response = as.double( vPatientOutcome ),
         ErrorCode = as.integer( nErrorCode ),
@@ -137,6 +138,7 @@ SimulatePatientOutcomeNormalAssurance <- function( NumSub, ArrivalTime, Treatmen
 ######################################################################################################################## .
 
 SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
+    
     # Step 1 - Use the prior that was supplied from output ####
     if ( !exists( "vPrior" ) || !exists( "nSimIndex" ) ) {
         return( list( Response = rep( 0, NumSub ), ErrorCode = -100L ) )
@@ -150,7 +152,6 @@ SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, Arriva
 
     # Step 2 - Setup the vectors so we can sample which component of the mixture prior to use ####
     vStdDev <- c( UserParam$dSDCtrl, UserParam$dSDExp )
-
 
     # Step 3 - Initialize variable ####
     nErrorCode <- 0 # East Horizon code for no errors occurred
@@ -169,10 +170,10 @@ SimulatePatientOutcomeNormalAssuranceUsingPriorInput <- function( NumSub, Arriva
         nErrorCode <- -100
     }
 
-    # Step 6 - Create any variables that are returned that need to be included in the output
+    # Step 6 - Create any variables that are returned that need to be included in the output ####
     vTrueDelta <- rep( Mean[ 2 ] - Mean[ 1 ], length( vPatientOutcome ) )
 
-    # Step 7 - Build the return object, add other variables to the list as needed
+    # Step 7 - Build the return object, add other variables to the list as needed ####
     lReturn <- list(
         Response = as.double( vPatientOutcome ),
         ErrorCode = as.integer( nErrorCode ),
