@@ -28,6 +28,7 @@
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
+    
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0
     vPatientArrivalTime <- rep( 0, NumPat ) # Note, as you simulate the patient data put it in this vector so it can be returned
@@ -35,18 +36,14 @@
     # Step 2 - Validate custom variable input and set defaults ####
     if ( is.null( UserParam ) ) {
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the
-        #   values are valid and
-        # take care of any issues. Also, if there is a default value for the parameters you may want to set them here.
-        #   Default values usually
-        # are applied to have the same functionality as East Horizon, see the first example
+        # values are valid and take care of any issues. Also, if there is a default value for the parameters you may want to set them here.
+        # Default values usually are applied to have the same functionality as East Horizon
 
         # EXAMPLE - Set the default if needed
-        # UserParam <- list( dRate = 0.5 )
+        # UserParam <- list( dRate = 8 )
     }
 
     # Step 3 - Loop over the patients and simulate the patient arrival times in the trial ####
-
-    # Example 1 - ####
     for ( nPatientIndex in seq_len( NumPat ) ) {
         # Add code here to simulate the patient arrival times.
         # The arrival times should be increasing
