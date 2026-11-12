@@ -1,8 +1,8 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Template: Simulate continuous subject responses
-#' @description Simulate continuous subject responses. Use this template as a starting point for custom logic.
+#' @title Template: Simulate multi-arm continuous subject responses
+#' @description Simulate multi-arm continuous subject responses. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
 #'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
@@ -30,6 +30,7 @@
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArms, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
+    
     # Step 1 - Validate custom variable input and set defaults ####
     if ( is.null( UserParam ) ) {
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and
