@@ -70,6 +70,9 @@
 ######################################################################################################################## .
 
 SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) {
+
+    nErrorCode <- 0
+    
     if ( is.null( UserParam ) ) {
         # Default is to select the treatment with highest number of responses and allocation of 2:1
         #   (Experimental:Control)
@@ -79,20 +82,19 @@ SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam
     tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
 
     # Want to select the top user-specified (QtyOfArmsToSelect) number of experimental treatments, so drop control from
-    #   the sorting
-    # Now, only the experimental treatments are left
+    # the sorting. Now, only the experimental treatments are left
     tabResults <- tabResults[ -1, , drop = FALSE ]
 
     nArmsToSelect <- UserParam$QtyOfArmsToSelect
     if ( length( nArmsToSelect ) != 1 || !is.finite( nArmsToSelect ) ||
          nArmsToSelect != as.integer( nArmsToSelect ) || nArmsToSelect < 1 ||
          nArmsToSelect > nrow( tabResults ) ) {
-        return( list( TreatmentID = integer( 0 ), AllocRatio = numeric( 0 ), ErrorCode = -2L ) )
+        return( list( TreatmentID = integer( 0 ), AllocRatio = numeric( 0 ), ErrorCode = -1 ) )
     }
     for ( nRank in seq_len( nArmsToSelect ) ) {
         dAllocationRatio <- UserParam[[ paste0( "Rank", nRank, "AllocationRatio" ) ]]
         if ( length( dAllocationRatio ) != 1 || !is.finite( dAllocationRatio ) || dAllocationRatio <= 0 ) {
-            return( list( TreatmentID = integer( 0 ), AllocRatio = numeric( 0 ), ErrorCode = -2L ) )
+            return( list( TreatmentID = integer( 0 ), AllocRatio = numeric( 0 ), ErrorCode = -2 ) )
         }
     }
 
@@ -115,11 +117,10 @@ SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam
     # Treatment vReturnTreatmentID[ 1 ] will have a ratio of UserParam$Rank1AllocationRatio and
     # vReturnTreatmentID[ 2 ] a ratio of UserParam$Rank2AllocationRatio, and control is always 1
 
-    nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
     if ( length( vReturnTreatmentID ) != length( vAllocationRatio ) ) {
         # Fatal error because the R code is incorrect
-        nErrorCode <- -1
+        nErrorCode <- -3
     }
     lReturn <- list(
         TreatmentID = as.integer( vReturnTreatmentID ),
