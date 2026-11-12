@@ -141,7 +141,6 @@ AnalyzeUsingBetaBinomial <- function( SimData, DesignParam, LookInfo = NULL, Use
         ) )
     }
 
-
     # Step 2 - Create the vector of simulated data for this IA - East Horizon sends all of the simulated data ####
     vPatientOutcome <- SimData$Response[ 1:nQtyOfPatsInAnalysis ]
     vPatientTreatment <- SimData$TreatmentID[ 1:nQtyOfPatsInAnalysis ]
