@@ -1,8 +1,8 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Template: Simulate binary subject responses
-#' @description Simulate binary subject responses. Use this template as a starting point for custom logic. Preserve
+#' @title Template: Simulate multi-arm binary subject responses
+#' @description Simulate multi-arm binary subject responses. Use this template as a starting point for custom logic. Preserve
 #'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
 #'   inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
@@ -30,6 +30,7 @@
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
+    
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0 # East Horizon code for no errors occurred
     vPatientOutcome <- rep( 0, NumSub ) # Note, as you simulate the patient data put in this vector so it can be returned
