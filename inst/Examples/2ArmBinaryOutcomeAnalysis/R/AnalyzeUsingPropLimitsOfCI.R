@@ -105,7 +105,7 @@
 
 AnalyzeUsingPropLimitsOfCI <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
 
-    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    # Retrieve necessary information from the objects East Horizon sent. You may not need all the variables
     if ( !is.null( LookInfo ) ) {
         # Group sequential design
         nLookIndex <- LookInfo$CurrLookIndex
