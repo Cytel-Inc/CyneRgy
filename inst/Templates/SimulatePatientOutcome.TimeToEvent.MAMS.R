@@ -1,8 +1,8 @@
 ######################################################################################################################## .
 # Last Modified Date: {{CREATION_DATE}}
 #' @name {{FUNCTION_NAME}}
-#' @title Template: Simulate subject survival times
-#' @description Simulate subject survival times. Use this template as a starting point for custom logic. Preserve
+#' @title Template: Simulate multi-arm subject survival times
+#' @description Simulate multi-arm subject survival times. Use this template as a starting point for custom logic. Preserve
 #'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
 #'   inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
@@ -39,6 +39,7 @@
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, SurvMethod, NumPrd, PrdTime, SurvParam, UserParam = NULL ) {
+    
     # Step 1 - Validate custom variable input and set defaults ####
     if ( is.null( UserParam ) ) {
         # If this function requires user defined parameters to be sent via the UserParam variable
@@ -67,10 +68,7 @@
     }
 
     # Step 6 - Build the return object ####
-    lReturn <- list(
-        SurvivalTime = as.double( vResponse ),
-        ErrorCode    = as.integer( nErrorCode )
-    )
+    lReturn <- list( SurvivalTime = as.double( vResponse ), ErrorCode    = as.integer( nErrorCode ) )
 
     return( lReturn )
 }
