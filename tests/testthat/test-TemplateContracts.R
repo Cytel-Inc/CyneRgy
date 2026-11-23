@@ -3,7 +3,7 @@
 ######################################################################################################################## .
 
 .GetTemplateFunction <- function( strTemplate ) {
-    strPath <- testthat::test_path( "..", "..", "inst", "Templates", strTemplate )
+    strPath <- system.file( "Templates", strTemplate, package = "CyneRgy" )
     strCode <- paste( readLines( strPath, warn = FALSE ), collapse = "\n" )
     strCode <- gsub( "{{FUNCTION_NAME}}", "TemplateFunction", strCode, fixed = TRUE )
     envTemplate <- new.env( parent = baseenv() )
@@ -12,13 +12,13 @@
 }
 
 .GetTemplateText <- function( strTemplate ) {
-    strPath <- testthat::test_path( "..", "..", "inst", "Templates", strTemplate )
+    strPath <- system.file( "Templates", strTemplate, package = "CyneRgy" )
     paste( readLines( strPath, warn = FALSE ), collapse = "\n" )
 }
 
 .GetDocumentedMembers <- function( strTemplate, strParameter ) {
     vLines <- readLines(
-        testthat::test_path( "..", "..", "inst", "Templates", strTemplate ),
+        system.file( "Templates", strTemplate, package = "CyneRgy" ),
         warn = FALSE
     )
     nStart <- grep( paste0( "^#' @param ", strParameter, "\\b" ), vLines )
@@ -176,7 +176,7 @@ test_that( "all templates accept their engine-supplied arguments", {
         "TreatmentSelection.R" = c( "SimData", "DesignParam", "LookInfo", "UserParam" )
     )
 
-    strTemplateDir <- testthat::test_path( "..", "..", "inst", "Templates" )
+    strTemplateDir <- system.file( "Templates", package = "CyneRgy" )
     expect_length( lContracts, length( list.files( strTemplateDir, pattern = "[.]R$" ) ) )
     for ( strTemplate in names( lContracts ) ) {
         lContract <- lContracts[[ strTemplate ]]
