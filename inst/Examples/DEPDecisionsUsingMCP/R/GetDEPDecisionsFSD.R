@@ -23,8 +23,7 @@
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
-#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
-#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position.
 #' @param TestStat Named list of endpoint test statistics on the Wald (Z) scale, returned by the endpoint analyses.
 #'   Access elements using the actual endpoint names.
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive

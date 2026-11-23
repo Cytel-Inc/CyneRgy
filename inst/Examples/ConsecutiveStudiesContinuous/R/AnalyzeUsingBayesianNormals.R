@@ -25,8 +25,7 @@
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below. The fields listed here are used by this example.
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
-#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
-#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position.
 #' \describe{
 #'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}
 #'   \item{CumCompleters}{Integer vector of cumulative completer counts, one per look.}

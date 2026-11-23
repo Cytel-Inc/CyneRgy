@@ -37,8 +37,7 @@
 #'     Fixed Sample`.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, for the current group-sequential look. Access
-#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
-#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position.
 #' \describe{
 #'   \item{NumLooks}{Integer total number of analysis looks.}
 #'   \item{CurrLookIndex}{Integer index of the current analysis look, starting at 1.}

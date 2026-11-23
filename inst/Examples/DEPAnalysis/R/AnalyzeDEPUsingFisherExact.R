@@ -43,8 +43,7 @@
 #'     endpoints with `Endpoint Type = Time-to-Event`.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
-#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
-#'   `CyneRgy::GetDecisionString()` and `CyneRgy::GetDecision()`, including NULL for a fixed-sample design.
+#'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position.
 #' \describe{
 #'   \item{NumEndpointLooks}{Named List of Integer. Named List of length equal to the number of endpoints,
 #'     indicating the number of looks for each endpoint. For example, `NumEndpointLooks["Endpoint 1"]` is the
