@@ -6,8 +6,6 @@
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumVisit Integer number of visits.
-#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
@@ -50,7 +48,7 @@
 #' This example uses independent normal measurement noise at each visit.
 ######################################################################################################################## .
 
-GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+GenerateResponseEmaxModel <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
     nErrorCode <- 0
     lRetval <- list( )
 
@@ -127,6 +125,8 @@ GenerateResponseEmaxModel <- function( NumSub, NumVisit, ArrivalTime, TreatmentI
 #' @return Named list containing the generated responses and optional ErrorCode execution status. Additional
 #'   custom outputs may also be included.
 #' \describe{
+#'   \item{Response1, ..., ResponseNumVisit}{Numeric concentration vectors, one per visit, with one element per
+#'     subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

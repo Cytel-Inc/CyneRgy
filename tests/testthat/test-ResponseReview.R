@@ -65,7 +65,7 @@ test_that( "dual-endpoint responses preserve Dev endpoint parameter order", {
     }
 } )
 
-test_that( "CSV response generation samples singleton arm rows by index", {
+test_that( "CSV response generation preserves original positional calls and singleton arm rows", {
     strOriginalDir <- getwd()
     bHadCache <- exists( "gdfPatients", envir = .GlobalEnv, inherits = FALSE )
     if ( bHadCache ) {
@@ -81,7 +81,7 @@ test_that( "CSV response generation samples singleton arm rows by index", {
     if ( bHadCache ) {
         rm( "gdfPatients", envir = .GlobalEnv )
     }
-    strTestDir <- tempfile( "response-csv-" )
+    strTestDir <- tempfile( "response-csv-", tmpdir = "." )
     dir.create( file.path( strTestDir, "Inputs" ), recursive = TRUE )
     on.exit( setwd( strOriginalDir ), add = TRUE )
     on.exit( unlink( strTestDir, recursive = TRUE ), add = TRUE )
@@ -95,7 +95,7 @@ test_that( "CSV response generation samples singleton arm rows by index", {
     setwd( strTestDir )
     for ( fnGenerate in lFunctions ) {
         for ( nTrial in seq_len( 10 ) ) {
-            lResult <- fnGenerate( 2, 1, c( 0, 0 ), c( 0, 1 ), 0, 1, 0, 0, 1, 1,
+            lResult <- fnGenerate( 2, 1, c( 0, 1 ), 0, 1, 0, 0, 1, 1,
                 matrix( 1 ), list( InputFileName = "patients.csv" ) )
             expect_identical( lResult$ErrorCode, 0L )
             expect_equal( lResult$Response1, c( 200, 100 ) )
@@ -139,7 +139,7 @@ test_that( "CSV response caches follow the requested input file", {
             rm( "gdfPatients", envir = .GlobalEnv )
         }
     }, add = TRUE )
-    strTestDir <- tempfile( "response-csv-scenarios-" )
+    strTestDir <- tempfile( "response-csv-scenarios-", tmpdir = "." )
     dir.create( file.path( strTestDir, "Inputs" ), recursive = TRUE )
     on.exit( unlink( strTestDir, recursive = TRUE ), add = TRUE )
     for ( nScenario in seq_len( 2 ) ) {
@@ -150,12 +150,12 @@ test_that( "CSV response caches follow the requested input file", {
     setwd( strTestDir )
     for ( fnGenerate in lFunctions ) {
         for ( nScenario in c( 1, 2, 1 ) ) {
-            lResult <- fnGenerate( 2, 1, c( 0, 0 ), c( 1, 0 ), 0, 1, 0, 0, 1, 1,
+            lResult <- fnGenerate( 2, 1, c( 1, 0 ), 0, 1, 0, 0, 1, 1,
                 matrix( 1 ), list( InputFileName = paste0( nScenario, ".csv" ) ) )
             expect_identical( lResult$ErrorCode, 0L )
             expect_equal( lResult$Response1, c( 20, 10 ) * nScenario )
         }
-        lMissing <- fnGenerate( 2, 1, c( 0, 0 ), c( 0, 1 ), 0, 1, 0, 0, 1, 1, matrix( 1 ) )
+        lMissing <- fnGenerate( 2, 1, c( 0, 1 ), 0, 1, 0, 0, 1, 1, matrix( 1 ) )
         expect_identical( lMissing$ErrorCode, -1L )
     }
 } )
@@ -197,7 +197,7 @@ test_that( "multiple-outcome examples return their documented error when user in
     }
 } )
 
-test_that( "PK concentration and Emax response generators coexist and integrate successive visit times", {
+test_that( "original positional PK and Emax calls coexist and integrate successive visit times", {
     skip_if_not_installed( "deSolve" )
     fnPK <- .GetCommonExampleFunction( "PKPDResponseGeneration", "GenerateDrugConcentration.R",
         "GenerateDrugConcentration" )
@@ -208,13 +208,13 @@ test_that( "PK concentration and Emax response generators coexist and integrate 
     envEmax$GenerateDrugConcentration <- fnPK
     on.exit( rm( "GenerateDrugConcentration", envir = envEmax ), add = TRUE )
     vVisits <- c( 0, 1, 2 )
-    lInputs <- list( NumSub = 2, NumVisit = 3, ArrivalTime = c( 0, 0 ), TreatmentID = c( 0, 1 ),
+    lInputs <- list( NumSub = 2, NumVisit = 3, TreatmentID = c( 0, 1 ),
         Inputmethod = 0, VisitTime = vVisits, MeanControl = rep( 0, 3 ), MeanTrt = rep( 0, 3 ),
         StdDevControl = rep( 0, 3 ), StdDevTrt = rep( 0, 3 ), CorrMat = diag( 3 ) )
-    lPK <- do.call( fnPK, c( lInputs, list( UserParam = list( AbsorptionRate = 1,
-        EliminationRate = 0.5, Dose = 10 ) ) ) )
-    lEmax <- do.call( fnEmax, c( lInputs, list( UserParam = list( AbsorptionRate = 1,
-        EliminationRate = 0.5, Dose = 10, E0 = 1, Emax = 2, EC50 = 5 ) ) ) )
+    lPK <- do.call( fnPK, unname( c( lInputs, list( UserParam = list( AbsorptionRate = 1,
+        EliminationRate = 0.5, Dose = 10 ) ) ) ) )
+    lEmax <- do.call( fnEmax, unname( c( lInputs, list( UserParam = list( AbsorptionRate = 1,
+        EliminationRate = 0.5, Dose = 10, E0 = 1, Emax = 2, EC50 = 5 ) ) ) ) )
     vExpectedPK <- 20 * ( exp( -0.5 * vVisits ) - exp( -vVisits ) )
     expect_identical( lPK$ErrorCode, 0L )
     expect_identical( lEmax$ErrorCode, 0L )

@@ -8,6 +8,8 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
@@ -20,11 +22,22 @@
 #'     dropout/non-completer; 1 = completer.}
 #'   \item{ClndrRespTime}{Numeric vector of response times on the calendar scale, with one element per subject. For
 #'     a survival endpoint, this is ArrivalTime plus the event or censoring time measured from enrollment.}
+#'   \item{LkRespTime}{Numeric response or follow-up time available at the current look.}
+#'   \item{LkCensorIndctr}{Integer current-look censor indicator. This is named CensorInd instead when accrual or
+#'     dropout processing applies its display-name mapping.}
+#'   \item{DropOutTime}{Numeric generated dropout time. Present when dropout is configured.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{RespRandNum}{Numeric response random numbers. Present with built-in continuous response generation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
 #' \describe{
+#'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{TrialType}{Integer. Trial Type: - `0`: Superiority.}
 #'   \item{TestType}{Integer. Test Type: - `0`: One-sided.}
@@ -54,6 +67,20 @@
 #'   \item{UpdatedAllocInfo}{Vector of Numeric. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
 #'     have been updated during treatment selection.}
+#'   \item{UpperAlpha}{Numeric upper-tail type I error allocation.}
+#'   \item{LowerAlpha}{Numeric lower-tail type I error allocation.}
+#'   \item{CriticalPoint}{Numeric critical value. Set to NA for non-fixed designs.}
+#'   \item{UpperCriticalPoint}{Numeric upper critical value. Set to NA when not applicable.}
+#'   \item{LowerCriticalPoint}{Numeric lower critical value. Set to NA when not applicable.}
+#'   \item{MaxEvents}{Integer maximum number of events. Set to NA for continuous tests.}
+#'   \item{FollowUpType}{Integer follow-up type. Set to NA for continuous tests.}
+#'   \item{FollowUpDur}{Numeric follow-up duration. Set to NA for continuous tests.}
+#'   \item{Sigma}{Numeric design standard deviation.}
+#'   \item{PValCombMethod}{Integer p-value combination method. Set to NA when not applicable.}
+#'   \item{w1}{Numeric inverse-normal stage-one weight. Set to NA when not applicable.}
+#'   \item{w2}{Numeric inverse-normal stage-two weight. Set to NA when not applicable.}
+#'   \item{AlphaProp}{Numeric vector of alpha allocations. Set to NA when not applicable.}
+#'   \item{TestSeq}{Integer treatment-test sequence. Set to NA when not applicable.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -76,10 +103,19 @@
 #'     `2`: Delta scale. - `6`: Hazard ratio scale.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
+#'   \item{CumAlphaUpper}{Numeric vector of upper cumulative alpha spending by look.}
+#'   \item{CumAlphaLower}{Numeric vector of lower cumulative alpha spending by look.}
+#'   \item{EffBdryScale}{Integer efficacy-boundary scale. Set to NA when efficacy boundaries are not configured.}
+#'   \item{EffBdry}{Numeric vector of efficacy boundaries by look. Set to NA when not configured.}
+#'   \item{EffBdryUpper}{Numeric vector of upper efficacy boundaries by look.}
+#'   \item{EffBdryLower}{Numeric vector of lower efficacy boundaries by look.}
+#'   \item{FutBdryUpper}{Numeric vector of upper futility boundaries by look.}
+#'   \item{FutBdryLower}{Numeric vector of lower futility boundaries by look.}
+#'   \item{BindingType}{Integer futility binding type: 0 = non-binding; 1 = binding.}
 #'   \item{PoCScale}{Integer. Proof of concept (PoC) scale: - `0`: High dose vs. control. East Horizon Explore:
 #'     Only available for `Study Objective = Dose Finding`. East Horizon Design: Not available.}
-#'   \item{PoCThreshold}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the proof of concept
-#'     (PoC) threshold. East Horizon Explore: Only available for `Study Objective = Dose Finding`. East Horizon
+#'   \item{PoCThreshold}{Numeric scalar proof-of-concept threshold.
+#'     East Horizon Explore: Only available for `Study Objective = Dose Finding`. East Horizon
 #'     Design: Not available.}
 #' }
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive

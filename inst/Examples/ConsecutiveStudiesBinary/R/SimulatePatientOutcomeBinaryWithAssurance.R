@@ -36,7 +36,8 @@
 #'     with one element per subject.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
-#'     simulations.}
+#'     simulations. This example returns -1 when UserParam is missing and -2 when a required named
+#'     Beta-prior parameter is missing.}
 #' }
 #'
 #' Example-specific additional output elements:
@@ -55,12 +56,15 @@
 SimulatePatientOutcomeBinaryWithAssurance <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
     # If the user did not specify the user parameters, but still called this function: error
     if ( is.null( UserParam ) ) {
-        nErrorCode <- 100
+        nErrorCode <- -1
         lReturn <- list( Response = as.double( rep( NA, NumSub ) ), ErrorCode = as.integer( nErrorCode ) )
         return( lReturn )
     }
 
-    # Step 1: Sample true probability of response
+    if ( is.null( UserParam$dParameter1Ctrl ) || is.null( UserParam$dParameter2Ctrl ) ||
+         is.null( UserParam$dParameter1Exp ) || is.null( UserParam$dParameter2Exp ) ) {
+        return( list( Response = rep( NA_real_, NumSub ), ErrorCode = -2L ) )
+    }
 
     dTrueProbCtrl <- stats::rbeta( 1, UserParam$dParameter1Ctrl, UserParam$dParameter2Ctrl )
     dTrueProbExp <- stats::rbeta( 1, UserParam$dParameter1Exp, UserParam$dParameter2Exp )

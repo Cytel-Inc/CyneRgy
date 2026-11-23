@@ -8,6 +8,8 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
@@ -15,8 +17,25 @@
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
+#'   \item{ClndrRespTime}{Numeric vector of event or censoring times on the calendar scale, with one element per
+#'     subject.}
+#'   \item{CensorInd}{Integer vector of censor indicators adjusted for the current analysis look: 0 = censored;
+#'     1 = event.}
+#'   \item{CensorIndOrg}{Original integer vector of censor indicators before analysis-time adjustment: 0 =
+#'     censored; 1 = event.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
+#'   \item{LkRespTime}{Numeric event or follow-up time available at the current look.}
+#'   \item{LkCensorIndctr}{Integer current-look censor indicator. This is named CensorInd instead when accrual or
+#'     dropout processing applies its display-name mapping.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{RespRandNum}{Numeric event-time random numbers. Present with built-in survival generation.}
+#'   \item{RespPrdRandNum}{Numeric survival-period random numbers. Present with piecewise built-in survival
+#'     generation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
@@ -68,6 +87,18 @@
 #'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
 #'     have been updated during treatment selection.}
 #'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
+#'   \item{UpperAlpha}{Numeric upper-tail type I error allocation.}
+#'   \item{LowerAlpha}{Numeric lower-tail type I error allocation.}
+#'   \item{UpperCriticalPoint}{Numeric upper critical value. Set to NA when not applicable.}
+#'   \item{LowerCriticalPoint}{Numeric lower critical value. Set to NA when not applicable.}
+#'   \item{MaxCompleters}{Integer maximum number of completers. Set to NA for time-to-event tests.}
+#'   \item{RespLag}{Numeric response lag. Set to NA for time-to-event tests.}
+#'   \item{TestStatType}{Integer time-to-event test statistic type.}
+#'   \item{VarType}{Integer variance type. Set to NA when not applicable.}
+#'   \item{Sigma}{Numeric design standard deviation. Set to NA for time-to-event tests.}
+#'   \item{PValCombMethod}{Integer p-value combination method. Set to NA when not applicable.}
+#'   \item{w1}{Numeric inverse-normal stage-one weight. Set to NA when not applicable.}
+#'   \item{w2}{Numeric inverse-normal stage-two weight. Set to NA when not applicable.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -95,6 +126,15 @@
 #'     `2`: Delta scale. - `6`: Hazard ratio scale.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
+#'   \item{CumAlphaUpper}{Numeric vector of upper cumulative alpha spending by look.}
+#'   \item{CumAlphaLower}{Numeric vector of lower cumulative alpha spending by look.}
+#'   \item{CumCompleters}{Integer vector of cumulative completers by look. Set to NA for time-to-event tests.}
+#'   \item{LookTime}{Numeric vector of calendar analysis times for time-based looks.}
+#'   \item{EffBdryUpper}{Numeric vector of upper efficacy boundaries by look.}
+#'   \item{EffBdryLower}{Numeric vector of lower efficacy boundaries by look.}
+#'   \item{FutBdryUpper}{Numeric vector of upper futility boundaries by look.}
+#'   \item{FutBdryLower}{Numeric vector of lower futility boundaries by look.}
+#'   \item{BindingType}{Integer futility binding type: 0 = non-binding; 1 = binding.}
 #' }
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
 #'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
@@ -112,7 +152,7 @@
 #'   \item{TestStat}{Numeric vector of test statistics on the Wald (Z) scale, with one value per experimental arm in
 #'     treatment-ID order.}
 #'   \item{HR}{Numeric vector of estimated treatment-to-control hazard ratios, one per experimental arm in
-#'     treatment-ID order.}
+#'     treatment-ID order. Required for built-in treatment selection even when Decision is returned.}
 #'   \item{Delta}{Estimated log hazard ratio (natural logarithm of HR).}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}

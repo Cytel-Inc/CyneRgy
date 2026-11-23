@@ -56,6 +56,9 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#' @details This example implements a right-tailed experimental-minus-control comparison. Use TailType = 1;
+#'   supporting the opposite alternative requires changing the comparison and selected boundary.
+#'
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

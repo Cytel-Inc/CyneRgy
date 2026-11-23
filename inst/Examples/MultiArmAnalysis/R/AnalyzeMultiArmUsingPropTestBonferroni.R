@@ -57,7 +57,9 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#' @details Return Decision to apply custom stopping logic, or TestStat, AdjPVal, or RawPVal to let East Horizon
+#' @details This example supports right-tailed comparisons only (TailType = 1). At sequential looks it computes
+#'   its own O'Brien-Fleming boundaries using gsDesign rather than using East Horizon's efficacy boundaries.
+#'   Return Decision to apply custom stopping logic, or TestStat, AdjPVal, or RawPVal to let East Horizon
 #'   apply its supported multiplicity adjustments and boundaries. Return one value per experimental arm
 #'   in treatment-ID order and NA for arms absent at the current look. Delta is required for Delta-scale
 #'   futility; HR is required for hazard-ratio-scale futility in time-to-event designs. RawPVal cannot be

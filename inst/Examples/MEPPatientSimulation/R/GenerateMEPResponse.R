@@ -40,9 +40,9 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#' @details The integration-point documentation also lists optional ArrivalRank and Corr outputs but does not
-#'   specify their structure. These templates and examples return Response and ErrorCode; consult the requirements
-#'   of the target East Horizon version before using those optional outputs.
+#' @details This example returns Response and ErrorCode. The Explore MEP engine also accepts an optional numeric
+#'   Corr matrix with one row and column per endpoint for its latent-normal correlation summary. ArrivalRank is
+#'   not required by the custom response dispatcher.
 #'
 #' This example uses the supplied numeric correlation matrix directly. It must be positive definite.
 #'   For time-to-event endpoints this example supports a single hazard period.

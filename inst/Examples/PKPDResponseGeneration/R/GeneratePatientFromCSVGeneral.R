@@ -10,8 +10,6 @@
 #' @author Anton Sun, Jacob Wathen, Gabriel Potvin
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumVisit Integer number of visits.
-#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
@@ -75,7 +73,7 @@
 #'   within each simulation replicate.
 ######################################################################################################################## .
 
-GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+GeneratePatientFromCSVGeneral <- function( NumSub, NumVisit, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
     # Initialize return variables and error code
     nErrorCode <- 0
     lReturn <- list( )

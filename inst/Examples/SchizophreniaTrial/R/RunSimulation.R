@@ -79,11 +79,11 @@ dfSimData <- data.frame(
     Response3 = lGeneratedData$Response3,
     Response4 = lGeneratedData$Response4,
     Response5 = lGeneratedData$Response5,
-    ArrTimeVisit1 = rep( vVisitTime[ 1 ], nNumSub ),
-    ArrTimeVisit2 = rep( vVisitTime[ 2 ], nNumSub ),
-    ArrTimeVisit3 = rep( vVisitTime[ 3 ], nNumSub ),
-    ArrTimeVisit4 = rep( vVisitTime[ 4 ], nNumSub ),
-    ArrTimeVisit5 = rep( vVisitTime[ 5 ], nNumSub )
+    ArrTimeVisit1 = vArrivalTime + vVisitTime[ 1 ],
+    ArrTimeVisit2 = vArrivalTime + vVisitTime[ 2 ],
+    ArrTimeVisit3 = vArrivalTime + vVisitTime[ 3 ],
+    ArrTimeVisit4 = vArrivalTime + vVisitTime[ 4 ],
+    ArrTimeVisit5 = vArrivalTime + vVisitTime[ 5 ]
 )
 
 lDesignParam <- list(
@@ -157,11 +157,11 @@ for ( iRep in 1:nQtyReps ) {
         Response3 = lGeneratedData$Response3,
         Response4 = lGeneratedData$Response4,
         Response5 = lGeneratedData$Response5,
-        ArrTimeVisit1 = rep( vVisitTime[ 1 ], nNumSub ),
-        ArrTimeVisit2 = rep( vVisitTime[ 2 ], nNumSub ),
-        ArrTimeVisit3 = rep( vVisitTime[ 3 ], nNumSub ),
-        ArrTimeVisit4 = rep( vVisitTime[ 4 ], nNumSub ),
-        ArrTimeVisit5 = rep( vVisitTime[ 5 ], nNumSub )
+        ArrTimeVisit1 = vArrivalTime + vVisitTime[ 1 ],
+        ArrTimeVisit2 = vArrivalTime + vVisitTime[ 2 ],
+        ArrTimeVisit3 = vArrivalTime + vVisitTime[ 3 ],
+        ArrTimeVisit4 = vArrivalTime + vVisitTime[ 4 ],
+        ArrTimeVisit5 = vArrivalTime + vVisitTime[ 5 ]
     )
 
     lLoopSimData[[ iRep ]] <- dfSimData

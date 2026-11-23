@@ -8,6 +8,8 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
@@ -23,17 +25,33 @@
 #'   \item{ClndrRespTime2}{Numeric vector of response times on the calendar scale, with one element per subject.
 #'     For a survival endpoint, this is ArrivalTime plus the event or censoring time measured from enrollment.
 #'     Applies to the second endpoint.}
+#'   \item{LkCensorIndctr}{Integer vector of censor indicators adjusted for the current analysis look. Applies to
+#'     the first endpoint.}
+#'   \item{LkCensorIndctr2}{Integer vector of censor indicators adjusted for the current analysis look. Applies to
+#'     the second endpoint.}
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer. Applies to the first endpoint.}
 #'   \item{CensorIndOrg2}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer. Applies to the second endpoint.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
+#'   \item{NormalResponse1}{Numeric latent normal response for the first endpoint, used by correlated DEP response
+#'     generation.}
+#'   \item{NormalResponse2}{Numeric latent normal response for the second endpoint, used by correlated DEP response
+#'     generation.}
+#'   \item{LkRespTime}{Numeric response or follow-up time available at the current look for the first endpoint.}
+#'   \item{LkRespTime2}{Numeric response or follow-up time available at the current look for the second endpoint.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
 #' \describe{
+#'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #'   \item{EndpointType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the
 #'     endpoint types: - 0: Continuous. - 1: Binary. - 2: Time-to-Event.}
 #'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
@@ -59,6 +77,8 @@
 #'   \item{AllocInfo}{Vector of Numeric. Vector of length equal to the number of experimental arms (number of arms -
 #'     1), containing the ratios of the experimental group sample sizes to the control group sample size.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
+#'   \item{UpperAlpha}{Numeric upper-tail type I error allocation.}
+#'   \item{LowerAlpha}{Numeric lower-tail type I error allocation.}
 #'   \item{CriticalPoint}{Named List of Numeric. Named List of length equal to the number of endpoints, indicating
 #'     the critical value for each endpoint. For example, `CriticalPoint["Endpoint 1"]` is the value for Endpoint
 #'     1. Only available if `Statistical Design = Fixed Sample`.}
@@ -137,14 +157,14 @@
 #'     containing the efficacy boundary values for each endpoint. For example, `EffBdry["Endpoint 1"]` is a vector
 #'     of length `LookInfo$NumLooks` containing the efficacy boundary values for each look for Endpoint 1. East
 #'     Horizon Explore: Set to `NA` if efficacy boundaries are skipped for some looks.}
-#'   \item{EffBdryLower}{Named list of numeric vectors. Named List of length equal to the number of endpoints,
-#'     containing the lower efficacy boundary values for each endpoint. For example, `EffBdryLower["Endpoint 1"]`
+#'   \item{EffBdryLwr}{Named list of numeric vectors. Named List of length equal to the number of endpoints,
+#'     containing the lower efficacy boundary values for each endpoint. For example, `EffBdryLwr["Endpoint 1"]`
 #'     is a vector of length `LookInfo$NumLooks` containing the lower efficacy boundary values for each look for
 #'     Endpoint 1. East Horizon Explore: Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist,
 #'     so this variable is not useful: use EffBdry instead. Set to `NA` if efficacy boundaries are skipped for some
 #'     looks.}
-#'   \item{EffBdryUpper}{Named list of numeric vectors. Named List of length equal to the number of endpoints,
-#'     containing the upper efficacy boundary values for each endpoint. For example, `EffBdryUpper["Endpoint 1"]`
+#'   \item{EffBdryUpr}{Named list of numeric vectors. Named List of length equal to the number of endpoints,
+#'     containing the upper efficacy boundary values for each endpoint. For example, `EffBdryUpr["Endpoint 1"]`
 #'     is a vector of length `LookInfo$NumLooks` containing the upper efficacy boundary values for each look for
 #'     Endpoint 1. East Horizon Explore: Only available if `Tail Type = Right-tailed`. Two-sided tests do not
 #'     exist, so this variable is not useful: use EffBdry instead. Set to `NA` if efficacy boundaries are skipped
@@ -157,14 +177,14 @@
 #'     containing the futility boundary values for each endpoint. For example, `FutBdry["Endpoint 1"]` is a vector
 #'     of length `LookInfo$NumLooks` containing the futility boundary values for each look for Endpoint 1. East
 #'     Horizon Explore: Set to `NA` if futility boundaries are skipped for some looks.}
-#'   \item{FutBdryLower}{Named list of numeric vectors. Named List of length equal to the number of endpoints,
-#'     containing the lower futility boundary values for each endpoint. For example, `FutBdryLower["Endpoint 1"]`
+#'   \item{FutBdryLwr}{Named list of numeric vectors. Named List of length equal to the number of endpoints,
+#'     containing the lower futility boundary values for each endpoint. For example, `FutBdryLwr["Endpoint 1"]`
 #'     is a vector of length `LookInfo$NumLooks` containing the lower futility boundary values for each look for
 #'     Endpoint 1. East Horizon Explore: Only available if `Tail Type = Left-tailed`. Two-sided tests do not exist,
 #'     so this variable is not useful: use FutBdry instead. Set to `NA` if futility boundaries are skipped for some
 #'     looks.}
-#'   \item{FutBdryUpper}{Named list of numeric vectors. Named List of length equal to the number of endpoints,
-#'     containing the upper futility boundary values for each endpoint. For example, `FutBdryUpper["Endpoint 1"]`
+#'   \item{FutBdryUpr}{Named list of numeric vectors. Named List of length equal to the number of endpoints,
+#'     containing the upper futility boundary values for each endpoint. For example, `FutBdryUpr["Endpoint 1"]`
 #'     is a vector of length `LookInfo$NumLooks` containing the upper futility boundary values for each look for
 #'     Endpoint 1. East Horizon Explore: Only available if `Tail Type = Right-tailed`. Two-sided tests do not
 #'     exist, so this variable is not useful: use FutBdry instead. Set to `NA` if futility boundaries are skipped
@@ -175,6 +195,10 @@
 #' }
 #' @param TestStat Named list of endpoint test statistics on the Wald (Z) scale, returned by the endpoint analyses.
 #'   Access elements using the actual endpoint names.
+#' \describe{
+#'   \item{EndpointName}{Numeric test statistic for an endpoint. Each member name is the corresponding value from
+#'     `DesignParam$EndpointName`; this is a placeholder for those user-defined names.}
+#' }
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
 #'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
 #'   Available for designs that support passing state between looks.
@@ -186,8 +210,8 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{Decision}{Named list of integer endpoint decisions in DesignParam$EndpointName order: 0 = no boundary
-#'     crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 4 = futility boundary
-#'     crossed. The multiplicity-adjustment integration point uses 4 for futility.}
+#'     crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 3 = futility boundary
+#'     crossed. The native engine consumes these codes without translating them.}
 #'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
 #'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
 #'     name. Available for designs that support passing state between looks.}

@@ -37,7 +37,7 @@
 #'   functions so East Horizon can identify and populate the required parameters.
 #'
 #' Example-specific parameters and requirements:
-#' If UserParam is supplied, the list must contain the following named elements:
+#' UserParam is required for this example and must contain the following named elements:
 #' \describe{
 #'    \item{UserParam$dPriorMeanCtrl}{Prior mean for control (Ctrl) used in analysis.}
 #'    \item{UserParam$dPriorStdDevCtrl}{Prior standard deviation for control (Ctrl) used in analysis}
@@ -57,8 +57,8 @@
 #'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
 #'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
 #'     (unavailable in East Horizon Explore).}
-#'   \item{Delta}{Estimated experimental-minus-control treatment effect (proportion difference for binary outcomes;
-#'     mean difference for continuous outcomes).}
+#'   \item{Delta}{True simulated experimental-minus-control mean difference, retained for reporting;
+#'     this example does not return a posterior effect estimate in Delta.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -67,7 +67,9 @@
 #' Example-specific additional output elements:
 #' \describe{
 #'   \item{PostProb}{Numeric posterior probability of exceeding the minimum acceptable value at the final
-#'     analysis, or predictive probability of a final No-Go decision at an interim analysis.}
+#'     analysis, or the illustrative predictive No-Go score at an interim analysis. The interim routine
+#'     counts No-Go draws only inside its near-cutoff refinement window and may underestimate No-Go probability;
+#'     review and calibrate it before operational use.}
 #'   \item{dTrueDelta}{Numeric true experimental-minus-control mean difference used to generate the current
 #'     simulation.}
 #'   \item{dCtrlPostMean}{Numeric posterior mean of the control-arm response mean.}

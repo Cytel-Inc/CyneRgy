@@ -6,8 +6,8 @@
 #' @author Shubham Lahoti
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumVisit Integer number of visits.
-#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
+#' @param ArrivalTime Unused compatibility argument retained in its original position. Explore does not
+#'   supply ArrivalTime to repeated-measures response generation.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected

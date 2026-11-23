@@ -6,7 +6,6 @@
 #'   the engine-supplied argument names and access named list elements by name. Supply additional user-defined
 #'   inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
-#' @param Type Integer enrollment type. This function supports global enrollment (0), the default.
 #' @param NumPrd Integer number of accrual periods.
 #' @param PrdStart Numeric vector of accrual-period starting times of length NumPrd. The first period starts at 0.
 #' @param AccrRate Numeric vector of accrual rates (subjects per unit time), with one element per accrual period.
@@ -27,7 +26,7 @@
 
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
+{{FUNCTION_NAME}} <- function( NumSub, NumPrd, PrdStart, AccrRate, UserParam = NULL ) {
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0
     vPatientArrivalTime <- rep( 0, NumSub ) # Note, as you simulate the patient data put it in this vector so it can be returned

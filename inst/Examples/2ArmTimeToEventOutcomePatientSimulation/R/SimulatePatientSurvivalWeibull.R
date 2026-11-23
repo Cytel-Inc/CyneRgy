@@ -15,9 +15,8 @@
 #' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
 #'   survival generation.
 #' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
-#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
-#'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
-#'   stratification). The control-arm entries may be NA in engine-supplied arrays.
+#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3.
+#'   This is a numeric vector of length NumPrd, shared by the arms.
 #' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
 #'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
 #'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for

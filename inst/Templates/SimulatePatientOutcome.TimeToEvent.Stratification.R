@@ -15,16 +15,16 @@
 #'   Available when stratification is enabled.
 #' @param SurvMethod Integer survival input method: 1 = hazard rates; 2 = cumulative survival percentages; 3 =
 #'   median survival times.
-#' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
-#'   survival generation.
+#' @param NumPrd Integer engine-supplied survival period count. The stratified bridge indexes PrdTime and
+#'   SurvParam by stratum, not by this count.
 #' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
-#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
-#'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
-#'   stratification). The control-arm entries may be NA in engine-supplied arrays.
-#' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
-#'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
+#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3.
+#'   The stratified native bridge supplies a numeric vector with one assessment time per stratum, shared
+#'   across arms. Index it by StratumID, not by treatment arm.
+#' @param SurvParam Matrix of survival parameters with one row per stratum and NumArm columns.
+#'   Column 1 is control; subsequent columns are experimental arms. Values are hazard
 #'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
-#'   SurvMethod = 3. Without stratification, the median-survival method has one row.
+#'   SurvMethod = 3.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper

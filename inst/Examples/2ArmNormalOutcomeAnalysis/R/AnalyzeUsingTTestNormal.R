@@ -54,6 +54,9 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#' @details This example implements a right-tailed experimental-minus-control comparison. Use TailType = 1;
+#'   supporting the opposite alternative requires changing the comparison and selected boundary.
+#'
 #' @details
 #' ## CyneRgy Decision Helpers
 #'
@@ -84,7 +87,7 @@
 
 AnalyzeUsingTTestNormal <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
 
-    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    # Retrieve necessary information from the objects East Horizon sent. You may not need all the variables
     if ( !is.null( LookInfo ) ) {
         nLookIndex <- LookInfo$CurrLookIndex
         nQtyOfLooks <- LookInfo$NumLooks

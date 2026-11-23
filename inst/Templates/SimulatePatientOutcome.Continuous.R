@@ -7,7 +7,8 @@
 #'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
+#'   in the same order as TreatmentID. Design may omit this argument when enrollment is disabled; the
+#'   template does not evaluate it. Code using enrollment times must handle an omitted argument.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms

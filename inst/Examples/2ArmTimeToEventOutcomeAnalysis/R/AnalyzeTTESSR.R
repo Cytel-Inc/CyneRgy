@@ -59,11 +59,11 @@
 #'     `1`: Step. - `2`: User-specified R. `SSRFuncScale = 1 (step)` is available only in East Horizon Explore.}
 #'   \item{MaxSSMultInp}{Named List. Maximum sample size multiplier inputs. If `SSRFuncScale = 0 (continuous)`, it
 #'     is a Named List of Numeric: - `MaxSSMultInp["From"] = PromZoneMin`. - `MaxSSMultInp["To"] = PromZoneMax`. -
-#'     `MaxSSMultInp["MaxSSMult"]` is a numeric specified by the user. If `SSRFuncScale = 1 (step)`, it is a Named
+#'     `MaxSSMultInp["MaxEventsMult"]` is the event-count multiplier specified by the user. If `SSRFuncScale = 1 (step)`, it is a Named
 #'     List of Array of Numeric: - `MaxSSMultInp["From"]` is an array of size `NumSteps` containing the lower
 #'     threshold for each step. - `MaxSSMultInp["To"]` is an array of size `NumSteps` containing the upper
-#'     threshold for each step. - `MaxSSMultInp["MaxSSMult"]` is an array of size `NumSteps` containing the maximum
-#'     sample size multiplier for each step.}
+#'     threshold for each step. - `MaxSSMultInp["MaxEventsMult"]` is an array of size `NumSteps` containing the maximum
+#'     event-count multiplier for each step. `MaxSSMult` is a separate subject-count multiplier and is not used here.}
 #' }
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
@@ -198,7 +198,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
         if ( is.na( dOrigCp ) ) {
             nReEstEvents <- DesignParam$MaxEvents
         } else if ( dOrigCp > AdaptInfo$PromZoneMin && dOrigCp < AdaptInfo$PromZoneMax ) {
-            nReEstEvents <- DesignParam$MaxEvents * AdaptInfo$MaxSSMultInp$MaxSSMult
+            nReEstEvents <- DesignParam$MaxEvents * AdaptInfo$MaxSSMultInp$MaxEventsMult
         } else {
             nReEstEvents <- DesignParam$MaxEvents
         }
@@ -208,7 +208,7 @@ AnalyzeTTESSR <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NU
         } else {
             vStepLowerBound <- AdaptInfo$MaxSSMultInp$From
             vStepUpperBound <- AdaptInfo$MaxSSMultInp$To
-            vStepMultiplier <- AdaptInfo$MaxSSMultInp$MaxSSMult
+            vStepMultiplier <- AdaptInfo$MaxSSMultInp$MaxEventsMult
             nIdx <- which( dOrigCp > vStepLowerBound & dOrigCp <= vStepUpperBound )
             if ( length( nIdx ) == 0 ) {
                 nReEstEvents <- DesignParam$MaxEvents

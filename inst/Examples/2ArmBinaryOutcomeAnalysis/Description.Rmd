@@ -207,7 +207,7 @@ Specifically,
 
 **At Interim Analysis**
 
-- If $\rho > 0.975 \rightarrow$ Make an early efficacy (Go) decision.
+- If $\rho > 0.95 \rightarrow$ Make an early efficacy (Go) decision.
 - If $\rho < 0.10 \rightarrow$ Make an early futility (No-Go) decision.
 
 **At Final Analysis**
@@ -251,7 +251,7 @@ where $\hat{p}$ is the pooled response rate across both arms.
 
 **Conditional Power:**
 
-Using the observed Z-statistic, the information fraction at the current look, and the efficacy boundary provided by East Horizon, the conditional power is computed. This represents the probability of eventually crossing the final efficacy boundary, given the interim data.
+Using the observed Z-statistic, the information fraction at the current look, and the final efficacy boundary provided by East Horizon, the conditional crossing probability is computed under zero future drift. This illustrative calculation conditions on the interim statistic, rather than assuming that the observed effect persists in future patients.
 
 **Sample Size Re-Estimation (SSR):**
 

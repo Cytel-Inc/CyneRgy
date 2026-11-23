@@ -8,21 +8,35 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#'   \item{ClndrRespTime}{Numeric vector of response times on the calendar scale, with one element per subject.}
 #'   \item{CensorInd}{Integer vector of censor indicators, with one element per subject: 0 = dropout/non-completer;
 #'     1 = completer.}
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
+#'   \item{LkRespTime}{Numeric response or follow-up time available at the current look.}
+#'   \item{LkCensorIndctr}{Integer current-look censor indicator. This is named CensorInd instead when accrual or
+#'     dropout processing applies its display-name mapping.}
+#'   \item{DropOutTime}{Numeric generated dropout time. Present when dropout is configured.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{RespRandNum}{Numeric response random numbers. Present with built-in continuous response generation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
 #' \describe{
+#'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{LowerAlpha}{Numeric. Lower Type I Error. Same as Alpha if left-tailed one-sided test. Only makes sense
 #'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Left-tailed`.
@@ -69,6 +83,18 @@
 #'   \item{Sigma}{Numeric. Design standard deviation specified in simulations. East Horizon Explore: Not available.
 #'     East Horizon Design: Only available for `Test = Difference of Means` (Continuous) and `Test Stat Type = 3
 #'     (Z-test)`.}
+#'   \item{LookFixOption}{Integer analysis-look scheduling option. Set to NA when not applicable.}
+#'   \item{MaxStudyDur}{Numeric maximum study duration. Set to NA when not applicable.}
+#'   \item{MaxEvents}{Integer maximum number of events. Set to NA for non-survival tests.}
+#'   \item{FollowUpType}{Integer follow-up type. Set to NA for non-survival tests.}
+#'   \item{FollowUpDur}{Numeric follow-up duration. Set to NA for non-survival tests.}
+#'   \item{SigmaD}{Numeric standard deviation for paired differences. Set to NA when not applicable.}
+#'   \item{SigmaLogRatio}{Numeric standard deviation on the log-ratio scale. Set to NA when not applicable.}
+#'   \item{CoeffVar}{Numeric coefficient of variation. Set to NA when not applicable.}
+#'   \item{UpperEquiLimit}{Numeric upper equivalence limit. Set to NA outside equivalence tests.}
+#'   \item{LowerEquiLimit}{Numeric lower equivalence limit. Set to NA outside equivalence tests.}
+#'   \item{EquiMargin}{Numeric equivalence margin. Set to NA outside equivalence tests.}
+#'   \item{PiC}{Numeric design control response probability. Set to NA for continuous tests.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, for the sample size re-estimation design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -146,7 +172,7 @@
 #'     Analysis spacing info (\%). Fixed to `1` for East Horizon Explore and for `AdaptMethod = 2 (CDL)`.}
 #'   \item{AdaptInterimNum}{Integer. Interim analysis number at which adaptation will happen. Fixed to
 #'     `LookInfo$NumLooks - 1` for `AdaptMethod = 2 (CDL)`.}
-#'   \item{AdaptInterimPerc}{Integer. Analysis spacing info (\%) at which adaptation will happen. Available only
+#'   \item{AdaptInterimPerc}{Numeric. Analysis spacing info (\%) at which adaptation will happen. Available only
 #'     for
 #'     `AdaptMethod = 2 (CDL)`.}
 #'   \item{StudyDurationUL}{Numeric. Upper limit on study duration. Not available for East Horizon Explore.}
@@ -163,6 +189,10 @@
 #'     Arbitrary/design conditional power. - `2`: Test statistic. - `3`: Estimated delta/sigma.}
 #'   \item{PromZoneSigma}{Numeric. Reference/design sigma for computing promising zone conditional power. Available
 #'     only when `PromZoneScale = 1 (Arbitrary/design conditional power)`.}
+#'   \item{PromZonePiC}{Numeric. Reference/design control response probability for computing promising zone
+#'     conditional power. Available for binary endpoints.}
+#'   \item{PromZoneHR}{Numeric. Reference/design hazard ratio for computing promising zone conditional power.
+#'     Available for time-to-event endpoints.}
 #'   \item{PromZoneDelta}{Numeric. Reference/design delta for computing promising zone conditional power. Available
 #'     only when `PromZoneScale = 1 (Arbitrary/design conditional power)`.}
 #'   \item{PromZoneMin}{Numeric. Minimum threshold for promising zone.}
@@ -172,13 +202,18 @@
 #'   \item{NumSteps}{Integer. Number of steps. Available only for `SSRFuncScale = 1 (step)`.}
 #'   \item{MaxSSMultInp}{Named List. Maximum sample size multiplier inputs. If `SSRFuncScale = 0 (continuous)`, it
 #'     is a Named List of Numeric: - `MaxSSMultInp["From"] = PromZoneMin`. - `MaxSSMultInp["To"] = PromZoneMax`. -
-#'     `MaxSSMultInp["MaxSSMult"]` is a numeric specified by the user. If `SSRFuncScale = 1 (step)`, it is a Named
+#'     `MaxSSMultInp["MaxSSMult"]` and `MaxSSMultInp["MaxEventsMult"]` are numeric multipliers. If `SSRFuncScale =
+#'     1 (step)`, it is a Named
 #'     List of Array of Numeric: - `MaxSSMultInp["From"]` is an array of size `NumSteps` containing the lower
 #'     threshold for each step. - `MaxSSMultInp["To"]` is an array of size `NumSteps` containing the upper
 #'     threshold for each step. - `MaxSSMultInp["MaxSSMult"]` is an array of size `NumSteps` containing the maximum
-#'     sample size multiplier for each step.}
+#'     sample size multiplier for each step. `MaxSSMultInp["MaxEventsMult"]` contains the corresponding maximum
+#'     event multipliers.}
 #'   \item{TargetCP}{Numeric. Target conditional power. Available only for `SSRFuncScale = 0 (continuous)`.}
 #'   \item{OrigCP}{Numeric. Conditional power computed from the maximum number of completers/events.}
+#'   \item{TestStat}{Numeric. Test statistic at the current look.}
+#'   \item{Delta}{Numeric. Observed treatment effect at the current look.}
+#'   \item{StdError}{Numeric. Standard error of the observed treatment effect at the current look.}
 #' }
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
@@ -204,15 +239,14 @@
 #'     simulations.}
 #'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
 #'     conditional-power rule uses the estimated effect and its standard error.}
-#'   \item{ReEstCompleters}{Required integer re-estimated total number of completers for the sample size
-#'     re-estimation design.}
+#'   \item{ReEstCompleters}{Integer re-estimated total number of completers, required at the adaptation look.}
 #' }
 #' @details Implement the placeholder sample size re-estimation rule before use.
 #'
 #' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count.
+#'   Delta-scale or conditional-power futility. At the adaptation look, sample size re-estimation designs also
+#'   require the re-estimated total event/completer count; Decision is not mandatory if TestStat is supplied.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, AdaptInfo = NULL, UserParam = NULL ) {

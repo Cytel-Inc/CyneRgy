@@ -16,9 +16,8 @@
 #'     dropout/non-completer; 1 = completer.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
-#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
-#'     calendar visit times.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of calendar visit times, with one element per subject.
+#'     Replace VisitID by the actual visit number. ArrivalTime is already included.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product

@@ -47,13 +47,13 @@ test_that( "subpopulation analyses preserve the original custom hazard-ratio out
     set.seed( 389 )
     dfData <- data.frame( ArrivalTime = 0, TreatmentID = rep( 0:1, each = 50 ),
         SurvivalTime = stats::rexp( 100 ), Group = rep( c( "A", "B" ), 50 ) )
-    lDesign <- list( MaxEvents = 75, NumSubPops = 1, SubpopName = "A",
+    lDesign <- list( MaxEvents = 75, NumSubPops = 1, SubpopName = c( "Full Population", "A" ),
         SubPops = list( A = list( Group = "A" ) ), PropAlpha = c( 0.5, 0.5 ),
         TransitionMatrix = matrix( 0, 2, 2 ), TailType = 0, Alpha = 0.025 )
     lResult <- envAnalyze$AnalyzeSubpopulation( dfData, lDesign )
     expect_identical( names( lResult$dHR ), c( "Full Population", "A" ) )
     expect_true( all( is.finite( unlist( lResult$dHR ) ) ) )
-    expect_false( "HR" %in% names( lResult ) )
+    expect_identical( lResult$HR, lResult$dHR )
 } )
 
 test_that( "dual-endpoint decisions accept positional statistics and tail directions", {

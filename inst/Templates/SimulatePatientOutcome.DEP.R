@@ -7,8 +7,9 @@
 #'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
+#' @param ArrivalTime Optional numeric vector of subject arrival times on the calendar scale, with one element per
+#'   subject, in the same order as TreatmentID. The current dual-endpoint response bridge does not supply this
+#'   argument.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param EndpointType Integer vector of endpoint types, in EndpointName order: 0 = continuous, 1 = binary, 2 =
@@ -45,7 +46,7 @@
 #' }
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, EndpointType, EndpointName, Correlation, SurvMethod = NULL, NumPrd = NULL, PrdTime = NULL, SurvParam = NULL, PropResp = NULL, UserParam = NULL ) {
+{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime = NULL, TreatmentID, EndpointType, EndpointName, Correlation, SurvMethod = NULL, NumPrd = NULL, PrdTime = NULL, SurvParam = NULL, PropResp = NULL, UserParam = NULL ) {
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0
     vPatientOutcomeEP1 <- rep( 0, NumSub )

@@ -6,7 +6,7 @@
 #' @author Shubham Lahoti
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#' @param NumVisit Integer number of visits. The engine sets this to 1 when DropMethod = 2.
+#' @param NumVisit Integer number of scheduled visits.
 #' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
 #'   visit.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
@@ -25,8 +25,6 @@
 #'   functions so East Horizon can identify and populate the required parameters.
 #' @return Named list containing the outputs returned by this example.
 #' \describe{
-#'   \item{CensorInd1, ..., CensorIndNumVisit}{Integer censor-indicator vectors, one per visit: 0 =
-#'     dropout/non-completer; 1 = completer.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current

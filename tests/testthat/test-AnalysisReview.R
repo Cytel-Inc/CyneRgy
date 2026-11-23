@@ -82,7 +82,7 @@ test_that( "Schizophrenia interim datasets preserve Dev visit selection", {
     skip_if_not_installed( "tidyr" )
     dfData <- data.frame( ArrivalTime = c( 0, 1, 2, 3 ), TreatmentID = rep( 0:1, 2 ) )
     for ( nVisit in seq_len( 5 ) ) {
-        dfData[[ paste0( "ArrTimeVisit", nVisit ) ]] <- nVisit - 1
+        dfData[[ paste0( "ArrTimeVisit", nVisit ) ]] <- dfData$ArrivalTime + nVisit - 1
         dfData[[ paste0( "Response", nVisit ) ]] <- seq_len( 4 ) + nVisit
     }
     lLook <- list( NumLooks = 2, CurrLookIndex = 1, CumCompleters = c( 2, 4 ),

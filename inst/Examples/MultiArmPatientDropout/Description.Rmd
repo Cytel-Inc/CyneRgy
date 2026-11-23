@@ -106,10 +106,12 @@ This function does not use user-defined parameters but relies on values specifie
 
 |**Name of the parameter in East Horizon**|**Where to find the parameter in East Horizon**|**Name of the variable in the R script**|
 |-----|-----|---|
-|Probability of Dropout for Control Arm|Response Card, Dropout Rate tab|$ProbDrop[ 1 ]$|
-|Probability of Dropout for Arm 1|Response Card, Dropout Rate tab|$ProbDrop[ 2 ]$|
-|Probability of Dropout for Arm 2|Response Card, Dropout Rate tab|$ProbDrop[ 3 ]$|
+|Probability of Dropout for Control Arm|Response Card, Dropout Rate tab|$DropParam[ 1, 1 ]$|
+|Probability of Dropout for Arm 1|Response Card, Dropout Rate tab|$DropParam[ 1, 2 ]$|
+|Probability of Dropout for Arm 2|Response Card, Dropout Rate tab|$DropParam[ 1, 3 ]$|
 |...|
+
+This example supports a single dropout period (`NumPrd = 1`).
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 

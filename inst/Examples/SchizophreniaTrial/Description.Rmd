@@ -23,10 +23,12 @@ To try this example, create a new project in East Horizon using the following co
 </ul></div>
 
 <div class="alert alert-warning" role="alert">
-<p style="margin-bottom:0">**Note:** This example is compatible with both Fixed Sample and Group Sequential statistical designs. The R code automatically detects whether interim look information (*LookInfo*) is available and adjusts the analysis parameters accordingly.</p>
+<p style="margin-bottom:0">**Limitation:** Use these MMRM examples with complete subject trajectories. Although the scripts accept *LookInfo* and select subjects for interim looks, they do not exclude future visit responses for those subjects or implement a single-post-baseline-visit ANCOVA fallback. The standalone interim demonstration is not validation of a group-sequential MMRM procedure; additional visit-availability handling and statistical validation are required before such use.</p>
 </div>
 
 # Introduction
+
+East Horizon supplies `ArrTimeVisit1`, `ArrTimeVisit2`, and subsequent visit-time columns on the calendar scale, already including each subject's `ArrivalTime`. The standalone simulation uses the same convention.
 
 Many clinical trials often involve repeated measures of a continuous endpoint across multiple visits. Due to the burden on the trial subjects, data can be missing for a variety of reasons such as missed visits or patient dropout. Efficiently, analyzing this type of data requires methods that handle within-patient correlation and missing data appropriately. 
 

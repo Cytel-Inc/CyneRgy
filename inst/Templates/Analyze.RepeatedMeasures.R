@@ -8,6 +8,8 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
@@ -19,16 +21,28 @@
 #'     dropout/non-completer; 1 = completer.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
-#'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
-#'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
-#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
-#'     calendar visit times.}
+#'   \item{DropoutVisitID}{Integer vector of last completed visit IDs, from 1 to NumVisit, with one element per
+#'     subject. NumVisit means all visits were completed.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of calendar visit times, already equal to ArrivalTime plus the
+#'     scheduled visit offset, with one element per subject. Replace VisitID by the actual visit number.
+#'     Do not add ArrivalTime again.}
+#'   \item{RespRandNum1, ..., RespRandNumNumVisit}{Numeric response random-number vectors, one per visit. Present
+#'     with built-in repeated-measures response generation.}
+#'   \item{ClndrRespTimeVisit[VisitID]}{Numeric calendar response-time vector for a visit. Replace VisitID by the
+#'     actual visit number.}
+#'   \item{LkRespTime}{Numeric response or follow-up time available at the current look.}
+#'   \item{LkCensorIndctr}{Integer current-look censor indicator used internally by repeated-measures analysis.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
 #' \describe{
+#'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{LowerAlpha}{Numeric. Lower Type I Error. Same as Alpha if left-tailed one-sided test. Only makes sense
 #'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Left-tailed`.
@@ -82,6 +96,24 @@
 #'   \item{DropImp}{Integer. Dropout imputation method: - `0`: None. - `1`: Last observation carried forward
 #'     (LOCF). East Horizon Explore: Only available for `Endpoint Type = Continuous with Repeated Measures`. East
 #'     Horizon Design: Not available.}
+#'   \item{RespLag}{Numeric response lag. Set to NA for repeated-measures tests.}
+#'   \item{LookFixOption}{Integer analysis-look scheduling option. Set to NA when not applicable.}
+#'   \item{MaxStudyDur}{Numeric maximum study duration. Set to NA when not applicable.}
+#'   \item{MaxEvents}{Integer maximum number of events. Set to NA for repeated-measures tests.}
+#'   \item{FollowUpType}{Integer follow-up type. Set to NA for repeated-measures tests.}
+#'   \item{FollowUpDur}{Numeric follow-up duration. Set to NA for repeated-measures tests.}
+#'   \item{TestStatType}{Integer test statistic type. Set to NA when not applicable.}
+#'   \item{VarType}{Integer variance type. Set to NA when not applicable.}
+#'   \item{Sigma}{Numeric design standard deviation. Set to NA when not applicable.}
+#'   \item{SigmaD}{Numeric standard deviation for paired differences. Set to NA when not applicable.}
+#'   \item{SigmaLogRatio}{Numeric standard deviation on the log-ratio scale. Set to NA when not applicable.}
+#'   \item{CoeffVar}{Numeric coefficient of variation. Set to NA when not applicable.}
+#'   \item{TrtEffNull}{Numeric null treatment effect. Set to NA when not applicable.}
+#'   \item{UpperEquiLimit}{Numeric upper equivalence limit. Set to NA outside equivalence tests.}
+#'   \item{LowerEquiLimit}{Numeric lower equivalence limit. Set to NA outside equivalence tests.}
+#'   \item{EquiMargin}{Numeric equivalence margin. Set to NA outside equivalence tests.}
+#'   \item{MuC}{Numeric design control mean. Set to NA when not applicable.}
+#'   \item{PiC}{Numeric design control response probability. Set to NA for repeated-measures tests.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -182,8 +214,7 @@
 #' }
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count.
+#'   Delta-scale or conditional-power futility.
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

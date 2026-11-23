@@ -7,7 +7,6 @@
 #'   NULL, PrdStart and AccrRate define the accrual schedule.
 #' @author J. Kyle Wathen
 #' @param NumPat Integer number of subjects in the trial.
-#' @param Type Integer enrollment type. This function supports global enrollment (0), the default.
 #' @param NumPrd Integer number of accrual periods.
 #' @param PrdStart Numeric vector of accrual-period starting times of length NumPrd. The first period starts at 0.
 #' @param AccrRate Numeric vector of accrual rates (subjects per unit time), with one element per accrual period.
@@ -39,7 +38,7 @@
 
 ######################################################################################################################## .
 
-GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
+GeneratePoissonArrivalMEP <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL ) {
     # Error = 0 --> No Error;
     # Error > 0 --> Nonfatal error; the current simulation will be aborted, but the next simulation will run
     # Error < 0 --> Fatal Error - No further simulation will be attempted. We suggest that user should classify error in

@@ -18,9 +18,8 @@
 #'     dropout/non-completer; 1 = completer.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
-#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
-#'     calendar visit times.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of calendar visit times, already including ArrivalTime,
+#'     with one element per subject. Replace VisitID by the actual visit number.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
@@ -60,14 +59,17 @@
 #'   \item{Decision}{Integer boundary-crossing code: 0 = no boundary crossed; 1 = lower efficacy boundary crossed;
 #'     2 = upper efficacy boundary crossed; 3 = futility boundary crossed; 4 = equivalence boundary crossed
 #'     (unavailable in East Horizon Explore).}
-#'   \item{PrimDelta}{Estimated treatment effect for the primary contrast. Required for Delta-scale futility using
-#'     the primary contrast.}
-#'   \item{SecDelta}{Estimated treatment effect for the secondary contrast. Required for Delta-scale futility using
-#'     the secondary contrast.}
+#'   \item{PrimDelta}{Numeric placeholder returned as zero; this example does not estimate the primary contrast.}
+#'   \item{SecDelta}{Numeric placeholder returned as zero; this example does not estimate the secondary contrast.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#' @details This no-dropout illustration retains all visits for selected interim subjects, including their
+#'   generated visits after the analysis time. It does not filter dropout metadata or implement Delta-scale
+#'   futility. Its repeated-measures GLS model uses a common treatment effect and custom O'Brien-Fleming
+#'   stage levels computed by rpact, not the native efficacy boundaries. Review these assumptions before use.
+#'
 #' @details
 #' ## CyneRgy Decision Helpers
 #'
@@ -103,7 +105,7 @@ Analyze.RepeatedMeasures <- function( SimData, DesignParam, LookInfo = NULL, Use
     dPrimDelta <- 0
     dSecDelta <- 0
 
-    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    # Retrieve necessary information from the objects East Horizon sent. You may not need all the variables
     if ( !is.null( LookInfo ) ) {
         nQtyOfLooks <- LookInfo$NumLooks
         nLookIndex <- LookInfo$CurrLookIndex
@@ -124,7 +126,7 @@ Analyze.RepeatedMeasures <- function( SimData, DesignParam, LookInfo = NULL, Use
     for ( i in 1:DesignParam$NumVisit ) {
         dfWideData[[ paste0( "Response", i ) ]] <- SimData[ , paste0( "Response", i ) ]
         vResponseColumns <- c( vResponseColumns, paste0( "Response", i ) )
-        dfWideData[[ paste0( "CalendarVisitTime", i ) ]] <- SimData[ , "ArrivalTime" ] + SimData[ , paste0( "ArrTimeVisit", i ) ]
+        dfWideData[[ paste0( "CalendarVisitTime", i ) ]] <- SimData[ , paste0( "ArrTimeVisit", i ) ]
         vVisitTimesColumns <- c( vVisitTimesColumns, paste0( "CalendarVisitTime", i ) )
     }
 

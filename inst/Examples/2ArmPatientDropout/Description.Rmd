@@ -65,7 +65,7 @@ This function does not use any user-defined parameters, but uses parameters spec
 Steps:  
 
 1. Let $pd$ be the dropout probability.  
-2. Draw a random sample from a Bernoulli distribution with $p = 1 - pd$, i.e., $Binomial(1, pd)$, of size $n = NumSub$.  
+2. Draw a random sample from a Bernoulli distribution with $p = 1 - pd$, i.e., $Binomial(1, 1 - pd)$, of size $n = NumSub$.
 3. The generated sample serves as a censoring indicator:  
    - **1** indicates a patient who completes the trial (does not drop out).  
    - **0** indicates a patient who drops out (non-completer).  

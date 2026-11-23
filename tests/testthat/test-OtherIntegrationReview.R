@@ -88,7 +88,7 @@ test_that( "ranked selection rejects unavailable ranks and missing allocation ra
         "SelectSpecifiedNumberOfExpWithHighestResponses" )
     dfData <- data.frame( TreatmentID = rep( 0:2, each = 3 ), Response = rep( c( 0, 1, 1 ), each = 3 ) )
     expect_identical( fnSelect( dfData, list( ), NULL,
-        list( QtyOfArmsToSelect = 3, Rank1AllocationRatio = 1 ) )$ErrorCode, -2L )
+        list( QtyOfArmsToSelect = 3, Rank1AllocationRatio = 1 ) )$ErrorCode, -1L )
     expect_identical( fnSelect( dfData, list( ), NULL,
         list( QtyOfArmsToSelect = 2, Rank1AllocationRatio = 1 ) )$ErrorCode, -2L )
     lResult <- fnSelect( dfData, list( ), NULL,

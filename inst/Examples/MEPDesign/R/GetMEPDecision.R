@@ -10,7 +10,7 @@
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
 #' \describe{
 #'   \item{SimID}{Vector of length equal to the number of subjects, indicating the simulation ID.}
-#'   \item{PatId}{Vector of length equal to the number of subjects, containing the patient ID identifying a unique
+#'   \item{PatID}{Vector of length equal to the number of subjects, containing the patient ID identifying a unique
 #'     patient in a given simulation.}
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}

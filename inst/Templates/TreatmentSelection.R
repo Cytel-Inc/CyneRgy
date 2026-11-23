@@ -8,6 +8,8 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
@@ -16,17 +18,31 @@
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
+#'   \item{ClndrRespTime}{Numeric vector of response, event, or censoring times on the calendar scale, with one
+#'     element per subject.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
 #'   \item{CensorInd}{Integer vector of censor indicators, with one element per subject: 0 = dropout/non-completer;
 #'     1 = completer.}
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
+#'   \item{LkRespTime}{Numeric response, event, or follow-up time available at the current look.}
+#'   \item{LkCensorIndctr}{Integer current-look censor indicator. This is named CensorInd instead when accrual or
+#'     dropout processing applies its display-name mapping.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{RespRandNum}{Numeric response or event-time random numbers. Present with built-in response generation.}
+#'   \item{RespPrdRandNum}{Numeric survival-period random numbers. Present with piecewise built-in survival
+#'     generation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
 #' \describe{
+#'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{TrialType}{Integer. Trial Type: - `0`: Superiority.}
 #'   \item{TestType}{Integer. Test Type: - `0`: One-sided.}
@@ -80,6 +96,13 @@
 #'   \item{UpdatedAllocInfo}{Vector of Numeric. Vector of length `DesignParam$NumTreatments` (number of arms - 1),
 #'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
 #'     have been updated during treatment selection.}
+#'   \item{UpperAlpha}{Numeric upper-tail type I error allocation.}
+#'   \item{LowerAlpha}{Numeric lower-tail type I error allocation.}
+#'   \item{UpperCriticalPoint}{Numeric upper critical value. Set to NA when not applicable.}
+#'   \item{LowerCriticalPoint}{Numeric lower critical value. Set to NA when not applicable.}
+#'   \item{FollowUpType}{Integer follow-up type. Set to NA for non-survival tests.}
+#'   \item{FollowUpDur}{Numeric follow-up duration. Set to NA for non-survival tests.}
+#'   \item{Sigma}{Numeric design standard deviation. Set to NA when not applicable.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -111,6 +134,14 @@
 #'     `2`: Delta scale. - `6`: Hazard ratio scale.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
+#'   \item{CumAlphaUpper}{Numeric vector of upper cumulative alpha spending by look.}
+#'   \item{CumAlphaLower}{Numeric vector of lower cumulative alpha spending by look.}
+#'   \item{LookTime}{Numeric vector of calendar analysis times for time-based survival looks.}
+#'   \item{EffBdryUpper}{Numeric vector of upper efficacy boundaries by look.}
+#'   \item{EffBdryLower}{Numeric vector of lower efficacy boundaries by look.}
+#'   \item{FutBdryUpper}{Numeric vector of upper futility boundaries by look.}
+#'   \item{FutBdryLower}{Numeric vector of lower futility boundaries by look.}
+#'   \item{BindingType}{Integer futility binding type: 0 = non-binding; 1 = binding.}
 #' }
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
@@ -120,15 +151,18 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{TreatmentID}{Required integer vector of selected experimental-arm IDs, starting at 1 and excluding
-#'     control. Return at least one selected arm.}
+#'     control. East Horizon Design requires at least one selected arm. Explore also accepts an empty vector
+#'     with an empty AllocRatio to indicate that no experimental arms continue.}
 #'   \item{AllocRatio}{Required numeric vector of allocation ratios for the selected experimental arms, in the same
-#'     order and with the same length as TreatmentID. Control has allocation 1.}
+#'     order and with the same length as TreatmentID. Each ratio must be in [0.001, 100]. Control has allocation 1.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#' @details TreatmentID and AllocRatio must have the same nonzero length and matching order. Include only
-#'   experimental treatment IDs; do not include 0 for control. The control allocation ratio is always 1.
+#' @details TreatmentID and AllocRatio must have the same length and matching order. Design rejects empty
+#'   vectors; Explore permits them to indicate futility. Include only experimental treatment IDs; do not
+#'   include 0 for control. The control allocation ratio is always 1. Implement the selection and allocation
+#'   placeholders before executing this template.
 #'
 #' Worked output objects:
 #' \preformatted{

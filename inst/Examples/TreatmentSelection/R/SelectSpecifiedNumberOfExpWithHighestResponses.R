@@ -29,9 +29,9 @@
 #'   \item{UserParam$QtyOfArmsToSelect}{Integer number of experimental arms to advance, between 1 and the
 #'     number of available experimental arms. When UserParam is NULL, the default is 1. Supply one
 #'     RankNAllocationRatio parameter for each selected rank.}
-#'   \item{UserParam$Rank1AllocationRatio}{Positive numeric treatment-to-control allocation ratio for the arm
+#'   \item{UserParam$Rank1AllocationRatio}{Numeric treatment-to-control allocation ratio in [0.001, 100] for the arm
 #'     ranked first by number of responses. When UserParam is NULL, the default is 2.}
-#'   \item{UserParam$Rank2AllocationRatio}{Positive numeric treatment-to-control allocation ratio for the arm
+#'   \item{UserParam$Rank2AllocationRatio}{Numeric treatment-to-control allocation ratio in [0.001, 100] for the arm
 #'     ranked second by number of responses. Required when selecting at least two arms; there is no default.}
 #'          }
 #' @return Named list containing the outputs returned by this example.
@@ -44,7 +44,8 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#' @details Invalid selection counts or missing/non-positive allocation ratios return ErrorCode = -2.
+#' @details Invalid selection counts return ErrorCode = -1; missing or out-of-range allocation ratios
+#'   return ErrorCode = -2. Both are fatal configuration errors.
 #'
 #' TreatmentID and AllocRatio must have the same nonzero length and matching order. Include only
 #'   experimental treatment IDs; do not include 0 for control. The control allocation ratio is always 1.
@@ -89,12 +90,13 @@ SelectSpecifiedNumberOfExpWithHighestResponses <- function( SimData, DesignParam
     if ( length( nArmsToSelect ) != 1 || !is.finite( nArmsToSelect ) ||
          nArmsToSelect != as.integer( nArmsToSelect ) || nArmsToSelect < 1 ||
          nArmsToSelect > nrow( tabResults ) ) {
-        return( list( TreatmentID = integer( 0 ), AllocRatio = numeric( 0 ), ErrorCode = -1 ) )
+        return( list( TreatmentID = integer( 0 ), AllocRatio = numeric( 0 ), ErrorCode = -1L ) )
     }
     for ( nRank in seq_len( nArmsToSelect ) ) {
         dAllocationRatio <- UserParam[[ paste0( "Rank", nRank, "AllocationRatio" ) ]]
-        if ( length( dAllocationRatio ) != 1 || !is.finite( dAllocationRatio ) || dAllocationRatio <= 0 ) {
-            return( list( TreatmentID = integer( 0 ), AllocRatio = numeric( 0 ), ErrorCode = -2 ) )
+        if ( length( dAllocationRatio ) != 1 || !is.finite( dAllocationRatio ) ||
+             dAllocationRatio < 0.001 || dAllocationRatio > 100 ) {
+            return( list( TreatmentID = integer( 0 ), AllocRatio = numeric( 0 ), ErrorCode = -2L ) )
         }
     }
 

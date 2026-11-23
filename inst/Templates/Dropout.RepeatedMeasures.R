@@ -7,7 +7,8 @@
 #'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#' @param NumVisit Integer number of visits. The engine sets this to 1 when DropMethod = 2.
+#' @param NumVisit Integer number of visits, including when DropMethod = 2. Only the dropout-parameter
+#'   vectors ByTime, DropParamControl, and DropParamTrt reduce to a single value for that method.
 #' @param VisitTime Numeric vector of visit times measured from enrollment, of length NumVisit and ordered by
 #'   visit.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
@@ -31,8 +32,8 @@
 #'     dropout/non-completer; 1 = completer.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
-#'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
-#'     subject.}
+#'   \item{DropoutVisitID}{Integer vector of last completed visit IDs, from 1 to NumVisit, with one element per
+#'     subject. NumVisit indicates completion of all visits.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -53,8 +54,8 @@
     }
 
     # Replace the censor indicators using the chosen dropout model.
-    lReturn$DropoutVisitID <- as.integer( rep( Inf, NumSub ) )
-    lReturn$DropOutTime <- as.double( rep( NumVisit, NumSub ) )
+    lReturn$DropoutVisitID <- rep( as.integer( NumVisit ), NumSub )
+    lReturn$DropOutTime <- rep( Inf, NumSub )
     lReturn$ErrorCode <- as.integer( nErrorCode )
     return( lReturn )
 }

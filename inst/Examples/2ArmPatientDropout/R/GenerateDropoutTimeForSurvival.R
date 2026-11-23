@@ -31,8 +31,7 @@
 #'   the generation logic to use the appropriate row of DropParam for each period.
 ######################################################################################################################## .
 
-GenerateDropoutTimeForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod,
-                                            NumPrd, PrdTime, DropParam, UserParam = NULL ) {
+GenerateDropoutTimeForSurvival <- function( NumSub, NumArm, TreatmentID, DropMethod, NumPrd, PrdTime, DropParam, UserParam = NULL ) {
     nErrorCode <- 0
 
     # Initializing Censor Dropout Times to Inf

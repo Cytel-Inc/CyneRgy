@@ -5,14 +5,15 @@
 #' @description Initialize the R simulation environment. Use this template as a starting point for custom logic.
 #'   Preserve the engine-supplied argument names and access named list elements by name. Supply additional
 #'   user-defined inputs through UserParam.
-#' @param Seed Integer random seed supplied by the engine. Setting the seed here affects the R random number
+#' @param Seed Integer-valued numeric random seed supplied by the engine. Setting the seed here affects the R random number
 #'   generator.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#' @return Integer execution status: 0 = no error; a positive value aborts the current simulation but allows
-#'   subsequent simulations to run; a negative value is fatal and stops all further simulations.
+#' @return Integer execution status: 0 = successful initialization; any nonzero value reports an initialization
+#'   error. The engine classifies positive codes as nonfatal and negative codes as fatal, but initialization runs
+#'   before the simulation loop: any initialization error prevents configuration from completing.
 #' @details Do not use \code{install.packages} or attempt to install new R packages in East Horizon as this will fail. Please
 #'   contact help to install libraries.
 ######################################################################################################################## .

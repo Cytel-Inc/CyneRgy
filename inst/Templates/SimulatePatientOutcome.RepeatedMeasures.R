@@ -7,8 +7,8 @@
 #'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumVisit Integer number of visits.
-#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
+#' @param ArrivalTime Optional numeric vector of subject arrival times on the calendar scale, with one element per
+#'   subject, in the same order as TreatmentID. The current repeated-measures bridge does not supply this argument.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param Inputmethod Integer input method: 0 = actual means and standard deviations at each visit; 1 = expected
@@ -39,7 +39,7 @@
 #'   ResponseNumVisit.
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumSub, NumVisit, ArrivalTime, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
+{{FUNCTION_NAME}} <- function( NumSub, NumVisit, ArrivalTime = NULL, TreatmentID, Inputmethod, VisitTime, MeanControl, MeanTrt, StdDevControl, StdDevTrt, CorrMat, UserParam = NULL ) {
     # TO DO : Modify this function appropriately
     nErrorCode <- 0
     vOutResponse <- c( )

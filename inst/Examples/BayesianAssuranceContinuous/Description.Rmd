@@ -291,7 +291,9 @@ $$\Pr( \text{No-Go at end of study} \mid X_1 ) > PU_{\text{Futility}} = 90\%$$
 
 This can be expressed as:
 
-$$\Pr\left( \left\{ \Pr( \mu_E > \mu_S + MAV \mid X_1, X_2 ) > PU \right\} \Big| X_1 \right) > PU_{\text{Futility}}$$
+$$\Pr\left( \left\{ \Pr( \mu_E > \mu_S + MAV \mid X_1, X_2 ) < PU \right\} \Big| X_1 \right) > PU_{\text{Futility}}$$
+
+The supplied illustrative Monte Carlo routine only counts No-Go draws inside its near-cutoff refinement window. It can therefore underestimate the predictive probability of No-Go; the interim rule should be reviewed and calibrated before operational use.
 
 Refer to the table below for the definitions and values of the user-defined parameters used in this example.
 

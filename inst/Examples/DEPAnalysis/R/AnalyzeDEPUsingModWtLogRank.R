@@ -63,6 +63,8 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
+#'   Optional `UserParam[[DesignParam$EndpointName[1]]]$delay` is the nonnegative survival-time threshold
+#'   for increasing the modified log-rank weights. It defaults to zero.
 #' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale for the endpoint currently being analyzed.}

@@ -8,6 +8,8 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
@@ -15,13 +17,31 @@
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
 #'   \item{SurvivalTime}{Numeric vector of generated time-to-event outcomes measured from each subject's
 #'     enrollment, with one element per subject.}
+#'   \item{ClndrRespTime}{Numeric vector of event or censoring times on the calendar scale, with one element per
+#'     subject.}
+#'   \item{CensorInd}{Integer vector of censor indicators adjusted for the current analysis look: 0 = censored;
+#'     1 = event.}
+#'   \item{CensorIndOrg}{Original integer vector of censor indicators before analysis-time adjustment: 0 =
+#'     censored; 1 = event.}
 #'   \item{DropOutTime}{Numeric vector of generated dropout times measured from each subject's enrollment, with one
 #'     element per subject. Inf indicates no dropout.}
+#'   \item{LkRespTime}{Numeric event or follow-up time available at the current look.}
+#'   \item{LkCensorIndctr}{Integer current-look censor indicator. This is named CensorInd instead when accrual or
+#'     dropout processing applies its display-name mapping.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{RespRandNum}{Numeric event-time random numbers. Present with built-in survival generation.}
+#'   \item{RespPrdRandNum}{Numeric survival-period random numbers. Present with piecewise built-in survival
+#'     generation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
 #' \describe{
+#'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{LowerAlpha}{Numeric. Lower Type I Error. Same as Alpha if left-tailed one-sided test. Only makes sense
 #'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Left-tailed`.
@@ -80,6 +100,18 @@
 #'     available for `Time-to-Event` tests.}
 #'   \item{LambdaC}{Numeric. Control Hazard rate. East Horizon Explore: Not available. East Horizon Design: Only
 #'     available for `Time-to-Event` tests.}
+#'   \item{MaxCompleters}{Integer maximum number of completers. Set to NA for time-to-event tests.}
+#'   \item{RespLag}{Numeric response lag. Set to NA for time-to-event tests.}
+#'   \item{VarType}{Integer variance type. Set to NA when not applicable.}
+#'   \item{Sigma}{Numeric design standard deviation. Set to NA for time-to-event tests.}
+#'   \item{SigmaD}{Numeric standard deviation for paired differences. Set to NA when not applicable.}
+#'   \item{SigmaLogRatio}{Numeric standard deviation on the log-ratio scale. Set to NA when not applicable.}
+#'   \item{CoeffVar}{Numeric coefficient of variation. Set to NA when not applicable.}
+#'   \item{UpperEquiLimit}{Numeric upper equivalence limit. Set to NA outside equivalence tests.}
+#'   \item{LowerEquiLimit}{Numeric lower equivalence limit. Set to NA outside equivalence tests.}
+#'   \item{EquiMargin}{Numeric equivalence margin. Set to NA outside equivalence tests.}
+#'   \item{MuC}{Numeric design control mean. Set to NA for time-to-event tests.}
+#'   \item{PiC}{Numeric design control response probability. Set to NA for time-to-event tests.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -103,12 +135,14 @@
 #'     Right-tailed`. Two-sided tests do not exist, so this variable is not useful: use CumAlpha instead. East
 #'     Horizon Design: Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type =
 #'     Two-sided asymmetric or symmetric`.}
-#'   \item{CumEvents}{Integer cumulative number of events at the current look. These examples also accept a vector of
-#'     per-look cumulative event counts, indexed by LookInfo$CurrLookIndex. East Horizon Explore: Only available for
-#'     `Endpoint Type = Time-to-Event` and for Vaccine Efficacy (`Endpoint Type = Binary` with Lower Value and `Test =
-#'     1 - Ratio of Proportions or 1 - Ratio of Poisson Rates`). East Horizon Design: Only available for `Time-to-
+#'   \item{CumCompleters}{Integer vector of cumulative completers by look. Set to NA when completion counts are not
+#'     applicable.}
+#'   \item{CumEvents}{Integer vector of cumulative event counts, of length LookInfo$NumLooks.
+#'     Index by LookInfo$CurrLookIndex for the current look. East Horizon Explore: Available for
+#'     `Endpoint Type = Time-to-Event`. East Horizon Design: Only available for `Time-to-
 #'     Event` tests.}
-#'   \item{LookTime}{Numeric calendar time of the current look. East Horizon Design: Only available for `Time-to-Event`
+#'   \item{LookTime}{Numeric vector of calendar analysis times, of length LookInfo$NumLooks.
+#'     East Horizon Design: Only available for `Time-to-Event`
 #'     tests if `Look Fix Option = Time-based`.}
 #'   \item{RejType}{Integer. Rejection type. East Horizon Explore: Possible values: - `0`: One-sided efficacy
 #'     upper. - `1`: One-sided futility upper. - `2`: One-sided efficacy lower. - `3`: One-sided futility lower. -
@@ -180,8 +214,7 @@
 #' }
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count.
+#'   Delta-scale or conditional-power futility.
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

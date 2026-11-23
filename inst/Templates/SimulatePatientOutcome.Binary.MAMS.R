@@ -7,8 +7,9 @@
 #'   inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
+#' @param ArrivalTime Optional numeric vector of subject arrival times on the calendar scale, with one element per
+#'   subject, in the same order as TreatmentID. The current multi-arm MAMS bridge does not supply this argument;
+#'   it is available when the same template is used by a path that does.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by
@@ -29,8 +30,7 @@
 #' @details This template accepts the standard multi-arm binary response inputs.
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
-    
+{{FUNCTION_NAME}} <- function( NumSub, NumArm, ArrivalTime = NULL, TreatmentID, PropResp, UserParam = NULL ) {
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0 # East Horizon code for no errors occurred
     vPatientOutcome <- rep( 0, NumSub ) # Note, as you simulate the patient data put in this vector so it can be returned

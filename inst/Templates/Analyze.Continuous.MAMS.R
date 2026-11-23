@@ -8,16 +8,29 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#'   \item{ClndrRespTime}{Numeric vector of response times on the calendar scale, with one element per subject.}
 #'   \item{CensorInd}{Integer vector of censor indicators, with one element per subject: 0 = dropout/non-completer;
 #'     1 = completer.}
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
+#'   \item{LkRespTime}{Numeric response or follow-up time available at the current look.}
+#'   \item{LkCensorIndctr}{Integer current-look censor indicator. This is named CensorInd instead when accrual or
+#'     dropout processing applies its display-name mapping.}
+#'   \item{DropOutTime}{Numeric generated dropout time. Present when dropout is configured.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{RespRandNum}{Numeric response random numbers. Present with built-in continuous response generation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
@@ -78,6 +91,13 @@
 #'     containing the updated ratios of the treatment group sample sizes to control group sample size, which may
 #'     have been updated during treatment selection.}
 #'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
+#'   \item{UpperAlpha}{Numeric upper-tail type I error allocation.}
+#'   \item{LowerAlpha}{Numeric lower-tail type I error allocation.}
+#'   \item{UpperCriticalPoint}{Numeric upper critical value. Set to NA when not applicable.}
+#'   \item{LowerCriticalPoint}{Numeric lower critical value. Set to NA when not applicable.}
+#'   \item{MaxEvents}{Integer maximum number of events. Set to NA for continuous tests.}
+#'   \item{FollowUpType}{Integer follow-up type. Set to NA for continuous tests.}
+#'   \item{FollowUpDur}{Numeric follow-up duration. Set to NA for continuous tests.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -105,10 +125,14 @@
 #'     `2`: Delta scale. - `6`: Hazard ratio scale.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
+#'   \item{CumAlphaUpper}{Numeric vector of upper cumulative alpha spending by look.}
+#'   \item{CumAlphaLower}{Numeric vector of lower cumulative alpha spending by look.}
+#'   \item{EffBdryUpper}{Numeric vector of upper efficacy boundaries by look.}
+#'   \item{EffBdryLower}{Numeric vector of lower efficacy boundaries by look.}
+#'   \item{FutBdryUpper}{Numeric vector of upper futility boundaries by look.}
+#'   \item{FutBdryLower}{Numeric vector of lower futility boundaries by look.}
+#'   \item{BindingType}{Integer futility binding type: 0 = non-binding; 1 = binding.}
 #' }
-#' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
-#'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
-#'   Available for designs that support passing state between looks.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -123,14 +147,12 @@
 #'     treatment-ID order.}
 #'   \item{Delta}{Numeric vector of estimated experimental-minus-control treatment effects, one per experimental
 #'     arm in treatment-ID order. For binary outcomes, each effect is a proportion difference; for continuous
-#'     outcomes, each effect is a mean difference.}
+#'     outcomes, each effect is a mean difference. Required for built-in treatment selection even when Decision
+#'     is returned.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{AdjPVal}{Numeric vector of p-values adjusted for multiple comparisons, one per experimental arm.}
 #'   \item{RawPVal}{Numeric vector of unadjusted p-values, one per experimental arm.}
-#'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
-#'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
-#'     name. Available for designs that support passing state between looks.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -140,8 +162,7 @@
 #'   in treatment-ID order and NA for arms absent at the current look. Delta is required for Delta-scale
 #'   futility; HR is required for hazard-ratio-scale futility in time-to-event designs. RawPVal cannot be
 #'   used for adjusted-p-value-scale futility. Return TestStat alongside RawPVal when the selected
-#'   Dunnett procedure requires it. Use OutList to pass custom state between looks. This template may use
-#'   only a subset of the documented design fields.
+#'   Dunnett procedure requires it. This template may use only a subset of the documented design fields.
 #' @details
 #' ## CyneRgy Decision Helpers
 #'
@@ -170,7 +191,7 @@
 #' The helper requirements above apply in addition to the inputs used by the analysis itself.
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL, OutList = NULL ) {
+{{FUNCTION_NAME}} <- function( SimData, DesignParam, LookInfo = NULL, UserParam = NULL ) {
     nErrorCode <- 0
 
     # If LookInfo is Null, then this is a fixed design and we use the DesignParam$MaxCompleters

@@ -18,9 +18,8 @@
 #'     dropout/non-completer; 1 = completer.}
 #'   \item{DropoutVisitID}{Integer vector of 1-based visit IDs after which subjects drop out, with one element per
 #'     subject.}
-#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of visit times measured from each subject's enrollment,
-#'     with one element per subject. Replace VisitID by the actual visit number. Add ArrivalTime to obtain
-#'     calendar visit times.}
+#'   \item{ArrTimeVisit[VisitID]}{Numeric vector of calendar visit times, with one element per subject.
+#'     Replace VisitID by the actual visit number. These values already include ArrivalTime.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$TailType`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
@@ -70,8 +69,9 @@
 #'   \item{p.value}{p-value for the analysis}
 #' }
 #'
-#' If only one post-baseline visit has been observed, the repeated-measures model reduces to a baseline-adjusted
-#'   ANCOVA at that visit. Future visit responses are excluded from interim analyses.
+#' This example fits all supplied post-baseline visits for the selected subjects. It does not exclude future
+#'   visit responses at an interim look or implement a single-visit ANCOVA fallback. Use it for complete
+#'   trajectories; interim analyses require additional visit-availability handling.
 #'
 #' Example-specific output usage: PrimDelta: Estimated treatment effect from the MMRM model with GLS at the final
 #'   visit.
@@ -231,7 +231,7 @@ CreateAnalysisDataset <- function( SimData, LookInfo ) {
         ) |>
         dplyr::mutate(
             Visit = as.integer( Visit ),
-            CalendarVisitTime = ArrivalTime + ArrTimeVisit
+            CalendarVisitTime = ArrTimeVisit
         ) |>
         dplyr::select( Id, TreatmentID, Visit, Response, CalendarVisitTime ) |>
         dplyr::arrange( Visit, CalendarVisitTime )

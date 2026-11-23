@@ -37,8 +37,8 @@
 #' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{Decision}{Named list of integer endpoint decisions in DesignParam$EndpointName order: 0 = no boundary
-#'     crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 4 = futility boundary
-#'     crossed. The multiplicity-adjustment integration point uses 4 for futility.}
+#'     crossed; 1 = lower efficacy boundary crossed; 2 = upper efficacy boundary crossed; 3 = futility boundary
+#'     crossed. This example returns efficacy or no-crossing codes only.}
 #'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
 #'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
 #'     name. Available for designs that support passing state between looks.}

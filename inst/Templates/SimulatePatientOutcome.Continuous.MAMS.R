@@ -7,8 +7,9 @@
 #'   user-defined inputs through UserParam.
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArms Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
+#' @param ArrivalTime Optional numeric vector of subject arrival times on the calendar scale, with one element per
+#'   subject, in the same order as TreatmentID. It is supplied for multi-arm dose-finding generation, but not for
+#'   ordinary multi-arm MAMS generation.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param Mean Numeric vector of mean responses by arm, with the control arm first, followed by experimental arms
@@ -29,8 +30,7 @@
 #' }
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumSub, NumArms, ArrivalTime, TreatmentID, Mean, StdDev, UserParam = NULL ) {
-    
+{{FUNCTION_NAME}} <- function( NumSub, NumArms, ArrivalTime = NULL, TreatmentID, Mean, StdDev, UserParam = NULL ) {
     # Step 1 - Validate custom variable input and set defaults ####
     if ( is.null( UserParam ) ) {
         # If this function requires user defined parameters to be sent via the UserParam variable check to make sure the values are valid and

@@ -46,7 +46,6 @@
 ######################################################################################################################## .
 
 SimulatePatientOutcomeBinaryWithAssurancePh3 <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {
-    # Step 1: Sample true probability of response
     if ( !exists( "gdfPh2Post" ) ) {
         # Load posterior distribution obtained from Phase 2
         gdfPh2Post <<- LoadData( )

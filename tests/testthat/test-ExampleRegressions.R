@@ -146,7 +146,7 @@ test_that( "SSR completer analyses preserve Dev response selection", {
     expect_identical( lAdapted$ReEstCompleters, 30L )
 } )
 
-test_that( "survival SSR uses a signed logrank statistic and the native sample size multiplier", {
+test_that( "survival SSR uses a signed logrank statistic and the native event multiplier", {
     skip_if_not_installed( "survival" )
     set.seed( 91 )
     dfData <- data.frame( TreatmentID = rep( 0:1, each = 100 ), ArrivalTime = 0,
@@ -166,7 +166,7 @@ test_that( "survival SSR uses a signed logrank statistic and the native sample s
     lLook <- list( NumLooks = 2, CurrLookIndex = 1, InfoFrac = c( 0.5, 1 ),
         EffBdry = c( -3, -1.96 ), RejType = 2 )
     lAdapt <- list( SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
-        MaxSSMultInp = list( MaxSSMult = 1.5 ) )
+        MaxSSMultInp = list( MaxSSMult = 9, MaxEventsMult = 1.5 ) )
     lAdapted <- fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )
     expect_identical( lAdapted$ReEstEvents, 150L )
 
@@ -229,5 +229,19 @@ test_that( "repeated-measures analysis preserves subject baselines with two, thr
         }
         expect_equal( lResult$PrimDelta, 0 )
         expect_equal( lResult$SecDelta, 0 )
+    }
+} )
+
+test_that( "schizophrenia analysis uses native calendar visit times without adding enrollment twice", {
+    skip_if_not_installed( "dplyr" )
+    skip_if_not_installed( "tidyr" )
+    dfData <- data.frame( ArrivalTime = c( 2, 7 ), TreatmentID = 0:1,
+                          Response1 = c( 10, 20 ), Response2 = c( 11, 21 ),
+                          ArrTimeVisit1 = c( 2, 7 ), ArrTimeVisit2 = c( 3, 8 ) )
+    for ( strFile in c( "AnalyzeUsingMMRM.R", "AnalyzeUsingMMRMWithGLS.R" ) ) {
+        fnPrepare <- .GetCommonExampleFunction( "SchizophreniaTrial", strFile, "CreateAnalysisDataset" )
+        dfPrepared <- fnPrepare( dfData, NULL )
+        expect_equal( dfPrepared$CalendarVisitTime, c( 3, 8 ), info = strFile )
+        expect_equal( dfPrepared$Baseline, c( 10, 20 ), info = strFile )
     }
 } )

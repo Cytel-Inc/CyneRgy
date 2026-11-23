@@ -27,10 +27,8 @@
 #'     StartAtTime contains their starting times. For method 2, ByTime contains the times at which Control survival
 #'     percentages are specified. Method 3 uses the control median survival time.}
 #' }
-#' @param Correlation Square matrix of integer correlation categories in EndpointName order. Category 0 =
-#'   uncorrelated; absolute values 1, 2, 3, 4, and 5 indicate very weak, weak, moderate, strong, and very strong
-#'   correlation. Positive values indicate positive correlation; negative values indicate negative correlation.
-#'   This is an engine category matrix, not a numeric Pearson correlation matrix.
+#' @param Correlation Numeric symmetric correlation matrix in EndpointName order, with diagonal entries 1.
+#'   The multiple-endpoint wrapper passes the numeric correlations directly, not integer strength categories.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
@@ -40,13 +38,16 @@
 #' \describe{
 #'   \item{Response}{Required named list of numeric response vectors, indexed by EndpointName, with one value per
 #'     subject in each vector. Time-to-event responses are measured from enrollment.}
+#'   \item{Corr}{Optional numeric matrix with one row and column per endpoint, in EndpointName order.
+#'     Used as the reported Normal_Corr_Pearson correlation matrix; it does not change the generated responses.}
+#'   \item{ArrivalRank}{Optional subject-length vector. Like other custom subject-length vectors, it is appended
+#'     to SimData; the committed engine does not use it to reorder subjects.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#' @details The integration-point documentation also lists optional ArrivalRank and Corr outputs but does not
-#'   specify their structure. These templates and examples return Response and ErrorCode; consult the requirements
-#'   of the target East Horizon version before using those optional outputs.
+#' @details Response and ErrorCode are sufficient for this template. Return each response vector in the same
+#'   subject order as TreatmentID and ArrivalTime.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumPat, NumArms, TreatmentID, ArrivalTime, EndpointType, EndpointName, RespParams, Correlation, UserParam = NULL ) {

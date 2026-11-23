@@ -119,7 +119,7 @@ AnalyzeUsingHazardRatioLimitsOfCI <- function( SimData, DesignParam, LookInfo = 
         return( list( Decision = 0L, ErrorCode = -1L ) )
     }
 
-    # Step 1: Retrieve necessary information from the objects East Horizon sent. You may not need all the variables ####
+    # Retrieve necessary information from the objects East Horizon sent. You may not need all the variables
     if ( !is.null( LookInfo ) ) {
         # Look info was provided so use it
         nQtyOfLooks <- LookInfo$NumLooks

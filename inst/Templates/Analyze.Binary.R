@@ -8,21 +8,35 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
 #'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#'   \item{ClndrRespTime}{Numeric vector of response times on the calendar scale, with one element per subject.}
 #'   \item{CensorInd}{Integer vector of censor indicators, with one element per subject: 0 = dropout/non-completer;
 #'     1 = completer.}
 #'   \item{CensorIndOrg}{Original integer vector of censor indicators before any analysis-time adjustment: 0 =
 #'     dropout/non-completer; 1 = completer.}
+#'   \item{LkRespTime}{Numeric response or follow-up time available at the current look.}
+#'   \item{LkCensorIndctr}{Integer current-look censor indicator. This is named CensorInd instead when accrual or
+#'     dropout processing applies its display-name mapping.}
+#'   \item{DropOutTime}{Numeric generated dropout time. Present when dropout is configured.}
+#'   \item{ArrvRandNum}{Numeric enrollment random numbers. Present with built-in enrollment generation.}
+#'   \item{AllocRandNum}{Numeric allocation random numbers. Present with randomized built-in allocation.}
+#'   \item{RespRandNum}{Numeric response random numbers. Present with built-in binary response generation.}
+#'   \item{DropOutPrdRandNum}{Numeric dropout-period random numbers. Present with built-in dropout generation.}
+#'   \item{DropOutDORandNum}{Numeric dropout-time random numbers. Present with built-in dropout generation.}
+#'   \item{CensorIndRandNum}{Numeric censor-indicator random numbers. Present with built-in censoring generation.}
 #' }
 #' @param DesignParam Named list of design and simulation parameters. Access elements by name, for example
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon product
 #'   as indicated below.
 #' \describe{
+#'   \item{TestID}{Integer test identifier supplied by East Horizon for the selected test.}
 #'   \item{Alpha}{Numeric type I error rate (significance level).}
 #'   \item{LowerAlpha}{Numeric. Lower Type I Error. Same as Alpha if left-tailed one-sided test. Only makes sense
 #'     to use for two-sided asymmetric tests. East Horizon Explore: Only available if `Tail Type = Left-tailed`.
@@ -69,6 +83,24 @@
 #'   }
 #'   \item{PiC}{Numeric. Design proportion for the control arm. East Horizon Explore: Not available. East Horizon
 #'     Design: Only available for `Binary` tests.}
+#'   \item{LookFixOption}{Integer analysis-look scheduling option. Set to NA when not applicable.}
+#'   \item{MaxStudyDur}{Numeric maximum study duration. Set to NA when not applicable.}
+#'   \item{MaxEvents}{Integer maximum number of events. Set to NA for non-survival tests.}
+#'   \item{FollowUpType}{Integer follow-up type. Set to NA for non-survival tests.}
+#'   \item{FollowUpDur}{Numeric follow-up duration. Set to NA for non-survival tests.}
+#'   \item{Sigma}{Numeric design standard deviation. Set to NA when not applicable.}
+#'   \item{SigmaD}{Numeric standard deviation for paired differences. Set to NA when not applicable.}
+#'   \item{SigmaLogRatio}{Numeric standard deviation on the log-ratio scale. Set to NA when not applicable.}
+#'   \item{CoeffVar}{Numeric coefficient of variation. Set to NA when not applicable.}
+#'   \item{UpperEquiLimit}{Numeric upper equivalence limit. Set to NA outside equivalence tests.}
+#'   \item{LowerEquiLimit}{Numeric lower equivalence limit. Set to NA outside equivalence tests.}
+#'   \item{EquiMargin}{Numeric equivalence margin. Set to NA outside equivalence tests.}
+#'   \item{MuC}{Numeric design mean for the control arm. Set to NA for binary tests.}
+#'   \item{NumPop}{Integer number of populations for a trend-in-ordered-proportions test.}
+#'   \item{Scores}{Numeric population scores for a trend-in-ordered-proportions test.}
+#'   \item{NumCat}{Integer number of categories for a chi-square categorical test.}
+#'   \item{NumGrp}{Integer number of groups for applicable chi-square categorical tests.}
+#'   \item{CatPropNull}{Numeric null category proportions for a specified-proportions chi-square test.}
 #' }
 #' @param LookInfo Named list of group sequential analysis parameters, or NULL for a fixed-sample design. Access
 #'   elements by name, for example `LookInfo$CurrLookIndex`, rather than by position. Pass LookInfo explicitly to
@@ -166,8 +198,7 @@
 #' }
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
 #'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility. Sample size re-estimation designs require a decision and the
-#'   re-estimated total event/completer count.
+#'   Delta-scale or conditional-power futility.
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

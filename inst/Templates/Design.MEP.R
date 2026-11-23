@@ -8,14 +8,21 @@
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
 #'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{SimID}{Vector of length equal to the number of subjects, indicating the simulation ID.}
-#'   \item{PatId}{Vector of length equal to the number of subjects, containing the patient ID identifying a unique
+#'   \item{PatID}{Vector of length equal to the number of subjects, containing the patient ID identifying a unique
 #'     patient in a given simulation.}
+#'   \item{SiteID}{Character site identifier. Available with regional enrollment.}
+#'   \item{RegionID}{Character region identifier. Available with regional enrollment.}
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
 #'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'   \item{RespTime}{Numeric endpoint-rule response time. Available when endpoint rules are configured.}
+#'   \item{EPRuleID}{Integer endpoint-rule identifier. Available when endpoint rules are configured.}
+#'   \item{DropoutTime}{Numeric generated dropout time. Available when dropout is configured.}
 #'   \item{TResponse.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated responses
 #'     for a specific endpoint. `EPNAME` is the endpoint name specified in East Horizon. Endpoint names can also be
 #'     accessed using `DesignParam$EndpointName`.}
@@ -26,16 +33,21 @@
 #'     for a specific endpoint after adjusting for endpoint and dropout rules. `EPNAME` is the endpoint name
 #'     specified in East Horizon. Endpoint names can also be accessed using `DesignParam$EndpointName`.}
 #'   \item{CalRespT.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated response
-#'     times on calendar scale for a specific endpoint. Equivalent to `Response + ArrivalTime`. `EPNAME` is the
+#'     times on calendar scale for a specific endpoint. For time-to-event outcomes this is enrollment plus the
+#'     event or censoring time; for binary/continuous outcomes it uses the assessment or dropout time, not the
+#'     numeric outcome value. `EPNAME` is the
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #'   \item{DropoutID.`EPNAME`}{Vector of length equal to the number of subjects, containing whether each patient
-#'     dropped out before responding for a specific endpoint: - `0`: Dropout. - `1`: Completer. `EPNAME` is the
+#'     dropped out before responding for a specific endpoint: - `0`: Did not drop out. - `1`: Dropped out. `EPNAME` is the
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #' }
+#' Additional subject-length columns returned by custom enrollment or response functions are appended to
+#'   `SimData`.
 #' @param AnalysisData Data frame containing the subset of SimData available at the current analysis look. It uses
-#'   the same column definitions as SimData.
+#'   the same column definitions as SimData and adds `ACI.EPNAME` (analysis censor indicator), `AFT.EPNAME`
+#'   (analysis follow-up time), and `ADI.EPNAME` (analysis dropout indicator) for each endpoint.
 #' @param DataSummary Named list of endpoint-specific summary statistics. Access an element by endpoint name, for
 #'   example `DataSummary[[DesignParam$EndpointName[1]]]$Events`.
 #' \describe{
@@ -60,18 +72,23 @@
 #'     Binary`.}
 #'   \item{HR}{Estimated hazard ratio comparing treatment to control. Only available for `Endpoint Type =
 #'     Time-to-Event`.}
-#'   \item{HR0}{Hazard-related summary for the control arm. Only available for `Endpoint Type = Time-to-Event`.}
-#'   \item{HR1}{Hazard-related summary for the treatment arm. Only available for `Endpoint Type = Time-to-Event`.}
+#'   \item{HR0}{Control hazard estimate: control events divided by total control follow-up time.
+#'     Only available for `Endpoint Type = Time-to-Event`.}
+#'   \item{HR1}{Treatment hazard estimate: HR multiplied by HR0.
+#'     Only available for `Endpoint Type = Time-to-Event`.}
 #'   \item{Mean0}{Mean outcome value in the control arm. Only available for `Endpoint Type = Continuous`.}
 #'   \item{Mean1}{Mean outcome value in the treatment arm. Only available for `Endpoint Type = Continuous`.}
 #'   \item{SD0}{Standard deviation of the outcome in the control arm. Only available for `Endpoint Type =
 #'     Continuous`.}
 #'   \item{SD1}{Standard deviation of the outcome in the treatment arm. Only available for `Endpoint Type =
 #'     Continuous`.}
-#'   \item{Delta}{Estimated treatment effect. Only available for `Endpoint Type = Continuous or Binary`}
-#'   \item{Prop0}{Observed proportion of responders in the control arm. Only available for `Endpoint Type =
+#'   \item{Delta}{Estimated treatment-minus-control mean/proportion difference, or log proportion ratio for
+#'     a ratio-of-proportions test. Only available for `Endpoint Type = Continuous or Binary`.}
+#'   \item{Prop0}{Continuity-corrected control response proportion: (responders + 0.5) / (completers + 1).
+#'     Only available for `Endpoint Type =
 #'     Binary`.}
-#'   \item{Prop1}{Observed proportion of responders in the treatment arm. Only available for `Endpoint Type =
+#'   \item{Prop1}{Continuity-corrected treatment response proportion: (responders + 0.5) / (completers + 1).
+#'     Only available for `Endpoint Type =
 #'     Binary`.}
 #' }
 #' @param LookInfo Named list of information for the current look, including the single look in a fixed-sample
@@ -147,6 +164,8 @@
 #'     endpoints (columns), containing the efficacy flag indicating which endpoint is selected for efficacy testing
 #'     at which analysis. Columns order matches `EndpointName` order. Possible values: - `1`: Test for efficacy. -
 #'     `0`: Do not test.}
+#'   \item{NumEndpointLooks}{Named list of Integer. Number of planned analysis looks for each endpoint. Names and
+#'     order match `EndpointName`.}
 #'   \item{FutFlg}{Matrix of Integer. Matrix of size equal to the number of analysis looks (rows) x the number of
 #'     endpoints (columns), containing the futility flag indicating which endpoint is selected for futility testing
 #'     at which analysis. Columns order matches `EndpointName` order. Possible values: - `1`: Test for futility -
@@ -185,8 +204,6 @@
 #'     efficacy; 2 = futility. This is the required output.}
 #'   \item{TestStat}{Optional named list of endpoint test statistics, using the names and order in
 #'     DesignParam$EndpointName.}
-#'   \item{Response}{Named list of numeric response vectors, one vector per endpoint with one element per subject,
-#'     using the names and order in DesignParam$EndpointName.}
 #'   \item{RawPVal}{Optional numeric vector of raw endpoint p-values.}
 #'   \item{EfficacyBoundary}{Optional numeric vector of endpoint efficacy boundaries.}
 #'   \item{WinStatus}{Optional integer trial status: 0 = no decision; 1 = win; -1 = lose.}
@@ -201,6 +218,9 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
+#' @details StdErr, RawPVal, Score, PropPld, and SDPld replace reported statistics only for endpoints included in
+#'   the returned TestStat list. Unreturned statistics for those endpoints become NaN. Response is not a
+#'   decision-integration output and cannot replace patient responses here.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( SimData, AnalysisData, DataSummary, LookInfo,

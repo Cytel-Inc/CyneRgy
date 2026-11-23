@@ -13,16 +13,14 @@
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param SurvMethod Integer survival input method: 1 = hazard rates; 2 = cumulative survival percentages; 3 =
 #'   median survival times.
-#' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
-#'   survival generation.
+#' @param NumPrd Integer number of survival periods.
 #' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
-#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
-#'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
-#'   stratification). The control-arm entries may be NA in engine-supplied arrays.
-#' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
-#'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
+#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3.
+#'   The native bridge supplies a numeric vector of length NumPrd, shared across arms.
+#' @param SurvParam Matrix of survival parameters with NumPrd rows and NumArm columns.
+#'   Column 1 is control; subsequent columns are experimental arms. Values are hazard
 #'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
-#'   SurvMethod = 3. Without stratification, the median-survival method has one row.
+#'   SurvMethod = 3. The median-survival method has one row.
 #' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper

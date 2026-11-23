@@ -43,7 +43,7 @@
 #'
 #'   \item Converts GMCP rejection flags into population-specific decision codes:
 #'         \itemize{
-#'           \item \code{2} = reject null hypothesis (efficacy)
+#'           \item \code{1} (left-tailed) or \code{2} (right-tailed) = reject null hypothesis (efficacy)
 #'           \item \code{0} = continue at interim look
 #'           \item \code{3} = no rejection at final look (futility)
 #'         }
@@ -83,12 +83,12 @@
 #'   \item{MaxEvents}{Integer maximum number of events in the trial.}
 #'   \item{NumSubPops}{Integer. Number of subpopulations. East Horizon Explore: Only available for `Endpoint Type =
 #'     Time-to-Event` with `Stratification` and `Subpopulations` turned on. East Horizon Design: Not available.}
-#'   \item{SubPops}{Named List. Named list of length equal to the number of subpopulations, indicating factor
-#'     details. For example, `SubPops["Factor1"]` is an array of level names for Factor 1. East Horizon Explore:
+#'   \item{SubPops}{Named list indexed by subpopulation name. Each element is a named list of factors and
+#'     their allowed levels, for example `SubPops[["Subpopulation 1"]][["Factor1"]]`. East Horizon Explore:
 #'     Only available for `Endpoint Type = Time-to-Event` with `Stratification` and `Subpopulations` turned on.
 #'     East Horizon Design: Not available.}
-#'   \item{SubpopName}{Array of Character. Array of length equal to the number of subpopulations, indicating the
-#'     subpopulation names. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` with
+#'   \item{SubpopName}{Character vector of length NumSubPops + 1, with the full-population name first, followed by
+#'     the subpopulation names. East Horizon Explore: Only available for `Endpoint Type = Time-to-Event` with
 #'     `Stratification` and `Subpopulations` turned on. East Horizon Design: Not available.}
 #'   \item{TransitionMatrix}{Matrix of Numeric. Transition matrix between all populations, including full
 #'     population and subpopulations. Dimension of `(NumSubPops + 1) x (NumSubPops + 1)`. East Horizon Explore:
@@ -120,7 +120,8 @@
 #'     Explore).}
 #'   \item{TestStat}{Named list of numeric test statistics on the Wald (Z) scale, with one element for
 #'     the full population and each subpopulation, using the population names defined by the design.}
-#'   \item{dHR}{Named list of estimated hazard ratios for the full population and each subpopulation.}
+#'   \item{HR}{Named list of estimated hazard ratios for the full population and each subpopulation.}
+#'   \item{dHR}{Alias of HR retained for existing custom reports.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
@@ -129,7 +130,7 @@
 #' }
 #'
 #' SimData also contains the subject-level stratification-factor columns named in DesignParam$StratFactors. When
-#'   subpopulations are enabled, Decision, TestStat, and dHR are named lists with one element for the full
+#'   subpopulations are enabled, Decision, TestStat, and HR are named lists with one element for the full
 #'   population and each subpopulation, using the population names defined by the design.
 ######################################################################################################################## .
 
@@ -163,12 +164,13 @@ AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserPar
     # Step 3: Read population inputs
     nNumSubPops <- DesignParam$NumSubPops
     vPopNames <- DesignParam$SubpopName
+    strFullPopName <- vPopNames[ 1 ]
     lSubPops <- DesignParam$SubPops
     vPropAlpha <- DesignParam$PropAlpha
 
     # Step 4: Create population filters
     lPopFilters <- list( )
-    lPopFilters[[ "Full Population" ]] <- rep( TRUE, nrow( SimData ) )
+    lPopFilters[[ strFullPopName ]] <- rep( TRUE, nrow( SimData ) )
 
     if ( nNumSubPops > 0 ) {
         for ( strSubpopName in names( lSubPops ) ) {
@@ -204,7 +206,7 @@ AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserPar
 
         if ( nrow( dfSubsetData ) > 0 ) {
             # Identify stratification factors
-            if ( strPopName == "Full Population" ) {
+            if ( strPopName == strFullPopName ) {
                 vCurrentStratFactors <- vAllFactors
             } else {
                 vCurrentStratFactors <- names( lSubPops[[ strPopName ]] )
@@ -238,8 +240,8 @@ AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserPar
             vTestStats <- c( vTestStats, dTestStat )
             vPopOrder <- c( vPopOrder, strPopName )
         } else {
-            lTestStatistics[[ strPopName ]] <- NA
-            lHazardRatios[[ strPopName ]] <- NA
+            lTestStatistics[[ strPopName ]] <- NA_real_
+            lHazardRatios[[ strPopName ]] <- NA_real_
             vTestStats <- c( vTestStats, NA )
             vPopOrder <- c( vPopOrder, strPopName )
         }
@@ -274,6 +276,7 @@ AnalyzeSubpopulation <- function( SimData, DesignParam, LookInfo = NULL, UserPar
     lRet <- list(
         Decision = as.list( lDecisions ),
         TestStat = as.list( lTestStatistics ),
+        HR = as.list( lHazardRatios ),
         dHR = as.list( lHazardRatios ),
         AnalysisTime = as.double( dTimeOfAnalysis ),
         ErrorCode = as.integer( nErrorCode )

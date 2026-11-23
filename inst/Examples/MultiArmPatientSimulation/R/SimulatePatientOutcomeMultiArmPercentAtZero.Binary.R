@@ -15,8 +15,8 @@
 #' @author Gabriel Potvin and Anoop Singh Rawat
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
-#' @param ArrivalTime Numeric vector of subject arrival times on the calendar scale, with one element per subject,
-#'   in the same order as TreatmentID.
+#' @param ArrivalTime Unused compatibility argument retained in its original position. Explore does not
+#'   supply ArrivalTime to multi-arm binary response generation.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1
 #'   = first experimental arm, 2 = second experimental arm, and so on.
 #' @param PropResp Numeric vector of response probabilities by arm, with the control arm first, followed by

@@ -21,10 +21,9 @@
 #'   median survival times.
 #' @param NumPrd Integer number of survival periods. Equals 1 for multi-arm confirmatory designs and stratified
 #'   survival generation.
-#' @param PrdTime Times used to specify survival parameters: starting times of hazard pieces for SurvMethod = 1;
-#'   times at which cumulative survival percentages are specified for SurvMethod = 2; 0 for SurvMethod = 3. Legacy
-#'   East Horizon inputs may be vectors; East Horizon inputs may be period-by-arm arrays (stratum-by-arm arrays with
-#'   stratification). The control-arm entries may be NA in engine-supplied arrays.
+#' @param PrdTime Numeric vector with one time per stratum. For SurvMethod = 2, each value is the assessment
+#'   time for both arms in that stratum; for SurvMethod = 3, values are 0. A single shared time and
+#'   stratum-by-arm matrices are also accepted for existing standalone callers.
 #' @param SurvParam Array of survival parameters with NumPrd rows and NumArm columns, or one row per stratum when
 #'   stratification is enabled. Column 1 is control; subsequent columns are experimental arms. Values are hazard
 #'   rates for SurvMethod = 1, cumulative survival percentages for SurvMethod = 2, and median survival times for
@@ -43,8 +42,7 @@
 #'     simulations.}
 #' }
 #' @details For SurvMethod = 2, this example requires a positive, finite assessment time for every arm in each
-#'   stratum. Missing engine-supplied control times cannot be used to derive a hazard from a survival
-#'   percentage and return ErrorCode = -100. No other arm's assessment time is substituted.
+#'   stratum. Missing assessment times return ErrorCode = -100. No other arm's assessment time is substituted.
 ######################################################################################################################## .
 
 SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, TreatmentID,
@@ -78,7 +76,8 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
 
         # SurvMethod 2: Cumulative % Survival
         if ( SurvMethod == 2 ) {
-            vSurvTimes <- rep( as.numeric( PrdTime[ 1 ] ), NumArm )
+            dStratumTime <- if ( length( PrdTime ) == 1 ) PrdTime[ 1 ] else PrdTime[ nStratumInd ]
+            vSurvTimes <- rep( as.numeric( dStratumTime ), NumArm )
             if ( is.matrix( PrdTime ) ) {
                 vSurvTimes <- PrdTime[ nStratumInd, ]
             }
@@ -87,11 +86,12 @@ SimulatePatientOutcomeStratification <- function( NumSub, NumArm, ArrivalTime, T
 
             for ( nArmIdx in 1:NumArm ) {
                 dSurvTime <- vSurvTimes[ nArmIdx ]
-                if ( vS[ nArmIdx ] > 0 && vS[ nArmIdx ] < 1 && dSurvTime > 0 ) {
+                if ( is.finite( vS[ nArmIdx ] ) && vS[ nArmIdx ] > 0 && vS[ nArmIdx ] < 1 &&
+                     is.finite( dSurvTime ) && dSurvTime > 0 ) {
                     vHazardRates[ nArmIdx ] <- -log( vS[ nArmIdx ] ) / dSurvTime
                 } else {
                     vHazardRates[ nArmIdx ] <- NA
-                    nErrorCode <- 1
+                    nErrorCode <- -100
                 }
             }
         }
