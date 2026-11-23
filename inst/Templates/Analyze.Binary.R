@@ -182,23 +182,21 @@
 #'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
 #'   \item{Delta}{Estimated experimental-minus-control treatment effect (proportion difference for binary outcomes;
 #'     mean difference for continuous outcomes).}
-#'   \item{CtrlCompleters}{Number of completers in the control arm. Required when the selected conditional-power
-#'     rule uses the estimated treatment effect.}
-#'   \item{TrmtCompleters}{Number of completers in the experimental arm. Required when the selected
-#'     conditional-power rule uses the estimated treatment effect.}
-#'   \item{CtrlPi}{Observed proportion of responders in the control arm. Return only when required by the selected
-#'     conditional-power rule.}
+#'   \item{CtrlCompleters}{Integer number of completers in the control arm. Required for binary outcomes when the
+#'     futility boundary is on the conditional-power scale and conditional power uses the estimated effect.}
+#'   \item{TrmtCompleters}{Integer number of completers in the experimental arm. Required for binary outcomes when the
+#'     futility boundary is on the conditional-power scale and conditional power uses the estimated effect.}
+#'   \item{CtrlPi}{Numeric observed proportion of responders in the control arm. Required for binary outcomes when the
+#'     futility boundary is on the conditional-power scale and conditional power uses the estimated effect.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
-#'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
-#'     conditional-power rule uses the estimated effect and its standard error.}
 #' }
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
-#'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility.
+#'   the engine apply its boundaries. Delta, and CtrlCompleters,
+#'   TrmtCompleters, and CtrlPi, may also be required for Delta-scale or conditional-power futility.
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

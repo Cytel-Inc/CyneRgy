@@ -6,34 +6,48 @@
 #'   on user-defined criteria.
 #' @author Anoop Singh Rawat, Gabriel Potvin
 #' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
-#'   columns by name, for example `SimData$TreatmentID`. Columns include the fields below when applicable,
+#'   columns by name, for example `SimData$ArrivalTime`. Columns include the fields below when applicable,
 #'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#'   The documented columns below are the engine-defined columns for this integration point; conditional columns are
+#'   marked in their descriptions. Columns returned by custom simulation functions are passed through as well.
 #' \describe{
 #'   \item{SimID}{Vector of length equal to the number of subjects, indicating the simulation ID.}
 #'   \item{PatID}{Vector of length equal to the number of subjects, containing the patient ID identifying a unique
 #'     patient in a given simulation.}
+#'   \item{SiteID}{Character site identifier. Available with regional enrollment.}
+#'   \item{RegionID}{Character region identifier. Available with regional enrollment.}
+#'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
+#'     subject, in the same order as TreatmentID.}
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
-#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'     1 = experimental arm. Multiple endpoint designs have two arms.}
+#'   \item{RespTime}{Numeric endpoint-rule response time. Available when endpoint rules are configured.}
+#'   \item{EPRuleID}{Integer endpoint-rule identifier. Available when endpoint rules are configured.}
+#'   \item{DropoutTime}{Numeric generated dropout time. Available when dropout is configured.}
 #'   \item{TResponse.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated responses
 #'     for a specific endpoint. `EPNAME` is the endpoint name specified in East Horizon. Endpoint names can also be
 #'     accessed using `DesignParam$EndpointName`.}
 #'   \item{CensorID.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated censor
-#'     indicator values for a specific endpoint: - `0`: Dropout. - `1`: Completer. `EPNAME` is the endpoint name
+#'     indicator values for a specific endpoint: - `0`: Censored. - `1`: Not censored (event or observed response). `EPNAME` is the endpoint name
 #'     specified in East Horizon. Endpoint names can also be accessed using `DesignParam$EndpointName`.}
 #'   \item{Response.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated responses
 #'     for a specific endpoint after adjusting for endpoint and dropout rules. `EPNAME` is the endpoint name
 #'     specified in East Horizon. Endpoint names can also be accessed using `DesignParam$EndpointName`.}
 #'   \item{CalRespT.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated response
-#'     times on calendar scale for a specific endpoint. Equivalent to `Response + ArrivalTime`. `EPNAME` is the
+#'     times on calendar scale for a specific endpoint. For time-to-event outcomes this is enrollment plus the
+#'     event or censoring time; for binary/continuous outcomes it uses the assessment or dropout time, not the
+#'     numeric outcome value. `EPNAME` is the
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #'   \item{DropoutID.`EPNAME`}{Vector of length equal to the number of subjects, containing whether each patient
-#'     dropped out before responding for a specific endpoint: - `0`: Dropout. - `1`: Completer. `EPNAME` is the
+#'     dropped out before responding for a specific endpoint: - `0`: Did not drop out. - `1`: Dropped out. `EPNAME` is the
 #'     endpoint name specified in East Horizon. Endpoint names can also be accessed using
 #'     `DesignParam$EndpointName`.}
 #' }
+#' Additional subject-length columns returned by custom enrollment or response functions are appended to
+#'   `SimData`.
 #' @param AnalysisData Data frame containing the subset of SimData available at the current analysis look. It uses
-#'   the same column definitions as SimData.
+#'   the same column definitions as SimData and adds `ACI.EPNAME` (analysis censor indicator), `AFT.EPNAME`
+#'   (analysis follow-up time), and `ADI.EPNAME` (analysis dropout indicator) for each endpoint.
 #' @param DataSummary Named list of endpoint-specific summary statistics. Access an element by endpoint name, for
 #'   example `DataSummary[[DesignParam$EndpointName[1]]]$Events`.
 #' \describe{
@@ -58,23 +72,29 @@
 #'     Binary`.}
 #'   \item{HR}{Estimated hazard ratio comparing treatment to control. Only available for `Endpoint Type =
 #'     Time-to-Event`.}
-#'   \item{HR0}{Hazard-related summary for the control arm. Only available for `Endpoint Type = Time-to-Event`.}
-#'   \item{HR1}{Hazard-related summary for the treatment arm. Only available for `Endpoint Type = Time-to-Event`.}
+#'   \item{HR0}{Control hazard estimate: control events divided by total control follow-up time.
+#'     Only available for `Endpoint Type = Time-to-Event`.}
+#'   \item{HR1}{Treatment hazard estimate: HR multiplied by HR0.
+#'     Only available for `Endpoint Type = Time-to-Event`.}
 #'   \item{Mean0}{Mean outcome value in the control arm. Only available for `Endpoint Type = Continuous`.}
 #'   \item{Mean1}{Mean outcome value in the treatment arm. Only available for `Endpoint Type = Continuous`.}
 #'   \item{SD0}{Standard deviation of the outcome in the control arm. Only available for `Endpoint Type =
 #'     Continuous`.}
 #'   \item{SD1}{Standard deviation of the outcome in the treatment arm. Only available for `Endpoint Type =
 #'     Continuous`.}
-#'   \item{Delta}{Estimated treatment effect. Only available for `Endpoint Type = Continuous or Binary`}
-#'   \item{Prop0}{Observed proportion of responders in the control arm. Only available for `Endpoint Type =
+#'   \item{Delta}{Estimated treatment-minus-control mean/proportion difference, or log proportion ratio for
+#'     a ratio-of-proportions test. Only available for `Endpoint Type = Continuous or Binary`.}
+#'   \item{Prop0}{Continuity-corrected control response proportion: (responders + 0.5) / (completers + 1).
+#'     Only available for `Endpoint Type =
 #'     Binary`.}
-#'   \item{Prop1}{Observed proportion of responders in the treatment arm. Only available for `Endpoint Type =
+#'   \item{Prop1}{Continuity-corrected treatment response proportion: (responders + 0.5) / (completers + 1).
+#'     Only available for `Endpoint Type =
 #'     Binary`.}
 #' }
 #' @param LookInfo Named list of information for the current look, including the single look in a fixed-sample
 #'   multiple-endpoint design.
 #' \describe{
+#'   \item{AnalysisTime}{Numeric. Current analysis time.}
 #'   \item{LookNum}{Integer. Current look number.}
 #'   \item{TestStatisticsOutputs}{Named List. Named List of length equal to the number of endpoints, containing the
 #'     test statistics results from the engine. Names are user-specified endpoint names from
@@ -85,6 +105,9 @@
 #'     test statistic), `TSPVal` (numeric p-value). - For Continuous endpoint: `DoF` (numeric degrees of freedom),
 #'     `SDPld` (numeric pooled standard deviation), `StdErr` (numeric standard error), `TS` (numeric test
 #'     statistic), `TSPVal` (numeric p-value).}
+#'   \item{InfoFrac}{List of Numeric Vector. List of length equal to the number of endpoints, containing the
+#'     vectors of the actual information fractions up to the current look for one endpoint. Order matches
+#'     `DesignParam$EndpointName` order.}
 #'   \item{LastLookDecision}{Vector of Integer. Vector of length equal to the number of endpoints, containing the
 #'     decisions from previous look. Order matches `DesignParam$EndpointName` order. Possible values: - `0`:
 #'     Continue. - `1`: Efficacy. - `2`: Futility.}
@@ -99,18 +122,50 @@
 #'   `DesignParam$Alpha`, rather than by position. Availability depends on the endpoint, design, and East Horizon
 #'   product as indicated below.
 #' \describe{
+#'   \item{TotalLooks}{Integer. Total number of planned looks.}
 #'   \item{EndpointName}{Vector of String. Vector of length equal to the number of endpoints, containing the
 #'     endpoint names.}
 #'   \item{EndpointType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the
 #'     endpoint types. Order matches `EndpointName` order. Possible values: - `0`: Continuous. - `1`: Binary. -
 #'     `2`: Time-to-Event.}
+#'   \item{TailType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the nature of
+#'     critical region for each endpoint. Order matches `EndpointName` order. Possible values: - `0`: Left-tailed.
+#'     - `1`: Right-tailed.}
+#'   \item{NumPat}{Integer number of subjects in the trial.}
+#'   \item{AllocRatio}{Numeric. Treatment allocation ratio: number of patients in the treatment arm over number of
+#'     patient in the control arm.}
+#'   \item{TrialType}{Vector of Integer. Vector of length equal to the number of endpoints, indicating the trial
+#'     type for each endpoint. Order matches `EndpointName` order. Possible values: - `0`: Superiority. - `1`:
+#'     Non-inferiority.}
+#'   \item{Alpha}{Numeric type I error rate (significance level).}
+#'   \item{TestStatistics}{Named List. Named List of length equal to the number of endpoints, containing the test
+#'     statistics specifications. Names are user-specified endpoint names from `EndpointName`. Order also matches
+#'     `EndpointName` order. Each element contains: - `Test`: Integer test type. Possible values: `0` = None, `1` =
+#'     Log-Rank (TTE), `2` = Difference of Means (Continuous), `3` = Difference of Proportions (Binary), `4` =
+#'     Ratio of Proportions (Binary). - `TestStat`: Integer test statistic. Possible values: `0` = None, `1` =
+#'     Log-Rank (TTE), `3` = Harrington Fleming (TTE), `4` = t-statistic (Continuous), `5` = z-statistic (Binary),
+#'     `6` = Modestly Weighted Log-Rank (TTE). - `Variance`: Integer variance. Only available for Binary or
+#'     Continuous endpoint. Possible values: `1` = Pooled (Binary), `2` = Unpooled (Binary), `3` = Equal
+#'     (Continuous), `4` = Unequal (Continuous). - `Parameter`: Vector of Numeric. Only available for TTE with
+#'     Harrington Fleming or MWLR. For Harrington Fleming: `c(p,q)`. For MWLR: `c(delay,w_max)`.}
 #'   \item{TargetInformation}{Vector of Integer. Vector of length equal to the number of endpoints, containing the
 #'     target information of each endpoint: number of completers for Continuous or Binary, number of events for
 #'     TTE. Order matches `EndpointName` order.}
+#'   \item{MultiplicityDetails}{List. Multiplicity adjustment details. Contains: - `MCP`: Integer, multiple
+#'     comparison procedure. Possible values: `0` = None, `1` = Fallback, `2` = Fixed Sequence, `3` =
+#'     Bonferroni/Weighted Bonferroni, `4` = Holm, `5` = Weighted Holm, `6` = User-specified GMCP. -
+#'     `AlphaAlloc`: Vector of Numeric of length equal to the number of endpoints, containing the Alpha allocation
+#'     percentages for each endpoint. Order matches `EndpointName` order. - `TestOrder`: Vector of Integer of
+#'     length equal to the number of endpoints, containing the testing order for each endpoint. Available for
+#'     Fallback or Fixed Sequence only. Order matches `EndpointName` order. - `TransMat`: Matrix of Numeric of size
+#'     equal to the number of endpoints x the number of endpoints, containing the transitions for Alpha
+#'     propagation. Available for GMCP only. Order matches `EndpointName` order.}
 #'   \item{EffFlg}{Matrix of Integer. Matrix of size equal to the number of analysis looks (rows) x the number of
 #'     endpoints (columns), containing the efficacy flag indicating which endpoint is selected for efficacy testing
 #'     at which analysis. Columns order matches `EndpointName` order. Possible values: - `1`: Test for efficacy. -
 #'     `0`: Do not test.}
+#'   \item{NumEndpointLooks}{Numeric vector of planned analysis looks per endpoint (column sums of EffFlg). Names and
+#'     order match `EndpointName`.}
 #'   \item{FutFlg}{Matrix of Integer. Matrix of size equal to the number of analysis looks (rows) x the number of
 #'     endpoints (columns), containing the futility flag indicating which endpoint is selected for futility testing
 #'     at which analysis. Columns order matches `EndpointName` order. Possible values: - `1`: Test for futility -
@@ -120,6 +175,20 @@
 #'     when futility check is not performed (`FutFlg = 0`). Depends on the endpoint: - For TTE endpoint: thresholds
 #'     represent HR (declare futility if HR > threshold). - For Binary or Continuous endpoint: thresholds represent
 #'     Delta (declare futility if Delta < threshold).}
+#'   \item{EffSpending}{Named List. Named List of length equal to the number of endpoints, containing the Alpha
+#'     spending details. Names are user-specified endpoint names from `EndpointName`. Order also matches
+#'     `EndpointName` order. Each element contains: - `EffBdry`: Integer efficacy boundary type. Possible values:
+#'     `0` = None, `1` = Spending Function. - `SpendFunc`: Integer spending function type. Only available for
+#'     `EffBdry = 1`. Possible values: `1` = Lan-DeMets (LD), `2` = Gamma. - `Parameter`: Numeric or integer value.
+#'     Only available for `EffBdry = 1`. Possible values: - For LD: `1` = O'Brien-Fleming (OF), `2` = Pocock (PK).
+#'     For Gamma: numeric values (e.g., 1, -3).}
+#'   \item{WinCondCriteria}{List. List containing trial winning condition criteria. Contains: -`whichEPs`: Vector
+#'     of Integer of length equal to the number of endpoints, indicating which endpoints are considered for winning
+#'     condition. Order matches `EndpointName` order. Possible values: `0` = Not considered, `1` = Considered.
+#'     -`NumEPsWin`: Integer. Number of endpoints that must be won. Can be `0` if `MustWinEPs` is used. -
+#'     `MustWinEPs`: Vector of Integer of length equal to the number of endpoints, indicating which endpoints must
+#'     be won for trial success. Order matches `EndpointName` order. Possible values: `0` = Not required, `1` =
+#'     Must win.}
 #' }
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
 #'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
@@ -128,13 +197,12 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#' @return Named list containing the outputs returned by this example.
+#' @return Named list containing the outputs returned by this example. The engine also accepts the optional outputs
+#'   TestStat, RawPVal, EfficacyBoundary, WinStatus, Score, StdErr, PropPld, SDPld, and OutList, which this example does
+#'   not return.
 #' \describe{
 #'   \item{Decision}{Integer vector of endpoint decisions in DesignParam$EndpointName order: 0 = continue; 1 =
 #'     efficacy; 2 = futility. This is the required output.}
-#'   \item{OutList}{Optional named list used to pass outputs between analysis looks. Return it at one look to
-#'     receive the same list as input at the next look; the input is NULL at the first look. Access elements by
-#'     name. Available for designs that support passing state between looks.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

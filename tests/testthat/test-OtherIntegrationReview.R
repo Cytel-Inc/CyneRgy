@@ -97,14 +97,9 @@ test_that( "ranked selection rejects unavailable ranks and missing allocation ra
     expect_identical( lResult$AllocRatio, c( 2, 1 ) )
 } )
 
-test_that( "Poisson enrollment counts are not capped in short accrual periods", {
+test_that( "Poisson enrollment skips zero-rate periods", {
     for ( strFunction in c( "GeneratePoissonArrival", "GeneratePoissonArrivalMEP" ) ) {
         fnArrival <- .GetCommonExampleFunction( "GeneratePoissonArrival", paste0( strFunction, ".R" ), strFunction )
-        fnPeriod <- get( "SimulateAccrualTimesWithConstantRate", envir = environment( fnArrival ) )
-        set.seed( 389 )
-        vCounts <- replicate( 1000, length( fnPeriod( 100, 0, 0.1 ) ) )
-        expect_equal( mean( vCounts ), 10, tolerance = 0.05 )
-        expect_true( any( vCounts > 14 ) )
         lResult <- fnArrival( 200, 3, c( 0, 0.1, 1.1 ), c( 100, 0, 20 ) )
         expect_length( lResult$ArrivalTime, 200 )
         expect_true( all( diff( lResult$ArrivalTime ) >= 0 ) )

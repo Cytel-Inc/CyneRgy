@@ -76,7 +76,7 @@ SimulateMultipleOutcomesCovariates <- function( NumSub, ArrivalTime, TreatmentID
     nErrorCode <- 0
 
     if ( is.null( UserParam ) ) {
-        return( list( Response = rep( 0, NumSub ), ErrorCode = 1L ) )
+        return( list( Response = rep( 0, NumSub ), ErrorCode = -1L ) )
     }
 
     # Extract means for each outcome and group

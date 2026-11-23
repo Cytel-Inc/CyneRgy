@@ -64,7 +64,7 @@ SimulateMultipleOutcomes <- function( NumSub, ArrivalTime, TreatmentID, Mean, St
     nErrorCode <- 0
 
     if ( is.null( UserParam ) ) {
-        return( list( Response = rep( 0, NumSub ), ErrorCode = 1L ) )
+        return( list( Response = rep( 0, NumSub ), ErrorCode = -1L ) )
     }
 
     # Extract means for each outcome and arm from UserParam

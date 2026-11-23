@@ -192,7 +192,7 @@ test_that( "multiple-outcome examples return their documented error when user in
         fnGenerate <- .GetCommonExampleFunction( "MultipleEndpointsWithCovariates", paste0( strFunction, ".R" ),
             strFunction )
         lResult <- fnGenerate( 4, rep( 0, 4 ), c( 0, 1, 0, 1 ), c( 0, 1 ), c( 1, 1 ) )
-        expect_identical( lResult$ErrorCode, 1L )
+        expect_identical( lResult$ErrorCode, -1L )
         expect_length( lResult$Response, 4 )
     }
 } )

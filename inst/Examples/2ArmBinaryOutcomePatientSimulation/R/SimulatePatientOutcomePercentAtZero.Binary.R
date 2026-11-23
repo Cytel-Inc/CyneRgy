@@ -41,10 +41,7 @@
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
 #' }
-#' @details For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
-#'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
-#'   treatment-to-control ratio of proportions). Include these arguments in the function signature for a
-#'   vaccine-efficacy design. Standard binary responses are coded 0 = non-response and 1 = response.
+#' @details Standard binary responses are coded 0 = non-response and 1 = response.
 ######################################################################################################################## .
 
 SimulatePatientOutcomePercentAtZero.Binary <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {

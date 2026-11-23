@@ -19,7 +19,7 @@
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
 #'     subject, in the same order as TreatmentID.}
 #'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
-#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'     1 = experimental arm. Multiple endpoint designs have two arms.}
 #'   \item{RespTime}{Numeric endpoint-rule response time. Available when endpoint rules are configured.}
 #'   \item{EPRuleID}{Integer endpoint-rule identifier. Available when endpoint rules are configured.}
 #'   \item{DropoutTime}{Numeric generated dropout time. Available when dropout is configured.}
@@ -27,7 +27,7 @@
 #'     for a specific endpoint. `EPNAME` is the endpoint name specified in East Horizon. Endpoint names can also be
 #'     accessed using `DesignParam$EndpointName`.}
 #'   \item{CensorID.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated censor
-#'     indicator values for a specific endpoint: - `0`: Dropout. - `1`: Completer. `EPNAME` is the endpoint name
+#'     indicator values for a specific endpoint: - `0`: Censored. - `1`: Not censored (event or observed response). `EPNAME` is the endpoint name
 #'     specified in East Horizon. Endpoint names can also be accessed using `DesignParam$EndpointName`.}
 #'   \item{Response.`EPNAME`}{Vector of length equal to the number of subjects, containing the generated responses
 #'     for a specific endpoint after adjusting for endpoint and dropout rules. `EPNAME` is the endpoint name
@@ -157,14 +157,14 @@
 #'     `AlphaAlloc`: Vector of Numeric of length equal to the number of endpoints, containing the Alpha allocation
 #'     percentages for each endpoint. Order matches `EndpointName` order. - `TestOrder`: Vector of Integer of
 #'     length equal to the number of endpoints, containing the testing order for each endpoint. Available for
-#'     Fallback or Fixed Sequence only. Order matches `EndpointName` order. - `TransMax`: Matrix of Numeric of size
+#'     Fallback or Fixed Sequence only. Order matches `EndpointName` order. - `TransMat`: Matrix of Numeric of size
 #'     equal to the number of endpoints x the number of endpoints, containing the transitions for Alpha
 #'     propagation. Available for GMCP only. Order matches `EndpointName` order.}
 #'   \item{EffFlg}{Matrix of Integer. Matrix of size equal to the number of analysis looks (rows) x the number of
 #'     endpoints (columns), containing the efficacy flag indicating which endpoint is selected for efficacy testing
 #'     at which analysis. Columns order matches `EndpointName` order. Possible values: - `1`: Test for efficacy. -
 #'     `0`: Do not test.}
-#'   \item{NumEndpointLooks}{Named list of Integer. Number of planned analysis looks for each endpoint. Names and
+#'   \item{NumEndpointLooks}{Numeric vector of planned analysis looks per endpoint (column sums of EffFlg). Names and
 #'     order match `EndpointName`.}
 #'   \item{FutFlg}{Matrix of Integer. Matrix of size equal to the number of analysis looks (rows) x the number of
 #'     endpoints (columns), containing the futility flag indicating which endpoint is selected for futility testing

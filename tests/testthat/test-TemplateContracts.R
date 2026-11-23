@@ -132,7 +132,7 @@ test_that( "all templates accept their engine-supplied arguments", {
             "DropParam", "UserParam" ),
         "GenerateArrivalTimes.MEP.R" = list(
             Engine = c( "NumPat", "NumPrd", "PrdStart", "AccrRate", "UserParam" ),
-            Template = c( "NumPat", "NumPrd", "PrdStart", "AccrRate", "UserParam", "Type" )
+            Template = c( "NumPat", "NumPrd", "PrdStart", "AccrRate", "UserParam" )
         ),
         "GenerateArrivalTimes.R" = c( "NumSub", "NumPrd", "PrdStart", "AccrRate", "UserParam" ),
         "Initialize.R" = c( "Seed", "UserParam" ),

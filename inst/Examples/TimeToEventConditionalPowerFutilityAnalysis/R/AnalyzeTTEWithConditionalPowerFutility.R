@@ -156,6 +156,10 @@ AnalyzeTTEWithConditionalPowerFutility <- function( SimData, DesignParam, LookIn
     dEffBdry <- stats::qnorm( DesignParam$Alpha )
     if ( !is.null( LookInfo ) && !is.null( LookInfo$EffBdry ) ) {
         dEffBdry <- LookInfo$EffBdry[ nQtyOfLooks ]
+        if ( !is.null( LookInfo$EffBdryScale ) && LookInfo$EffBdryScale == 1 ) {
+            # Boundary supplied on the p-value scale; convert to the left-tail Z scale.
+            dEffBdry <- stats::qnorm( dEffBdry )
+        }
     } else if ( !is.null( DesignParam$CriticalPoint ) ) {
         dEffBdry <- DesignParam$CriticalPoint
     }

@@ -26,7 +26,7 @@
 #' @return Named list containing the outputs returned by this example.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
-#'     subject, in the same order as TreatmentID.}
+#'     subject (length `NumSub`). Subjects are randomized after arrival times are generated.}
 #'   \item{nQtyOfRates}{Integer vector repeating the number of accrual rates for each subject; an example-specific
 #'     custom output.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
@@ -107,10 +107,11 @@ SimulateAccrualTimesWithConstantRate <- function( dPatsPerUnitTime, dPeriodStart
     if ( dPatsPerUnitTime == 0 ) {
         return( numeric( 0 ) )
     }
+    nMaxQtyPatsInThisTimeUnit <- stats::qpois( 0.9999, dPatsPerUnitTime ) + 10
+    vIntraArrivalTime <- stats::rexp( dQtyOfUnitsOfTime * nMaxQtyPatsInThisTimeUnit, dPatsPerUnitTime )
 
-    # Conditional on the Poisson count, arrivals are sorted uniform times within this period.
-    nSubjectsInPeriod <- stats::rpois( 1, dPatsPerUnitTime * dQtyOfUnitsOfTime )
-    vTimes <- sort( stats::runif( nSubjectsInPeriod, min = 0, max = dQtyOfUnitsOfTime ) )
+    vTimes <- cumsum( vIntraArrivalTime )
+    vTimes <- vTimes[ vTimes < dQtyOfUnitsOfTime ]
     vTimes <- vTimes + dPeriodStartTime
 
     return( vTimes )

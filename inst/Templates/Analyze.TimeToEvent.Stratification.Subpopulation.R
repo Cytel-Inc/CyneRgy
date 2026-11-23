@@ -81,31 +81,32 @@
 #'     Sample`. Only available if `Test Type = One-sided` and `Tail Type = Right-tailed`, or `Test Type = Two-sided
 #'     symmetric/asymmetric`.}
 #'   \item{SampleSize}{Integer planned total sample size of the trial.}
-#'   \item{LookFixOption}{Integer. Look option: - `0`: Event-based. - `1`: Time-based. East Horizon Explore: Not
-#'     available. East Horizon Design: Only available for `Time-to-Event` tests.}
+#'   \item{LookFixOption}{Integer. Look option: - `0`: Event-based. - `1`: Time-based. East Horizon Explore: Available for
+#'     non-MAMS designs. East Horizon Design: Only available for `Time-to-Event` tests.}
 #'   \item{MaxEvents}{Integer maximum number of events in the trial.}
-#'   \item{MaxStudyDur}{Integer. Maximum study duration. East Horizon Explore: Not available. East Horizon Design:
-#'     Only available for `Time-to-Event` tests with `Look Fix Option = 1 (Time-based)`.}
+#'   \item{MaxStudyDur}{Numeric. Maximum study duration; may be `Inf` when no maximum is set. East Horizon Explore:
+#'     Available for non-MAMS designs. East Horizon Design: Only available for `Time-to-Event` tests with `Look Fix
+#'     Option = 1 (Time-based)`.}
 #'   \item{FollowUpType}{Integer. Follow-up type: - `0`: Until the end of the study. - `1`: For a fixed period.
 #'     East Horizon Explore: Only available for `Endpoint Type = Time-to-Event`. East Horizon Design: Only
 #'     available for `Time-to-Event` tests.}
 #'   \item{FollowUpDur}{Numeric. Follow-up duration. East Horizon Explore: Only available for `Endpoint Type =
 #'     Time-to-Event`. East Horizon Design: Only available for `Time-to-Event` tests.}
 #'   \item{TestStatType}{Integer survival test statistic type: 0 = logrank; 1 = Wilcoxon Gehan; 2 = Harrington Fleming; 3, 4,
-#'     and 5 are the corresponding stratified tests. Available in East Horizon Design.
+#'     and 5 are the corresponding stratified tests. Available in East Horizon Explore and Design.
 #'   }
-#'   \item{HFParam1}{Numeric. First parameter of Harrington Fleming. East Horizon Explore: Not available. East
-#'     Horizon Design: Only available for `Time-to-Event` tests.}
-#'   \item{HFParam2}{Numeric. Second parameter of Harrington Fleming. East Horizon Explore: Not available. East
-#'     Horizon Design: Only available for `Time-to-Event` tests.}
+#'   \item{HFParam1}{Numeric. First parameter of Harrington Fleming; meaningful only when `TestStatType = 2`. Available
+#'     for two-arm and stratified `Time-to-Event` tests in East Horizon Explore and Design.}
+#'   \item{HFParam2}{Numeric. Second parameter of Harrington Fleming; meaningful only when `TestStatType = 2`. Available
+#'     for two-arm and stratified `Time-to-Event` tests in East Horizon Explore and Design.}
 #'   \item{TrtEffNull}{Numeric null treatment effect on the log hazard-ratio scale; 0 for superiority.
 #'   }
-#'   \item{NumHzrdPrd}{Integer. Number of Hazard pieces. East Horizon Explore: Not available. East Horizon Design:
-#'     Only available for `Time-to-Event` tests.}
-#'   \item{PrdAt}{Numeric. Period starting value. East Horizon Explore: Not available. East Horizon Design: Only
-#'     available for `Time-to-Event` tests.}
-#'   \item{LambdaC}{Numeric. Control Hazard rate. East Horizon Explore: Not available. East Horizon Design: Only
-#'     available for `Time-to-Event` tests.}
+#'   \item{NumHzrdPrd}{Integer. Number of hazard pieces. Available for two-arm and stratified `Time-to-Event` tests in East
+#'     Horizon Explore and Design.}
+#'   \item{PrdAt}{Numeric vector. Starting time of each hazard piece. Available for two-arm and stratified
+#'     `Time-to-Event` tests in East Horizon Explore and Design.}
+#'   \item{LambdaC}{Numeric vector. Control hazard rate for each hazard piece. Available for two-arm and stratified
+#'     `Time-to-Event` tests in East Horizon Explore and Design.}
 #'   \item{MaxCompleters}{Integer maximum number of completers. Set to NA for time-to-event tests.}
 #'   \item{RespLag}{Numeric response lag. Set to NA for time-to-event tests.}
 #'   \item{VarType}{Integer variance type. Set to NA when not applicable.}
@@ -244,24 +245,17 @@
 #'     the full population and each subpopulation, using the population names defined by the design.}
 #'   \item{HR}{Named list of estimated treatment-to-control hazard ratios, with one element for the full
 #'     population and each subpopulation, using the population names defined by the design.}
-#'   \item{Delta}{Estimated log hazard ratio (natural logarithm of HR).}
+#'   \item{Delta}{Estimated treatment-to-control hazard ratio (HR scale, not log HR), used for Delta-scale
+#'     futility.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
-#'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
-#'     conditional-power rule uses the estimated effect and its standard error.}
-#'   \item{CtrlCompleters}{Number of completers in the control arm. Required when the selected conditional-power
-#'     rule uses the estimated treatment effect.}
-#'   \item{TrmtCompleters}{Number of completers in the experimental arm. Required when the selected
-#'     conditional-power rule uses the estimated treatment effect.}
-#'   \item{CtrlPi}{Observed proportion of responders in the control arm. Return only when required by the selected
-#'     conditional-power rule.}
 #' }
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
-#'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility.
+#'   the engine apply its boundaries. Delta may also be required
+#'   for Delta-scale or conditional-power futility.
 #'
 #' SimData also contains the subject-level stratification-factor columns named in DesignParam$StratFactors. When
 #'   subpopulations are enabled, Decision, TestStat, and HR are named lists with one element for the full

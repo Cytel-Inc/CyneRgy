@@ -167,12 +167,11 @@ AnalyzeUsingMMRM <- function( SimData, DesignParam, LookInfo = NULL, UserParam =
             )
         } else {
             warning( "Treatment coefficient not found: ", strTrtRow )
-            nErrorCode <- 1
             dPValue <- 1.0
         }
     } else {
+        # Model fit failed: keep the simulation and treat it as no rejection.
         dPValue <- 1.0
-        nErrorCode <- 1
     }
 
     # Step 4: Obtain group‐sequential alpha ####

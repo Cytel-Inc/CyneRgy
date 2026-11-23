@@ -121,7 +121,7 @@
 #'   \item{TestStat}{Named list of numeric test statistics on the Wald (Z) scale, with one element for
 #'     the full population and each subpopulation, using the population names defined by the design.}
 #'   \item{HR}{Named list of estimated hazard ratios for the full population and each subpopulation.}
-#'   \item{dHR}{Alias of HR retained for existing custom reports.}
+#'   \item{dHR}{Copy of HR kept for backward compatibility. East Horizon reads HR, not dHR.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current

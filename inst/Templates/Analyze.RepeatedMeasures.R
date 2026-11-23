@@ -213,8 +213,7 @@
 #'     simulations.}
 #' }
 #' @details For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
-#'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility.
+#'   the engine apply its boundaries. PrimDelta or SecDelta may also be required for Delta-scale futility.
 #' @details
 #' ## CyneRgy Decision Helpers
 #'

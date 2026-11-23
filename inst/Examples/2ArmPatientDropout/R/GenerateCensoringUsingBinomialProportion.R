@@ -3,7 +3,7 @@
 #' @title Generate dropout indicators for binary or continuous outcomes
 #' @description Generate censoring indicator ( CensorInd ) for 2 arm designs with Normal and Binomial Endpoint
 #'   using a single dropout probability.
-#' @author Shubham Lahoti
+#' @author Shubham Lahoti, J. Kyle Wathen
 #' @param NumSub Integer number of subjects in the trial.
 #' @param ProbDrop Numeric dropout probability for a two-arm design, shared by both arms; for a multi-arm design, a
 #'   numeric vector of length NumArm with the control probability first and experimental-arm probabilities
@@ -21,9 +21,6 @@
 #'     simulations.}
 #' }
 #' @details These binary/continuous dropout functions return CensorInd for standard binary and continuous outcomes.
-#'   Vaccine-efficacy binary designs instead use DropOutTime and also supply NumArm = 2 and FollowUpDur (the
-#'   follow-up time at which the dropout probability applies). Extend the function signature and generation logic
-#'   before using it for that case.
 ######################################################################################################################## .
 
 GenerateCensoringUsingBinomialProportion <- function( NumSub, ProbDrop, UserParam = NULL ) {

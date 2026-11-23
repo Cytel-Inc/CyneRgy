@@ -3,7 +3,7 @@
 #' @title Generate dropout for repeated-measures outcomes
 #' @description This function generates dropout time for a Repeated Measures design with Dropout method on East
 #'   Horizon as 'Cumulative Probability of Dropout by Time'.
-#' @author Shubham Lahoti
+#' @author Anusree Sengupta, Srinjoy Mondal, Shubham Lahoti
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
 #' @param NumVisit Integer number of scheduled visits.

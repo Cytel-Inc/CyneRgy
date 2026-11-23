@@ -26,9 +26,6 @@
 #'     simulations.}
 #' }
 #' @details These binary/continuous dropout functions return CensorInd for standard binary and continuous outcomes.
-#'   Vaccine-efficacy binary designs instead use DropOutTime and also supply NumArm = 2 and FollowUpDur (the
-#'   follow-up time at which the dropout probability applies). Extend the function signature and generation logic
-#'   before using it for that case.
 ######################################################################################################################## .
 
 {{FUNCTION_NAME}} <- function( NumSub, ProbDrop, NumArm, TreatmentID, UserParam = NULL ) {

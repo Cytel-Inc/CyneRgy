@@ -38,7 +38,7 @@ test_that( "hazard-ratio confidence limits compare thresholds on the same scale"
     expect_identical( fnAnalyze( dfData, lDesign )$ErrorCode, -1L )
 } )
 
-test_that( "dose-finding analyses retain Dev timing and use current-look proof of concept", {
+test_that( "dose-finding analyses retain Dev timing and use the scalar proof-of-concept threshold", {
     fnAnalyze <- .GetCommonExampleFunction( "DoseFindingAnalysis",
         "AnalyzeDoseFindingContinuousUsingPairwiseTTest.R", "AnalyzeDoseFindingContinuousUsingPairwiseTTest" )
     dfData <- data.frame( ArrivalTime = seq_len( 120 ), TreatmentID = rep( 0:2, 40 ),
@@ -48,7 +48,7 @@ test_that( "dose-finding analyses retain Dev timing and use current-look proof o
     lDesign <- list( NumTreatments = 2, Alpha = 0.025, TailType = 1, VarType = 4,
         IsArmPresent = c( 1, 1 ), RespLag = 10, MaxCompleters = 114 )
     lLook <- list( NumLooks = 2, CurrLookIndex = 1, CumCompleters = c( 90, 114 ),
-        FutBdry = c( NA_real_, NA_real_ ), PoCThreshold = c( 0.1, 0.2 ) )
+        FutBdry = c( NA_real_, NA_real_ ), PoCThreshold = 0.1 )
     lResult <- fnAnalyze( dfData, lDesign, lLook )
     expect_identical( lResult$ErrorCode, 0L )
     expect_equal( lResult$AnalysisTime, 100 )
@@ -177,7 +177,7 @@ test_that( "conditional-power analysis honors the specified final efficacy bound
     expect_equal( lSequential$dConditionalPower, -1 )
 } )
 
-test_that( "MMRM reports a failed model fit as a nonfatal simulation error", {
+test_that( "MMRM keeps Dev no-rejection handling when the model fit fails", {
     skip_if_not_installed( "nlme" )
     skip_if_not_installed( "dplyr" )
     skip_if_not_installed( "tidyr" )
@@ -186,7 +186,7 @@ test_that( "MMRM reports a failed model fit as a nonfatal simulation error", {
     dfData <- data.frame( ArrivalTime = 0, TreatmentID = 0:1,
         Response1 = c( 1, 2 ), Response2 = c( 2, 4 ), ArrTimeVisit1 = 0, ArrTimeVisit2 = 1 )
     lResult <- suppressWarnings( fnAnalyze( dfData, list( TailType = 1, Alpha = 0.025 ) ) )
-    expect_identical( lResult$ErrorCode, 1L )
+    expect_identical( lResult$ErrorCode, 0L )
     expect_true( is.na( lResult$PrimDelta ) )
     expect_equal( lResult$p.value, 1 )
 } )

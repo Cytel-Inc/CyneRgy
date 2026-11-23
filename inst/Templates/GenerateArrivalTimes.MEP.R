@@ -13,13 +13,11 @@
 #'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
 #'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
 #'   functions so East Horizon can identify and populate the required parameters.
-#' @param Type Optional compatibility argument retained for callers of this template. The committed multiple-endpoint
-#'   enrollment engine does not supply or consume it.
 #' @return Named list of supported output elements. Return the fields needed by the chosen analysis or generation
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
-#'     subject, in the same order as TreatmentID.}
+#'     subject (length `NumSub`). Subjects are randomized after arrival times are generated.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
@@ -28,7 +26,7 @@
 
 ######################################################################################################################## .
 
-{{FUNCTION_NAME}} <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL, Type = 0 ) {
+{{FUNCTION_NAME}} <- function( NumPat, NumPrd, PrdStart, AccrRate, UserParam = NULL ) {
     # Step 1 - Initialize the return variables or other variables needed ####
     nErrorCode <- 0
     vPatientArrivalTime <- rep( 0, NumPat ) # Note, as you simulate the patient data put it in this vector so it can be returned

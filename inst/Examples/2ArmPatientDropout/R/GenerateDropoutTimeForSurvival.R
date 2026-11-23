@@ -2,7 +2,7 @@
 #' @name GenerateDropoutTimeForSurvival
 #' @title Generate subject dropout times for survival outcomes
 #' @description The following function generates dropout time for 2-arm survival design.
-#' @author Shubham Lahoti
+#' @author Shubham Lahoti, J. Kyle Wathen
 #' @param NumSub Integer number of subjects in the trial.
 #' @param NumArm Integer number of arms in the trial, including the placebo/control arm and all experimental arms.
 #' @param TreatmentID Integer vector of treatment assignments, with one element per subject: 0 = placebo/control, 1

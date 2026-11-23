@@ -42,7 +42,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 1. [GenerateDrugConcentration.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateDrugConcentration.R) - This file contains the R code for simulating drug concentrations for Example 1.
 
-2. [GenerateResponseEmaxModel.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateResponseEmaxModel.R) - This file contains the R code to simulate treatment effect responses for patients for Example 2. (Note: Contains *GenerateDrugConcentration* function inside)
+2. [GenerateResponseEmaxModel.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/GenerateResponseEmaxModel.R) - This file contains the R code to simulate treatment effect responses for patients for Example 2. (Note: Contains its own *GenerateEmaxDrugConcentration* PK helper function)
 
 3. [PlotEmax.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/PKPDResponseGeneration/R/PlotEmax.R) - This file plots a visual that shows the mean response for each treatment group as a function of time based on the output of *GenerateResponseEmaxModel.R*. It is used to create the Emax over visits plot shown in the Example 2 section below.
 

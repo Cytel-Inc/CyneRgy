@@ -228,24 +228,18 @@
 #'   \item{TestStat}{Numeric test statistic on the Wald (Z) scale.}
 #'   \item{Delta}{Estimated experimental-minus-control treatment effect (proportion difference for binary outcomes;
 #'     mean difference for continuous outcomes).}
-#'   \item{CtrlCompleters}{Number of completers in the control arm. Required when the selected conditional-power
-#'     rule uses the estimated treatment effect.}
-#'   \item{TrmtCompleters}{Number of completers in the experimental arm. Required when the selected
-#'     conditional-power rule uses the estimated treatment effect.}
 #'   \item{AnalysisTime}{Optional numeric calendar time of the analysis: the look time at an interim analysis and
 #'     the study duration at the final analysis. Compute and return this value in the R function.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}
-#'   \item{StdError}{Numeric standard error of the estimated treatment effect. Required when the chosen
-#'     conditional-power rule uses the estimated effect and its standard error.}
 #'   \item{ReEstCompleters}{Integer re-estimated total number of completers, required at the adaptation look.}
 #' }
 #' @details Implement the placeholder sample size re-estimation rule before use.
 #'
 #' For ordinary analysis designs, return either Decision to apply custom stopping logic or TestStat to let
-#'   the engine apply its boundaries. Delta, event/completer counts, and standard errors may also be required for
-#'   Delta-scale or conditional-power futility. At the adaptation look, sample size re-estimation designs also
+#'   the engine apply its boundaries. Delta may also be required
+#'   for Delta-scale or conditional-power futility. At the adaptation look, sample size re-estimation designs also
 #'   require the re-estimated total event/completer count; Decision is not mandatory if TestStat is supplied.
 ######################################################################################################################## .
 

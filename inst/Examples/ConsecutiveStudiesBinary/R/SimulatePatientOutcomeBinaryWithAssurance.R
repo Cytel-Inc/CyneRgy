@@ -47,10 +47,7 @@
 #'   \item{TrueProbabilityExperimental}{Numeric vector of the sampled experimental response probability, repeated
 #'     for all subjects in a simulation.}
 #' }
-#' @details For vaccine-efficacy binary designs, the engine additionally supplies FollowUpDur (numeric follow-up
-#'   duration, used as the assessment time for PropResp) and OneMinusROP (numeric value of 1 minus the
-#'   treatment-to-control ratio of proportions). Include these arguments in the function signature for a
-#'   vaccine-efficacy design. Standard binary responses are coded 0 = non-response and 1 = response.
+#' @details Standard binary responses are coded 0 = non-response and 1 = response.
 ######################################################################################################################## .
 
 SimulatePatientOutcomeBinaryWithAssurance <- function( NumSub, NumArm, ArrivalTime, TreatmentID, PropResp, UserParam = NULL ) {

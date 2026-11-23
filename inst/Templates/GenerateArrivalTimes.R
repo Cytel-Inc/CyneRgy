@@ -17,7 +17,7 @@
 #'   method; additional custom outputs may also be included.
 #' \describe{
 #'   \item{ArrivalTime}{Numeric vector of subject arrival times on the calendar scale, with one element per
-#'     subject, in the same order as TreatmentID.}
+#'     subject (length `NumSub`). Subjects are randomized after arrival times are generated.}
 #'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
 #'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
 #'     simulations.}

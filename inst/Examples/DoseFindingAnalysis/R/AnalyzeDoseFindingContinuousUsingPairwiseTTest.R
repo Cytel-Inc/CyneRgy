@@ -45,9 +45,9 @@
 #'   \item{CumCompleters}{Integer vector of cumulative completer counts, one per look.}
 #'   \item{FutBdry}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the futility boundary
 #'     values for each look.}
-#'   \item{PoCThreshold}{Vector of Numeric. Vector of length `LookInfo$NumLooks`, containing the proof of concept
-#'     (PoC) threshold. East Horizon Explore: Only available for `Study Objective = Dose Finding`. East Horizon
-#'     Design: Not available.}
+#'   \item{PoCThreshold}{Numeric scalar proof of concept (PoC) threshold, applied at every look.
+#'     East Horizon Explore: Only available for `Study Objective = Dose Finding`. East Horizon Design: Not
+#'     available.}
 #' }
 #' @param OutList Optional named list used to pass outputs between analysis looks. Return it at one look to receive
 #'   the same list as input at the next look; the input is NULL at the first look. Access elements by name.
@@ -82,7 +82,7 @@
 #' }
 #' @details OutList carries vPOCStatusArm (one proof-of-concept status per experimental arm) and dOverallPOC
 #'   (overall proof-of-concept status) from the previous look. The first look starts with zero statuses. The
-#'   current-look PoCThreshold is applied to isotonic treatment-effect estimates. Analysis timing includes RespLag.
+#'   PoCThreshold is applied to isotonic treatment-effect estimates. Analysis timing includes RespLag.
 ######################################################################################################################## .
 
 AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam, LookInfo = NULL, OutList = NULL, UserParam = NULL ) {
@@ -99,7 +99,7 @@ AnalyzeDoseFindingContinuousUsingPairwiseTTest <- function( SimData, DesignParam
     nNumLooks <- LookInfo$NumLooks
     nCurrLookIndex <- LookInfo$CurrLookIndex
     vFutBdry <- LookInfo$FutBdry
-    dPoCThreshold <- LookInfo$PoCThreshold[ nCurrLookIndex ]
+    dPoCThreshold <- LookInfo$PoCThreshold
     vCumCompleters <- LookInfo$CumCompleters
 
     vDecision <- rep( 0L, nNumTrt )
