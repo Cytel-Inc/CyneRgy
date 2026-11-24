@@ -154,13 +154,13 @@ A single analysis is conducted once 50% of patients have experienced the event o
 ```{r  echo=FALSE,  warning=FALSE, include = FALSE}
 ######################################################################################################################## .
 # Example 3 Post Process                                                                                               ####
-# This file provides functions and R Code example to post process the East output for useful graphs and numeric values ####
+# This file provides functions and R Code example to post process the East Horizon output for useful graphs and numeric values ####
 # 
 ######################################################################################################################## .
 library(readr)
 
 dfEastResultsEx1 <- read_csv("Outputs/Example1/Example1.csv")
-vGo       <- ifelse( dfEastResultsEx1$BdryStopCode == 2, 1, 0)
+vGo       <- as.integer( dfEastResultsEx1$BdryStopCode %in% c( 1L, 2L ) )
 dProbGo   <- mean( vGo )  # Pr( Go )
 ```
 
@@ -168,7 +168,7 @@ The probability of a Go decision is `r round( dProbGo*100, 0)`% and the probabil
 
 ```{r echo = FALSE, warning = FALSE}
 # Get trials that are successful so we can build posterior of true delta when a Go decision is made
-dfSuccess <- dfEastResultsEx1[ dfEastResultsEx1$BdryStopCode==2, ]
+dfSuccess <- dfEastResultsEx1[ dfEastResultsEx1$BdryStopCode %in% c( 1L, 2L ), ]
 dfDensity <- density( log( dfSuccess$TrueHR) )
 
 vY <- dfDensity$y

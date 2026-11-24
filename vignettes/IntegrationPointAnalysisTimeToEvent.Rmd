@@ -651,6 +651,6 @@ Explore the following examples for more context:
     - [AnalyzeStratification.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeStratification.R)
     - [AnalyzeSubpopulation.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmTimeToEventOutcomeAnalysis/R/AnalyzeSubpopulation.R)
 2. [**Time-To-Event Weighted Conditional Power Futility Analysis**](TimeToEventConditionalPowerFutilityAnalysis.html)
-    - [AnalzyeTTEWithConditinalPowerFutility.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R)
+    - [AnalyzeTTEWithConditionalPowerFutility.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalyzeTTEWithConditionalPowerFutility.R)
 3. [**Multiple Arm, Analysis**](MultiArmAnalysis.html)
     - [AnalyzeMultiArmUsingLogrankTestBonferroni.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/MultiArmAnalysis/R/AnalyzeMultiArmUsingLogrankTestBonferroni.R)

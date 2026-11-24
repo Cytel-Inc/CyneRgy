@@ -67,6 +67,10 @@ test_that( "RunExample copies installed examples outside the package library and
 test_that( "Every example has a matching project and concise introduction instructions", {
     strExamplesPath <- system.file( "Examples", package = "CyneRgy" )
     vExamples       <- list.dirs( strExamplesPath, recursive = FALSE, full.names = FALSE )
+    # Empty directories in a source checkout are not part of the installed examples.
+    vExamples <- vExamples[ vapply( vExamples, function( strExample ) {
+        return( length( list.files( file.path( strExamplesPath, strExample ), recursive = TRUE ) ) > 0 )
+    }, logical( 1 ) ) ]
 
     for( strExample in vExamples )
     {

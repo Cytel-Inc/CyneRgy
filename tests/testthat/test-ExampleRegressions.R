@@ -1,0 +1,301 @@
+#################################################################################################### .
+#   Description: Regression checks for example calculations and integration-point outputs.
+#################################################################################################### .
+
+test_that( "binary analyses compare experimental and control proportions with unequal arm sizes", {
+    dfData <- data.frame(
+        TreatmentID = c( rep( 0, 20 ), rep( 1, 40 ) ),
+        Response = c( rep( 1, 8 ), rep( 0, 12 ), rep( 1, 32 ), rep( 0, 8 ) )
+    )
+    lDesign <- list( TailType = 1, CriticalPoint = 1.96, MaxCompleters = 60 )
+    lExpected <- stats::prop.test( c( 32, 8 ), c( 40, 20 ),
+        alternative = "greater", correct = FALSE )
+    lResult <- AnalyzeUsingPropTest( dfData, lDesign )
+    expect_equal( lResult$TestStat, stats::qnorm( 1 - lExpected$p.value ) )
+    expect_identical( lResult$Decision, 2L )
+
+    lExpectedCI <- stats::prop.test( c( 32, 8 ), c( 40, 20 ), correct = FALSE,
+        conf.level = 0.9 )
+    lResultCI <- AnalyzeUsingPropLimitsOfCI( dfData, lDesign,
+        UserParam = list( dConfLevel = 0.9, dLowerLimit = 0.1, dUpperLimit = 0 ) )
+    expect_equal( lResultCI$Delta, 0.4 )
+    expect_equal( lResultCI$TestStat, unname( lExpectedCI$conf.int[ 1 ] ) )
+} )
+
+test_that( "treatment selection supports one experimental arm and constant binary outcomes", {
+    vFunctions <- c( "SelectExpThatAreBetterThanCtrl", "SelectExpUsingBayesianRule",
+        "SelectExpWithPValueLessThanSpecified", "SelectSpecifiedNumberOfExpWithHighestResponses" )
+    for ( strFunction in vFunctions ) {
+        fnSelect <- .GetCommonExampleFunction( "TreatmentSelection", paste0( strFunction, ".R" ),
+            strFunction )
+        for ( nResponse in 0:1 ) {
+            dfData <- data.frame( TreatmentID = rep( 0:1, each = 20 ), Response = nResponse )
+            # A constant outcome has no chi-squared information; the example falls back to an arm.
+            lResult <- suppressWarnings( fnSelect( dfData, list(), list() ) )
+            expect_identical( lResult$ErrorCode, 0L, info = strFunction )
+            expect_identical( lResult$TreatmentID, 1L, info = strFunction )
+            expect_length( lResult$AllocRatio, 1 )
+        }
+    }
+} )
+
+test_that( "stratified survival responses retain the original subject and arm order", {
+    set.seed( 94 )
+    dfSubjects <- expand.grid( TreatmentID = 0:1, StratumID = 2:1, Replicate = seq_len( 2000 ) )
+    mHazards <- matrix( c( 0.2, 2, 2, 0.2 ), nrow = 2, byrow = TRUE )
+    fnGenerate <- .GetCommonExampleFunction( "2ArmTimeToEventOutcomePatientSimulation",
+        "SimulatePatientOutcomeStratification.R", "SimulatePatientOutcomeStratification" )
+    lResult <- fnGenerate( nrow( dfSubjects ), 2, rep( 0, nrow( dfSubjects ) ),
+        dfSubjects$TreatmentID, dfSubjects$StratumID, 1, 1, 0, mHazards )
+    expect_identical( lResult$ErrorCode, 0L )
+    for ( nStratum in 1:2 ) {
+        for ( nArm in 0:1 ) {
+            vResponses <- lResult$SurvivalTime[ dfSubjects$StratumID == nStratum &
+                dfSubjects$TreatmentID == nArm ]
+            expect_equal( mean( vResponses ) * mHazards[ nStratum, nArm + 1 ], 1, tolerance = 0.06 )
+        }
+    }
+} )
+
+test_that( "survival assurance accepts the same mixture sampling weights as continuous assurance", {
+    set.seed( 95 )
+    fnGenerate <- .GetCommonExampleFunction( "BayesianAssuranceTimeToEvent",
+        "SimulatePatientSurvivalAssurance.R", "SimulatePatientSurvivalAssurance" )
+    lUser <- list( dWeight1 = 2, dWeight2 = 0, dPriorMean = -0.7, dPriorSD = 0,
+        dAlpha = 2, dBeta = 2, dUpper = 0, dLower = -1, dMeanTTECtrl = 1 )
+    lResult <- fnGenerate( 20, 2, rep( 0, 20 ), rep( 0:1, 10 ), 1, 1, 0,
+        matrix( c( 1, 1 ), nrow = 1 ), lUser )
+    expect_identical( lResult$ErrorCode, 0L )
+    expect_equal( lResult$TrueHR, rep( exp( -0.7 ), 20 ) )
+} )
+
+test_that( "assurance generators report treatment effects when the control mean is nonzero", {
+    vExamples <- c( "BayesianAssuranceContinuous", "ConsecutiveStudiesContinuous",
+        "ConsecutiveStudiesContinuousTimeToEvent" )
+    lUser <- list( dWeight1 = 1, dWeight2 = 0, dMean1 = 0.5, dMean2 = 1,
+        dSD1 = 0, dSD2 = 0, dMeanCtrl = 10, dSDCtrl = 0, dSDExp = 0 )
+    for ( strExample in vExamples ) {
+        fnGenerate <- .GetCommonExampleFunction( strExample, "SimulatePatientOutcomeNormalAssurance.R",
+            "SimulatePatientOutcomeNormalAssurance" )
+        lResult <- fnGenerate( 4, rep( 0, 4 ), c( 0, 1, 0, 1 ), c( 10, 11 ), c( 0, 0 ), lUser )
+        expect_identical( lResult$ErrorCode, 0L, info = strExample )
+        expect_equal( lResult$Response, c( 10, 10.5, 10, 10.5 ), info = strExample )
+        expect_equal( lResult$vTrueDelta, rep( 0.5, 4 ), info = strExample )
+        expect_identical( lResult$Delta, lResult$vTrueDelta, info = strExample )
+
+        fnAnalyze <- .GetCommonExampleFunction( strExample, "AnalyzeUsingBayesianNormals.R",
+            "AnalyzeUsingBayesianNormals" )
+        dfGenerated <- data.frame( lResult[ setdiff( names( lResult ), "ErrorCode" ) ],
+            TreatmentID = c( 0, 1, 0, 1 ) )
+        lAnalysisUser <- list( dPriorMeanCtrl = 10, dPriorStdDevCtrl = 1,
+            dPriorMeanExp = 10.5, dPriorStdDevExp = 1, dSigma = 1,
+            dMAV = 0, dPU = 0.8, dPUFutility = 0.8 )
+        lAnalyzed <- fnAnalyze( dfGenerated, list( TailType = 1 ), UserParam = lAnalysisUser )
+        expect_identical( lAnalyzed$ErrorCode, 0L, info = strExample )
+
+        fnFromPrior <- .GetCommonExampleFunction( strExample, "SimulatePatientOutcomeNormalAssurance.R",
+            "SimulatePatientOutcomeNormalAssuranceUsingPriorInput" )
+        envPrior <- environment( fnFromPrior )
+        envPrior$vPrior <- c( 10.75, 11 )
+        envPrior$nSimIndex <- 1
+        lFromPrior <- fnFromPrior( 4, rep( 0, 4 ), c( 0, 1, 0, 1 ), c( 10, 11 ), c( 0, 0 ), lUser )
+        expect_equal( lFromPrior$Delta, rep( 0.75, 4 ), info = strExample )
+        expect_equal( envPrior$nSimIndex, 2, info = strExample )
+    }
+} )
+
+test_that( "binary and normal SSR analyses honor lower efficacy boundaries without adaptation", {
+    fnBinary <- .GetCommonExampleFunction( "2ArmBinaryOutcomeAnalysis", "AnalyzeBinarySSR.R",
+        "AnalyzeBinarySSR" )
+    fnNormal <- .GetCommonExampleFunction( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR.R",
+        "AnalyzeNormalSSR" )
+    dfData <- data.frame( TreatmentID = rep( 0:1, each = 50 ), ArrivalTime = seq_len( 100 ) / 10 )
+    dfBinary <- dfData
+    dfBinary$Response <- c( rep( 1, 45 ), rep( 0, 5 ), rep( 1, 5 ), rep( 0, 45 ) )
+    dfNormal <- dfData
+    dfNormal$Response <- c( seq( 2, 4, length.out = 50 ), seq( -1, 1, length.out = 50 ) )
+    lDesign <- list( TailType = 0, CriticalPoint = -1.96, MaxCompleters = 100, RespLag = 2 )
+    for ( lCase in list( list( fnBinary, dfBinary ), list( fnNormal, dfNormal ) ) ) {
+        lResult <- lCase[[ 1 ]]( lCase[[ 2 ]], lDesign )
+        expect_identical( lResult$ErrorCode, 0L )
+        expect_lt( lResult$TestStat, -1.96 )
+        expect_identical( lResult$Decision, 1L )
+        expect_identical( lResult$ReEstCompleters, 100L )
+    }
+} )
+
+test_that( "SSR analyses use completers only and ignore dropout columns", {
+    fnAnalyze <- .GetCommonExampleFunction( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR.R",
+        "AnalyzeNormalSSR" )
+    dfData <- data.frame( TreatmentID = rep( 0:1, 12 ), ArrivalTime = seq_len( 24 ),
+        Response = c( seq_len( 12 ), rep( 1000, 12 ) ), CensorInd = c( 0, rep( 1, 23 ) ) )
+    lDesign <- list( TailType = 1, CriticalPoint = 1.96, MaxCompleters = 20, RespLag = 100 )
+    lLook <- list( NumLooks = 2, CurrLookIndex = 1, InfoFrac = c( 0.5, 1 ),
+        EffBdry = c( 2.5, 1.96 ), RejType = 0 )
+    lResult <- fnAnalyze( dfData, lDesign, LookInfo = lLook )
+    expect_equal( lResult$AnalysisTime, 110 )
+    # Only the first 10 subjects have a response by time 110; arrived subjects in the pipeline are excluded.
+    expect_equal( lResult$Delta, mean( c( 2, 4, 6, 8, 10 ) ) - mean( c( 1, 3, 5, 7, 9 ) ) )
+    expect_identical( lResult$ReEstCompleters, 20L )
+    names( dfData )[ names( dfData ) == "CensorInd" ] <- "CensorIndOrg"
+    expect_equal( fnAnalyze( dfData, lDesign, LookInfo = lLook ), lResult )
+
+    lAdapt <- list( AdaptInterimNum = 1, SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
+        MaxSSMultInp = list( MaxSSMult = 1.5 ) )
+    lAdapted <- fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )
+    expect_identical( lAdapted$ReEstCompleters, 30L )
+} )
+
+test_that( "SSR analyses move post-adaptation looks to the re-estimated sample size", {
+    fnAnalyze <- .GetCommonExampleFunction( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR.R",
+        "AnalyzeNormalSSR" )
+    set.seed( 96 )
+    dfData <- data.frame( TreatmentID = rep( 0:1, 200 ), ArrivalTime = seq_len( 400 ),
+        Response = stats::rnorm( 400 ) )
+    lDesign <- list( TailType = 1, MaxCompleters = 200, RespLag = 10 )
+    lAdapt <- list( AdaptInterimNum = 1, SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
+        MaxSSMultInp = list( MaxSSMult = 1.5 ) )
+    vAnalysisTime <- c( )
+    for ( nLook in 1:3 ) {
+        lLook <- list( NumLooks = 3, CurrLookIndex = nLook, InfoFrac = c( 0.5, 0.75, 1 ),
+            CumCompleters = c( 100L, 150L, 200L ), EffBdry = c( 10, 10, 0.5 ), RejType = 0 )
+        lResult <- fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )
+        expect_identical( lResult$ErrorCode, 0L )
+        expect_identical( lResult$ReEstCompleters, 300L )
+        vAnalysisTime <- c( vAnalysisTime, lResult$AnalysisTime )
+    }
+    # Engine look positions: 100, round( 100 + 2 * ( 150 - 100 ) ) = 200, then the re-estimated 300.
+    expect_equal( vAnalysisTime, c( 100, 200, 300 ) + 10 )
+
+    lLook$AdaptInterimNum <- NULL
+    lLook$CurrLookIndex <- 3
+    expect_identical( fnAnalyze( dfData, lDesign, LookInfo = lLook )$AnalysisTime, 210 )
+    expect_identical( fnAnalyze( dfData[ 1:250, ], lDesign, LookInfo = lLook,
+        AdaptInfo = lAdapt )$AnalysisTime, 260 )
+} )
+
+test_that( "SSR analyses reject missing adaptation look and step cut-points", {
+    skip_if_not_installed( "survival" )
+    lLook <- list( NumLooks = 2, CurrLookIndex = 1, InfoFrac = c( 0.5, 1 ), EffBdry = c( 3, 2 ), RejType = 0 )
+    lStep <- list( From = c( 0.3, NA ), To = c( NA, 0.9 ), MaxSSMult = c( 1.2, 1.5 ),
+        MaxEventsMult = c( 1.2, 1.5 ) )
+    for ( vCase in list(
+        c( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR" ),
+        c( "2ArmBinaryOutcomeAnalysis", "AnalyzeBinarySSR" ),
+        c( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeTTESSR" )
+    ) ) {
+        fnAnalyze <- .GetCommonExampleFunction( vCase[ 1 ], paste0( vCase[ 2 ], ".R" ), vCase[ 2 ] )
+        dfData <- data.frame( TreatmentID = rep( 0:1, 20 ), ArrivalTime = seq_len( 40 ),
+            Response = rep( 0:1, 20 ), SurvivalTime = seq_len( 40 ) )
+        lDesign <- list( TailType = 1, MaxCompleters = 40, MaxEvents = 40, RespLag = 1 )
+        lAdapt <- list( AdaptInterimNum = 1, SSRFuncScale = 1, MaxSSMultInp = lStep )
+        expect_identical( fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )$ErrorCode, -1L,
+            info = vCase[ 2 ] )
+        for ( nAdaptLook in list( NULL, NA, 0, 2 ) ) {
+            lAdapt <- list( AdaptInterimNum = nAdaptLook, SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
+                MaxSSMultInp = list( MaxSSMult = 1.5, MaxEventsMult = 1.5 ) )
+            expect_identical( fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )$ErrorCode, -2L,
+                info = vCase[ 2 ] )
+        }
+    }
+} )
+
+test_that( "survival SSR uses a signed logrank statistic and the native event multiplier", {
+    skip_if_not_installed( "survival" )
+    set.seed( 91 )
+    dfData <- data.frame( TreatmentID = rep( 0:1, each = 100 ), ArrivalTime = 0,
+        SurvivalTime = c( stats::rexp( 100, 1 ), stats::rexp( 100, 0.25 ) ) )
+    fnAnalyze <- .GetCommonExampleFunction( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeTTESSR.R",
+        "AnalyzeTTESSR" )
+    lDesign <- list( TailType = 0, CriticalPoint = -1.96, MaxEvents = 100 )
+    lResult <- fnAnalyze( dfData, lDesign )
+    dfObserved <- dfData
+    dfObserved$Event <- dfObserved$SurvivalTime <= lResult$AnalysisTime
+    dfObserved$Time <- pmin( dfObserved$SurvivalTime, lResult$AnalysisTime )
+    cExpected <- survival::survdiff( survival::Surv( Time, Event ) ~ TreatmentID, data = dfObserved )
+    expect_equal( lResult$TestStat, -sqrt( cExpected$chisq ) )
+    expect_identical( lResult$Decision, 1L )
+    expect_identical( lResult$ReEstEvents, 100L )
+
+    lLook <- list( NumLooks = 2, CurrLookIndex = 1, InfoFrac = c( 0.5, 1 ),
+        EffBdry = c( -3, -1.96 ), RejType = 2 )
+    lAdapt <- list( AdaptInterimNum = 1, SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
+        MaxSSMultInp = list( MaxSSMult = 9, MaxEventsMult = 1.5 ) )
+    lAdapted <- fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )
+    expect_identical( lAdapted$ReEstEvents, 150L )
+
+    fnStratified <- .GetCommonExampleFunction( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeStratification.R",
+        "AnalyzeStratification" )
+    dfData$Region <- rep( 1:2, 100 )
+    lDesign$TestStratFactors <- "Region"
+    lStratified <- fnStratified( dfData, lDesign )
+    expect_lt( lStratified$TestStat, -1.96 )
+    expect_identical( lStratified$Decision, 1L )
+} )
+
+test_that( "Cox assurance analyses support partial optional parameters and sequential boundaries", {
+    skip_if_not_installed( "survival" )
+    set.seed( 92 )
+    dfData <- data.frame( TreatmentID = rep( 0:1, each = 100 ), ArrivalTime = 0,
+        SurvivalTime = c( stats::rexp( 100, 1 ), stats::rexp( 100, 0.25 ) ), TrueHR = 0.25 )
+    lDesign <- list( TailType = 0, Alpha = 0.025, MaxEvents = 100 )
+    lLook <- list( NumLooks = 2, CurrLookIndex = 1, CumEvents = c( 100, 150 ),
+        EffBdry = c( -20, -1.96 ), RejType = 2 )
+    for ( strExample in c( "BayesianAssuranceTimeToEvent", "ConsecutiveStudiesContinuousTimeToEvent" ) ) {
+        fnAnalyze <- .GetCommonExampleFunction( strExample, "AnalyzeSurvivalDataUsingCoxPH.R",
+            "AnalyzeSurvivalDataUsingCoxPH" )
+        lResult <- fnAnalyze( dfData, lDesign, UserParam = list() )
+        expect_identical( lResult$Decision, 1L, info = strExample )
+        expect_equal( lResult$TrueHR, 0.25, info = strExample )
+        lInterim <- fnAnalyze( dfData, lDesign, LookInfo = lLook,
+            UserParam = list( bReturnNAForNoGoTrials = TRUE ) )
+        expect_identical( lInterim$Decision, 0L, info = strExample )
+        expect_true( is.na( lInterim$TrueHR ), info = strExample )
+        lPValueLook <- lLook
+        lPValueLook$EffBdryScale <- 1
+        lPValueLook$EffBdry <- c( 1e-50, 0.025 )
+        lPValueInterim <- fnAnalyze( dfData, lDesign, LookInfo = lPValueLook )
+        expect_identical( lPValueInterim$Decision, 0L, info = strExample )
+    }
+} )
+
+test_that( "repeated-measures analysis preserves subject baselines with two, three, or five visits", {
+    skip_if_not_installed( "nlme" )
+    set.seed( 93 )
+    fnAnalyze <- .GetCommonExampleFunction( "2ArmNormalRepeatedMeasuresResponseGeneration",
+        "RepeatedMeasuresAnalysisUsingRPackage.R", "MMRMAna" )
+    for ( nVisits in c( 2, 3, 5 ) ) {
+        dfData <- data.frame( TreatmentID = rep( 0:1, each = 50 ), Response1 = stats::rnorm( 100 ) )
+        for ( nVisit in 2:nVisits ) {
+            dfData[[ paste0( "Response", nVisit ) ]] <- 0.8 * dfData$Response1 +
+                2 * dfData$TreatmentID + stats::rnorm( 100 )
+        }
+        lResult <- fnAnalyze( dfData, list( NumVisit = nVisits ) )
+        lShuffled <- fnAnalyze( dfData[ sample( seq_len( 100 ) ), ], list( NumVisit = nVisits ) )
+        expect_identical( lResult$ErrorCode, 0L )
+        expect_gt( lResult$TestStat, 5 )
+        expect_equal( lResult$TestStat, lShuffled$TestStat, tolerance = 1e-4 )
+        if ( nVisits == 2 ) {
+            cExpected <- stats::lm( Response2 ~ Response1 + TreatmentID, data = dfData )
+            dOneSidedP <- summary( cExpected )$coefficients[ "TreatmentID", "Pr(>|t|)" ] / 2
+            expect_equal( stats::pnorm( lResult$TestStat, lower.tail = FALSE ), dOneSidedP,
+                tolerance = 1e-8 )
+        }
+        expect_equal( lResult$PrimDelta, 0 )
+        expect_equal( lResult$SecDelta, 0 )
+    }
+} )
+
+test_that( "schizophrenia analysis uses native calendar visit times without adding enrollment twice", {
+    skip_if_not_installed( "dplyr" )
+    skip_if_not_installed( "tidyr" )
+    dfData <- data.frame( ArrivalTime = c( 2, 7 ), TreatmentID = 0:1,
+                          Response1 = c( 10, 20 ), Response2 = c( 11, 21 ),
+                          ArrTimeVisit1 = c( 2, 7 ), ArrTimeVisit2 = c( 3, 8 ) )
+    for ( strFile in c( "AnalyzeUsingMMRM.R", "AnalyzeUsingMMRMWithGLS.R" ) ) {
+        fnPrepare <- .GetCommonExampleFunction( "SchizophreniaTrial", strFile, "CreateAnalysisDataset" )
+        dfPrepared <- fnPrepare( dfData, NULL )
+        expect_equal( dfPrepared$CalendarVisitTime, c( 3, 8 ), info = strFile )
+        expect_equal( dfPrepared$Baseline, c( 10, 20 ), info = strFile )
+    }
+} )

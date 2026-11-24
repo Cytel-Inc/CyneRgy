@@ -1,104 +1,108 @@
 ######################################################################################################################## .
-#' @param SelectExpThatAreBetterThanCtrl
-#' @title Select treatments that are higher than control or, if none are greater, select the treatment with the largest probability of response.  
-#' @param SimData Data frame which consists of data generated in current simulation.
-#' @param DesignParam List of Design and Simulation Parameters required to perform treatment selection.
-#' @param LookInfo List containing Design and Simulation Parameters, which might be required to perform treatment selection
-#' @param UserParam A list of user defined parameters in East. The default must be NULL.
-#' @description
-#'  At the interim analysis, select any treatment with a response rate that is higher than control for stage 2.
-#'  If none of the treatments have a higher response rate than control, select the treatment with the largest probability of response.
-#'  In the second stage, the randomization ratio will be 1:1 (experimental:control).
-#' @return TreatmentID  A vector that consists of the experimental treatments that were selected and carried forward. Experimental treatment IDs are 1, 2, ..., number of experimental treatments
-#' @return AllocRatio A vector that consists of the allocation for all experimental treatments that continue to the next phase.
-#' @return ErrorCode An integer value:  ErrorCode = 0 --> No Error
-#                                       ErrorCode > 0 --> Non fatal error, current simulation is aborted but the next simulations will run
-#                                       ErrorCode < 0 --> Fatal error, no further simulation will be attempted
-#' @note The length of TreatmentID and AllocRatio must be the same.
-#' @note The allocation ratio for control will be 1, AllocRatio are relative to this value.  So, a 2 will randomize twice as many to experimental
-#' @note The order of AllocRatio should be the same as TreatmentID, and the  corresponding elements will have the assigned allocation ratio
-#' @note The returned vector ONLY includes TreatmentIDs for experimental treatments, eg TreatmentID = c( 0, 1, 2 ) is invalid, because you do NOT need to include 0 for control.
-#' @note You must return at LEAST one treatment and one allocation ratio
-#' 
-#' @examples  Example Output Object:
-#'       Example 1: Assuming the allocation in 2nd part of the trial is 1:2:2 for Control:Experimental 1:Experimental 2
-#'      vSelectedTreatments <- c( 1, 2 )  # Experimental 1 and 2 both have an allocation ratio of 2. 
-#'       vAllocationRatio    <- c( 2, 2 )
-#'       nErrorCode          <- 0
-#'       lReturn             <- list( TreatmentID = vSelectedTreatments, 
-#'                                    AllocRatio  = vAllocationRatio,
-#'                                    ErrorCode   = nErrorCode )
-#'       return( lReturn )
-#'       
-#'      Example 2: Assuming the allocation in 2nd part of the trial is 1:1:2 for Control:Experimental 1:Experimental 2
-#'       vSelectedTreatments <- c( 1, 2 )  # Experimental 2 will receive twice as many as Experimental 1 or Control. 
-#'       vAllocationRatio    <- c( 1, 2 )
-#'       nErrorCode          <- 0
-#'       lReturn             <- list( TreatmentID = vSelectedTreatments, 
-#'                                    AllocRatio  = vAllocationRatio,
-#'                                    ErrorCode   = nErrorCode )
-#'       return( lReturn )
+#' @name SelectExpThatAreBetterThanCtrl
+#' @title Select treatments that are higher than control or, if none are greater, select the treatment with the
+#'   largest probability of response.
+#' @description At the interim analysis, select any treatment with a response rate that is higher than control for
+#'   stage 2. If none of the treatments have a higher response rate than control, select the treatment with the
+#'   largest observed response rate. In the second stage, the randomization ratio will be 1:1
+#'   (experimental:control).
+#' @author Sydney Ringold, J. Kyle Wathen
+#' @param SimData Data frame of subject-level data for the current simulation, with one row per subject. Access
+#'   columns by name, for example `SimData$TreatmentID`. Columns include the fields below when applicable,
+#'   plus any custom outputs from enrollment, randomization, response, or dropout generation.
+#' \describe{
+#'   \item{TreatmentID}{Integer vector of treatment assignments, with one element per subject: 0 = placebo/control,
+#'     1 = first experimental arm, 2 = second experimental arm, and so on.}
+#'   \item{Response}{Numeric vector of generated subject responses, with one element per subject.}
+#' }
+#' @param DesignParam Engine-supplied design parameters; not used by this selection rule.
+#' @param LookInfo Engine-supplied analysis-look information; not used by this selection rule.
+#' @param UserParam Optional named list of user-defined parameters supplied through East Horizon. The default is
+#'   NULL. Access elements by name, for example `UserParam$ParameterName`, rather than by position. User-defined
+#'   scalar parameters may be integer, numeric, or character values. Pass the individual named elements to helper
+#'   functions so East Horizon can identify and populate the required parameters.
+#' @return Named list containing the outputs returned by this example.
+#' \describe{
+#'   \item{TreatmentID}{Required integer vector of selected experimental-arm IDs, starting at 1 and excluding
+#'     control. Return at least one selected arm.}
+#'   \item{AllocRatio}{Required numeric vector of allocation ratios for the selected experimental arms, in the same
+#'     order and with the same length as TreatmentID. Control has allocation 1.}
+#'   \item{ErrorCode}{Optional integer execution status: 0 = no error; a positive value aborts the current
+#'     simulation but allows subsequent simulations to run; a negative value is fatal and stops all further
+#'     simulations.}
+#' }
+#' @details TreatmentID and AllocRatio must have the same nonzero length and matching order. Include only
+#'   experimental treatment IDs; do not include 0 for control. The control allocation ratio is always 1.
 #'
+#' Worked output objects:
+#' \preformatted{
+#' # Example 1: Control:Experimental 1:Experimental 2 allocation is 1:2:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 2, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
+#'
+#' # Example 2: Control:Experimental 1:Experimental 2 allocation is 1:1:2.
+#' vSelectedTreatments <- c( 1, 2 )
+#' vAllocationRatio <- c( 1, 2 )
+#' lReturn <- list( TreatmentID = vSelectedTreatments,
+#'                  AllocRatio = vAllocationRatio,
+#'                  ErrorCode = 0L )
+#' return( lReturn )
+#' }
 ######################################################################################################################## .
 
-SelectExpThatAreBetterThanCtrl  <- function(SimData, DesignParam, LookInfo)
-{
-    # In this example, the majority of the code is provided.  The fill in the blank areas are noted by _____________________.
-    # This is done to allow you to practice creating these examples. You will need to remove the ____________ and enter the correct code.
-    # The fully worked examples are provided in the corresponding example R files. 
-    
+SelectExpThatAreBetterThanCtrl <- function( SimData, DesignParam, LookInfo, UserParam = NULL ) {
     # Calculate the number of responders and treatment failures for each treatment
-    
-    # The next lines create a table where each treatment is in a row, number of treatment failures is the first column, and number of responses is the second column.
-    tabResults   <- table( SimData$TreatmentID, SimData$Response )
-    
+
+    # The next lines create a table where each treatment is in a row, number of treatment failures is the first column,
+    #   and number of responses is the second column.
+    tabResults <- table( SimData$TreatmentID, factor( SimData$Response, levels = c( 0, 1 ) ) )
+
     # Compute the response probability as # of responses/(  # of treatment failures + # of responses )
-    vProbabilityResponse            <- as.vector( ____________[,2]/(tabResults[,1] + tabResults[,2] ) )
+    vProbabilityResponse <- as.vector( ____________[ , 2 ] / ( tabResults[ , 1 ] + tabResults[ , 2 ] ) )
+
     # Create a variable with the probability of response on control to be used in decision making
-    dProbabilityOfResponseOnControl     <- ____________[ 1 ]     
+    dProbabilityOfResponseOnControl <- ____________[ 1 ]
     # Create vector with only the estimated probability of response on experimentals
-    vProbabilityResponseOnExperimental  <- ____________[ c(2:length(vProbabilityResponse)) ]     
-    
+    vProbabilityResponseOnExperimental <- ____________[ c( 2:length( vProbabilityResponse ) ) ]
+
+    vExperimentalTreatmentID <- as.integer( row.names( tabResults )[ -1 ] )
+
     # Note: vProbabilityResponseOnExperimental now contains only the response rates for the experimental treatments
-    
+
     # Selection Rule: Any treatment with a response rate that is higher than control is selected for stage 2
-    vReturnTreatmentID <- c()
+    vReturnTreatmentID <- c( )
     # Note: Start with row 2, which is experimental treatment 1
-    for( nIndex in 1:length( vProbabilityResponseOnExperimental ) )  
-    {
+    for ( nIndex in seq_along( vProbabilityResponseOnExperimental ) ) {
         # If the response rate > response rate on control, add the treatment ID to the list
-        if( vProbabilityResponseOnExperimental[ nIndex ] > _____________ )   
-            vReturnTreatmentID <- c( vReturnTreatmentID, nIndex  )    
-        
+        if ( vProbabilityResponseOnExperimental[ nIndex ] > _____________ ) {
+            vReturnTreatmentID <- c( vReturnTreatmentID, vExperimentalTreatmentID[ nIndex ] )
+        }
     }
-    
-    # If none of the experimental treatments had a response rate greater than control, select the treatment with the largest response rate 
-    if( length( ____________ ) == 0)
-    {
-        vReturnTreatmentID <-  which.max( vProbabilityResponseOnExperimental  )
+
+    # If none of the experimental treatments had a response rate greater than control, select the treatment with the
+    #   largest response rate
+    if ( length( ____________ ) == 0 ) {
+        vReturnTreatmentID <- vExperimentalTreatmentID[ which.max( vProbabilityResponseOnExperimental ) ]
     }
-    
-    # We want all treatments to have a randomization ratio of 1 
-    # The allocation will put twice as many on the treatment with the highest number of responses, 
-    # eg. the Treatment vReturnTreatmentID[ 1 ] will receive twice as many patients as vReturnTreatmentID[ 2 ]
-    vAllocationRatio   <- rep( 1, length( ____________ ))    
-    
-    
-    # Treatment vReturnTreatmentID[ 1 ] will have a ratio of 2, vReturnTreatmentID[ 2 ] a ratio of 1, and control is always 1
-    
-    nErrrorCode <- 0
+
+    # Selected experimental arms have the same allocation as control.
+    vAllocationRatio <- rep( 1, length( ____________ ) )
+    nErrorCode <- 0
     # Notes: The length( vReturnTreatmentID ) must equal length( vAllocationRatio )
-    if( length(vReturnTreatmentID ) != length( vAllocationRatio ) )
-    {
-        #  Fatal error because the R code is incorrect 
-        nErrrorCode <- -1  
+    if ( length( vReturnTreatmentID ) != length( vAllocationRatio ) ) {
+        #  Fatal error because the R code is incorrect
+        nErrorCode <- -1
     }
-    
-    lReturn <- list( TreatmentID = as.integer( vReturnTreatmentID ) ,
-                     AllocRatio  = as.double( vAllocationRatio ),
-                     ErrorCode   = as.integer( nErrrorCode ) )
-    
+
+    lReturn <- list(
+        TreatmentID = as.integer( vReturnTreatmentID ),
+        AllocRatio = as.double( vAllocationRatio ),
+        ErrorCode = as.integer( nErrorCode )
+    )
+
     return( lReturn )
-    
 }
-    

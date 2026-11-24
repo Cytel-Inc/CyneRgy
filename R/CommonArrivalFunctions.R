@@ -31,6 +31,9 @@ GeneratePoissonArrival <- function( NumSub, NumPrd, PrdStart, AccrRate, UserPara
 # Internal helper mirroring the bundled GeneratePoissonArrival example, kept here for direct unit testing.
 SimulateAccrualTimesWithConstantRate <- function( dPatsPerUnitTime, dPeriodStartTime, dQtyOfUnitsOfTime = 1 )
 {
+    if ( dPatsPerUnitTime == 0 ) {
+        return( numeric( 0 ) )
+    }
     nMaxQtyPatsInThisTimeUnit <- stats::qpois( 0.9999, dPatsPerUnitTime ) + 10
     vIntraArrivalTime         <- stats::rexp( dQtyOfUnitsOfTime * nMaxQtyPatsInThisTimeUnit, dPatsPerUnitTime )
     vTimes                    <- cumsum( vIntraArrivalTime )

@@ -44,7 +44,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 1. [SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R) - Functions to simulate patient outcomes under a normal distribution informed by mixture priors.
 2. [AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using normal priors.
 3. [SimulatePatientSurvivalAssuranceUsingPh2Prior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R) - This function simulates patient-level outcomes within a Bayesian assurance framework.
-4. [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R) - Implements Bayesian analysis of simulated outcomes using Cox proportional hazards model.
+4. [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R) - Analyzes simulated survival outcomes using a Cox proportional hazards model.
 
 **Note:** This example builds on the [Bayesian Assurance, Continuous Outcome](BayesianAssuranceContinuous.html) and the [Bayesian Assurance, Time-to-Event Outcome](BayesianAssuranceTimeToEvent.html) examples, and utilizes some of the same R code. Please refer to them for more information. The difference is that we now have two different studies: Phase 3 is conducted **only** if Phase 2 results in a Go decision.
 
@@ -95,7 +95,7 @@ ggplot() +
 Before starting, make sure you have the required tools and files.
 
 - [East Horizon](https://platform.cytel.com)
-- Download R Files from our public Github repo: [SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R), [AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R), [SimulatePatientSurvivalAssuranceUsingPh2Prior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R), and [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R).
+- Download R Files from our public Github repo: [SimulatePatientOutcomeNormalAssurance.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientOutcomeNormalAssurance.R), [AnalyzeUsingBayesianNormals.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeUsingBayesianNormals.R), [SimulatePatientSurvivalAssuranceUsingPh2Prior.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/SimulatePatientSurvivalAssuranceUsingPh2Prior.R), and [AnalyzeSurvivalDataUsingCoxPH.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/ConsecutiveStudiesContinuousTimeToEvent/R/AnalyzeSurvivalDataUsingCoxPH.R).
 
 In this example, we will create two different projects: one for the Phase 2 study and one for the Phase 3 study.
 
@@ -115,7 +115,7 @@ In this example, we will create two different projects: one for the Phase 2 stud
 
 ### Design Page
 
-3. Within the input set you just created, navigate to the Design page, then select “User Specified – R” in the Test field.
+3. Within the input set you just created, navigate to the Design page, then select “User Specified - R” in the Test field.
 
 ![](ConsecutiveStudiesContinuousTimeToEvent_files/Step3.png){width=800px}
 
@@ -137,7 +137,7 @@ In this example, we will create two different projects: one for the Phase 2 stud
 
 ### Response Page
 
-9. Navigate to the Response page and the relevant response card, and then select “User Specified – R” in the Distribution field.
+9. Navigate to the Response page and the relevant response card, and then select “User Specified - R” in the Distribution field.
 
 ![](ConsecutiveStudiesContinuousTimeToEvent_files/Step9.png){width=800px}
 
@@ -232,7 +232,7 @@ In this example, we will create two different projects: one for the Phase 2 stud
 
 ### Design Page
 
-29. Within the input set you just created, navigate to the Design page, then select “User Specified – R” in the Test Statistic field.
+29. Within the input set you just created, navigate to the Design page, then select “User Specified - R” in the Test Statistic field.
 
 ![](ConsecutiveStudiesContinuousTimeToEvent_files/Step29.png){width=800px}
 
@@ -254,7 +254,7 @@ In this example, we will create two different projects: one for the Phase 2 stud
 
 ### Response Page
 
-36. Navigate to the Response page and the relevant response card of the Phase 3 input set, and then select “User Specified – R” in the Distribution field.
+36. Navigate to the Response page and the relevant response card of the Phase 3 input set, and then select “User Specified - R” in the Distribution field.
 
 ![](ConsecutiveStudiesContinuousTimeToEvent_files/Step36.png){width=800px}
 
@@ -444,11 +444,11 @@ CyneRgy::PlotExampleFlowchart(
             "Return simulated survival times and true hazard ratio"
         ),
         "Analysis" = c(
-            "Load survival data, mean TTE, and relationship parameters",
-            "Sample true treatment effect from prior distribution (from CSV file)",
-            "Compute true log hazard ratio and hazard rates for each arm",
-            "Generate exponential survival times based on hazard rates",
-            "Return simulated survival times and true hazard ratio"
+            "Load survival outcomes and target event count",
+            "Censor survival data at the analysis time",
+            "Fit a Cox proportional hazards model",
+            "Compute the one-sided p-value and Go/No-Go decision",
+            "Return decision and true hazard ratio for reporting"
         )
     )
 )
@@ -502,7 +502,7 @@ Refer to the table below for the definitions of the user-defined parameters used
 
 ```{r echo=FALSE,  warning=FALSE, include = FALSE}
 ######################################################################################################################## .
-# Read in the output from East and compute the assurance and probability of a stop ####
+# Read in the output from East Horizon and compute the assurance and probability of a stop ####
 ######################################################################################################################## .
 library(readr)
 
@@ -543,14 +543,14 @@ ggplot( data = dfSuccess, aes( x = dTrueDelta ) ) +
 ```{r  echo=FALSE,  warning=FALSE, include = FALSE}
 ######################################################################################################################## .
 # Example 2 Post Process                                                                                               ####
-# This file provides functions and R Code example to post process the East output for useful graphs and numeric values ####
+# This file provides functions and R Code example to post process the East Horizon output for useful graphs and numeric values ####
 # 
 ######################################################################################################################## .
 library(readr)
 
 dfEastResultsEx5Ph3Uncond <- read_csv("Outputs/Example1/Phase3Unconditional.csv")
 
-dProbGoUncond   <- mean( dfEastResultsEx5Ph3Uncond$BdryStopCode )  # Pr( Go )
+dProbGoUncond   <- mean( dfEastResultsEx5Ph3Uncond$BdryStopCode %in% c( 1L, 2L ) )  # Pr( Go )
 
 vCredIntervalUncond <- log( quantile(dfEastResultsEx5Ph3Uncond$TrueHR, probs=c(0.025,0.975)) )
 ```
@@ -596,7 +596,7 @@ ggplot(dfPostDensity, aes(x = x, y = y)) +
 
 dfEastResultsEx5Ph3Cond <- read_csv("Outputs/Example1/Phase3Conditional.csv")
 
-dProbGoCond    <- mean( dfEastResultsEx5Ph3Cond$BdryStopCode )  # Pr( Go )
+dProbGoCond    <- mean( dfEastResultsEx5Ph3Cond$BdryStopCode %in% c( 1L, 2L ) )  # Pr( Go )
 
 vCredIntervalCond <- log( quantile(dfEastResultsEx5Ph3Cond$TrueHR , probs=c(0.025,0.975)) )
 ```

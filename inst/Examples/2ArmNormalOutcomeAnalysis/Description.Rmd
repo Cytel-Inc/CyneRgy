@@ -30,7 +30,7 @@ To try this example, create a new project in East Horizon using the following co
 
 # Introduction
 
-The following examples illustrate how to integrate new analysis capabilities into East Horizon or East using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes assumed to follow a normal distribution. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
+The following examples illustrate how to integrate new analysis capabilities into East Horizon using R functions in the context of a two-arm trial. In each example, the trial design includes a standard-of-care control arm and an experimental treatment arm, with patient outcomes assumed to follow a normal distribution. The design includes two interim analyses (IA) and one final analysis (FA). At each IA, an analysis is conducted which may lead to early stopping for efficacy or futility, depending on the predefined design criteria.
 
 Once CyneRgy is installed, you can load this example in RStudio, VS Code, or any other supported IDE with the following command:
 ```{r, eval=FALSE}
@@ -49,7 +49,7 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 3. [AnalyzeUsingMeanLimitsOfCI.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingMeanLimitsOfCI.R) - Contains a function named *AnalyzeUsingMeanLimitsOfCI* that bases interim and final decisions on confidence interval limits rather than East Horizon-provided boundaries. The function uses user-defined parameters (MAV, TV, and confidence level) to implement a Go / No-Go decision framework.
 
-4. [AnalyzeNormalSSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R) - Contains a function named *AnalyzeNormalSSR* that extends the standard continuous analysis to support conditional power–based sample size re-estimation (SSR) in a group sequential design.
+4. [AnalyzeNormalSSR.R](https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R) - Contains a function named *AnalyzeNormalSSR* that extends the standard continuous analysis to support conditional power-based sample size re-estimation (SSR) in a group sequential design.
 
 # Example 1 - Using Formulas Q.3.3 from the East manual
 
@@ -59,17 +59,17 @@ In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/m
 
 In this example, the analysis is customized by replacing the default method with a user-defined calculation based on formulas of the **Appendix Q.3.3 - Parallel Design: Difference of Means** from the East manual.
 
-**Estimate of the pooled standard deviation:**
+**Estimate of the pooled variance:**
 
-$$\hat\sigma^{2} = \sqrt{ 
+$$\hat\sigma^{2} =
 \frac{(n_t - 1) \cdot \sigma_t^2 + (n_c - 1) \cdot \sigma_c^2}
 {n - 2}
-}$$
+$$
 
 Where:
 
 - $n_t$ and $n_c$ are the number of patients in the treatment and control groups, respectively.
-- $\hat\sigma_t$ and $\hat\sigma_e$ are the standard deviations of responses in the treatment and control groups, respectively.
+- $\sigma_t$ and $\sigma_c$ are the sample standard deviations of responses in the treatment and control groups, respectively.
 - $n = n_t + n_c$ is the total number of patients.
 
 **Test Statistic:**
@@ -79,11 +79,11 @@ $$Z = \frac{\hat{\mu}_t - \hat{\mu}_c}
 
 Where:
 
-- $\hat{\mu}_t$ and $\hat{\mu}_e$ are the means of responses in the treatment and control groups, respectively.
-- $\hat\sigma^{2}$ is the estimate of the pooled standard deviation.
+- $\hat{\mu}_t$ and $\hat{\mu}_c$ are the means of responses in the treatment and control groups, respectively.
+- $\hat\sigma^{2}$ is the estimate of the pooled variance.
 - $n_t$ and $n_c$ are the numbers of patients in the treatment and control groups, respectively.
 
-The objective is to demonstrate a straightforward way to modify both the analysis and decision-making process. The computed test statistic is compared to the efficacy boundary provided by East Horizon or East as input. This example does not include a futility rule and does not use any user-defined parameters.
+The objective is to demonstrate a straightforward way to modify both the analysis and decision-making process. The computed test statistic is compared to the efficacy boundary provided by East Horizon as input. This example does not include a futility rule and does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -106,7 +106,7 @@ CyneRgy::PlotExampleFlowchart(
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeUsingTTestNormal.R" class="alert-link">AnalyzeUsingTTestNormal.R</a></p>
 </div>
 
-This example utilizes the base R `t.test()` function to perform the interim and final analyses. The resulting t-statistic is compared against the efficacy boundary provided by East Horizon or East. Like Example 1, this example does not include a futility rule and does not use any user-defined parameters.
+This example utilizes the base R `t.test()` function to perform the interim and final analyses. The resulting t-statistic is compared against the efficacy boundary provided by East Horizon. Like Example 1, this example does not include a futility rule and does not use any user-defined parameters.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -134,7 +134,7 @@ In many Phase II trials, Go/No-Go decisions are made based on whether a treatmen
 - **Minimum Acceptable Value (MAV)**: The smallest treatment effect considered meaningful.
 - **Target Value (TV)**: A highly desirable treatment effect based on clinical or strategic considerations.
 
-This example demonstrates how to approximate probabilistic decision-making using frequentist confidence intervals (CIs), ignoring the boundaries provided by East Horizon or East in favor of a CI-based logic. We use the function `t.test()` from base R to analyze the data and compute the desired confidence intervals. If the treatment difference is likely to exceed the MAV, a Go decision is made. If not, and it is unlikely to exceed the TV, a No-Go decision is made. Specifically:
+This example demonstrates how to approximate probabilistic decision-making using frequentist confidence intervals (CIs), ignoring the boundaries provided by East Horizon in favor of a CI-based logic. We use the function `t.test()` from base R to analyze the data and compute the desired confidence intervals. If the treatment difference is likely to exceed the MAV, a Go decision is made. If not, and it is unlikely to exceed the TV, a No-Go decision is made. Specifically:
 
 **At Interim Analysis**
 
@@ -154,9 +154,9 @@ In this example, the team has resources for 100 patients and is comparing two fi
 |--|------|
 |**dMAV**|Minimum Acceptable Value: the smallest treatment effect considered clinically meaningful to warrant further development.|
 |**dTV**|Target Value: the desired treatment effect that would represent a strong clinical benefit or strategic advantage.|
-|**dConfLevel**|Confidence Level: the level of confidence used to construct the confidence interval for Go/No-Go decision-making (e.g., 0.80 for an 80% CI).|
+|**dConfLevel**|Confidence level of each one-sided bound. The code computes separate lower and upper one-sided t confidence bounds; 0.80 gives bounds corresponding to a central 60% interval, not a central 80% interval.|
 
-**Note:** In this example, the boundary information that is computed in East Horizon or East is ignored. User-defined parameters and the function `t.test()` from base R are used to analyze the data and compute the desired confidence intervals.
+**Note:** In this example, the boundary information that is computed in East Horizon is ignored. User-defined parameters and the function `t.test()` from base R are used to analyze the data and compute the desired confidence intervals.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -174,14 +174,14 @@ CyneRgy::PlotExampleFlowchart(
 )
 ```
 
-## Option 1 - Fixed Design (80% CI)
+## Option 1 - Fixed Design (80% One-Sided Bounds)
 
 The decisions are made as follows:
 
-- **Go**: If there is at least a 90% probability that the treatment effect exceeds MAV = 0.1 (approximated by lower bound of 80% CI > MAV).
-- **No-Go**: If a Go decision is not made, and there is less than a 10% probability that the effect exceeds TV = 0.3 (approximated by upper bound of 80% CI < TV).
+- **Go**: If the lower 80% one-sided confidence bound exceeds MAV = 0.1.
+- **No-Go**: If a Go decision is not made and the upper 80% one-sided confidence bound is below TV = 0.3.
 
-This framework can be approximated using frequentist logic by applying the decision rules to an 80% confidence interval assuming to range from the 10th to the 90th percentile.
+These bounds are the endpoints of a central 60% t confidence interval. They are frequentist confidence limits, not posterior probabilities.
 
 Refer to the table below for the values of the user-defined parameters used in this option.
 
@@ -191,14 +191,14 @@ Refer to the table below for the values of the user-defined parameters used in t
 |**dTV**|0.3|
 |**dConfLevel**|0.8|
 
-## Option 2 - Fixed Design (70% CI)
+## Option 2 - Fixed Design (70% One-Sided Bounds)
 
 The decisions are made as follows:
 
-- **Go**: If there is at least an 85% probability that the treatment effect exceeds MAV = 0.1 (approximated by lower bound of 70% CI > MAV).
-- **No-Go**: If a Go decision is not made, and there is less than a 15% probability that the effect exceeds TV = 0.3 (approximated by upper bound of 70% CI < TV).
+- **Go**: If the lower 70% one-sided confidence bound exceeds MAV = 0.1.
+- **No-Go**: If a Go decision is not made and the upper 70% one-sided confidence bound is below TV = 0.3.
 
-This framework can be approximated using frequentist logic by applying the decision rules to an 80% confidence interval assuming to range from the 15th to the 85th percentile.
+These bounds are the endpoints of a central 40% t confidence interval.
 
 Refer to the table below for the values of the user-defined parameters used in this option.
 
@@ -214,10 +214,10 @@ In this option, an interim analysis at 50 patients is included with an option to
 
 The decisions are made as follows:
 
-- **Go** (or continue to the next analysis if IA): If there is at least an 92.5% probability that the treatment effect exceeds MAV = 0.1 (approximated by lower bound of 85% CI > MAV).
-- **No-Go** (or stop for futility if IA): If a Go decision is not made, and there is less than a 7.5% probability that the effect exceeds TV = 0.3 (approximated by upper bound of 85% CI < TV).
+- **Go** (if efficacy stopping is enabled): If the lower 85% one-sided confidence bound exceeds MAV = 0.1.
+- **No-Go** (or stop for futility if IA): If a Go decision is not made and the upper 85% one-sided confidence bound is below TV = 0.3.
 
-This framework can be approximated using frequentist logic by applying the decision rules to an 85% confidence interval assuming to range from the 7.5 to the 92.5th percentile.
+These bounds are the endpoints of a central 70% t confidence interval. At an interim look, enabled boundaries are governed by `LookInfo$RejType`.
 
 Refer to the table below for the values of the user-defined parameters used in this option.
 
@@ -233,7 +233,7 @@ Refer to the table below for the values of the user-defined parameters used in t
   <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/blob/main/inst/Examples/2ArmNormalOutcomeAnalysis/R/AnalyzeNormalSSR.R" class="alert-link">AnalyzeNormalSSR.R</a></p>
 </div>
 
-This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total number of completers based on interim results. This is achieved using a conditional power–based SSR approach, which allows the trial to increase its planned number of completers when interim results fall within a "promising zone".
+This example illustrates how to customize the analysis when using `Statistical Design = Group Sequential with Sample Size Re-Estimation` in East Horizon. The key difference from the previous examples is that the analysis function is responsible not only for producing a test statistic and interim decision, but also for computing a re-estimated total number of completers based on interim results. This is achieved using a conditional power-based SSR approach, which allows the trial to increase its planned number of completers when interim results fall within a "promising zone".
 
 **Test Statistic:**
 
@@ -241,11 +241,15 @@ A standardized Z-statistic is computed based on the observed difference in mean 
 
 $$Z = \frac{\bar{X}_{exp} - \bar{X}_{ctrl}}{\sqrt{ \frac{s^2_{exp}}{n_{exp}} + \frac{s^2{ctrl}}{n_{ctrl}} }}$$
 
-where $\bar{X}_{exp}$ and $\bar{X}_{ctrl}$ are the sample means in the experimental and control arms, $s^2_{exp}$ and $s^2_{ctrl}$ are the corresponding sample variances, and $n_{exp}$ and $n_{ctrl}$ are the numbers of observed patients in each arm at the current look.
+where $\bar{X}_{exp}$ and $\bar{X}_{ctrl}$ are the sample means in the experimental and control arms, $s^2_{exp}$ and $s^2_{ctrl}$ are the corresponding sample variances, and $n_{exp}$ and $n_{ctrl}$ are the numbers of completers in each arm at the current look. As in East Horizon, only completers (patients whose response is observed by the analysis time) are analyzed; patients still in the response-lag pipeline are excluded.
 
 **Conditional Power:**
 
-Using the observed Z-statistic, the information fraction at the current look, and the efficacy boundary provided by East Horizon, the conditional power is computed. This represents the probability of eventually crossing the final efficacy boundary, given the interim data and assuming the currently observed effect persists for the remainder of the trial.
+At the adaptation look $k$ selected in East Horizon (`AdaptInfo$AdaptInterimNum`), with $n_k$ planned completers out of $N$ planned completers, the information fraction is $\tau = n_k / N$. The conditional power under the current trend is
+
+$$CP = 1 - \Phi\left( s \cdot \frac{c - Z_k / \sqrt{\tau}}{\sqrt{1 - \tau}} \right)$$
+
+where $Z_k$ is the interim Z-statistic, $c$ is the final efficacy boundary provided by East Horizon (`LookInfo$EffBdry[LookInfo$NumLooks]`), and $s = 1$ for a right-tailed test or $s = -1$ for a left-tailed test. This two-stage formula ignores intermediate looks.
 
 **Sample Size Re-Estimation (SSR):**
 
@@ -253,12 +257,16 @@ Based on the computed conditional power, the total number of completers is re-es
 
 |Condition|Rule|
 |----|----|
-|The SSR function scale for promising zone selected in East Horizon is "Continuous" (`AdaptInfo$SSRFuncScale == 0`)|If the conditional power falls between the lower and upper promising-zone thresholds selected in East Horizon (`AdaptInfo$PromZoneMin` and `AdaptInfo$PromZoneMax`), the maximum number of completers is multiplied by the maximum sample size multiplier input specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxSSMult`).|
-|The SSR function scale for promising zone selected in East Horizon is "Step" (`AdaptInfo$SSRFuncScale == 1`)|The conditional power is mapped to intervals specified in East Horizon (`AdaptInfo$MaxSSMultInp$From`, `AdaptInfo$MaxSSMultInp$To`), each associated with a specific sample size multiplier specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxSSMult`).|
+|The SSR function scale for promising zone selected in East Horizon is "Continuous" (`AdaptInfo$SSRFuncScale == 0`)|If $PromZoneMin \le CP < PromZoneMax$ (`AdaptInfo$PromZoneMin` and `AdaptInfo$PromZoneMax`), the planned maximum number of completers is multiplied by the maximum sample size multiplier specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxSSMult`). This custom rule jumps directly to the maximum multiplier, unlike the native East Horizon rule, which targets the `TargetCP` up to the maximum.|
+|The SSR function scale for promising zone selected in East Horizon is "Step" (`AdaptInfo$SSRFuncScale == 1`)|The multiplier of the step with $From \le CP < To$ (`AdaptInfo$MaxSSMultInp$From`, `AdaptInfo$MaxSSMultInp$To`, `AdaptInfo$MaxSSMultInp$MaxSSMult`) is used. East Horizon Design currently passes missing values for intermediate step cut-points when there is more than one step; the example then returns a fatal `ErrorCode = -1`.|
 
-If the conditional power falls outside the promising zone, the original planned number of completers is retained.
+If the conditional power falls outside the promising zone, the original planned number of completers is retained. The re-estimated number of completers is never lower than the planned number.
 
-Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. Both the decision and the re-estimated total number of completers (`ReEstCompleters`) are returned to East Horizon.
+**Looks After Adaptation:**
+
+East Horizon calls the analysis function at every look but does not update `LookInfo` after adaptation. At and after the adaptation look, the example therefore recomputes the interim conditional power at the same data cut and moves the look positions as the East Horizon engine does: the final look uses the re-estimated number of completers (`ReEstCompleters`), and intermediate looks after the adaptation are scaled proportionally between the adaptation look and the new maximum. The analysis time returned to East Horizon (`AnalysisTime`) is the time at which the targeted number of completers is reached.
+
+Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. The decision, the re-estimated total number of completers (`ReEstCompleters`), and the analysis time are returned to East Horizon. Note that the final test uses the unweighted Z-statistic rather than a Cui, Hung, and Wang (CHW) weighted statistic, so the type I error should be checked by simulation under the null hypothesis.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -267,10 +275,10 @@ CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
         "Analysis" = c(
             "Load responses and arrival times from EH",
-            "Compute mean difference and Z-statistic",
-            "Compute conditional power using efficacy boundary",
-            "Re-estimate total completers",
-            "Return decision and re-estimated number of completers"
+            "At or after adaptation look, compute interim CP",
+            "Re-estimate total completers and look positions",
+            "Compute mean difference and Z-statistic on completers",
+            "Return decision, re-estimated completers and analysis time"
         )
     )
 )

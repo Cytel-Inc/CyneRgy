@@ -49,7 +49,7 @@ By integrating this R file, East Horizon users can perform adaptive interim anal
 
 In the [R directory of this example](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R) you will find the following R file:
 
-- **[AnalzyeTTEWithConditinalPowerFutility.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R)**
+- **[AnalyzeTTEWithConditionalPowerFutility.R](https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalyzeTTEWithConditionalPowerFutility.R)**
 
    This R file contains a function that analyzes simulated time-to-event clinical trial data at interim or final analyses. It prepares the event and censoring information, runs a log-rank test to compare treatment groups, and then calculates conditional power based on either a target hazard ratio, the estimated hazard ratio, or a weighted mix of both. It applies futility rules using this conditional power at interim looks to decide whether the trial should stop early or continue, and then uses the traditional Logrank test for the efficacy/futility decision at the final look. The function returns the test statistic, estimated hazard ratio, conditional power, and a decision code indicating the outcome.
    
@@ -78,7 +78,7 @@ CyneRgy::PlotExampleFlowchart(
 # Technical Information and Example Values
 
 <div class="alert alert-primary" role="alert">
-  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalzyeTTEWithConditinalPowerFutility.R" class="alert-link">AnalzyeTTEWithConditinalPowerFutility.R</a></p>
+  <p style="margin-bottom:0"> This example is related to this R file: <a href="https://github.com/Cytel-Inc/CyneRgy/tree/main/inst/Examples/TimeToEventConditionalPowerFutilityAnalysis/R/AnalyzeTTEWithConditionalPowerFutility.R" class="alert-link">AnalyzeTTEWithConditionalPowerFutility.R</a></p>
 </div>
 
 We begin by preparing the simulated trial data based on the design parameters and current look index.
