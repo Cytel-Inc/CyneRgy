@@ -192,7 +192,7 @@ This example illustrates how to customize the analysis when using `Statistical D
 
 **Test Statistic:**
 
-At each interim look, the analysis time is determined based on the target cumulative number of events implied by the current information fraction. Survival data are censored at this analysis time, and a log-rank-style standardized Z-statistic is computed based on the observed and expected number of events in the treatment arm:
+At each look, the analysis time is the calendar time at which the target cumulative number of events is reached. The target is the planned number of events for the current look provided by East Horizon (`LookInfo$CumEvents`, or the information fraction times the maximum number of events when unavailable), moved after adaptation as described below. Survival data are censored at this analysis time, and a log-rank-style standardized Z-statistic is computed based on the observed and expected number of events in the treatment arm:
 
 $$Z = \frac{O_T - E_T}{\sqrt{ \text{Var}(O_T) }}$$
 
@@ -202,7 +202,11 @@ In addition, a Cox proportional hazards model is fit to the observed data to est
 
 **Conditional Power:**
 
-Using the observed Z-statistic, the information fraction at the current look, and the final efficacy boundary provided by East Horizon, the conditional crossing probability is computed under zero future drift. This illustrative calculation conditions on the interim statistic; it does not assume that the observed treatment effect continues in future events. The final efficacy boundary, not the futility boundary, defines the crossing target.
+At the adaptation look $k$ selected in East Horizon (`AdaptInfo$AdaptInterimNum`), with $d_k$ planned events out of $D$ planned events, the information fraction is $\tau = d_k / D$. The conditional power under the current trend is
+
+$$CP = 1 - \Phi\left( s \cdot \frac{c - Z_k / \sqrt{\tau}}{\sqrt{1 - \tau}} \right)$$
+
+where $Z_k$ is the interim Z-statistic, $c$ is the final efficacy boundary provided by East Horizon (`LookInfo$EffBdry[LookInfo$NumLooks]`), and $s = 1$ for a right-tailed test or $s = -1$ for a left-tailed test. The final efficacy boundary, not the futility boundary, defines the crossing target. This two-stage formula ignores intermediate looks.
 
 **Sample Size Re-Estimation (SSR):**
 
@@ -210,12 +214,16 @@ Based on the computed conditional power, the total number of events is re-estima
 
 |Condition|Rule|
 |----|----|
-|The SSR function scale for promising zone selected in East Horizon is "Continuous" (`AdaptInfo$SSRFuncScale == 0`)|If the conditional power falls between the lower and upper promising-zone thresholds selected in East Horizon (`AdaptInfo$PromZoneMin` and `AdaptInfo$PromZoneMax`), the maximum number of events is multiplied by the maximum event-count multiplier specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxEventsMult`).|
-|The SSR function scale for promising zone selected in East Horizon is "Step" (`AdaptInfo$SSRFuncScale == 1`)|The conditional power is mapped to intervals specified in East Horizon (`AdaptInfo$MaxSSMultInp$From`, `AdaptInfo$MaxSSMultInp$To`), each associated with an event-count multiplier specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxEventsMult`). The separate `MaxSSMult` field is a subject-count multiplier and is not used for event re-estimation.|
+|The SSR function scale for promising zone selected in East Horizon is "Continuous" (`AdaptInfo$SSRFuncScale == 0`)|If $PromZoneMin \le CP < PromZoneMax$ (`AdaptInfo$PromZoneMin` and `AdaptInfo$PromZoneMax`), the planned maximum number of events is multiplied by the maximum event-count multiplier specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxEventsMult`). This custom rule jumps directly to the maximum multiplier, unlike the native East Horizon rule, which targets the `TargetCP` up to the maximum.|
+|The SSR function scale for promising zone selected in East Horizon is "Step" (`AdaptInfo$SSRFuncScale == 1`)|The event-count multiplier of the step with $From \le CP < To$ (`AdaptInfo$MaxSSMultInp$From`, `AdaptInfo$MaxSSMultInp$To`, `AdaptInfo$MaxSSMultInp$MaxEventsMult`) is used. The separate `MaxSSMult` field is a subject-count multiplier and is not used for event re-estimation. East Horizon Design currently passes missing values for intermediate step cut-points when there is more than one step; the example then returns a fatal `ErrorCode = -1`.|
 
-If the conditional power falls outside the promising zone, the original planned number of events is retained.
+If the conditional power falls outside the promising zone, the original planned number of events is retained. The re-estimated number of events is never lower than the planned number.
 
-Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. Both the decision and the re-estimated total number of events (`ReEstEvents`) are returned to East Horizon.
+**Looks After Adaptation:**
+
+East Horizon calls the analysis function at every look but does not update `LookInfo` after adaptation. At and after the adaptation look, the example therefore recomputes the interim conditional power at the same data cut and moves the look positions as the East Horizon engine does: the final look uses the re-estimated number of events (`ReEstEvents`), and intermediate looks after the adaptation are scaled proportionally between the adaptation look and the new maximum.
+
+Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. The decision, the re-estimated total number of events (`ReEstEvents`), and the analysis time are returned to East Horizon. Note that the final test uses the unweighted log-rank statistic rather than a Cui, Hung, and Wang (CHW) weighted statistic, so the type I error should be checked by simulation under the null hypothesis. Dropout information is ignored.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -224,10 +232,10 @@ CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
         "Analysis" = c(
             "Load survival data and arrival times from EH",
-            "Determine analysis time from target event count",
+            "At or after adaptation look, compute interim CP",
+            "Re-estimate total events and look positions",
             "Compute log-rank Z-statistic and hazard ratio",
-            "Compute conditional power using efficacy boundary",
-            "Return decision and re-estimated number of events"
+            "Return decision, re-estimated events and analysis time"
         )
     )
 )

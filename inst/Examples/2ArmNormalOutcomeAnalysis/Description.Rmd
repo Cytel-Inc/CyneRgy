@@ -241,11 +241,15 @@ A standardized Z-statistic is computed based on the observed difference in mean 
 
 $$Z = \frac{\bar{X}_{exp} - \bar{X}_{ctrl}}{\sqrt{ \frac{s^2_{exp}}{n_{exp}} + \frac{s^2{ctrl}}{n_{ctrl}} }}$$
 
-where $\bar{X}_{exp}$ and $\bar{X}_{ctrl}$ are the sample means in the experimental and control arms, $s^2_{exp}$ and $s^2_{ctrl}$ are the corresponding sample variances, and $n_{exp}$ and $n_{ctrl}$ are the numbers of observed patients in each arm at the current look.
+where $\bar{X}_{exp}$ and $\bar{X}_{ctrl}$ are the sample means in the experimental and control arms, $s^2_{exp}$ and $s^2_{ctrl}$ are the corresponding sample variances, and $n_{exp}$ and $n_{ctrl}$ are the numbers of completers in each arm at the current look. As in East Horizon, only completers (patients whose response is observed by the analysis time) are analyzed; patients still in the response-lag pipeline are excluded.
 
 **Conditional Power:**
 
-Using the observed Z-statistic, the information fraction at the current look, and the final efficacy boundary provided by East Horizon, the conditional crossing probability is computed under zero future drift. This illustrative calculation conditions on the interim statistic; it does not assume that the observed effect persists in future patients.
+At the adaptation look $k$ selected in East Horizon (`AdaptInfo$AdaptInterimNum`), with $n_k$ planned completers out of $N$ planned completers, the information fraction is $\tau = n_k / N$. The conditional power under the current trend is
+
+$$CP = 1 - \Phi\left( s \cdot \frac{c - Z_k / \sqrt{\tau}}{\sqrt{1 - \tau}} \right)$$
+
+where $Z_k$ is the interim Z-statistic, $c$ is the final efficacy boundary provided by East Horizon (`LookInfo$EffBdry[LookInfo$NumLooks]`), and $s = 1$ for a right-tailed test or $s = -1$ for a left-tailed test. This two-stage formula ignores intermediate looks.
 
 **Sample Size Re-Estimation (SSR):**
 
@@ -253,12 +257,16 @@ Based on the computed conditional power, the total number of completers is re-es
 
 |Condition|Rule|
 |----|----|
-|The SSR function scale for promising zone selected in East Horizon is "Continuous" (`AdaptInfo$SSRFuncScale == 0`)|If the conditional power falls between the lower and upper promising-zone thresholds selected in East Horizon (`AdaptInfo$PromZoneMin` and `AdaptInfo$PromZoneMax`), the maximum number of completers is multiplied by the maximum sample size multiplier input specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxSSMult`).|
-|The SSR function scale for promising zone selected in East Horizon is "Step" (`AdaptInfo$SSRFuncScale == 1`)|The conditional power is mapped to intervals specified in East Horizon (`AdaptInfo$MaxSSMultInp$From`, `AdaptInfo$MaxSSMultInp$To`), each associated with a specific sample size multiplier specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxSSMult`).|
+|The SSR function scale for promising zone selected in East Horizon is "Continuous" (`AdaptInfo$SSRFuncScale == 0`)|If $PromZoneMin \le CP < PromZoneMax$ (`AdaptInfo$PromZoneMin` and `AdaptInfo$PromZoneMax`), the planned maximum number of completers is multiplied by the maximum sample size multiplier specified in East Horizon (`AdaptInfo$MaxSSMultInp$MaxSSMult`). This custom rule jumps directly to the maximum multiplier, unlike the native East Horizon rule, which targets the `TargetCP` up to the maximum.|
+|The SSR function scale for promising zone selected in East Horizon is "Step" (`AdaptInfo$SSRFuncScale == 1`)|The multiplier of the step with $From \le CP < To$ (`AdaptInfo$MaxSSMultInp$From`, `AdaptInfo$MaxSSMultInp$To`, `AdaptInfo$MaxSSMultInp$MaxSSMult`) is used. East Horizon Design currently passes missing values for intermediate step cut-points when there is more than one step; the example then returns a fatal `ErrorCode = -1`.|
 
-If the conditional power falls outside the promising zone, the original planned number of completers is retained.
+If the conditional power falls outside the promising zone, the original planned number of completers is retained. The re-estimated number of completers is never lower than the planned number.
 
-Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. Both the decision and the re-estimated total number of completers (`ReEstCompleters`) are returned to East Horizon.
+**Looks After Adaptation:**
+
+East Horizon calls the analysis function at every look but does not update `LookInfo` after adaptation. At and after the adaptation look, the example therefore recomputes the interim conditional power at the same data cut and moves the look positions as the East Horizon engine does: the final look uses the re-estimated number of completers (`ReEstCompleters`), and intermediate looks after the adaptation are scaled proportionally between the adaptation look and the new maximum. The analysis time returned to East Horizon (`AnalysisTime`) is the time at which the targeted number of completers is reached.
+
+Finally, the Z-statistic is compared against the efficacy boundary provided by East Horizon. At interim looks, crossing the boundary results in an early efficacy decision, while at the final look a lack of boundary crossing results in a futility decision. The decision, the re-estimated total number of completers (`ReEstCompleters`), and the analysis time are returned to East Horizon. Note that the final test uses the unweighted Z-statistic rather than a Cui, Hung, and Wang (CHW) weighted statistic, so the type I error should be checked by simulation under the null hypothesis.
 
 The figure below illustrates where this example fits within the R integration points of Cytel products, accompanied by a flowchart outlining the general steps performed by the R code.
 
@@ -267,10 +275,10 @@ CyneRgy::PlotExampleFlowchart(
     lIntPoints = list(
         "Analysis" = c(
             "Load responses and arrival times from EH",
-            "Compute mean difference and Z-statistic",
-            "Compute conditional power using efficacy boundary",
-            "Re-estimate total completers",
-            "Return decision and re-estimated number of completers"
+            "At or after adaptation look, compute interim CP",
+            "Re-estimate total completers and look positions",
+            "Compute mean difference and Z-statistic on completers",
+            "Return decision, re-estimated completers and analysis time"
         )
     )
 )

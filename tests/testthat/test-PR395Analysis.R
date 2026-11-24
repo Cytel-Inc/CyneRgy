@@ -62,13 +62,14 @@ test_that( "TTE SSR targets final efficacy rather than current efficacy or futil
 
     for ( nTail in 0:1 ) {
         dTailSign <- if ( nTail == 0 ) -1 else 1
-        dFinal <- dZ * sqrt( 0.5 ) + dTailSign * stats::qnorm( 0.6 ) * sqrt( 0.5 + 1e-12 )
+        # Final boundary chosen so the current-trend CP equals 0.4.
+        dFinal <- dZ / sqrt( 0.5 ) + dTailSign * stats::qnorm( 0.6 ) * sqrt( 0.5 )
         lDesign <- list( MaxEvents = 80L, TailType = nTail, CriticalPoint = 100 * dTailSign )
         lLook <- list( NumLooks = 2L, CurrLookIndex = 1L, InfoFrac = c( 0.5, 1 ),
             RejType = if ( nTail == 0 ) 5L else 4L,
             EffBdry = c( dZ + dTailSign * 2, dFinal ),
             FutBdry = c( dZ - dTailSign * 3, dZ - dTailSign * 4 ) )
-        lAdapt <- list( SSRFuncScale = 0, PromZoneMin = 0.39, PromZoneMax = 0.41,
+        lAdapt <- list( AdaptInterimNum = 1L, SSRFuncScale = 0, PromZoneMin = 0.39, PromZoneMax = 0.41,
             MaxSSMultInp = list( From = 0.39, To = 0.41, MaxSSMult = 7, MaxEventsMult = 1.5 ) )
         lResult <- fnAnalyze( dfData, lDesign, lLook, lAdapt )
         expect_equal( lResult$TestStat, unname( dZ ) )
@@ -77,10 +78,11 @@ test_that( "TTE SSR targets final efficacy rather than current efficacy or futil
         expect_identical( lResult$ErrorCode, 0L )
         expect_equal( lResult$AnalysisTime, dTime )
 
-        dCP <- 1 - stats::pnorm( dTailSign * ( dFinal - lResult$TestStat * sqrt( 0.5 ) ) /
-            sqrt( 0.5 + 1e-12 ) )
+        dCP <- 1 - stats::pnorm( dTailSign * ( dFinal - lResult$TestStat / sqrt( 0.5 ) ) / sqrt( 1 - 0.5 ) )
+        expect_equal( dCP, 0.4 )
+        # Promising zone is PromZoneMin <= CP < PromZoneMax, as in the engine.
         lAdapt$PromZoneMin <- dCP
-        expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 80L )
+        expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 120L )
         lAdapt$PromZoneMin <- dCP - 0.1
         lAdapt$PromZoneMax <- dCP
         expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 80L )
@@ -88,12 +90,13 @@ test_that( "TTE SSR targets final efficacy rather than current efficacy or futil
         lAdapt$MaxSSMultInp <- list( From = c( 0.1, 0.39 ), To = c( 0.3, 0.41 ),
             MaxSSMult = c( 6, 7 ), MaxEventsMult = c( 1.2, 2 ) )
         expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 160L )
+        # Steps cover From <= CP < To.
         lAdapt$MaxSSMultInp <- list( From = dCP - 0.1, To = dCP, MaxSSMult = 7, MaxEventsMult = 2 )
-        expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 160L )
+        expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 80L )
         lAdapt$MaxSSMultInp$From <- dCP
         lAdapt$MaxSSMultInp$To <- dCP + 0.1
-        expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 80L )
-        lLook$EffBdry[ 2 ] <- dZ * sqrt( 0.5 ) + dTailSign * 4
+        expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 160L )
+        lLook$EffBdry[ 2 ] <- dZ / sqrt( 0.5 ) + dTailSign * 4
         expect_identical( fnAnalyze( dfData, lDesign, lLook, lAdapt )$ReEstEvents, 80L )
     }
 } )

@@ -124,7 +124,7 @@ test_that( "binary and normal SSR analyses honor lower efficacy boundaries witho
     }
 } )
 
-test_that( "SSR completer analyses preserve Dev response selection", {
+test_that( "SSR analyses use completers only and ignore dropout columns", {
     fnAnalyze <- .GetCommonExampleFunction( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR.R",
         "AnalyzeNormalSSR" )
     dfData <- data.frame( TreatmentID = rep( 0:1, 12 ), ArrivalTime = seq_len( 24 ),
@@ -134,16 +134,70 @@ test_that( "SSR completer analyses preserve Dev response selection", {
         EffBdry = c( 2.5, 1.96 ), RejType = 0 )
     lResult <- fnAnalyze( dfData, lDesign, LookInfo = lLook )
     expect_equal( lResult$AnalysisTime, 110 )
-    expect_equal( lResult$Delta, mean( dfData$Response[ dfData$TreatmentID == 1 ] ) -
-        mean( dfData$Response[ dfData$TreatmentID == 0 ] ) )
+    # Only the first 10 subjects have a response by time 110; arrived subjects in the pipeline are excluded.
+    expect_equal( lResult$Delta, mean( c( 2, 4, 6, 8, 10 ) ) - mean( c( 1, 3, 5, 7, 9 ) ) )
     expect_identical( lResult$ReEstCompleters, 20L )
     names( dfData )[ names( dfData ) == "CensorInd" ] <- "CensorIndOrg"
     expect_equal( fnAnalyze( dfData, lDesign, LookInfo = lLook ), lResult )
 
-    lAdapt <- list( SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
+    lAdapt <- list( AdaptInterimNum = 1, SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
         MaxSSMultInp = list( MaxSSMult = 1.5 ) )
     lAdapted <- fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )
     expect_identical( lAdapted$ReEstCompleters, 30L )
+} )
+
+test_that( "SSR analyses move post-adaptation looks to the re-estimated sample size", {
+    fnAnalyze <- .GetCommonExampleFunction( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR.R",
+        "AnalyzeNormalSSR" )
+    set.seed( 96 )
+    dfData <- data.frame( TreatmentID = rep( 0:1, 200 ), ArrivalTime = seq_len( 400 ),
+        Response = stats::rnorm( 400 ) )
+    lDesign <- list( TailType = 1, MaxCompleters = 200, RespLag = 10 )
+    lAdapt <- list( AdaptInterimNum = 1, SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
+        MaxSSMultInp = list( MaxSSMult = 1.5 ) )
+    vAnalysisTime <- c( )
+    for ( nLook in 1:3 ) {
+        lLook <- list( NumLooks = 3, CurrLookIndex = nLook, InfoFrac = c( 0.5, 0.75, 1 ),
+            CumCompleters = c( 100L, 150L, 200L ), EffBdry = c( 10, 10, 0.5 ), RejType = 0 )
+        lResult <- fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )
+        expect_identical( lResult$ErrorCode, 0L )
+        expect_identical( lResult$ReEstCompleters, 300L )
+        vAnalysisTime <- c( vAnalysisTime, lResult$AnalysisTime )
+    }
+    # Engine look positions: 100, round( 100 + 2 * ( 150 - 100 ) ) = 200, then the re-estimated 300.
+    expect_equal( vAnalysisTime, c( 100, 200, 300 ) + 10 )
+
+    lLook$AdaptInterimNum <- NULL
+    lLook$CurrLookIndex <- 3
+    expect_identical( fnAnalyze( dfData, lDesign, LookInfo = lLook )$AnalysisTime, 210 )
+    expect_identical( fnAnalyze( dfData[ 1:250, ], lDesign, LookInfo = lLook,
+        AdaptInfo = lAdapt )$AnalysisTime, 260 )
+} )
+
+test_that( "SSR analyses reject missing adaptation look and step cut-points", {
+    skip_if_not_installed( "survival" )
+    lLook <- list( NumLooks = 2, CurrLookIndex = 1, InfoFrac = c( 0.5, 1 ), EffBdry = c( 3, 2 ), RejType = 0 )
+    lStep <- list( From = c( 0.3, NA ), To = c( NA, 0.9 ), MaxSSMult = c( 1.2, 1.5 ),
+        MaxEventsMult = c( 1.2, 1.5 ) )
+    for ( vCase in list(
+        c( "2ArmNormalOutcomeAnalysis", "AnalyzeNormalSSR" ),
+        c( "2ArmBinaryOutcomeAnalysis", "AnalyzeBinarySSR" ),
+        c( "2ArmTimeToEventOutcomeAnalysis", "AnalyzeTTESSR" )
+    ) ) {
+        fnAnalyze <- .GetCommonExampleFunction( vCase[ 1 ], paste0( vCase[ 2 ], ".R" ), vCase[ 2 ] )
+        dfData <- data.frame( TreatmentID = rep( 0:1, 20 ), ArrivalTime = seq_len( 40 ),
+            Response = rep( 0:1, 20 ), SurvivalTime = seq_len( 40 ) )
+        lDesign <- list( TailType = 1, MaxCompleters = 40, MaxEvents = 40, RespLag = 1 )
+        lAdapt <- list( AdaptInterimNum = 1, SSRFuncScale = 1, MaxSSMultInp = lStep )
+        expect_identical( fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )$ErrorCode, -1L,
+            info = vCase[ 2 ] )
+        for ( nAdaptLook in list( NULL, NA, 0, 2 ) ) {
+            lAdapt <- list( AdaptInterimNum = nAdaptLook, SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
+                MaxSSMultInp = list( MaxSSMult = 1.5, MaxEventsMult = 1.5 ) )
+            expect_identical( fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )$ErrorCode, -2L,
+                info = vCase[ 2 ] )
+        }
+    }
 } )
 
 test_that( "survival SSR uses a signed logrank statistic and the native event multiplier", {
@@ -165,7 +219,7 @@ test_that( "survival SSR uses a signed logrank statistic and the native event mu
 
     lLook <- list( NumLooks = 2, CurrLookIndex = 1, InfoFrac = c( 0.5, 1 ),
         EffBdry = c( -3, -1.96 ), RejType = 2 )
-    lAdapt <- list( SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
+    lAdapt <- list( AdaptInterimNum = 1, SSRFuncScale = 0, PromZoneMin = 0, PromZoneMax = 1,
         MaxSSMultInp = list( MaxSSMult = 9, MaxEventsMult = 1.5 ) )
     lAdapted <- fnAnalyze( dfData, lDesign, LookInfo = lLook, AdaptInfo = lAdapt )
     expect_identical( lAdapted$ReEstEvents, 150L )
