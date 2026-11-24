@@ -15,24 +15,24 @@ AdaptInfo is only available for `Statistical Design = Group Sequential with Samp
 
 ## For `Endpoint Type = Continuous, Binary, Time-to-Event`
 
-| **Variable** | **Type** | **Description** | **Notes** |
-|----|----|----|----|
-| **AdaptMethod** | Integer | Adaptation method:<br>- `1`: Cui, Hung, and Wang (CHW).<br>- `2`: Chen, DeMets, and Lan (CDL). |  |
-| **AdaptInterimScale** | Integer | Adapt at interim analysis scale:<br>- `1`: Interim analysis number.<br>- `2`: Analysis spacing info (%). | Fixed to `1` for East Horizon Explore and for `AdaptMethod = 2 (CDL)`. |
-| **AdaptInterimNum** | Integer | Interim analysis number at which adaptation will happen. | Fixed to `LookInfo$NumLooks - 1` for `AdaptMethod = 2 (CDL)`. |
-| **AdaptInterimPerc** | Integer | Analysis spacing info (%) at which adaptation will happen. | Available only for `AdaptMethod = 2 (CDL)`. |
-| **StudyDurationUL** | Numeric | Upper limit on study duration. | Not available for East Horizon Explore. |
-| **WaldCPThreshold** | Numeric | Threshold beyond which Wald statistics are used. | Available only for `AdaptMethod = 2 (CDL)`. |
-| **EnrollAdaptScale** | Integer | Scale for enrollment rate after adaptation:<br>- `0`: No change.<br>- `1`: Use multiplier.<br>- `2`: Use fixed rate. | `EnrollAdaptScale = 2 (fixed rate)` is only applicable for East Horizon Design. |
-| **EnrollAdaptMult** | Numeric | Multiplier for enrollment rate after adaptation. | Available only for `EnrollAdaptScale = 1 (use multiplier)`. |
-| **EnrollAdaptRate** | Numeric | Fixed enrollment rate after adaptation. | Available only for `EnrollAdaptScale = 2 (use fixed rate)`. |
-| **PromZoneScale** | Integer | Promising zone scale:<br>- `0`, `1`: Conditional Power<br>- `2`, `3`: Test Statistic<br>- `4`, `5`: Estimated delta/sigma<br><br>The parameter also contains the information of the assumed treatment effect used for the calculation of the conditional power:<br>- `0`, `2`, `4`: Estimated delta/sigma<br>`1`, `3`, `5`: Design delta/sigma | Values `2` to `5` are only available in East Horizon Design |
-| **PromZoneSigma** | Numeric | Reference/design sigma for computing promising zone conditional power. | Available only in East Horizon Explore when `PromZoneScale = 1 (Arbitrary/design conditional power)`. |
-| **PromZoneDelta** | Numeric | Reference/design delta for computing promising zone conditional power. | Available only in East Horizon Explore when `PromZoneScale = 1 (Arbitrary/design conditional power)`. |
-| **PromZoneMin** | Numeric | Minimum threshold for promising zone. |  |
-| **PromZoneMax** | Numeric | Maximum threshold for promising zone. |  |
-| **SSRFuncScale** | Numeric | Sample size re-estimation function scale for promising zone:<br>- `0`: Continuous.<br>- `1`: Step.<br>- `2`: User-specified R. | `SSRFuncScale = 1 (step)` is available only in East Horizon Explore. |
-| **NumSteps** | Integer | Number of steps. | Available only for `SSRFuncScale = 1 (step)`. |
-| **MaxSSMultInp** | Named List | Maximum sample size multiplier inputs. | If `SSRFuncScale = 0 (continuous)`, it is a Named List of Numeric:<br>- `MaxSSMultInp[“From”] = PromZoneMin`.<br>- `MaxSSMultInp[“To”] = PromZoneMax`.<br>- `MaxSSMultInp[“MaxSSMult”]` is a numeric specified by the user.<br>If `SSRFuncScale = 1 (step)`, it is a Named List of Array of Numeric:<br>- `MaxSSMultInp[“From”]` is an array of size `NumSteps` containing the lower threshold for each step.<br>- `MaxSSMultInp[“To”]` is an array of size `NumSteps` containing the upper threshold for each step.<br>- `MaxSSMultInp[“MaxSSMult”]` is an array of size `NumSteps` containing the maximum sample size multiplier for each step. |
-| **TargetCP** | Numeric | Target conditional power. | Available only for `SSRFuncScale = 0 (continuous)`. |
-| **OrigCP** | Numeric | Conditional power computed from the maximum number of completers/events. |  |
+|**Variable**|**Type**|**Description**|**Notes**|
+|-|-|----|-----|
+|**AdaptMethod**|Integer|Adaptation method:<br>- `1`: Cui, Hung, and Wang (CHW).<br>- `2`: Chen, DeMets, and Lan (CDL).||
+|**AdaptInterimScale**|Integer|Adapt at interim analysis scale:<br>- `1`: Interim analysis number.<br>- `2`: Analysis spacing info (%).|Fixed to `1` for East Horizon Explore and for `AdaptMethod = 2 (CDL)`.|
+|**AdaptInterimNum**|Integer|Interim analysis number at which adaptation will happen.|Fixed to `LookInfo$NumLooks - 1` for `AdaptMethod = 2 (CDL)`.|
+|**AdaptInterimPerc**|Integer|Analysis spacing info (%) at which adaptation will happen.|Available only for `AdaptMethod = 2 (CDL)`.|
+|**StudyDurationUL**|Numeric|Upper limit on study duration.|Not available for East Horizon Explore.|
+|**WaldCPThreshold**|Numeric|Threshold beyond which Wald statistics are used.|Available only for `AdaptMethod = 2 (CDL)`.|
+|**EnrollAdaptScale**|Integer|Scale for enrollment rate after adaptation:<br>- `0`: No change.<br>- `1`: Use multiplier.<br>- `2`: Use fixed rate.|`EnrollAdaptScale = 2 (fixed rate)` is only applicable for East Horizon Design.|
+|**EnrollAdaptMult**|Numeric|Multiplier for enrollment rate after adaptation.|Available only for `EnrollAdaptScale = 1 (use multiplier)`.|
+|**EnrollAdaptRate**|Numeric|Fixed enrollment rate after adaptation.|Available only for `EnrollAdaptScale = 2 (use fixed rate)`.|
+|**PromZoneScale**|Integer|Promising zone scale, combined with the treatment effect assumed for the conditional power (CP) computation:<br>- `0`: Conditional power, CP based on estimated delta/sigma.<br>- `1`: Conditional power, CP based on design delta/sigma.<br>- `2`: Test statistic, CP based on estimated delta/sigma.<br>- `3`: Test statistic, CP based on design delta/sigma.<br>- `4`: Estimated delta/sigma, CP based on estimated delta/sigma.<br>- `5`: Estimated delta/sigma, CP based on design delta/sigma.|Values `2` to `5` are only available in East Horizon Design.|
+|**PromZoneSigma**|Numeric|Reference/design sigma for computing promising zone conditional power.|Available only when `PromZoneScale = 1 (conditional power, CP based on design delta/sigma)`.|
+|**PromZoneDelta**|Numeric|Reference/design delta for computing promising zone conditional power.|Available only when `PromZoneScale = 1 (conditional power, CP based on design delta/sigma)`.|
+|**PromZoneMin**|Numeric|Minimum threshold for promising zone.||
+|**PromZoneMax**|Numeric|Maximum threshold for promising zone.||
+|**SSRFuncScale**|Numeric|Sample size re-estimation function scale for promising zone:<br>- `0`: Continuous.<br>- `1`: Step.<br>- `2`: User-specified R.|`SSRFuncScale = 1 (step)` is available only in East Horizon Explore.|
+|**NumSteps**|Integer|Number of steps.|Available only for `SSRFuncScale = 1 (step)`.|
+|**MaxSSMultInp**|Named List|Maximum sample size multiplier inputs.|If `SSRFuncScale = 0 (continuous)`, it is a Named List of Numeric:<br>- `MaxSSMultInp[“From”] = PromZoneMin`.<br>- `MaxSSMultInp[“To”] = PromZoneMax`.<br>- `MaxSSMultInp[“MaxSSMult”]` is a numeric specified by the user.<br>If `SSRFuncScale = 1 (step)`, it is a Named List of Array of Numeric:<br>- `MaxSSMultInp[“From”]` is an array of size `NumSteps` containing the lower threshold for each step.<br>- `MaxSSMultInp[“To”]` is an array of size `NumSteps` containing the upper threshold for each step.<br>- `MaxSSMultInp[“MaxSSMult”]` is an array of size `NumSteps` containing the maximum sample size multiplier for each step.|
+|**TargetCP**|Numeric|Target conditional power.|Available only for `SSRFuncScale = 0 (continuous)`.|
+|**OrigCP**|Numeric|Conditional power computed from the maximum number of completers/events.||
