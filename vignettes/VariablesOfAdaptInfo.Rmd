@@ -26,9 +26,9 @@ AdaptInfo is only available for `Statistical Design = Group Sequential with Samp
 |**EnrollAdaptScale**|Integer|Scale for enrollment rate after adaptation:<br>- `0`: No change.<br>- `1`: Use multiplier.<br>- `2`: Use fixed rate.|`EnrollAdaptScale = 2 (fixed rate)` is only applicable for East Horizon Design.|
 |**EnrollAdaptMult**|Numeric|Multiplier for enrollment rate after adaptation.|Available only for `EnrollAdaptScale = 1 (use multiplier)`.|
 |**EnrollAdaptRate**|Numeric|Fixed enrollment rate after adaptation.|Available only for `EnrollAdaptScale = 2 (use fixed rate)`.|
-|**PromZoneScale**|Integer|Promising zone scale:<br>- `0`: Estimated conditional power.<br>- `1`: Arbitrary/design conditional power.<br>- `2`: Test statistic.<br>- `3`: Estimated delta/sigma.||
-|**PromZoneSigma**|Numeric|Reference/design sigma for computing promising zone conditional power.|Available only when `PromZoneScale = 1 (Arbitrary/design conditional power)`.|
-|**PromZoneDelta**|Numeric|Reference/design delta for computing promising zone conditional power.|Available only when `PromZoneScale = 1 (Arbitrary/design conditional power)`.|
+|**PromZoneScale**|Integer|Promising zone scale, combined with the treatment effect assumed for the conditional power (CP) computation:<br>- `0`: Conditional power, CP based on estimated delta/sigma.<br>- `1`: Conditional power, CP based on design delta/sigma.<br>- `2`: Test statistic, CP based on estimated delta/sigma.<br>- `3`: Test statistic, CP based on design delta/sigma.<br>- `4`: Estimated delta/sigma, CP based on estimated delta/sigma.<br>- `5`: Estimated delta/sigma, CP based on design delta/sigma.|Values `2` to `5` are only available in East Horizon Design.|
+|**PromZoneSigma**|Numeric|Reference/design sigma for computing promising zone conditional power.|Available only when `PromZoneScale = 1 (conditional power, CP based on design delta/sigma)`.|
+|**PromZoneDelta**|Numeric|Reference/design delta for computing promising zone conditional power.|Available only when `PromZoneScale = 1 (conditional power, CP based on design delta/sigma)`.|
 |**PromZoneMin**|Numeric|Minimum threshold for promising zone.||
 |**PromZoneMax**|Numeric|Maximum threshold for promising zone.||
 |**SSRFuncScale**|Numeric|Sample size re-estimation function scale for promising zone:<br>- `0`: Continuous.<br>- `1`: Step.<br>- `2`: User-specified R.|`SSRFuncScale = 1 (step)` is available only in East Horizon Explore.|
